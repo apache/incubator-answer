@@ -656,10 +656,15 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
+	respInfo, ok := resp.(*schema.QuestionInfo)
+  if !ok {
+		handler.HandleResponse(ctx, err, resp)
+		return
+  }
 	if !isAdmin || !linkUrlLimitUser {
 		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}
-	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
+	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{UrlTitle: respInfo.UrlTitle, WaitForReview: !req.NoNeedReview})
 }
 
 // QuestionRecover recover deleted question

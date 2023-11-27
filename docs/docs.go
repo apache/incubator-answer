@@ -3685,6 +3685,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/plugin/status": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get all plugins status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plugin"
+                ],
+                "summary": "get all plugins status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetPluginListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/post/render": {
             "post": {
                 "security": [
@@ -7278,6 +7321,10 @@ const docTemplate = `{
                     "description": "username",
                     "type": "string"
                 },
+                "visit_token": {
+                    "description": "visit token",
+                    "type": "string"
+                },
                 "website": {
                     "description": "website",
                     "type": "string"
@@ -7679,27 +7726,21 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_at": {
-                    "description": "created time",
                     "type": "integer"
                 },
                 "description": {
-                    "description": "description text",
                     "type": "string"
                 },
                 "display_name": {
-                    "description": "display name",
                     "type": "string"
                 },
                 "excerpt": {
-                    "description": "excerpt",
                     "type": "string"
                 },
                 "follow_count": {
-                    "description": "follower amount",
                     "type": "integer"
                 },
                 "is_follower": {
-                    "description": "is follower",
                     "type": "boolean"
                 },
                 "main_tag_slug_name": {
@@ -7707,22 +7748,18 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "member_actions": {
-                    "description": "MemberActions",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/schema.PermissionMemberAction"
                     }
                 },
                 "original_text": {
-                    "description": "original text",
                     "type": "string"
                 },
                 "parsed_text": {
-                    "description": "parsed text",
                     "type": "string"
                 },
                 "question_count": {
-                    "description": "question amount",
                     "type": "integer"
                 },
                 "recommend": {
@@ -7732,15 +7769,15 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "slug_name": {
-                    "description": "slug name",
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 },
                 "tag_id": {
-                    "description": "tag id",
                     "type": "string"
                 },
                 "updated_at": {
-                    "description": "updated time",
                     "type": "integer"
                 }
             }
@@ -8489,6 +8526,9 @@ const docTemplate = `{
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 },
                 "user_info": {
@@ -9638,6 +9678,10 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "username",
+                    "type": "string"
+                },
+                "visit_token": {
+                    "description": "visit token",
                     "type": "string"
                 },
                 "website": {

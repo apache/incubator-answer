@@ -31,6 +31,7 @@ import (
 	"github.com/apache/incubator-answer/pkg/htmltext"
 
 	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -39,6 +40,7 @@ import (
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/obj"
+	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
 )
@@ -483,10 +485,19 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		questionIDs = append(questionIDs, string(r["question_id"]))
 		userIDs = append(userIDs, string(r["user_id"]))
 		tp, _ := time.ParseInLocation("2006-01-02 15:04:05", string(r["created_at"]), time.Local)
+
+		ID := string(r["id"])
+		QuestionID := string(r["question_id"])
+		if handler.GetEnableShortID(ctx) {
+			ID = uid.EnShortID(ID)
+			QuestionID = uid.EnShortID(QuestionID)
+		}
+
 		object := &schema.SearchObject{
-			ID:              string(r["id"]),
-			QuestionID:      string(r["question_id"]),
+			ID:              ID,
+			QuestionID:      QuestionID,
 			Title:           string(r["title"]),
+			UrlTitle:        htmltext.UrlTitle(string(r["title"])),
 			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
 			CreatedAtParsed: tp.Unix(),
 			UserInfo: &schema.SearchObjectUser{
