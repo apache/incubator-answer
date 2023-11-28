@@ -204,43 +204,43 @@ func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err e
 
 type QuestionBaseInfo struct {
 	ID              string `json:"id" `
-	Title           string `json:"title" xorm:"title"`                       // title
-	UrlTitle        string `json:"url_title" xorm:"url_title"`               // title
-	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view count
-	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // answer count
-	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // collection count
-	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // follow count
+	Title           string `json:"title"`
+	UrlTitle        string `json:"url_title"`
+	ViewCount       int    `json:"view_count"`
+	AnswerCount     int    `json:"answer_count"`
+	CollectionCount int    `json:"collection_count"`
+	FollowCount     int    `json:"follow_count"`
 	Status          string `json:"status"`
 	AcceptedAnswer  bool   `json:"accepted_answer"`
 }
 
 type QuestionInfo struct {
 	ID                   string         `json:"id" `
-	Title                string         `json:"title" xorm:"title"`                         // title
-	UrlTitle             string         `json:"url_title" xorm:"url_title"`                 // title
-	Content              string         `json:"content" xorm:"content"`                     // content
-	HTML                 string         `json:"html" xorm:"html"`                           // html
-	Description          string         `json:"description"`                                //description
-	Tags                 []*TagResp     `json:"tags" `                                      // tags
-	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
-	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count
-	VoteCount            int            `json:"vote_count" xorm:"vote_count"`               // vote_count
-	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // answer count
-	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // collection count
-	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // follow count
-	AcceptedAnswerID     string         `json:"accepted_answer_id" `                        // accepted_answer_id
-	LastAnswerID         string         `json:"last_answer_id" `                            // last_answer_id
-	CreateTime           int64          `json:"create_time" `                               // create_time
-	UpdateTime           int64          `json:"-"`                                          // update_time
+	Title                string         `json:"title"`
+	UrlTitle             string         `json:"url_title"`
+	Content              string         `json:"content"`
+	HTML                 string         `json:"html"`
+	Description          string         `json:"description"`
+	Tags                 []*TagResp     `json:"tags"`
+	ViewCount            int            `json:"view_count"`
+	UniqueViewCount      int            `json:"unique_view_count"`
+	VoteCount            int            `json:"vote_count"`
+	AnswerCount          int            `json:"answer_count"`
+	CollectionCount      int            `json:"collection_count"`
+	FollowCount          int            `json:"follow_count"`
+	AcceptedAnswerID     string         `json:"accepted_answer_id"`
+	LastAnswerID         string         `json:"last_answer_id"`
+	CreateTime           int64          `json:"create_time"`
+	UpdateTime           int64          `json:"-"`
 	PostUpdateTime       int64          `json:"update_time"`
 	QuestionUpdateTime   int64          `json:"edit_time"`
-	Pin                  int            `json:"pin"`  // 1: unpin, 2: pin
-	Show                 int            `json:"show"` // 0: show, 1: hide
+	Pin                  int            `json:"pin"`
+	Show                 int            `json:"show"`
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
-	UserID               string         `json:"-" `
-	LastEditUserID       string         `json:"-" `
-	LastAnsweredUserID   string         `json:"-" `
+	UserID               string         `json:"-"`
+	LastEditUserID       string         `json:"-"`
+	LastAnsweredUserID   string         `json:"-"`
 	UserInfo             *UserBasicInfo `json:"user_info"`
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`

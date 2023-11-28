@@ -98,12 +98,12 @@ type AnswerListReq struct {
 }
 
 type AnswerInfo struct {
-	ID             string         `json:"id" xorm:"id"`
-	QuestionID     string         `json:"question_id" xorm:"question_id"`
-	Content        string         `json:"content" xorm:"content"`
-	HTML           string         `json:"html" xorm:"html"`
-	CreateTime     int64          `json:"create_time" xorm:"created"`
-	UpdateTime     int64          `json:"update_time" xorm:"updated"`
+	ID             string         `json:"id"`
+	QuestionID     string         `json:"question_id"`
+	Content        string         `json:"content"`
+	HTML           string         `json:"html"`
+	CreateTime     int64          `json:"create_time"`
+	UpdateTime     int64          `json:"update_time"`
 	Accepted       int            `json:"accepted"`
 	UserID         string         `json:"-"`
 	UpdateUserID   string         `json:"-"`
