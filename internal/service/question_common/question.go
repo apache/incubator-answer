@@ -63,7 +63,7 @@ type QuestionRepo interface {
 	GetQuestionsByTitle(ctx context.Context, title string, pageSize int) (questionList []*entity.Question, err error)
 	UpdatePvCount(ctx context.Context, questionID string) (err error)
 	UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error)
-	UpdateCollectionCount(ctx context.Context, questionID string, num int) (err error)
+	UpdateCollectionCount(ctx context.Context, questionID string) (count int64, err error)
 	UpdateAccepted(ctx context.Context, question *entity.Question) (err error)
 	UpdateLastAnswer(ctx context.Context, question *entity.Question) (err error)
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
@@ -135,8 +135,8 @@ func (qs *QuestionCommon) UpdateAnswerCount(ctx context.Context, questionID stri
 	return qs.questionRepo.UpdateAnswerCount(ctx, questionID, int(count))
 }
 
-func (qs *QuestionCommon) UpdateCollectionCount(ctx context.Context, questionID string, num int) error {
-	return qs.questionRepo.UpdateCollectionCount(ctx, questionID, num)
+func (qs *QuestionCommon) UpdateCollectionCount(ctx context.Context, questionID string) (count int64, err error) {
+	return qs.questionRepo.UpdateCollectionCount(ctx, questionID)
 }
 
 func (qs *QuestionCommon) UpdateAccepted(ctx context.Context, questionID, AnswerID string) error {

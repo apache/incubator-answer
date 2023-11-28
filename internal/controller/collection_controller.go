@@ -22,14 +22,10 @@ package controller
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"
-	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service"
-	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/errors"
 )
 
 // CollectionController collection controller
@@ -57,21 +53,10 @@ func (cc *CollectionController) CollectionSwitch(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
 	req.ObjectID = uid.DeShortID(req.ObjectID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	dto := &schema.CollectionSwitchDTO{}
-	_ = copier.Copy(dto, req)
-
-	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
-	if converter.StringToInt64(req.ObjectID) < 1 {
-		return
-	}
-	if converter.StringToInt64(dto.UserID) < 1 {
-		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
-		return
-	}
-
-	resp, err := cc.collectionService.CollectionSwitch(ctx, dto)
+	resp, err := cc.collectionService.CollectionSwitch(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
