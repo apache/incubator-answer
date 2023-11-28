@@ -591,7 +591,7 @@ func (qs *QuestionCommon) ShowListFormat(ctx context.Context, data *entity.Quest
 }
 
 func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question) *schema.QuestionInfo {
-	ID := data.ID
+	var ID = data.ID
 	if handler.GetEnableShortID(ctx) {
 		ID = uid.EnShortID(data.ID)
 	}

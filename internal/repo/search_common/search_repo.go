@@ -486,8 +486,8 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		userIDs = append(userIDs, string(r["user_id"]))
 		tp, _ := time.ParseInLocation("2006-01-02 15:04:05", string(r["created_at"]), time.Local)
 
-		ID := string(r["id"])
-		QuestionID := string(r["question_id"])
+		var ID = string(r["id"])
+		var QuestionID = string(r["question_id"])
 		if handler.GetEnableShortID(ctx) {
 			ID = uid.EnShortID(ID)
 			QuestionID = uid.EnShortID(QuestionID)
