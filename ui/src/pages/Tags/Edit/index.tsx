@@ -70,9 +70,6 @@ const Index = () => {
 
   const { data } = useTagInfo({ id: tagId });
   const { data: revisions = [] } = useQueryRevisions(data?.tag_id);
-  initFormData.displayName.value = data?.display_name || '';
-  initFormData.slugName.value = data?.slug_name || '';
-  initFormData.description.value = data?.original_text || '';
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
@@ -84,6 +81,18 @@ const Index = () => {
   usePromptWithUnload({
     when: contentChanged,
   });
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      displayName: { ...formData.displayName, value: data?.display_name || '' },
+      slugName: { ...formData.slugName, value: data?.slug_name || '' },
+      description: {
+        ...formData.description,
+        value: data?.original_text || '',
+      },
+    });
+  }, [data]);
 
   useEffect(() => {
     const { displayName, slugName, description, editSummary } = formData;
