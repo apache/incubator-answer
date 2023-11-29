@@ -6871,12 +6871,13 @@
                 "object_id"
             ],
             "properties": {
+                "bookmark": {
+                    "type": "boolean"
+                },
                 "group_id": {
-                    "description": "user collection group TagID",
                     "type": "string"
                 },
                 "object_id": {
-                    "description": "object TagID",
                     "type": "string"
                 }
             }
@@ -6885,13 +6886,7 @@
             "type": "object",
             "properties": {
                 "object_collection_count": {
-                    "type": "string"
-                },
-                "object_id": {
-                    "type": "string"
-                },
-                "switch": {
-                    "type": "boolean"
+                    "type": "integer"
                 }
             }
         },
