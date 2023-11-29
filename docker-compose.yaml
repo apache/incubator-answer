@@ -18,7 +18,7 @@
 version: "3"
 services:
   answer:
-    image: answerdev/answer
+    image: apache/answer
     ports:
       - '9080:80'
     restart: on-failure
