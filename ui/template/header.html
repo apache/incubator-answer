@@ -115,7 +115,7 @@
         <div id="protect-browser"></div>
       </div>
 
-      <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
+      <nav id="header" class="sticky-top theme-colored navbar navbar-expand-lg navbar-dark">
         <div class="d-flex align-items-center container">
           <button
             aria-controls="navBarContent"
@@ -129,27 +129,41 @@
           <div
             class="d-flex justify-content-between align-items-center nav-grow flex-nowrap"
           >
-            <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
-              {{.siteinfo.General.Name}}
-            </a>
+            {{if .siteinfo.Branding.Logo}}
+              <a class="lh-1 me-0 me-sm-5 p-0 navbar-brand" href="/">
+                <img class="logo me-0" src="{{.siteinfo.Branding.Logo}}" alt="{{.siteinfo.General.Name}}">
+              </a>
+            {{else}}
+              <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
+                {{.siteinfo.General.Name}}
+              </a>
+            {{end}}
           </div>
           <div class="me-auto navbar-collapse collapse" id="navBarContent">
             <hr class="hr lg-none mb-2" style="margin-top: 12px" />
-            <div class="col-md-4">
-              <div class="navbar-nav">
-                <a class="nav-link" href="/questions"
-                  >{{translator $.language "ui.header.nav.question"}}</a
-                >
-                <a class="nav-link" href="/tags"
-                  >{{translator $.language "ui.header.nav.tag"}}</a
-                >
-              </div>
+            <div class="ps-0 col-lg-8">
+              <form action="/search" class="w-100 maxw-400">
+                <input placeholder="Search" name="q" type="search" class="placeholder-search form-control" value="">
+              </form>
             </div>
-            <hr class="hr lg-none mt-2" />
+            <!-- <div class="lg-none mt-3 pb-1 nav-item">
+              <a class="text-capitalize text-nowrap btn btn-light" href="/questions/ask">{{translator $.language "ui.btns.add_question"}}</a>
+            </div> -->
+            <div class="d-none d-lg-flex justify-content-start justify-content-sm-end col-lg-4">
+              <!-- <a role="button" tabindex="0" href="/users/login" class="me-2 link-light btn btn-link">
+                {{translator $.language "ui.btns.login"}}
+              </a>
+              <a role="button" tabindex="0" href="/users/register" class="btn btn-light">
+                {{translator $.language "ui.btns.signup"}}
+              </a> -->
+            </div>
           </div>
         </div>
       </nav>
-      <div class="position-relative page-wrap">{{end}}</div>
+      <div class="position-relative page-wrap">
+        {{template "sidenav" . }}
+        {{end}}
+      </div>
 
     </div>
   </body>

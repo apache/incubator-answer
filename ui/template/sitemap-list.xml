@@ -1,3 +1,4 @@
+{{ .xmlHeader }}
 <!--
 
     Licensed to the Apache Software Foundation (ASF) under one
@@ -18,11 +19,10 @@
     under the License.
 
 -->
-{{ .xmlHeader }}
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {{ range .page }}
   <sitemap>
     <loc>{{$.general.SiteUrl}}/sitemap/question-{{.}}.xml</loc>
   </sitemap>
-   {{ end }}
+  {{ end }}
 </sitemapindex>

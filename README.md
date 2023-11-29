@@ -2,7 +2,7 @@
     <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
-# Answer - Build Q&A platform
+# Apache Answer - Build Q&A platform
 
 A Q&A platform software for teams at any scales. Whether it’s a community forum, help center, or knowledge management platform, you can always count on Answer.
 
@@ -30,17 +30,32 @@ For more information, see [Installation](https://answer.apache.org/docs/installa
 
 ### Plugins
 
-Answer provides a plugin system for developers to create custom plugins and expand Answer’s features. You can find the [plugin documentation here](https://answer.apache.org/docs/development/extending/).
+Answer provides a plugin system for developers to create custom plugins and expand Answer’s features. You can find the [plugin documentation here](https://answer.apache.org/community/plugins).
 
 We value your feedback and suggestions to improve our documentation. If you have any comments or questions, please feel free to contact us. We’re excited to see what you can create using our plugin system!
 
-You can also check out the [plugins here](https://github.com/apache/incubator-answer-plugins).
+You can also check out the [plugins here](https://answer.apache.org/plugins).
+
+## Building from Source
+
+### Prerequisites
+
+- Golang >= 1.18
+- Node.js >= 16.17
+- pnpm >= 8
+
+### Build
+
+```bash
+$ make ui
+$ make build
+```
 
 ## Contributing
 
 Contributions are always welcome!
 
-See [CONTRIBUTING](https://answer.apache.org/docs/development/contributing/) for ways to get started.
+See [CONTRIBUTING](https://answer.apache.org/community/contributing) for ways to get started.
 
 ## License
 

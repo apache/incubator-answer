@@ -1,3 +1,4 @@
+#!/bin/bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,45 +16,5 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Build Test
-
-on:
-  push:
-    branches:
-      - 'dev'
-  pull_request:
-    branches: 
-      - 'dev'
-
-jobs:
-  node-build-test:
-    name: Node Build Test
-    runs-on: [self-hosted, linux]
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-
-    - name: Test Build
-      run: make install-ui-packages ui
-
-  go-build-test:
-    name: Go Build Test
-    runs-on: [self-hosted, linux]
-    needs:
-      - node-build-test
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
-
-    - name: Go Test Build
-      run: make clean build
+docker run -it --rm -v $(pwd):/github/workspace ghcr.io/korandoru/hawkeye-native format
+gofmt -w -l .
