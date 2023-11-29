@@ -17,40 +17,68 @@
  * under the License.
  */
 
-package migrations
+package cli
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/schema"
 	"xorm.io/xorm"
 )
 
-func addPasswordLoginControl(ctx context.Context, x *xorm.Engine) error {
+type ConfigField struct {
+	AllowPasswordLogin bool `json:"allow_password_login"`
+}
+
+// SetDefaultConfig set default config
+func SetDefaultConfig(dbConf *data.Database, cacheConf *data.CacheConf, field *ConfigField) error {
+	db, err := data.NewDB(false, dbConf)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	cache, cacheCleanup, err := data.NewCache(cacheConf)
+	if err != nil {
+		fmt.Println("new cache failed")
+	}
+	defer func() {
+		if cache != nil {
+			cache.Flush(context.Background())
+			cacheCleanup()
+		}
+	}()
+
+	if field.AllowPasswordLogin {
+		return defaultLoginConfig(db)
+	}
+
+	return nil
+}
+
+func defaultLoginConfig(x *xorm.Engine) (err error) {
+	fmt.Println("set default login config")
+
 	loginSiteInfo := &entity.SiteInfo{
 		Type: constant.SiteTypeLogin,
 	}
-	exist, err := x.Context(ctx).Get(loginSiteInfo)
+	exist, err := x.Get(loginSiteInfo)
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
 	if exist {
-		content := &schema.SiteLoginReq{}
-		_ = json.Unmarshal([]byte(loginSiteInfo.Content), content)
-		content.AllowPasswordLogin = true
-		data, _ := json.Marshal(content)
-		loginSiteInfo.Content = string(data)
-		_, err = x.Context(ctx).ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
+		var content map[string]any
+		_ = json.Unmarshal([]byte(loginSiteInfo.Content), &content)
+		content["allow_password_login"] = true
+		dataByte, _ := json.Marshal(content)
+		loginSiteInfo.Content = string(dataByte)
+		_, err = x.ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
 		if err != nil {
 			return fmt.Errorf("update site info failed: %w", err)
 		}
 	}
-
-	type User struct {
-		Avatar string `xorm:"not null default '' VARCHAR(1024) avatar"`
-	}
-	return x.Context(ctx).Sync(new(User))
+	return nil
 }
