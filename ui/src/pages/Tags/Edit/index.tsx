@@ -92,6 +92,16 @@ const Index = () => {
         value: data?.original_text || '',
       },
     });
+
+    setImmData({
+      ...immData,
+      displayName: { ...immData.displayName, value: data?.display_name || '' },
+      slugName: { ...immData.slugName, value: data?.slug_name || '' },
+      description: {
+        ...immData.description,
+        value: data?.original_text || '',
+      },
+    });
   }, [data]);
 
   useEffect(() => {
