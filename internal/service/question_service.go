@@ -754,7 +754,6 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
 		return
-
 	}
 	if existUnreviewed {
 		err = errors.BadRequest(reason.QuestionCannotUpdate)
@@ -1196,6 +1195,7 @@ func (qs *QuestionService) GetQuestionsByTitle(ctx context.Context, title string
 		item := &schema.QuestionBaseInfo{}
 		item.ID = question.ID
 		item.Title = question.Title
+		item.UrlTitle = htmltext.UrlTitle(question.Title)
 		item.ViewCount = question.ViewCount
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount

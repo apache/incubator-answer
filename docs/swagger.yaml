@@ -1,20 +1,3 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -357,11 +340,11 @@ definitions:
     type: object
   schema.CollectionSwitchReq:
     properties:
+      bookmark:
+        type: boolean
       group_id:
-        description: user collection group TagID
         type: string
       object_id:
-        description: object TagID
         type: string
     required:
     - group_id
@@ -370,11 +353,7 @@ definitions:
   schema.CollectionSwitchResp:
     properties:
       object_collection_count:
-        type: string
-      object_id:
-        type: string
-      switch:
-        type: boolean
+        type: integer
     type: object
   schema.ConfigField:
     properties:
@@ -657,6 +636,9 @@ definitions:
         type: string
       username:
         description: username
+        type: string
+      visit_token:
+        description: visit token
         type: string
       website:
         description: website
@@ -941,53 +923,42 @@ definitions:
   schema.GetTagResp:
     properties:
       created_at:
-        description: created time
         type: integer
       description:
-        description: description text
         type: string
       display_name:
-        description: display name
         type: string
       excerpt:
-        description: excerpt
         type: string
       follow_count:
-        description: follower amount
         type: integer
       is_follower:
-        description: is follower
         type: boolean
       main_tag_slug_name:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
       member_actions:
-        description: MemberActions
         items:
           $ref: '#/definitions/schema.PermissionMemberAction'
         type: array
       original_text:
-        description: original text
         type: string
       parsed_text:
-        description: parsed text
         type: string
       question_count:
-        description: question amount
         type: integer
       recommend:
         type: boolean
       reserved:
         type: boolean
       slug_name:
-        description: slug name
+        type: string
+      status:
         type: string
       tag_id:
-        description: tag id
         type: string
       updated_at:
-        description: updated time
         type: integer
     type: object
   schema.GetTagSynonymsResp:
@@ -1507,6 +1478,8 @@ definitions:
           $ref: '#/definitions/schema.TagResp'
         type: array
       title:
+        type: string
+      url_title:
         type: string
       user_info:
         allOf:
@@ -2301,6 +2274,9 @@ definitions:
         type: string
       username:
         description: username
+        type: string
+      visit_token:
+        description: visit token
         type: string
       website:
         description: website
@@ -4659,6 +4635,30 @@ paths:
       summary: get user personal votes
       tags:
       - Activity
+  /answer/api/v1/plugin/status:
+    get:
+      consumes:
+      - application/json
+      description: get all plugins status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetPluginListResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get all plugins status
+      tags:
+      - Plugin
   /answer/api/v1/post/render:
     post:
       consumes:

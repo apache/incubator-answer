@@ -301,7 +301,7 @@ const Ask = () => {
         modifyQuestion(ep)
           .then(async (res) => {
             await editCaptcha.close();
-            navigate(pathFactory.questionLanding(qid, params.url_title), {
+            navigate(pathFactory.questionLanding(qid, res?.url_title), {
               state: { isReview: res?.wait_for_review },
             });
           })
@@ -353,7 +353,7 @@ const Ask = () => {
           if (checked) {
             navigate(pathFactory.questionLanding(id, res?.question?.url_title));
           } else {
-            navigate(pathFactory.questionLanding(id));
+            navigate(pathFactory.questionLanding(id, res?.url_title));
           }
         }
         removeDraft();
