@@ -200,7 +200,11 @@ export const postAnswer = (params: Type.PostAnswerReq) => {
   return request.post('/answer/api/v1/answer', params);
 };
 
-export const bookmark = (params: { group_id: string; object_id: string }) => {
+export const bookmark = (params: {
+  group_id: string;
+  object_id: string;
+  bookmark: boolean;
+}) => {
   return request.post('/answer/api/v1/collection/switch', params);
 };
 
