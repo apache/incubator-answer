@@ -83,25 +83,11 @@ const Index = () => {
   });
 
   useEffect(() => {
-    setFormData({
-      ...formData,
-      displayName: { ...formData.displayName, value: data?.display_name || '' },
-      slugName: { ...formData.slugName, value: data?.slug_name || '' },
-      description: {
-        ...formData.description,
-        value: data?.original_text || '',
-      },
-    });
-
-    setImmData({
-      ...immData,
-      displayName: { ...immData.displayName, value: data?.display_name || '' },
-      slugName: { ...immData.slugName, value: data?.slug_name || '' },
-      description: {
-        ...immData.description,
-        value: data?.original_text || '',
-      },
-    });
+    initFormData.displayName.value = data?.display_name || '';
+    initFormData.slugName.value = data?.slug_name || '';
+    initFormData.description.value = data?.original_text || '';
+    setFormData(initFormData);
+    setImmData(initFormData);
   }, [data]);
 
   useEffect(() => {
@@ -111,9 +97,6 @@ const Index = () => {
       slugName: slug_name,
       description: original_text,
     } = immData;
-    if (!display_name || !slug_name || !original_text) {
-      return;
-    }
 
     if (
       display_name.value !== displayName.value ||
