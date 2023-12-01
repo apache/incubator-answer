@@ -115,6 +115,7 @@ type SearchObject struct {
 	ID              string `json:"id"`
 	QuestionID      string `json:"question_id"`
 	Title           string `json:"title"`
+	UrlTitle        string `json:"url_title"`
 	Excerpt         string `json:"excerpt"`
 	CreatedAtParsed int64  `json:"created_at"`
 	VoteCount       int    `json:"vote_count"`
