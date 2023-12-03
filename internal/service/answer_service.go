@@ -495,6 +495,10 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
+func (as *AnswerService) GetByUserIDQuestionID(ctx context.Context, userId string, questionId string) ([]*entity.Answer, error) {
+	return as.answerRepo.GetByUserIDQuestionID(ctx, userId, questionId)
+}
+
 func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminUpdateAnswerStatusReq) error {
 	setStatus, ok := entity.AdminAnswerSearchStatus[req.Status]
 	if !ok {
