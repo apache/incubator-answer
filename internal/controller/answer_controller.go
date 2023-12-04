@@ -245,15 +245,16 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	write, err := ac.siteInfoCommonService.GetSiteWrite(ctx)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
+		return
 	}
 	if write.RestrictAnswer {
 		// check if there's already an answer by this user
-		resp, err := ac.answerService.GetByUserIDQuestionID(ctx, req.UserID, req.QuestionID)
+		count, err := ac.answerService.GetCountByUserIDQuestionID(ctx, req.UserID, req.QuestionID)
 		if err != nil {
 			handler.HandleResponse(ctx, err, nil)
 			return
 		}
-		if len(resp) >= 1 {
+		if count >= 1 {
 			handler.HandleResponse(ctx, errors.Forbidden(reason.AnswerRestrictAnswer), nil)
 			return
 		}

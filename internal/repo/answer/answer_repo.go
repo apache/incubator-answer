@@ -289,20 +289,14 @@ func (ar *answerRepo) GetCountByUserID(ctx context.Context, userID string) (int6
 	return count, nil
 }
 
-func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) ([]*entity.Answer, error) {
+func (ar *answerRepo) GetCountByUserIDQuestionID(ctx context.Context, userID string, questionID string) (count int64, err error) {
 	questionID = uid.DeShortID(questionID)
-	var resp = make([]*entity.Answer, 0)
-	err := ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).Find(&resp)
+	var resp = new(entity.Answer)
+	count, err = ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
-		return resp, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if handler.GetEnableShortID(ctx) {
-		for _, item := range resp {
-			item.ID = uid.EnShortID(item.ID)
-			item.QuestionID = uid.EnShortID(item.QuestionID)
-		}
-	}
-	return resp, nil
+	return count, nil
 }
 
 // SearchList
