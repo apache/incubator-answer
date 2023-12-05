@@ -534,6 +534,7 @@ ui:
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
+    logout: Log Out
   notifications:
     title: Notifications
     inbox: Inbox

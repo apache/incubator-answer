@@ -94,7 +94,8 @@ const Header: FC = () => {
     navigate(searchUrl);
   };
 
-  const handleLogout = async () => {
+  const handleLogout = async (evt) => {
+    evt.preventDefault();
     await logout();
     clearUserStore();
     window.location.replace(window.location.href);
@@ -167,7 +168,11 @@ const Header: FC = () => {
           {/* mobile nav */}
           <div className="d-flex lg-none align-items-center flex-lg-nowrap">
             {user?.username ? (
-              <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
+              <NavItems
+                redDot={redDot}
+                userInfo={user}
+                logOut={(e) => handleLogout(e)}
+              />
             ) : (
               <>
                 <Button
