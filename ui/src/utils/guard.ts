@@ -163,6 +163,16 @@ export const logged = () => {
   return gr;
 };
 
+export const loggedRedirectHome = () => {
+  const gr: TGuardResult = { ok: true };
+  const us = deriveLoginState();
+  if (!us.isLogged) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
+  }
+  return gr;
+};
+
 export const notLogged = () => {
   const gr: TGuardResult = { ok: true };
   const us = deriveLoginState();
