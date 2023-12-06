@@ -17,19 +17,20 @@
  * under the License.
  */
 
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 
-import { usePageTags } from '@/hooks';
-import { Pagination, FormatTime, Empty } from '@/components';
-import { loggedUserInfoStore } from '@/stores';
 import {
   usePersonalInfoByName,
   usePersonalTop,
   usePersonalListByTabName,
+  questionDetail,
 } from '@/services';
+import { usePageTags } from '@/hooks';
+import { Pagination, FormatTime, Empty } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
 import type { UserInfoRes } from '@/common/interface';
 
 import {
@@ -66,7 +67,46 @@ const Personal: FC = () => {
     },
     tabName,
   );
-  const { count = 0, list = [] } = listData?.[tabName] || {};
+  const { list = [] } = listData?.[tabName] || {};
+  const [filteredList, setFilteredList] = useState<any[]>([]);
+  const currentUserId = sessionUser?.id;
+  console.log(sessionUser);
+  useEffect(() => {
+    const fetchQuestionDetails = async () => {
+      let completedList;
+
+      if (tabName === 'bookmarks') {
+        completedList = list.map((item) => ({ ...item, questionInfo: item }));
+      } else {
+        const promises = list.map((item) => {
+          const questionId = item.question_id;
+          return questionDetail(questionId)
+            .then((questionInfo) => ({ ...item, questionInfo }))
+            .catch((error) => {
+              console.error(`error_ID: ${questionId}`, error);
+              return null;
+            });
+        });
+
+        completedList = await Promise.all(promises);
+      }
+
+      const filtered = completedList.filter((item) => {
+        if (!item) return false;
+        const userId = item.questionInfo?.user_info?.id;
+        const showValue = item.questionInfo?.show;
+        return !(showValue === 2 && userId !== currentUserId);
+      });
+
+      setFilteredList(filtered);
+    };
+
+    if (list.length) {
+      fetchQuestionDetails();
+    }
+  }, [list, currentUserId, tabName]);
+
+  const count = filteredList.length;
 
   let pageTitle = '';
   if (userInfo?.username) {
@@ -115,15 +155,15 @@ const Personal: FC = () => {
             visible={tabName !== 'overview'}
             tabName={tabName}
           />
-          <Answers data={list} visible={tabName === 'answers'} />
+          <Answers data={filteredList} visible={tabName === 'answers'} />
           <DefaultList
-            data={list}
+            data={filteredList}
             tabName={tabName}
             visible={tabName === 'questions' || tabName === 'bookmarks'}
           />
-          <Reputation data={list} visible={tabName === 'reputation'} />
-          <Comments data={list} visible={tabName === 'comments'} />
-          <Votes data={list} visible={tabName === 'votes'} />
+          <Reputation data={filteredList} visible={tabName === 'reputation'} />
+          <Comments data={filteredList} visible={tabName === 'comments'} />
+          <Votes data={filteredList} visible={tabName === 'votes'} />
           {!list?.length && !isLoading && <Empty />}
 
           {count > 0 && (
