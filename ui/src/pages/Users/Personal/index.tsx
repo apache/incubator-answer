@@ -27,6 +27,7 @@ import {
   usePersonalTop,
   usePersonalListByTabName,
   questionDetail,
+  getAnswers,
 } from '@/services';
 import { usePageTags } from '@/hooks';
 import { Pagination, FormatTime, Empty } from '@/components';
@@ -54,7 +55,8 @@ const Personal: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
   const sessionUser = loggedUserInfoStore((state) => state.user);
   const isSelf = sessionUser?.username === username;
-
+  const currentUserId = sessionUser?.id;
+  const roleId = sessionUser?.role_id;
   const { data: userInfo } = usePersonalInfoByName(username);
   const { data: topData } = usePersonalTop(username, tabName);
 
@@ -67,44 +69,125 @@ const Personal: FC = () => {
     },
     tabName,
   );
+  const getFullQuestionInfo = async (list) => {
+    const promises = list.map((item) => {
+      const questionId = item.question_id;
+      return questionDetail(questionId)
+        .then((questionInfo) => ({ ...item, questionInfo }))
+        .catch((error) => {
+          console.error(`error_ID: ${questionId}`, error);
+          return null;
+        });
+    });
+    const completedList = await Promise.all(promises);
+    return completedList;
+  };
+
+  const getAnswersUserId = async (list) => {
+    const promises = list.map((item) =>
+      getAnswers({
+        order: order === 'updated' ? order : 'default',
+        question_id: item.question_id,
+        page: 1,
+        page_size: 999,
+      })
+        .then((res) => ({
+          questionId: item.question_id,
+          user_ids: res.list.map((answer) => answer.user_info.id),
+        }))
+        .catch((error) => {
+          console.error(
+            `Error fetching answers for question ID: ${item.question_id}`,
+            error,
+          );
+          return { questionId: item.question_id, user_ids: [] };
+        }),
+    );
+
+    const results = await Promise.all(promises);
+    const answersMap = new Map();
+    results.forEach(({ questionId, user_ids }) =>
+      answersMap.set(questionId, user_ids),
+    );
+    return answersMap;
+  };
+  const getFiltered = (completedList, answersMap) => {
+    const filtered = completedList.filter((item) => {
+      if (!item) return false;
+      const userId = item.questionInfo?.user_info?.id;
+      const showValue = item.questionInfo?.show;
+      const userAnswered = answersMap
+        .get(item.question_id)
+        ?.includes(currentUserId);
+      return showValue !== 2 || userId === currentUserId || userAnswered;
+    });
+    return filtered;
+  };
   const { list = [] } = listData?.[tabName] || {};
+  const top = topData ?? { answer: [], question: [] };
+  console.log('top data', topData);
+  console.log('list data', list);
   const [filteredList, setFilteredList] = useState<any[]>([]);
-  const currentUserId = sessionUser?.id;
-  console.log(sessionUser);
+  const [filteredTop, setFilteredTop] = useState<{
+    answer: any[];
+    question: any[];
+  }>({ answer: [], question: [] });
+  useEffect(() => {
+    const fetchTop = async () => {
+      if (roleId === 2) {
+        setFilteredTop(top);
+        return;
+      }
+      const completedAnswers = await getFullQuestionInfo(top.answer);
+      const completedQuestion = await getFullQuestionInfo(top.question);
+      const answersAnswerMap = await getAnswersUserId(completedAnswers);
+      const questionsAnswerMap = await getAnswersUserId(completedQuestion);
+      const filteredAnswer = getFiltered(completedAnswers, answersAnswerMap);
+      const filteredQuestion = getFiltered(
+        completedQuestion,
+        questionsAnswerMap,
+      );
+      const answerQuestionIds = filteredAnswer.map((answer) => {
+        return answer.question_id;
+      });
+      const questionQuestionIds = filteredQuestion.map((question) => {
+        return question.question_id;
+      });
+      const filtered = {
+        answer: top.answer.filter((answer) =>
+          answerQuestionIds.includes(answer.question_id),
+        ),
+        question: top.question.filter((question) =>
+          questionQuestionIds.includes(question.question_id),
+        ),
+      };
+      setFilteredTop(filtered);
+    };
+    if (top.answer.length || top.question.length) {
+      fetchTop();
+    }
+  }, [top, currentUserId, roleId]);
   useEffect(() => {
     const fetchQuestionDetails = async () => {
+      if (roleId === 2) {
+        setFilteredList(list);
+        return;
+      }
       let completedList;
-
       if (tabName === 'bookmarks') {
         completedList = list.map((item) => ({ ...item, questionInfo: item }));
       } else {
-        const promises = list.map((item) => {
-          const questionId = item.question_id;
-          return questionDetail(questionId)
-            .then((questionInfo) => ({ ...item, questionInfo }))
-            .catch((error) => {
-              console.error(`error_ID: ${questionId}`, error);
-              return null;
-            });
-        });
-
-        completedList = await Promise.all(promises);
+        completedList = await getFullQuestionInfo(list);
       }
-
-      const filtered = completedList.filter((item) => {
-        if (!item) return false;
-        const userId = item.questionInfo?.user_info?.id;
-        const showValue = item.questionInfo?.show;
-        return !(showValue === 2 && userId !== currentUserId);
-      });
-
+      const answersMap = await getAnswersUserId(completedList);
+      const filtered = getFiltered(completedList, answersMap);
       setFilteredList(filtered);
     };
 
     if (list.length) {
       fetchQuestionDetails();
     }
-  }, [list, currentUserId, tabName]);
+  }, [list, currentUserId, tabName, roleId]);
 
   const count = filteredList.length;
 
@@ -147,7 +230,7 @@ const Personal: FC = () => {
           <Overview
             visible={tabName === 'overview'}
             introduction={userInfo?.bio_html || ''}
-            data={topData}
+            data={filteredTop}
           />
           <ListHead
             count={tabName === 'reputation' ? Number(userInfo?.rank) : count}
