@@ -21,8 +21,6 @@ package answer
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/plugin"
-	"github.com/segmentfault/pacman/log"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -37,7 +35,9 @@ import (
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/apache/incubator-answer/pkg/uid"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // answerRepo answer repository
@@ -289,12 +289,20 @@ func (ar *answerRepo) GetCountByUserID(ctx context.Context, userID string) (int6
 	return count, nil
 }
 
-func (ar *answerRepo) GetIDsByUserIDAndQuestionID(ctx context.Context, userID string, questionID string) ([]int64, error) {
+func (ar *answerRepo) GetIDsByUserIDAndQuestionID(ctx context.Context, userID string, questionID string) ([]string, error) {
 	questionID = uid.DeShortID(questionID)
-	var resp []int64
-	err := ar.data.DB.Context(ctx).Table(entity.Answer{}.TableName()).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).OrderBy("created_at ASC").Cols("id").Find(&resp)
+	var ids []string
+	resp := make([]string, 0)
+	err := ar.data.DB.Context(ctx).Table(entity.Answer{}.TableName()).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).OrderBy("created_at ASC").Cols("id").Find(&ids)
 	if err != nil {
 		return resp, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if handler.GetEnableShortID(ctx) {
+		for _, id := range ids {
+			resp = append(resp, uid.EnShortID(id))
+		}
+	} else {
+		resp = ids
 	}
 	return resp, nil
 }

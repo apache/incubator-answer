@@ -232,7 +232,6 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     setEditorFocusState(true);
   };
 
-  console.log(data);
   return (
     <Form noValidate className="mt-4">
       {(!data.answered || showEditor) && (

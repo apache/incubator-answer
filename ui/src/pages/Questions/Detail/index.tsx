@@ -195,6 +195,7 @@ const Index = () => {
       setQuestion({
         ...question,
         answered: true,
+        answer_ids: [...question.answer_ids, obj.id],
       });
     }
   };
@@ -229,8 +230,6 @@ const Index = () => {
       canInvitePeople = true;
     }
   }
-
-  console.log(question);
 
   return (
     <Row className="questionDetailPage pt-4 mb-5">

@@ -23,7 +23,6 @@ import (
 	"context"
 	"encoding/json"
 	"math"
-	"strconv"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -306,7 +305,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 
 	st := make([]string, 0)
 	for _, id := range ids {
-		st = append(st, strconv.FormatInt(id, 10))
+		st = append(st, id)
 	}
 	showinfo.AnswerIDs = st
 
