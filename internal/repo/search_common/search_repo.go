@@ -50,10 +50,10 @@ var (
 		"`question`.`id`",
 		"`question`.`id` as `question_id`",
 		"`title`",
-		"`parsed_text`",
+		"`question`.`parsed_text` as `parsed_text`",
 		"`question`.`created_at` as `created_at`",
-		"`user_id`",
-		"`vote_count`",
+		"`question`.`user_id` as `user_id`",
+		"`question`.`vote_count` as `vote_count`",
 		"`answer_count`",
 		"CASE WHEN `accepted_answer_id` > 0 THEN 2 ELSE 0 END as `accepted`",
 		"`question`.`status` as `status`",
@@ -98,54 +98,41 @@ func NewSearchRepo(
 }
 
 // SearchContents search question and answer data
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
-
 	var (
-		b     *builder.Builder
-		ub    *builder.Builder
-		qfs   = qFields
-		afs   = aFields
-		argsQ = []interface{}{}
-		argsA = []interface{}{}
+		b    *builder.Builder
+		qfs  = qFields
+		args = []interface{}{}
 	)
 
 	if order == "relevance" {
 		if len(words) > 0 {
-			qfs, argsQ = addRelevanceField([]string{"title", "original_text"}, words, qfs)
-			afs, argsA = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+			qfs, args = addRelevanceField([]string{"`question`.`title`", "`question`.`original_text`"}, words, qfs)
 		} else {
 			order = "newest"
 		}
 	}
 
-	b = builder.MySQL().Select(qfs...).From("`question`")
-	ub = builder.MySQL().Select(afs...).From("`answer`").
-		LeftJoin("`question`", "`question`.id = `answer`.question_id")
+	// create builder
+	b = builder.MySQL().Select(qfs...).From("`question`").
+		LeftJoin("`answer`", "`question`.`id` = `answer`.`question_id`").
+		Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
+		And(builder.Eq{"`question`.`show`": entity.QuestionShow}).
+		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted})
+	args = append(args, entity.QuestionStatusDeleted, entity.QuestionShow, entity.AnswerStatusDeleted)
 
-	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
-		And(builder.Eq{"`question`.`show`": entity.QuestionShow})
-	ub.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
-		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).
-		And(builder.Eq{"`question`.`show`": entity.QuestionShow})
-
-	argsQ = append(argsQ, entity.QuestionStatusDeleted, entity.QuestionShow)
-	argsA = append(argsA, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted, entity.QuestionShow)
-
-	likeConQ := builder.NewCond()
-	likeConA := builder.NewCond()
+	// add content like match conditions
+	likeCon := builder.NewCond()
 	for _, word := range words {
-		likeConQ = likeConQ.Or(builder.Like{"title", word}).
-			Or(builder.Like{"original_text", word})
-		argsQ = append(argsQ, "%"+word+"%")
-		argsQ = append(argsQ, "%"+word+"%")
-
-		likeConA = likeConA.Or(builder.Like{"`answer`.original_text", word})
-		argsA = append(argsA, "%"+word+"%")
+		likeCon = likeCon.Or(builder.Like{"`question`.`title`", word}).
+			Or(builder.Like{"`question`.`original_text`", word}).
+			Or(builder.Like{"`answer`.original_text", word})
+		args = append(args, "%"+word+"%")
+		args = append(args, "%"+word+"%")
+		args = append(args, "%"+word+"%")
 	}
-
-	b.Where(likeConQ)
-	ub.Where(likeConA)
+	b.Where(likeCon)
 
 	// check tag
 	for ti, tagID := range tagIDs {
@@ -155,53 +142,25 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 				ast + ".tag_id": tagID,
 				ast + ".status": entity.TagRelStatusAvailable,
 			})
-		ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
-			And(builder.Eq{
-				ast + ".tag_id": tagID,
-				ast + ".status": entity.TagRelStatusAvailable,
-			})
-		argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
-		argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
+		args = append(args, entity.TagRelStatusAvailable, tagID)
 	}
 
 	// check user
 	if userID != "" {
-		b.Where(builder.Eq{"question.user_id": userID})
-		ub.Where(builder.Eq{"answer.user_id": userID})
-		argsQ = append(argsQ, userID)
-		argsA = append(argsA, userID)
+		userCond := builder.NewCond()
+		userCond.Or(builder.Eq{"question.user_id": userID}).
+			Or(builder.Eq{"answer.user_id": userID})
+		args = append(args, userID)
+		args = append(args, userID)
+		b.Where(userCond)
 	}
 
-	// check vote
-	if votes == 0 {
-		b.Where(builder.Eq{"question.vote_count": votes})
-		ub.Where(builder.Eq{"answer.vote_count": votes})
-		argsQ = append(argsQ, votes)
-		argsA = append(argsA, votes)
-	} else if votes > 0 {
-		b.Where(builder.Gte{"question.vote_count": votes})
-		ub.Where(builder.Gte{"answer.vote_count": votes})
-		argsQ = append(argsQ, votes)
-		argsA = append(argsA, votes)
-	}
-
-	//b = b.Union("all", ub)
-	ubSQL, _, err := ub.ToSQL()
-	if err != nil {
-		return
-	}
-	bSQL, _, err := b.ToSQL()
-	if err != nil {
-		return
-	}
-	sql := fmt.Sprintf("(%s UNION ALL %s)", bSQL, ubSQL)
-
-	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
 
-	querySQL, _, err := builder.MySQL().Select("*").From(sql, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
@@ -210,12 +169,10 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	countArgs := []interface{}{}
 
 	queryArgs = append(queryArgs, querySQL)
-	queryArgs = append(queryArgs, argsQ...)
-	queryArgs = append(queryArgs, argsA...)
+	queryArgs = append(queryArgs, args...)
 
 	countArgs = append(countArgs, countSQL)
-	countArgs = append(countArgs, argsQ...)
-	countArgs = append(countArgs, argsA...)
+	countArgs = append(countArgs, args...)
 
 	res, err := sr.data.DB.Context(ctx).Query(queryArgs...)
 	if err != nil {
@@ -236,7 +193,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, votes, views, answers int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 	var (
 		qfs  = qFields
@@ -254,6 +211,15 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 
 	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 	args = append(args, entity.QuestionStatusDeleted, entity.QuestionShow)
+
+	// check vote
+	if votes == 0 {
+		b.And(builder.Eq{"question.vote_count": votes})
+		args = append(args, votes)
+	} else if votes > 0 {
+		b.And(builder.Gte{"question.vote_count": votes})
+		args = append(args, votes)
+	}
 
 	likeConQ := builder.NewCond()
 	for _, word := range words {

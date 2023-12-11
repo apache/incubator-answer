@@ -69,10 +69,10 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 	if finder == nil {
 		if cond.SearchAll() {
 			resp.SearchResults, resp.Total, err =
-				ss.searchRepo.SearchContents(ctx, cond.Words, cond.Tags, cond.UserID, cond.VoteAmount, dto.Page, dto.Size, dto.Order)
+				ss.searchRepo.SearchContents(ctx, cond.Words, cond.Tags, cond.UserID, dto.Page, dto.Size, dto.Order)
 		} else if cond.SearchQuestion() {
 			resp.SearchResults, resp.Total, err =
-				ss.searchRepo.SearchQuestions(ctx, cond.Words, cond.Tags, cond.NotAccepted, cond.Views, cond.AnswerAmount, dto.Page, dto.Size, dto.Order)
+				ss.searchRepo.SearchQuestions(ctx, cond.Words, cond.Tags, cond.NotAccepted, cond.VoteAmount, cond.Views, cond.AnswerAmount, dto.Page, dto.Size, dto.Order)
 		} else if cond.SearchAnswer() {
 			resp.SearchResults, resp.Total, err =
 				ss.searchRepo.SearchAnswers(ctx, cond.Words, cond.Tags, cond.Accepted, cond.QuestionID, dto.Page, dto.Size, dto.Order)

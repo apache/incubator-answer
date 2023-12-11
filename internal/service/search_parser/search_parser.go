@@ -56,12 +56,15 @@ func (sp *SearchParser) ParseStructure(ctx context.Context, dto *schema.SearchDT
 	// match tags
 	cond.Tags = sp.parseTags(ctx, &query)
 
-	// match all
+	//default: match all
 	cond.UserID = sp.parseUserID(ctx, &query, dto.UserID)
-	cond.VoteAmount = sp.parseVotes(&query)
 	cond.Words = sp.parseWithin(&query)
 
 	// match questions
+	cond.VoteAmount = sp.parseVotes(&query)
+	if cond.VoteAmount > -1 {
+		cond.TargetType = constant.QuestionObjectType
+	}
 	cond.NotAccepted = sp.parseNotAccepted(&query)
 	if cond.NotAccepted {
 		cond.TargetType = constant.QuestionObjectType
@@ -100,6 +103,14 @@ func (sp *SearchParser) ParseStructure(ctx context.Context, dto *schema.SearchDT
 	// check limit words
 	if len(cond.Words) > limitWords {
 		cond.Words = cond.Words[:limitWords]
+	}
+
+	// only tags, not words and search is default, only search question
+	if len(cond.Words) == 0 &&
+		len(cond.Tags) > 0 &&
+		cond.TargetType != constant.QuestionObjectType &&
+		cond.TargetType != constant.AnswerObjectType {
+		cond.TargetType = constant.QuestionObjectType
 	}
 	return
 }
