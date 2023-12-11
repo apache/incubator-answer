@@ -244,6 +244,7 @@ export interface QuestionDetailRes {
   user_info: UserInfoBase;
   answered: boolean;
   collected: boolean;
+  answer_ids: string[];
 
   [prop: string]: any;
 }
@@ -396,6 +397,7 @@ export interface SiteSettings {
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
   site_users: AdminSettingsUsers;
+  site_write: AdminSettingsWrite;
   version: string;
   revision: string;
 }
@@ -415,6 +417,7 @@ export interface AdminSettingsLegal {
 }
 
 export interface AdminSettingsWrite {
+  restrict_answer?: boolean;
   recommend_tags: string[];
   required_tag: string;
   reserved_tags: string[];

@@ -28,7 +28,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { Pagination, CustomSidebar } from '@/components';
-import { loggedUserInfoStore, toastStore } from '@/stores';
+import { loggedUserInfoStore, toastStore, writeSettingStore } from '@/stores';
 import { scrollToElementTop, scrollToDocTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
@@ -74,6 +74,7 @@ const Index = () => {
   });
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
+  const writeInfo = writeSettingStore((state) => state.write);
   const isAuthor = userInfo?.username === question?.user_info?.username;
   const isAdmin = userInfo?.role_id === 2;
   const isModerator = userInfo?.role_id === 3;
@@ -229,6 +230,8 @@ const Index = () => {
     }
   }
 
+  console.log(question);
+
   return (
     <Row className="questionDetailPage pt-4 mb-5">
       <Col className="page-main flex-auto">
@@ -279,7 +282,9 @@ const Index = () => {
               data={{
                 qid,
                 answered: question?.answered,
+                restrictAnswer: writeInfo.restrict_answer,
                 loggedUserRank,
+                answer_ids: question?.answer_ids,
               }}
               callback={writeAnswerCallback}
             />

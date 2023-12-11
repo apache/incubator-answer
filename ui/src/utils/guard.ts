@@ -29,6 +29,7 @@ import {
   seoSettingStore,
   loginToContinueStore,
   pageTagStore,
+  writeSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import {
@@ -398,6 +399,7 @@ export const initAppSettingsStore = async () => {
     customizeStore.getState().update(appSettings.custom_css_html);
     themeSettingStore.getState().update(appSettings.theme);
     seoSettingStore.getState().update(appSettings.site_seo);
+    writeSettingStore.getState().update(appSettings.site_write);
   }
 };
 

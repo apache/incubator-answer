@@ -495,8 +495,8 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
-func (as *AnswerService) GetCountByUserIDQuestionID(ctx context.Context, userId string, questionId string) (answerCount int64, err error) {
-	return as.answerRepo.GetCountByUserIDQuestionID(ctx, userId, questionId)
+func (as *AnswerService) GetCountByUserIDQuestionID(ctx context.Context, userId string, questionId string) (ids []int64, err error) {
+	return as.answerRepo.GetIDsByUserIDAndQuestionID(ctx, userId, questionId)
 }
 
 func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminUpdateAnswerStatusReq) error {

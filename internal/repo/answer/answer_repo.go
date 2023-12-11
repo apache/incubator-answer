@@ -185,8 +185,8 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 
 // GetQuestionCount
 func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err error) {
-	list := make([]*entity.Answer, 0)
-	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).FindAndCount(&list)
+	var resp = new(entity.Answer)
+	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -272,8 +272,8 @@ func (ar *answerRepo) GetByID(ctx context.Context, answerID string) (*entity.Ans
 
 func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID string) (int64, error) {
 	questionID = uid.DeShortID(questionID)
-	rows := make([]*entity.Answer, 0)
-	count, err := ar.data.DB.Context(ctx).Where("question_id =? and  status = ?", questionID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	var resp = new(entity.Answer)
+	count, err := ar.data.DB.Context(ctx).Where("question_id =? and  status = ?", questionID, entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -281,22 +281,22 @@ func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID strin
 }
 
 func (ar *answerRepo) GetCountByUserID(ctx context.Context, userID string) (int64, error) {
-	rows := make([]*entity.Answer, 0)
-	count, err := ar.data.DB.Context(ctx).Where(" user_id = ?  and  status = ?", userID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	var resp = new(entity.Answer)
+	count, err := ar.data.DB.Context(ctx).Where(" user_id = ?  and  status = ?", userID, entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return count, nil
 }
 
-func (ar *answerRepo) GetCountByUserIDQuestionID(ctx context.Context, userID string, questionID string) (count int64, err error) {
+func (ar *answerRepo) GetIDsByUserIDAndQuestionID(ctx context.Context, userID string, questionID string) ([]int64, error) {
 	questionID = uid.DeShortID(questionID)
-	var resp = new(entity.Answer)
-	count, err = ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).Count(resp)
+	var resp []int64
+	err := ar.data.DB.Context(ctx).Table(entity.Answer{}.TableName()).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).OrderBy("created_at ASC").Cols("id").Find(&resp)
 	if err != nil {
-		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return resp, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return count, nil
+	return resp, nil
 }
 
 // SearchList

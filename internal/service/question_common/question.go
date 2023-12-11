@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"math"
+	"strconv"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -297,11 +298,17 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	isFollowed, _ := qs.followCommon.IsFollowed(ctx, loginUserID, questionID)
 	showinfo.IsFollowed = isFollowed
 
-	has, err = qs.AnswerCommon.SearchAnswered(ctx, loginUserID, dbinfo.ID)
+	ids, err := qs.AnswerCommon.SearchAnswerIDs(ctx, loginUserID, dbinfo.ID)
 	if err != nil {
 		log.Error("AnswerFunc.SearchAnswered", err)
 	}
-	showinfo.Answered = has
+	showinfo.Answered = len(ids) > 0
+
+	st := make([]string, 0)
+	for _, id := range ids {
+		st = append(st, strconv.FormatInt(id, 10))
+	}
+	showinfo.AnswerIDs = st
 
 	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
 	if err != nil {

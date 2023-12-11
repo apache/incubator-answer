@@ -20,6 +20,7 @@
 import { memo, useState, FC, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { marked } from 'marked';
 import classNames from 'classnames';
@@ -37,7 +38,9 @@ interface Props {
     /** question  id */
     qid: string;
     answered?: boolean;
+    restrictAnswer?: boolean;
     loggedUserRank: number;
+    answer_ids?: string[];
   };
   callback?: (obj) => void;
 }
@@ -195,6 +198,11 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     if (!guard.tryNormalLogged(true)) {
       return;
     }
+    if (data?.answered && !showEditor && data?.restrictAnswer) {
+      setShowEditor(true);
+      return;
+    }
+
     if (data?.answered && !showEditor) {
       Modal.confirm({
         title: t('confirm_title'),
@@ -223,6 +231,8 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     setShowEditor(true);
     setEditorFocusState(true);
   };
+
+  console.log(data);
   return (
     <Form noValidate className="mt-4">
       {(!data.answered || showEditor) && (
@@ -306,10 +316,20 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
       )}
 
       {data.answered && !showEditor ? (
-        <Button onClick={clickBtn}>{t('add_another_answer')}</Button>
+        // the 0th answer is the oldest one
+        <Link to={`/posts/${data.qid}/${data.answer_ids?.at(0)}/edit`}>
+          <Button>{t('edit_answer')}</Button>
+        </Link>
       ) : (
         <Button onClick={clickBtn}>{t('btn_name')}</Button>
       )}
+
+      {data.answered && !showEditor && !data.restrictAnswer && (
+        <Button onClick={clickBtn} className="ms-2 " variant="outline-primary">
+          {t('add_another_answer')}
+        </Button>
+      )}
+
       {hasDraft && (
         <Button variant="link" className="ms-2" onClick={deleteDraft}>
           {t('discard_draft', { keyPrefix: 'btns' })}

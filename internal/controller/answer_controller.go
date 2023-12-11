@@ -249,12 +249,12 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	if write.RestrictAnswer {
 		// check if there's already an answer by this user
-		count, err := ac.answerService.GetCountByUserIDQuestionID(ctx, req.UserID, req.QuestionID)
+		ids, err := ac.answerService.GetCountByUserIDQuestionID(ctx, req.UserID, req.QuestionID)
 		if err != nil {
 			handler.HandleResponse(ctx, err, nil)
 			return
 		}
-		if count >= 1 {
+		if len(ids) >= 1 {
 			handler.HandleResponse(ctx, errors.Forbidden(reason.AnswerRestrictAnswer), nil)
 			return
 		}

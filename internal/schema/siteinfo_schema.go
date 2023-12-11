@@ -208,6 +208,7 @@ type SiteInfoResp struct {
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoResp           `json:"site_seo"`
 	SiteUsers     *SiteUsersResp         `json:"site_users"`
+	Write         *SiteWriteResp         `json:"site_write"`
 	Version       string                 `json:"version"`
 	Revision      string                 `json:"revision"`
 }
