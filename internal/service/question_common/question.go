@@ -302,12 +302,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 		log.Error("AnswerFunc.SearchAnswered", err)
 	}
 	showinfo.Answered = len(ids) > 0
-
-	st := make([]string, 0)
-	for _, id := range ids {
-		st = append(st, id)
-	}
-	showinfo.AnswerIDs = st
+	showinfo.AnswerIDs = ids
 
 	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
 	if err != nil {
