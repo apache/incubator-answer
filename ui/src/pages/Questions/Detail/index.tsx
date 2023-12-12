@@ -181,6 +181,9 @@ const Index = () => {
       getDetail();
       return;
     }
+    if (type === 'delete_answer') {
+      getDetail();
+    }
     requestAnswers();
   };
 
