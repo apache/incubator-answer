@@ -194,7 +194,9 @@ const Index = () => {
       setQuestion({
         ...question,
         answered: true,
-        first_answer_id: obj.id,
+        first_answer_id: question.first_answer_id
+          ? question.first_answer_id
+          : obj.id,
       });
     }
   };
