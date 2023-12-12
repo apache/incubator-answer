@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
@@ -65,7 +65,7 @@ const Index: FC = () => {
     restrict_answer: {
       'ui:widget': 'switch',
       'ui:options': {
-        label: t('required_tag.label'),
+        label: t('restrict_answer.label'),
       },
     },
     recommend_tags: {
@@ -112,7 +112,9 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        writeSettingStore.getState().update(reqParams);
+        writeSettingStore
+          .getState()
+          .update({ restrict_answer: reqParams.restrict_answer });
       })
       .catch((err) => {
         if (err.isError) {

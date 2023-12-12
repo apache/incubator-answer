@@ -418,9 +418,9 @@ export interface AdminSettingsLegal {
 
 export interface AdminSettingsWrite {
   restrict_answer?: boolean;
-  recommend_tags: string[];
-  required_tag: string;
-  reserved_tags: string[];
+  recommend_tags?: string[];
+  required_tag?: string;
+  reserved_tags?: string[];
 }
 
 export interface AdminSettingsSeo {

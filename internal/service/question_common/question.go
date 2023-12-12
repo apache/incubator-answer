@@ -299,10 +299,12 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 
 	ids, err := qs.AnswerCommon.SearchAnswerIDs(ctx, loginUserID, dbinfo.ID)
 	if err != nil {
-		log.Error("AnswerFunc.SearchAnswered", err)
+		log.Error("AnswerFunc.SearchAnswerIDs", err)
 	}
 	showinfo.Answered = len(ids) > 0
-	showinfo.AnswerIDs = ids
+	if showinfo.Answered {
+		showinfo.FirstAnswerId = ids[0]
+	}
 
 	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
 	if err != nil {

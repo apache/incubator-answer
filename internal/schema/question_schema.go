@@ -245,7 +245,7 @@ type QuestionInfo struct {
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`
 	Answered             bool           `json:"answered"`
-	AnswerIDs            []string       `json:"answer_ids"`
+	FirstAnswerId        string         `json:"first_answer_id"`
 	Collected            bool           `json:"collected"`
 	VoteStatus           string         `json:"vote_status"`
 	IsFollowed           bool           `json:"is_followed"`
