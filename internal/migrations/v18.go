@@ -49,6 +49,25 @@ func addPasswordLoginControl(ctx context.Context, x *xorm.Engine) error {
 		}
 	}
 
+	writeSiteInfo := &entity.SiteInfo{
+		Type: constant.SiteTypeWrite,
+	}
+	exist, err = x.Context(ctx).Get(writeSiteInfo)
+	if err != nil {
+		return fmt.Errorf("get config failed: %w", err)
+	}
+	if exist {
+		content := &schema.SiteWriteReq{}
+		_ = json.Unmarshal([]byte(writeSiteInfo.Content), content)
+		content.RestrictAnswer = true
+		data, _ := json.Marshal(content)
+		writeSiteInfo.Content = string(data)
+		_, err = x.Context(ctx).ID(writeSiteInfo.ID).Cols("content").Update(writeSiteInfo)
+		if err != nil {
+			return fmt.Errorf("update site info failed: %w", err)
+		}
+	}
+
 	type User struct {
 		Avatar string `xorm:"not null default '' VARCHAR(1024) avatar"`
 	}
