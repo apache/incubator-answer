@@ -313,8 +313,10 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
 
       {data.answered && !showEditor ? (
         // the 0th answer is the oldest one
-        <Link to={`/posts/${data.qid}/${data.first_answer_id}/edit`}>
-          <Button>{t('edit_answer')}</Button>
+        <Link
+          to={`/posts/${data.qid}/${data.first_answer_id}/edit`}
+          className="btn btn-primary">
+          {t('edit_answer')}
         </Link>
       ) : (
         <Button onClick={clickBtn}>{t('btn_name')}</Button>
