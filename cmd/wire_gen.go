@@ -205,7 +205,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService)
 	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService, captchaService, rateLimitMiddleware)
-	answerController := controller.NewAnswerController(answerService, rankService, captchaService, rateLimitMiddleware)
+	answerController := controller.NewAnswerController(answerService, rankService, captchaService, siteInfoCommonService, rateLimitMiddleware)
 	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon, tagCommonService)
 	searchService := service.NewSearchService(searchParser, searchRepo)

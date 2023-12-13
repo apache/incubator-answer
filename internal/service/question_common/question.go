@@ -297,11 +297,14 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	isFollowed, _ := qs.followCommon.IsFollowed(ctx, loginUserID, questionID)
 	showinfo.IsFollowed = isFollowed
 
-	has, err = qs.AnswerCommon.SearchAnswered(ctx, loginUserID, dbinfo.ID)
+	ids, err := qs.AnswerCommon.SearchAnswerIDs(ctx, loginUserID, dbinfo.ID)
 	if err != nil {
-		log.Error("AnswerFunc.SearchAnswered", err)
+		log.Error("AnswerFunc.SearchAnswerIDs", err)
 	}
-	showinfo.Answered = has
+	showinfo.Answered = len(ids) > 0
+	if showinfo.Answered {
+		showinfo.FirstAnswerId = ids[0]
+	}
 
 	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
 	if err != nil {
