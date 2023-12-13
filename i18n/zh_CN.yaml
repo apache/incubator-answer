@@ -1052,8 +1052,9 @@ ui:
       btn_accepted: 已被采纳
     write_answer:
       title: 你的回答
+      edit_answer: 编辑我的回答
       btn_name: 提交你的回答
-      add_another_answer: 添加另一个答案
+      add_another_answer: 添加另一个回答
       confirm_title: 继续回答
       continue: 继续
       confirm_info: >-
@@ -1594,6 +1595,10 @@ ui:
         text: "您可以在此添加隐私政策内容。如果您已经在别处托管了文档，请在这里提供完整的URL。"
     write:
       page_title: 编辑
+      restrict_answer:
+        title: 限制一个回答
+        label: 每个用户对于每个问题只能有一个回答
+        text: "用户可以使用编辑按钮优化已有的回答"
       recommend_tags:
         label: 推荐标签
         text: "请在上方输入标签固定链接，每行一个标签。"

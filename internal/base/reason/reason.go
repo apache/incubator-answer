@@ -49,6 +49,7 @@ const (
 	AnswerCannotDeleted              = "error.answer.cannot_deleted"
 	AnswerCannotUpdate               = "error.answer.cannot_update"
 	AnswerCannotAddByClosedQuestion  = "error.answer.question_closed_cannot_add"
+	AnswerRestrictAnswer             = "error.answer.restrict_answer"
 	CommentEditWithoutPermission     = "error.comment.edit_without_permission"
 	DisallowVote                     = "error.object.disallow_vote"
 	DisallowFollow                   = "error.object.disallow_follow"

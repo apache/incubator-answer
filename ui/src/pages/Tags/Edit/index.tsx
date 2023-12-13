@@ -70,9 +70,6 @@ const Index = () => {
 
   const { data } = useTagInfo({ id: tagId });
   const { data: revisions = [] } = useQueryRevisions(data?.tag_id);
-  initFormData.displayName.value = data?.display_name || '';
-  initFormData.slugName.value = data?.slug_name || '';
-  initFormData.description.value = data?.original_text || '';
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
@@ -86,15 +83,20 @@ const Index = () => {
   });
 
   useEffect(() => {
+    initFormData.displayName.value = data?.display_name || '';
+    initFormData.slugName.value = data?.slug_name || '';
+    initFormData.description.value = data?.original_text || '';
+    setFormData(initFormData);
+    setImmData(initFormData);
+  }, [data]);
+
+  useEffect(() => {
     const { displayName, slugName, description, editSummary } = formData;
     const {
       displayName: display_name,
       slugName: slug_name,
       description: original_text,
     } = immData;
-    if (!display_name || !slug_name || !original_text) {
-      return;
-    }
 
     if (
       display_name.value !== displayName.value ||
