@@ -43,6 +43,7 @@ const Index: FC = () => {
         type: 'boolean',
         title: t('restrict_answer.title'),
         description: t('restrict_answer.text'),
+        default: true,
       },
       recommend_tags: {
         type: 'string',

@@ -28,7 +28,7 @@ interface IProps {
 
 const Index = create<IProps>((set) => ({
   write: {
-    restrict_answer: false,
+    restrict_answer: true,
     recommend_tags: [],
     required_tag: '',
     reserved_tags: [],
