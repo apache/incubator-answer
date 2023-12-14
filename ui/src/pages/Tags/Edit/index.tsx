@@ -164,7 +164,7 @@ const Index = () => {
       edit_summary: formData.editSummary.value,
     };
     modifyTag(params).then((res) => {
-      navigate(`/tags/${formData.slugName.value}/info`, {
+      navigate(`/tags/${encodeURIComponent(formData.slugName.value)}/info`, {
         replace: true,
         state: { isReview: res.wait_for_review },
       });

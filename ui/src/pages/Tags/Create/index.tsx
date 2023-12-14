@@ -115,7 +115,7 @@ const Index = () => {
     };
     createTag(params)
       .then((res) => {
-        navigate(`/tags/${res.slug_name}/info`, {
+        navigate(`/tags/${encodeURIComponent(res.slug_name)}/info`, {
           replace: true,
         });
       })

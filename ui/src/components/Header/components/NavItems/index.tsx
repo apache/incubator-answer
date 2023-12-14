@@ -30,7 +30,7 @@ import { userCenterStore } from '@/stores';
 interface Props {
   redDot: Type.NotificationStatus | undefined;
   userInfo: Type.UserInfoRes;
-  logOut: () => void;
+  logOut: (e) => void;
 }
 
 const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
@@ -111,7 +111,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
             {t('header.nav.setting')}
           </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={logOut}>
+          <Dropdown.Item href="/users/logout" onClick={(e) => logOut(e)}>
             {t('header.nav.logout')}
           </Dropdown.Item>
         </Dropdown.Menu>

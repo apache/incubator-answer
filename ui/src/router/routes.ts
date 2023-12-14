@@ -247,6 +247,13 @@ const routes: RouteNode[] = [
         },
       },
       {
+        path: 'users/logout',
+        page: 'pages/Users/Logout',
+        guard: () => {
+          return guard.loggedRedirectHome();
+        },
+      },
+      {
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
         guard: () => {

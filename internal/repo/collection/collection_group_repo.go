@@ -21,6 +21,7 @@ package collection
 
 import (
 	"context"
+	"xorm.io/xorm"
 
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/pager"
@@ -66,6 +67,42 @@ func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, us
 	}
 	collectionGroup = defaultGroup
 	return
+}
+
+// CreateDefaultGroupIfNotExist create default group if not exist
+func (cr *collectionGroupRepo) CreateDefaultGroupIfNotExist(ctx context.Context, userID string) (
+	collectionGroup *entity.CollectionGroup, err error) {
+	_, err = cr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
+		old := &entity.CollectionGroup{
+			UserID:       userID,
+			DefaultGroup: schema.CGDefault,
+		}
+		exist, err := session.ForUpdate().Get(old)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			collectionGroup = old
+			return old, nil
+		}
+
+		defaultGroup := &entity.CollectionGroup{
+			Name:         "default",
+			DefaultGroup: schema.CGDefault,
+			UserID:       userID,
+		}
+		_, err = session.Insert(defaultGroup)
+		if err != nil {
+			return nil, err
+		}
+		collectionGroup = defaultGroup
+		return nil, nil
+	})
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return collectionGroup, nil
 }
 
 // UpdateCollectionGroup update collection group

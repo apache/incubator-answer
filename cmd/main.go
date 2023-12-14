@@ -47,6 +47,8 @@ var (
 	Revision = "-"
 	// Time is the build time of the project
 	Time = "-"
+	// GoVersion is the go version of the project
+	GoVersion = "1.19"
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path
@@ -75,6 +77,7 @@ func runApp() {
 	}
 	constant.Version = Version
 	constant.Revision = Revision
+	constant.GoVersion = GoVersion
 	schema.AppStartTime = time.Now()
 	fmt.Println("answer Version:", constant.Version, " Revision:", constant.Revision)
 

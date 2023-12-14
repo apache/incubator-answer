@@ -76,28 +76,32 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             )}
           </Col>
           <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('run_mode')}</span>
+            <strong>{data.login_required ? t('private') : t('public')}</strong>
+          </Col>
+          <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('upload_folder')}</span>
+            <strong>
+              {data.uploading_files ? t('writable') : t('not_writable')}
+            </strong>
+          </Col>
+          <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('https')}</span>
             <strong>{data.https ? t('yes') : t('no')}</strong>
           </Col>
-          <Col xs={6} className="mb-1">
-            <span className="text-secondary me-1">{t('uploading_files')}</span>
-            <strong>
-              {data.uploading_files ? t('allowed') : t('not_allowed')}
-            </strong>
+          <Col xs={6}>
+            <span className="text-secondary me-1">{t('timezone')}</span>
+            <strong>{data.time_zone.split('/')?.[1]}</strong>
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('smtp')}</span>
-            {data.smtp ? (
-              <strong>{t('enabled')}</strong>
+            {data.smtp !== 'not_configured' ? (
+              <strong>{t(data.smtp)}</strong>
             ) : (
               <Link to="/admin/smtp" className="ms-2">
                 {t('config')}
               </Link>
             )}
-          </Col>
-          <Col xs={6}>
-            <span className="text-secondary me-1">{t('timezone')}</span>
-            <strong>{data.time_zone}</strong>
           </Col>
         </Row>
       </Card.Body>

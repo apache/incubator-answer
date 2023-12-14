@@ -45,6 +45,8 @@ var (
 	// This config is used to upgrade the database from a specific version manually.
 	// If you want to upgrade the database to version 1.1.0, you can use `answer upgrade -f v1.1.0`.
 	upgradeVersion string
+	// The fields that need to be set to the default value
+	configFields []string
 )
 
 func init() {
@@ -60,7 +62,9 @@ func init() {
 
 	upgradeCmd.Flags().StringVarP(&upgradeVersion, "from", "f", "", "upgrade from specific version, eg: -f v1.1.0")
 
-	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd, buildCmd, pluginCmd} {
+	configCmd.Flags().StringSliceVarP(&configFields, "with", "w", []string{}, "the fields that need to be set to the default value, eg: -w allow_password_login")
+
+	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd, buildCmd, pluginCmd, configCmd} {
 		rootCmd.AddCommand(cmd)
 	}
 }
@@ -229,6 +233,38 @@ To run answer, use:
 				fmt.Printf("%s[%s] made by %s\n", info.SlugName, info.Version, info.Author)
 				return nil
 			})
+		},
+	}
+
+	// configCmd set some config to default value
+	configCmd = &cobra.Command{
+		Use:   "config",
+		Short: "set some config to default value",
+		Long:  `set some config to default value`,
+		Run: func(_ *cobra.Command, _ []string) {
+			cli.FormatAllPath(dataDirPath)
+
+			c, err := conf.ReadConfig(cli.GetConfigFilePath())
+			if err != nil {
+				fmt.Println("read config failed: ", err.Error())
+				return
+			}
+
+			field := &cli.ConfigField{}
+			for _, f := range configFields {
+				switch f {
+				case "allow_password_login":
+					field.AllowPasswordLogin = true
+				default:
+					fmt.Printf("field %s not support\n", f)
+				}
+			}
+			err = cli.SetDefaultConfig(c.Data.Database, c.Data.Cache, field)
+			if err != nil {
+				fmt.Println("set default config failed: ", err.Error())
+			} else {
+				fmt.Println("set default config successfully")
+			}
 		},
 	}
 )

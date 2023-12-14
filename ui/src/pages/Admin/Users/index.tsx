@@ -92,8 +92,8 @@ const Users: FC = () => {
     ...(curFilter === 'all'
       ? {}
       : curFilter === 'staff'
-      ? { staff: true }
-      : { status: curFilter }),
+        ? { staff: true }
+        : { status: curFilter }),
   });
 
   const userModal = useUserModal({

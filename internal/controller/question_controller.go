@@ -657,10 +657,10 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		return
 	}
 	respInfo, ok := resp.(*schema.QuestionInfo)
-  if !ok {
+	if !ok {
 		handler.HandleResponse(ctx, err, resp)
 		return
-  }
+	}
 	if !isAdmin || !linkUrlLimitUser {
 		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}

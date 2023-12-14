@@ -24,8 +24,8 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'react-app',
     'react-app/jest',
+    'plugin:react/recommended',
     'airbnb',
     'airbnb-typescript',
     'plugin:import/typescript',
@@ -61,6 +61,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/tabindex-no-positive': 'off',
+    'jsx-a11y/control-has-associated-label': 'off',
     'func-names': 'off',
     'no-alert': 'off',
     'prefer-promise-reject-errors': 'off',
