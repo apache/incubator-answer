@@ -14,8 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +266,8 @@ backend:
         other: No puedes modificar tu propio rol.
       not_allowed_registration:
         other: Currently the site is not open for registration.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Access denied
       page_access_denied:
@@ -480,33 +481,12 @@ backend:
       other: accept
     accepted:
       other: accepted
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Cómo formatear
     desc: >-
-      <ul class="mb-0">
-       <li><p class="mb-2">Para hacer enlaces</p>
-       <pre class="mb-2">
-       <code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)
-       </code>
-       </pre>
-       </li>
-       <li><p class="mb-2">Colocar saltos de línea entre párrafos</p></li>
-       <li><p class="mb-2"><em>_cursiva_</em> o **<strong>negrita</strong>**</p></li>
-       <li><p class="mb-2">Indentar el código con 4 espacios</p></li>
-       <li><p class="mb-2">Citar colocando <code>&gt;</code> al inicio de la línea</p></li>
-       <li><p class="mb-2">Escape con backticks <code>`como _esto_`</code></p></li>
-       <li><p class="mb-2">Crear barreras de código con backticks <code>`</code></p>
-       <pre class="mb-0">
-       <code>
-       ```<br/>
-       código aquí<br/>
-       ```
-       </code>
-       </pre>
-       </li>
-      </ul>
+      <ul class="mb-0"> <li><p class="mb-2">Para hacer enlaces</p> <pre class="mb-2"> <code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com) </code> </pre> </li> <li><p class="mb-2">Colocar saltos de línea entre párrafos</p></li> <li><p class="mb-2"><em>_cursiva_</em> o **<strong>negrita</strong>**</p></li> <li><p class="mb-2">Indentar el código con 4 espacios</p></li> <li><p class="mb-2">Citar colocando <code>&gt;</code> al inicio de la línea</p></li> <li><p class="mb-2">Escape con backticks <code>`como _esto_`</code></p></li> <li><p class="mb-2">Crear barreras de código con backticks <code>`</code></p> <pre class="mb-0"> <code> ```<br/> código aquí<br/> ``` </code> </pre> </li> </ul>
   pagination:
     prev: Anterior
     next: Siguiente
@@ -541,6 +521,7 @@ ui:
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
+    logout: Log Out
   notifications:
     title: Notificaciones
     inbox: Buzón de entrada
@@ -725,6 +706,7 @@ ui:
   edit_tag:
     title: Editar etiqueta
     default_reason: Editar etiqueta
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -752,6 +734,8 @@ ui:
     x_hours_ago: "hace {{count}}h"
     hour: hora
     day: día
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Añadir comentario
     reply_to: Responder a
@@ -770,6 +754,7 @@ ui:
   edit_answer:
     title: Editar respuesta
     default_reason: Editar respuesta
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -800,6 +785,7 @@ ui:
     title: Agregar una pregunta
     edit_title: Editar pregunta
     default_reason: Editar pregunta
+    default_first_reason: Add question
     similar_questions: Preguntas similares
     form:
       fields:
@@ -854,7 +840,7 @@ ui:
       placeholder: Buscar
   footer:
     build_on: >-
-      Sitio creado con <1> Answer </1>- el software de código abierto sobre el que funcionan las comunidades de P&R.<br />Hecho con amor © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Cambiar
     loading: cargando...
@@ -1073,6 +1059,7 @@ ui:
       btn_accepted: Aceptada
     write_answer:
       title: Tu respuesta
+      edit_answer: Edit my existing answer
       btn_name: Publica tu respuesta
       add_another_answer: Añadir otra respuesta
       confirm_title: Continuar a pregunta
@@ -1098,12 +1085,9 @@ ui:
   delete:
     title: Eliminar esta publicación
     question: >-
-      No recomendamos <strong>borrar preguntas con respuestas</strong> porque esto priva a los lectores futuros de este conocimiento.
-      </p><p>
-      El borrado repetido de preguntas respondidas puede resultar en que tu cuenta se bloquee para hacer preguntas. ¿Estás seguro de que deseas borrarlo?
+      No recomendamos <strong>borrar preguntas con respuestas</strong> porque esto priva a los lectores futuros de este conocimiento. </p><p> El borrado repetido de preguntas respondidas puede resultar en que tu cuenta se bloquee para hacer preguntas. ¿Estás seguro de que deseas borrarlo?
     answer_accepted: >-
-      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p>
-
+      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p> 
       El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
     tip_answer_deleted: Esta respuesta ha sido eliminada
@@ -1378,23 +1362,33 @@ ui:
     dashboard:
       title: Panel
       welcome: '¡Bienvenido a Answer Admin!'
-      site_statistics: Estadísticas del sitio
+      site_statistics: Site statistics
       questions: "Preguntas:"
       answers: "Respuestas:"
       comments: "Comentarios:"
       votes: "Votos:"
-      active_users: "Usuarios activos:"
+      users: "Users:"
       flags: "Banderas:"
-      site_health_status: Estado de salud del sitio
+      site_health_status: Site health status
       version: "Versión:"
       https: "HTTPS:"
-      uploading_files: "Subiendo archivos:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Zona horaria:"
-      system_info: Información del sistema
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Almacenamiento utilizado:"
       uptime: "Tiempo ejecutándose:"
-      answer_links: Enlaces de respuesta
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Documentos
       feedback: Comentario
       support: Soporte
@@ -1409,6 +1403,8 @@ ui:
       allowed: Permitido
       enabled: Activado
       disabled: Desactivado
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Banderas
       pending: Pendiente
@@ -1619,6 +1615,10 @@ ui:
         text: "Puede agregar contenido de política de privacidad aquí. Si ya tiene un documento alojado en otro lugar, proporcione la URL completa aquí."
     write:
       page_title: Escribir
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "Ingrese el slug de la etiqueta arriba, una etiqueta por línea."
@@ -1685,6 +1685,10 @@ ui:
         title: Privado
         label: Inicio de sesión requerido
         text: Sólo usuarios con sesión iniciada pueden acceder a esta comunidad.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.

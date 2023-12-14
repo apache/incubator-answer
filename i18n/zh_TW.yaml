@@ -14,8 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +266,8 @@ backend:
         other: 您不能修改自己的角色。
       not_allowed_registration:
         other: Currently the site is not open for registration.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Access denied
       page_access_denied:
@@ -480,7 +481,7 @@ backend:
       other: accept
     accepted:
       other: accepted
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: 如何設定文本格式
@@ -520,6 +521,7 @@ ui:
     http_404: HTTP 錯誤 404
     http_50X: HTTP 錯誤 500
     http_403: HTTP 錯誤 403
+    logout: Log Out
   notifications:
     title: 通知
     inbox: 收件夾
@@ -704,6 +706,7 @@ ui:
   edit_tag:
     title: 編輯標籤
     default_reason: 編輯標籤
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -731,6 +734,8 @@ ui:
     x_hours_ago: "{{count}} 小時前"
     hour: 小時
     day: 天
+    hours: hours
+    days: days
   comment:
     btn_add_comment: 添加評論
     reply_to: 回復
@@ -749,6 +754,7 @@ ui:
   edit_answer:
     title: 編輯回答
     default_reason: 編輯回答
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +785,7 @@ ui:
     title: 發問
     edit_title: 編輯問題
     default_reason: 編輯問題
+    default_first_reason: Add question
     similar_questions: 相似的問題
     form:
       fields:
@@ -833,7 +840,7 @@ ui:
       placeholder: 搜尋
   footer:
     build_on: >-
-      基於<1>Answer</1>--為問答社群提供動力的開源軟體。<br />Made with love © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: 更改
     loading: 讀取中...
@@ -1052,6 +1059,7 @@ ui:
       btn_accepted: 已被採納
     write_answer:
       title: 你的回答
+      edit_answer: Edit my existing answer
       btn_name: 提交你的回答
       add_another_answer: 添加另一個答案
       confirm_title: 繼續回答
@@ -1353,23 +1361,33 @@ ui:
     dashboard:
       title: 後台管理
       welcome: 歡迎來到 Answer 後台管理！
-      site_statistics: 站點統計
+      site_statistics: Site statistics
       questions: "問題:"
       answers: "回答:"
       comments: "評論:"
       votes: "投票:"
-      active_users: "活躍用戶:"
+      users: "Users:"
       flags: "檢舉:"
-      site_health_status: '健康狀態:'
+      site_health_status: Site health status
       version: "版本"
       https: "HTTPS:"
-      uploading_files: "上傳文件:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "時區："
-      system_info: 系統資訊
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "已用儲存空間："
       uptime: "運行時間："
-      answer_links: 回答連結
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: 文件
       feedback: 用戶反饋
       support: 支持
@@ -1384,6 +1402,8 @@ ui:
       allowed: 允許
       enabled: 已啟用
       disabled: 停用
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: 檢舉
       pending: 等待處理
@@ -1594,6 +1614,10 @@ ui:
         text: "您可以在此加入隱私政策內容。如果您已經在別處托管了文檔，請在這裡提供完整的URL。"
     write:
       page_title: 編輯
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "請在上方輸入標籤固定連結，每行一個標籤。"
@@ -1660,6 +1684,10 @@ ui:
         title: 非公開的
         label: 需要登入
         text: 只有登入使用者才能訪問這個社群。
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
