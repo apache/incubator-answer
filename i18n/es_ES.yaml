@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 # The following fields are used for back-end
 backend:
   base:
@@ -1087,8 +1088,7 @@ ui:
     question: >-
       No recomendamos <strong>borrar preguntas con respuestas</strong> porque esto priva a los lectores futuros de este conocimiento. </p><p> El borrado repetido de preguntas respondidas puede resultar en que tu cuenta se bloquee para hacer preguntas. ¿Estás seguro de que deseas borrarlo?
     answer_accepted: >-
-      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p> 
-      El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
+      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p> El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
     tip_answer_deleted: Esta respuesta ha sido eliminada
     undelete_title: Undelete this post
