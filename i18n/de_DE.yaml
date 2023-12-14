@@ -14,8 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -31,7 +30,7 @@ backend:
     forbidden_error:
       other: Verboten.
     duplicate_request_error:
-      other: Duplicate submission.
+      other: Doppelte Einreichung.
   action:
     report:
       other: Melden
@@ -56,7 +55,7 @@ backend:
     invite_someone_to_answer:
       other: Bearbeiten
     undelete:
-      other: Undelete
+      other: Wiederherstellen
   role:
     name:
       user:
@@ -267,6 +266,8 @@ backend:
         other: Du kannst deine Rolle nicht ändern.
       not_allowed_registration:
         other: Derzeit ist die Seite nicht für die Anmeldung geöffnet.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Zugriff verweigert
       page_access_denied:
@@ -295,73 +296,73 @@ backend:
   reason:
     spam:
       name:
-        other: spam
+        other: Spam
       desc:
         other: Dieser Beitrag ist eine Werbung oder Vandalismus. Er ist nicht nützlich oder relevant für das aktuelle Thema.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: unhöflich oder beleidigend
       desc:
         other: Eine vernünftige Person würde diesen Inhalt als unangemessen für einen respektvollen Diskurs empfinden.
     a_duplicate:
       name:
-        other: a duplicate
+        other: ein Duplikat
       desc:
         other: Diese Frage wurde schon einmal gestellt und hat bereits eine Antwort.
       placeholder:
         other: Gib den Link zur bestehenden Frage ein
     not_a_answer:
       name:
-        other: not an answer
+        other: keine Antwort
       desc:
         other: Das wurde als Antwort gepostet, aber es versucht nicht, die Frage zu beantworten. Sie sollte entweder bearbeitet, kommentiert, als weitere Frage gestellt oder ganz gelöscht werden.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: nicht mehr benötigt
       desc:
         other: Dieser Kommentar ist veraltet oder nicht relevant für diesen Beitrag.
     something:
       name:
-        other: something else
+        other: anderer Grund
       desc:
         other: Dieser Posten erfordert die Aufmerksamkeit des Personals aus einem anderen, oben nicht genannten Grund.
       placeholder:
         other: Lass uns wissen, worüber du dir Sorgen machst
     community_specific:
       name:
-        other: a community-specific reason
+        other: ein Community-spezifischer Grund
       desc:
         other: Diese Frage entspricht nicht den Gemeinschaftsrichtlinien.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: benötigt Details oder Klarheit
       desc:
         other: Diese Frage enthält derzeit mehrere Fragen in einer. Sie sollte sich auf ein einziges Problem konzentrieren.
     looks_ok:
       name:
-        other: looks OK
+        other: sieht OK aus
       desc:
         other: Dieser Beitrag ist gut so wie er ist und nicht von schlechter Qualität.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: muss bearbeitet werden, und ich habe es getan
       desc:
         other: Verbessere und korrigiere Probleme mit diesem Beitrag selbst.
     needs_close:
       name:
-        other: needs close
+        other: muss geschlossen werden
       desc:
         other: Eine geschlossene Frage kann nicht beantwortet werden, aber du kannst sie trotzdem bearbeiten, abstimmen und kommentieren.
     needs_delete:
       name:
-        other: needs delete
+        other: muss gelöscht werden
       desc:
         other: Dieser Beitrag wird gelöscht.
   question:
     close:
       duplicate:
         name:
-          other: spam
+          other: Spam
         desc:
           other: Diese Frage ist bereits gestellt worden und hat bereits eine Antwort.
       guideline:
@@ -405,7 +406,7 @@ backend:
       reply_to_you:
         other: hat Ihnen geantwortet
       mention_you:
-        other: mentioned you
+        other: hat dich erwähnt
       your_question_is_closed:
         other: Deine Frage wurde geschlossen
       your_question_was_deleted:
@@ -415,17 +416,17 @@ backend:
       your_comment_was_deleted:
         other: Dein Kommentar wurde gelöscht
       up_voted_question:
-        other: upvoted question
+        other: positiv bewertete Frage
       down_voted_question:
-        other: downvoted question
+        other: negativ bewertete Frage
       up_voted_answer:
-        other: upvoted answer
+        other: positiv bewertete Antwort
       down_voted_answer:
-        other: downvoted answer
+        other: negativ bewertete Antwort
       up_voted_comment:
-        other: upvoted comment
+        other: positiv bewerteter Kommentar
       invited_you_to_answer:
-        other: invited you to answer
+        other: hat dich eingeladen, zu antworten
   email_tpl:
     change_email:
       title:
@@ -469,18 +470,18 @@ backend:
         other: "Dies ist eine Test-Email."
   action_activity_type:
     upvote:
-      other: upvote
+      other: positiv bewerten
     upvoted:
-      other: upvoted
+      other: positiv bewertet
     downvote:
-      other: downvote
+      other: negativ bewerten
     downvoted:
-      other: downvoted
+      other: negativ bewertet
     accept:
-      other: accept
+      other: akzeptieren
     accepted:
-      other: accepted
-#The following fields are used for interface presentation(Front-end)
+      other: akzeptiert
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Wie man formatiert
@@ -520,6 +521,7 @@ ui:
     http_404: HTTP-Fehler 404
     http_50X: HTTP-Fehler 500
     http_403: HTTP Fehler 403
+    logout: Log Out
   notifications:
     title: Benachrichtigungen
     inbox: Posteingang
@@ -704,6 +706,7 @@ ui:
   edit_tag:
     title: Tag bearbeiten
     default_reason: Tag bearbeiten
+    default_first_reason: Schlagwort hinzufügen
     form:
       fields:
         revision:
@@ -731,6 +734,8 @@ ui:
     x_hours_ago: "vor {{count}}h"
     hour: stunde
     day: tag
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Einen Kommentar hinzufügen
     reply_to: Antwort an
@@ -745,10 +750,11 @@ ui:
       Verwende Kommentare, um nach weiteren Informationen zu fragen oder Verbesserungen vorzuschlagen. Vermeide es, Fragen in Kommentaren zu beantworten.
     tip_answer: >-
       Verwende Stellungsnahmen, um anderen Nutzern zu antworten oder sie über Änderungen zu informieren. Wenn du neue Informationen hinzufügst, bearbeite deinen Beitrag, anstatt zu kommentieren.
-    tip_vote: It adds something useful to the post
+    tip_vote: Es fügt dem Beitrag etwas Nützliches hinzu
   edit_answer:
     title: Antwort bearbeiten
     default_reason: Antwort bearbeiten
+    default_first_reason: Antwort hinzufügen
     form:
       fields:
         revision:
@@ -779,6 +785,7 @@ ui:
     title: Frage hinzufügen
     edit_title: Frage bearbeiten
     default_reason: Frage bearbeiten
+    default_first_reason: Frage hinzufügen
     similar_questions: Ähnliche Fragen
     form:
       fields:
@@ -808,7 +815,7 @@ ui:
             Erkläre kurz deine Änderungen (korrigierte Rechtschreibung, korrigierte Grammatik, verbesserte Formatierung)
     btn_post_question: Poste deine Frage
     btn_save_edits: Änderungen speichern
-    answer_question: Answer your own question
+    answer_question: Eigene Frage beantworten
     post_question&answer: Poste deine Frage und Antwort
   tag_selector:
     add_btn: Schlagwort hinzufügen
@@ -833,7 +840,7 @@ ui:
       placeholder: Suchen
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Ändern
     loading: wird geladen...
@@ -868,14 +875,14 @@ ui:
         range: Name mit bis zu 30 Zeichen.
         character: 'Muss den Zeichensatz "a-z", "0-9", " - . _" verwenden'
     email:
-      label: Email
+      label: E-Mail
       msg:
         empty: E-Mail-Feld darf nicht leer sein.
     password:
       label: Passwort
       msg:
         empty: Passwort-Feld darf nicht leer sein.
-        different: The passwords entered on both sides are inconsistent
+        different: Die beiden eingegebenen Passwörter stimmen nicht überein
   account_forgot:
     page_title: Dein Passwort vergessen
     btn_name: Schicke mir eine E-Mail zur Wiederherstellung
@@ -1010,7 +1017,7 @@ ui:
       modal_confirm_btn: Entfernen
       remove_success: Erfolgreich entfernt
   toast:
-    update: update success
+    update: Aktualisierung erfolgreich
     update_password: Das Kennwort wurde erfolgreich geändert.
     flag_success: Danke fürs Markieren.
     forbidden_operate_self: Verboten, an sich selbst zu operieren
@@ -1052,6 +1059,7 @@ ui:
       btn_accepted: Akzeptiert
     write_answer:
       title: Deine Antwort
+      edit_answer: Edit my existing answer
       btn_name: Poste deine Antwort
       add_another_answer: Weitere Antwort hinzufügen
       confirm_title: Antworten fortsetzen
@@ -1353,23 +1361,33 @@ ui:
     dashboard:
       title: Dashboard
       welcome: Willkommen beim Answer-Admin!
-      site_statistics: Site-Statistiken
+      site_statistics: Site statistics
       questions: "Fragen:"
       answers: "Antworten:"
       comments: "Kommentare:"
       votes: "Stimmen:"
-      active_users: "Aktive Benutzer:"
+      users: "Users:"
       flags: "Meldungen:"
-      site_health_status: Website-Gesundheitsstatus
+      site_health_status: Site health status
       version: "Version:"
       https: "HTTPS:"
-      uploading_files: "Dateien hochladen:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Zeitzone:"
-      system_info: Systeminformationen
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Verwendeter Speicher:"
       uptime: "Betriebszeit:"
-      answer_links: Antwortlinks
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Dokumentation
       feedback: Rückmeldung
       support: Unterstützung
@@ -1384,6 +1402,8 @@ ui:
       allowed: Erlaubt
       enabled: Ermöglicht
       disabled: Behinderte
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Meldungen
       pending: Ausstehend
@@ -1467,7 +1487,7 @@ ui:
         text: Don’t check this if you wish to only delete the user’s account.
       suspend_user:
         title: Suspend this user
-        content: A suspended user can't log in.
+        content: Ein gesperrter Benutzer kann sich nicht einloggen.
     questions:
       page_title: Fragen
       normal: Normal
@@ -1594,6 +1614,10 @@ ui:
         text: "Du kannst hier Inhalte zur Datenschutzerklärung hinzufügen. Wenn du bereits ein Dokument hast, das anderswo gehostet wird, gib hier die vollständige URL an."
     write:
       page_title: Schreiben
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Empfohlene Tags
         text: "Bitte gib den Tag-Slug oben ein, ein Tag pro Zeile."
@@ -1660,6 +1684,10 @@ ui:
         title: Privatgelände
         label: Anmeldung erforderlich
         text: Nur angemeldete Benutzer können auf diese Community zugreifen.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installierte Plugins
       plugin_link: Plugins erweitern und ergänzen die Funktionalität von Answer. Du kannst Plugins im <1>Answer Plugin Repository</1> finden.

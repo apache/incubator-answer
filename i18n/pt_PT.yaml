@@ -14,8 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +266,8 @@ backend:
         other: Você não pode modificar a sua função.
       not_allowed_registration:
         other: Atualmente o site não está aberto para cadastro
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Acesso negado
       page_access_denied:
@@ -480,7 +481,7 @@ backend:
       other: aceito
     accepted:
       other: aceito
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Como formatar
@@ -520,6 +521,7 @@ ui:
     http_404: HTTP Erro 404
     http_50X: HTTP Erro 500
     http_403: HTTP Erro 403
+    logout: Log Out
   notifications:
     title: Notificações
     inbox: Caixa de entrada
@@ -704,6 +706,7 @@ ui:
   edit_tag:
     title: Editar marcador
     default_reason: Editar marcador
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -722,7 +725,7 @@ ui:
     btn_save_edits: Salvar edições
     btn_cancel: Cancelar
   dates:
-    long_date: D MMM 
+    long_date: D MMM
     long_date_with_year: "D MMM, YYYY"
     long_date_with_time: "D MMM, YYYY [at] HH:mm"
     now: agora
@@ -731,6 +734,8 @@ ui:
     x_hours_ago: "{{count}}h atrás"
     hour: hora
     day: dia
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Adicionar comentário
     reply_to: Responder a
@@ -749,6 +754,7 @@ ui:
   edit_answer:
     title: Editar Resposta
     default_reason: Editar Resposta
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +785,7 @@ ui:
     title: Adicionar Pergunta
     edit_title: Editar Pergunta
     default_reason: Editar pergunta
+    default_first_reason: Add question
     similar_questions: Similar perguntas
     form:
       fields:
@@ -833,7 +840,7 @@ ui:
       placeholder: Procurar
   footer:
     build_on: >-
-      Construído com <1> Answer </1>- o software de código aberto que empodera comunidades de Q&A.<br />Feito com amor © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Mudar
     loading: carregando...
@@ -1052,6 +1059,7 @@ ui:
       btn_accepted: Aceito
     write_answer:
       title: A sua Resposta
+      edit_answer: Edit my existing answer
       btn_name: Publicação a sua resposta
       add_another_answer: Adicionar outra resposta
       confirm_title: Continuar a responder
@@ -1353,23 +1361,33 @@ ui:
     dashboard:
       title: Painel
       welcome: Bem vindo ao Answer Administrador!
-      site_statistics: Estatísticas do Site
+      site_statistics: Site statistics
       questions: "Perguntas:"
       answers: "Respostas:"
       comments: "Comentários:"
       votes: "Votos:"
-      active_users: "Usuários ativos:"
+      users: "Users:"
       flags: "Marcadores:"
-      site_health_status: Estatísticas da saúde do site
+      site_health_status: Site health status
       version: "Versão:"
       https: "HTTPS:"
-      uploading_files: "Enviando arquivos:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Fuso horário:"
-      system_info: Informações do Sistema
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Armazenamento usado:"
       uptime: "Tempo de atividade:"
-      answer_links: Links das Respostas
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Documentos
       feedback: Opinião
       support: Supporte
@@ -1384,6 +1402,8 @@ ui:
       allowed: Permitido
       enabled: Ativo
       disabled: Disponível
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Marcadores
       pending: Pendente
@@ -1594,6 +1614,10 @@ ui:
         text: "Você pode adicionar termos de conteúdo de serviço aqui. Se você já tem um documento hospedado em outro lugar, forneça a URL completa aqui."
     write:
       page_title: Escrever
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend Marcadores
         text: "Por favor input tag slug above, one tag per line."
@@ -1660,6 +1684,10 @@ ui:
         title: Privado
         label: Login requirido
         text: Somente usuários conectados podem acessar esta comunidade.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Extensões instaladas
       plugin_link: Extensões estendem e expandem a funcionalidade da Resposta. Você pode encontrar extensões no <1>Repositório de extensões do Answer</1>.
