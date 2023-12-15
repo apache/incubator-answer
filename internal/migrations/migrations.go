@@ -130,7 +130,7 @@ func ExpectedVersion() int64 {
 func Migrate(debug bool, dbConf *data.Database, cacheConf *data.CacheConf, upgradeToSpecificVersion string) error {
 	cache, cacheCleanup, err := data.NewCache(cacheConf)
 	if err != nil {
-		fmt.Println("new check failed:", err.Error())
+		fmt.Println("new cache failed:", err.Error())
 	}
 	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {
