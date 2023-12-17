@@ -113,10 +113,14 @@ function formatUptime(value) {
   const second = parseInt(value, 10);
 
   if (second > 60 * 60 && second < 60 * 60 * 24) {
-    return `${Math.floor(second / 3600)} ${t('dates.hour')}`;
+    const hour = second / 3600;
+    return `${Math.floor(hour)} ${
+      hour > 1 ? t('dates.hours') : t('dates.hour')
+    }`;
   }
   if (second > 60 * 60 * 24) {
-    return `${Math.floor(second / 3600 / 24)} ${t('dates.day')}`;
+    const day = second / 3600 / 24;
+    return `${Math.floor(day)} ${day > 1 ? t('dates.days') : t('dates.day')}`;
   }
 
   return `< 1 ${t('dates.hour')}`;

@@ -66,10 +66,11 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RequiredTag   bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
-	RecommendTags []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
-	ReservedTags  []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
-	UserID        string   `json:"-"`
+	RestrictAnswer bool     `validate:"omitempty" form:"restrict_answer" json:"restrict_answer"`
+	RequiredTag    bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
+	RecommendTags  []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
+	ReservedTags   []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
+	UserID         string   `json:"-"`
 }
 
 // SiteLegalReq site branding request
@@ -117,6 +118,7 @@ type SiteUsersReq struct {
 type SiteLoginReq struct {
 	AllowNewRegistrations   bool     `json:"allow_new_registrations"`
 	AllowEmailRegistrations bool     `json:"allow_email_registrations"`
+	AllowPasswordLogin      bool     `json:"allow_password_login"`
 	LoginRequired           bool     `json:"login_required"`
 	AllowEmailDomains       []string `json:"allow_email_domains"`
 }
@@ -207,6 +209,7 @@ type SiteInfoResp struct {
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoResp           `json:"site_seo"`
 	SiteUsers     *SiteUsersResp         `json:"site_users"`
+	Write         *SiteWriteResp         `json:"site_write"`
 	Version       string                 `json:"version"`
 	Revision      string                 `json:"revision"`
 }

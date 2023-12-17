@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import type { Editor, Position } from 'codemirror';
 import type CodeMirror from 'codemirror';
@@ -148,6 +148,7 @@ export const useEditor = ({
 }) => {
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const [value, setValue] = useState<string>('');
+  const isMountedRef = useRef(false);
 
   const onEnter = (cm) => {
     const cursor = cm.getCursor();
@@ -178,6 +179,11 @@ export const useEditor = ({
   };
 
   const init = async () => {
+    if (isMountedRef.current) {
+      return false;
+    }
+    isMountedRef.current = true;
+
     const { default: codeMirror } = await import('codemirror');
     await import('codemirror/mode/markdown/markdown');
     await import('codemirror/addon/display/placeholder');
@@ -186,11 +192,13 @@ export const useEditor = ({
       mode: 'markdown',
       lineWrapping: true,
       placeholder,
-      focus: autoFocus,
     });
 
-    setEditor(cm);
-    createEditorUtils(codeMirror, cm);
+    if (autoFocus) {
+      setTimeout(() => {
+        cm.focus();
+      }, 10);
+    }
 
     cm.on('change', (e) => {
       const newValue = e.getValue();
@@ -203,6 +211,10 @@ export const useEditor = ({
     cm.on('blur', () => {
       onBlur?.();
     });
+
+    setEditor(cm);
+    createEditorUtils(codeMirror, cm);
+
     cm.setSize('100%', '100%');
     cm.addKeyMap({
       Enter: onEnter,

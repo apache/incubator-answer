@@ -37,8 +37,40 @@ const AnswerLinks = () => {
             </a>
           </Col>
           <Col xs={6}>
+            <a
+              href="https://answer.apache.org/plugins"
+              target="_blank"
+              rel="noreferrer">
+              {t('plugins')}
+            </a>
+          </Col>
+          <Col xs={6}>
             <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
               {t('support')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://github.com/apache/incubator-answer"
+              target="_blank"
+              rel="noreferrer">
+              {t('github')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://answer.apache.org/blog"
+              target="_blank"
+              rel="noreferrer">
+              {t('blog')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://answer.apache.org/contact"
+              target="_blank"
+              rel="noreferrer">
+              {t('contact')}
             </a>
           </Col>
         </Row>

@@ -135,6 +135,13 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 
 // EmailLogin email login
 func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLoginReq) (resp *schema.UserLoginResp, err error) {
+	siteLogin, err := us.siteInfoService.GetSiteLogin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if !siteLogin.AllowPasswordLogin {
+		return nil, errors.BadRequest(reason.NotAllowedLoginViaPassword)
+	}
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err
@@ -871,7 +878,7 @@ func (us *UserService) warpStatRankingResp(
 		if stat.Rank <= 0 {
 			continue
 		}
-		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil && userInfo.Status != entity.UserStatusDeleted {
 			resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
 				Username:    userInfo.Username,
 				Rank:        stat.Rank,
@@ -884,7 +891,7 @@ func (us *UserService) warpStatRankingResp(
 		if stat.VoteCount <= 0 {
 			continue
 		}
-		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil && userInfo.Status != entity.UserStatusDeleted {
 			resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
 				Username:    userInfo.Username,
 				VoteCount:   stat.VoteCount,
@@ -894,7 +901,7 @@ func (us *UserService) warpStatRankingResp(
 		}
 	}
 	for _, rel := range userRoleRels {
-		if userInfo := userInfoMapping[rel.UserID]; userInfo != nil {
+		if userInfo := userInfoMapping[rel.UserID]; userInfo != nil && userInfo.Status != entity.UserStatusDeleted {
 			resp.Staffs = append(resp.Staffs, &schema.UserRankingSimpleInfo{
 				Username:    userInfo.Username,
 				Rank:        userInfo.Rank,

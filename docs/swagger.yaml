@@ -357,11 +357,11 @@ definitions:
     type: object
   schema.CollectionSwitchReq:
     properties:
+      bookmark:
+        type: boolean
       group_id:
-        description: user collection group TagID
         type: string
       object_id:
-        description: object TagID
         type: string
     required:
     - group_id
@@ -370,11 +370,7 @@ definitions:
   schema.CollectionSwitchResp:
     properties:
       object_collection_count:
-        type: string
-      object_id:
-        type: string
-      switch:
-        type: boolean
+        type: integer
     type: object
   schema.ConfigField:
     properties:
@@ -1677,6 +1673,8 @@ definitions:
         $ref: '#/definitions/schema.SiteSeoResp'
       site_users:
         $ref: '#/definitions/schema.SiteUsersResp'
+      site_write:
+        $ref: '#/definitions/schema.SiteWriteResp'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
       version:
@@ -1738,6 +1736,8 @@ definitions:
         type: boolean
       allow_new_registrations:
         type: boolean
+      allow_password_login:
+        type: boolean
       login_required:
         type: boolean
     type: object
@@ -1750,6 +1750,8 @@ definitions:
       allow_email_registrations:
         type: boolean
       allow_new_registrations:
+        type: boolean
+      allow_password_login:
         type: boolean
       login_required:
         type: boolean
@@ -1861,6 +1863,8 @@ definitions:
         items:
           type: string
         type: array
+      restrict_answer:
+        type: boolean
     type: object
   schema.SiteWriteResp:
     properties:
@@ -1874,6 +1878,8 @@ definitions:
         items:
           type: string
         type: array
+      restrict_answer:
+        type: boolean
     type: object
   schema.TagItem:
     properties:

@@ -34,6 +34,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/action"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	"github.com/apache/incubator-answer/internal/service/rank"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -41,10 +42,11 @@ import (
 
 // AnswerController answer controller
 type AnswerController struct {
-	answerService       *service.AnswerService
-	rankService         *rank.RankService
-	actionService       *action.CaptchaService
-	rateLimitMiddleware *middleware.RateLimitMiddleware
+	answerService         *service.AnswerService
+	rankService           *rank.RankService
+	actionService         *action.CaptchaService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
+	rateLimitMiddleware   *middleware.RateLimitMiddleware
 }
 
 // NewAnswerController new controller
@@ -52,13 +54,15 @@ func NewAnswerController(
 	answerService *service.AnswerService,
 	rankService *rank.RankService,
 	actionService *action.CaptchaService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 	rateLimitMiddleware *middleware.RateLimitMiddleware,
 ) *AnswerController {
 	return &AnswerController{
-		answerService:       answerService,
-		rankService:         rankService,
-		actionService:       actionService,
-		rateLimitMiddleware: rateLimitMiddleware,
+		answerService:         answerService,
+		rankService:           rankService,
+		actionService:         actionService,
+		siteInfoCommonService: siteInfoCommonService,
+		rateLimitMiddleware:   rateLimitMiddleware,
 	}
 }
 
@@ -236,6 +240,24 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	if !can {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
+	}
+
+	write, err := ac.siteInfoCommonService.GetSiteWrite(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if write.RestrictAnswer {
+		// check if there's already an answer by this user
+		ids, err := ac.answerService.GetCountByUserIDQuestionID(ctx, req.UserID, req.QuestionID)
+		if err != nil {
+			handler.HandleResponse(ctx, err, nil)
+			return
+		}
+		if len(ids) >= 1 {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.AnswerRestrictAnswer), nil)
+			return
+		}
 	}
 
 	answerID, err := ac.answerService.Insert(ctx, req)

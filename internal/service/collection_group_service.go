@@ -33,6 +33,7 @@ import (
 type CollectionGroupRepo interface {
 	AddCollectionGroup(ctx context.Context, collectionGroup *entity.CollectionGroup) (err error)
 	AddCollectionDefaultGroup(ctx context.Context, userID string) (collectionGroup *entity.CollectionGroup, err error)
+	CreateDefaultGroupIfNotExist(ctx context.Context, userID string) (collectionGroup *entity.CollectionGroup, err error)
 	UpdateCollectionGroup(ctx context.Context, collectionGroup *entity.CollectionGroup, cols []string) (err error)
 	GetCollectionGroup(ctx context.Context, id string) (collectionGroup *entity.CollectionGroup, exist bool, err error)
 	GetCollectionGroupPage(ctx context.Context, page, pageSize int, collectionGroup *entity.CollectionGroup) (collectionGroupList []*entity.CollectionGroup, total int64, err error)

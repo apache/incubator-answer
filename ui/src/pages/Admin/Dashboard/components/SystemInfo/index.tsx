@@ -36,8 +36,20 @@ const SystemInfo: FC<IProps> = ({ data }) => {
         <h6 className="mb-3">{t('system_info')}</h6>
         <Row>
           <Col xs={6}>
+            <span className="text-secondary me-1">{t('go_version')}</span>
+            <strong>{data.go_version}</strong>
+          </Col>
+          <Col xs={6}>
+            <span className="text-secondary me-1">{t('database')}</span>
+            <strong>{data.database_version}</strong>
+          </Col>
+          <Col xs={6}>
             <span className="text-secondary me-1">{t('storage_used')}</span>
             <strong>{data.occupying_storage_space}</strong>
+          </Col>
+          <Col xs={6}>
+            <span className="text-secondary me-1">{t('database_size')}</span>
+            <strong>{data.database_size}</strong>
           </Col>
           {data.app_start_time ? (
             <Col xs={6}>
