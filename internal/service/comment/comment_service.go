@@ -479,6 +479,7 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 			if err != nil {
 				log.Error(err)
 			} else {
+<<<<<<< HEAD
 				questionInfo, _, _ := cs.questionCommon.GetQuestionRepo().GetQuestion(ctx, objInfo.QuestionID)
 				isParticipant := questionInfo.UserID == req.LoginUserID
 				dbSearch.QuestionID = questionInfo.ID
@@ -492,6 +493,9 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 				if req.LoginUserRole == "1" && questionInfo.Show == 2 && !isParticipant{
         			continue
         }
+=======
+				log.Infof("objInfo : %+v",objInfo)
+>>>>>>> main
 				commentResp.ObjectType = objInfo.ObjectType
 				commentResp.Title = objInfo.Title
 				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)

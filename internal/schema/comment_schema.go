@@ -213,8 +213,11 @@ type GetCommentPersonalWithPageReq struct {
 	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	// login user role
 	LoginUserRole string `form:"login_user_role"`
+<<<<<<< HEAD
 	// login user id
 	LoginUserID string `json:"-"`
+=======
+>>>>>>> main
 	// user id
 	UserID string `json:"-"`
 }
