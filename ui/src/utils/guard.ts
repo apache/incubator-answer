@@ -29,6 +29,7 @@ import {
   seoSettingStore,
   loginToContinueStore,
   pageTagStore,
+  writeSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import {
@@ -159,6 +160,16 @@ export const logged = () => {
   if (!us.isLogged) {
     gr.ok = false;
     gr.redirect = RouteAlias.login;
+  }
+  return gr;
+};
+
+export const loggedRedirectHome = () => {
+  const gr: TGuardResult = { ok: true };
+  const us = deriveLoginState();
+  if (!us.isLogged) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
   }
   return gr;
 };
@@ -398,6 +409,9 @@ export const initAppSettingsStore = async () => {
     customizeStore.getState().update(appSettings.custom_css_html);
     themeSettingStore.getState().update(appSettings.theme);
     seoSettingStore.getState().update(appSettings.site_seo);
+    writeSettingStore
+      .getState()
+      .update({ restrict_answer: appSettings.site_write.restrict_answer });
   }
 };
 

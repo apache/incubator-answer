@@ -45,7 +45,8 @@ const Index: React.FC = () => {
     ucAgentInfo = ucAgent.agent_info;
   }
   const canOriginalLogin =
-    !ucAgentInfo || ucAgentInfo.enabled_original_user_system;
+    (!ucAgentInfo || ucAgentInfo.enabled_original_user_system) &&
+    loginSetting.allow_password_login;
 
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {

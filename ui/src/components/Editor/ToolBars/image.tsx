@@ -29,8 +29,8 @@ import { IEditorContext } from '../types';
 import { uploadImage } from '@/services';
 
 let context: IEditorContext;
-const Image = () => {
-  const [editor, setEditor] = useState<Editor>(null);
+const Image = ({ editorInstance }) => {
+  const [editor, setEditor] = useState<Editor>(editorInstance);
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const loadingText = `![${t('image.uploading')}...]()`;
@@ -218,9 +218,6 @@ const Image = () => {
   const addLink = (ctx) => {
     context = ctx;
     setEditor(context.editor);
-    if (!editor) {
-      return;
-    }
     const text = context.editor?.getSelection();
 
     setImageName({ ...imageName, value: text });

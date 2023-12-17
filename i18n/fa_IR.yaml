@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +267,8 @@ backend:
         other: شما نمی توانید وظیفه خود را تغییر دهید.
       not_allowed_registration:
         other: درحال حاضر سایت برای ثبت نام باز نیست.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: دسترسی مجاز نیست
       page_access_denied:
@@ -480,7 +482,7 @@ backend:
       other: پذیرفتن
     accepted:
       other: پذیرفته شده
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: نحوه فرمت کردن
@@ -520,6 +522,7 @@ ui:
     http_404: خطای 404 HTTP
     http_50X: خطای 500 HTTP
     http_403: خطای 403 HTTP
+    logout: Log Out
   notifications:
     title: اعلانات
     inbox: پیغام‌های دریافتی
@@ -704,6 +707,7 @@ ui:
   edit_tag:
     title: ویرایش تگ‌
     default_reason: ویرایش تگ‌
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -731,6 +735,8 @@ ui:
     x_hours_ago: "{{count}}ساعت پیش"
     hour: ساعت
     day: روز
+    hours: hours
+    days: days
   comment:
     btn_add_comment: افزودن نظر
     reply_to: پاسخ به
@@ -749,6 +755,7 @@ ui:
   edit_answer:
     title: ویرایش جواب
     default_reason: ویرایش جواب
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +786,7 @@ ui:
     title: سوالی اضافه کنید
     edit_title: سوال را ویرایش کنید
     default_reason: سوال را ویرایش کنید
+    default_first_reason: Add question
     similar_questions: سؤال های مشابه
     form:
       fields:
@@ -833,7 +841,7 @@ ui:
       placeholder: جستجو
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: تغییر
     loading: درحال بارگذاری...
@@ -1052,6 +1060,7 @@ ui:
       btn_accepted: پذیرفته شده
     write_answer:
       title: پاسخ شما
+      edit_answer: Edit my existing answer
       btn_name: پاسخ خود را ارسال کنید
       add_another_answer: پاسخ دیگری اضافه کنید
       confirm_title: به پاسخ دادن ادامه دهید
@@ -1353,23 +1362,33 @@ ui:
     dashboard:
       title: داشبرد
       welcome: به پاسخ مدیر خوش آمدید!
-      site_statistics: آمار سایت
+      site_statistics: Site statistics
       questions: "سوالات:"
       answers: "جواب ها:"
       comments: "نظرات:"
       votes: "آرا:"
-      active_users: "کاربران فعال:"
+      users: "Users:"
       flags: "علامت‌ها:"
-      site_health_status: وضعیت سلامت سایت
+      site_health_status: Site health status
       version: "نسخه:"
       https: "HTTPS:"
-      uploading_files: "فایل های در حال آپلود:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "منطقه زمانی:"
-      system_info: اطلاعات سیستم
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "فضای استفاده شده:"
       uptime: "پایداری:"
-      answer_links: لینک های Answer
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: اسناد
       feedback: ﺑﺎﺯﺧﻮﺭﺩ
       support: پشتیبانی
@@ -1384,6 +1403,8 @@ ui:
       allowed: مجاز
       enabled: فعال
       disabled: غیرفعال
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: علامت‌ها
       pending: در حالت انتظار
@@ -1594,6 +1615,10 @@ ui:
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
     write:
       page_title: نوشتن
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
@@ -1660,6 +1685,10 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.

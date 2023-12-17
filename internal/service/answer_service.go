@@ -22,8 +22,6 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/apache/incubator-answer/pkg/converter"
-	"github.com/apache/incubator-answer/pkg/token"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -42,6 +40,8 @@ import (
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/converter"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -493,6 +493,10 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	}
 
 	return info, questionInfo, has, nil
+}
+
+func (as *AnswerService) GetCountByUserIDQuestionID(ctx context.Context, userId string, questionId string) (ids []string, err error) {
+	return as.answerRepo.GetIDsByUserIDAndQuestionID(ctx, userId, questionId)
 }
 
 func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminUpdateAnswerStatusReq) error {

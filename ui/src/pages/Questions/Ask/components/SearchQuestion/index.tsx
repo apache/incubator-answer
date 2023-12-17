@@ -46,16 +46,15 @@ const SearchQuestion = ({ similarQuestions }) => {
                 <ListGroup.Item
                   action
                   as="a"
-                  className="d-flex align-items-center link-dark"
+                  className="link-dark text-wrap text-break"
                   key={item.id}
                   href={pathFactory.questionLanding(item.id, item.url_title)}
                   target="_blank">
-                  <span className="text-wrap text-break">
-                    {item.title}
-                    {item.status === 'closed'
-                      ? ` [${t('closed', { keyPrefix: 'question' })}]`
-                      : null}
-                  </span>
+                  {item.title}
+                  {item.status === 'closed'
+                    ? ` [${t('closed', { keyPrefix: 'question' })}]`
+                    : null}
+
                   {item.accepted_answer ? (
                     <span className="small ms-3 text-success">
                       <Icon type="bi" name="check-circle-fill" />

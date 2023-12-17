@@ -20,12 +20,12 @@
 import { seoSettingStore } from '@/stores';
 
 const tagLanding = (slugName: string) => {
-  const r = slugName ? `/tags/${slugName}` : '/tags';
+  const r = slugName ? `/tags/${encodeURIComponent(slugName)}` : '/tags';
   return r;
 };
 
 const tagInfo = (slugName: string) => {
-  const r = slugName ? `/tags/${slugName}/info` : '/tags';
+  const r = slugName ? `/tags/${encodeURIComponent(slugName)}/info` : '/tags';
   return r;
 };
 

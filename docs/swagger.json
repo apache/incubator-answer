@@ -6871,12 +6871,13 @@
                 "object_id"
             ],
             "properties": {
+                "bookmark": {
+                    "type": "boolean"
+                },
                 "group_id": {
-                    "description": "user collection group TagID",
                     "type": "string"
                 },
                 "object_id": {
-                    "description": "object TagID",
                     "type": "string"
                 }
             }
@@ -6885,13 +6886,7 @@
             "type": "object",
             "properties": {
                 "object_collection_count": {
-                    "type": "string"
-                },
-                "object_id": {
-                    "type": "string"
-                },
-                "switch": {
-                    "type": "boolean"
+                    "type": "integer"
                 }
             }
         },
@@ -8755,6 +8750,9 @@
                 "site_users": {
                     "$ref": "#/definitions/schema.SiteUsersResp"
                 },
+                "site_write": {
+                    "$ref": "#/definitions/schema.SiteWriteResp"
+                },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
                 },
@@ -8846,6 +8844,9 @@
                 "allow_new_registrations": {
                     "type": "boolean"
                 },
+                "allow_password_login": {
+                    "type": "boolean"
+                },
                 "login_required": {
                     "type": "boolean"
                 }
@@ -8864,6 +8865,9 @@
                     "type": "boolean"
                 },
                 "allow_new_registrations": {
+                    "type": "boolean"
+                },
+                "allow_password_login": {
                     "type": "boolean"
                 },
                 "login_required": {
@@ -9028,6 +9032,9 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "restrict_answer": {
+                    "type": "boolean"
                 }
             }
         },
@@ -9048,6 +9055,9 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "restrict_answer": {
+                    "type": "boolean"
                 }
             }
         },

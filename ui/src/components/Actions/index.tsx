@@ -125,9 +125,10 @@ const Index: FC<Props> = ({ className, data, source }) => {
     bookmark({
       group_id: '0',
       object_id: data?.id,
+      bookmark: !bookmarkState.state,
     }).then((res) => {
       setBookmark({
-        state: res.switch,
+        state: !bookmarkState.state,
         count: res.object_collection_count,
       });
     });

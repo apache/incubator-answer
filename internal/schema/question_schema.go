@@ -245,6 +245,7 @@ type QuestionInfo struct {
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`
 	Answered             bool           `json:"answered"`
+	FirstAnswerId        string         `json:"first_answer_id"`
 	Collected            bool           `json:"collected"`
 	VoteStatus           string         `json:"vote_status"`
 	IsFollowed           bool           `json:"is_followed"`
@@ -257,7 +258,7 @@ type QuestionInfo struct {
 // UpdateQuestionResp update question resp
 type UpdateQuestionResp struct {
 	UrlTitle      string `json:"url_title"`
-	WaitForReview bool `json:"wait_for_review"`
+	WaitForReview bool   `json:"wait_for_review"`
 }
 
 type AdminQuestionInfo struct {
