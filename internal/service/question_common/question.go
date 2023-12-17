@@ -170,6 +170,7 @@ func (qs *QuestionCommon) UpdatePostSetTime(ctx context.Context, questionID stri
 func (qs *QuestionCommon) FindInfoByID(ctx context.Context, questionIDs []string, loginUserID string) (map[string]*schema.QuestionInfo, error) {
 	list := make(map[string]*schema.QuestionInfo)
 	questionList, err := qs.questionRepo.FindByID(ctx, questionIDs)
+
 	if err != nil {
 		return list, err
 	}
@@ -650,4 +651,8 @@ func (qs *QuestionCommon) ShowFormatWithTag(ctx context.Context, data *entity.Qu
 	}
 	info.Tags = Tags
 	return info
+}
+
+func (qc *QuestionCommon) GetQuestionRepo() QuestionRepo {
+    return qc.questionRepo
 }

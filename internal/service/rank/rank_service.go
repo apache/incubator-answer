@@ -35,6 +35,8 @@ import (
 	"github.com/apache/incubator-answer/internal/service/permission"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/apache/incubator-answer/plugin"
@@ -59,6 +61,8 @@ type UserRankRepo interface {
 // RankService rank service
 type RankService struct {
 	userCommon        *usercommon.UserCommon
+	questionCommon    *questioncommon.QuestionCommon
+	answerRepo        answercommon.AnswerRepo
 	configService     *config.ConfigService
 	userRankRepo      UserRankRepo
 	objectInfoService *object_info.ObjService
@@ -69,6 +73,8 @@ type RankService struct {
 // NewRankService new rank service
 func NewRankService(
 	userCommon *usercommon.UserCommon,
+	questionCommon *questioncommon.QuestionCommon,
+	answerRepo answercommon.AnswerRepo,
 	userRankRepo UserRankRepo,
 	objectInfoService *object_info.ObjService,
 	roleService *role.UserRoleRelService,
@@ -76,6 +82,8 @@ func NewRankService(
 	configService *config.ConfigService) *RankService {
 	return &RankService{
 		userCommon:        userCommon,
+		questionCommon: 	 questionCommon,
+		answerRepo:        answerRepo,
 		configService:     configService,
 		userRankRepo:      userRankRepo,
 		objectInfoService: objectInfoService,
@@ -279,20 +287,24 @@ func (rs *RankService) GetRankPersonalPage(ctx context.Context, req *schema.GetR
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
-	userRankPage, total, err := rs.userRankRepo.UserRankPage(ctx, req.UserID, req.Page, req.PageSize)
+	userRankPage, _, err := rs.userRankRepo.UserRankPage(ctx, req.UserID, req.Page, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := rs.decorateRankPersonalPageResp(ctx, userRankPage)
-	return pager.NewPageModel(total, resp), nil
+	resp := rs.decorateRankPersonalPageResp(ctx, userRankPage, req.LoginUserRole, req.LoginUserID)
+	return pager.NewPageModel(int64(len(resp)), resp), nil
 }
 
 func (rs *RankService) decorateRankPersonalPageResp(
-	ctx context.Context, userRankPage []*entity.Activity) []*schema.GetRankPersonalPageResp {
+	ctx context.Context,
+	userRankPage []*entity.Activity,
+	LoginUserRole string,
+	LoginUserID string,
+	) []*schema.GetRankPersonalPageResp {
 	resp := make([]*schema.GetRankPersonalPageResp, 0)
 	lang := handler.GetLangByCtx(ctx)
-
+	dbSearch := entity.AnswerSearch{}
 	for _, userRankInfo := range userRankPage {
 		if len(userRankInfo.ObjectID) == 0 || userRankInfo.ObjectID == "0" {
 			continue
@@ -302,7 +314,19 @@ func (rs *RankService) decorateRankPersonalPageResp(
 			log.Error(err)
 			continue
 		}
-
+		questionInfo, _, _ := rs.questionCommon.GetQuestionRepo().GetQuestion(ctx, objInfo.QuestionID)
+		isParticipant := questionInfo.UserID == LoginUserID
+		dbSearch.QuestionID = questionInfo.ID
+		answerOriginalList, _, _ := rs.answerRepo.SearchList(ctx, &dbSearch)
+		for _, answer := range answerOriginalList {
+			if answer.UserID == LoginUserID {
+				isParticipant = true
+				break
+			}
+		}
+		if LoginUserRole == "1" && questionInfo.Show == 2 && !isParticipant{
+					continue
+		}
 		commentResp := &schema.GetRankPersonalPageResp{
 			CreatedAt:  userRankInfo.CreatedAt.Unix(),
 			ObjectID:   userRankInfo.ObjectID,

@@ -179,7 +179,7 @@ func (vc *VoteController) UserVotes(ctx *gin.Context) {
 		return
 	}
 
-	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := vc.VoteService.ListUserVotes(ctx, req)
 	handler.HandleResponse(ctx, err, resp)

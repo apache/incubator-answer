@@ -464,23 +464,26 @@ type AdminUpdateQuestionStatusReq struct {
 }
 
 type PersonalQuestionPageReq struct {
-	Page        int    `validate:"omitempty,min=1" form:"page"`
-	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
-	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
-	LoginUserID string `json:"-"`
+	Page        	int    `validate:"omitempty,min=1" form:"page"`
+	PageSize    	int    `validate:"omitempty,min=1" form:"page_size"`
+	OrderCond   	string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	Username    	string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	LoginUserID 	string `json:"-"`
+	LoginUserRole string `form:"login_user_role"`
 }
 
 type PersonalAnswerPageReq struct {
-	Page        int    `validate:"omitempty,min=1" form:"page"`
-	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
-	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
-	LoginUserID string `json:"-"`
+	Page        	int    `validate:"omitempty,min=1" form:"page"`
+	PageSize    	int    `validate:"omitempty,min=1" form:"page_size"`
+	OrderCond   	string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	Username    	string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	LoginUserID 	string `json:"-"`
+	LoginUserRole string `form:"login_user_role"`
 }
 
 type PersonalCollectionPageReq struct {
-	Page     int    `validate:"omitempty,min=1" form:"page"`
-	PageSize int    `validate:"omitempty,min=1" form:"page_size"`
-	UserID   string `json:"-"`
+	Page     			int    `validate:"omitempty,min=1" form:"page"`
+	PageSize 			int    `validate:"omitempty,min=1" form:"page_size"`
+	UserID   			string `json:"-"`
+	LoginUserRole string `form:"login_user_role"`
 }

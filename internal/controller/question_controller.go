@@ -788,8 +788,9 @@ func (qc *QuestionController) GetSimilarQuestions(ctx *gin.Context) {
 // @Router /answer/api/v1/personal/qa/top [get]
 func (qc *QuestionController) UserTop(ctx *gin.Context) {
 	userName := ctx.Query("username")
+	loginUserRole := ctx.Query("login_user_role")
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, answerList, err := qc.questionService.SearchUserTopList(ctx, userName, userID)
+	questionList, answerList, err := qc.questionService.SearchUserTopList(ctx, userName, userID, loginUserRole)
 	handler.HandleResponse(ctx, err, gin.H{
 		"question": questionList,
 		"answer":   answerList,
@@ -814,7 +815,6 @@ func (qc *QuestionController) PersonalQuestionPage(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-
 	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := qc.questionService.PersonalQuestionPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -862,7 +862,6 @@ func (qc *QuestionController) PersonalCollectionPage(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
 	resp, err := qc.questionService.PersonalCollectionPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

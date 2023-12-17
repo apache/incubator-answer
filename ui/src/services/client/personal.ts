@@ -42,6 +42,7 @@ export const usePersonalInfoByName = (username: string) => {
 
 interface ListReq {
   username?: string;
+  login_user_role?: string;
   page: number;
   page_size: number;
   order?: string;
@@ -52,10 +53,15 @@ interface ListRes {
   list: any[];
 }
 
-export const usePersonalTop = (username: string, tabName: string) => {
-  const apiUrl = '/answer/api/v1/personal/qa/top?username=';
+export const usePersonalTop = (
+  username: string,
+  tabName: string,
+  login_user_role: string,
+) => {
+  const apiUrl = '/answer/api/v1/personal/qa/top';
+  const urlWithParams = `${apiUrl}?username=${username}&login_user_role=${login_user_role}`;
   const { data, error } = useSWR<{ answer: any[]; question: any[] }, Error>(
-    tabName === 'overview' ? `${apiUrl}${username}` : null,
+    tabName === 'overview' ? urlWithParams : null,
     request.instance.get,
   );
   return {

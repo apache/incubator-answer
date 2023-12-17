@@ -27,6 +27,10 @@ type GetRankPersonalWithPageReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// username
 	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
+
+	LoginUserRole string `form:"login_user_role"`
+
+	LoginUserID string `json:"-"`
 	// user id
 	UserID string `json:"-"`
 }

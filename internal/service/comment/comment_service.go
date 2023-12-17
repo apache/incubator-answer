@@ -29,9 +29,12 @@ import (
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+// 	"github.com/apache/incubator-answer/internal/service"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"github.com/apache/incubator-answer/internal/service/activity_common"
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
 	"github.com/apache/incubator-answer/internal/service/comment_common"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/object_info"
@@ -77,7 +80,9 @@ func (c *CommentQuery) GetOrderBy() string {
 // CommentService user service
 type CommentService struct {
 	commentRepo                      CommentRepo
-	commentCommonRepo                comment_common.CommentCommonRepo
+	commentCommonRepo								 comment_common.CommentCommonRepo
+	questionCommon                   *questioncommon.QuestionCommon
+	answerRepo                       answercommon.AnswerRepo
 	userCommon                       *usercommon.UserCommon
 	voteCommon                       activity_common.VoteRepo
 	objectInfoService                *object_info.ObjService
@@ -92,6 +97,8 @@ type CommentService struct {
 func NewCommentService(
 	commentRepo CommentRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
+	questionCommon *questioncommon.QuestionCommon,
+	answerRepo answercommon.AnswerRepo,
 	userCommon *usercommon.UserCommon,
 	objectInfoService *object_info.ObjService,
 	voteCommon activity_common.VoteRepo,
@@ -104,6 +111,8 @@ func NewCommentService(
 	return &CommentService{
 		commentRepo:                      commentRepo,
 		commentCommonRepo:                commentCommonRepo,
+		questionCommon: 	                questionCommon,
+		answerRepo:                       answerRepo,
 		userCommon:                       userCommon,
 		voteCommon:                       voteCommon,
 		objectInfoService:                objectInfoService,
@@ -447,17 +456,17 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 	if len(req.UserID) == 0 {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-
 	dto := &CommentQuery{
 		PageCond:  pager.PageCond{Page: req.Page, PageSize: req.PageSize},
 		UserID:    req.UserID,
 		QueryCond: "created_at",
 	}
-	commentList, total, err := cs.commentRepo.GetCommentPage(ctx, dto)
+	commentList, _, err := cs.commentRepo.GetCommentPage(ctx, dto)
 	if err != nil {
 		return nil, err
 	}
 	resp := make([]*schema.GetCommentPersonalWithPageResp, 0)
+	dbSearch := entity.AnswerSearch{}
 	for _, comment := range commentList {
 		commentResp := &schema.GetCommentPersonalWithPageResp{
 			CommentID: comment.ID,
@@ -470,6 +479,19 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 			if err != nil {
 				log.Error(err)
 			} else {
+				questionInfo, _, _ := cs.questionCommon.GetQuestionRepo().GetQuestion(ctx, objInfo.QuestionID)
+				isParticipant := questionInfo.UserID == req.LoginUserID
+				dbSearch.QuestionID = questionInfo.ID
+				answerOriginalList, _, _ := cs.answerRepo.SearchList(ctx, &dbSearch)
+				for _, answer := range answerOriginalList {
+					if answer.UserID == req.LoginUserID {
+						isParticipant = true
+						break
+					}
+				}
+				if req.LoginUserRole == "1" && questionInfo.Show == 2 && !isParticipant{
+        			continue
+        }
 				commentResp.ObjectType = objInfo.ObjectType
 				commentResp.Title = objInfo.Title
 				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
@@ -482,7 +504,7 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 		}
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(total, resp), nil
+	return pager.NewPageModel(int64(len(resp)), resp), nil
 }
 
 func (cs *CommentService) notificationQuestionComment(ctx context.Context, questionUserID,

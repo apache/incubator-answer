@@ -274,8 +274,7 @@ func (cc *CommentController) GetCommentPersonalWithPage(ctx *gin.Context) {
 		return
 	}
 
-	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := cc.commentService.GetCommentPersonalWithPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

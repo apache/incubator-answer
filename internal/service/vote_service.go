@@ -180,7 +180,6 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 	}
 	activityTypes := make([]int, 0)
 	activityTypeMapping := make(map[int]string, 0)
-
 	for _, typeKey := range typeKeys {
 		cfg, err := vs.configService.GetConfigByKey(ctx, typeKey)
 		if err != nil {
@@ -190,7 +189,7 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		activityTypeMapping[cfg.ID] = typeKey
 	}
 
-	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req.Page, req.PageSize, activityTypes)
+	voteList, _, err := vs.voteRepo.ListUserVotes(ctx, req.LoginUserID, req.Page, req.PageSize, activityTypes)
 	if err != nil {
 		return nil, err
 	}
@@ -198,13 +197,26 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 	lang := handler.GetLangByCtx(ctx)
 
 	votes := make([]*schema.GetVoteWithPageResp, 0)
+	dbSearch := entity.AnswerSearch{}
 	for _, voteInfo := range voteList {
 		objInfo, err := vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
-
+		questionInfo, _, _ := vs.questionRepo.GetQuestion(ctx, objInfo.QuestionID)
+		isParticipant := questionInfo.UserID == req.LoginUserID
+		dbSearch.QuestionID = questionInfo.ID
+		answerOriginalList, _, _ := vs.answerRepo.SearchList(ctx, &dbSearch)
+		for _, answer := range answerOriginalList {
+			if answer.UserID == req.LoginUserID {
+				isParticipant = true
+				break
+			}
+		}
+		if req.LoginUserRole == "1" && questionInfo.Show == 2 && !isParticipant{
+					continue
+		}
 		item := &schema.GetVoteWithPageResp{
 			CreatedAt:  voteInfo.CreatedAt.Unix(),
 			ObjectID:   objInfo.ObjectID,
@@ -222,7 +234,7 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		}
 		votes = append(votes, item)
 	}
-	return pager.NewPageModel(total, votes), err
+	return pager.NewPageModel(int64(len(votes)), votes), err
 }
 
 func (vs *VoteService) createVoteOperationInfo(ctx context.Context,

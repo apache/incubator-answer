@@ -72,6 +72,10 @@ type GetVoteWithPageReq struct {
 	Page int `validate:"omitempty,min=1" form:"page"`
 	// page size
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
+
+	LoginUserRole string `form:"login_user_role"`
+
+	LoginUserID string `json:"-"`
 	// user id
 	UserID string `json:"-"`
 }
