@@ -211,6 +211,8 @@ type GetCommentPersonalWithPageReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// username
 	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	// login user role
+	LoginUserRole string `form:"login_user_role"`
 	// user id
 	UserID string `json:"-"`
 }

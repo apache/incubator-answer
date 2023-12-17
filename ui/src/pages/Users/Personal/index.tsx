@@ -53,13 +53,14 @@ const Personal: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
   const sessionUser = loggedUserInfoStore((state) => state.user);
   const isSelf = sessionUser?.username === username;
-
+  const loginUserRole = String(sessionUser?.role_id);
   const { data: userInfo } = usePersonalInfoByName(username);
-  const { data: topData } = usePersonalTop(username, tabName);
+  const { data: topData } = usePersonalTop(username, tabName, loginUserRole);
 
   const { data: listData, isLoading = true } = usePersonalListByTabName(
     {
       username,
+      login_user_role: loginUserRole,
       page: Number(page),
       page_size: 30,
       order,
@@ -67,7 +68,6 @@ const Personal: FC = () => {
     tabName,
   );
   const { count = 0, list = [] } = listData?.[tabName] || {};
-
   let pageTitle = '';
   if (userInfo?.username) {
     pageTitle = `${userInfo?.display_name} (${userInfo?.username})`;

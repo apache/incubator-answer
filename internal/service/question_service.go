@@ -69,6 +69,7 @@ type QuestionService struct {
 	metaService                      *meta.MetaService
 	collectionCommon                 *collectioncommon.CollectionCommon
 	answerActivityService            *activity.AnswerActivityService
+	answerService                    *AnswerService
 	emailService                     *export.EmailService
 	notificationQueueService         notice_queue.NotificationQueueService
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
@@ -87,6 +88,7 @@ func NewQuestionService(
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
 	answerActivityService *activity.AnswerActivityService,
+	answerService *AnswerService,
 	emailService *export.EmailService,
 	notificationQueueService notice_queue.NotificationQueueService,
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
@@ -104,6 +106,7 @@ func NewQuestionService(
 		metaService:                      metaService,
 		collectionCommon:                 collectionCommon,
 		answerActivityService:            answerActivityService,
+		answerService:                    answerService,
 		emailService:                     emailService,
 		notificationQueueService:         notificationQueueService,
 		externalNotificationQueueService: externalNotificationQueueService,
@@ -986,24 +989,43 @@ func (qs *QuestionService) PersonalQuestionPage(ctx context.Context, req *schema
 	pageModel *pager.PageModel, err error) {
 
 	userinfo, exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
+	loginUserInfo, _, _ := qs.userRepo.GetByUserID(ctx, req.LoginUserID)
 	if err != nil {
 		return nil, err
 	}
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
+
 	search := &schema.QuestionPageReq{}
 	search.OrderCond = req.OrderCond
 	search.Page = req.Page
 	search.PageSize = req.PageSize
 	search.UserIDBeSearched = userinfo.ID
 	search.LoginUserID = req.LoginUserID
-	questionList, total, err := qs.GetQuestionPage(ctx, search)
+	questionList, _, err := qs.GetQuestionPage(ctx, search)
 	if err != nil {
 		return nil, err
 	}
 	userQuestionInfoList := make([]*schema.UserQuestionInfo, 0)
+	answerReq := &schema.AnswerListReq{}
+	answerReq.UserID = userinfo.ID
 	for _, item := range questionList {
+		answerReq.QuestionID = item.ID
+		answerList, _, err := qs.answerService.SearchList(ctx, answerReq)
+		if err != nil {
+    	return nil, err
+    }
+    isParticipant := userinfo.ID == loginUserInfo.ID
+		for _, answer := range answerList {
+			if answer.UserID == req.LoginUserID {
+				isParticipant = true
+				break
+			}
+    }
+		if req.LoginUserRole == "1" && item.Show == 2 && !isParticipant{
+      continue
+    }
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
 		status, ok := entity.AdminQuestionSearchStatusIntToString[item.Status]
@@ -1012,7 +1034,7 @@ func (qs *QuestionService) PersonalQuestionPage(ctx context.Context, req *schema
 		}
 		userQuestionInfoList = append(userQuestionInfoList, info)
 	}
-	return pager.NewPageModel(total, userQuestionInfoList), nil
+	return pager.NewPageModel(int64(len(userQuestionInfoList)), userQuestionInfoList), nil
 }
 
 func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.PersonalAnswerPageReq) (
@@ -1034,11 +1056,10 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 		answersearch.Order = entity.AnswerSearchOrderByDefault
 	}
 	questionIDs := make([]string, 0)
-	answerList, total, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
+	answerList, _, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
 	if err != nil {
 		return nil, err
 	}
-
 	answerlist := make([]*schema.AnswerInfo, 0)
 	userAnswerlist := make([]*schema.UserAnswerInfo, 0)
 	for _, item := range answerList {
@@ -1050,26 +1071,31 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 	if err != nil {
 		return nil, err
 	}
-
+	isLoginUserTheAnswerer := req.LoginUserID == userinfo.ID
 	for _, item := range answerlist {
+
 		_, ok := questionMaps[item.QuestionID]
 		if ok {
 			item.QuestionInfo = questionMaps[item.QuestionID]
 		} else {
 			continue
 		}
+		isParticipant := isLoginUserTheAnswerer || req.LoginUserID == item.QuestionInfo.UserID
+
+		if req.LoginUserRole == "1" && item.QuestionInfo.Show == 2 && !isParticipant{
+        continue
+    }
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
 		if item.QuestionInfo.Status == entity.QuestionStatusDeleted {
 			info.QuestionInfo.Title = "Deleted question"
-
 		}
 		userAnswerlist = append(userAnswerlist, info)
 	}
 
-	return pager.NewPageModel(total, userAnswerlist), nil
+	return pager.NewPageModel(int64(len(userAnswerlist)), userAnswerlist), nil
 }
 
 // PersonalCollectionPage get collection list by user
@@ -1080,7 +1106,8 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 	collectionSearch.UserID = req.UserID
 	collectionSearch.Page = req.Page
 	collectionSearch.PageSize = req.PageSize
-	collectionList, total, err := qs.collectionCommon.SearchList(ctx, collectionSearch)
+	collectionList, _, err := qs.collectionCommon.SearchList(ctx, collectionSearch)
+
 	if err != nil {
 		return nil, err
 	}
@@ -1093,11 +1120,27 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 	if err != nil {
 		return nil, err
 	}
+	answerReq := &schema.AnswerListReq{}
 	for _, id := range questionIDs {
 		if handler.GetEnableShortID(ctx) {
 			id = uid.EnShortID(id)
 		}
 		_, ok := questionMaps[id]
+		isParticipant := questionMaps[id].UserID == req.UserID
+		answerReq.QuestionID = id
+		answerList, _, err := qs.answerService.SearchList(ctx, answerReq)
+		if err != nil {
+			return nil, err
+		}
+		for _, answer := range answerList {
+			if answer.UserID == req.UserID {
+				isParticipant = true
+				break
+			}
+		}
+		if req.LoginUserRole == "1" && questionMaps[id].Show == 2 && !isParticipant{
+			continue
+		}
 		if ok {
 			questionMaps[id].LastAnsweredUserInfo = nil
 			questionMaps[id].UpdateUserInfo = nil
@@ -1106,16 +1149,16 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 			if questionMaps[id].Status == entity.QuestionStatusDeleted {
 				questionMaps[id].Title = "Deleted question"
 			}
+
 			list = append(list, questionMaps[id])
 		}
 	}
 
-	return pager.NewPageModel(total, list), nil
+	return pager.NewPageModel(int64(len(list)), list), nil
 }
 
-func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName string, loginUserID string) ([]*schema.UserQuestionInfo, []*schema.UserAnswerInfo, error) {
+func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName string, loginUserID string, loginUserRole string) ([]*schema.UserQuestionInfo, []*schema.UserAnswerInfo, error) {
 	answerlist := make([]*schema.AnswerInfo, 0)
-
 	userAnswerlist := make([]*schema.UserAnswerInfo, 0)
 	userQuestionlist := make([]*schema.UserQuestionInfo, 0)
 
@@ -1160,17 +1203,37 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
 	}
-
+	answerReq := &schema.AnswerListReq{}
+  answerReq.UserID = userinfo.ID
 	for _, item := range questionlist {
+		answerReq.QuestionID = item.ID
+		answerList, _, err := qs.answerService.SearchList(ctx, answerReq)
+		if err != nil {
+			return nil, nil, err
+		}
+		isParticipant := userinfo.ID == loginUserID
+		for _, answer := range answerList {
+			if answer.UserID == loginUserID {
+				isParticipant = true
+				break
+			}
+		}
+		if loginUserRole == "1" && item.Show == 2 && !isParticipant{
+			continue
+		}
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
 		info.UrlTitle = htmltext.UrlTitle(info.Title)
 		userQuestionlist = append(userQuestionlist, info)
 	}
-
+	isLoginUserTheAnswerer := loginUserID == userinfo.ID
 	for _, item := range answerlist {
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
+		isParticipant := isLoginUserTheAnswerer || loginUserID == item.QuestionInfo.UserID
+		if loginUserRole == "1" && item.QuestionInfo.Show == 2 && !isParticipant{
+				continue
+		}
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
 		info.QuestionInfo.UrlTitle = htmltext.UrlTitle(info.QuestionInfo.Title)

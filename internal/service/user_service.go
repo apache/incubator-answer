@@ -126,6 +126,7 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 	if !exist {
 		return nil, errors.NotFound(reason.UserNotFound)
 	}
+
 	resp = &schema.GetOtherUserInfoByUsernameResp{}
 	resp.ConvertFromUserEntity(userInfo)
 	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
