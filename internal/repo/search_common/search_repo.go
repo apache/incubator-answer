@@ -157,9 +157,9 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 			And(builder.In(ast+".tag_id", tagID))
 		ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
 			And(builder.Eq{
-				ast + ".tag_id": tagID,
 				ast + ".status": entity.TagRelStatusAvailable,
-			})
+			}).
+			And(builder.In(ast+".tag_id", tagID))
 		argsQ = append(argsQ, entity.TagRelStatusAvailable)
 		argsA = append(argsA, entity.TagRelStatusAvailable)
 		for _, t := range tagID {
