@@ -276,7 +276,10 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 				ast + ".tag_id": tagID,
 				ast + ".status": entity.TagRelStatusAvailable,
 			})
-		args = append(args, entity.TagRelStatusAvailable, tagID)
+		args = append(args, entity.TagRelStatusAvailable)
+		for _, t := range tagID {
+			args = append(args, t)
+		}
 	}
 
 	// check need filter has not accepted
@@ -385,7 +388,10 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 				ast + ".tag_id": tagID,
 				ast + ".status": entity.TagRelStatusAvailable,
 			})
-		args = append(args, entity.TagRelStatusAvailable, tagID)
+		args = append(args, entity.TagRelStatusAvailable)
+		for _, t := range tagID {
+			args = append(args, t)
+		}
 	}
 
 	// check limit accepted
