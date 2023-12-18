@@ -98,7 +98,7 @@ func NewSearchRepo(
 }
 
 // SearchContents search question and answer data
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs [][]string, userID string, votes int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
@@ -160,8 +160,12 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 				ast + ".tag_id": tagID,
 				ast + ".status": entity.TagRelStatusAvailable,
 			})
-		argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
-		argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
+		argsQ = append(argsQ, entity.TagRelStatusAvailable)
+		argsA = append(argsA, entity.TagRelStatusAvailable)
+		for _, t := range tagID {
+			argsQ = append(argsQ, t)
+			argsA = append(argsA, t)
+		}
 	}
 
 	// check user
@@ -236,7 +240,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs [][]string, notAccepted bool, views, answers int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 	var (
 		qfs  = qFields
@@ -343,7 +347,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 }
 
 // SearchAnswers search answer data
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs [][]string, accepted bool, questionID string, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
