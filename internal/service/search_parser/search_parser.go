@@ -105,7 +105,7 @@ func (sp *SearchParser) ParseStructure(ctx context.Context, dto *schema.SearchDT
 }
 
 // parseTags parse search tags, return tag ids array
-func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []string) {
+func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags [][]string) {
 	var (
 		// expire tag pattern
 		exprTag = `\[(.*?)\]`
@@ -119,17 +119,25 @@ func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []st
 		return
 	}
 
-	tags = []string{}
+	tags = make([][]string, 0)
 	for _, item := range res {
+		tagGroup := make([]string, 0)
 		tag, exists, err := sp.tagCommonService.GetTagBySlugName(ctx, item[1])
 		if err != nil || !exists {
 			continue
 		}
+		tagGroup = append(tagGroup, tag.ID)
 		if tag.MainTagID > 0 {
-			tags = append(tags, fmt.Sprintf("%d", tag.MainTagID))
-		} else {
-			tags = append(tags, tag.ID)
+			tagGroup = append(tagGroup, fmt.Sprintf("%d", tag.MainTagID))
 		}
+		synIDs, err := sp.tagCommonService.GetTagIDsByMainTagID(ctx, tag.ID)
+		if err != nil || !exists {
+			continue
+		}
+		tagGroup = append(tagGroup, tag.ID)
+		tagGroup = append(tagGroup, synIDs...)
+		tagGroup = converter.UniqueArray(tagGroup)
+		tags = append(tags, tagGroup)
 	}
 
 	// limit maximum 5 tags
