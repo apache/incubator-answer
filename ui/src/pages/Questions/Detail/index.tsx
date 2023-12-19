@@ -181,6 +181,9 @@ const Index = () => {
       getDetail();
       return;
     }
+    if (type === 'delete_answer') {
+      getDetail();
+    }
     requestAnswers();
   };
 
@@ -194,6 +197,9 @@ const Index = () => {
       setQuestion({
         ...question,
         answered: true,
+        first_answer_id: question.first_answer_id
+          ? question.first_answer_id
+          : obj.id,
       });
     }
   };
@@ -280,6 +286,7 @@ const Index = () => {
                 qid,
                 answered: question?.answered,
                 loggedUserRank,
+                first_answer_id: question?.first_answer_id,
               }}
               callback={writeAnswerCallback}
             />

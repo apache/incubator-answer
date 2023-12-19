@@ -28,24 +28,15 @@ const (
 
 // CollectionSwitchReq switch collection request
 type CollectionSwitchReq struct {
-	// object TagID
 	ObjectID string `validate:"required" json:"object_id"`
-	// user collection group TagID
-	GroupID string `validate:"required" json:"group_id"`
-}
-
-// CollectionSwitchDTO  collection data transfer object
-type CollectionSwitchDTO struct {
-	ObjectID string
-	GroupID  string
-	UserID   string
+	GroupID  string `validate:"required" json:"group_id"`
+	Bookmark bool   `validate:"omitempty" json:"bookmark"`
+	UserID   string `json:"-"`
 }
 
 // CollectionSwitchResp switch collection response
 type CollectionSwitchResp struct {
-	ObjectID              string `json:"object_id"`
-	Switch                bool   `json:"switch"`
-	ObjectCollectionCount string `json:"object_collection_count"`
+	ObjectCollectionCount int64 `json:"object_collection_count"`
 }
 
 // AddCollectionGroupReq add collection group request

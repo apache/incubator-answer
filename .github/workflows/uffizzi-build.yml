@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
-    if: ${{ github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' && github.repository_owner == 'apache' }}
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v4
@@ -98,7 +98,7 @@ jobs:
   delete-preview:
     name: Call for Preview Deletion
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == 'closed' }}
+    if: ${{ github.event.action == 'closed' && github.repository_owner == 'apache' }}
     steps:
       # If this PR is closing, we will not render a compose file nor pass it to the next workflow.
       - name: Serialize PR Event to File

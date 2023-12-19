@@ -35,6 +35,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/internal/service/user_notification_config"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/random"
 	"github.com/apache/incubator-answer/pkg/token"
@@ -56,12 +57,13 @@ type UserExternalLoginRepo interface {
 
 // UserExternalLoginService user external login service
 type UserExternalLoginService struct {
-	userRepo              usercommon.UserRepo
-	userExternalLoginRepo UserExternalLoginRepo
-	userCommonService     *usercommon.UserCommon
-	emailService          *export.EmailService
-	siteInfoCommonService siteinfo_common.SiteInfoCommonService
-	userActivity          activity.UserActiveActivityRepo
+	userRepo                      usercommon.UserRepo
+	userExternalLoginRepo         UserExternalLoginRepo
+	userCommonService             *usercommon.UserCommon
+	emailService                  *export.EmailService
+	siteInfoCommonService         siteinfo_common.SiteInfoCommonService
+	userActivity                  activity.UserActiveActivityRepo
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService
 }
 
 // NewUserExternalLoginService new user external login service
@@ -72,14 +74,16 @@ func NewUserExternalLoginService(
 	emailService *export.EmailService,
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 	userActivity activity.UserActiveActivityRepo,
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService,
 ) *UserExternalLoginService {
 	return &UserExternalLoginService{
-		userRepo:              userRepo,
-		userCommonService:     userCommonService,
-		userExternalLoginRepo: userExternalLoginRepo,
-		emailService:          emailService,
-		siteInfoCommonService: siteInfoCommonService,
-		userActivity:          userActivity,
+		userRepo:                      userRepo,
+		userCommonService:             userCommonService,
+		userExternalLoginRepo:         userExternalLoginRepo,
+		emailService:                  emailService,
+		siteInfoCommonService:         siteInfoCommonService,
+		userActivity:                  userActivity,
+		userNotificationConfigService: userNotificationConfigService,
 	}
 }
 
@@ -163,6 +167,11 @@ func (us *UserExternalLoginService) ExternalLogin(
 	newMailStatus, err := us.activeUser(ctx, oldUserInfo, externalUserInfo)
 	if err != nil {
 		log.Error(err)
+	}
+
+	// set default user notification config for external user
+	if err := us.userNotificationConfigService.SetDefaultUserNotificationConfig(ctx, []string{oldUserInfo.ID}); err != nil {
+		log.Errorf("set default user notification config failed, err: %v", err)
 	}
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(

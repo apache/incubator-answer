@@ -29,6 +29,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.repository_owner == 'apache' }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout

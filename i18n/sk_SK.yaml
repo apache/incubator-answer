@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +267,8 @@ backend:
         other: Svoju rolu nemôžete zmeniť.
       not_allowed_registration:
         other: Currently the site is not open for registration.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Access denied
       page_access_denied:
@@ -480,7 +482,7 @@ backend:
       other: accept
     accepted:
       other: accepted
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Ako formátovať
@@ -520,6 +522,7 @@ ui:
     http_404: HTTP chyba 404
     http_50X: HTTP chyba 403
     http_403: HTTP Error 403
+    logout: Log Out
   notifications:
     title: Oznámenia
     inbox: Doručená pošta
@@ -704,6 +707,7 @@ ui:
   edit_tag:
     title: Upraviť značku
     default_reason: Upraviť značku
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -731,6 +735,8 @@ ui:
     x_hours_ago: "pred {{count}}h"
     hour: hodina
     day: deň
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Pridať komentár
     reply_to: Odpovedať
@@ -749,6 +755,7 @@ ui:
   edit_answer:
     title: Uprav odpoveď
     default_reason: Uprav odpoveď
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +786,7 @@ ui:
     title: Pridať otázku
     edit_title: Upraviť otázku
     default_reason: Upraviť otázku
+    default_first_reason: Add question
     similar_questions: Podobné otázky
     form:
       fields:
@@ -833,7 +841,7 @@ ui:
       placeholder: Vyhľadávanie
   footer:
     build_on: >-
-      Postavené na <1> Answer </1> – softvéri s otvoreným zdrojom, ktorý poháňa komunity otázok a odpovedí.<br />Vyrobené s láskou © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Zmena
     loading: načítavanie...
@@ -1052,6 +1060,7 @@ ui:
       btn_accepted: Prijaté
     write_answer:
       title: Vaša odpoveď
+      edit_answer: Edit my existing answer
       btn_name: Pošlite svoju odpoveď
       add_another_answer: Pridajte ďalšiu odpoveď
       confirm_title: Pokračovať v odpovedi
@@ -1353,23 +1362,33 @@ ui:
     dashboard:
       title: Nástenka
       welcome: Vitajte v Administrátorovi odpovedí!
-      site_statistics: Štatistiky stránky
+      site_statistics: Site statistics
       questions: "Otázky:"
       answers: "Odpovede:"
       comments: "Komentáre:"
       votes: "Hlasy:"
-      active_users: "Aktívni používatelia:"
+      users: "Users:"
       flags: "Vlajky:"
-      site_health_status: Site Health Status
+      site_health_status: Site health status
       version: "Verzia:"
       https: "HTTPS:"
-      uploading_files: "Nahrávanie súborov:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Časové pásmo:"
-      system_info: Systémové informácie
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Použité úložisko:"
       uptime: "Doba prevádzky:"
-      answer_links: Odkazy na odpovede
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Dokumenty
       feedback: Spätná väzba
       support: Podpora
@@ -1384,6 +1403,8 @@ ui:
       allowed: Povolené
       enabled: Povolené
       disabled: Zablokované
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Vlajky
       pending: Prebiehajúce
@@ -1594,6 +1615,10 @@ ui:
         text: "Tu môžete pridať obsah zásad ochrany osobných údajov. Ak už máte dokument umiestnený inde, uveďte tu celú URL adresu."
     write:
       page_title: Písať
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "Vyššie zadajte tag slug, jednu značku na riadok."
@@ -1660,6 +1685,10 @@ ui:
         title: Súkromné
         label: Vyžaduje sa prihlásenie
         text: Do tejto komunity majú prístup iba prihlásení používatelia
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.

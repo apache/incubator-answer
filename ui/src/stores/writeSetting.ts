@@ -19,27 +19,27 @@
 
 import create from 'zustand';
 
-import { AdminSettingsLogin } from '@/common/interface';
+import { AdminSettingsWrite } from '@/common/interface';
 
-interface IType {
-  login: AdminSettingsLogin;
-  update: (params: AdminSettingsLogin) => void;
+interface IProps {
+  write: AdminSettingsWrite;
+  update: (params: AdminSettingsWrite) => void;
 }
 
-const loginSetting = create<IType>((set) => ({
-  login: {
-    allow_new_registrations: true,
-    login_required: false,
-    allow_email_registrations: true,
-    allow_email_domains: [],
-    allow_password_login: true,
+const Index = create<IProps>((set) => ({
+  write: {
+    restrict_answer: true,
+    recommend_tags: [],
+    required_tag: '',
+    reserved_tags: [],
   },
   update: (params) =>
-    set(() => {
+    set((state) => {
+      const o = { ...state.write, ...params };
       return {
-        login: params,
+        write: o,
       };
     }),
 }));
 
-export default loginSetting;
+export default Index;

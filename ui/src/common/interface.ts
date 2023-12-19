@@ -244,6 +244,7 @@ export interface QuestionDetailRes {
   user_info: UserInfoBase;
   answered: boolean;
   collected: boolean;
+  answer_ids: string[];
 
   [prop: string]: any;
 }
@@ -396,6 +397,7 @@ export interface SiteSettings {
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
   site_users: AdminSettingsUsers;
+  site_write: AdminSettingsWrite;
   version: string;
   revision: string;
 }
@@ -415,9 +417,10 @@ export interface AdminSettingsLegal {
 }
 
 export interface AdminSettingsWrite {
-  recommend_tags: string[];
-  required_tag: string;
-  reserved_tags: string[];
+  restrict_answer?: boolean;
+  recommend_tags?: string[];
+  required_tag?: string;
+  reserved_tags?: string[];
 }
 
 export interface AdminSettingsSeo {
@@ -454,6 +457,7 @@ export interface AdminSettingsLogin {
   login_required: boolean;
   allow_email_registrations: boolean;
   allow_email_domains: string[];
+  allow_password_login: boolean;
 }
 
 /**
@@ -507,11 +511,15 @@ export interface AdminDashboard {
     user_count: number;
     report_count: number;
     uploading_files: boolean;
-    smtp: boolean;
+    smtp: 'enabled' | 'disabled' | 'not_configured';
     time_zone: string;
     occupying_storage_space: string;
     app_start_time: number;
     https: boolean;
+    login_required: boolean;
+    go_version: string;
+    database_version: string;
+    database_size: string;
     version_info: {
       remote_version: string;
       version: string;

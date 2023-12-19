@@ -86,8 +86,9 @@ const Index: FC = () => {
 
   if (timelineData?.object_info.object_type === 'tag') {
     linkUrl = `/tags/${
-      timelineData?.object_info.main_tag_slug_name ||
-      timelineData?.object_info.title
+      timelineData?.object_info.main_tag_slug_name
+        ? encodeURIComponent(timelineData?.object_info.main_tag_slug_name)
+        : encodeURIComponent(timelineData?.object_info.title)
     }`;
     pageTitle = `${t('title_for_tag')} '${timelineData?.object_info.title}'`;
   }
@@ -97,6 +98,8 @@ const Index: FC = () => {
   usePageTags({
     title: pageTitle,
   });
+
+  console.log('timelineData', linkUrl);
   return (
     <div className="py-4 mb-5">
       <h5 className="mb-4">

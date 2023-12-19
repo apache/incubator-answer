@@ -28,6 +28,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"xorm.io/xorm"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"xorm.io/builder"
@@ -127,14 +128,26 @@ func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string
 	return nil
 }
 
-func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionID string, num int) (err error) {
+func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionID string) (count int64, err error) {
 	questionID = uid.DeShortID(questionID)
-	question := &entity.Question{}
-	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Incr("collection_count", num).Update(question)
+	_, err = qr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
+		count, err = session.Count(&entity.Collection{ObjectID: questionID})
+		if err != nil {
+			return nil, err
+		}
+
+		question := &entity.Question{CollectionCount: int(count)}
+		_, err = session.ID(questionID).MustCols("collection_count").Update(question)
+		if err != nil {
+			return nil, err
+		}
+		return
+	})
 	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return nil
+	return count, nil
 }
 
 func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, questionID string, status int) (err error) {
