@@ -23,6 +23,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.repository_owner == 'apache' }}
     name: Build and Push
     runs-on: ubuntu-latest
     steps:
