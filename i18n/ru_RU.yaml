@@ -433,17 +433,17 @@ backend:
       title:
         other: "[{{.SiteName}}] Подтвердите новый адрес электронной почты"
       body:
-        other: "Подтвердите свой новый адрес электронной почты для {{.SiteName}}, перейдя по следующей ссылке:<br> <a href=''{{.ChangeEmailUrl}}'' target=''_blank''>{{.ChangeEmailUrl}}</a><br><br> Если вы не запрашивали это изменение, пожалуйста, проигнорируйте это электронное письмо."
+        other: "Подтвердите свой новый адрес электронной почты для {{.SiteName}}, перейдя по следующей ссылке:<br> <a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br> Если вы не запрашивали это изменение, пожалуйста, проигнорируйте это электронное письмо."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} ответил на ваш вопрос"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br> {{.DisplayName}}:<br>\n<blockquote>ЗАПОЛНИТЕЛЬ3</blockquote><br>\n<a href=''{{.AnswerUrl}}''>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href=''{{.UnsubscribeUrl}}''>Отказаться от подписки</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br> {{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href='{{.UnsubscribeUrl}}'>Отказаться от подписки</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} пригласил вас ответить"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>{{.DisplayName}}:<br>\n<blockquote>Я думаю, вы можете знать ответ.</blockquote><br>  <a href=''{{.InviteUrl}}''>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href=''{{.UnsubscribeUrl}}''>Отказаться от подписки</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>{{.DisplayName}}:<br>\n<blockquote>Я думаю, вы можете знать ответ.</blockquote><br>  <a href='{{.InviteUrl}}'>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href='{{.UnsubscribeUrl}}'>Отказаться от подписки</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} прокомментировал ваш пост"
@@ -458,12 +458,12 @@ backend:
       title:
         other: "[{{.SiteName }}] Сброс пароля"
       body:
-        other: "Кто-то попросил сбросить ваш пароль на {{.SiteName}}.<br><br> Если это были не вы, вы можете спокойно проигнорировать это электронное письмо.<br><br> Перейдите по следующей ссылке, чтобы выбрать новый пароль:<br> <a href=''ЗАПОЛНИТЕЛЬ1'' target=''_blank''>ЗАПОЛНИТЕЛЬ1</a> "
+        other: "Кто-то попросил сбросить ваш пароль на {{.SiteName}}.<br><br> Если это были не вы, вы можете спокойно проигнорировать это электронное письмо.<br><br> Перейдите по следующей ссылке, чтобы выбрать новый пароль:<br> <a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a> "
     register:
       title:
         other: "[{{.SiteName }}] Подтвердите свою новую учетную запись"
       body:
-        other: "Добро пожаловать в {{.SiteName}}!<br><br> Перейдите по следующей ссылке, чтобы подтвердить и активировать свою новую учетную запись:<br><a href=''{{.RegisterUrl}}'' target=''_blank''>ЗАПОЛНИТЕЛЬ1</a><br><br> Если приведенная выше ссылка недоступна, попробуйте скопировать и вставить ее в адресную строку вашего веб-браузера."
+        other: "Добро пожаловать в {{.SiteName}}!<br><br> Перейдите по следующей ссылке, чтобы подтвердить и активировать свою новую учетную запись:<br><a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br> Если приведенная выше ссылка недоступна, попробуйте скопировать и вставить ее в адресную строку вашего веб-браузера."
     test:
       title:
         other: "[{{.SiteName}}] тестового электронного письма"
