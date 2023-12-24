@@ -446,7 +446,7 @@ backend:
         other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>{{.DisplayName}}:<br>\n<blockquote>Я думаю, вы можете знать ответ.</blockquote><br>  <a href=''{{.InviteUrl}}''>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href=''{{.UnsubscribeUrl}}''>Отказаться от подписки</a></small>"
     new_comment:
       title:
-        other: [{{.SiteName}}] {{.DisplayName}} прокомментировал ваш пост
+        other: "[{{.SiteName}}] {{.DisplayName}} прокомментировал ваш пост"
       body:
         other: "<a href='{{.CommentUrl}'>{{.QuestionTitle}}</a><br><br> {{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'> Просмотрите его на {{.SiteName}}</a><br><br>--<br> <small><a href='{{.UnsubscribeUrl}}'>Отказаться от подписки</a></small>"
     new_question:
@@ -1320,7 +1320,7 @@ ui:
     answers: ответы
     accepted: Принято
   page_error:
-    http_error: {{ code }} HTTP-ошибки
+    http_error: HTTP Error {{ code }}
     desc_403: У вас нет разрешения на доступ к этой странице.
     desc_404: К сожалению, эта страница не существует.
     desc_50X: Сервер обнаружил ошибку и не смог выполнить ваш запрос.
@@ -1617,8 +1617,8 @@ ui:
       page_title: Писать
       restrict_answer:
         title: Ограничить ответ
-        label: Каждый пользователь может написать только один ответ на каждый вопрос
-        text: "Вместо этого они могут воспользоваться ссылкой "Редактировать", чтобы уточнить и улучшить свой существующий ответ."
+        label: Each user can only write one answer for each question
+        text: "Вместо этого они могут использовать ссылку редактирования, чтобы уточнить и улучшить свой существующий ответ."
       recommend_tags:
         label: Рекомендуемые теги
         text: "Пожалуйста, введите тег slug выше, по одному тегу на строку."
