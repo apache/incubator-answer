@@ -274,7 +274,7 @@ backend:
       page_access_denied:
         other: У вас нет доступа к этой странице.
       add_bulk_users_format_error:
-        other: "Ошибка формата {{.Field}} рядом с "{{.Content}}" в строке {{.Line}}. {{.ExtraMessage}}"
+        other: "Ошибка формата {{.Field}} рядом с '{{.Content}}' в строке {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
         other: "Количество пользователей, которых вы добавляете одновременно, должно быть в диапазоне от 1 до {{.MaxAmount}}."
     config:
@@ -1364,7 +1364,7 @@ ui:
       welcome: Добро пожаловать в ответ админу!
       site_statistics: Статистика сайта
       questions: "Вопросы:"
-      answers: "Ответы:'
+      answers: "Ответы:"
       comments: "Комментарии:"
       votes: "Голоса:"
       users: "Пользователи:"
