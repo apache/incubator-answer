@@ -31,7 +31,7 @@ backend:
     forbidden_error:
       other: Доступ запрещен.
     duplicate_request_error:
-      other: Дубликатный запрос.
+      other: Дубликат запроса.
   action:
     report:
       other: Флаг
@@ -483,7 +483,8 @@ action_activity_type:
 ui:
   how_to_format:
     title: Как форматировать
-    desc: <ul class="mb-0"><li><p class="mb-2">создавать ссылки</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Заголовок](https://url.com)</code></pre></li><li><p class="mb-2">ставить разрывы между абзацами</p></li><li><p class="mb-2"><em>_курсив_</em> или **<strong>жирный</strong>**</p></li><li><p class="mb-2">отступать код на 4 пробела</p></li><li><p class="mb-2">цитировать, начиная с <code>&gt;</code> в начале строки</p></li><li><p class="mb-2">выделять код обратными кавычками <code>`так _вот_`</code></p></li><li><p class="mb-2">создавать блоки кода с использованием обратных кавычек <code>`</code></p><pre class="mb-0"><code>```<br/>код здесь<br/>```</code></pre></li></ul>
+    desc: >-
+      <ul class="mb-0"><li><p class="mb-2">создавать ссылки</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Заголовок](https://url.com)</code></pre></li><li><p class="mb-2">ставить разрывы между абзацами</p></li><li><p class="mb-2"><em>_курсив_</em> или **<strong>жирный</strong>**</p></li><li><p class="mb-2">отступать код на 4 пробела</p></li><li><p class="mb-2">цитировать, начиная с <code>&gt;</code> в начале строки</p></li><li><p class="mb-2">выделять код обратными кавычками <code>`так _вот_`</code></p></li><li><p class="mb-2">создавать блоки кода с использованием обратных кавычек <code>`</code></p><pre class="mb-0"><code>```<br/>код здесь<br/>```</code></pre></li></ul>
   pagination:
     prev: Назад
     next: Вперёд
