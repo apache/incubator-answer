@@ -801,6 +801,8 @@ ask:
           empty: Ответ не может быть пустым.
       edit_summary:
         label: Резюме редактирования
+        placeholder: >-
+          Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
   btn_post_question: Опубликовать свой вопрос
   btn_save_edits: Сохранить изменения
   answer_question: Ответить на свой вопрос
