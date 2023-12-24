@@ -274,9 +274,9 @@ backend:
       page_access_denied:
         other: У вас нет доступа к этой странице.
       add_bulk_users_format_error:
-        other: Ошибка формата {{.Field}} рядом с "{{.Content}}" в строке {{.Line}}. {{.ExtraMessage}}
+        other: "Ошибка формата {{.Field}} рядом с "{{.Content}}" в строке {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: Количество пользователей, которых вы добавляете одновременно, должно быть в диапазоне от 1 до {{.MaxAmount}}.
+        other: "Количество пользователей, которых вы добавляете одновременно, должно быть в диапазоне от 1 до {{.MaxAmount}}."
     config:
       read_config_failed:
         other: Не удалось прочитать конфигурацию
@@ -487,7 +487,7 @@ ui:
   how_to_format:
     title: Как отформатировать
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">делать ссылки</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">помещайте возвраты между абзацами</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">отступ кода на 4 пробела</p></li><li><p class="mb-2">цитата путем размещения <code>&gt;</code> в начале строки</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">создавать ограждения кода с помощью обратных кавычек <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Предыдущий
     next: Следующий
@@ -538,7 +538,7 @@ ui:
       votes: Голоса
   suspended:
     title: Ваш аккаунт заблокирован
-    until_time: Ваша учетная запись была заблокирована до {{ time }}.
+    until_time: "Ваша учетная запись была заблокирована до {{ time }}."
     forever: Этот пользователь был навсегда заблокирован.
     end: Вы не соответствуете правилам сообщества.
     contact_us: Связаться с нами
@@ -716,7 +716,7 @@ ui:
           label: Отображаемое имя
         slug_name:
           label: URL-адрес slug
-          info: 'Невозможно использовать набор символов "от а до я", "0-9", "+ # - ."'
+          info: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
         desc:
           label: Описание
         edit_summary:
@@ -822,7 +822,7 @@ ui:
     add_btn: Добавить тег
     create_btn: Создать новый тег
     search_tag: Поиск тега
-    hint: Опишите, о чем ваш вопрос, требуется хотя бы один тег.
+    hint: "Опишите, о чем ваш вопрос, требуется хотя бы один тег."
     no_result: Теги не совпадают
     tag_required_text: Обязательный тег (хотя бы один)
   header:
@@ -853,7 +853,7 @@ ui:
   inactive:
     first: >-
       Вы почти закончили! Мы отправили письмо с активацией на адрес <bold>{{mail}}</bold>. Пожалуйста, следуйте инструкциям в письме, чтобы активировать свою учетную запись.
-    info: Если оно не пришло, проверьте свою папку со спамом.
+    info: "Если оно не пришло, проверьте свою папку со спамом."
     another: >-
       Мы отправили вам еще одно электронное письмо с активацией по адресу <bold>{{mail}}</bold>. Его получение может занять несколько минут; обязательно проверьте папку со спамом.
     btn_name: Повторно отправить письмо с активацией
@@ -874,7 +874,7 @@ ui:
       msg:
         empty: Имя пользователя не должно быть пустым.
         range: Имя пользователя должно быть до 30 символов.
-        character: Невозможно использовать набор символов "от а до я", "0-9", " - . _"
+        character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
     email:
       label: Адрес эл. почты
       msg:
@@ -952,7 +952,7 @@ ui:
         caption: Люди могут упоминать вас как "@username".
         msg: Имя пользователя не может быть пустым.
         msg_range: Имя пользователя длиной до 30 символов.
-        character: Необходимо использовать набор символов "a-z", "0-9", " - . _"
+        character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
       avatar:
         label: Изображение профиля
         gravatar: Гравитатор
@@ -965,11 +965,11 @@ ui:
         label: Обо мне
       website:
         label: Вебсайт
-        placeholder: https://example.com
+        placeholder: "https://example.com"
         msg: Неправильный формат веб-сайта
       location:
         label: Местоположение
-        placeholder: Город, страна
+        placeholder: "Город, страна"
     notification:
       heading: Уведомления
       email: Электронная почта
@@ -1243,7 +1243,7 @@ ui:
       msg: Пароль не может быть пустым.
     db_host:
       label: Узел базы данных
-      placeholder: 'дб: 3306'
+      placeholder: "db: 3306"
       msg: Узел базы данных не может быть пустым.
     db_name:
       label: Имя базы данных
@@ -1303,7 +1303,7 @@ ui:
     ready_title: Ваш ответ готов!
     ready_desc: >-
        Если вам когда-нибудь захочется изменить дополнительные настройки,посетите <1>раздел администратора</1>; найдите его в меню сайта.
-    good_luck: Получайте удовольствие и удачи!
+    good_luck: "Получайте удовольствие и удачи!"
     warn_title: Предупреждение
     warn_desc: >-
       Файл <1>config.yaml</1> уже существует. Если вам нужно сбросить какой-либо из элементов конфигурации в этом файле, пожалуйста, сначала удалите его.
@@ -1326,7 +1326,7 @@ ui:
     desc_50X: Сервер обнаружил ошибку и не смог выполнить ваш запрос.
     back_home: Вернуться на главную страницу
   page_maintenance:
-    desc: Мы на ремонте, скоро вернемся.
+    desc: "Мы на ремонте, скоро вернемся."
   nav_menus:
     dashboard: Панель управления
     contents: Содержание
@@ -1363,27 +1363,27 @@ ui:
       title: Панель управления
       welcome: Добро пожаловать в ответ админу!
       site_statistics: Статистика сайта
-      questions: 'Вопросы:'
-      answers: 'Ответы:'
-      comments: 'Комментарии:'
-      votes: 'Голоса:'
-      users: 'Пользователи:'
-      flags: 'Флаги:'
+      questions: "Вопросы:"
+      answers: "Ответы:'
+      comments: "Комментарии:"
+      votes: "Голоса:"
+      users: "Пользователи:"
+      flags: "Флаги:"
       site_health_status: Состояние работоспособности сайта
-      version: 'Версия:'
-      https: 'https:'
-      upload_folder: 'Папка для загрузки:'
-      run_mode: 'Режим работы:'
+      version: "Версия:"
+      https: "https:"
+      upload_folder: "Папка для загрузки:"
+      run_mode: "Режим работы:"
       private: Частный
       public: Общественный
-      smtp: 'SMTP:'
-      timezone: 'Часовой пояс:'
+      smtp: "SMTP:"
+      timezone: "Часовой пояс:"
       system_info: Информация о системе
-      go_version: 'Версия Go:'
-      database: 'База данных:'
-      database_size: 'Размер базы данных:'
-      storage_used: 'Используемое хранилище:'
-      uptime: 'Рабочее время:'
+      go_version: "Версия Go:"
+      database: "База данных:"
+      database_size: "Размер базы данных:"
+      storage_used: "Используемое хранилище:"
+      uptime: "Рабочее время:"
       answer_links: Ссылки на ответы
       plugins: Плагины
       github: GitHub
@@ -1397,8 +1397,8 @@ ui:
       update_to: Обновление до
       latest: Самый последний
       check_failed: Проверка не удалась
-      'yes': Да
-      'no': Нет
+      "yes": "Да"
+      "no": "Нет"
       not_allowed: Не допускается
       allowed: Допустимый
       enabled: Включенный
@@ -1471,7 +1471,7 @@ ui:
       Admin: Администратор
       User: Пользователь
       filter:
-        placeholder: Фильтровать по имени, идентификатору пользователя
+        placeholder: "Фильтровать по имени, идентификатору пользователя"
       set_new_password: Установите новый пароль
       change_status: Изменить статус
       change_role: Изменить роль
@@ -1520,7 +1520,7 @@ ui:
       name:
         label: Название сайта
         msg: Название сайта не может быть пустым.
-        text: Название сайта, используемое в этом названии.
+        text: "Название сайта, используемое в этом названии."
       site_url:
         label: URL-адрес сайта
         msg: URL-адрес сайта не может быть пустым.
@@ -1612,7 +1612,7 @@ ui:
         text: "Вы можете добавить содержимое условий предоставления услуг здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь."
       privacy_policy:
         label: Политика конфиденциальности
-        text: Вы можете добавить содержание политики конфиденциальности здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь.
+        text: "Вы можете добавить содержание политики конфиденциальности здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь."
     write:
       page_title: Писать
       restrict_answer:
