@@ -716,7 +716,7 @@ ui:
           label: Display name
         slug_name:
           label: URL slug
-          info: '必須由 "a-z", "0-9", "+ # - ." 組成'
+          info: URL slug 不能超過 35 個字符。
         desc:
           label: 描述
         edit_summary:
