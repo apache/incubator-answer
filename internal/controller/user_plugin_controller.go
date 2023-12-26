@@ -22,6 +22,9 @@ package controller
 import (
 	"encoding/json"
 	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/segmentfault/pacman/errors"
+	"net/http"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -53,10 +56,12 @@ func (pc *UserPluginController) GetUserPluginList(ctx *gin.Context) {
 	resp := make([]*schema.GetUserPluginListResp, 0)
 	_ = plugin.CallUserConfig(func(base plugin.UserConfig) error {
 		info := base.Info()
-		resp = append(resp, &schema.GetUserPluginListResp{
-			Name:     info.Name.Translate(ctx),
-			SlugName: info.SlugName,
-		})
+		if plugin.StatusManager.IsEnabled(info.SlugName) {
+			resp = append(resp, &schema.GetUserPluginListResp{
+				Name:     info.Name.Translate(ctx),
+				SlugName: info.SlugName,
+			})
+		}
 		return nil
 	})
 	handler.HandleResponse(ctx, nil, resp)
@@ -122,6 +127,10 @@ func (pc *UserPluginController) GetUserPluginConfig(ctx *gin.Context) {
 func (pc *UserPluginController) UpdatePluginUserConfig(ctx *gin.Context) {
 	req := &schema.UpdateUserPluginConfigReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	if !plugin.StatusManager.IsEnabled(req.PluginSlugName) {
+		handler.HandleResponse(ctx, errors.New(http.StatusBadRequest, reason.RequestFormatError), nil)
 		return
 	}
 
