@@ -716,7 +716,7 @@ ui:
           label: 显示名称
         slug_name:
           label: URL 固定链接
-          info: '必须由 "a-z", "0-9", "+ # - ." 组成'
+          info: URL 固定链接不能超过 35 个字符。
         desc:
           label: 描述
         edit_summary:
