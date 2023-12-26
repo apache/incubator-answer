@@ -208,26 +208,30 @@ function diffText(newText: string, oldText?: string): string {
 }
 
 function base64ToSvg(base64: string, svgClassName?: string) {
-  // base64 to svg xml
-  const svgxml = atob(base64);
+  try {
+    // base64 to svg xml
+    const svgxml = atob(base64);
 
-  // svg add class
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(svgxml, 'image/svg+xml');
-  const parseError = doc.querySelector('parsererror');
-  const svg = doc.querySelector('svg');
-  let str = '';
-  if (svg && !parseError) {
-    if (svgClassName) {
-      svg.setAttribute('class', svgClassName);
+    // svg add class
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgxml, 'image/svg+xml');
+    const parseError = doc.querySelector('parsererror');
+    const svg = doc.querySelector('svg');
+    let str = '';
+    if (svg && !parseError) {
+      if (svgClassName) {
+        svg.setAttribute('class', svgClassName);
+      }
+      // svg.classList.add('me-2');
+
+      // transform svg to string
+      const serializer = new XMLSerializer();
+      str = serializer.serializeToString(doc);
     }
-    // svg.classList.add('me-2');
-
-    // transform svg to string
-    const serializer = new XMLSerializer();
-    str = serializer.serializeToString(doc);
+    return str;
+  } catch (error) {
+    return '';
   }
-  return str;
 }
 
 // Determine whether the user is in WeChat or Enterprise WeChat or DingTalk, and return the corresponding type

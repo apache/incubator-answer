@@ -23,10 +23,11 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
+import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
+
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
 
-const MAX_LENGTH = 35;
 interface IProps {
   title?: string;
   onConfirm?: (formData: any) => void;
@@ -85,7 +86,7 @@ const useTagModal = (props: IProps = {}) => {
         isInvalid: true,
         errorMsg: t('form.fields.display_name.msg.empty'),
       };
-    } else if (displayName.value.length > MAX_LENGTH) {
+    } else if (displayName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
       bol = false;
       formData.displayName = {
         value: displayName.value,
@@ -107,7 +108,7 @@ const useTagModal = (props: IProps = {}) => {
         isInvalid: true,
         errorMsg: t('form.fields.slug_name.msg.empty'),
       };
-    } else if (slugName.value.length > MAX_LENGTH) {
+    } else if (slugName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
       bol = false;
       formData.slugName = {
         value: slugName.value,

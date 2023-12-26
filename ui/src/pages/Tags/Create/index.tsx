@@ -30,6 +30,7 @@ import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
 import { createTag } from '@/services';
 import { handleFormError } from '@/utils';
+import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
 
 interface FormDataItem {
   displayName: Type.FormValue<string>;
@@ -104,10 +105,69 @@ const Index = () => {
       description: { ...formData.description, value, isInvalid: false },
     });
 
+  const checkValidated = (): boolean => {
+    let bol = true;
+    const { displayName, slugName } = formData;
+
+    if (!displayName.value) {
+      bol = false;
+      formData.displayName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.empty'),
+      };
+    } else if (displayName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.range'),
+      };
+    } else {
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    if (!slugName.value) {
+      bol = false;
+      formData.slugName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.empty'),
+      };
+    } else if (slugName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.range'),
+      };
+    } else {
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    setFormData({
+      ...formData,
+    });
+    return bol;
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setContentChanged(false);
+
+    if (!checkValidated()) {
+      return;
+    }
+
     const params = {
       display_name: formData.displayName.value,
       slug_name: formData.slugName.value,
