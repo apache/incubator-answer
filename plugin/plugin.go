@@ -48,6 +48,10 @@ func Register(p Base) {
 		registerConfig(p.(Config))
 	}
 
+	if _, ok := p.(UserConfig); ok {
+		registerUserConfig(p.(UserConfig))
+	}
+
 	if _, ok := p.(Connector); ok {
 		registerConnector(p.(Connector))
 	}
