@@ -39,9 +39,7 @@ const Index = () => {
         type: 'boolean',
         title: t('inbox.label'),
         description: t('inbox.description'),
-        enum: configData?.inbox?.map((v) => v.enable),
-        default: configData?.inbox?.map((v) => v.enable),
-        enumNames: configData?.inbox?.map((v) => t(v.key)),
+        default: true,
       },
       all_new_question: {
         type: 'boolean',
@@ -69,21 +67,21 @@ const Index = () => {
   };
   const uiSchema: UISchema = {
     inbox: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
       },
     },
     all_new_question: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
       },
     },
     all_new_question_for_following_tags: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
         text: t('all_new_question_for_following_tags.description'),
       },
     },

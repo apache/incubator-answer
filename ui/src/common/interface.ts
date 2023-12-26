@@ -631,3 +631,8 @@ export interface ActivatedPlugin {
   name: string;
   slug_name: string;
 }
+
+export interface UserPluginsConfigRes {
+  name: string;
+  slug_name: string;
+}
