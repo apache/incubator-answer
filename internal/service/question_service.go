@@ -1240,13 +1240,18 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	questions = make([]*schema.QuestionPageResp, 0)
 
 	// query by tag condition
+	var tagIDs = make([]string, 0)
 	if len(req.Tag) > 0 {
 		tagInfo, exist, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
 		if err != nil {
 			return nil, 0, err
 		}
 		if exist {
-			req.TagID = tagInfo.ID
+			synTagIds, err := qs.tagCommon.GetTagIDsByMainTagID(ctx, tagInfo.ID)
+			if err != nil {
+				return nil, 0, err
+			}
+			tagIDs = append(synTagIds, tagInfo.ID)
 		}
 	}
 
@@ -1263,7 +1268,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond, req.InDays)
+		tagIDs, req.UserIDBeSearched, req.OrderCond, req.InDays)
 	if err != nil {
 		return nil, 0, err
 	}

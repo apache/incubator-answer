@@ -344,15 +344,15 @@ func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, tagIDs []string, userID, orderCond string, inDays int) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
 	session := qr.data.DB.Context(ctx).Where("question.status = ? OR question.status = ?",
 		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
-	if len(tagID) > 0 {
+	if len(tagIDs) > 0 {
 		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session.And("tag_rel.tag_id = ?", tagID)
+		session.In("tag_rel.tag_id", tagIDs)
 		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
 	}
 	if len(userID) > 0 {
