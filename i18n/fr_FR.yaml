@@ -103,29 +103,29 @@ backend:
     rank_answer_vote_down_label:
       other: Downvote answer
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Inviter quelqu'un à répondre
     rank_tag_add_label:
       other: Créer une nouvelle étiquette
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Modifier la description de l'étiquette (doit être vérifié)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Modifier la question d'un autre (doit être vérifié)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Modifier la réponse d'un autre (doit être vérifié)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Modifier la question d'un autre sans vérification
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: Modifier la réponse d'un autre sans vérification
     rank_question_audit_label:
-      other: Review question edits
+      other: Examiner les modifications apportées aux questions
     rank_answer_audit_label:
-      other: Review answer edits
+      other: Examiner les modifications apportées aux réponses
     rank_tag_audit_label:
-      other: Review tag edits
+      other: Examiner les modifications apportées aux étiquettes
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: Modifier la description des étiquettes sans vérification
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Gérer les synonymes des étiquettes
   email:
     other: Email
   e_mail:
