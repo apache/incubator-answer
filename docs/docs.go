@@ -7929,22 +7929,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "all_new_question": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "all_new_question_for_following_tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "inbox": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 }
             }
         },
@@ -9546,22 +9537,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "all_new_question": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "all_new_question_for_following_tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "inbox": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 }
             }
         },

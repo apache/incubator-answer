@@ -991,17 +991,11 @@ definitions:
   schema.GetUserNotificationConfigResp:
     properties:
       all_new_question:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       all_new_question_for_following_tags:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       inbox:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
     type: object
   schema.GetUserPageResp:
     properties:
@@ -2106,17 +2100,11 @@ definitions:
   schema.UpdateUserNotificationConfigReq:
     properties:
       all_new_question:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       all_new_question_for_following_tags:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       inbox:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
     type: object
   schema.UpdateUserPasswordReq:
     properties:
