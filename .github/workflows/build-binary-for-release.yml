@@ -21,7 +21,6 @@ on:
   push:
     tags:
       - "v*"
-    branches: [ release-artifact-name ]
 permissions:
   contents: write
 
