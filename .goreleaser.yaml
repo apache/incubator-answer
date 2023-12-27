@@ -27,6 +27,7 @@ before:
 
 release:
   draft: true
+  name_template: apache-answer-{{ .Version }}-incubating-src
 
 builds:
   - id: build
@@ -49,9 +50,6 @@ builds:
       - windows
     goarch:
       - amd64
-
-
-
 
 archives:
   - name_template: >-
@@ -77,4 +75,3 @@ changelog:
       - '^test:'
 
 # goreleaser release --snapshot --rm-dist
-
