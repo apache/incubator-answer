@@ -34,7 +34,7 @@ type UserConfig interface {
 var (
 	// CallUserConfig is a function that calls all registered config plugins
 	CallUserConfig,
-	registerUserConfig = MakePlugin[UserConfig](true)
+	registerUserConfig = MakePlugin[UserConfig](false)
 	getPluginUserConfigFn func(userID, pluginSlugName string) []byte
 )
 

@@ -49,6 +49,7 @@ func (ns *ExternalNotificationService) handleNewAnswerNotification(ctx context.C
 			ns.sendNewAnswerNotificationEmail(ctx, msg.ReceiverUserID, msg.ReceiverEmail, msg.ReceiverLang, msg.NewAnswerTemplateRawData)
 		}
 	}
+	ns.syncNotificationToPlugin(ctx, constant.InboxSource, msg)
 	return nil
 }
 
