@@ -601,7 +601,7 @@ ui:
             msg:
               empty: Ni all ffeil fod yn wag.
               only_image: Dim ond ffeiliau delwedd a ganiateir.
-              max_size: Ni all maint y ffeil fod yn fwy na 4MB.
+              max_size: Ni all maint y ffeil fod yn fwy na 4 MB.
           desc:
             label: Disgrifiad
       tab_url: URL delwedd
