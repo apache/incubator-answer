@@ -51,7 +51,7 @@ const Index: FC = () => {
         return (
           <NavLink
             key={item.slug_name}
-            className="nav-link"
+            className="nav-link w-100 text-truncate"
             to={`/users/settings/${item.slug_name}`}>
             {item.name}
           </NavLink>
