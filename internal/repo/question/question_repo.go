@@ -347,7 +347,7 @@ func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int, showHidden bool) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
@@ -360,6 +360,9 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
+		if !showHidden {
+			session.And("question.show = ?", entity.QuestionShow)
+		}
 	} else {
 		session.And("question.show = ?", entity.QuestionShow)
 	}

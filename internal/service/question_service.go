@@ -45,6 +45,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/permission"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
+	"github.com/apache/incubator-answer/internal/service/role"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
@@ -65,6 +66,7 @@ type QuestionService struct {
 	questioncommon                   *questioncommon.QuestionCommon
 	userCommon                       *usercommon.UserCommon
 	userRepo                         usercommon.UserRepo
+	userRoleRelService               *role.UserRoleRelService
 	revisionService                  *revision_common.RevisionService
 	metaService                      *meta.MetaService
 	collectionCommon                 *collectioncommon.CollectionCommon
@@ -83,6 +85,7 @@ func NewQuestionService(
 	questioncommon *questioncommon.QuestionCommon,
 	userCommon *usercommon.UserCommon,
 	userRepo usercommon.UserRepo,
+	userRoleRelService *role.UserRoleRelService,
 	revisionService *revision_common.RevisionService,
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
@@ -100,6 +103,7 @@ func NewQuestionService(
 		questioncommon:                   questioncommon,
 		userCommon:                       userCommon,
 		userRepo:                         userRepo,
+		userRoleRelService:               userRoleRelService,
 		revisionService:                  revisionService,
 		metaService:                      metaService,
 		collectionCommon:                 collectionCommon,
@@ -1237,7 +1241,17 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.QuestionPageReq) (
 	questions []*schema.QuestionPageResp, total int64, err error) {
 	questions = make([]*schema.QuestionPageResp, 0)
-
+	// query by user role
+	req.ShowHidden = false
+	if req.LoginUserID != "" {
+		userRole, err := qs.userRoleRelService.GetUserRole(ctx, req.LoginUserID)
+		if err != nil {
+			return nil, 0, err
+		}
+		if req.UserIDBeSearched != "" {
+			req.ShowHidden = req.LoginUserID == req.UserIDBeSearched || userRole == role.RoleAdminID || userRole == role.RoleModeratorID
+		}
+	}
 	// query by tag condition
 	if len(req.Tag) > 0 {
 		tagInfo, exist, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
@@ -1262,7 +1276,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond, req.InDays)
+		req.UserIDBeSearched, req.TagID, req.OrderCond, req.InDays, req.ShowHidden)
 	if err != nil {
 		return nil, 0, err
 	}

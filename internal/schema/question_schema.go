@@ -353,6 +353,7 @@ type QuestionPageReq struct {
 	LoginUserID      string `json:"-"`
 	UserIDBeSearched string `json:"-"`
 	TagID            string `json:"-"`
+	ShowHidden       bool   `json:"-"`
 }
 
 const (
