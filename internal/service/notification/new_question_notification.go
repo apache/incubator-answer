@@ -219,18 +219,18 @@ func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx c
 		pluginNotificationMsg := ns.newPluginQuestionNotification(ctx, msg)
 
 		// 4. send notification
-		for subscriber, notificationType := range subscribersMapping {
-			pluginNotificationMsg.ReceiverUserID = subscriber
+		for subscriberUserID, notificationType := range subscribersMapping {
+			pluginNotificationMsg.ReceiverUserID = subscriberUserID
 			pluginNotificationMsg.Type = notificationType
 
-			if len(msg.ReceiverLang) == 0 && len(msg.ReceiverUserID) > 0 {
-				userInfo, _, _ := ns.userRepo.GetByUserID(ctx, msg.ReceiverUserID)
+			if len(subscriberUserID) > 0 {
+				userInfo, _, _ := ns.userRepo.GetByUserID(ctx, subscriberUserID)
 				if userInfo != nil {
 					pluginNotificationMsg.ReceiverLang = userInfo.Language
 				}
 			}
 
-			userInfo, exist, err := ns.userExternalLoginRepo.GetByUserID(ctx, fn.Info().SlugName, msg.ReceiverUserID)
+			userInfo, exist, err := ns.userExternalLoginRepo.GetByUserID(ctx, fn.Info().SlugName, subscriberUserID)
 			if err != nil {
 				log.Errorf("get user external login info failed: %v", err)
 				return nil
