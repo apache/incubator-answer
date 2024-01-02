@@ -21,7 +21,6 @@ package notification
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/activity_common"
@@ -31,10 +30,7 @@ import (
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/internal/service/user_external_login"
 	"github.com/apache/incubator-answer/internal/service/user_notification_config"
-	"github.com/apache/incubator-answer/pkg/display"
-	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/log"
-	"strings"
 )
 
 type ExternalNotificationService struct {
@@ -89,65 +85,4 @@ func (ns *ExternalNotificationService) Handler(ctx context.Context, msg *schema.
 	}
 	log.Errorf("unknown notification message: %+v", msg)
 	return nil
-}
-
-func (ns *ExternalNotificationService) syncNotificationToPlugin(ctx context.Context,
-	source constant.NotificationSource, msg *schema.ExternalNotificationMsg) {
-	pluginNotificationMsg := &plugin.NotificationMessage{
-		ReceiverUserID: msg.ReceiverUserID,
-		ReceiverLang:   msg.ReceiverLang,
-	}
-
-	switch source {
-	case constant.InboxSource:
-		return
-	case constant.AllNewQuestionSource:
-		pluginNotificationMsg.Type = plugin.NotificationNewQuestion
-		pluginNotificationMsg = ns.newPluginQuestionNotification(ctx, msg)
-	case constant.AllNewQuestionForFollowingTagsSource:
-		pluginNotificationMsg.Type = plugin.NotificationNewQuestionFollowedTag
-		pluginNotificationMsg = ns.newPluginQuestionNotification(ctx, msg)
-	}
-
-	if len(msg.ReceiverLang) == 0 && len(msg.ReceiverUserID) > 0 {
-		userInfo, _, _ := ns.userRepo.GetByUserID(ctx, msg.ReceiverUserID)
-		if userInfo != nil {
-			pluginNotificationMsg.ReceiverLang = userInfo.Language
-		}
-	}
-
-	_ = plugin.CallNotification(func(fn plugin.Notification) error {
-		userInfo, exist, err := ns.userExternalLoginRepo.GetByUserID(ctx, fn.Info().SlugName, msg.ReceiverUserID)
-		if err != nil {
-			log.Errorf("get user external login info failed: %v", err)
-			return nil
-		}
-		if exist {
-			pluginNotificationMsg.ReceiverExternalID = userInfo.ExternalID
-		}
-		fn.Notify(pluginNotificationMsg)
-		return nil
-	})
-}
-
-func (ns *ExternalNotificationService) newPluginQuestionNotification(
-	ctx context.Context, msg *schema.ExternalNotificationMsg) (raw *plugin.NotificationMessage) {
-	raw = &plugin.NotificationMessage{
-		ReceiverUserID: msg.ReceiverUserID,
-		ReceiverLang:   msg.ReceiverLang,
-		QuestionTitle:  msg.NewQuestionTemplateRawData.QuestionTitle,
-		QuestionTags:   strings.Join(msg.NewQuestionTemplateRawData.Tags, ","),
-	}
-	siteInfo, err := ns.siteInfoService.GetSiteGeneral(ctx)
-	if err != nil {
-		return raw
-	}
-	seoInfo, err := ns.siteInfoService.GetSiteSeo(ctx)
-	if err != nil {
-		return raw
-	}
-	raw.QuestionUrl = display.QuestionURL(
-		seoInfo.Permalink, siteInfo.SiteUrl,
-		msg.NewQuestionTemplateRawData.QuestionID, msg.NewQuestionTemplateRawData.QuestionTitle)
-	return raw
 }

@@ -48,6 +48,9 @@ const (
 type Notification interface {
 	Base
 
+	// GetNewQuestionSubscribers returns the subscribers of the new question notification
+	GetNewQuestionSubscribers() (userIDs []string)
+
 	// Notify sends a notification to the user
 	Notify(msg *NotificationMessage)
 }

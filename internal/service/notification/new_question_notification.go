@@ -23,10 +23,12 @@ import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/pkg/display"
 	"github.com/apache/incubator-answer/pkg/token"
-	"github.com/jinzhu/copier"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
+	"strings"
 	"time"
 )
 
@@ -61,11 +63,9 @@ func (ns *ExternalNotificationService) handleNewQuestionNotification(ctx context
 				})
 			}
 		}
-		pluginMsg := &schema.ExternalNotificationMsg{}
-		_ = copier.Copy(pluginMsg, msg)
-		pluginMsg.ReceiverUserID = subscriber.UserID
-		ns.syncNotificationToPlugin(ctx, subscriber.NotificationSource, pluginMsg)
 	}
+
+	ns.syncNewQuestionNotificationToPlugin(ctx, msg)
 	return nil
 }
 
@@ -189,4 +189,79 @@ func (ns *ExternalNotificationService) sendNewQuestionNotificationEmail(ctx cont
 	}
 	ns.emailService.SendAndSaveCodeWithTime(
 		ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 1*24*time.Hour)
+}
+
+func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx context.Context,
+	msg *schema.ExternalNotificationMsg) {
+	_ = plugin.CallNotification(func(fn plugin.Notification) error {
+		// 1. get all this new question's tags followers
+		subscribersMapping := make(map[string]plugin.NotificationType)
+		for _, tagID := range msg.NewQuestionTemplateRawData.TagIDs {
+			userIDs, err := ns.followRepo.GetFollowUserIDs(ctx, tagID)
+			if err != nil {
+				log.Error(err)
+				continue
+			}
+			for _, userID := range userIDs {
+				subscribersMapping[userID] = plugin.NotificationNewQuestion
+			}
+		}
+
+		// 2. get all new question's followers
+		questionSubscribers := fn.GetNewQuestionSubscribers()
+		for _, subscriber := range questionSubscribers {
+			subscribersMapping[subscriber] = plugin.NotificationNewQuestionFollowedTag
+		}
+
+		// 3. remove question owner
+		delete(subscribersMapping, msg.NewQuestionTemplateRawData.QuestionAuthorUserID)
+
+		pluginNotificationMsg := ns.newPluginQuestionNotification(ctx, msg)
+
+		// 4. send notification
+		for subscriber, notificationType := range subscribersMapping {
+			pluginNotificationMsg.ReceiverUserID = subscriber
+			pluginNotificationMsg.Type = notificationType
+
+			if len(msg.ReceiverLang) == 0 && len(msg.ReceiverUserID) > 0 {
+				userInfo, _, _ := ns.userRepo.GetByUserID(ctx, msg.ReceiverUserID)
+				if userInfo != nil {
+					pluginNotificationMsg.ReceiverLang = userInfo.Language
+				}
+			}
+
+			userInfo, exist, err := ns.userExternalLoginRepo.GetByUserID(ctx, fn.Info().SlugName, msg.ReceiverUserID)
+			if err != nil {
+				log.Errorf("get user external login info failed: %v", err)
+				return nil
+			}
+			if exist {
+				pluginNotificationMsg.ReceiverExternalID = userInfo.ExternalID
+			}
+			fn.Notify(pluginNotificationMsg)
+		}
+		return nil
+	})
+}
+
+func (ns *ExternalNotificationService) newPluginQuestionNotification(
+	ctx context.Context, msg *schema.ExternalNotificationMsg) (raw *plugin.NotificationMessage) {
+	raw = &plugin.NotificationMessage{
+		ReceiverUserID: msg.ReceiverUserID,
+		ReceiverLang:   msg.ReceiverLang,
+		QuestionTitle:  msg.NewQuestionTemplateRawData.QuestionTitle,
+		QuestionTags:   strings.Join(msg.NewQuestionTemplateRawData.Tags, ","),
+	}
+	siteInfo, err := ns.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		return raw
+	}
+	seoInfo, err := ns.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		return raw
+	}
+	raw.QuestionUrl = display.QuestionURL(
+		seoInfo.Permalink, siteInfo.SiteUrl,
+		msg.NewQuestionTemplateRawData.QuestionID, msg.NewQuestionTemplateRawData.QuestionTitle)
+	return raw
 }
