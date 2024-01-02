@@ -622,12 +622,17 @@ export interface NotificationConfigItem {
   key: string;
 }
 export interface NotificationConfig {
-  all_new_question: NotificationConfigItem[];
-  all_new_question_for_following_tags: NotificationConfigItem[];
-  inbox: NotificationConfigItem[];
+  all_new_question: NotificationConfigItem;
+  all_new_question_for_following_tags: NotificationConfigItem;
+  inbox: NotificationConfigItem;
 }
 
 export interface ActivatedPlugin {
+  name: string;
+  slug_name: string;
+}
+
+export interface UserPluginsConfigRes {
   name: string;
   slug_name: string;
 }

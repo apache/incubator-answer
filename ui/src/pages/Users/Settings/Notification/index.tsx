@@ -39,51 +39,39 @@ const Index = () => {
         type: 'boolean',
         title: t('inbox.label'),
         description: t('inbox.description'),
-        enum: configData?.inbox?.map((v) => v.enable),
-        default: configData?.inbox?.map((v) => v.enable),
-        enumNames: configData?.inbox?.map((v) => t(v.key)),
+        default: configData?.inbox.enable,
       },
       all_new_question: {
         type: 'boolean',
         title: t('all_new_question.label'),
         description: t('all_new_question.description'),
-        enum: configData?.all_new_question?.map((v) => v.enable),
-        default: configData?.all_new_question?.map((v) => v.enable),
-        enumNames: configData?.all_new_question?.map((v) => t(v.key)),
+        default: configData?.all_new_question.enable,
       },
       all_new_question_for_following_tags: {
         type: 'boolean',
         title: t('all_new_question_for_following_tags.label'),
         description: t('all_new_question_for_following_tags.description'),
-        enum: configData?.all_new_question_for_following_tags?.map(
-          (v) => v.enable,
-        ),
-        default: configData?.all_new_question_for_following_tags?.map(
-          (v) => v.enable,
-        ),
-        enumNames: configData?.all_new_question_for_following_tags?.map((v) =>
-          t(v.key),
-        ),
+        default: configData?.all_new_question_for_following_tags.enable,
       },
     },
   };
   const uiSchema: UISchema = {
     inbox: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
       },
     },
     all_new_question: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
       },
     },
     all_new_question_for_following_tags: {
-      'ui:widget': 'checkbox',
+      'ui:widget': 'switch',
       'ui:options': {
-        label: t('email'),
+        label: t('turn_on'),
         text: t('all_new_question_for_following_tags.description'),
       },
     },
@@ -98,19 +86,18 @@ const Index = () => {
     event.preventDefault();
     event.stopPropagation();
     const params = {
-      inbox: configData?.inbox.map((v, index) => {
-        return { enable: formData.inbox.value[index], key: v.key };
-      }),
-      all_new_question: configData?.all_new_question.map((v, index) => {
-        return { enable: formData.all_new_question.value[index], key: v.key };
-      }),
-      all_new_question_for_following_tags:
-        configData?.all_new_question_for_following_tags.map((v, index) => {
-          return {
-            enable: formData.all_new_question_for_following_tags.value[index],
-            key: v.key,
-          };
-        }),
+      inbox: {
+        enable: formData.inbox.value,
+        key: configData?.inbox.key,
+      },
+      all_new_question: {
+        enable: formData.all_new_question.value,
+        key: configData?.all_new_question.key,
+      },
+      all_new_question_for_following_tags: {
+        enable: formData.all_new_question_for_following_tags.value,
+        key: configData?.all_new_question_for_following_tags.key,
+      },
     } as NotificationConfig;
 
     putNotificationConfig(params).then(() => {
