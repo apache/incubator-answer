@@ -21,6 +21,7 @@ package plugin_config
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/pager"
 	"xorm.io/xorm"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -85,4 +86,14 @@ func (ur *pluginUserConfigRepo) GetPluginUserConfig(ctx context.Context, userID,
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return pluginUserConfig, exist, err
+}
+
+func (ur *pluginUserConfigRepo) GetPluginUserConfigPage(ctx context.Context, page, pageSize int) (
+	pluginUserConfigs []*entity.PluginUserConfig, total int64, err error) {
+	pluginUserConfigs = make([]*entity.PluginUserConfig, 0)
+	total, err = pager.Help(page, pageSize, &pluginUserConfigs, &entity.PluginUserConfig{}, ur.data.DB.Context(ctx))
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
 }
