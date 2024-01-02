@@ -60,6 +60,7 @@ type TagRepo interface {
 	MustGetTagByNameOrID(ctx context.Context, tagID, slugName string) (tag *entity.Tag, exist bool, err error)
 	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
 	GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error)
+	GetIDsByMainTagId(ctx context.Context, mainTagID string) (tagIDs []string, err error)
 	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
 }
 
@@ -361,6 +362,12 @@ func (ts *TagCommonService) GetTagByID(ctx context.Context, tagID string) (tag *
 		return
 	}
 	ts.tagFormatRecommendAndReserved(ctx, tag)
+	return
+}
+
+// GetTagIDsByMainTagID get object tag
+func (ts *TagCommonService) GetTagIDsByMainTagID(ctx context.Context, tagID string) (tagIDs []string, err error) {
+	tagIDs, err = ts.tagRepo.GetIDsByMainTagId(ctx, tagID)
 	return
 }
 

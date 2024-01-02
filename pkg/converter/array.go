@@ -32,3 +32,15 @@ func ArrayNotInArray(original []string, search []string) []string {
 	}
 	return result
 }
+
+func UniqueArray[T comparable](input []T) []T {
+	result := make([]T, 0, len(input))
+	seen := make(map[T]bool, len(input))
+	for _, element := range input {
+		if !seen[element] {
+			result = append(result, element)
+			seen[element] = true
+		}
+	}
+	return result
+}

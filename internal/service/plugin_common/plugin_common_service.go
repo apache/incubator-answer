@@ -22,12 +22,11 @@ package plugin_common
 import (
 	"context"
 	"encoding/json"
-	"github.com/apache/incubator-answer/internal/base/data"
-	"github.com/apache/incubator-answer/internal/repo/search_sync"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/search_sync"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/config"
 	"github.com/apache/incubator-answer/plugin"
@@ -40,16 +39,24 @@ type PluginConfigRepo interface {
 	GetPluginConfigAll(ctx context.Context) (pluginConfigs []*entity.PluginConfig, err error)
 }
 
+type PluginUserConfigRepo interface {
+	SaveUserPluginConfig(ctx context.Context, userID string, pluginSlugName, configValue string) (err error)
+	GetPluginUserConfig(ctx context.Context, userID, pluginSlugName string) (
+		pluginUserConfig *entity.PluginUserConfig, exist bool, err error)
+}
+
 // PluginCommonService user service
 type PluginCommonService struct {
-	configService    *config.ConfigService
-	pluginConfigRepo PluginConfigRepo
-	data             *data.Data
+	configService        *config.ConfigService
+	pluginConfigRepo     PluginConfigRepo
+	pluginUserConfigRepo PluginUserConfigRepo
+	data                 *data.Data
 }
 
 // NewPluginCommonService new report service
 func NewPluginCommonService(
 	pluginConfigRepo PluginConfigRepo,
+	pluginUserConfigRepo PluginUserConfigRepo,
 	configService *config.ConfigService,
 	data *data.Data,
 ) *PluginCommonService {
@@ -82,10 +89,24 @@ func NewPluginCommonService(
 		}
 	}
 
+	// init plugin user config
+	plugin.RegisterGetPluginUserConfigFunc(func(userID, pluginSlugName string) []byte {
+		pluginUserConfig, exist, err := pluginUserConfigRepo.GetPluginUserConfig(context.Background(), userID, pluginSlugName)
+		if err != nil {
+			log.Error(err)
+			return nil
+		}
+		if !exist {
+			return nil
+		}
+		return []byte(pluginUserConfig.Value)
+	})
+
 	return &PluginCommonService{
-		configService:    configService,
-		pluginConfigRepo: pluginConfigRepo,
-		data:             data,
+		configService:        configService,
+		pluginConfigRepo:     pluginConfigRepo,
+		pluginUserConfigRepo: pluginUserConfigRepo,
+		data:                 data,
 	}
 }
 
@@ -113,4 +134,27 @@ func (ps *PluginCommonService) UpdatePluginConfig(ctx context.Context, req *sche
 		return nil
 	})
 	return nil
+}
+
+// UpdatePluginUserConfig update plugin config
+func (ps *PluginCommonService) UpdatePluginUserConfig(ctx context.Context, req *schema.UpdateUserPluginConfigReq) (err error) {
+	configValue, _ := json.Marshal(req.ConfigFields)
+	err = ps.pluginUserConfigRepo.SaveUserPluginConfig(ctx, req.UserID, req.PluginSlugName, string(configValue))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetUserPluginConfig get user plugin config
+func (ps *PluginCommonService) GetUserPluginConfig(ctx context.Context, req *schema.GetUserPluginConfigReq) (
+	configValue string, err error) {
+	pluginUserConfig, exist, err := ps.pluginUserConfigRepo.GetPluginUserConfig(ctx, req.UserID, req.PluginSlugName)
+	if err != nil {
+		return "", err
+	}
+	if !exist {
+		return "", nil
+	}
+	return pluginUserConfig.Value, nil
 }

@@ -17,34 +17,14 @@
  * under the License.
  */
 
-package controller
+package migrations
 
-import "github.com/google/wire"
-
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
+import (
+	"context"
+	"github.com/apache/incubator-answer/internal/entity"
+	"xorm.io/xorm"
 )
+
+func addNotificationPlugin(ctx context.Context, x *xorm.Engine) error {
+	return x.Context(ctx).Sync(new(entity.PluginUserConfig))
+}

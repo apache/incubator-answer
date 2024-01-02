@@ -5876,6 +5876,132 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/plugin/config": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user plugin config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserPlugin"
+                ],
+                "summary": "get user plugin config",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin_slug_name",
+                        "name": "plugin_slug_name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetPluginConfigResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update user plugin config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserPlugin"
+                ],
+                "summary": "update user plugin config",
+                "parameters": [
+                    {
+                        "description": "UpdatePluginConfigReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateUserPluginConfigReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/plugin/configs": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get plugin list that used for user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserPlugin"
+                ],
+                "summary": "get plugin list that used for user.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetUserPluginListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/ranking": {
             "get": {
                 "security": [
@@ -7803,22 +7929,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "all_new_question": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "all_new_question_for_following_tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "inbox": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 }
             }
         },
@@ -7871,6 +7988,17 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "username",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserPluginListResp": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "slug_name": {
                     "type": "string"
                 }
             }
@@ -9409,22 +9537,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "all_new_question": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "all_new_question_for_following_tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 },
                 "inbox": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.NotificationChannelConfig"
-                    }
+                    "$ref": "#/definitions/schema.NotificationChannelConfig"
                 }
             }
         },
@@ -9442,6 +9561,22 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "schema.UpdateUserPluginConfigReq": {
+            "type": "object",
+            "required": [
+                "plugin_slug_name"
+            ],
+            "properties": {
+                "config_fields": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "plugin_slug_name": {
+                    "type": "string",
+                    "maxLength": 100
                 }
             }
         },

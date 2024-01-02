@@ -24,14 +24,16 @@ import (
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/pkg/token"
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"time"
 )
 
 type NewQuestionSubscriber struct {
-	UserID   string                      `json:"user_id"`
-	Channels schema.NotificationChannels `json:"channels"`
+	UserID             string                      `json:"user_id"`
+	Channels           schema.NotificationChannels `json:"channels"`
+	NotificationSource constant.NotificationSource `json:"notification_source"`
 }
 
 func (ns *ExternalNotificationService) handleNewQuestionNotification(ctx context.Context,
@@ -59,6 +61,10 @@ func (ns *ExternalNotificationService) handleNewQuestionNotification(ctx context
 				})
 			}
 		}
+		pluginMsg := &schema.ExternalNotificationMsg{}
+		_ = copier.Copy(pluginMsg, msg)
+		pluginMsg.ReceiverUserID = subscriber.UserID
+		ns.syncNotificationToPlugin(ctx, subscriber.NotificationSource, pluginMsg)
 	}
 	return nil
 }
@@ -94,8 +100,9 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			continue
 		}
 		subscribersMapping[userNotificationConfig.UserID] = &NewQuestionSubscriber{
-			UserID:   userNotificationConfig.UserID,
-			Channels: schema.NewNotificationChannelsFormJson(userNotificationConfig.Channels),
+			UserID:             userNotificationConfig.UserID,
+			Channels:           schema.NewNotificationChannelsFormJson(userNotificationConfig.Channels),
+			NotificationSource: constant.AllNewQuestionForFollowingTagsSource,
 		}
 	}
 	log.Debugf("get %d subscribers from tags", len(subscribersMapping))
@@ -113,8 +120,9 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			continue
 		}
 		subscribersMapping[notificationConfig.UserID] = &NewQuestionSubscriber{
-			UserID:   notificationConfig.UserID,
-			Channels: schema.NewNotificationChannelsFormJson(notificationConfig.Channels),
+			UserID:             notificationConfig.UserID,
+			Channels:           schema.NewNotificationChannelsFormJson(notificationConfig.Channels),
+			NotificationSource: constant.AllNewQuestionSource,
 		}
 	}
 

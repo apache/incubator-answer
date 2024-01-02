@@ -53,6 +53,7 @@ type AnswerAPIRouter struct {
 	roleController          *controller_admin.RoleController
 	pluginController        *controller_admin.PluginController
 	permissionController    *controller.PermissionController
+	userPluginController    *controller.UserPluginController
 }
 
 func NewAnswerAPIRouter(
@@ -82,6 +83,7 @@ func NewAnswerAPIRouter(
 	roleController *controller_admin.RoleController,
 	pluginController *controller_admin.PluginController,
 	permissionController *controller.PermissionController,
+	userPluginController *controller.UserPluginController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -110,6 +112,7 @@ func NewAnswerAPIRouter(
 		roleController:          roleController,
 		pluginController:        pluginController,
 		permissionController:    permissionController,
+		userPluginController:    userPluginController,
 	}
 }
 
@@ -268,6 +271,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
 	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
 
+	// plugin
+	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
+	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
+	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {

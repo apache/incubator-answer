@@ -49,6 +49,7 @@ func (ns *ExternalNotificationService) handleInviteAnswerNotification(ctx contex
 			ns.sendInviteAnswerNotificationEmail(ctx, msg.ReceiverUserID, msg.ReceiverEmail, msg.ReceiverLang, msg.NewInviteAnswerTemplateRawData)
 		}
 	}
+	ns.syncNotificationToPlugin(ctx, constant.InboxSource, msg)
 	return nil
 }
 

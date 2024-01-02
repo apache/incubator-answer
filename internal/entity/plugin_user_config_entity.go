@@ -17,34 +17,17 @@
  * under the License.
  */
 
-package controller
+package entity
 
-import "github.com/google/wire"
+// PluginUserConfig plugin config
+type PluginUserConfig struct {
+	ID             int    `xorm:"not null pk autoincr INT(11) id"`
+	UserID         string `xorm:"not null default 0 BIGINT(20) UNIQUE(uk_up) user_id"`
+	PluginSlugName string `xorm:"VARCHAR(128) UNIQUE(uk_up) plugin_slug_name"`
+	Value          string `xorm:"TEXT value"`
+}
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-)
+// TableName config table name
+func (PluginUserConfig) TableName() string {
+	return "plugin_user_config"
+}
