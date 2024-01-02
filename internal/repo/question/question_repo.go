@@ -39,11 +39,10 @@ import (
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/apache/incubator-answer/plugin"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/builder"
 	"xorm.io/xorm"
-
-	"github.com/segmentfault/pacman/errors"
 )
 
 // questionRepo question repository
@@ -76,7 +75,6 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 	if handler.GetEnableShortID(ctx) {
 		question.ID = uid.EnShortID(question.ID)
 	}
-	_ = qr.updateSearch(ctx, question.ID)
 	return
 }
 
@@ -100,7 +98,7 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 	if handler.GetEnableShortID(ctx) {
 		question.ID = uid.EnShortID(question.ID)
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return
 }
 
@@ -111,7 +109,7 @@ func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (e
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -123,7 +121,7 @@ func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -155,7 +153,7 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, questionID str
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, questionID)
+	_ = qr.UpdateSearch(ctx, questionID)
 	return nil
 }
 
@@ -165,7 +163,7 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -175,7 +173,7 @@ func (qr *questionRepo) RecoverQuestion(ctx context.Context, questionID string) 
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, questionID)
+	_ = qr.UpdateSearch(ctx, questionID)
 	return nil
 }
 
@@ -194,7 +192,7 @@ func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Que
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -204,7 +202,7 @@ func (qr *questionRepo) UpdateLastAnswer(ctx context.Context, question *entity.Q
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -461,8 +459,8 @@ func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.Ad
 	return rows, count, nil
 }
 
-// updateSearch update search, if search plugin not enable, do nothing
-func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (err error) {
+// UpdateSearch update search, if search plugin not enable, do nothing
+func (qr *questionRepo) UpdateSearch(ctx context.Context, questionID string) (err error) {
 	// check search plugin
 	var s plugin.Search
 	_ = plugin.CallSearch(func(search plugin.Search) error {
@@ -543,7 +541,7 @@ func (qr *questionRepo) RemoveAllUserQuestion(ctx context.Context, userID string
 
 	// update search content
 	for _, id := range questionIDs {
-		_ = qr.updateSearch(ctx, id)
+		_ = qr.UpdateSearch(ctx, id)
 	}
 	return nil
 }

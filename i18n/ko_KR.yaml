@@ -674,7 +674,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -716,7 +716,7 @@ ui:
           label: Display name
         slug_name:
           label: URL slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: URL slug up to 35 characters.
         desc:
           label: Description
         edit_summary:

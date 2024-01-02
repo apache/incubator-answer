@@ -314,6 +314,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err != nil {
 		return
 	}
+	_ = qs.questionRepo.UpdateSearch(ctx, question.ID)
 
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,

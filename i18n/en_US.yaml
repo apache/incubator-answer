@@ -732,7 +732,7 @@ ui:
           label: Display name
         slug_name:
           label: URL slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: URL slug up to 35 characters.
         desc:
           label: Description
         edit_summary:
