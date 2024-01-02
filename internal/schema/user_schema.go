@@ -325,6 +325,7 @@ type UserBasicInfo struct {
 	Avatar      string `json:"avatar"`
 	Website     string `json:"website"`
 	Location    string `json:"location"`
+	Language    string `json:"language"`
 	Status      string `json:"status"`
 }
 

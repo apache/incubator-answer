@@ -98,48 +98,22 @@ func (ns *ExternalNotificationService) syncNotificationToPlugin(ctx context.Cont
 		ReceiverLang:   msg.ReceiverLang,
 	}
 
-	if len(msg.ReceiverLang) == 0 {
-		userInfo, _, _ := ns.userRepo.GetByUserID(ctx, msg.ReceiverUserID)
-		if userInfo != nil && len(userInfo.Language) > 0 {
-			pluginNotificationMsg.ReceiverLang = userInfo.Language
-		}
-	}
-
 	switch source {
 	case constant.InboxSource:
-		if msg.NewCommentTemplateRawData != nil {
-			pluginNotificationMsg.Type = plugin.NewComment
-			pluginNotificationMsg.NewCommentNoticeData = plugin.NewCommentNoticeData{
-				CommentUserDisplayName: msg.NewCommentTemplateRawData.CommentUserDisplayName,
-				QuestionTitle:          msg.NewCommentTemplateRawData.QuestionTitle,
-				QuestionID:             msg.NewCommentTemplateRawData.QuestionID,
-				AnswerID:               msg.NewCommentTemplateRawData.AnswerID,
-				CommentID:              msg.NewCommentTemplateRawData.CommentID,
-				CommentSummary:         msg.NewCommentTemplateRawData.CommentSummary,
-			}
-		} else if msg.NewAnswerTemplateRawData != nil {
-			pluginNotificationMsg.Type = plugin.NewAnswer
-			pluginNotificationMsg.NewAnswerNoticeData = plugin.NewAnswerNoticeData{
-				AnswerUserDisplayName: msg.NewAnswerTemplateRawData.AnswerUserDisplayName,
-				QuestionTitle:         msg.NewAnswerTemplateRawData.QuestionTitle,
-				QuestionID:            msg.NewAnswerTemplateRawData.QuestionID,
-				AnswerID:              msg.NewAnswerTemplateRawData.AnswerID,
-				AnswerSummary:         msg.NewAnswerTemplateRawData.AnswerSummary,
-			}
-		} else if msg.NewInviteAnswerTemplateRawData != nil {
-			pluginNotificationMsg.Type = plugin.NewInviteAnswer
-			pluginNotificationMsg.NewInviteAnswerNoticeData = plugin.NewInviteAnswerNoticeData{
-				InviterDisplayName: msg.NewInviteAnswerTemplateRawData.InviterDisplayName,
-				QuestionTitle:      msg.NewInviteAnswerTemplateRawData.QuestionTitle,
-				QuestionID:         msg.NewInviteAnswerTemplateRawData.QuestionID,
-			}
-		}
+		return
 	case constant.AllNewQuestionSource:
-		pluginNotificationMsg.Type = plugin.NewQuestion
-		pluginNotificationMsg.NewQuestionNoticeData = ns.newPluginQuestionNotification(ctx, msg)
+		pluginNotificationMsg.Type = plugin.NotificationNewQuestion
+		pluginNotificationMsg = ns.newPluginQuestionNotification(ctx, msg)
 	case constant.AllNewQuestionForFollowingTagsSource:
-		pluginNotificationMsg.Type = plugin.NewQuestionFollowedTag
-		pluginNotificationMsg.NewQuestionNoticeData = ns.newPluginQuestionNotification(ctx, msg)
+		pluginNotificationMsg.Type = plugin.NotificationNewQuestionFollowedTag
+		pluginNotificationMsg = ns.newPluginQuestionNotification(ctx, msg)
+	}
+
+	if len(msg.ReceiverLang) == 0 && len(msg.ReceiverUserID) > 0 {
+		userInfo, _, _ := ns.userRepo.GetByUserID(ctx, msg.ReceiverUserID)
+		if userInfo != nil {
+			pluginNotificationMsg.ReceiverLang = userInfo.Language
+		}
 	}
 
 	_ = plugin.CallNotification(func(fn plugin.Notification) error {
@@ -149,7 +123,7 @@ func (ns *ExternalNotificationService) syncNotificationToPlugin(ctx context.Cont
 			return nil
 		}
 		if exist {
-			pluginNotificationMsg.ExternalID = userInfo.ExternalID
+			pluginNotificationMsg.ReceiverExternalID = userInfo.ExternalID
 		}
 		fn.Notify(pluginNotificationMsg)
 		return nil
@@ -157,10 +131,12 @@ func (ns *ExternalNotificationService) syncNotificationToPlugin(ctx context.Cont
 }
 
 func (ns *ExternalNotificationService) newPluginQuestionNotification(
-	ctx context.Context, msg *schema.ExternalNotificationMsg) (raw plugin.NewQuestionNoticeData) {
-	raw = plugin.NewQuestionNoticeData{
-		QuestionTitle: msg.NewQuestionTemplateRawData.QuestionTitle,
-		Tags:          strings.Join(msg.NewQuestionTemplateRawData.Tags, ","),
+	ctx context.Context, msg *schema.ExternalNotificationMsg) (raw *plugin.NotificationMessage) {
+	raw = &plugin.NotificationMessage{
+		ReceiverUserID: msg.ReceiverUserID,
+		ReceiverLang:   msg.ReceiverLang,
+		QuestionTitle:  msg.NewQuestionTemplateRawData.QuestionTitle,
+		QuestionTags:   strings.Join(msg.NewQuestionTemplateRawData.Tags, ","),
 	}
 	siteInfo, err := ns.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
