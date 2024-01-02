@@ -8762,6 +8762,9 @@ const docTemplate = `{
                 "site_users": {
                     "$ref": "#/definitions/schema.SiteUsersResp"
                 },
+                "site_write": {
+                    "$ref": "#/definitions/schema.SiteWriteResp"
+                },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
                 },
@@ -8853,6 +8856,9 @@ const docTemplate = `{
                 "allow_new_registrations": {
                     "type": "boolean"
                 },
+                "allow_password_login": {
+                    "type": "boolean"
+                },
                 "login_required": {
                     "type": "boolean"
                 }
@@ -8871,6 +8877,9 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "allow_new_registrations": {
+                    "type": "boolean"
+                },
+                "allow_password_login": {
                     "type": "boolean"
                 },
                 "login_required": {
@@ -9035,6 +9044,9 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                },
+                "restrict_answer": {
+                    "type": "boolean"
                 }
             }
         },
@@ -9055,6 +9067,9 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                },
+                "restrict_answer": {
+                    "type": "boolean"
                 }
             }
         },

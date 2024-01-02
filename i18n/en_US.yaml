@@ -695,6 +695,13 @@ ui:
             character: URL slug contains unallowed character set.
         desc:
           label: Description
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar,
+            improved formatting)
     btn_cancel: Cancel
     btn_submit: Submit
     btn_post: Post new tag
@@ -724,22 +731,6 @@ ui:
     title: Edit Tag
     default_reason: Edit tag
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: Revision
-        display_name:
-          label: Display name
-        slug_name:
-          label: URL slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
-        desc:
-          label: Description
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar,
-            improved formatting)
     btn_save_edits: Save edits
     btn_cancel: Cancel
   dates:

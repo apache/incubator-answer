@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +267,8 @@ backend:
         other: 你不能修改自己的角色。
       not_allowed_registration:
         other: 目前该站点未开放注册。
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: 拒绝访问
       page_access_denied:
@@ -480,7 +482,7 @@ backend:
       other: 采纳
     accepted:
       other: 已采纳
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: 如何排版
@@ -520,6 +522,7 @@ ui:
     http_404: HTTP 错误 404
     http_50X: HTTP 错误 500
     http_403: HTTP 错误 403
+    logout: Log Out
   notifications:
     title: 通知
     inbox: 收件箱
@@ -678,6 +681,12 @@ ui:
             character: URL 固定链接包含非法字符。
         desc:
           label: 描述
+        revision:
+          label: 编辑历史
+        edit_summary:
+          label: 编辑摘要
+          placeholder: >-
+            简单描述更改原因 (错别字、文字表达、格式等等)
     btn_cancel: 取消
     btn_submit: 提交
     btn_post: 发布新标签
@@ -704,21 +713,7 @@ ui:
   edit_tag:
     title: 编辑标签
     default_reason: 编辑标签
-    form:
-      fields:
-        revision:
-          label: 编辑历史
-        display_name:
-          label: 显示名称
-        slug_name:
-          label: URL 固定链接
-          info: '必须由 "a-z", "0-9", "+ # - ." 组成'
-        desc:
-          label: 描述
-        edit_summary:
-          label: 编辑摘要
-          placeholder: >-
-            简单描述更改原因 (错别字、文字表达、格式等等)
+    default_first_reason: 添加标签
     btn_save_edits: 保存更改
     btn_cancel: 取消
   dates:
@@ -731,6 +726,8 @@ ui:
     x_hours_ago: "{{count}} 小时前"
     hour: 小时
     day: 天
+    hours: hours
+    days: days
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -749,6 +746,7 @@ ui:
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +777,7 @@ ui:
     title: 提交新的问题
     edit_title: 编辑问题
     default_reason: 编辑问题
+    default_first_reason: Add question
     similar_questions: 相似的问题
     form:
       fields:
@@ -1359,18 +1358,28 @@ ui:
       answers: "回答:"
       comments: "评论:"
       votes: "投票:"
-      active_users: "活跃用户:"
+      users: "Users:"
       flags: "举报:"
       site_health_status: '健康状态:'
       version: "版本"
       https: "HTTPS:"
-      uploading_files: "上传文件:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "时区："
       system_info: 系统信息
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "已用存储空间："
       uptime: "运行时间："
       answer_links: 回答链接
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: 文档
       feedback: 用户反馈
       support: 帮助
@@ -1385,6 +1394,8 @@ ui:
       allowed: 允许
       enabled: 已启用
       disabled: 停用
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: 举报
       pending: 等待处理
@@ -1665,6 +1676,10 @@ ui:
         title: 非公开的
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: 已安装插件
       plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。

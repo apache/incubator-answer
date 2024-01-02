@@ -297,6 +297,7 @@ const Index = () => {
                 defaultValue={formData.description.value}
                 isInvalid={formData.description.isInvalid}
                 placeholder={t('form.fields.edit_summary.placeholder')}
+                contentEditable
               />
               <Form.Control.Feedback type="invalid">
                 {formData.description.errorMsg}

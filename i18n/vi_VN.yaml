@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#The following fields are used for back-end
+# The following fields are used for back-end
 backend:
   base:
     success:
@@ -267,6 +267,8 @@ backend:
         other: You cannot modify your role.
       not_allowed_registration:
         other: Currently the site is not open for registration.
+      not_allowed_login_via_password:
+        other: Currently the site is not allowed to login via password.
       access_denied:
         other: Truy cập bị từ chối
       page_access_denied:
@@ -480,7 +482,7 @@ backend:
       other: accept
     accepted:
       other: accepted
-#The following fields are used for interface presentation(Front-end)
+# The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: How to Format
@@ -520,6 +522,7 @@ ui:
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
+    logout: Log Out
   notifications:
     title: Notifications
     inbox: Inbox
@@ -704,6 +707,7 @@ ui:
   edit_tag:
     title: Edit Tag
     default_reason: Edit tag
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -712,7 +716,7 @@ ui:
           label: Display name
         slug_name:
           label: URL slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: URL slug up to 35 characters.
         desc:
           label: Description
         edit_summary:
@@ -731,6 +735,8 @@ ui:
     x_hours_ago: "{{count}}h ago"
     hour: hour
     day: day
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Add comment
     reply_to: Reply to
@@ -749,6 +755,7 @@ ui:
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -779,6 +786,7 @@ ui:
     title: Add Question
     edit_title: Edit Question
     default_reason: Edit question
+    default_first_reason: Add question
     similar_questions: Similar questions
     form:
       fields:
@@ -833,7 +841,7 @@ ui:
       placeholder: Search
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
     loading: loading...
@@ -1052,6 +1060,7 @@ ui:
       btn_accepted: Accepted
     write_answer:
       title: Your Answer
+      edit_answer: Edit my existing answer
       btn_name: Post your answer
       add_another_answer: Add another answer
       confirm_title: Continue to answer
@@ -1353,23 +1362,33 @@ ui:
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
+      site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
       comments: "Comments:"
       votes: "Votes:"
-      active_users: "Active users:"
+      users: "Users:"
       flags: "Flags:"
-      site_health_status: Site Health Status
+      site_health_status: Site health status
       version: "Version:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Timezone:"
-      system_info: System Info
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Storage used:"
       uptime: "Uptime:"
-      answer_links: Answer Links
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Documents
       feedback: Feedback
       support: Support
@@ -1384,6 +1403,8 @@ ui:
       allowed: Allowed
       enabled: Enabled
       disabled: Disabled
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Flags
       pending: Pending
@@ -1594,6 +1615,10 @@ ui:
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
     write:
       page_title: Write
+      restrict_answer:
+        title: Restrict answer
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
@@ -1660,6 +1685,10 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
