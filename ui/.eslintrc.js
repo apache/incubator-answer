@@ -109,5 +109,6 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    'jsx-a11y/click-events-have-key-events': 'off'
   },
 };
