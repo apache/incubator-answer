@@ -311,8 +311,12 @@ func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema
 	if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypePrivileges, privilege); err != nil {
 		return nil, err
 	}
+	privilegeOptions := schema.DefaultPrivilegeOptions
+	if privilege.Custom != nil {
+		privilegeOptions = append(privilegeOptions, privilege.Custom)
+	}
 	resp = &schema.GetPrivilegesConfigResp{
-		Options:       s.translatePrivilegeOptions(ctx),
+		Options:       s.translatePrivilegeOptions(ctx, privilegeOptions),
 		SelectedLevel: schema.PrivilegeLevel3,
 	}
 	if privilege != nil && privilege.Level > 0 {
@@ -321,9 +325,9 @@ func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema
 	return resp, nil
 }
 
-func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context) (options []*schema.PrivilegeOption) {
+func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context, privilegeOptions []*schema.PrivilegeOption) (options []*schema.PrivilegeOption) {
 	la := handler.GetLangByCtx(ctx)
-	for _, option := range schema.DefaultPrivilegeOptions {
+	for _, option := range privilegeOptions {
 		op := &schema.PrivilegeOption{
 			Level:     option.Level,
 			LevelDesc: translator.Tr(la, option.LevelDesc),
