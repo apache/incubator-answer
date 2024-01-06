@@ -345,12 +345,34 @@ func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context, privile
 }
 
 func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
-	chooseOption := schema.DefaultPrivilegeOptions.Choose(req.Level)
+	var chooseOption *schema.PrivilegeOption
+	if req.Level == schema.PrivilegeLevelCustom {
+		chooseOption = req.Custom
+	} else {
+		chooseOption = schema.DefaultPrivilegeOptions.Choose(req.Level)
+	}
 	if chooseOption == nil {
 		return nil
 	}
 
 	// update site info that user choose which privilege level
+	if req.Level == schema.PrivilegeLevelCustom {
+		req.Custom.LevelDesc = "privilege.level_custom.description"
+		privilegeMap := map[string]string{}
+		for _, privilege := range constant.RankAllPrivileges {
+			privilegeMap[privilege.Key] = privilege.Label
+		}
+		for _, privilege := range req.Custom.Privileges {
+			privilege.Label = privilegeMap[privilege.Key]
+		}
+	} else {
+		privilege := &schema.UpdatePrivilegesConfigReq{}
+		if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypePrivileges, privilege); err != nil {
+			return nil
+		}
+		req.Custom = privilege.Custom
+	}
+
 	content, _ := json.Marshal(req)
 	data := &entity.SiteInfo{
 		Type:    constant.SiteTypePrivileges,
