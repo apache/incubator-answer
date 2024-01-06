@@ -28,6 +28,7 @@ export const DRAFT_QUESTION_STORAGE_KEY = '_a_dq_';
 export const DRAFT_ANSWER_STORAGE_KEY = '_a_da_';
 export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
 export const QUESTIONS_ORDER_STORAGE_KEY = '_a_qok_';
+export const ADMIN_PRIVILEGE_CUSTOM_LEVEL = 99;
 
 export const USER_AGENT_NAMES = {
   SegmentFault: 'SegmentFault',

@@ -284,12 +284,17 @@ const (
 	PrivilegeLevel2 PrivilegeLevel = 2
 	// PrivilegeLevel3 high
 	PrivilegeLevel3 PrivilegeLevel = 3
+	// PrivilegeLevelCustom custom
+	PrivilegeLevelCustom PrivilegeLevel = 3
 )
 
 type PrivilegeLevel int
 type PrivilegeOptions []*PrivilegeOption
 
 func (p PrivilegeOptions) Choose(level PrivilegeLevel) (option *PrivilegeOption) {
+	if level == 99 {
+		return &PrivilegeOption{}
+	}
 	for _, op := range p {
 		if op.Level == level {
 			return op
@@ -313,7 +318,7 @@ type PrivilegeOption struct {
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level  PrivilegeLevel   `validate:"required,min=1,max=3" json:"level"`
+	Level  PrivilegeLevel   `validate:"required,min=1,max=99" json:"level"`
 	Custom *PrivilegeOption `json:"custom"`
 }
 
