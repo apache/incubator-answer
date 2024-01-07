@@ -318,12 +318,13 @@ type PrivilegeOption struct {
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level  PrivilegeLevel   `validate:"required,min=1,max=3" json:"level"`
+	Level  PrivilegeLevel   `validate:"required,min=1,max=99" json:"level"`
 	Custom *PrivilegeOption `validate:"required" json:"custom"`
 }
 
 var (
 	DefaultPrivilegeOptions      PrivilegeOptions
+	DefaultCustomPrivilegeOption *PrivilegeOption
 	privilegeOptionsLevelMapping = map[string][]int{
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
@@ -373,5 +374,12 @@ func init() {
 				Key:   privilege.Key,
 			})
 		}
+	}
+
+	// set up default custom privilege option
+	DefaultCustomPrivilegeOption = &PrivilegeOption{
+		Level:      PrivilegeLevelCustom,
+		LevelDesc:  reason.PrivilegeLevelCustomDesc,
+		Privileges: DefaultPrivilegeOptions[0].Privileges,
 	}
 }
