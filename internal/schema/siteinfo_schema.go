@@ -285,7 +285,7 @@ const (
 	// PrivilegeLevel3 high
 	PrivilegeLevel3 PrivilegeLevel = 3
 	// PrivilegeLevelCustom custom
-	PrivilegeLevelCustom PrivilegeLevel = 3
+	PrivilegeLevelCustom PrivilegeLevel = 99
 )
 
 type PrivilegeLevel int
@@ -313,13 +313,13 @@ type GetPrivilegesConfigResp struct {
 type PrivilegeOption struct {
 	Level      PrivilegeLevel        `json:"level"`
 	LevelDesc  string                `json:"level_desc"`
-	Privileges []*constant.Privilege `json:"privileges"`
+	Privileges []*constant.Privilege `validate:"dive" json:"privileges"`
 }
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level  PrivilegeLevel   `validate:"required,min=1,max=99" json:"level"`
-	Custom *PrivilegeOption `json:"custom"`
+	Level  PrivilegeLevel   `validate:"required,min=1,max=3" json:"level"`
+	Custom *PrivilegeOption `validate:"required" json:"custom"`
 }
 
 var (

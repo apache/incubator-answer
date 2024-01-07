@@ -50,8 +50,6 @@ const Index: FC = () => {
   const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
 
   const setFormConfig = (state: FormDataType) => {
-    console.log(state);
-    console.log(formData);
     const selectedLevel = Number(state.level.value);
     const levelOptions = privilege?.options;
     const curLevel = levelOptions?.find((li) => {
@@ -82,6 +80,16 @@ const Index: FC = () => {
       uiState[li.key] = {
         'ui:options': {
           readOnly: curLevel.level !== ADMIN_PRIVILEGE_CUSTOM_LEVEL,
+          validator: (value: string) => {
+            const val = Number(value);
+            if (Number.isNaN(val)) {
+              return 'the input should be number';
+            }
+            if (val < 1) {
+              return 'number should be equal or larger than 1';
+            }
+            return true;
+          },
         },
       };
     });
@@ -135,8 +143,14 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        if (reqParams.level === ADMIN_PRIVILEGE_CUSTOM_LEVEL) {
+          getPrivilegeSetting().then((resp) => {
+            setPrivilege(resp);
+          });
+        }
       })
       .catch((err) => {
+        debugger;
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
@@ -148,7 +162,6 @@ const Index: FC = () => {
     if (!privilege) {
       return;
     }
-    debugger;
     setFormConfig({
       level: {
         value: privilege.selected_level,
@@ -163,7 +176,6 @@ const Index: FC = () => {
     });
   }, []);
   const handleOnChange = (state) => {
-    debugger;
     // if updated values in Custom form
     if (
       state.level.value === ADMIN_PRIVILEGE_CUSTOM_LEVEL &&
