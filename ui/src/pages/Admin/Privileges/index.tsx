@@ -150,7 +150,6 @@ const Index: FC = () => {
         }
       })
       .catch((err) => {
-        debugger;
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
