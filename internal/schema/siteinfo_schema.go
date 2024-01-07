@@ -292,7 +292,7 @@ type PrivilegeLevel int
 type PrivilegeOptions []*PrivilegeOption
 
 func (p PrivilegeOptions) Choose(level PrivilegeLevel) (option *PrivilegeOption) {
-	if level == 99 {
+	if level == PrivilegeLevelCustom {
 		return &PrivilegeOption{}
 	}
 	for _, op := range p {
