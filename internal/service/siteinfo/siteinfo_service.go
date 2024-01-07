@@ -314,6 +314,8 @@ func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema
 	privilegeOptions := schema.DefaultPrivilegeOptions
 	if privilege.Custom != nil {
 		privilegeOptions = append(privilegeOptions, privilege.Custom)
+	} else {
+		privilegeOptions = append(privilegeOptions, schema.DefaultCustomPrivilegeOption)
 	}
 	resp = &schema.GetPrivilegesConfigResp{
 		Options:       s.translatePrivilegeOptions(ctx, privilegeOptions),
