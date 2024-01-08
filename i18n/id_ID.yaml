@@ -601,7 +601,7 @@ ui:
             msg:
               empty: File tidak boleh kosong.
               only_image: Hanya file Gambar yang diperbolehkan.
-              max_size: Ukuran file tidak boleh melebihi 4MB.
+              max_size: Ukuran file tidak boleh melebihi 4 MB.
           desc:
             label: Description
       tab_url: URL gambar

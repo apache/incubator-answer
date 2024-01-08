@@ -360,7 +360,7 @@ ui:
             msg:
               empty: Arquivo não pode ser vazio.
               only_image: Somente um arquivo de imagem é permitido.
-              max_size: O tamanho do arquivo não pode exceder 4MB.
+              max_size: O tamanho do arquivo não pode exceder 4 MB.
           desc:
             label: Descrição (opcional)
       tab_url: URL da imagem

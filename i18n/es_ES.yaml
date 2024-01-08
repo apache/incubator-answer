@@ -601,7 +601,7 @@ ui:
             msg:
               empty: El título no puede estar vacío.
               only_image: Solo se permiten archivos de imagen.
-              max_size: El tamaño del archivo no puede superar 4MB.
+              max_size: El tamaño del archivo no puede superar 4 MB.
           desc:
             label: Descripción
       tab_url: URL de la imagen
