@@ -235,6 +235,7 @@ func (ds *dashboardService) remoteVersion(ctx context.Context) string {
 }
 
 func (ds *dashboardService) smtpStatus(ctx context.Context) (smtpStatus string) {
+	smtpStatus = "not_configured"
 	emailConf, err := ds.configService.GetStringValue(ctx, "email.config")
 	if err != nil {
 		log.Errorf("get email config failed: %s", err)
