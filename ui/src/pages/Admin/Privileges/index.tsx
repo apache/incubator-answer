@@ -116,11 +116,7 @@ const Index: FC = () => {
 
     const reqParams: AdminSettingsPrivilegeReq = {
       level: Number(formData.level.value),
-      custom: {
-        level: Number(formData.level.value),
-        level_desc: '',
-        privileges: [],
-      },
+      custom_privileges: [],
     };
 
     if (reqParams.level === ADMIN_PRIVILEGE_CUSTOM_LEVEL) {
@@ -129,9 +125,8 @@ const Index: FC = () => {
         if (key === 'level') {
           return;
         }
-        reqParams.custom?.privileges.push({
+        reqParams.custom_privileges?.push({
           key,
-          label: '',
           value: Number(value.value),
         });
       });

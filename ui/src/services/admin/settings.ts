@@ -49,7 +49,11 @@ export interface AdminSettingsPrivilege {
 
 export interface AdminSettingsPrivilegeReq {
   level: number;
-  custom?: PrivilegeLevel;
+  custom_privileges?: {
+    label?: string;
+    value: number;
+    key: string;
+  }[];
 }
 
 export const useGeneralSetting = () => {
