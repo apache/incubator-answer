@@ -419,7 +419,12 @@ const Comment = ({ objectId, mode, commentId }) => {
               onClick={() => {
                 setPageIndex(pageIndex + 1);
               }}>
-              {t('show_more')}
+              (
+              {t('show_more', {
+                count:
+                  data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
+              })}
+              )
             </Button>
           )}
       </div>
