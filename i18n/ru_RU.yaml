@@ -601,7 +601,7 @@ ui:
             msg:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: Описание
       tab_url: URL изображения

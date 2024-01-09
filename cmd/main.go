@@ -44,9 +44,10 @@ var (
 	// Version is the version of the project
 	Version = "0.0.0"
 	// Revision is the git short commit revision number
-	Revision = "-"
+	// If built without a Git repository, this field will be empty.
+	Revision = ""
 	// Time is the build time of the project
-	Time = "-"
+	Time = ""
 	// GoVersion is the go version of the project
 	GoVersion = "1.19"
 	// log level
