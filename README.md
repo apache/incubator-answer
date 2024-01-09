@@ -43,11 +43,17 @@ You can also check out the [plugins here](https://answer.apache.org/plugins).
 - Golang >= 1.18
 - Node.js >= 16.17
 - pnpm >= 8
+- mockgen >= 1.6.0
+- wire >= 0.5.0
 
 ### Build
 
 ```bash
+# install wire and mockgen for building
+$ make generate
+# install frontend dependencies and build
 $ make ui
+# install backend dependencies and build
 $ make build
 ```
 
