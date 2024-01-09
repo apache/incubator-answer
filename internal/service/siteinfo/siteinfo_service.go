@@ -312,8 +312,12 @@ func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema
 		return nil, err
 	}
 	privilegeOptions := schema.DefaultPrivilegeOptions
-	if privilege.Custom != nil {
-		privilegeOptions = append(privilegeOptions, privilege.Custom)
+	if privilege.CustomPrivileges != nil && len(privilege.CustomPrivileges) > 0 {
+		privilegeOptions = append(privilegeOptions, &schema.PrivilegeOption{
+			Level:      schema.PrivilegeLevelCustom,
+			LevelDesc:  reason.PrivilegeLevelCustomDesc,
+			Privileges: privilege.CustomPrivileges,
+		})
 	} else {
 		privilegeOptions = append(privilegeOptions, schema.DefaultCustomPrivilegeOption)
 	}
@@ -347,32 +351,41 @@ func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context, privile
 }
 
 func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
-	var chooseOption *schema.PrivilegeOption
+	var choosePrivileges []*constant.Privilege
 	if req.Level == schema.PrivilegeLevelCustom {
-		chooseOption = req.Custom
+		choosePrivileges = req.CustomPrivileges
 	} else {
-		chooseOption = schema.DefaultPrivilegeOptions.Choose(req.Level)
+		chooseOption := schema.DefaultPrivilegeOptions.Choose(req.Level)
+		if chooseOption == nil {
+			return nil
+		}
+		choosePrivileges = chooseOption.Privileges
 	}
-	if chooseOption == nil {
+	if choosePrivileges == nil {
 		return nil
 	}
 
 	// update site info that user choose which privilege level
 	if req.Level == schema.PrivilegeLevelCustom {
-		req.Custom.LevelDesc = "privilege.level_custom.description"
-		privilegeMap := map[string]string{}
+		privilegeMap := make(map[string]int)
+		for _, privilege := range req.CustomPrivileges {
+			privilegeMap[privilege.Key] = privilege.Value
+		}
+		var privileges []*constant.Privilege
 		for _, privilege := range constant.RankAllPrivileges {
-			privilegeMap[privilege.Key] = privilege.Label
+			privileges = append(privileges, &constant.Privilege{
+				Key:   privilege.Key,
+				Label: privilege.Label,
+				Value: privilegeMap[privilege.Key],
+			})
 		}
-		for _, privilege := range req.Custom.Privileges {
-			privilege.Label = privilegeMap[privilege.Key]
-		}
+		req.CustomPrivileges = privileges
 	} else {
 		privilege := &schema.UpdatePrivilegesConfigReq{}
 		if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypePrivileges, privilege); err != nil {
-			return nil
+			return err
 		}
-		req.Custom = privilege.Custom
+		req.CustomPrivileges = privilege.CustomPrivileges
 	}
 
 	content, _ := json.Marshal(req)
@@ -387,7 +400,7 @@ func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schem
 	}
 
 	// update privilege in config
-	for _, privilege := range chooseOption.Privileges {
+	for _, privilege := range choosePrivileges {
 		err = s.configService.UpdateConfig(ctx, privilege.Key, fmt.Sprintf("%d", privilege.Value))
 		if err != nil {
 			return err

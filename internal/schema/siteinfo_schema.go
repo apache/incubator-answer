@@ -315,8 +315,8 @@ type PrivilegeOption struct {
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level  PrivilegeLevel   `validate:"required,min=1,max=3|eq=99" json:"level"`
-	Custom *PrivilegeOption `validate:"required" json:"custom"`
+	Level            PrivilegeLevel        `validate:"required,min=1,max=3|eq=99" json:"level"`
+	CustomPrivileges []*constant.Privilege `validate:"dive" json:"custom_privileges"`
 }
 
 var (
