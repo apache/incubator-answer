@@ -746,7 +746,7 @@ ui:
     btn_flag: 举报
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: 显示更多评论
+    show_more: "{{count}}条剩余评论"
     tip_question: >-
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-

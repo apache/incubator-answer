@@ -21,9 +21,6 @@ package comment
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/pkg/token"
-	"time"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -38,10 +35,13 @@ import (
 	"github.com/apache/incubator-answer/internal/service/permission"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"sort"
+	"time"
 )
 
 // CommentRepo comment repository
@@ -341,6 +341,11 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 	commentList, total, err := cs.commentRepo.GetCommentPage(ctx, dto)
 	if err != nil {
 		return nil, err
+	}
+	if total <= 3 {
+		sort.SliceStable(commentList, func(i, j int) bool {
+			return commentList[i].CreatedAt.Before(commentList[j].CreatedAt)
+		})
 	}
 	resp := make([]*schema.GetCommentResp, 0)
 	for _, comment := range commentList {

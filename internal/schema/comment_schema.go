@@ -130,7 +130,7 @@ type GetCommentWithPageReq struct {
 	// comment id
 	CommentID string `validate:"omitempty" form:"comment_id"`
 	// query condition
-	QueryCond string `validate:"omitempty,oneof=vote" form:"query_cond"`
+	QueryCond string `validate:"omitempty,oneof=vote created_at" form:"query_cond"`
 	// user id
 	UserID string `json:"-"`
 	// whether user can edit it

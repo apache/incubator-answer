@@ -746,7 +746,7 @@ ui:
     btn_flag: Balise
     btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
-    show_more: Afficher plus de commentaires
+    show_more: "{{count}} commentaires restants"
     tip_question: >-
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-

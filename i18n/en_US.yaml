@@ -763,7 +763,7 @@ ui:
     btn_flag: Flag
     btn_save_edits: Save edits
     btn_cancel: Cancel
-    show_more: Show more comments
+    show_more: "{{count}} more comments"
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid
       answering questions in comments.
