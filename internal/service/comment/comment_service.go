@@ -40,7 +40,6 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
-	"sort"
 	"time"
 )
 
@@ -341,11 +340,6 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 	commentList, total, err := cs.commentRepo.GetCommentPage(ctx, dto)
 	if err != nil {
 		return nil, err
-	}
-	if total <= 3 {
-		sort.SliceStable(commentList, func(i, j int) bool {
-			return commentList[i].CreatedAt.Before(commentList[j].CreatedAt)
-		})
 	}
 	resp := make([]*schema.GetCommentResp, 0)
 	for _, comment := range commentList {
