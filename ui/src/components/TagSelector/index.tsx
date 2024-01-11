@@ -64,7 +64,6 @@ const TagSelector: FC<IProps> = ({
   const [tags, setTags] = useState<Type.Tag[] | null>(null);
   const [requiredTags, setRequiredTags] = useState<Type.Tag[] | null>(null);
   const { t } = useTranslation('translation', { keyPrefix: 'tag_selector' });
-  const [visibleMenu, setVisibleMenu] = useState(false);
   const { data: userPermission } = useUserPermission('tag.add');
   const toast = useToast();
   const tagModal = useTagModal({
@@ -207,10 +206,6 @@ const TagSelector: FC<IProps> = ({
     fetchTags(searchStr);
   };
 
-  const handleSelect = (eventKey) => {
-    setCurrentIndex(eventKey);
-    inputRef.current?.focus();
-  };
   const handleKeyDown = (e) => {
     e.stopPropagation();
     const { keyCode } = e;
@@ -218,7 +213,7 @@ const TagSelector: FC<IProps> = ({
       handleRemove(value[value.length - 1]);
     }
 
-    if (!tags || tags.length === 0) {
+    if (!tags) {
       return;
     }
 
@@ -231,8 +226,7 @@ const TagSelector: FC<IProps> = ({
 
     if (keyCode === 13 && currentIndex > -1) {
       e.preventDefault();
-
-      if (tags.length === 0) {
+      if (tags.length === 0 && searchValue) {
         tagModal.onShow(searchValue);
         return;
       }
@@ -281,19 +275,9 @@ const TagSelector: FC<IProps> = ({
   useEffect(() => {
     if (focusState) {
       fetchTags(searchValue);
-    }
-    if (visibleMenu) {
       inputRef.current?.focus();
     }
-  }, [visibleMenu]);
-
-  useEffect(() => {
-    if (autoFocus) {
-      setShowMenu(true);
-      setFocusState(true);
-      inputRef.current?.focus();
-    }
-  }, [autoFocus]);
+  }, [focusState]);
 
   useEffect(() => {
     queryTags('').then((res) => {
@@ -310,7 +294,6 @@ const TagSelector: FC<IProps> = ({
         !containerRef.current?.contains(event.target)
       ) {
         handleTagSelectorBlur();
-        console.log('outside click');
       }
     };
     document.addEventListener('click', handleOutsideClick);
@@ -325,22 +308,22 @@ const TagSelector: FC<IProps> = ({
       (tags && tags?.length > 0) ||
       (searchValue && tags?.length === 0) ||
       (searchValue && !hiddenCreateBtn);
-    if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
-      handleMenuShow(true);
-    } else {
-      handleMenuShow(false);
-    }
+    if (focusState) {
+      if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
+        handleMenuShow(true);
+      } else {
+        handleMenuShow(false);
+      }
 
-    if ((tags && tags?.length < 5) || alwaysShowAddBtn) {
-      inputRef.current?.focus();
+      if ((tags && tags?.length < 5) || alwaysShowAddBtn) {
+        inputRef.current?.focus();
+      }
     }
-  }, [tags, hiddenCreateBtn, searchValue, alwaysShowAddBtn]);
+  }, [focusState, tags, hiddenCreateBtn, searchValue, alwaysShowAddBtn]);
 
   return (
     <div ref={containerRef} className="position-relative">
-      <Dropdown
-        onSelect={handleSelect}
-        onToggle={setVisibleMenu}
+      <div
         tabIndex={0}
         className={classNames(
           'tag-selector-wrap form-control position-relative p-0',
@@ -348,7 +331,7 @@ const TagSelector: FC<IProps> = ({
         )}
         onFocus={handleTagSelectorFocus}
         onKeyDown={handleKeyDown}>
-        <Dropdown.Toggle as="div" onClick={handleClickToggle}>
+        <div onClick={handleClickToggle}>
           <div
             className="d-flex flex-wrap m-n1"
             style={{ padding: '0.375rem 0.75rem' }}>
@@ -393,7 +376,7 @@ const TagSelector: FC<IProps> = ({
             )}
             <span className="a-input-width">{searchValue}</span>
           </div>
-        </Dropdown.Toggle>
+        </div>
         <Dropdown.Menu id="a-dropdown-menu" className="w-100" show={showMenu}>
           {!searchValue &&
             showRequiredTagText &&
@@ -407,7 +390,6 @@ const TagSelector: FC<IProps> = ({
               <Dropdown.Item
                 as="div"
                 key={item.slug_name}
-                eventKey={index}
                 active={index === currentIndex}
                 onClick={() => handleClick(item)}>
                 {item.display_name}
@@ -428,7 +410,7 @@ const TagSelector: FC<IProps> = ({
             </Button>
           )}
         </Dropdown.Menu>
-      </Dropdown>
+      </div>
       {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
     </div>
   );
