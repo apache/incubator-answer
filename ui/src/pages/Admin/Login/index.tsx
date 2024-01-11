@@ -39,7 +39,7 @@ const Index: FC = () => {
         type: 'boolean',
         title: t('membership.title'),
         description: t('membership.text'),
-        default: false,
+        default: true,
       },
       allow_email_registrations: {
         type: 'boolean',
