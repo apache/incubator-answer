@@ -71,6 +71,7 @@ const Index: FC = () => {
           hiddenDescription
           hiddenCreateBtn
           alwaysShowAddBtn
+          autoFocus
         />
       </Card.Body>
     </Card>

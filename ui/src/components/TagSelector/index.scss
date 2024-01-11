@@ -31,5 +31,42 @@
     color: #212529;
     background-color: #e9ecef;
   }
+  .hover-hand:hover {
+    cursor: pointer;
+  }
 
+  .a-placeholder {
+    color: var(--bs-secondary-color);
+  }
+
+  .a-input {
+    padding: 0;
+    background: transparent !important;
+    box-shadow: none;
+    border: none;
+    min-width: 60px;
+  }
+  .a-input:focus {
+    box-shadow: none !important;
+    border: none;
+  }
+
+  .a-input-width {
+    display: inline-block;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    max-width: calc(100% - 40px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
+
+.tag-selector-wrap--focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  box-shadow: 0 0 0 0.25rem rgba(84, 125, 248, 0.25) !important;
+  border-color: rgb(170, 190, 252) !important;
+  outline: 0;
 }

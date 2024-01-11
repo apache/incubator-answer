@@ -18,8 +18,8 @@
  */
 
 /* eslint-disable no-nested-ternary */
-import { FC, useState, useEffect } from 'react';
-import { Dropdown, FormControl, Button, Form } from 'react-bootstrap';
+import { FC, useState, useEffect, useRef } from 'react';
+import { Dropdown, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
@@ -28,18 +28,18 @@ import classNames from 'classnames';
 import { useTagModal, useToast } from '@/hooks';
 import type * as Type from '@/common/interface';
 import { queryTags, useUserPermission } from '@/services';
+// import { OutsideClickListener } from '@/components';
 
 import './index.scss';
 
 interface IProps {
   value?: Type.Tag[];
   onChange?: (tags: Type.Tag[]) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
   hiddenDescription?: boolean;
   hiddenCreateBtn?: boolean;
   showRequiredTagText?: boolean;
   alwaysShowAddBtn?: boolean;
+  autoFocus?: boolean;
 }
 
 let timer;
@@ -47,20 +47,23 @@ let timer;
 const TagSelector: FC<IProps> = ({
   value = [],
   onChange,
-  onFocus = () => {},
-  onBlur = () => {},
   hiddenDescription = false,
   hiddenCreateBtn = false,
   alwaysShowAddBtn = false,
   showRequiredTagText = false,
+  autoFocus = false,
 }) => {
-  const [initialValue, setInitialValue] = useState<Type.Tag[]>([...value]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [focusState, setFocusState] = useState(autoFocus);
+  const [showMenu, setShowMenu] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [repeatIndex, setRepeatIndex] = useState(-1);
   const [searchValue, setSearchValue] = useState<string>('');
   const [tags, setTags] = useState<Type.Tag[] | null>(null);
+  const [requiredTags, setRequiredTags] = useState<Type.Tag[] | null>(null);
   const { t } = useTranslation('translation', { keyPrefix: 'tag_selector' });
-  const [visibleMenu, setVisibleMenu] = useState(false);
   const { data: userPermission } = useUserPermission('tag.add');
   const toast = useToast();
   const tagModal = useTagModal({
@@ -68,7 +71,7 @@ const TagSelector: FC<IProps> = ({
       if (!(onChange instanceof Function)) {
         return;
       }
-      const findIndex = initialValue.findIndex(
+      const findIndex = value.findIndex(
         (item) => item.slug_name.toLowerCase() === data.slug_name.toLowerCase(),
       );
       if (findIndex === -1) {
@@ -79,6 +82,7 @@ const TagSelector: FC<IProps> = ({
             parsed_text: marked(data.original_text),
           },
         ]);
+        setSearchValue('');
       } else {
         setRepeatIndex(findIndex);
         clearTimeout(timer);
@@ -91,7 +95,7 @@ const TagSelector: FC<IProps> = ({
 
   const filterTags = (result) => {
     const tagArray: Type.Tag[] = [];
-    result.forEach((item) => {
+    result?.forEach((item) => {
       const findIndex = value.findIndex((v) => {
         const tagName1 = v.slug_name.toLowerCase();
         const tagName2 =
@@ -109,33 +113,49 @@ const TagSelector: FC<IProps> = ({
     return tagArray;
   };
 
-  useEffect(() => {
-    setInitialValue(value);
-    if (tags) {
-      const tagArray: Type.Tag[] = filterTags(tags || []);
-
-      setTags(tagArray);
+  const handleMenuShow = (bol: boolean) => {
+    setShowMenu(bol);
+    const ele = document.getElementById('a-dropdown-menu');
+    if (ele) {
+      if (bol) {
+        ele.classList.add('show');
+      } else {
+        ele.classList.remove('show');
+      }
     }
-  }, [value]);
+  };
+
+  const handleTagSelectorFocus = () => {
+    setFocusState(true);
+    inputRef.current?.focus();
+  };
+
+  const handleTagSelectorBlur = () => {
+    setFocusState(false);
+    setCurrentIndex(0);
+    handleMenuShow(false);
+  };
 
   const fetchTags = (str) => {
     queryTags(str).then((res) => {
       const tagArray: Type.Tag[] = filterTags(res || []);
+      handleMenuShow(tagArray.length > 0);
       setTags(tagArray?.length > 5 ? tagArray.slice(0, 5) : tagArray);
     });
   };
 
-  useEffect(() => {
-    fetchTags(searchValue);
-  }, [visibleMenu]);
-
   const resetSearch = () => {
     setCurrentIndex(0);
     setSearchValue('');
-    setTags([]);
+    if (value?.length < 5 || alwaysShowAddBtn) {
+      const tagArray: Type.Tag[] = filterTags(requiredTags);
+      setTags(tagArray.length > 0 ? tagArray : []);
+    } else {
+      setTags([]);
+    }
   };
   const handleClick = (val: Type.Tag) => {
-    const findIndex = initialValue.findIndex(
+    const findIndex = value.findIndex(
       (item) => item.slug_name.toLowerCase() === val.slug_name.toLowerCase(),
     );
     if (onChange instanceof Function && findIndex === -1) {
@@ -173,19 +193,29 @@ const TagSelector: FC<IProps> = ({
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchStr = e.currentTarget.value.replace(';', '');
     setSearchValue(searchStr);
+    const ele = document.querySelector('.a-input-width') as HTMLElement;
+    if (ele.offsetWidth > 60) {
+      inputRef.current?.setAttribute(
+        'style',
+        `width:${ele.offsetWidth + 16}px`,
+      );
+    } else {
+      inputRef.current?.setAttribute('style', 'width: 60px');
+    }
+
     fetchTags(searchStr);
   };
 
-  const handleSelect = (eventKey) => {
-    setCurrentIndex(eventKey);
-  };
   const handleKeyDown = (e) => {
     e.stopPropagation();
+    const { keyCode } = e;
+    if (value.length > 0 && keyCode === 8 && !searchValue) {
+      handleRemove(value[value.length - 1]);
+    }
 
     if (!tags) {
       return;
     }
-    const { keyCode } = e;
 
     if (keyCode === 38 && currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
@@ -196,8 +226,7 @@ const TagSelector: FC<IProps> = ({
 
     if (keyCode === 13 && currentIndex > -1) {
       e.preventDefault();
-
-      if (tags.length === 0) {
+      if (tags.length === 0 && searchValue) {
         tagModal.onShow(searchValue);
         return;
       }
@@ -222,92 +251,165 @@ const TagSelector: FC<IProps> = ({
     }
   };
 
-  return (
-    <div
-      className="tag-selector-wrap"
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onKeyDown={handleKeyDown}>
-      <div className="d-flex flex-wrap m-n1">
-        {initialValue?.map((item, index) => {
-          return (
-            <Button
-              key={item.slug_name}
-              className={classNames(
-                'm-1 text-nowrap d-flex align-items-center',
-                index === repeatIndex && 'bg-fade-out',
-              )}
-              variant={`outline-${
-                item.reserved ? 'danger' : item.recommend ? 'dark' : 'secondary'
-              }`}
-              size="sm">
-              {item.display_name}
-              <span className="ms-1" onMouseUp={() => handleRemove(item)}>
-                ×
-              </span>
-            </Button>
-          );
-        })}
-        {initialValue?.length < 5 || alwaysShowAddBtn ? (
-          <Dropdown onSelect={handleSelect} onToggle={setVisibleMenu}>
-            <Dropdown.Toggle
-              className={classNames('m-1')}
-              variant="outline-secondary"
-              size="sm">
-              <span className="me-1">+</span>
-              {t('add_btn')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {visibleMenu && (
-                <Dropdown.Header>
-                  <Form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                    }}>
-                    <FormControl
-                      autoFocus
-                      type="search"
-                      placeholder={t('search_tag')}
-                      value={searchValue}
-                      onChange={handleSearch}
-                    />
-                  </Form>
-                </Dropdown.Header>
-              )}
-              {!searchValue &&
-                showRequiredTagText &&
-                tags &&
-                tags.filter((v) => v.recommend)?.length > 0 && (
-                  <h6 className="dropdown-header">{t('tag_required_text')}</h6>
-                )}
+  const handleClickToggle = () => {
+    const menuHasContent =
+      (tags && tags?.length > 0) ||
+      (searchValue && tags?.length === 0) ||
+      (searchValue && !hiddenCreateBtn);
+    if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
+      handleMenuShow(true);
+    } else {
+      handleMenuShow(false);
+    }
+  };
 
-              {tags?.map((item, index) => {
-                return (
-                  <Dropdown.Item
-                    key={item.slug_name}
-                    eventKey={index}
-                    active={index === currentIndex}
-                    onClick={() => handleClick(item)}>
-                    {item.display_name}
-                  </Dropdown.Item>
-                );
-              })}
-              {searchValue && tags && tags.length === 0 && (
-                <Dropdown.Item disabled className="text-secondary">
-                  {t('no_result')}
-                </Dropdown.Item>
-              )}
-              {!hiddenCreateBtn && searchValue && (
-                <Button
-                  variant="link"
-                  className="px-3 btn-no-border w-100 text-start"
-                  onClick={handleCreate}>
-                  + {t('create_btn')}
-                </Button>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
-        ) : null}
+  useEffect(() => {
+    if (value?.length < 5 || alwaysShowAddBtn) {
+      const tagArray: Type.Tag[] = filterTags(requiredTags);
+      setTags(tagArray.length > 0 ? tagArray : []);
+    } else {
+      setTags([]);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (focusState) {
+      fetchTags(searchValue);
+      inputRef.current?.focus();
+    }
+  }, [focusState]);
+
+  useEffect(() => {
+    queryTags('').then((res) => {
+      setRequiredTags(res?.length > 5 ? res.slice(0, 5) : res);
+    });
+    setInitialized(true);
+  }, []);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        initialized &&
+        containerRef.current &&
+        !containerRef.current?.contains(event.target)
+      ) {
+        handleTagSelectorBlur();
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [initialized]);
+
+  useEffect(() => {
+    // menu show
+    const menuHasContent =
+      (tags && tags?.length > 0) ||
+      (searchValue && tags?.length === 0) ||
+      (searchValue && !hiddenCreateBtn);
+    if (focusState) {
+      if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
+        handleMenuShow(true);
+      } else {
+        handleMenuShow(false);
+      }
+
+      if ((tags && tags?.length < 5) || alwaysShowAddBtn) {
+        inputRef.current?.focus();
+      }
+    }
+  }, [focusState, tags, hiddenCreateBtn, searchValue, alwaysShowAddBtn]);
+
+  return (
+    <div ref={containerRef} className="position-relative">
+      <div
+        tabIndex={0}
+        className={classNames(
+          'tag-selector-wrap form-control position-relative p-0',
+          focusState ? 'tag-selector-wrap--focus' : '',
+        )}
+        onFocus={handleTagSelectorFocus}
+        onKeyDown={handleKeyDown}>
+        <div onClick={handleClickToggle}>
+          <div
+            className="d-flex flex-wrap m-n1"
+            style={{ padding: '0.375rem 0.75rem' }}>
+            {value?.map((item, index) => {
+              return (
+                <span
+                  key={item.slug_name}
+                  className={classNames(
+                    'badge-tag rounded-1 m-1 flex-shrink-0',
+                    item.reserved && 'badge-tag-reserved',
+                    item.recommend && 'badge-tag-required',
+                    index === repeatIndex && 'bg-fade-out',
+                  )}>
+                  {item.display_name}
+                  <span
+                    className="ms-1 hover-hand"
+                    onMouseUp={() => handleRemove(item)}>
+                    ×
+                  </span>
+                </span>
+              );
+            })}
+            {value?.length < 5 || alwaysShowAddBtn ? (
+              <Form.Control
+                // autoFocus
+                autoComplete="off"
+                style={{ width: '60px' }}
+                ref={inputRef}
+                className="a-input m-1"
+                placeholder={t('add_btn')}
+                value={searchValue}
+                onChange={handleSearch}
+              />
+            ) : null}
+            {value.length >= 5 && (
+              <Form.Control
+                autoComplete="off"
+                className="a-input"
+                style={{ width: '60px', position: 'absolute', zIndex: -1 }}
+                autoFocus
+              />
+            )}
+            <span className="a-input-width">{searchValue}</span>
+          </div>
+        </div>
+        <Dropdown.Menu id="a-dropdown-menu" className="w-100" show={showMenu}>
+          {!searchValue &&
+            showRequiredTagText &&
+            tags &&
+            tags.filter((v) => v.recommend)?.length > 0 && (
+              <h6 className="dropdown-header">{t('tag_required_text')}</h6>
+            )}
+
+          {tags?.map((item, index) => {
+            return (
+              <Dropdown.Item
+                as="div"
+                key={item.slug_name}
+                active={index === currentIndex}
+                onClick={() => handleClick(item)}>
+                {item.display_name}
+              </Dropdown.Item>
+            );
+          })}
+          {searchValue && tags?.length === 0 && (
+            <Dropdown.Item disabled className="text-secondary">
+              {t('no_result')}
+            </Dropdown.Item>
+          )}
+          {!hiddenCreateBtn && searchValue && (
+            <Button
+              variant="link"
+              className="px-3 btn-no-border w-100 text-start"
+              onClick={handleCreate}>
+              + {t('create_btn')}
+            </Button>
+          )}
+        </Dropdown.Menu>
       </div>
       {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
     </div>

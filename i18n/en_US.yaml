@@ -1049,7 +1049,7 @@ ui:
     answers: answers
   invite_to_answer:
     title: People Asked
-    desc: Invite people who you think might know the answer.
+    desc: Select people who you think might know the answer.
     invite: Invite to answer
     add: Add people
     search: Search people
