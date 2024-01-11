@@ -32,7 +32,7 @@ builds:
   - id: build
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.Version}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.RawVersion}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
     flags: -v
     goos:
       - linux
@@ -43,7 +43,7 @@ builds:
   - id: build-windows
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.Version}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.RawVersion}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
     flags: -v
     goos:
       - windows
@@ -55,7 +55,7 @@ builds:
 
 archives:
   - name_template: >-
-      apache-answer-{{ .Version }}-incubating-{{ .Os }}-{{ .Arch }}
+      apache-answer-{{ .RawVersion }}-incubating-bin-{{ .Os }}-{{ .Arch }}
     files:
       - src: "docs/release/LICENSE"
         dst: LICENSE
@@ -76,5 +76,9 @@ changelog:
       - '^docs:'
       - '^test:'
 
-# goreleaser release --snapshot --rm-dist
+source:
+  enabled: true
+  name_template: apache-answer-{{ .RawVersion }}-incubating-src
+
+# goreleaser release --skip-validate  --skip-publish --clean
 

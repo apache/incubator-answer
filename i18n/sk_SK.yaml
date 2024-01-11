@@ -601,7 +601,7 @@ ui:
             msg:
               empty: Názov súboru nemôže byť prázdny.
               only_image: Povolené sú iba obrázkové súbory.
-              max_size: File size cannot exceed 4MB.
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: Popis
       tab_url: URL obrázka
