@@ -60,3 +60,8 @@ See [CONTRIBUTING](https://answer.apache.org/community/contributing) for ways to
 ## License
 
 [Apache License 2.0](https://github.com/apache/incubator-answer/blob/main/LICENSE)
+
+## One-Click Deployment
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploy.png)](https://repocloud.io/details/?app_id=104)
+
