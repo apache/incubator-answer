@@ -21,6 +21,9 @@ package schema
 
 import (
 	"encoding/json"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/translator"
+	"github.com/segmentfault/pacman/errors"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/validator"
@@ -80,6 +83,8 @@ type UserLoginResp struct {
 	Location string `json:"location"`
 	// language
 	Language string `json:"language"`
+	// Color scheme
+	ColorScheme string `json:"color_scheme"`
 	// access token
 	AccessToken string `json:"access_token"`
 	// role id
@@ -278,8 +283,23 @@ func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, er
 type UpdateUserInterfaceRequest struct {
 	// language
 	Language string `validate:"required,gt=1,lte=100" json:"language"`
+	// Color scheme
+	ColorScheme string `validate:"required,gt=1,lte=100" json:"color_scheme"`
 	// user id
 	UserId string `json:"-"`
+}
+
+func (req *UpdateUserInterfaceRequest) Check() (errFields []*validator.FormErrorField, err error) {
+	if !translator.CheckLanguageIsValid(req.Language) {
+		return nil, errors.BadRequest(reason.LangNotFound)
+	}
+	if req.ColorScheme != constant.ColorSchemeDefault &&
+		req.ColorScheme != constant.ColorSchemeLight &&
+		req.ColorScheme != constant.ColorSchemeDark &&
+		req.ColorScheme != constant.ColorSchemeSystem {
+		req.ColorScheme = constant.ColorSchemeDefault
+	}
+	return nil, nil
 }
 
 type UserRetrievePassWordRequest struct {

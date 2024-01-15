@@ -381,14 +381,7 @@ func (us *UserService) formatUserInfoForUpdateInfo(
 
 // UserUpdateInterface update user interface
 func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.UpdateUserInterfaceRequest) (err error) {
-	if !translator.CheckLanguageIsValid(req.Language) {
-		return errors.BadRequest(reason.LangNotFound)
-	}
-	err = us.userRepo.UpdateLanguage(ctx, req.UserId, req.Language)
-	if err != nil {
-		return
-	}
-	return nil
+	return us.userRepo.UpdateUserInterface(ctx, req.UserId, req.Language, req.ColorScheme)
 }
 
 // UserRegisterByEmail user register

@@ -136,6 +136,7 @@ type SiteCustomCssHTMLReq struct {
 type SiteThemeReq struct {
 	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
 	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
+	ColorScheme string                 `validate:"omitempty,gt=0,lte=100" json:"color_scheme"`
 }
 
 type SiteSeoReq struct {
