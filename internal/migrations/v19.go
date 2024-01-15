@@ -25,6 +25,10 @@ import (
 	"xorm.io/xorm"
 )
 
-func addNotificationPlugin(ctx context.Context, x *xorm.Engine) error {
-	return x.Context(ctx).Sync(new(entity.PluginUserConfig))
+func addNotificationPluginAndThemeConfig(ctx context.Context, x *xorm.Engine) error {
+	type User struct {
+		ID          string `xorm:"not null pk autoincr BIGINT(20) id"`
+		ColorScheme string `xorm:"not null default '' VARCHAR(100) color_scheme"`
+	}
+	return x.Context(ctx).Sync(new(entity.PluginUserConfig), new(User))
 }
