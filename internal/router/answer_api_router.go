@@ -53,6 +53,7 @@ type AnswerAPIRouter struct {
 	roleController          *controller_admin.RoleController
 	pluginController        *controller_admin.PluginController
 	permissionController    *controller.PermissionController
+	userPluginController    *controller.UserPluginController
 }
 
 func NewAnswerAPIRouter(
@@ -82,6 +83,7 @@ func NewAnswerAPIRouter(
 	roleController *controller_admin.RoleController,
 	pluginController *controller_admin.PluginController,
 	permissionController *controller.PermissionController,
+	userPluginController *controller.UserPluginController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -110,6 +112,7 @@ func NewAnswerAPIRouter(
 		roleController:          roleController,
 		pluginController:        pluginController,
 		permissionController:    permissionController,
+		userPluginController:    userPluginController,
 	}
 }
 
@@ -141,9 +144,6 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
-	r.GET("/user/logout", a.userController.UserLogout)
-	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
-	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
 
@@ -181,6 +181,12 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
+}
+
+func (a *AnswerAPIRouter) RegisterAuthUserWithAnyStatusAnswerAPIRouter(r *gin.RouterGroup) {
+	r.GET("/user/logout", a.userController.UserLogout)
+	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
@@ -268,6 +274,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
 	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
 
+	// plugin
+	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
+	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
+	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {

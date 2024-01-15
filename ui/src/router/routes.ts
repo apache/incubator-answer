@@ -181,6 +181,10 @@ const routes: RouteNode[] = [
                 path: 'interface',
                 page: 'pages/Users/Settings/Interface',
               },
+              {
+                path: ':slug_name',
+                page: 'pages/Users/Settings/Plugins',
+              },
             ],
           },
           {

@@ -22,6 +22,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/entity"
 	"html/template"
 	"net/http"
 	"regexp"
@@ -376,6 +377,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		"detail":   detail,
 		"answers":  answers,
 		"comments": comments,
+		"noindex":  detail.Show == entity.QuestionHide,
 	})
 }
 

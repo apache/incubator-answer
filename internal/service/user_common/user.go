@@ -153,6 +153,7 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.DisplayName = userInfo.DisplayName
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
+	userBasicInfo.Language = userInfo.Language
 	userBasicInfo.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
 	if userBasicInfo.Status == constant.UserDeleted {
 		userBasicInfo.Avatar = ""

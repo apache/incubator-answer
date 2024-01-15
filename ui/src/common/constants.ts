@@ -634,3 +634,5 @@ export const SYSTEM_AVATAR_OPTIONS = [
     value: 'gravatar',
   },
 ];
+
+export const TAG_SLUG_NAME_MAX_LENGTH = 35;

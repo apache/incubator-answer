@@ -44,7 +44,7 @@ const Index: FC<Props> = ({ id }) => {
   }
 
   return (
-    <Card>
+    <Card className="mt-4">
       <Card.Header>{t('title')}</Card.Header>
       <ListGroup variant="flush">
         {data?.list?.map((item) => {

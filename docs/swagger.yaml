@@ -1,20 +1,3 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -1008,17 +991,11 @@ definitions:
   schema.GetUserNotificationConfigResp:
     properties:
       all_new_question:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       all_new_question_for_following_tags:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       inbox:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
     type: object
   schema.GetUserPageResp:
     properties:
@@ -1057,6 +1034,13 @@ definitions:
         type: string
       username:
         description: username
+        type: string
+    type: object
+  schema.GetUserPluginListResp:
+    properties:
+      name:
+        type: string
+      slug_name:
         type: string
     type: object
   schema.GetVoteWithPageResp:
@@ -2116,17 +2100,11 @@ definitions:
   schema.UpdateUserNotificationConfigReq:
     properties:
       all_new_question:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       all_new_question_for_following_tags:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
       inbox:
-        items:
-          $ref: '#/definitions/schema.NotificationChannelConfig'
-        type: array
+        $ref: '#/definitions/schema.NotificationChannelConfig'
     type: object
   schema.UpdateUserPasswordReq:
     properties:
@@ -2139,6 +2117,17 @@ definitions:
     required:
     - password
     - user_id
+    type: object
+  schema.UpdateUserPluginConfigReq:
+    properties:
+      config_fields:
+        additionalProperties: {}
+        type: object
+      plugin_slug_name:
+        maxLength: 100
+        type: string
+    required:
+    - plugin_slug_name
     type: object
   schema.UpdateUserRoleReq:
     properties:
@@ -6010,6 +5999,79 @@ paths:
       summary: RetrievePassWord
       tags:
       - User
+  /answer/api/v1/user/plugin/config:
+    get:
+      description: get user plugin config
+      parameters:
+      - description: plugin_slug_name
+        in: query
+        name: plugin_slug_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetPluginConfigResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user plugin config
+      tags:
+      - UserPlugin
+    put:
+      consumes:
+      - application/json
+      description: update user plugin config
+      parameters:
+      - description: UpdatePluginConfigReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserPluginConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user plugin config
+      tags:
+      - UserPlugin
+  /answer/api/v1/user/plugin/configs:
+    get:
+      consumes:
+      - application/json
+      description: get plugin list that used for user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetUserPluginListResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get plugin list that used for user.
+      tags:
+      - UserPlugin
   /answer/api/v1/user/ranking:
     get:
       consumes:
