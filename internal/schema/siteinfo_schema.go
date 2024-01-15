@@ -172,6 +172,7 @@ type SiteThemeResp struct {
 	ThemeOptions []*ThemeOption         `json:"theme_options"`
 	Theme        string                 `json:"theme"`
 	ThemeConfig  map[string]interface{} `json:"theme_config"`
+	ColorScheme  string                 `json:"color_scheme"`
 }
 
 func (s *SiteThemeResp) TrTheme(ctx context.Context) {
