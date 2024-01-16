@@ -22,17 +22,23 @@ import i18next from 'i18next';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-import { interfaceStore, loggedUserInfoStore } from '@/stores';
+import {
+  interfaceStore,
+  loggedUserInfoStore,
+  themeSettingStore,
+} from '@/stores';
 import {
   CURRENT_LANG_STORAGE_KEY,
   DEFAULT_LANG,
   LANG_RESOURCE_STORAGE_KEY,
+  DEFAULT_THEME,
 } from '@/common/constants';
 import {
   getAdminLanguageOptions,
   getLanguageConfig,
   getLanguageOptions,
 } from '@/services';
+import { changeTheme } from '@/utils/common';
 
 import Storage from './storage';
 
@@ -103,6 +109,18 @@ export const getCurrentLang = () => {
   return currentLang;
 };
 
+export const getCurrentTheme = () => {
+  const loggedUser = loggedUserInfoStore.getState().user;
+  const adminTheme = themeSettingStore.getState().color_scheme;
+  const fallbackTheme = DEFAULT_THEME;
+  let currentTheme = loggedUser.color_scheme;
+  if (/default/i.test(currentTheme)) {
+    currentTheme = adminTheme;
+  }
+  currentTheme ||= fallbackTheme;
+  return currentTheme;
+};
+
 /**
  * localize for Day.js
  */
@@ -127,4 +145,10 @@ export const setupAppTimeZone = () => {
   if (adminInterface.time_zone) {
     dayjs.tz.setDefault(adminInterface.time_zone);
   }
+};
+
+export const setupAppTheme = () => {
+  const theme = getCurrentTheme();
+  console.log(333, theme);
+  changeTheme(theme);
 };

@@ -1150,6 +1150,10 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
   search:
     title: Search Results
     keywords: Keywords
@@ -1678,11 +1682,12 @@ ui:
       themes:
         label: Themes
         text: Select an existing theme.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Navbar style
       primary_color:
-        label: Primary Color
+        label: Primary color
         text: Modify the colors used by your themes
     css_and_html:
       page_title: CSS and HTML

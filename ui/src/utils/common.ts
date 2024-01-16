@@ -250,6 +250,21 @@ function getUaType() {
   return null;
 }
 
+function changeTheme(mode: '' | 'light' | 'dark' | 'system') {
+  const htmlTag = document.querySelector('html') as HTMLHtmlElement;
+  if (mode === 'system') {
+    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (systemThemeQuery.matches) {
+      htmlTag.setAttribute('data-bs-theme', 'dark');
+    } else {
+      htmlTag.setAttribute('data-bs-theme', 'light');
+    }
+  } else {
+    htmlTag.setAttribute('data-bs-theme', mode);
+  }
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -264,4 +279,5 @@ export {
   diffText,
   base64ToSvg,
   getUaType,
+  changeTheme,
 };

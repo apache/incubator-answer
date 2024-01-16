@@ -31,10 +31,12 @@ export const getLanguageOptions = () => {
   return request.get<Type.LangsType[]>('/answer/api/v1/language/options');
 };
 
-export const updateUserInterface = (lang: string) => {
-  return request.put('/answer/api/v1/user/interface', {
-    language: lang,
-  });
+interface userSettingInterface {
+  language: '';
+  color_scheme: '';
+}
+export const updateUserInterface = (data: userSettingInterface) => {
+  return request.put('/answer/api/v1/user/interface', data);
 };
 
 export const useGetNotificationConfig = () => {
