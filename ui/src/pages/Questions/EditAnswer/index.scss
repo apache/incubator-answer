@@ -29,6 +29,9 @@
       z-index: 1;
       background: var(--an-white);
     }
+    img {
+      max-width: 100%;
+    }
     .scroll-bar {
       height: 12px;
     }

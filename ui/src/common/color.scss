@@ -49,4 +49,8 @@
   .bg-light {
     background-color: rgba(0, 0, 0, 0.5) !important;
   }
+  .text-bg-dark {
+    color: #000 !important;
+    background-color: RGBA(255, 255, 255, var(--bs-bg-opacity, 1)) !important;
+  }
 }

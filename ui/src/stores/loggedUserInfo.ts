@@ -22,6 +22,7 @@ import create from 'zustand';
 import type { UserInfoRes } from '@/common/interface';
 import Storage from '@/utils/storage';
 import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
+import { changeTheme } from '@/utils/common';
 
 interface UserInfoStore {
   user: UserInfoRes;
@@ -56,6 +57,12 @@ const loggedUserInfo = create<UserInfoStore>((set) => ({
     }
     if (!params?.language) {
       params.language = 'Default';
+    }
+    if (!params?.color_scheme) {
+      params.color_scheme = 'default';
+      changeTheme('default');
+    } else {
+      changeTheme(params.color_scheme);
     }
     set(() => {
       Storage.set(LOGGED_TOKEN_STORAGE_KEY, params.access_token);
