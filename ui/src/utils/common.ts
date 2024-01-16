@@ -250,7 +250,7 @@ function getUaType() {
   return null;
 }
 
-function changeTheme(mode: '' | 'light' | 'dark' | 'system') {
+function changeTheme(mode: 'default' | 'light' | 'dark' | 'system') {
   const htmlTag = document.querySelector('html') as HTMLHtmlElement;
   if (mode === 'system') {
     const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');

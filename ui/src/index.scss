@@ -276,6 +276,9 @@ img[src=""] {
       word-break: initial;
     }
   }
+  ol ol,ol ul,ul ol,ul ul {
+    margin-bottom: 1rem;
+  }
 }
 
 .upload-img-wrap {
