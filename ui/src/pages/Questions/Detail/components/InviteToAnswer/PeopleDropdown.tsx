@@ -144,7 +144,7 @@ const Index: FC<Props> = ({
       <Dropdown.Menu
         renderOnMount
         show
-        className="w-100 py-0 position-relative border-top-0">
+        className="w-100 py-0 position-relative">
         <div className="p-3">
           <Form.Control
             type="search"
@@ -164,6 +164,7 @@ const Index: FC<Props> = ({
                 <Form.Check
                   type="checkbox"
                   id={p.username}
+                  tabIndex={-1}
                   className="position-relative">
                   <Form.Check.Input
                     type="checkbox"

@@ -16,22 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+.card-body {
+  box-sizing: border-box;
+}
 .people-dropdown {
-  border: var(--bs-border-width) solid var(--bs-border-color-translucent);
-  border-top: 0;
-  border-bottom-left-radius: var(--bs-border-radius);
-  border-bottom-right-radius: var(--bs-border-radius);
-  .dropdown-menu {
-    transform: translate(0, 0px) !important;
-    border: none;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  .border-top {
-    border-top: var(--bs-border-width) solid var(--bs-border-color-translucent);
-  }
+  position: absolute;
+  top: 34px;
+  left: 0;
+  width: 100%;
 
   .dropdown-item.active {
     color: #212529;
