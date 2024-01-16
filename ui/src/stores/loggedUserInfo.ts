@@ -42,6 +42,7 @@ const initUser: UserInfoRes = {
   status: 'normal',
   mail_status: 1,
   language: 'Default',
+  color_scheme: 'default',
   is_admin: false,
   have_password: true,
   role_id: 1,

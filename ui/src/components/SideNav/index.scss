@@ -17,7 +17,6 @@
  * under the License.
  */
 
-
 #sideNav {
   .nav-wrap {
     position: sticky;
@@ -32,10 +31,10 @@
     max-width: calc(100% - 24px);
   }
   .nav-link {
-    color: rgba(0, 0, 0, 0.65);
+    color: var(--an-side-nav-link);
   }
   .nav-link:hover {
-    color: rgba(0, 0, 0);
+    color: black;
     background-color: var(--bs-gray-100);
   }
   .nav-link.active {

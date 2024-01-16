@@ -34,6 +34,7 @@ import {
   HttpErrorContent,
 } from '@/components';
 import { LoginToContinueModal } from '@/components/Modal';
+import { changeTheme } from '@/utils';
 
 const Layout: FC = () => {
   const location = useLocation();
@@ -47,6 +48,25 @@ const Layout: FC = () => {
   useEffect(() => {
     httpStatusReset();
   }, [location]);
+
+  useEffect(() => {
+    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    function handleSystemThemeChange(event) {
+      if (event.matches) {
+        console.log('system theme is dark');
+        changeTheme('dark');
+      } else {
+        console.log('system theme is light');
+        changeTheme('light');
+      }
+    }
+
+    systemThemeQuery.addListener(handleSystemThemeChange);
+
+    return () => {
+      systemThemeQuery.removeListener(handleSystemThemeChange);
+    };
+  }, []);
   return (
     <HelmetProvider>
       <PageTags />

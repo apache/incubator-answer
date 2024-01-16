@@ -440,6 +440,7 @@ export type themeConfig = {
 };
 export interface AdminSettingsTheme {
   theme: string;
+  color_scheme: string;
   theme_options?: { label: string; value: string }[];
   theme_config: Record<string, themeConfig>;
 }

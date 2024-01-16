@@ -38,7 +38,7 @@ import {
 } from '@/common/constants';
 import Storage from '@/utils/storage';
 
-import { setupAppLanguage, setupAppTimeZone } from './localize';
+import { setupAppLanguage, setupAppTimeZone, setupAppTheme } from './localize';
 import { floppyNavigation, NavigateConfig } from './floppyNavigation';
 import { pullUcAgent, getSignUpUrl } from './userCenter';
 
@@ -453,6 +453,7 @@ export const setupApp = async () => {
   await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
+  setupAppTheme();
   /**
    * WARN:
    * Initialization must be completed after all initialization actions,
