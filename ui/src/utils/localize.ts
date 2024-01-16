@@ -149,6 +149,5 @@ export const setupAppTimeZone = () => {
 
 export const setupAppTheme = () => {
   const theme = getCurrentTheme();
-  console.log(333, theme);
   changeTheme(theme);
 };
