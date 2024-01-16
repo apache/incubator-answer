@@ -92,15 +92,15 @@ const Comment = ({ objectId, mode, commentId }) => {
     if (!data) {
       return;
     }
+    if (data.count <= 3) {
+      data.list.sort((a, b) => a.created_at - b.created_at);
+    }
     if (pageIndex === 1 || pageIndex === 0) {
       setComments(data?.list);
     } else {
       setComments([...comments, ...data.list]);
     }
     const user: Types.PageUser[] = [];
-    if (data.count <= 3) {
-      data.list.sort((a, b) => a.created_at - b.created_at);
-    }
     data.list.forEach((item) => {
       user.push({
         id: item.user_id,
