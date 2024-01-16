@@ -53,10 +53,8 @@ const Layout: FC = () => {
     const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     function handleSystemThemeChange(event) {
       if (event.matches) {
-        console.log('system theme is dark');
         changeTheme('dark');
       } else {
-        console.log('system theme is light');
         changeTheme('light');
       }
     }
