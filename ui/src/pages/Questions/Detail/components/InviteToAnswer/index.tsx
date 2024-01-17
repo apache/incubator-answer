@@ -109,7 +109,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   }
 
   return (
-    <Card className="invite-answer-card border-0">
+    <Card className="invite-answer-card position-relative border-0">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('title')}
         {!readOnly && (
@@ -121,38 +121,36 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
           </Button>
         )}
       </Card.Header>
-      {editing ? (
+      <Card.Body className={classNames('position-relative')}>
+        <div className={classNames('d-flex align-items-center flex-wrap m-n1')}>
+          {users?.map((user) => {
+            return (
+              <Link
+                key={user.username}
+                to={`/users/${user.username}`}
+                className="mx-2 my-1 d-inline-flex flex-nowrap">
+                <Avatar
+                  avatar={user.avatar}
+                  size="24"
+                  alt={user.display_name}
+                  className="rounded-1"
+                />
+                <small className="ms-2">{user.display_name}</small>
+              </Link>
+            );
+          })}
+          {users?.length === 0 ? (
+            <div className="text-muted">{t('desc')}</div>
+          ) : null}
+        </div>
+      </Card.Body>
+      {editing && (
         <PeopleDropdown
           visible={editing}
           selectedPeople={users}
           onSelect={updateInviteUsers}
           saveInviteUsers={saveInviteUsers}
         />
-      ) : (
-        <Card.Body>
-          <div
-            className={classNames('d-flex align-items-center flex-wrap m-n1')}>
-            {users?.map((user) => {
-              return (
-                <Link
-                  key={user.username}
-                  to={`/users/${user.username}`}
-                  className="mx-2 my-1 d-inline-flex flex-nowrap">
-                  <Avatar
-                    avatar={user.avatar}
-                    size="24"
-                    alt={user.display_name}
-                    className="rounded-1"
-                  />
-                  <small className="ms-2">{user.display_name}</small>
-                </Link>
-              );
-            })}
-            {users?.length === 0 ? (
-              <div className="text-muted">{t('desc')}</div>
-            ) : null}
-          </div>
-        </Card.Body>
       )}
     </Card>
   );
