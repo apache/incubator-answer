@@ -48,7 +48,7 @@ const Index: FC = () => {
       color_scheme: {
         type: 'string',
         title: t('color_scheme.label'),
-        enum: ['setting', 'light', 'dark'],
+        enum: ['system', 'light', 'dark'],
         enumNames: [
           t('system_setting', { keyPrefix: 'btns' }),
           t('light', { keyPrefix: 'btns' }),
