@@ -160,6 +160,9 @@ const Index: FC<Props> = ({
               <Dropdown.Item
                 key={p.username}
                 eventKey={idx}
+                onFocus={() => {
+                  setCurrentIndex(idx);
+                }}
                 active={idx === currentIndex}>
                 <Form.Check
                   type="checkbox"
