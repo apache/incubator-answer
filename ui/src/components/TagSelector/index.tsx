@@ -37,8 +37,8 @@ interface IProps {
   onChange?: (tags: Type.Tag[]) => void;
   hiddenDescription?: boolean;
   hiddenCreateBtn?: boolean;
-  showRequiredTagText?: boolean;
-  alwaysShowAddBtn?: boolean;
+  maxTagLength?: number;
+  showRequiredTag?: boolean;
   autoFocus?: boolean;
 }
 
@@ -49,8 +49,8 @@ const TagSelector: FC<IProps> = ({
   onChange,
   hiddenDescription = false,
   hiddenCreateBtn = false,
-  alwaysShowAddBtn = false,
-  showRequiredTagText = false,
+  maxTagLength = 0,
+  showRequiredTag = false,
   autoFocus = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,6 +65,8 @@ const TagSelector: FC<IProps> = ({
   const [requiredTags, setRequiredTags] = useState<Type.Tag[] | null>(null);
   const { t } = useTranslation('translation', { keyPrefix: 'tag_selector' });
   const { data: userPermission } = useUserPermission('tag.add');
+  const canAddTag =
+    (maxTagLength > 0 && value?.length < maxTagLength) || maxTagLength === 0;
   const toast = useToast();
   const tagModal = useTagModal({
     onConfirm: (data) => {
@@ -126,19 +128,28 @@ const TagSelector: FC<IProps> = ({
   };
 
   const handleTagSelectorFocus = () => {
+    console.log('foucsed 555');
     setFocusState(true);
     inputRef.current?.focus();
   };
 
   const handleTagSelectorBlur = () => {
+    console.log('tab key pressed666');
     setFocusState(false);
     setCurrentIndex(0);
     handleMenuShow(false);
   };
 
   const fetchTags = (str) => {
+    if (!showRequiredTag && !str) {
+      setTags([]);
+      return;
+    }
     queryTags(str).then((res) => {
       const tagArray: Type.Tag[] = filterTags(res || []);
+      if (str === '') {
+        setRequiredTags(res?.length > 5 ? res.slice(0, 5) : res);
+      }
       handleMenuShow(tagArray.length > 0);
       setTags(tagArray?.length > 5 ? tagArray.slice(0, 5) : tagArray);
     });
@@ -147,7 +158,7 @@ const TagSelector: FC<IProps> = ({
   const resetSearch = () => {
     setCurrentIndex(0);
     setSearchValue('');
-    if (value?.length < 5 || alwaysShowAddBtn) {
+    if (canAddTag) {
       const tagArray: Type.Tag[] = filterTags(requiredTags);
       setTags(tagArray.length > 0 ? tagArray : []);
     } else {
@@ -191,6 +202,7 @@ const TagSelector: FC<IProps> = ({
   };
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleSearch');
     const searchStr = e.currentTarget.value.replace(';', '');
     setSearchValue(searchStr);
     const ele = document.querySelector('.a-input-width') as HTMLElement;
@@ -202,13 +214,17 @@ const TagSelector: FC<IProps> = ({
     } else {
       inputRef.current?.setAttribute('style', 'width: 60px');
     }
-
     fetchTags(searchStr);
   };
 
   const handleKeyDown = (e) => {
     e.stopPropagation();
     const { keyCode } = e;
+    if (keyCode === 9) {
+      console.log('tab key pressed');
+      handleTagSelectorBlur();
+      return;
+    }
     if (value.length > 0 && keyCode === 8 && !searchValue) {
       handleRemove(value[value.length - 1]);
     }
@@ -256,7 +272,7 @@ const TagSelector: FC<IProps> = ({
       (tags && tags?.length > 0) ||
       (searchValue && tags?.length === 0) ||
       (searchValue && !hiddenCreateBtn);
-    if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
+    if (canAddTag && menuHasContent) {
       handleMenuShow(true);
     } else {
       handleMenuShow(false);
@@ -264,7 +280,7 @@ const TagSelector: FC<IProps> = ({
   };
 
   useEffect(() => {
-    if (value?.length < 5 || alwaysShowAddBtn) {
+    if (canAddTag) {
       const tagArray: Type.Tag[] = filterTags(requiredTags);
       setTags(tagArray.length > 0 ? tagArray : []);
     } else {
@@ -273,16 +289,13 @@ const TagSelector: FC<IProps> = ({
   }, [value]);
 
   useEffect(() => {
-    if (focusState) {
+    if (focusState && showRequiredTag) {
       fetchTags(searchValue);
       inputRef.current?.focus();
     }
   }, [focusState]);
 
   useEffect(() => {
-    queryTags('').then((res) => {
-      setRequiredTags(res?.length > 5 ? res.slice(0, 5) : res);
-    });
     setInitialized(true);
   }, []);
 
@@ -309,18 +322,19 @@ const TagSelector: FC<IProps> = ({
       (searchValue && tags?.length === 0) ||
       (searchValue && !hiddenCreateBtn);
     if (focusState) {
-      if ((value.length < 5 || alwaysShowAddBtn) && menuHasContent) {
+      if (canAddTag && menuHasContent) {
         handleMenuShow(true);
       } else {
         handleMenuShow(false);
       }
 
-      if ((tags && tags?.length < 5) || alwaysShowAddBtn) {
+      if ((tags && tags?.length < 5) || maxTagLength === 0) {
         inputRef.current?.focus();
       }
     }
-  }, [focusState, tags, hiddenCreateBtn, searchValue, alwaysShowAddBtn]);
+  }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
 
+  console.log('focusState===', focusState);
   return (
     <div ref={containerRef} className="position-relative">
       <div
@@ -354,7 +368,7 @@ const TagSelector: FC<IProps> = ({
                 </span>
               );
             })}
-            {value?.length < 5 || alwaysShowAddBtn ? (
+            {canAddTag ? (
               <Form.Control
                 // autoFocus
                 autoComplete="off"
@@ -365,8 +379,7 @@ const TagSelector: FC<IProps> = ({
                 value={searchValue}
                 onChange={handleSearch}
               />
-            ) : null}
-            {value.length >= 5 && (
+            ) : (
               <Form.Control
                 autoComplete="off"
                 className="a-input"
@@ -379,7 +392,7 @@ const TagSelector: FC<IProps> = ({
         </div>
         <Dropdown.Menu id="a-dropdown-menu" className="w-100" show={showMenu}>
           {!searchValue &&
-            showRequiredTagText &&
+            showRequiredTag &&
             tags &&
             tags.filter((v) => v.recommend)?.length > 0 && (
               <h6 className="dropdown-header">{t('tag_required_text')}</h6>
@@ -388,7 +401,6 @@ const TagSelector: FC<IProps> = ({
           {tags?.map((item, index) => {
             return (
               <Dropdown.Item
-                as="div"
                 key={item.slug_name}
                 active={index === currentIndex}
                 onClick={() => handleClick(item)}>
