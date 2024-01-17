@@ -115,6 +115,9 @@ func (r *GetCurrentLoginUserInfoResp) ConvertFromUserEntity(userInfo *entity.Use
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	r.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
+	if len(r.ColorScheme) == 0 {
+		r.ColorScheme = constant.ColorSchemeDefault
+	}
 }
 
 // GetOtherUserInfoByUsernameResp get user response
