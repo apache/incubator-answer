@@ -53,4 +53,9 @@
     color: #000 !important;
     background-color: RGBA(255, 255, 255, var(--bs-bg-opacity, 1)) !important;
   }
+  #sideNav {
+    .side-nav-right-line {
+      background-color: var(--bs-border-color);
+    }
+  }
 }

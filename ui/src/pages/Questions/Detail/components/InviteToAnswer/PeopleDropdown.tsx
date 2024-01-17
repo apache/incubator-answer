@@ -49,7 +49,7 @@ const Index: FC<Props> = ({
     keyPrefix: 'invite_to_answer',
   });
   const [peopleList, setPeopleList] = useState<UserInfoCheck[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchValue, setSearchValue] = useState('');
   const filterAndSetPeople = (source) => {
     const filteredPeople: Type.UserInfoBase[] = [];
@@ -85,7 +85,7 @@ const Index: FC<Props> = ({
   };
 
   const resetSearch = () => {
-    setCurrentIndex(0);
+    setCurrentIndex(-1);
     setSearchValue('');
     setPeopleList([]);
   };
@@ -144,7 +144,7 @@ const Index: FC<Props> = ({
       <Dropdown.Menu
         renderOnMount
         show
-        className="w-100 py-0 position-relative border-top-0">
+        className="w-100 py-0 position-relative">
         <div className="p-3">
           <Form.Control
             type="search"
@@ -167,6 +167,7 @@ const Index: FC<Props> = ({
                   className="position-relative">
                   <Form.Check.Input
                     type="checkbox"
+                    tabIndex={-1}
                     checked={Boolean(
                       selectedPeople?.find((v) => v.id === p.id),
                     )}
