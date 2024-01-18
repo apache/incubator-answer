@@ -384,7 +384,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	req.AccessToken = middleware.ExtractToken(ctx)
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
 	if !isAdmin {
-		captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionPassword, req.UserID,
+		captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEditUserinfo, req.UserID,
 			req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -394,7 +394,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 			return
 		}
-		_, err := uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionPassword, req.UserID)
+		_, err := uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEditUserinfo, req.UserID)
 		if err != nil {
 			log.Error(err)
 		}
@@ -424,7 +424,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
 	if err == nil {
-		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, req.UserID)
+		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionEditUserinfo, req.UserID)
 	}
 	handler.HandleResponse(ctx, err, nil)
 }
