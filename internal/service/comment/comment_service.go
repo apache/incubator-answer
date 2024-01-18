@@ -21,9 +21,6 @@ package comment
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/pkg/token"
-	"time"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -38,10 +35,12 @@ import (
 	"github.com/apache/incubator-answer/internal/service/permission"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"time"
 )
 
 // CommentRepo comment repository

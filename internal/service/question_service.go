@@ -22,9 +22,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/internal/service/notification"
-	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
-	"github.com/apache/incubator-answer/pkg/token"
 	"strings"
 	"time"
 
@@ -42,13 +39,17 @@ import (
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/meta"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
+	"github.com/apache/incubator-answer/internal/service/notification"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
+	"github.com/apache/incubator-answer/internal/service/role"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -65,6 +66,7 @@ type QuestionService struct {
 	questioncommon                   *questioncommon.QuestionCommon
 	userCommon                       *usercommon.UserCommon
 	userRepo                         usercommon.UserRepo
+	userRoleRelService               *role.UserRoleRelService
 	revisionService                  *revision_common.RevisionService
 	metaService                      *meta.MetaService
 	collectionCommon                 *collectioncommon.CollectionCommon
@@ -83,6 +85,7 @@ func NewQuestionService(
 	questioncommon *questioncommon.QuestionCommon,
 	userCommon *usercommon.UserCommon,
 	userRepo usercommon.UserRepo,
+	userRoleRelService *role.UserRoleRelService,
 	revisionService *revision_common.RevisionService,
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
@@ -100,6 +103,7 @@ func NewQuestionService(
 		questioncommon:                   questioncommon,
 		userCommon:                       userCommon,
 		userRepo:                         userRepo,
+		userRoleRelService:               userRoleRelService,
 		revisionService:                  revisionService,
 		metaService:                      metaService,
 		collectionCommon:                 collectionCommon,
@@ -314,6 +318,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err != nil {
 		return
 	}
+	_ = qs.questionRepo.UpdateSearch(ctx, question.ID)
 
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
@@ -1237,15 +1242,31 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.QuestionPageReq) (
 	questions []*schema.QuestionPageResp, total int64, err error) {
 	questions = make([]*schema.QuestionPageResp, 0)
-
+	// query by user role
+	showHidden := false
+	if req.LoginUserID != "" && req.UserIDBeSearched != "" {
+		showHidden = req.LoginUserID == req.UserIDBeSearched
+		if !showHidden {
+			userRole, err := qs.userRoleRelService.GetUserRole(ctx, req.LoginUserID)
+			if err != nil {
+				return nil, 0, err
+			}
+			showHidden = userRole == role.RoleAdminID || userRole == role.RoleModeratorID
+		}
+	}
 	// query by tag condition
+	var tagIDs = make([]string, 0)
 	if len(req.Tag) > 0 {
 		tagInfo, exist, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
 		if err != nil {
 			return nil, 0, err
 		}
 		if exist {
-			req.TagID = tagInfo.ID
+			synTagIds, err := qs.tagCommon.GetTagIDsByMainTagID(ctx, tagInfo.ID)
+			if err != nil {
+				return nil, 0, err
+			}
+			tagIDs = append(synTagIds, tagInfo.ID)
 		}
 	}
 
@@ -1262,7 +1283,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond, req.InDays)
+		tagIDs, req.UserIDBeSearched, req.OrderCond, req.InDays, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}
