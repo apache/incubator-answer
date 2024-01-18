@@ -92,6 +92,9 @@ const Comment = ({ objectId, mode, commentId }) => {
     if (!data) {
       return;
     }
+    if (data.count <= 3) {
+      data.list.sort((a, b) => a.created_at - b.created_at);
+    }
     if (pageIndex === 1 || pageIndex === 0) {
       setComments(data?.list);
     } else {
@@ -419,7 +422,12 @@ const Comment = ({ objectId, mode, commentId }) => {
               onClick={() => {
                 setPageIndex(pageIndex + 1);
               }}>
-              {t('show_more')}
+              (
+              {t('show_more', {
+                count:
+                  data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
+              })}
+              )
             </Button>
           )}
       </div>
