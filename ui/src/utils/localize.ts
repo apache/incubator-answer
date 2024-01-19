@@ -76,7 +76,7 @@ const addI18nResource = async (langName) => {
       const { default: resConf } = await import(`@i18n/${langName}.yaml`);
       res.resources = resConf.ui;
     } catch (ex) {
-      console.log('ex: ', ex);
+      console.error('addI18nResource error: ', ex);
     }
   } else if (storageResource && storageResource.lng === res.lng) {
     res.resources = storageResource.resources;
@@ -149,6 +149,5 @@ export const setupAppTimeZone = () => {
 
 export const setupAppTheme = () => {
   const theme = getCurrentTheme();
-  console.log(333, theme);
   changeTheme(theme);
 };

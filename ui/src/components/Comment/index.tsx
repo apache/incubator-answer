@@ -74,10 +74,8 @@ const Comment = ({ objectId, mode, commentId }) => {
 
   useEffect(() => {
     if (pageIndex === 0 && commentId) {
-      console.log('scrollCallback');
       setTimeout(() => {
         const el = document.getElementById(commentId);
-        console.log(el);
         scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);

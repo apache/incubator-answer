@@ -92,8 +92,6 @@ const Index = () => {
     setLangs(res);
   };
 
-  console.log(formData.color_scheme, '3333');
-
   const handleOnChange = (d) => {
     setFormData(d);
   };

@@ -68,7 +68,7 @@ const Index: FC = () => {
         resolveNextOne(resp, pageNumber);
       })
       .catch((ex) => {
-        console.log('ex: ', ex);
+        console.error('review next error: ', ex);
       });
   };
   const reviewInfo = unreviewed_info?.content;
@@ -85,7 +85,7 @@ const Index: FC = () => {
         queryNextOne(page);
       })
       .catch((ex) => {
-        console.log('ex: ', ex);
+        console.error('revisionAudit approve error: ', ex);
       })
       .finally(() => {
         setIsLoading(false);
@@ -101,7 +101,7 @@ const Index: FC = () => {
         queryNextOne(page);
       })
       .catch((ex) => {
-        console.log('ex: ', ex);
+        console.error('revisionAudit reject error: ', ex);
       })
       .finally(() => {
         setIsLoading(false);
