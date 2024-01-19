@@ -334,7 +334,6 @@ const TagSelector: FC<IProps> = ({
     }
   }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
 
-  console.log('focusState===', focusState);
   return (
     <div ref={containerRef} className="position-relative">
       <div

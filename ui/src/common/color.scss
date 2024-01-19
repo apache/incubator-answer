@@ -12,6 +12,8 @@
   --an-white: #fff;
   --an-inbox-warning:#fff3cd80;
   --an-f5: #f5f5f5;
+  --an-answer-item-border-top: rgba(0, 0, 0, .125);
+  --an-answer-inbox-nav-border-top: var(--bs-border-color);
 }
 
 
@@ -27,6 +29,8 @@
     --an-white: #000;
     --an-inbox-warning:#38363180;
     --an-f5: var(--bs-body-bg);
+    --an-answer-item-border-top: var(--bs-border-color);
+    --an-answer-inbox-nav-border-top: var(--bs-border-color);
  }
 
 [data-bs-theme="dark"] {
