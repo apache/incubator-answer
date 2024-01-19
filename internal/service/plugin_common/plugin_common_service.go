@@ -22,8 +22,12 @@ package plugin_common
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/repo/search_sync"
+
+	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -31,8 +35,6 @@ import (
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/config"
 	"github.com/apache/incubator-answer/plugin"
-	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 type PluginConfigRepo interface {
@@ -78,6 +80,16 @@ func NewPluginCommonService(
 			})
 			if err != nil {
 				log.Errorf("parse plugin config failed: %s %v", pluginConfig.PluginSlugName, err)
+			}
+
+			err = plugin.CallCache(func(cache plugin.Cache) error {
+				if cache.Info().SlugName == pluginConfig.PluginSlugName {
+					data.Cache = cache
+				}
+				return nil
+			})
+			if err != nil {
+				log.Errorf("parse plugin cache failed: %s %v", pluginConfig.PluginSlugName, err)
 			}
 		}
 	}
