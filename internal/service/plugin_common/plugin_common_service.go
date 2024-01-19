@@ -81,16 +81,14 @@ func NewPluginCommonService(
 			if err != nil {
 				log.Errorf("parse plugin config failed: %s %v", pluginConfig.PluginSlugName, err)
 			}
+		}
 
-			err = plugin.CallCache(func(cache plugin.Cache) error {
-				if cache.Info().SlugName == pluginConfig.PluginSlugName {
-					data.Cache = cache
-				}
-				return nil
-			})
-			if err != nil {
-				log.Errorf("parse plugin cache failed: %s %v", pluginConfig.PluginSlugName, err)
-			}
+		err = plugin.CallCache(func(cache plugin.Cache) error {
+			data.Cache = cache
+			return nil
+		})
+		if err != nil {
+			log.Errorf("parse plugin cache failed: %v", err)
 		}
 	}
 
