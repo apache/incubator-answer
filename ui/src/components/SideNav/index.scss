@@ -34,11 +34,11 @@
     color: var(--an-side-nav-link);
   }
   .nav-link:hover {
-    color: black;
+    color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-100);
   }
   .nav-link.active {
-    color: black;
+    color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-200);
   }
   .side-nav-right-line {

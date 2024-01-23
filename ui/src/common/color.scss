@@ -15,6 +15,11 @@
   --an-answer-item-border-top: rgba(0, 0, 0, .125);
   --an-answer-inbox-nav-border-top: var(--bs-border-color);
   --an-comment-item-border-bottom: var(--bs-colors-gray-200);
+  --an-editor-toolbar-hover: #f8f9fa;
+  --ans-editor-toolbar-focus: #dae0e5;
+  --an-editor-placeholder-color: #6c757d;
+  --an-side-nav-link-hover-color: black;
+  --an-invite-answer-item-active: #e9ecef;
 }
 
 
@@ -33,13 +38,18 @@
     --an-answer-item-border-top: var(--bs-border-color);
     --an-answer-inbox-nav-border-top: var(--bs-border-color);
     --an-comment-item-border-bottom: var(--bs-border-color);
+    --an-editor-toolbar-hover: var(--bs-tertiary-bg);
+    --ans-editor-toolbar-focus: var(--bs-tertiary-bg);
+    --an-editor-placeholder-color: var(--bs-body-color);
+    --an-side-nav-link-hover-color: var(--bs-body-color);
+    --an-invite-answer-item-active: var(--bs-tertiary-bg);
  }
 
 [data-bs-theme="dark"] {
   .link-dark {
     color: rgba(var(--bs-emphasis-color-rgb),0.8)!important;
   }
-  /** editor **/
+  /** CodeMirror **/
 
   .CodeMirror {
     background: var(--bs-body-bg);
@@ -51,6 +61,9 @@
   .cm-header, .cm-link, .cm-url {
     color: var(--bs-body-color);
   }
+  div.CodeMirror-selected { background: rgba(127, 190, 244, 0.4); }
+  .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: rgba(84,174,255,0.4); }
+  .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: rgba(84,174,255,0.4); }
 
   .bg-light {
     background-color: rgba(0, 0, 0, 0.5) !important;
@@ -59,13 +72,14 @@
     color: #000 !important;
     background-color: RGBA(255, 255, 255, var(--bs-bg-opacity, 1)) !important;
   }
+  /** side nav **/
   #sideNav {
     .nav-link:hover, .nav-link.active {
-      color: var(--bs-body-color) !important;
       background-color: #2b3035 !important;
     }
   }
 
+  /** tag **/
   .badge-tag {
     background: rgba($blue-900, 0.5);
     color: $blue-300;
@@ -74,7 +88,6 @@
       background: $blue-900;
     }
   }
-
   .badge-tag-required {
     background: $gray-800;
     color:$gray-300;
