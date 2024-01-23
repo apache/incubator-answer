@@ -35,7 +35,7 @@ const Index: FC<Props> = ({ data }) => {
           {data.msg.indexOf('http') > -1 ? (
             <p>
               {data.description}{' '}
-              <a href={data.msg} style={{ color: '#055160' }}>
+              <a href={data.msg} className="alert-exist">
                 <strong>{t('question_detail.show_exist')}</strong>
               </a>
             </p>
