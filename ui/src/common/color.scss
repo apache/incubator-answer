@@ -20,6 +20,7 @@
   --an-editor-placeholder-color: #6c757d;
   --an-side-nav-link-hover-color: black;
   --an-invite-answer-item-active: #e9ecef;
+  --an-alert-exist-color: #055160;
 }
 
 
@@ -43,6 +44,7 @@
     --an-editor-placeholder-color: var(--bs-body-color);
     --an-side-nav-link-hover-color: var(--bs-body-color);
     --an-invite-answer-item-active: var(--bs-tertiary-bg);
+    --an-alert-exist-color: #60cee4;
  }
 
 [data-bs-theme="dark"] {
