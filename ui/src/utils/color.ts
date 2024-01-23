@@ -58,5 +58,5 @@ export const shiftColor = (color, weight) => {
   if (weight > 0) {
     return shadeColor(color, weight);
   }
-  return tintColor(color, weight);
+  return tintColor(color, -weight);
 };

@@ -41,20 +41,27 @@ const ActionBar = ({
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
 
   return (
-    <div className="d-flex justify-content-between small">
-      <div className="d-flex align-items-center link-secondary">
+    <div className="d-flex justify-content-between flex-wrap small">
+      <div className="d-flex align-items-center flex-wrap link-secondary">
         {userStatus !== 'deleted' ? (
-          <Link to={`/users/${username}`}>{nickName}</Link>
+          <Link
+            to={`/users/${username}`}
+            className="name-ellipsis"
+            style={{ maxWidth: '200px' }}>
+            {nickName}
+          </Link>
         ) : (
           <span>{nickName}</span>
         )}
         <span className="mx-1">•</span>
-        <FormatTime time={createdAt} className="me-3" />
+        <FormatTime time={createdAt} className="me-3 flex-shrink-0" />
         <Button
           title={t('tip_vote')}
           variant="link"
           size="sm"
-          className={`me-3 btn-no-border p-0 ${isVote ? '' : 'link-secondary'}`}
+          className={`flex-shrink-0 me-3 btn-no-border p-0 ${
+            isVote ? '' : 'link-secondary'
+          }`}
           onClick={onVote}>
           <Icon name="hand-thumbs-up-fill" />
           {voteCount > 0 && <span className="ms-2">{voteCount}</span>}
@@ -96,11 +103,7 @@ const ActionBar = ({
         <Dropdown.Menu align="end">
           {memberActions.map((action) => {
             return (
-              <Dropdown.Item
-                key={action.name}
-                variant="link"
-                size="sm"
-                onClick={() => onAction(action)}>
+              <Dropdown.Item key={action.name} onClick={() => onAction(action)}>
                 {action.name}
               </Dropdown.Item>
             );
