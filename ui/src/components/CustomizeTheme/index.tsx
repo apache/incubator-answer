@@ -148,6 +148,10 @@ const Index: FC = () => {
                 ).hex()}, 0.8);
                 color: ${tintColor(primaryColor, 0.6).hex()};
               }
+              [data-bs-theme="dark"] .tag-selector-wrap--focus {
+                border-color: ${tintColor(primaryColor, 0.5)} !important;
+                box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), .4) !important;
+              }
             `}
         </style>
       )}

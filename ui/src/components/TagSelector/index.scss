@@ -28,8 +28,8 @@
   }
 
   .dropdown-item.active {
-    color: #212529;
-    background-color: #e9ecef;
+    color: var(--bs-body-color);
+    background-color: var(--an-invite-answer-item-active);
   }
   .hover-hand:hover {
     cursor: pointer;
