@@ -18,6 +18,7 @@
   --an-editor-toolbar-hover: #f8f9fa;
   --ans-editor-toolbar-focus: #dae0e5;
   --an-editor-placeholder-color: #6c757d;
+  --an-side-nav-link-hover-color: black;
 }
 
 
@@ -39,6 +40,7 @@
     --an-editor-toolbar-hover: var(--bs-tertiary-bg);
     --ans-editor-toolbar-focus: var(--bs-tertiary-bg);
     --an-editor-placeholder-color: var(--bs-body-color);
+    --an-side-nav-link-hover-color: var(--bs-body-color);
  }
 
 [data-bs-theme="dark"] {
@@ -71,7 +73,6 @@
   /** side nav **/
   #sideNav {
     .nav-link:hover, .nav-link.active {
-      color: var(--bs-body-color) !important;
       background-color: #2b3035 !important;
     }
   }

@@ -71,6 +71,21 @@
   // style for colored navbar
   &.theme-light {
     background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.95) 100%);
+    .nav-link {
+      color: rgba(0, 0, 0, 0.65);
+    }
+    .placeholder-search {
+      box-shadow: none;
+      color: var(--bs-body-color);
+      background-color: rgba(255, 255, 255, .2);
+      border: $border-width $border-style #dee2e6;
+      &:focus {
+        border: $border-width $border-style $border-color;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
   }
 
   .maxw-400 {
