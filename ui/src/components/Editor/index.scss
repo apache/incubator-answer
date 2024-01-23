@@ -66,10 +66,10 @@
       border-radius: 3px;
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: var(--an-editor-toolbar-hover);
       }
       &:focus {
-        background-color: #dae0e5;
+        background-color: var(--ans-editor-toolbar-focus);
       }
       &.icon-heading {
         background-position: 0px -144px;
@@ -204,7 +204,7 @@
       padding: 16px 0;
     }
     .CodeMirror-placeholder {
-      color: #6c757d;
+      color: var(--an-editor-placeholder-color);
     }
   }
 }
