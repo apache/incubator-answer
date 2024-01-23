@@ -203,14 +203,14 @@ func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx c
 				continue
 			}
 			for _, userID := range userIDs {
-				subscribersMapping[userID] = plugin.NotificationNewQuestion
+				subscribersMapping[userID] = plugin.NotificationNewQuestionFollowedTag
 			}
 		}
 
 		// 2. get all new question's followers
 		questionSubscribers := fn.GetNewQuestionSubscribers()
 		for _, subscriber := range questionSubscribers {
-			subscribersMapping[subscriber] = plugin.NotificationNewQuestionFollowedTag
+			subscribersMapping[subscriber] = plugin.NotificationNewQuestion
 		}
 
 		// 3. remove question owner
