@@ -259,7 +259,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           label={t('login_required.switch')}
           checked={data.login_required.value}
           onChange={(e) => {
-            console.log(e.target.checked);
             changeCallback({
               login_required: {
                 value: e.target.checked,

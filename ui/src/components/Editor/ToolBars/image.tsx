@@ -117,7 +117,7 @@ const Image = ({ editorInstance }) => {
 
     editor.replaceSelection(loadingText);
     const urls = await upload(fileList).catch((ex) => {
-      console.log('ex: ', ex);
+      console.error('upload file error: ', ex);
     });
 
     const text: string[] = [];

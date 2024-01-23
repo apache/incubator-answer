@@ -12,6 +12,9 @@
   --an-white: #fff;
   --an-inbox-warning:#fff3cd80;
   --an-f5: #f5f5f5;
+  --an-answer-item-border-top: rgba(0, 0, 0, .125);
+  --an-answer-inbox-nav-border-top: var(--bs-border-color);
+  --an-comment-item-border-bottom: var(--bs-colors-gray-200);
 }
 
 
@@ -27,6 +30,9 @@
     --an-white: #000;
     --an-inbox-warning:#38363180;
     --an-f5: var(--bs-body-bg);
+    --an-answer-item-border-top: var(--bs-border-color);
+    --an-answer-inbox-nav-border-top: var(--bs-border-color);
+    --an-comment-item-border-bottom: var(--bs-border-color);
  }
 
 [data-bs-theme="dark"] {
@@ -54,8 +60,39 @@
     background-color: RGBA(255, 255, 255, var(--bs-bg-opacity, 1)) !important;
   }
   #sideNav {
-    .side-nav-right-line {
-      background-color: var(--bs-border-color);
+    .nav-link:hover, .nav-link.active {
+      color: var(--bs-body-color) !important;
+      background-color: #2b3035 !important;
     }
   }
+
+  .badge-tag {
+    background: rgba($blue-900, 0.5);
+    color: $blue-300;
+    &:hover {
+      color: $blue-300;
+      background: $blue-900;
+    }
+  }
+
+  .badge-tag-required {
+    background: $gray-800;
+    color:$gray-300;
+    border: 1px solid $gray-600;
+    &:hover {
+      color: $gray-300;
+      background: $gray-700;
+    }
+  }
+  .badge-tag-reserved {
+    color: $orange-300;
+    background: rgba($orange-900, 0.5);
+    border: 1px solid $orange-900;
+    &:hover {
+      color: $orange-300;
+      background: rgba($orange-900, 1);
+    }
+  }
+
+
 }

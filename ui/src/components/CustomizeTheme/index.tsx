@@ -58,6 +58,12 @@ const Index: FC = () => {
                   .round()
                   .array()}
               }
+              :root[data-bs-theme='dark'] {
+                --bs-link-hover-color: ${shiftColor(primaryColor, -0.8).hex()};
+                --bs-link-hover-color-rgb: ${shiftColor(primaryColor, -0.8)
+                  .round()
+                  .array()};
+              }
               .nav-pills {
                 --bs-nav-pills-link-active-bg: ${primaryColor.hex()};
               }
@@ -127,6 +133,20 @@ const Index: FC = () => {
               }
               .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
                  background-color: ${tintColor(primaryColor, 0.2).hex()};
+              }
+              [data-bs-theme="dark"] .badge-tag:not(.badge-tag-reserved):not(.badge-tag-required) {
+                background-color: rgba(${shadeColor(primaryColor, 0.2)
+                  .rgb()
+                  .array()
+                  .join(',')}, .5);
+                color: ${tintColor(primaryColor, 0.4).hex()};
+              }
+              [data-bs-theme="dark"] .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
+                background-color: rgba(${tintColor(
+                  primaryColor,
+                  0.4,
+                ).hex()}, 0.8);
+                color: ${tintColor(primaryColor, 0.6).hex()};
               }
             `}
         </style>

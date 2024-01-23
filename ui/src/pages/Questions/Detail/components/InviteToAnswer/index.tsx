@@ -93,7 +93,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
           if (ex.isError) {
             iaCaptcha.handleCaptchaError(ex.list);
           }
-          console.log('ex: ', ex);
+          console.error('putInviteUser error: ', ex);
         });
     });
   };

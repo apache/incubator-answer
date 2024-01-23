@@ -128,13 +128,11 @@ const TagSelector: FC<IProps> = ({
   };
 
   const handleTagSelectorFocus = () => {
-    console.log('foucsed 555');
     setFocusState(true);
     inputRef.current?.focus();
   };
 
   const handleTagSelectorBlur = () => {
-    console.log('tab key pressed666');
     setFocusState(false);
     setCurrentIndex(0);
     handleMenuShow(false);
@@ -221,7 +219,6 @@ const TagSelector: FC<IProps> = ({
     e.stopPropagation();
     const { keyCode } = e;
     if (keyCode === 9) {
-      console.log('tab key pressed');
       handleTagSelectorBlur();
       return;
     }
@@ -334,7 +331,6 @@ const TagSelector: FC<IProps> = ({
     }
   }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
 
-  console.log('focusState===', focusState);
   return (
     <div ref={containerRef} className="position-relative">
       <div

@@ -144,10 +144,9 @@ export const pullLoggedUser = async (isInitPull = false) => {
   pluTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo({
     passingError: true,
-  }).catch((ex) => {
+  }).catch(() => {
     pluTimestamp = 0;
     loggedUserInfoStore.getState().clear(false);
-    console.error(ex);
   });
   if (loggedUserInfo) {
     loggedUserInfoStore.getState().update(loggedUserInfo);
@@ -424,7 +423,6 @@ export const googleSnapshotRedirect = () => {
   if (searchStr.indexOf('cache:') === 0 && searchStr.includes(':http')) {
     const redirectUrl = `http${searchStr.split(':http')[1]}`;
     const pathname = redirectUrl.replace(new URL(redirectUrl).origin, '');
-    console.log('googleSnapshotUrl', window.location.href);
 
     gr.ok = false;
     gr.redirect = pathname || '/';
