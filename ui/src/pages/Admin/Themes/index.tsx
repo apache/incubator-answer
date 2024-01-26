@@ -82,13 +82,31 @@ const Index: FC = () => {
       'ui:widget': 'select',
     },
     primary_color: {
+      'ui:widget': 'input_group',
       'ui:options': {
         inputType: 'color',
+        suffixBtnOptions: {
+          text: '',
+          variant: 'outline-secondary',
+          iconName: 'arrow-counterclockwise',
+          actionType: 'click',
+          title: t('reset', { keyPrefix: 'btns' }),
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          clickCallback: () => resetPrimaryScheme(),
+        },
       },
     },
   };
+
   const [formData, setFormData] = useState(initFormData(schema));
   const { update: updateThemeSetting } = themeSettingStore((_) => _);
+
+  const resetPrimaryScheme = () => {
+    const formMeta = { ...formData };
+    formMeta.primary_color.value = '#0033FF';
+    setFormData({ ...formMeta });
+  };
+
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();

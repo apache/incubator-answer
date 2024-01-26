@@ -63,7 +63,7 @@ const Index: FC<Props> = ({
       onChange={handleChange}
       disabled={readOnly}
       isInvalid={fieldObject?.isInvalid}
-      style={type === 'color' ? { width: '6rem' } : {}}
+      style={type === 'color' ? { width: '100px', flex: 'none' } : {}}
     />
   );
 };
