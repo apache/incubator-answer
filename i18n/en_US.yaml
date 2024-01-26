@@ -1166,6 +1166,7 @@ ui:
     dark: Dark
     system_setting: System setting
     default: Default
+    reset: Reset
   search:
     title: Search Results
     keywords: Keywords

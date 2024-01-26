@@ -37,6 +37,7 @@ import type {
   FormRef,
   BaseUIOptions,
   FormKit,
+  InputGroupOptions,
 } from './types';
 import {
   Legend,
@@ -48,6 +49,7 @@ import {
   Textarea,
   Input,
   Button as SfButton,
+  InputGroup,
 } from './components';
 
 export * from './types';
@@ -377,7 +379,32 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
                   uiOpt && 'variant' in uiOpt ? uiOpt.variant : undefined
                 }
                 size={uiOpt && 'size' in uiOpt ? uiOpt.size : undefined}
+                title={uiOpt && 'title' in uiOpt ? uiOpt?.title : ''}
               />
+            ) : null}
+            {widget === 'input_group' ? (
+              <InputGroup
+                formKitWithContext={formKitWithContext}
+                uiOpt={uiOpt as InputGroupOptions}
+                prefixText={
+                  (uiOpt && 'prefixText' in uiOpt && uiOpt.prefixText) || ''
+                }
+                suffixText={
+                  (uiOpt && 'suffixText' in uiOpt && uiOpt.suffixText) || ''
+                }>
+                <Input
+                  type={
+                    uiOpt && 'inputType' in uiOpt ? uiOpt.inputType : 'text'
+                  }
+                  placeholder={
+                    uiOpt && 'placeholder' in uiOpt ? uiOpt.placeholder : ''
+                  }
+                  fieldName={key}
+                  onChange={onChange}
+                  formData={formData}
+                  readOnly={readOnly}
+                />
+              </InputGroup>
             ) : null}
             {/* Unified handling of `Feedback` and `Text` */}
             <Form.Control.Feedback type="invalid">
@@ -397,6 +424,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
     </Form>
   );
 };
+
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   const props: JSONSchema['properties'] = schema?.properties || {};

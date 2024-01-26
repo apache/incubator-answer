@@ -112,10 +112,20 @@ export interface TextareaOptions extends BaseUIOptions {
 
 export interface ButtonOptions extends BaseUIOptions {
   text: string;
-  icon?: string;
+  iconName?: string;
   action?: UIAction;
+  actionType: 'click' | 'submit';
   variant?: ButtonProps['variant'];
   size?: ButtonProps['size'];
+  title?: string;
+  clickCallback?: () => void;
+}
+
+export interface InputGroupOptions extends InputOptions {
+  prefixText?: string;
+  suffixText?: string;
+  prefixBtnOptions?: ButtonOptions;
+  suffixBtnOptions?: ButtonOptions;
 }
 
 export type UIOptions =
@@ -127,7 +137,8 @@ export type UIOptions =
   | CheckboxOptions
   | RadioOptions
   | TextareaOptions
-  | ButtonOptions;
+  | ButtonOptions
+  | InputGroupOptions;
 
 export type UIWidget =
   | 'textarea'
@@ -139,7 +150,8 @@ export type UIWidget =
   | 'timezone'
   | 'switch'
   | 'legend'
-  | 'button';
+  | 'button'
+  | 'input_group';
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;
