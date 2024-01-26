@@ -21,15 +21,17 @@ package notification
 
 import (
 	"context"
+	"strings"
+	"time"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/pkg/display"
 	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/plugin"
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
-	"strings"
-	"time"
 )
 
 type NewQuestionSubscriber struct {
@@ -220,13 +222,15 @@ func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx c
 
 		// 4. send notification
 		for subscriberUserID, notificationType := range subscribersMapping {
-			pluginNotificationMsg.ReceiverUserID = subscriberUserID
-			pluginNotificationMsg.Type = notificationType
+			newMsg := plugin.NotificationMessage{}
+			_ = copier.Copy(&newMsg, pluginNotificationMsg)
+			newMsg.ReceiverUserID = subscriberUserID
+			newMsg.Type = notificationType
 
 			if len(subscriberUserID) > 0 {
 				userInfo, _, _ := ns.userRepo.GetByUserID(ctx, subscriberUserID)
 				if userInfo != nil {
-					pluginNotificationMsg.ReceiverLang = userInfo.Language
+					newMsg.ReceiverLang = userInfo.Language
 				}
 			}
 
@@ -236,9 +240,9 @@ func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx c
 				return nil
 			}
 			if exist {
-				pluginNotificationMsg.ReceiverExternalID = userInfo.ExternalID
+				newMsg.ReceiverExternalID = userInfo.ExternalID
 			}
-			fn.Notify(pluginNotificationMsg)
+			fn.Notify(newMsg)
 		}
 		return nil
 	})

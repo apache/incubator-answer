@@ -52,7 +52,7 @@ type Notification interface {
 	GetNewQuestionSubscribers() (userIDs []string)
 
 	// Notify sends a notification to the user
-	Notify(msg *NotificationMessage)
+	Notify(msg NotificationMessage)
 }
 
 type NotificationMessage struct {
