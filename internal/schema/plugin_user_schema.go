@@ -55,9 +55,11 @@ func (g *GetUserPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plu
 			Required:    field.Required,
 			Value:       field.Value,
 			UIOptions: ConfigFieldUIOptions{
-				Rows:      field.UIOptions.Rows,
-				InputType: string(field.UIOptions.InputType),
-				Variant:   field.UIOptions.Variant,
+				Rows:           field.UIOptions.Rows,
+				InputType:      string(field.UIOptions.InputType),
+				Variant:        field.UIOptions.Variant,
+				ClassName:      field.UIOptions.ClassName,
+				FieldClassName: field.UIOptions.FieldClassName,
 			},
 		}
 		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)

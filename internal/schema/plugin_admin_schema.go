@@ -78,9 +78,11 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 			Required:    field.Required,
 			Value:       field.Value,
 			UIOptions: ConfigFieldUIOptions{
-				Rows:      field.UIOptions.Rows,
-				InputType: string(field.UIOptions.InputType),
-				Variant:   field.UIOptions.Variant,
+				Rows:           field.UIOptions.Rows,
+				InputType:      string(field.UIOptions.InputType),
+				Variant:        field.UIOptions.Variant,
+				ClassName:      field.UIOptions.ClassName,
+				FieldClassName: field.UIOptions.FieldClassName,
 			},
 		}
 		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)
@@ -128,13 +130,15 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder string          `json:"placeholder,omitempty"`
-	Rows        string          `json:"rows,omitempty"`
-	InputType   string          `json:"input_type,omitempty"`
-	Label       string          `json:"label,omitempty"`
-	Action      *UIOptionAction `json:"action,omitempty"`
-	Variant     string          `json:"variant,omitempty"`
-	Text        string          `json:"text,omitempty"`
+	Placeholder    string          `json:"placeholder,omitempty"`
+	Rows           string          `json:"rows,omitempty"`
+	InputType      string          `json:"input_type,omitempty"`
+	Label          string          `json:"label,omitempty"`
+	Action         *UIOptionAction `json:"action,omitempty"`
+	Variant        string          `json:"variant,omitempty"`
+	Text           string          `json:"text,omitempty"`
+	ClassName      string          `json:"class_name,omitempty"`
+	FieldClassName string          `json:"field_class_name,omitempty"`
 }
 
 type ConfigFieldOption struct {
