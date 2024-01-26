@@ -285,7 +285,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
             {/* Uniform processing `label` */}
             {title && !uiSimplify ? <Form.Label>{title}</Form.Label> : null}
             {/* Handling of individual specific controls */}
-            {widget === 'legend' ? <Legend title={title} /> : null}
+            {widget === 'legend' ? (
+              <Legend title={title} className={String(uiOpt?.className)} />
+            ) : null}
             {widget === 'select' ? (
               <Select
                 desc={description}
