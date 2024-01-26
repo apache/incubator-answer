@@ -103,8 +103,8 @@ const QuestionList: FC<Props> = ({
                     {li.status === 2 ? ` [${t('closed')}]` : ''}
                   </NavLink>
                 </h5>
-                <div className="d-flex flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
-                  <div className="d-flex">
+                <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
+                  <div className="d-flex flex-wrap me-0 me-md-3">
                     <BaseUserCard
                       data={li.operator}
                       showAvatar={false}
@@ -113,7 +113,7 @@ const QuestionList: FC<Props> = ({
                     •
                     <FormatTime
                       time={li.operated_at}
-                      className="text-secondary ms-1"
+                      className="text-secondary ms-1 flex-shrink-0"
                       preFix={t(li.operation_type)}
                     />
                   </div>
@@ -124,7 +124,7 @@ const QuestionList: FC<Props> = ({
                       views: li.view_count,
                     }}
                     isAccepted={li.accepted_answer_id >= 1}
-                    className="ms-0 ms-md-3 mt-2 mt-md-0"
+                    className="mt-2 mt-md-0"
                   />
                 </div>
                 <div className="question-tags m-n1">
