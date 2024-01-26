@@ -1002,10 +1002,10 @@ ui:
         label: Location
         placeholder: "City, Country"
     notification:
-      heading: Notifications
-      email: Email
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Email notifications
+        label: Inbox notifications
         description: Answers to your questions, comments, invites, and more.
       all_new_question:
         label: All new questions
