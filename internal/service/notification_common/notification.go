@@ -22,10 +22,11 @@ package notificationcommon
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/apache/incubator-answer/internal/service/user_external_login"
 	"github.com/apache/incubator-answer/pkg/display"
-	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -255,7 +256,7 @@ func (ns *NotificationCommon) syncNotificationToPlugin(ctx context.Context, objI
 
 	objInfo.QuestionID = uid.DeShortID(objInfo.QuestionID)
 	objInfo.AnswerID = uid.DeShortID(objInfo.AnswerID)
-	pluginNotificationMsg := &plugin.NotificationMessage{
+	pluginNotificationMsg := plugin.NotificationMessage{
 		Type:           plugin.NotificationType(msg.NotificationAction),
 		ReceiverUserID: msg.ReceiverUserID,
 		TriggerUserID:  msg.TriggerUserID,
