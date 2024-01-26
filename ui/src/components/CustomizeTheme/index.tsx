@@ -59,8 +59,18 @@ const Index: FC = () => {
                   .array()}
               }
               :root[data-bs-theme='dark'] {
-                --bs-link-hover-color: ${shiftColor(primaryColor, -0.8).hex()};
-                --bs-link-hover-color-rgb: ${shiftColor(primaryColor, -0.8)
+                --bs-link-color: ${tintColor(primaryColor, 0.6).hex()};
+                --bs-link-color-rgb: ${tintColor(primaryColor, 0.6)
+                  .round()
+                  .array()};
+                --bs-link-hover-color: ${shiftColor(
+                  tintColor(primaryColor, 0.6),
+                  -0.8,
+                ).hex()};
+                --bs-link-hover-color-rgb: ${shiftColor(
+                  tintColor(primaryColor, 0.6),
+                  -0.8,
+                )
                   .round()
                   .array()};
               }
@@ -115,6 +125,12 @@ const Index: FC = () => {
                   0.5,
                 )}%27/%3e%3c/svg%3e");
               }
+              .tag-selector-wrap--focus {
+                box-shadow: 0 0 0 0.25rem ${primaryColor
+                  .fade(0.75)
+                  .string()} !important;
+                border-color: ${tintColor(primaryColor, 0.5)} !important;
+              }
               .dropdown-menu {
                 --bs-dropdown-link-active-bg: rgb(var(--bs-primary-rgb));
               }
@@ -134,6 +150,7 @@ const Index: FC = () => {
               .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
                  background-color: ${tintColor(primaryColor, 0.2).hex()};
               }
+
               [data-bs-theme="dark"] .badge-tag:not(.badge-tag-reserved):not(.badge-tag-required) {
                 background-color: rgba(${shadeColor(primaryColor, 0.2)
                   .rgb()
@@ -147,10 +164,6 @@ const Index: FC = () => {
                   0.4,
                 ).hex()}, 0.8);
                 color: ${tintColor(primaryColor, 0.6).hex()};
-              }
-              [data-bs-theme="dark"] .tag-selector-wrap--focus {
-                border-color: ${tintColor(primaryColor, 0.5)} !important;
-                box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), .4) !important;
               }
             `}
         </style>
