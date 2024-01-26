@@ -260,16 +260,19 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
           uiSchema?.[key] || {};
         formData ||= {};
         const fieldState = formData[key];
+        if (uiOpt?.class_name) {
+          uiOpt.className = uiOpt.class_name;
+        }
 
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
-        let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
+        let groupClassName: BaseUIOptions['field_class_name'] = uiOpt?.simplify
           ? 'mb-2'
           : 'mb-3';
         if (widget === 'legend') {
           groupClassName = 'mb-0';
         }
-        if (uiOpt?.fieldClassName) {
-          groupClassName = uiOpt.fieldClassName;
+        if (uiOpt?.field_class_name) {
+          groupClassName = uiOpt.field_class_name;
         }
 
         const readOnly = uiOpt?.readOnly || false;
@@ -285,7 +288,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
             {/* Uniform processing `label` */}
             {title && !uiSimplify ? <Form.Label>{title}</Form.Label> : null}
             {/* Handling of individual specific controls */}
-            {widget === 'legend' ? <Legend title={title} /> : null}
+            {widget === 'legend' ? (
+              <Legend title={title} className={String(uiOpt?.className)} />
+            ) : null}
             {widget === 'select' ? (
               <Select
                 desc={description}
