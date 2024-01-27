@@ -416,7 +416,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 
 	// get question
 	var (
-		question *entity.Question
+		question = new(entity.Question)
 	)
 	exist, err = ar.data.DB.Context(ctx).Where("id = ?", answer.QuestionID).Get(&question)
 	if err != nil {
