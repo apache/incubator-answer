@@ -153,13 +153,10 @@ func (ps *PluginCommonService) initPluginData() {
 			}
 		}
 
-		err = plugin.CallCache(func(cache plugin.Cache) error {
-			data.Cache = cache
+		_ = plugin.CallCache(func(cache plugin.Cache) error {
+			ps.data.Cache = cache
 			return nil
 		})
-		if err != nil {
-			log.Errorf("parse plugin cache failed: %v", err)
-		}
 	}
 
 	// init plugin user config
