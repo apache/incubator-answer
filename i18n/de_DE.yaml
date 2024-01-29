@@ -75,13 +75,16 @@ backend:
   privilege:
     level_1:
       description:
-        other: Stufe 1 (weniger Ansehen erforderlich für privates Team, Gruppe)
+        other: Level 1 (less reputation required for private team, group)
     level_2:
       description:
-        other: Stufe 2 (geringes Ansehen für Startup-Community erforderlich)
+        other: Level 2 (low reputation required for startup community)
     level_3:
       description:
-        other: Stufe 3 (hohes Ansehen für reife Gemeinschaft erforderlich)
+        other: Level 3 (high reputation required for mature community)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: Fragen stellen
     rank_answer_add_label:
@@ -179,9 +182,9 @@ backend:
       captcha_verification_failed:
         other: Captcha ist falsch.
       disallow_follow:
-        other: Es ist dir nicht erlaubt, zu folgen.
+        other: Es ist dir nicht erlaubt zu folgen.
       disallow_vote:
-        other: Du darfst nicht abstimmen.
+        other: Es ist dir nicht erlaubt abzustimmen.
       disallow_vote_your_self:
         other: Du kannst nicht für deinen eigenen Beitrag stimmen.
       not_found:
@@ -202,7 +205,7 @@ backend:
       cannot_deleted:
         other: Keine Berechtigung zum Löschen.
       cannot_close:
-        other: Keine Erlaubnis zum Schließen.
+        other: Keine Berechtigung zum Schließen.
       cannot_update:
         other: Keine Berechtigung zum Aktualisieren.
     rank:
@@ -214,9 +217,9 @@ backend:
         other: Dafür brauchst du mindestens {{.Rank}} Ansehen.
     report:
       handle_failed:
-        other: Berichtshandle fehlgeschlagen.
+        other: Bearbeiten der Meldung fehlgeschlagen.
       not_found:
-        other: Report nicht gefunden.
+        other: Meldung nicht gefunden.
     tag:
       already_exist:
         other: Tag existiert bereits.
@@ -242,7 +245,7 @@ backend:
         other: Design nicht gefunden.
     revision:
       review_underway:
-        other: Kann momentan nicht bearbeiten, es gibt eine Version in der Warteschlange.
+        other: Kann derzeit nicht bearbeitet werden, es existiert eine Version in der Überprüfungswarteschlange.
       no_permission:
         other: Keine Berechtigung zum Überarbeiten.
     user:
@@ -297,7 +300,7 @@ backend:
   reason:
     spam:
       name:
-        other: Spam
+        other: spam
       desc:
         other: Dieser Beitrag ist eine Werbung oder Vandalismus. Er ist nicht nützlich oder relevant für das aktuelle Thema.
     rude_or_abusive:
@@ -326,7 +329,7 @@ backend:
       name:
         other: anderer Grund
       desc:
-        other: Dieser Posten erfordert die Aufmerksamkeit des Personals aus einem anderen, oben nicht genannten Grund.
+        other: Dieser Beitrag erfordert die Aufmerksamkeit der Temmitglieder aus einem anderen, oben nicht genannten Grund.
       placeholder:
         other: Lass uns wissen, worüber du dir Sorgen machst
     community_specific:
@@ -433,7 +436,7 @@ backend:
       title:
         other: "[{{.SiteName}}] Bestätige deine neue E-Mail-Adresse"
       body:
-        other: "Bestätige deine neue E-Mail-Adresse für {{.SiteName}}, indem du auf den folgenden Link klickst:<br> <a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}} </a><br><br>\n\nWenn du diese Änderung nicht beantragt hast, ignoriere bitte diese E-Mail."
+        other: "Bestätige deine neue E-Mail-Adresse für {{.SiteName}}, indem du auf den folgenden Link klickst:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nWenn du diese Änderung nicht beantragt hast, ignoriere bitte diese E-Mail."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} hat deine Frage beantwortet"
@@ -448,7 +451,7 @@ backend:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} hat deinen Beitrag kommentiert"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Auf {{.SiteName}} ansehen</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbstellen</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Auf {{.SiteName}} ansehen</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbestellen</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] Neue Frage: {{.QuestionTitle}}"
@@ -487,7 +490,7 @@ ui:
   how_to_format:
     title: Wie man formatiert
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">um Links zu erstellen</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put gibt zurück zwischen Absätzen</p></li><li><p class="mb-2"><em>_italic_</em> oder **<strong>fett</strong>**</p></li><li><p class="mb-2">Code um 4 Leerzeichen einrücken</p></li><li><p class="mb-2">Zitat durch Platzieren von <code>&gt;</code> am Zeilenanfang</p></li><li><p class="mb-2">Backtick-Escapes <code>`like _this_`</code></p></li><li><p class="mb-2">erzeuge Codezäune mit Backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code hier<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">um Links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Titel](https://url.com)</code></pre></li><li><p class="mb-2">Zwischen den Absätzen Zeilenumbrüche einfügen</p></li><li><p class="mb-2"><em>_italic_</em> oder **<strong>fett</strong>**</p></li><li><p class="mb-2">Code um 4 Leerzeichen einrücken</p></li><li><p class="mb-2">Zitat durch Setzen von <code>&gt; </code> am Anfang der Zeile</p></li><li><p class="mb-2">Backtick-Escapes <code>`wie _this_`</code></p></li><li><p class="mb-2">Codeumrandungen mit Backticks <code>`</code></p><pre class="mb-0"><code>`<br/>Code hier<br/>``</code></pre></li></ul>
   pagination:
     prev: Zurück
     next: Weiter
@@ -516,7 +519,7 @@ ui:
     change_email: E-Mails ändern
     install: Installation beantworten
     upgrade: Antwort-Upgrade
-    maintenance: Website-Pflege
+    maintenance: Website-Wartung
     users: Benutzer
     oauth_callback: In Bearbeitung
     http_404: HTTP-Fehler 404
@@ -529,7 +532,7 @@ ui:
     achievement: Erfolge
     new_alerts: Neue Benachrichtigungen
     all_read: Alle als gelesen markieren
-    show_more: Mehr Anzeigen
+    show_more: Mehr anzeigen
     someone: Jemand
     inbox_type:
       all: Alle
@@ -553,7 +556,7 @@ ui:
       sequence_diagram: Sequenzdiagramm
       class_diagram: Klassen Diagramm
       state_diagram: Zustandsdiagramm
-      entity_relationship_diagram: Entity-Relationship-Diagramm
+      entity_relationship_diagram: Entitätsbeziehungsdiagramm
       user_defined_diagram: Benutzerdefiniertes Diagramm
       gantt_chart: Gantt-Diagramm
       pie_chart: Kuchendiagramm
@@ -601,7 +604,7 @@ ui:
             msg:
               empty: Datei darf nicht leer sein.
               only_image: Nur Bilddateien sind erlaubt.
-              max_size: Die Dateigröße darf 4MB nicht überschreiten.
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: Beschreibung
       tab_url: Bild URL
@@ -681,6 +684,12 @@ ui:
             character: URL-Slug enthält nicht erlaubten Zeichensatz.
         desc:
           label: Beschreibung
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: Abbrechen
     btn_submit: Senden
     btn_post: Neuen Tag erstellen
@@ -708,21 +717,6 @@ ui:
     title: Tag bearbeiten
     default_reason: Tag bearbeiten
     default_first_reason: Schlagwort hinzufügen
-    form:
-      fields:
-        revision:
-          label: Revision
-        display_name:
-          label: Anzeigename
-        slug_name:
-          label: URL-Slug
-          info: 'Muss den Zeichensatz "a-z", "0-9", "+ # - ." verwenden'
-        desc:
-          label: Beschreibung
-        edit_summary:
-          label: Zusammenfassung bearbeiten
-          placeholder: >-
-            Erkläre kurz deine Änderungen (korrigierte Rechtschreibung, korrigierte Grammatik, verbesserte Formatierung)
     btn_save_edits: Änderungen speichern
     btn_cancel: Stornieren
   dates:
@@ -746,7 +740,7 @@ ui:
     btn_flag: Flagge
     btn_save_edits: Änderungen speichern
     btn_cancel: Stornieren
-    show_more: Weitere Kommentare anzeigen
+    show_more: "{{count}} more comments"
     tip_question: >-
       Verwende Kommentare, um nach weiteren Informationen zu fragen oder Verbesserungen vorzuschlagen. Vermeide es, Fragen in Kommentaren zu beantworten.
     tip_answer: >-
@@ -971,10 +965,10 @@ ui:
         label: Standort
         placeholder: "Stadt, Land"
     notification:
-      heading: Benachrichtigungen
-      email: E-Mail
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Email-Benachrichtigungen
+        label: Inbox notifications
         description: Antworten auf deine Fragen, Kommentare, Einladungen und mehr.
       all_new_question:
         label: Alle neuen Fragen
@@ -1029,7 +1023,7 @@ ui:
     answers: antworten
   invite_to_answer:
     title: Menschen gefragt
-    desc: Lade Leute ein, von denen du denkst, dass sie die Antwort wissen könnten.
+    desc: Select people who you think might know the answer.
     invite: Zur Antwort einladen
     add: Personen hinzufügen
     search: Personen suchen
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Themen
         text: Wähle ein bestehendes Thema aus.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Navbar-Stil
-        text: Wähle ein bestehendes Thema aus.
+        label: Navbar style
       primary_color:
-        label: Primärfarbe
+        label: Primary color
         text: Ändere die Farben, die von deinen Themes verwendet werden
     css_and_html:
       page_title: CSS and HTML

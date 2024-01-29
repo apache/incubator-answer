@@ -82,6 +82,9 @@ backend:
     level_3:
       description:
         other: Level 3 (high reputation required for mature community)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
@@ -681,6 +684,12 @@ ui:
             character: URL slug contains unallowed character set.
         desc:
           label: Description
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: Cancel
     btn_submit: Submit
     btn_post: Post new tag
@@ -708,21 +717,6 @@ ui:
     title: Ubah Tag
     default_reason: Sunting tag
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: Revisi
-        display_name:
-          label: Display name
-        slug_name:
-          label: URL slug
-          info: 'Harus menggunakan set karakter "a-z", "0-9", "+ # - ."'
-        desc:
-          label: Deskripsi
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Jelaskan secara singkat perubahan yang Anda lakukan (ejaan yang diperbaiki, tata bahasa yang diperbaiki, pemformatan yang ditingkatkan)
     btn_save_edits: Simpan suntingan
     btn_cancel: Batal
   dates:
@@ -746,7 +740,7 @@ ui:
     btn_flag: Flag
     btn_save_edits: Simpan suntingan
     btn_cancel: Batal
-    show_more: Show more comments
+    show_more: "{{count}} more comments"
     tip_question: >-
       Gunakan komentar untuk meminta informasi lebih lanjut atau menyarankan perbaikan. Hindari menjawab pertanyaan di komentar.
     tip_answer: >-
@@ -971,10 +965,10 @@ ui:
         label: Location
         placeholder: "City, Country"
     notification:
-      heading: Notifications
-      email: Email
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Email notifications
+        label: Inbox notifications
         description: Answers to your questions, comments, invites, and more.
       all_new_question:
         label: All new questions
@@ -1029,7 +1023,7 @@ ui:
     answers: jawaban
   invite_to_answer:
     title: People Asked
-    desc: Invite people who you think might know the answer.
+    desc: Select people who you think might know the answer.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: Search Results
     keywords: Keywords
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Themes
         text: Select an existing theme.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Navbar style
       primary_color:
-        label: Primary Color
+        label: Primary color
         text: Modify the colors used by your themes
     css_and_html:
       page_title: CSS and HTML
