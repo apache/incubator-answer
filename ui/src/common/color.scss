@@ -1,0 +1,132 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+
+
+:root {
+  --an-side-nav-link: rgba(0, 0, 0, 0.65);
+  --an-toolbar-divider: rgba(0, 0, 0, 0.1);
+  --an-ced4da: #ced4da;
+  --an-e9ecef: #e9ecef;
+  --an-pre: #161b22;
+  --an-6c757d: #6c757d;
+  --an-212529: #212529;
+  --an-gray-300: var(--bs-gray-300);
+  --an-white: #fff;
+  --an-inbox-warning:#fff3cd80;
+  --an-f5: #f5f5f5;
+  --an-answer-item-border-top: rgba(0, 0, 0, .125);
+  --an-answer-inbox-nav-border-top: var(--bs-border-color);
+  --an-comment-item-border-bottom: var(--bs-colors-gray-200, #E9ECEF);
+  --an-editor-toolbar-hover: #f8f9fa;
+  --ans-editor-toolbar-focus: #dae0e5;
+  --an-editor-placeholder-color: #6c757d;
+  --an-side-nav-link-hover-color: black;
+  --an-invite-answer-item-active: #e9ecef;
+  --an-alert-exist-color: #055160;
+}
+
+
+[data-bs-theme="dark"] {
+    --an-side-nav-link: rgba(255, 255, 255, 0.65);
+    --an-toolbar-divider: rgba(255, 255, 255, 0.3);
+    --an-ced4da: var(--bs-border-color);
+    --an-e9ecef: #161b22;
+    --an-pre: #161b22;
+    --an-6c757d: var(--bs-body-color);
+    --an-212529: var(--bs-body-color);
+    --an-gray-300: #161b22;
+    --an-white: #000;
+    --an-inbox-warning:#38363180;
+    --an-f5: var(--bs-body-bg);
+    --an-answer-item-border-top: var(--bs-border-color);
+    --an-answer-inbox-nav-border-top: var(--bs-border-color);
+    --an-comment-item-border-bottom: var(--bs-border-color);
+    --an-editor-toolbar-hover: var(--bs-tertiary-bg);
+    --ans-editor-toolbar-focus: var(--bs-tertiary-bg);
+    --an-editor-placeholder-color: var(--bs-body-color);
+    --an-side-nav-link-hover-color: var(--bs-body-color);
+    --an-invite-answer-item-active: var(--bs-tertiary-bg);
+    --an-alert-exist-color: #60cee4;
+ }
+
+[data-bs-theme="dark"] {
+  .link-dark {
+    color: rgba(var(--bs-emphasis-color-rgb),0.8)!important;
+  }
+  /** CodeMirror **/
+
+  .CodeMirror {
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+  }
+  .CodeMirror-cursor {
+    border-left: 1px solid var(--bs-body-color);
+  }
+  .cm-header, .cm-link, .cm-url {
+    color: var(--bs-body-color);
+  }
+  div.CodeMirror-selected { background: rgba(127, 190, 244, 0.4); }
+  .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: rgba(84,174,255,0.4); }
+  .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: rgba(84,174,255,0.4); }
+
+  .bg-light {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  .text-bg-dark {
+    color: #000 !important;
+    background-color: RGBA(255, 255, 255, var(--bs-bg-opacity, 1)) !important;
+  }
+  /** side nav **/
+  #sideNav {
+    .nav-link:hover, .nav-link.active {
+      background-color: #2b3035 !important;
+    }
+  }
+
+  /** tag **/
+  .badge-tag {
+    background: rgba($blue-900, 0.5);
+    color: $blue-300;
+    &:hover {
+      color: $blue-300;
+      background: $blue-900;
+    }
+  }
+  .badge-tag-required {
+    background: $gray-800;
+    color:$gray-300;
+    border: 1px solid $gray-600;
+    &:hover {
+      color: $gray-300;
+      background: $gray-700;
+    }
+  }
+  .badge-tag-reserved {
+    color: $orange-300;
+    background: rgba($orange-900, 0.5);
+    border: 1px solid $orange-900;
+    &:hover {
+      color: $orange-300;
+      background: rgba($orange-900, 1);
+    }
+  }
+
+
+}

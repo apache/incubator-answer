@@ -58,8 +58,9 @@ export interface BaseUIOptions {
   empty?: string;
   // Will be appended to the className of the form component itself
   className?: classnames.Argument;
+  class_name?: classnames.Argument;
   // The className that will be attached to a **form field container**
-  fieldClassName?: classnames.Argument;
+  field_class_name?: classnames.Argument;
   // Make a form component render into simplified mode
   readOnly?: boolean;
   simplify?: boolean;
@@ -112,10 +113,20 @@ export interface TextareaOptions extends BaseUIOptions {
 
 export interface ButtonOptions extends BaseUIOptions {
   text: string;
-  icon?: string;
+  iconName?: string;
   action?: UIAction;
+  actionType: 'click' | 'submit';
   variant?: ButtonProps['variant'];
   size?: ButtonProps['size'];
+  title?: string;
+  clickCallback?: () => void;
+}
+
+export interface InputGroupOptions extends InputOptions {
+  prefixText?: string;
+  suffixText?: string;
+  prefixBtnOptions?: ButtonOptions;
+  suffixBtnOptions?: ButtonOptions;
 }
 
 export type UIOptions =
@@ -127,7 +138,8 @@ export type UIOptions =
   | CheckboxOptions
   | RadioOptions
   | TextareaOptions
-  | ButtonOptions;
+  | ButtonOptions
+  | InputGroupOptions;
 
 export type UIWidget =
   | 'textarea'
@@ -139,7 +151,8 @@ export type UIWidget =
   | 'timezone'
   | 'switch'
   | 'legend'
-  | 'button';
+  | 'button'
+  | 'input_group';
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;

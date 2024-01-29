@@ -49,7 +49,6 @@ func (ns *ExternalNotificationService) handleNewCommentNotification(ctx context.
 			ns.sendNewCommentNotificationEmail(ctx, msg.ReceiverUserID, msg.ReceiverEmail, msg.ReceiverLang, msg.NewCommentTemplateRawData)
 		}
 	}
-
 	return nil
 }
 

@@ -56,7 +56,7 @@ type SearchBasicCond struct {
 	// The keywords for search.
 	Words []string
 	// TagIDs is a list of tag IDs.
-	TagIDs []string
+	TagIDs [][]string
 	// The object's owner user ID.
 	UserID string
 	// The order of the search result.

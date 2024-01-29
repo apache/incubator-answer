@@ -98,8 +98,6 @@ const Index: FC = () => {
   usePageTags({
     title: pageTitle,
   });
-
-  console.log('timelineData', linkUrl);
   return (
     <div className="py-4 mb-5">
       <h5 className="mb-4">

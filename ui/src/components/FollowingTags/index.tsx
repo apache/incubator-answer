@@ -70,7 +70,7 @@ const Index: FC = () => {
           onChange={handleTagsChange}
           hiddenDescription
           hiddenCreateBtn
-          alwaysShowAddBtn
+          autoFocus
         />
       </Card.Body>
     </Card>

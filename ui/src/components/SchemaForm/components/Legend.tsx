@@ -22,9 +22,10 @@ import { Form } from 'react-bootstrap';
 
 interface Props {
   title: string;
+  className?: string | undefined;
 }
-const Index: FC<Props> = ({ title }) => {
-  return <Form.Label>{title}</Form.Label>;
+const Index: FC<Props> = ({ title, className }) => {
+  return <Form.Label className={className}>{title}</Form.Label>;
 };
 
 export default Index;

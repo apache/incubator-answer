@@ -18,12 +18,22 @@
  */
 
 .people-dropdown {
-  .dropdown-menu {
-    width: 15rem;
-  }
+  position: absolute;
+  top: 34px;
+  left: 0;
+  width: 100%;
 
   .dropdown-item.active {
-    color: #212529;
-    background-color: #e9ecef;
+    color: var(--bs-body-color);
+    background-color: var(--an-invite-answer-item-active);
+  }
+  .check-cover {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto 0;
   }
 }

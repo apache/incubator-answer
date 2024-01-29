@@ -37,6 +37,7 @@ import type {
   FormRef,
   BaseUIOptions,
   FormKit,
+  InputGroupOptions,
 } from './types';
 import {
   Legend,
@@ -48,6 +49,7 @@ import {
   Textarea,
   Input,
   Button as SfButton,
+  InputGroup,
 } from './components';
 
 export * from './types';
@@ -258,16 +260,19 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
           uiSchema?.[key] || {};
         formData ||= {};
         const fieldState = formData[key];
+        if (uiOpt?.class_name) {
+          uiOpt.className = uiOpt.class_name;
+        }
 
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
-        let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
+        let groupClassName: BaseUIOptions['field_class_name'] = uiOpt?.simplify
           ? 'mb-2'
           : 'mb-3';
         if (widget === 'legend') {
           groupClassName = 'mb-0';
         }
-        if (uiOpt?.fieldClassName) {
-          groupClassName = uiOpt.fieldClassName;
+        if (uiOpt?.field_class_name) {
+          groupClassName = uiOpt.field_class_name;
         }
 
         const readOnly = uiOpt?.readOnly || false;
@@ -283,7 +288,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
             {/* Uniform processing `label` */}
             {title && !uiSimplify ? <Form.Label>{title}</Form.Label> : null}
             {/* Handling of individual specific controls */}
-            {widget === 'legend' ? <Legend title={title} /> : null}
+            {widget === 'legend' ? (
+              <Legend title={title} className={String(uiOpt?.className)} />
+            ) : null}
             {widget === 'select' ? (
               <Select
                 desc={description}
@@ -377,7 +384,32 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
                   uiOpt && 'variant' in uiOpt ? uiOpt.variant : undefined
                 }
                 size={uiOpt && 'size' in uiOpt ? uiOpt.size : undefined}
+                title={uiOpt && 'title' in uiOpt ? uiOpt?.title : ''}
               />
+            ) : null}
+            {widget === 'input_group' ? (
+              <InputGroup
+                formKitWithContext={formKitWithContext}
+                uiOpt={uiOpt as InputGroupOptions}
+                prefixText={
+                  (uiOpt && 'prefixText' in uiOpt && uiOpt.prefixText) || ''
+                }
+                suffixText={
+                  (uiOpt && 'suffixText' in uiOpt && uiOpt.suffixText) || ''
+                }>
+                <Input
+                  type={
+                    uiOpt && 'inputType' in uiOpt ? uiOpt.inputType : 'text'
+                  }
+                  placeholder={
+                    uiOpt && 'placeholder' in uiOpt ? uiOpt.placeholder : ''
+                  }
+                  fieldName={key}
+                  onChange={onChange}
+                  formData={formData}
+                  readOnly={readOnly}
+                />
+              </InputGroup>
             ) : null}
             {/* Unified handling of `Feedback` and `Text` */}
             <Form.Control.Feedback type="invalid">
@@ -397,6 +429,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
     </Form>
   );
 };
+
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   const props: JSONSchema['properties'] = schema?.properties || {};

@@ -417,6 +417,7 @@ const Ask = () => {
                 onChange={handleTitleChange}
                 placeholder={t('form.fields.title.placeholder')}
                 autoFocus
+                contentEditable
               />
 
               <Form.Control.Feedback type="invalid">
@@ -460,7 +461,8 @@ const Ask = () => {
               <TagSelector
                 value={formData.tags.value}
                 onChange={handleTagsChange}
-                showRequiredTagText
+                showRequiredTag
+                maxTagLength={5}
               />
               <Form.Control.Feedback type="invalid">
                 {formData.tags.errorMsg}
@@ -475,6 +477,7 @@ const Ask = () => {
                   isInvalid={formData.edit_summary.isInvalid}
                   placeholder={t('form.fields.edit_summary.placeholder')}
                   onChange={handleSummaryChange}
+                  contentEditable
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.edit_summary.errorMsg}

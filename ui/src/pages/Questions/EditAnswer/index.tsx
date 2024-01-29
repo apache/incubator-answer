@@ -73,7 +73,7 @@ const Index = () => {
   const [contentChanged, setContentChanged] = useState(false);
   const editCaptcha = useCaptchaModal('edit');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (data?.info?.content) {
       setFormData({
         ...formData,
@@ -227,7 +227,7 @@ const Index = () => {
           <div className="question-content-wrap">
             <div
               ref={questionContentRef}
-              className="content position-absolute top-0 w-100 bg-white"
+              className="content position-absolute top-0 w-100"
               dangerouslySetInnerHTML={{ __html: data?.question.html }}
             />
             <div
@@ -297,6 +297,7 @@ const Index = () => {
                 defaultValue={formData.description.value}
                 isInvalid={formData.description.isInvalid}
                 placeholder={t('form.fields.edit_summary.placeholder')}
+                contentEditable
               />
               <Form.Control.Feedback type="invalid">
                 {formData.description.errorMsg}

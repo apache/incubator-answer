@@ -47,6 +47,15 @@ export interface AdminSettingsPrivilege {
   options: PrivilegeLevel[];
 }
 
+export interface AdminSettingsPrivilegeReq {
+  level: number;
+  custom_privileges?: {
+    label?: string;
+    value: number;
+    key: string;
+  }[];
+}
+
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;
   const { data, error } = useSWR<Type.AdminSettingsGeneral, Error>(
@@ -185,8 +194,6 @@ export const getPrivilegeSetting = () => {
   );
 };
 
-export const putPrivilegeSetting = (level: number) => {
-  return request.put('/answer/admin/api/setting/privileges', {
-    level,
-  });
+export const putPrivilegeSetting = (params: AdminSettingsPrivilegeReq) => {
+  return request.put('/answer/admin/api/setting/privileges', params);
 };

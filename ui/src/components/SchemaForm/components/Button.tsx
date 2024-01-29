@@ -17,31 +17,43 @@
  * under the License.
  */
 
-import React, { FC, useLayoutEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Button, ButtonProps, Spinner } from 'react-bootstrap';
 
 import { request } from '@/utils';
 import type { UIAction, FormKit } from '../types';
 import { useToast } from '@/hooks';
+import { Icon } from '@/components';
 
 interface Props {
   fieldName: string;
   text: string;
   action: UIAction | undefined;
+  actionType?: 'submit' | 'click';
+  clickCallback?: () => void;
   formKit: FormKit;
   readOnly: boolean;
   variant?: ButtonProps['variant'];
   size?: ButtonProps['size'];
+  iconName?: string;
+  nowrap?: boolean;
+  title?: string;
 }
 const Index: FC<Props> = ({
   fieldName,
   action,
+  actionType = 'submit',
   formKit,
   text = '',
   readOnly = false,
   variant = 'primary',
   size,
+  iconName = '',
+  nowrap = false,
+  clickCallback,
+  title,
 }) => {
+  console.log('Button.tsx: action:', title);
   const Toast = useToast();
   const [isLoading, setLoading] = useState(false);
   const handleToast = (msg, type: 'success' | 'danger' = 'success') => {
@@ -62,6 +74,12 @@ const Index: FC<Props> = ({
     }
   };
   const handleAction = () => {
+    if (actionType === 'click') {
+      if (typeof clickCallback === 'function') {
+        clickCallback();
+      }
+      return;
+    }
     if (!action) {
       return;
     }
@@ -87,21 +105,21 @@ const Index: FC<Props> = ({
         setLoading(false);
       });
   };
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (action?.loading?.state === 'pending') {
       setLoading(true);
     }
   }, []);
   const loadingText = action?.loading?.text || text;
   const disabled = isLoading || readOnly;
-
-  return (
-    <div className="d-flex">
+  if (nowrap) {
+    return (
       <Button
         name={fieldName}
         onClick={handleAction}
         disabled={disabled}
         size={size}
+        title={title}
         variant={variant}>
         {isLoading ? (
           <>
@@ -116,6 +134,34 @@ const Index: FC<Props> = ({
         ) : (
           text
         )}
+        {iconName && <Icon name={iconName} />}
+      </Button>
+    );
+  }
+
+  return (
+    <div className="d-flex">
+      <Button
+        name={fieldName}
+        onClick={handleAction}
+        disabled={disabled}
+        size={size}
+        title={title}
+        variant={variant}>
+        {isLoading ? (
+          <>
+            <Spinner
+              className="align-middle me-2"
+              animation="border"
+              size="sm"
+              variant={variant}
+            />
+            {loadingText}
+          </>
+        ) : (
+          text
+        )}
+        {iconName && <Icon name={iconName} />}
       </Button>
     </div>
   );

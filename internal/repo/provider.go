@@ -96,4 +96,5 @@ var ProviderSetRepo = wire.NewSet(
 	plugin_config.NewPluginConfigRepo,
 	user_notification_config.NewUserNotificationConfigRepo,
 	limit.NewRateLimitRepo,
+	plugin_config.NewPluginUserConfigRepo,
 )

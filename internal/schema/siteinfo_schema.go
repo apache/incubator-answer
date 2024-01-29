@@ -136,6 +136,7 @@ type SiteCustomCssHTMLReq struct {
 type SiteThemeReq struct {
 	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
 	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
+	ColorScheme string                 `validate:"omitempty,gt=0,lte=100" json:"color_scheme"`
 }
 
 type SiteSeoReq struct {
@@ -171,6 +172,7 @@ type SiteThemeResp struct {
 	ThemeOptions []*ThemeOption         `json:"theme_options"`
 	Theme        string                 `json:"theme"`
 	ThemeConfig  map[string]interface{} `json:"theme_config"`
+	ColorScheme  string                 `json:"color_scheme"`
 }
 
 func (s *SiteThemeResp) TrTheme(ctx context.Context) {
@@ -284,6 +286,8 @@ const (
 	PrivilegeLevel2 PrivilegeLevel = 2
 	// PrivilegeLevel3 high
 	PrivilegeLevel3 PrivilegeLevel = 3
+	// PrivilegeLevelCustom custom
+	PrivilegeLevelCustom PrivilegeLevel = 99
 )
 
 type PrivilegeLevel int
@@ -308,16 +312,18 @@ type GetPrivilegesConfigResp struct {
 type PrivilegeOption struct {
 	Level      PrivilegeLevel        `json:"level"`
 	LevelDesc  string                `json:"level_desc"`
-	Privileges []*constant.Privilege `json:"privileges"`
+	Privileges []*constant.Privilege `validate:"dive" json:"privileges"`
 }
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level PrivilegeLevel `validate:"required,min=1,max=3" json:"level"`
+	Level            PrivilegeLevel        `validate:"required,min=1,max=3|eq=99" json:"level"`
+	CustomPrivileges []*constant.Privilege `validate:"dive" json:"custom_privileges"`
 }
 
 var (
 	DefaultPrivilegeOptions      PrivilegeOptions
+	DefaultCustomPrivilegeOption *PrivilegeOption
 	privilegeOptionsLevelMapping = map[string][]int{
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
@@ -367,5 +373,12 @@ func init() {
 				Key:   privilege.Key,
 			})
 		}
+	}
+
+	// set up default custom privilege option
+	DefaultCustomPrivilegeOption = &PrivilegeOption{
+		Level:      PrivilegeLevelCustom,
+		LevelDesc:  reason.PrivilegeLevelCustomDesc,
+		Privileges: DefaultPrivilegeOptions[0].Privileges,
 	}
 }

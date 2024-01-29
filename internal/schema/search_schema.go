@@ -64,7 +64,7 @@ type SearchCondition struct {
 	// only show this question's answer
 	QuestionID string
 	// search query tags
-	Tags []string
+	Tags [][]string
 	// search query keywords
 	Words []string
 }

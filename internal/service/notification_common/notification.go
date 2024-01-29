@@ -24,6 +24,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
+	"github.com/apache/incubator-answer/internal/service/user_external_login"
+	"github.com/apache/incubator-answer/pkg/display"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -59,6 +63,8 @@ type NotificationCommon struct {
 	userCommon               *usercommon.UserCommon
 	objectInfoService        *object_info.ObjService
 	notificationQueueService notice_queue.NotificationQueueService
+	userExternalLoginRepo    user_external_login.UserExternalLoginRepo
+	siteInfoService          siteinfo_common.SiteInfoCommonService
 }
 
 func NewNotificationCommon(
@@ -69,6 +75,8 @@ func NewNotificationCommon(
 	followRepo activity_common.FollowRepo,
 	objectInfoService *object_info.ObjService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	userExternalLoginRepo user_external_login.UserExternalLoginRepo,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *NotificationCommon {
 	notification := &NotificationCommon{
 		data:                     data,
@@ -78,6 +86,8 @@ func NewNotificationCommon(
 		userCommon:               userCommon,
 		objectInfoService:        objectInfoService,
 		notificationQueueService: notificationQueueService,
+		userExternalLoginRepo:    userExternalLoginRepo,
+		siteInfoService:          siteInfoService,
 	}
 	notificationQueueService.RegisterHandler(notification.AddNotification)
 	return notification
@@ -183,6 +193,10 @@ func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.N
 	}
 
 	go ns.SendNotificationToAllFollower(ctx, msg, questionID)
+
+	if msg.Type == schema.NotificationTypeInbox {
+		ns.syncNotificationToPlugin(ctx, objInfo, msg)
+	}
 	return nil
 }
 
@@ -225,4 +239,73 @@ func (ns *NotificationCommon) SendNotificationToAllFollower(ctx context.Context,
 		t.NoNeedPushAllFollow = true
 		ns.notificationQueueService.Send(ctx, t)
 	}
+}
+
+func (ns *NotificationCommon) syncNotificationToPlugin(ctx context.Context, objInfo *schema.SimpleObjectInfo,
+	msg *schema.NotificationMsg) {
+	siteInfo, err := ns.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general info failed: %v", err)
+		return
+	}
+	seoInfo, err := ns.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Errorf("get site seo info failed: %v", err)
+		return
+	}
+
+	objInfo.QuestionID = uid.DeShortID(objInfo.QuestionID)
+	objInfo.AnswerID = uid.DeShortID(objInfo.AnswerID)
+	pluginNotificationMsg := plugin.NotificationMessage{
+		Type:           plugin.NotificationType(msg.NotificationAction),
+		ReceiverUserID: msg.ReceiverUserID,
+		TriggerUserID:  msg.TriggerUserID,
+		QuestionTitle:  objInfo.Title,
+	}
+
+	if len(objInfo.QuestionID) > 0 {
+		pluginNotificationMsg.QuestionUrl =
+			display.QuestionURL(seoInfo.Permalink, siteInfo.SiteUrl, objInfo.QuestionID, objInfo.Title)
+	}
+	if len(objInfo.AnswerID) > 0 {
+		pluginNotificationMsg.AnswerUrl =
+			display.AnswerURL(seoInfo.Permalink, siteInfo.SiteUrl, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID)
+	}
+	if len(objInfo.CommentID) > 0 {
+		pluginNotificationMsg.CommentUrl =
+			display.CommentURL(seoInfo.Permalink, siteInfo.SiteUrl, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID, objInfo.CommentID)
+	}
+
+	if len(msg.TriggerUserID) > 0 {
+		triggerUser, exist, err := ns.userCommon.GetUserBasicInfoByID(ctx, msg.TriggerUserID)
+		if err != nil {
+			log.Errorf("get trigger user basic info failed: %v", err)
+			return
+		}
+		if exist {
+			pluginNotificationMsg.TriggerUserID = triggerUser.ID
+			pluginNotificationMsg.TriggerUserDisplayName = triggerUser.DisplayName
+			pluginNotificationMsg.TriggerUserUrl = display.UserURL(siteInfo.SiteUrl, triggerUser.Username)
+		}
+	}
+
+	if len(pluginNotificationMsg.ReceiverLang) == 0 && len(msg.ReceiverUserID) > 0 {
+		userInfo, _, _ := ns.userCommon.GetUserBasicInfoByID(ctx, msg.ReceiverUserID)
+		if userInfo != nil {
+			pluginNotificationMsg.ReceiverLang = userInfo.Language
+		}
+	}
+
+	_ = plugin.CallNotification(func(fn plugin.Notification) error {
+		userInfo, exist, err := ns.userExternalLoginRepo.GetByUserID(ctx, fn.Info().SlugName, msg.ReceiverUserID)
+		if err != nil {
+			log.Errorf("get user external login info failed: %v", err)
+			return nil
+		}
+		if exist {
+			pluginNotificationMsg.ReceiverExternalID = userInfo.ExternalID
+		}
+		fn.Notify(pluginNotificationMsg)
+		return nil
+	})
 }

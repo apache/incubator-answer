@@ -74,10 +74,8 @@ const Comment = ({ objectId, mode, commentId }) => {
 
   useEffect(() => {
     if (pageIndex === 0 && commentId) {
-      console.log('scrollCallback');
       setTimeout(() => {
         const el = document.getElementById(commentId);
-        console.log(el);
         scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);
@@ -91,6 +89,9 @@ const Comment = ({ objectId, mode, commentId }) => {
   useEffect(() => {
     if (!data) {
       return;
+    }
+    if (data.count <= 3) {
+      data.list.sort((a, b) => a.created_at - b.created_at);
     }
     if (pageIndex === 1 || pageIndex === 0) {
       setComments(data?.list);
@@ -419,7 +420,10 @@ const Comment = ({ objectId, mode, commentId }) => {
               onClick={() => {
                 setPageIndex(pageIndex + 1);
               }}>
-              {t('show_more')}
+              {t('show_more', {
+                count:
+                  data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
+              })}
             </Button>
           )}
       </div>

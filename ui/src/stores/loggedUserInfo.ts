@@ -42,6 +42,7 @@ const initUser: UserInfoRes = {
   status: 'normal',
   mail_status: 1,
   language: 'Default',
+  color_scheme: 'default',
   is_admin: false,
   have_password: true,
   role_id: 1,
@@ -55,6 +56,9 @@ const loggedUserInfo = create<UserInfoStore>((set) => ({
     }
     if (!params?.language) {
       params.language = 'Default';
+    }
+    if (!params?.color_scheme) {
+      params.color_scheme = 'default';
     }
     set(() => {
       Storage.set(LOGGED_TOKEN_STORAGE_KEY, params.access_token);

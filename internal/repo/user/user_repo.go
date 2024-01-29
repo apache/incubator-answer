@@ -155,8 +155,9 @@ func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err 
 	return
 }
 
-func (ur *userRepo) UpdateLanguage(ctx context.Context, userID, language string) (err error) {
-	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Update(&entity.User{Language: language})
+func (ur *userRepo) UpdateUserInterface(ctx context.Context, userID, language, colorSchema string) (err error) {
+	session := ur.data.DB.Context(ctx).Where("id = ?", userID)
+	_, err = session.Cols("language", "color_scheme").Update(&entity.User{Language: language, ColorScheme: colorSchema})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

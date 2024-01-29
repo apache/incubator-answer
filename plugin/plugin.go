@@ -21,6 +21,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"github.com/segmentfault/pacman/i18n"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/translator"
@@ -46,6 +47,10 @@ func Register(p Base) {
 
 	if _, ok := p.(Config); ok {
 		registerConfig(p.(Config))
+	}
+
+	if _, ok := p.(UserConfig); ok {
+		registerUserConfig(p.(UserConfig))
 	}
 
 	if _, ok := p.(Connector); ok {
@@ -78,6 +83,10 @@ func Register(p Base) {
 
 	if _, ok := p.(Search); ok {
 		registerSearch(p.(Search))
+	}
+
+	if _, ok := p.(Notification); ok {
+		registerNotification(p.(Notification))
 	}
 }
 
@@ -151,6 +160,11 @@ func (m *statusManager) UnmarshalJSON(data []byte) error {
 // Translate translates the key to the current language of the context
 func Translate(ctx *GinContext, key string) string {
 	return translator.Tr(handler.GetLang(ctx), key)
+}
+
+// TranslateWithData translates the key to the language with data
+func TranslateWithData(lang i18n.Language, key string, data any) string {
+	return translator.TrWithData(lang, key, data)
 }
 
 // TranslateFn presents a generator of translated string.

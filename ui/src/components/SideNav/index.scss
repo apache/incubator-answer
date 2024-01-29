@@ -17,7 +17,6 @@
  * under the License.
  */
 
-
 #sideNav {
   .nav-wrap {
     position: sticky;
@@ -32,14 +31,14 @@
     max-width: calc(100% - 24px);
   }
   .nav-link {
-    color: rgba(0, 0, 0, 0.65);
+    color: var(--an-side-nav-link);
   }
   .nav-link:hover {
-    color: rgba(0, 0, 0);
+    color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-100);
   }
   .nav-link.active {
-    color: black;
+    color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-200);
   }
   .side-nav-right-line {
@@ -48,7 +47,7 @@
     right: 12px;
     width: 1px;
     height: 100%;
-    background-color: var(--bs-gray-300);
+    background-color: var(--bs-border-color);
     min-height: calc(100vh - 62px - 74px);
   }
 }

@@ -681,6 +681,12 @@ ui:
             character: URL 固定链接包含非法字符。
         desc:
           label: 描述
+        revision:
+          label: 编辑历史
+        edit_summary:
+          label: 编辑摘要
+          placeholder: >-
+            简单描述更改原因 (错别字、文字表达、格式等等)
     btn_cancel: 取消
     btn_submit: 提交
     btn_post: 发布新标签
@@ -707,22 +713,7 @@ ui:
   edit_tag:
     title: 编辑标签
     default_reason: 编辑标签
-    default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: 编辑历史
-        display_name:
-          label: 显示名称
-        slug_name:
-          label: URL 固定链接
-          info: URL 固定链接不能超过 35 个字符。
-        desc:
-          label: 描述
-        edit_summary:
-          label: 编辑摘要
-          placeholder: >-
-            简单描述更改原因 (错别字、文字表达、格式等等)
+    default_first_reason: 添加标签
     btn_save_edits: 保存更改
     btn_cancel: 取消
   dates:
@@ -746,7 +737,7 @@ ui:
     btn_flag: 举报
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: 显示更多评论
+    show_more: "{{count}}条剩余评论"
     tip_question: >-
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-

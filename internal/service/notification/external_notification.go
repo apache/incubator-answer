@@ -26,7 +26,9 @@ import (
 	"github.com/apache/incubator-answer/internal/service/activity_common"
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/internal/service/user_external_login"
 	"github.com/apache/incubator-answer/internal/service/user_notification_config"
 	"github.com/segmentfault/pacman/log"
 )
@@ -38,6 +40,8 @@ type ExternalNotificationService struct {
 	emailService               *export.EmailService
 	userRepo                   usercommon.UserRepo
 	notificationQueueService   notice_queue.ExternalNotificationQueueService
+	userExternalLoginRepo      user_external_login.UserExternalLoginRepo
+	siteInfoService            siteinfo_common.SiteInfoCommonService
 }
 
 func NewExternalNotificationService(
@@ -47,6 +51,8 @@ func NewExternalNotificationService(
 	emailService *export.EmailService,
 	userRepo usercommon.UserRepo,
 	notificationQueueService notice_queue.ExternalNotificationQueueService,
+	userExternalLoginRepo user_external_login.UserExternalLoginRepo,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *ExternalNotificationService {
 	n := &ExternalNotificationService{
 		data:                       data,
@@ -55,6 +61,8 @@ func NewExternalNotificationService(
 		emailService:               emailService,
 		userRepo:                   userRepo,
 		notificationQueueService:   notificationQueueService,
+		userExternalLoginRepo:      userExternalLoginRepo,
+		siteInfoService:            siteInfoService,
 	}
 	notificationQueueService.RegisterHandler(n.Handler)
 	return n

@@ -32,6 +32,7 @@ import {
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
 import { login, UcAgent } from '@/services';
+import { setupAppTheme } from '@/utils/localize';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -116,6 +117,7 @@ const Index: React.FC = () => {
       .then(async (res) => {
         await passwordCaptcha.close();
         updateUser(res);
+        setupAppTheme();
         const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
           // inactive

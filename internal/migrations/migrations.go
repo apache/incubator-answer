@@ -94,6 +94,7 @@ var migrations = []Migration{
 	NewMigration("v1.1.3", "set default user notification config", setDefaultUserNotificationConfig, false),
 	NewMigration("v1.2.0", "add recover answer permission", addRecoverPermission, true),
 	NewMigration("v1.2.1", "add password login control", addPasswordLoginControl, true),
+	NewMigration("v1.2.5", "add notification plugin and theme config", addNotificationPluginAndThemeConfig, true),
 }
 
 func GetMigrations() []Migration {

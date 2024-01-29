@@ -30,42 +30,48 @@ import './PeopleDropdown.scss';
 interface Props {
   selectedPeople: Type.UserInfoBase[] | undefined;
   onSelect: (people: Type.UserInfoBase) => void;
+  saveInviteUsers: () => void;
   visible?: boolean;
+}
+
+interface UserInfoCheck extends Type.UserInfoBase {
+  checked?: boolean;
 }
 
 const Index: FC<Props> = ({
   selectedPeople = [],
   visible = false,
   onSelect,
+  saveInviteUsers,
 }) => {
   const { user: currentUser } = loggedUserInfoStore();
   const { t } = useTranslation('translation', {
     keyPrefix: 'invite_to_answer',
   });
-  const [toggleState, setToggleState] = useState(false);
-  const [peopleList, setPeopleList] = useState<Type.UserInfoBase[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [peopleList, setPeopleList] = useState<UserInfoCheck[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchValue, setSearchValue] = useState('');
   const filterAndSetPeople = (source) => {
-    if (!toggleState) {
-      return;
-    }
     const filteredPeople: Type.UserInfoBase[] = [];
     source.forEach((p) => {
-      if (currentUser && currentUser.username === p.username) {
+      if (
+        currentUser &&
+        currentUser.role_id === 1 &&
+        currentUser.username === p.username
+      ) {
         return;
       }
-      if (selectedPeople.find((_) => _.username === p.username)) {
+      if (selectedPeople?.find((_) => _.username === p.username)) {
         return;
       }
       filteredPeople.push(p);
     });
-    setPeopleList(filteredPeople);
+    setPeopleList([...selectedPeople, ...filteredPeople]);
   };
 
   const searchPeople = (s) => {
     if (!s) {
-      setPeopleList([]);
+      setPeopleList([...selectedPeople]);
       return;
     }
     userSearchByName(s).then((resp) => {
@@ -79,7 +85,7 @@ const Index: FC<Props> = ({
   };
 
   const resetSearch = () => {
-    setCurrentIndex(0);
+    setCurrentIndex(-1);
     setSearchValue('');
     setPeopleList([]);
   };
@@ -92,8 +98,6 @@ const Index: FC<Props> = ({
     if (people) {
       onSelect(people);
     }
-
-    resetSearch();
   };
 
   const handleKeyDown = (evt) => {
@@ -117,69 +121,83 @@ const Index: FC<Props> = ({
   };
 
   useEffect(() => {
-    filterAndSetPeople(peopleList);
-  }, [selectedPeople]);
-
-  useEffect(() => {
-    searchPeople(searchValue);
-  }, [toggleState]);
-
-  useEffect(() => {
-    if (!visible && toggleState) {
-      setToggleState(false);
+    if (visible && selectedPeople.length > 0) {
+      setPeopleList(selectedPeople);
+    }
+    if (!visible) {
+      resetSearch();
     }
   }, [visible]);
 
   return visible ? (
     <Dropdown
-      className="d-inline-flex people-dropdown"
+      autoClose="outside"
+      show
+      className="people-dropdown"
       onSelect={handleSelect}
       onKeyDown={handleKeyDown}
-      onToggle={setToggleState}>
-      <Dropdown.Toggle
-        className="m-1 no-toggle"
-        size="sm"
-        variant="outline-secondary">
-        <span className="me-1">+</span>
-        {t('add')}
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu show={toggleState}>
-        <Dropdown.Header className="px-2 py-0">
-          {toggleState ? (
-            <Form.Control
-              autoFocus
-              type="search"
-              placeholder={t('search')}
-              value={searchValue}
-              onChange={handleSearch}
-            />
-          ) : null}
-        </Dropdown.Header>
-        {peopleList.map((p, idx) => {
-          return (
-            <Dropdown.Item
-              key={p.username}
-              eventKey={idx}
-              active={idx === currentIndex}
-              className={idx === 0 ? 'mt-2' : ''}>
-              <div className="d-flex align-items-center text-nowrap">
-                <Avatar
-                  avatar={p.avatar}
-                  size="24"
-                  alt={p.display_name}
-                  className="rounded-1"
-                />
-                <div className="d-flex flex-wrap text-truncate">
-                  <span className="ms-2 text-truncate">{p.display_name}</span>
-                  <small className="text-secondary text-truncate ms-2">
-                    @{p.username}
-                  </small>
-                </div>
-              </div>
-            </Dropdown.Item>
-          );
-        })}
+      onToggle={(state) => {
+        if (!state) {
+          saveInviteUsers();
+        }
+      }}>
+      <Dropdown.Menu
+        renderOnMount
+        show
+        className="w-100 py-0 position-relative">
+        <div className="p-3">
+          <Form.Control
+            type="search"
+            autoFocus
+            placeholder={t('search')}
+            value={searchValue}
+            onChange={handleSearch}
+          />
+        </div>
+        <div className={`${peopleList.length > 0 ? 'py-2 border-top' : ''}`}>
+          {peopleList.map((p, idx) => {
+            return (
+              <Dropdown.Item
+                key={p.username}
+                eventKey={idx}
+                onFocus={() => {
+                  setCurrentIndex(idx);
+                }}
+                active={idx === currentIndex}>
+                <Form.Check
+                  type="checkbox"
+                  id={p.username}
+                  className="position-relative">
+                  <Form.Check.Input
+                    type="checkbox"
+                    tabIndex={-1}
+                    checked={Boolean(
+                      selectedPeople?.find((v) => v.id === p.id),
+                    )}
+                    onChange={() => {}}
+                  />
+                  <div className="check-cover" />
+                  <Form.Check.Label className="d-flex align-items-center text-nowrap">
+                    <Avatar
+                      avatar={p.avatar}
+                      size="24"
+                      alt={p.display_name}
+                      className="rounded-1"
+                    />
+                    <div className="d-flex flex-wrap text-truncate">
+                      <span className="ms-2 text-truncate">
+                        {p.display_name}
+                      </span>
+                      <small className="text-secondary text-truncate ms-2">
+                        @{p.username}
+                      </small>
+                    </div>
+                  </Form.Check.Label>
+                </Form.Check>
+              </Dropdown.Item>
+            );
+          })}
+        </div>
       </Dropdown.Menu>
     </Dropdown>
   ) : null;

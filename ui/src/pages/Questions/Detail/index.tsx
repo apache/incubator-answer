@@ -294,13 +294,13 @@ const Index = () => {
       </Col>
       <Col className="page-right-side mt-4 mt-xl-0">
         <CustomSidebar />
-        <RelatedQuestions id={question?.id || ''} />
         {showInviteToAnswer ? (
           <InviteToAnswer
             questionId={question.id}
             readOnly={!canInvitePeople}
           />
         ) : null}
+        <RelatedQuestions id={question?.id || ''} />
       </Col>
     </Row>
   );
