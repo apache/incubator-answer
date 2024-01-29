@@ -82,6 +82,9 @@ backend:
     level_3:
       description:
         other: Level 3 (high reputation required for mature community)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
@@ -681,6 +684,12 @@ ui:
             character: URL 固定連結包含非法字元。
         desc:
           label: 描述
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: 取消
     btn_submit: 提交
     btn_post: Post new tag
@@ -708,21 +717,6 @@ ui:
     title: 編輯標籤
     default_reason: 編輯標籤
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: 編輯歷史
-        display_name:
-          label: Display name
-        slug_name:
-          label: URL slug
-          info: URL slug 不能超過 35 個字符。
-        desc:
-          label: 描述
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_save_edits: 儲存更改
     btn_cancel: 取消
   dates:
@@ -972,7 +966,7 @@ ui:
         placeholder: "城市, 國家"
     notification:
       heading: 通知
-      email: Email
+      turn_on: Turn on
       inbox:
         label: Email notifications
         description: Answers to your questions, comments, invites, and more.
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: 搜尋結果
     keywords: 關鍵詞
@@ -1642,9 +1641,10 @@ ui:
       themes:
         label: 主題
         text: 選擇一個現有主題。
+      color_scheme:
+        label: Color scheme
       navbar_style:
         label: 導航欄樣式
-        text: 選擇一個現有主題。
       primary_color:
         label: 主色調
         text: 修改您主題使用的顏色

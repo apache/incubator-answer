@@ -82,6 +82,9 @@ backend:
     level_3:
       description:
         other: Nível 3 (Alta reputação necessária para a comunidade adulta)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: Perguntar
     rank_answer_add_label:
@@ -681,6 +684,12 @@ ui:
             character: URL slug contém conjunto de caracteres não permitido.
         desc:
           label: Descrição (opcional)
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: Cancelar
     btn_submit: Enviar
     btn_post: Postar novo marcador
@@ -708,21 +717,6 @@ ui:
     title: Editar marcador
     default_reason: Editar marcador
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: Revisão
-        display_name:
-          label: Nome de exibição
-        slug_name:
-          label: Slug de URL
-          info: 'Deve usar o conjunto de caracteres "a-z", "0-9", "+ # - ."'
-        desc:
-          label: Descrição
-        edit_summary:
-          label: Resumo da edição
-          placeholder: >-
-            Explique resumidamente suas alterações (ortografia corrigida, gramática corrigida, formatação aprimorada)
     btn_save_edits: Salvar edições
     btn_cancel: Cancelar
   dates:
@@ -746,7 +740,7 @@ ui:
     btn_flag: Marcador
     btn_save_edits: Salvar edições
     btn_cancel: Cancelar
-    show_more: Mostrar mais comentários
+    show_more: "{{count}} more comments"
     tip_question: >-
       Use os comentários para pedir mais informações ou sugerir melhorias. Evite responder perguntas nos comentários.
     tip_answer: >-
@@ -971,10 +965,10 @@ ui:
         label: Localização (opcional)
         placeholder: "Cidade, País"
     notification:
-      heading: Notificações
-      email: E-mail
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Notificações de email
+        label: Inbox notifications
         description: Responda suas próprias perguntas, comentários, convites e muito mais.
       all_new_question:
         label: Todas as perguntas novas
@@ -1029,7 +1023,7 @@ ui:
     answers: respostas
   invite_to_answer:
     title: Pessoas Perguntaram
-    desc: Convidar pessoas que você acha que deve saber a resposta.
+    desc: Select people who you think might know the answer.
     invite: Convidar para responder
     add: Adicionar pessoas
     search: Procurar pessoas
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: Procurar Resultados
     keywords: Palavras-chave
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Temas
         text: Selecionar um tema existente.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Estilo da barra de navegação
-        text: Selecionar um tema existente.
+        label: Navbar style
       primary_color:
-        label: Cor Primária
+        label: Primary color
         text: Modifica as cores usadas por seus temas
     css_and_html:
       page_title: CSS e HTML

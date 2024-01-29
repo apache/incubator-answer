@@ -82,6 +82,9 @@ backend:
     level_3:
       description:
         other: Level 3 (high reputation required for mature community)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
@@ -681,6 +684,12 @@ ui:
             character: URL slug obsahuje nepovolenú znakovú sadu.
         desc:
           label: Opis
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: Zrušiť
     btn_submit: Potvrdiť
     btn_post: Post new tag
@@ -708,21 +717,6 @@ ui:
     title: Upraviť značku
     default_reason: Upraviť značku
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: Revízia
-        display_name:
-          label: Display name
-        slug_name:
-          label: URL slug
-          info: 'Musíte použiť znakovú sadu "a-z", "0-9", "+ # - ."'
-        desc:
-          label: Opis
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika, vylepšené formátovanie)
     btn_save_edits: Uložiť úpravy
     btn_cancel: Zrušiť
   dates:
@@ -746,7 +740,7 @@ ui:
     btn_flag: Vlajka
     btn_save_edits: Uložiť zmeny
     btn_cancel: Zrušiť
-    show_more: Zobraziť viac komentárov
+    show_more: "{{count}} more comments"
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
@@ -971,10 +965,10 @@ ui:
         label: Poloha
         placeholder: "Mesto, Krajina"
     notification:
-      heading: Oznámenia
-      email: Email
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Email notifications
+        label: Inbox notifications
         description: Answers to your questions, comments, invites, and more.
       all_new_question:
         label: All new questions
@@ -1029,7 +1023,7 @@ ui:
     answers: odpovede
   invite_to_answer:
     title: People Asked
-    desc: Invite people who you think might know the answer.
+    desc: Select people who you think might know the answer.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: Výsledky vyhľadávania
     keywords: Kľúčové slová
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Témy
         text: Vyberte existujúcu tému.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Štýl navigačnej lišty
-        text: Vyberte existujúcu tému.
+        label: Navbar style
       primary_color:
-        label: Primárna farba
+        label: Primary color
         text: Upraviť farby používané vašími motívmi
     css_and_html:
       page_title: CSS a HTML

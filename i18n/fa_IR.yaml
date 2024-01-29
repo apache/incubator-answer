@@ -82,6 +82,9 @@ backend:
     level_3:
       description:
         other: سطح ۳ (شهرت بالایی برای نیاز هست برای انجمن های تکمیل)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
       other: سوال بپرس
     rank_answer_add_label:
@@ -601,7 +604,7 @@ ui:
             msg:
               empty: فایل نمی تواند خالی باشد.
               only_image: فقط فایل های تصویری مجاز هستند.
-              max_size: حجم فایل نمی تواند بیشتر از ۴ مگابایت باشد.
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: توضیحات
       tab_url: لینک عکس
@@ -681,6 +684,12 @@ ui:
             character: نامک آدرس شامل کلمات غیر مجاز می باشد.
         desc:
           label: توضیحات
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: لغو
     btn_submit: ثبت
     btn_post: پست کردن تگ جدید
@@ -708,21 +717,6 @@ ui:
     title: ویرایش تگ‌
     default_reason: ویرایش تگ‌
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: بازنگری
-        display_name:
-          label: نام
-        slug_name:
-          label: نامک نشانی اینترنتی
-          info: 'باید از حروف "a-z", "0-9", "+ # -" استفاده شود'
-        desc:
-          label: توضیحات
-        edit_summary:
-          label: ویرایش خلاصه
-          placeholder: >-
-            بطور خلاصه تغییرات را توضیح دهید (اصلاح املایی، اصلاح دستورزبان،‌ بهبود فرمت دهی)
     btn_save_edits: ذخیره ویرایشها
     btn_cancel: لغو
   dates:
@@ -746,7 +740,7 @@ ui:
     btn_flag: نشان
     btn_save_edits: ذخیره ویرایشها
     btn_cancel: لغو
-    show_more: نمایش نظرات بیشتر
+    show_more: "{{count}} more comments"
     tip_question: >-
       از نظرات برای درخواست اطلاعات بیشتر یا پیشنهاد بهبود استفاده کنید. از پاسخ دادن به سوالات در نظرات خودداری کنید.
     tip_answer: >-
@@ -971,10 +965,10 @@ ui:
         label: موقعیت
         placeholder: "شهر، کشور"
     notification:
-      heading: اعلانات
-      email: ایمیل
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: اعلانات ایمیل
+        label: Inbox notifications
         description: پاسخ به سوالات خود،‌ نظرات،‌ دعوت ها،‌و بیشتر.
       all_new_question:
         label: تمامی سوالات جدید
@@ -1029,7 +1023,7 @@ ui:
     answers: جواب ها
   invite_to_answer:
     title: مردم پرسیدند
-    desc: افرادی را دعوت کنید که فکر می کنید ممکن است پاسخ را بدانند.
+    desc: Select people who you think might know the answer.
     invite: دعوت به پاسخ
     add: افزودن افراد
     search: جستجوی افراد
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: نتایج جستجو
     keywords: کلیدواژه ها
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Themes
         text: Select an existing theme.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Navbar style
       primary_color:
-        label: Primary Color
+        label: Primary color
         text: Modify the colors used by your themes
     css_and_html:
       page_title: CSS and HTML
