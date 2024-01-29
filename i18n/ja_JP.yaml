@@ -52,9 +52,9 @@ backend:
     unpin:
       other: Unpin
     show:
-      other: List
+      other: リスト
     invite_someone_to_answer:
-      other: Edit
+      other: 編集
     undelete:
       other: Undelete
   role:
@@ -82,14 +82,17 @@ backend:
     level_3:
       description:
         other: Level 3 (high reputation required for mature community)
+    level_custom:
+      description:
+        other: Custom Level
     rank_question_add_label:
-      other: Ask question
+      other: 質問する
     rank_answer_add_label:
-      other: Write answer
+      other: 回答を書く
     rank_comment_add_label:
-      other: Write comment
+      other: コメントを書く
     rank_report_add_label:
-      other: Flag
+      other: フラグ
     rank_comment_vote_up_label:
       other: Upvote comment
     rank_link_url_limit_label:
@@ -105,7 +108,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Invite someone to answer
     rank_tag_add_label:
-      other: Create new tag
+      other: 新しいタグを作成
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
@@ -133,7 +136,7 @@ backend:
   password:
     other: パスワード
   pass:
-    other: Password
+    other: パスワード
   email_or_password_wrong_error:
     other: メールアドレスとパスワードが一致しません。
   error:
@@ -270,7 +273,7 @@ backend:
       not_allowed_login_via_password:
         other: Currently the site is not allowed to login via password.
       access_denied:
-        other: Access denied
+        other: アクセスが拒否されました
       page_access_denied:
         other: You do not have access to this page.
       add_bulk_users_format_error:
@@ -532,16 +535,16 @@ ui:
     show_more: もっと見る
     someone: Someone
     inbox_type:
-      all: All
-      posts: Posts
-      invites: Invites
-      votes: Votes
+      all: すべて
+      posts: 投稿
+      invites: 招待
+      votes: 投票
   suspended:
     title: あなたのアカウントは停止されています。
     until_time: "あなたのアカウントは {{ time }} まで停止されました。"
     forever: このユーザーは永久に停止されました。
     end: You don't meet a community guideline.
-    contact_us: Contact us
+    contact_us: お問い合わせ
   editor:
     blockquote:
       text: 引用
@@ -601,7 +604,7 @@ ui:
             msg:
               empty: ファイルは空にできません。
               only_image: 画像ファイルのみが許可されています。
-              max_size: ファイルサイズは4MBを超えることはできません。
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: 説明
       tab_url: 画像URL
@@ -673,7 +676,7 @@ ui:
             empty: 表示名を入力してください。
             range: 表示名は最大 35 文字までです。
         slug_name:
-          label: URL slug
+          label: URLスラッグ
           desc: '文字セット「a-z」、「0-9」、「+ # -」を使用する必要があります。'
           msg:
             empty: URL スラッグを空にすることはできません。
@@ -681,6 +684,12 @@ ui:
             character: URL slug contains unallowed character set.
         desc:
           label: 説明
+        revision:
+          label: Revision
+        edit_summary:
+          label: Edit summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_cancel: キャンセル
     btn_submit: 送信
     btn_post: 新しいタグを投稿
@@ -708,23 +717,8 @@ ui:
     title: タグを編集
     default_reason: タグを編集
     default_first_reason: Add tag
-    form:
-      fields:
-        revision:
-          label: Revision
-        display_name:
-          label: Display name
-        slug_name:
-          label: URL slug
-          info: URL slug up to 35 characters.
-        desc:
-          label: Description
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
-    btn_cancel: Cancel
+    btn_cancel: キャンセル
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
@@ -733,29 +727,29 @@ ui:
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
-    hours: hours
-    days: days
+    hour: 時
+    day: 日
+    hours: 時
+    days: 日
   comment:
-    btn_add_comment: Add comment
+    btn_add_comment: コメントを追加
     reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
-    btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: Show more comments
+    btn_reply: 返信
+    btn_edit: 編集
+    btn_delete: 削除
+    btn_flag: フラグ
+    btn_save_edits: 編集内容を保存
+    btn_cancel: キャンセル
+    show_more: "{{count}} more comments"
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
     tip_vote: It adds something useful to the post
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
-    default_first_reason: Add answer
+    title: 回答を編集　
+    default_reason: 回答を編集　
+    default_first_reason: 回答を追加
     form:
       fields:
         revision:
@@ -769,25 +763,25 @@ ui:
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
-    btn_cancel: Cancel
+    btn_cancel: キャンセル
   tags:
-    title: Tags
+    title: タグ
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: Newest
-    button_follow: Follow
-    button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
+      popular: 人気
+      name: 名前
+      newest: 最新
+    button_follow: フォロー
+    button_following: フォロー中
+    tag_label: 質問
+    search_placeholder: タグ名でフィルタ
     no_desc: The tag has no description.
     more: More
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    default_first_reason: Add question
-    similar_questions: Similar questions
+    title: 質問を追加
+    edit_title: 質問を編集
+    default_reason: 質問を編集
+    default_first_reason: 質問を追加
+    similar_questions: 類似の質問
     form:
       fields:
         revision:
@@ -833,18 +827,18 @@ ui:
       profile: Profile
       setting: Settings
       logout: Log out
-      admin: Admin
-      review: Review
-      bookmark: Bookmarks
+      admin: 管理者
+      review: レビュー
+      bookmark: ブックマーク
       moderation: Moderation
     search:
-      placeholder: Search
+      placeholder: 検索
   footer:
     build_on: >-
       Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
-    name: Change
-    loading: loading...
+    name: 変更
+    loading: 読み込み中…
   pic_auth_code:
     title: Captcha
     placeholder: Type the text above
@@ -933,7 +927,7 @@ ui:
     password_confirm:
       label: Confirm new password
   settings:
-    page_title: Settings
+    page_title: 設定
     goto_modify: Go to modify
     nav:
       profile: Profile
@@ -948,18 +942,18 @@ ui:
         msg: Display name cannot be empty.
         msg_range: Display name up to 30 characters.
       username:
-        label: Username
+        label: ユーザー名
         caption: People can mention you as "@username".
         msg: Username cannot be empty.
         msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile image
+        label: プロフィール画像
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
         custom_text: You can upload your image.
-        default: System
+        default: システム
         msg: Please upload an avatar
       bio:
         label: About me
@@ -971,10 +965,10 @@ ui:
         label: Location
         placeholder: "City, Country"
     notification:
-      heading: Notifications
-      email: Email
+      heading: Email Notifications
+      turn_on: Turn on
       inbox:
-        label: Email notifications
+        label: Inbox notifications
         description: Answers to your questions, comments, invites, and more.
       all_new_question:
         label: All new questions
@@ -1029,7 +1023,7 @@ ui:
     answers: answers
   invite_to_answer:
     title: People Asked
-    desc: Invite people who you think might know the answer.
+    desc: Select people who you think might know the answer.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1123,6 +1117,11 @@ ui:
     close: Close
     reopen: Reopen
     ok: OK
+    light: Light
+    dark: Dark
+    system_setting: System setting
+    default: Default
+    reset: Reset
   search:
     title: Search Results
     keywords: Keywords
@@ -1642,11 +1641,12 @@ ui:
       themes:
         label: Themes
         text: Select an existing theme.
+      color_scheme:
+        label: Color scheme
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Navbar style
       primary_color:
-        label: Primary Color
+        label: Primary color
         text: Modify the colors used by your themes
     css_and_html:
       page_title: CSS and HTML
@@ -1700,7 +1700,7 @@ ui:
       plugins:
         label: Plugins
         text: Select an existing plugin.
-      name: Name
+      name: 名前
       version: Version
       status: Status
       action: Action
@@ -1784,7 +1784,7 @@ ui:
     comment: Comment
     no_data: "We couldn't find anything."
   users:
-    title: Users
+    title: ユーザー
     users_with_the_most_reputation: Users with the highest reputation scores this week
     users_with_the_most_vote: Users who voted the most this week
     staffs: Our community staff
