@@ -19,59 +19,59 @@
 backend:
   base:
     success:
-      other: Success.
+      other: Успішно.
     unknown:
-      other: Unknown error.
+      other: Невідома помилка.
     request_format_error:
-      other: Request format is not valid.
+      other: Неприпустимий формат запиту.
     unauthorized_error:
-      other: Unauthorized.
+      other: Не авторизовано.
     database_error:
-      other: Data server error.
+      other: Помилка сервера даних.
     forbidden_error:
-      other: Forbidden.
+      other: Заборонено.
     duplicate_request_error:
       other: Duplicate submission.
   action:
     report:
       other: Flag
     edit:
-      other: Edit
+      other: Редагувати
     delete:
-      other: Delete
+      other: Видалити
     close:
-      other: Close
+      other: Закрити
     reopen:
-      other: Reopen
+      other: Відкрити знову
     forbidden_error:
-      other: Forbidden.
+      other: Заборонено.
     pin:
-      other: Pin
+      other: Закріпити
     hide:
-      other: Unlist
+      other: Вилучити зі списку
     unpin:
-      other: Unpin
+      other: Відкріпити
     show:
-      other: List
+      other: Список
     invite_someone_to_answer:
-      other: Edit
+      other: Редагувати
     undelete:
-      other: Undelete
+      other: Скасувати видалення
   role:
     name:
       user:
-        other: User
+        other: Користувач
       admin:
-        other: Admin
+        other: Адмін
       moderator:
-        other: Moderator
+        other: Модератор
     description:
       user:
-        other: Default with no special access.
+        other: За замовчуванням без спеціального доступу.
       admin:
-        other: Have the full power to access the site.
+        other: Має повний доступ до сайту.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Має доступ до всіх дописів, окрім налаштувань адміністратора.
   privilege:
     level_1:
       description:
@@ -86,98 +86,98 @@ backend:
       description:
         other: Custom Level
     rank_question_add_label:
-      other: Ask question
+      other: Задати питання
     rank_answer_add_label:
-      other: Write answer
+      other: Написати відповідь
     rank_comment_add_label:
-      other: Write comment
+      other: Написати коментар
     rank_report_add_label:
       other: Flag
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: Проголосувати за коментар
     rank_link_url_limit_label:
-      other: Post more than 2 links at a time
+      other: Публікуйте більш ніж 2 посилання одночасно
     rank_question_vote_up_label:
-      other: Upvote question
+      other: Проголосувати за питання
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: Проголосувати за відповідь
     rank_question_vote_down_label:
-      other: Downvote question
+      other: Проголосувати проти питання
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: Проголосувати проти відповіді
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Запросити когось відповісти
     rank_tag_add_label:
-      other: Create new tag
+      other: Створити новий теґ
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Редагувати опис теґу (необхідно розглянути)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Редагувати чуже питання (необхідно розглянути)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Редагувати чужу відповідь (необхідно розглянути)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Редагувати чуже питання без розгляду
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: Редагувати чужу відповідь без розгляду
     rank_question_audit_label:
-      other: Review question edits
+      other: Переглянути редагування питання
     rank_answer_audit_label:
-      other: Review answer edits
+      other: Переглянути редагування відповіді
     rank_tag_audit_label:
-      other: Review tag edits
+      other: Переглянути редагування теґу
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: Редагувати опис теґу без розгляду
     rank_tag_synonym_label:
       other: Manage tag synonyms
   email:
-    other: Email
+    other: Електронна пошта
   e_mail:
-    other: Email
+    other: Електронна пошта
   password:
-    other: Password
+    other: Пароль
   pass:
-    other: Password
+    other: Пароль
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: Електронна пошта та пароль не збігаються.
   error:
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: Пароль не може містити пробіли.
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Ви не можете змінити свій пароль.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Ви не можете змінити свій статус.
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: Електронна пошта та пароль не збігаються.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Відповідь не знайдено.
       cannot_deleted:
-        other: No permission to delete.
+        other: Немає дозволу на видалення.
       cannot_update:
-        other: No permission to update.
+        other: Немає дозволу на оновлення.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Питання закриті й не можуть бути додані.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: Коментарі не можна редагувати.
       not_found:
-        other: Comment not found.
+        other: Коментар не знайдено.
       cannot_edit_after_deadline:
         other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: Email already exists.
+        other: Такий E-mail вже існує.
       need_to_be_verified:
-        other: Email should be verified.
+        other: Електронна пошта повинна бути підтверджена.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
         other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
-        other: Language file not found.
+        other: Мовний файл не знайдено.
     object:
       captcha_verification_failed:
         other: Captcha wrong.
@@ -186,35 +186,35 @@ backend:
       disallow_vote:
         other: You are not allowed to vote.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Ви не можете проголосувати за власну публікацію.
       not_found:
-        other: Object not found.
+        other: Обʼєкт не знайдено.
       verification_failed:
-        other: Verification failed.
+        other: Не вдалося виконати перевірку.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: Електронна пошта та пароль не збігаються.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Не вдалося перевірити старий пароль
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: Новий пароль збігається з попереднім.
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Публікацію видалено.
       not_found:
-        other: Question not found.
+        other: Питання не знайдено.
       cannot_deleted:
-        other: No permission to delete.
+        other: Немає дозволу на видалення.
       cannot_close:
-        other: No permission to close.
+        other: Немає дозволу на закриття.
       cannot_update:
-        other: No permission to update.
+        other: Немає дозволу на оновлення.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: Ранг репутації не відповідає умові.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+        other: Дякуємо за відгук. Щоб проголосувати, вам потрібна репутація не нижче {{.Rank}}.
       no_enough_rank_to_operate:
-        other: You need at least {{.Rank}} reputation to do this.
+        other: Щоб це зробити, вам потрібна репутація не менше {{.Rank}}.
     report:
       handle_failed:
         other: Report handle failed.
@@ -222,102 +222,102 @@ backend:
         other: Report not found.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Теґ уже існує.
       not_found:
-        other: Tag not found.
+        other: Теґ не знайдено.
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: Рекомендований теґ не існує.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Будь ласка, введіть принаймні один необхідний тег.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Не повинно містити теґи синонімів.
       cannot_update:
-        other: No permission to update.
+        other: Немає дозволу на оновлення.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: Ви не можете видалити теґ, який використовується.
       cannot_set_synonym_as_itself:
         other: You cannot set the synonym of the current tag as itself.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
+        other: Ім’я відправника не може бути електронною адресою.
     theme:
       not_found:
-        other: Theme not found.
+        other: Тему не знайдено.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: Наразі неможливо редагувати, є версія в черзі перегляду.
       no_permission:
-        other: No permission to revise.
+        other: Немає дозволу на перегляд.
     user:
       external_login_missing_user_id:
-        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
+        other: Платформа сторонніх розробників не надає унікальний ідентифікатор користувача, тому ви не можете увійти, будь ласка, зв’яжіться з адміністратором вебсайту.
       external_login_unbinding_forbidden:
-        other: Please set a login password for your account before you remove this login.
+        other: Будь ласка, встановіть пароль для входу до свого облікового запису, перш ніж видалити ім'я користувача.
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: Електронна пошта та пароль не збігаються.
       not_found:
-        other: User not found.
+        other: Користувач не знайдений.
       suspended:
-        other: User has been suspended.
+        other: Користувач був призупинений.
       username_invalid:
-        other: Username is invalid.
+        other: Ім'я користувача недійсне.
       username_duplicate:
-        other: Username is already in use.
+        other: Це ім'я користувача вже використовується.
       set_avatar:
-        other: Avatar set failed.
+        other: Не вдалося встановити аватар.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Ви не можете змінити вашу роль.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: На цей час сайт не відкритий для реєстрації.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: Наразі на сайті заборонено вхід за допомогою пароля.
       access_denied:
-        other: Access denied
+        other: Доступ заборонено
       page_access_denied:
-        other: You do not have access to this page.
+        other: Ви не маєте доступу до цієї сторінки.
       add_bulk_users_format_error:
-        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+        other: "Помилка формату {{.Field}} біля '{{.Content}}' у рядку {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "Кількість користувачів, яких ви додаєте одночасно, має бути в діапазоні 1-{{.MaxAmount}}."
     config:
       read_config_failed:
         other: Read config failed
     database:
       connection_failed:
-        other: Database connection failed
+        other: Не вдалося встановити з'єднання з базою даних
       create_table_failed:
-        other: Create table failed
+        other: Не вдалося створити таблицю
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Не вдалося створити config.yaml файл.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Непідтримуваний формат файлу.
     site_info:
       config_not_found:
         other: Site config not found.
   reason:
     spam:
       name:
-        other: spam
+        other: спам
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: Це повідомлення є рекламою або вандалізмом. Воно не є корисним або не має відношення до поточної теми.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: грубо чи образливо
       desc:
-        other: A reasonable person would find this content inappropriate for respectful discourse.
+        other: Розумна людина вважала б цей вміст неприйнятним для шанобливого дискурсу.
     a_duplicate:
       name:
-        other: a duplicate
+        other: дублікат
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Це питання ставилося раніше, і на нього вже є відповідь.
       placeholder:
-        other: Enter the existing question link
+        other: Введіть наявне посилання на питання
     not_a_answer:
       name:
-        other: not an answer
+        other: не відповідь
       desc:
         other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
     no_longer_needed:
@@ -354,12 +354,12 @@ backend:
         other: Improve and correct problems with this post yourself.
     needs_close:
       name:
-        other: needs close
+        other: потрібно закрити
       desc:
-        other: A closed question can't answer, but still can edit, vote and comment.
+        other: Закрите питання не може відповісти, але все ще може редагувати, голосувати і коментувати.
     needs_delete:
       name:
-        other: needs delete
+        other: потрібно видалити
       desc:
         other: This post will be deleted.
   question:
@@ -400,25 +400,25 @@ backend:
       answer_the_question:
         other: answered question
       update_answer:
-        other: updated answer
+        other: оновлена відповідь
       accept_answer:
-        other: accepted answer
+        other: прийнята відповідь
       comment_question:
-        other: commented question
+        other: прокоментоване питання
       comment_answer:
-        other: commented answer
+        other: прокоментована відповідь
       reply_to_you:
-        other: replied to you
+        other: відповів(-ла) вам
       mention_you:
-        other: mentioned you
+        other: згадав(-ла) вас
       your_question_is_closed:
-        other: Your question has been closed
+        other: Ваше запитання закрито
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: Ваше запитання видалено
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: Вашу відповідь видалено
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: Ваш коментар видалено
       up_voted_question:
         other: upvoted question
       down_voted_question:
@@ -430,7 +430,7 @@ backend:
       up_voted_comment:
         other: upvoted comment
       invited_you_to_answer:
-        other: invited you to answer
+        other: запросив(-ла) вас відповісти
   email_tpl:
     change_email:
       title:
@@ -439,12 +439,12 @@ backend:
         other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+        other: "[{{.SiteName}}] {{.DisplayName}} відповів(-ла) на ваше запитання"
       body:
         other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+        other: "[{{.SiteName}}] {{.DisplayName}} запросив(-ла) вас відповісти"
       body:
         other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
@@ -461,17 +461,17 @@ backend:
       title:
         other: "[{{.SiteName }}] Password reset"
       body:
-        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Хтось попросив скинути ваш пароль на сайті {{.SiteName}}.<br><br>\n\nЯкщо це були не ви, можете спокійно проігнорувати цей електронний лист.<br><br>\n\nНатисніть це посилання, щоб вибрати новий пароль:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
-        other: "[{{.SiteName}}] Confirm your new account"
+        other: "[{{.SiteName}}] Підтвердьте свій новий обліковий запис"
       body:
-        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Вітаємо на {{.SiteName}}!<br><br>\n\nНатисніть це посилання, щоб підтвердити й активувати свій новий обліковий запис:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nЯкщо наведене вище посилання не можна натиснути, спробуйте скопіювати та вставити його в адресний рядок веб-переглядача.\n"
     test:
       title:
-        other: "[{{.SiteName}}] Test Email"
+        other: "[{{.SiteName}}] Тестовий електронний лист"
       body:
-        other: "This is a test email."
+        other: "Це тестовий електронний лист."
   action_activity_type:
     upvote:
       other: upvote
@@ -482,26 +482,26 @@ backend:
     downvoted:
       other: downvoted
     accept:
-      other: accept
+      other: прийняти
     accepted:
-      other: accepted
+      other: прийнято
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Як відформатувати
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Назад
+    next: Далі
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
+    question: Запитання
+    questions: Запитання
+    tag: Теґ
+    tags: Теґи
     tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
+    create_tag: Створити теґ
+    edit_tag: Редагувати теґ
     ask_a_question: Add Question
     edit_question: Edit Question
     edit_answer: Edit Answer
@@ -532,19 +532,19 @@ ui:
     achievement: Achievements
     new_alerts: New alerts
     all_read: Mark all as read
-    show_more: Show more
+    show_more: Показати більше
     someone: Someone
     inbox_type:
-      all: All
-      posts: Posts
-      invites: Invites
-      votes: Votes
+      all: Усі
+      posts: Публікації
+      invites: Запрошення
+      votes: Голоси
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
-    contact_us: Contact us
+    title: Ваш обліковий запис було призупинено
+    until_time: "Ваш обліковий запис призупинено до {{ time }}."
+    forever: Цього користувача призупинено назавжди.
+    end: Ви не дотримуєтеся правил спільноти.
+    contact_us: Зв'яжіться з нами
   editor:
     blockquote:
       text: Blockquote
@@ -552,59 +552,59 @@ ui:
       text: Strong
     chart:
       text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
+      flow_chart: Блок-схема
+      sequence_diagram: Діаграма послідовності
+      class_diagram: Діаграма класів
+      state_diagram: Діаграма станів
       entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      user_defined_diagram: Визначена користувачем діаграма
+      gantt_chart: Діаграма Ґанта
+      pie_chart: Кругова діаграма
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Зразок коду
+      add_code: Додати зразок коду
       form:
         fields:
           code:
-            label: Code
+            label: Код
             msg:
-              empty: Code cannot be empty.
+              empty: Код не може бути порожнім.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Мова
+            placeholder: Автоматичне визначення
+      btn_cancel: Скасувати
+      btn_confirm: Додати
     formula:
-      text: Formula
+      text: Формула
       options:
-        inline: Inline formula
+        inline: Вбудована формула
         block: Block formula
     heading:
-      text: Heading
+      text: Заголовок
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Заголовок 1
+        h2: Заголовок 2
+        h3: Заголовок 3
+        h4: Заголовок 4
+        h5: Заголовок 5
+        h6: Заголовок 6
     help:
-      text: Help
+      text: Допомога
     hr:
-      text: Horizontal rule
+      text: Горизонтальна лінійка
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Зображення
+      add_image: Додати зображення
+      tab_image: Завантажити зображення
       form_image:
         fields:
           file:
-            label: Image file
-            btn: Select image
+            label: Файл зображення
+            btn: Обрати зображення
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              empty: Файл не може бути порожнім.
+              only_image: Допустимі лише файли зображень.
+              max_size: Розмір файлу не може перевищувати 4 МБ.
           desc:
             label: Description
       tab_url: Image URL
@@ -683,47 +683,47 @@ ui:
             range: URL slug up to 35 characters.
             character: URL slug contains unallowed character set.
         desc:
-          label: Description
+          label: Опис
         revision:
           label: Revision
         edit_summary:
           label: Edit summary
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_cancel: Cancel
+            Коротко поясніть ваші зміни (виправлена орфографія, виправлена граматика, покращене форматування)
+    btn_cancel: Скасувати
     btn_submit: Submit
-    btn_post: Post new tag
+    btn_post: Опублікувати новий теґ
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Створено
+    edited_at: Відредаговано
+    history: Історія
     synonyms:
-      title: Synonyms
+      title: Синоніми
       text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
+      empty: Синонімів не знайдено.
+      btn_add: Додати синонім
+      btn_edit: Редагувати
+      btn_save: Зберегти
     synonyms_text: The following tags will be remapped to
     delete:
-      title: Delete this tag
+      title: Видалити цей теґ
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
-      close: Close
+      tip: Ви впевнені, що хочете видалити?
+      close: Закрити
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
-    default_first_reason: Add tag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+    title: Редагувати теґ
+    default_reason: Редагувати теґ
+    default_first_reason: Додати теґ
+    btn_save_edits: Зберегти зміни
+    btn_cancel: Скасувати
   dates:
-    long_date: MMM D
-    long_date_with_year: "MMM D, YYYY"
-    long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
+    long_date: МММ Д
+    long_date_with_year: "МММ Д, РРРР"
+    long_date_with_time: "МММ Д, РРРР [о] ГГ:хв"
+    now: зараз
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
@@ -732,14 +732,14 @@ ui:
     hours: hours
     days: days
   comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
+    btn_add_comment: Додати коментар
+    reply_to: Відповісти на
+    btn_reply: Відповісти
+    btn_edit: Редагувати
+    btn_delete: Видалити
     btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+    btn_save_edits: Зберегти зміни
+    btn_cancel: Скасувати
     show_more: "{{count}} more comments"
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
