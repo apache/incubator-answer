@@ -84,7 +84,7 @@ backend:
         other: Poziom 3 (wysoka reputacja wymagana dla dojrzałej społeczności)
     level_custom:
       description:
-        other: Custom Level
+        other: Poziom niestandardowy
     rank_question_add_label:
       other: Zadaj pytanie
     rank_answer_add_label:
@@ -689,7 +689,7 @@ ui:
         edit_summary:
           label: Edit summary
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Krótkie wyjaśnienie zmian (poprawa pisowni, naprawa gramatyki, poprawa formatowania)
     btn_cancel: Anuluj
     btn_submit: Prześlij
     btn_post: Opublikuj nowy tag
@@ -740,7 +740,7 @@ ui:
     btn_flag: Zgłoś
     btn_save_edits: Zapisz edycje
     btn_cancel: Anuluj
-    show_more: "{{count}} more comments"
+    show_more: "Jest {{count}} komentarzy, pokaż więcej"
     tip_question: >-
       Użyj komentarzy, aby poprosić o dodatkowe informacje lub sugerować poprawki. Unikaj udzielania odpowiedzi na pytania w komentarzach.
     tip_answer: >-
@@ -965,10 +965,10 @@ ui:
         label: Lokalizacja
         placeholder: "Miasto, Kraj"
     notification:
-      heading: Email Notifications
-      turn_on: Turn on
+      heading: Powiadomienia email
+      turn_on: Włącz
       inbox:
-        label: Inbox notifications
+        label: Powiadomienia skrzynki odbiorczej
         description: Odpowiedzi na Twoje pytania, komentarze, zaproszenia i inne.
       all_new_question:
         label: Wszystkie nowe pytania
@@ -1005,9 +1005,9 @@ ui:
         label: Język Interfejsu
         text: Język interfejsu użytkownika. Zmieni się po odświeżeniu strony.
     my_logins:
-      title: My logins
+      title: Moje logowania
       label: Zaloguj się lub zarejestruj na tej stronie za pomocą tych kont.
-      modal_title: Remove login
+      modal_title: Usuń logowanie
       modal_content: Czy na pewno chcesz usunąć to logowanie z Twojego konta?
       modal_confirm_btn: Usuń
       remove_success: Pomyślnie usunięto
@@ -1023,7 +1023,7 @@ ui:
     answers: odpowiedzi
   invite_to_answer:
     title: People Asked
-    desc: Select people who you think might know the answer.
+    desc: Wybierz osoby, które mogą znać odpowiedź.
     invite: Zaproś do odpowiedzi
     add: Dodaj osoby
     search: Wyszukaj osoby
