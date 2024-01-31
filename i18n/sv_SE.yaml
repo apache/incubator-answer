@@ -1117,11 +1117,11 @@ ui:
     close: Stäng
     reopen: Reopen
     ok: OK
-    light: Light
-    dark: Dark
+    light: Ljust
+    dark: Mörkt
     system_setting: System setting
-    default: Default
-    reset: Reset
+    default: Standard
+    reset: Återställ
   search:
     title: Sökresultat
     keywords: Keywords
@@ -1642,7 +1642,7 @@ ui:
         label: Teman
         text: Select an existing theme.
       color_scheme:
-        label: Color scheme
+        label: Färgschema
       navbar_style:
         label: Navbar style
       primary_color:
