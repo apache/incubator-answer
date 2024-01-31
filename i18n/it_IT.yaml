@@ -29,34 +29,34 @@ backend:
     database_error:
       other: Errore server dati
     forbidden_error:
-      other: Forbidden.
+      other: Vietato.
     duplicate_request_error:
       other: Duplicate submission.
   action:
     report:
-      other: Flag
+      other: Segnala
     edit:
-      other: Edit
+      other: Modifica
     delete:
-      other: Delete
+      other: Cancella
     close:
-      other: Close
+      other: Chiudi
     reopen:
-      other: Reopen
+      other: Riapri
     forbidden_error:
-      other: Forbidden.
+      other: Vietato.
     pin:
-      other: Pin
+      other: Fissa sul profilo
     hide:
-      other: Unlist
+      other: Rimuovi dall'elenco
     unpin:
-      other: Unpin
+      other: Stacca dal profilo
     show:
-      other: List
+      other: Aggiungi all'elenco
     invite_someone_to_answer:
-      other: Edit
+      other: Modifica
     undelete:
-      other: Undelete
+      other: Ripristina
   role:
     name:
       user:
@@ -86,17 +86,17 @@ backend:
       description:
         other: Custom Level
     rank_question_add_label:
-      other: Ask question
+      other: Fai una domanda
     rank_answer_add_label:
-      other: Write answer
+      other: Scrivi una risposta
     rank_comment_add_label:
-      other: Write comment
+      other: Scrivi un commento
     rank_report_add_label:
-      other: Flag
+      other: Segnala
     rank_comment_vote_up_label:
       other: Upvote comment
     rank_link_url_limit_label:
-      other: Post more than 2 links at a time
+      other: Pubblica più di 2 link alla volta
     rank_question_vote_up_label:
       other: Upvote question
     rank_answer_vote_up_label:
@@ -106,9 +106,9 @@ backend:
     rank_answer_vote_down_label:
       other: Downvote answer
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Invita qualcuno a rispondere
     rank_tag_add_label:
-      other: Create new tag
+      other: Crea un nuovo tag
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
@@ -132,7 +132,7 @@ backend:
   email:
     other: E-mail
   e_mail:
-    other: Email
+    other: E-mail
   password:
     other: Chiave di accesso
   pass:
@@ -142,12 +142,12 @@ backend:
   error:
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: La password non può contenere spazi.
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Non è possibile modificare la password.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Non è possibile modificare il tuo status.
       email_or_password_wrong:
         other: Email o password errati
     answer:
@@ -158,7 +158,7 @@ backend:
       cannot_update:
         other: Nessun permesso per l'aggiornamento.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Le domande sono chiuse e non possono essere aggiunte.
     comment:
       edit_without_permission:
         other: Non si hanno di privilegi sufficienti per modificare il commento
@@ -199,7 +199,7 @@ backend:
         other: La nuova password è identica alla precedente
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Questo post è stato eliminato.
       not_found:
         other: domanda non trovata
       cannot_deleted:
@@ -222,11 +222,11 @@ backend:
         other: Report non trovato
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Tag già esistente.
       not_found:
         other: Etichetta non trovata
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: Il tag consigliato non esiste.
       recommend_tag_enter:
         other: Inserisci almeno un tag.
       not_contain_synonym_tags:
@@ -234,12 +234,12 @@ backend:
       cannot_update:
         other: Nessun permesso per l'aggiornamento.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: Non è possibile eliminare un tag in uso.
       cannot_set_synonym_as_itself:
         other: Non puoi impostare il sinonimo del tag corrente come se stesso.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
+        other: Il mittente non può essere un indirizzo email.
     theme:
       not_found:
         other: tema non trovato
@@ -247,7 +247,7 @@ backend:
       review_underway:
         other: Non è possibile modificare al momento, c'è una versione nella coda di revisione.
       no_permission:
-        other: No permission to revise.
+        other: Non è permessa la revisione.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -269,13 +269,13 @@ backend:
       cannot_update_your_role:
         other: Non puoi modificare il tuo ruolo.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: Attualmente il sito non è aperto per la registrazione.
       not_allowed_login_via_password:
         other: Currently the site is not allowed to login via password.
       access_denied:
-        other: Access denied
+        other: Accesso negato
       page_access_denied:
-        other: You do not have access to this page.
+        other: Non hai accesso a questa pagina.
       add_bulk_users_format_error:
         other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
@@ -300,34 +300,34 @@ backend:
   reason:
     spam:
       name:
-        other: spam
+        other: Spam
       desc:
         other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: scortese o offensivo
       desc:
         other: A reasonable person would find this content inappropriate for respectful discourse.
     a_duplicate:
       name:
-        other: a duplicate
+        other: duplicato
       desc:
         other: This question has been asked before and already has an answer.
       placeholder:
         other: Enter the existing question link
     not_a_answer:
       name:
-        other: not an answer
+        other: Non è una risposta
       desc:
         other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: Non più necessario
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Questo commento è obsoleto, informale o non rilevante per questo post.
     something:
       name:
-        other: something else
+        other: Qualcos'altro
       desc:
         other: This post requires staff attention for another reason not listed above.
       placeholder:
@@ -339,7 +339,7 @@ backend:
         other: This question doesn't meet a community guideline.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: Richiede maggiori dettagli o chiarezza
       desc:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
