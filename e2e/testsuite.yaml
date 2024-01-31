@@ -1,0 +1,181 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+name: answer
+api: |
+  {{default "http://answer" (env "SERVER")}}/answer/api/v1
+param:
+  email: |
+    {{default "admin123@admin.com" (env "EMAIL")}}
+  pass: |
+    {{default "admin123" (env "PASSWD")}}
+items:
+- name: login
+  request:
+    api: /user/login/email
+    body: |-
+      {
+          "e_mail": "{{.param.email}}",
+          "pass": "{{.param.pass}}"
+      }
+    header:
+      Content-Type: application/json
+    method: POST
+- name: status
+  request:
+    api: /notification/status
+    header:
+      Authorization: "{{.login.data.access_token}}"
+      Content-Type: application/json
+    method: GET
+- name: question
+  request:
+    api: /question
+    body: |
+      {
+        "title": "{{randomKubernetesName}}",
+        "content": "good-body",
+        "tags": [
+          {
+            "slug_name": "test",
+            "display_name": "test",
+            "original_text": "",
+            "parsed_text": ""
+          }
+        ]
+      }
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+    method: POST
+- name: questionList
+  request:
+    api: /question/page
+    header:
+      Authorization: '{{.login.data.access_token}}'
+- name: answer
+  request:
+    api: /answer
+    body: |
+      {
+        "question_id": "{{(index .questionList.data.list 0).id}}",
+        "content": "{{randomKubernetesName}}",
+        "html": "<p>{{randomKubernetesName}}</p>\n"
+      }
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+    method: POST
+- before:
+    items:
+    - sleep("1s")
+  expect: {}
+  name: acceptance
+  request:
+    api: /answer/acceptance
+    body: |
+      {
+        "question_id": "{{.question.data.id}}",
+        "answer_id": "{{.answer.data.info.id}}"
+      }
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+    method: POST
+- expect: {}
+  name: delAnswer
+  request:
+    api: /answer
+    body: |
+      {
+        "id": "{{.answer.data.info.id}}"
+      }
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+    method: DELETE
+- expect: {}
+  name: delQuestion
+  request:
+    api: /question
+    body: |
+      {
+        "id": "{{.question.data.id}}"
+      }
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+    method: DELETE
+- expect:
+    bodyFieldsExpect:
+      msg: page must be 1 or greater
+    statusCode: 400
+  name: search-nagetive-page
+  request:
+    api: /search?q=abc&order=active&page={{randInt -10 0}}&size=20
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- expect:
+    bodyFieldsExpect:
+      msg: size must be 1 or greater
+    statusCode: 400
+  name: search-nagetive-size
+  request:
+    api: /search?q=abc&order=active&page=1&size={{randInt -10 0}}
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- expect:
+    bodyFieldsExpect:
+      msg: order must be one of [newest active score relevance]
+    statusCode: 400
+  name: search-wrong-order
+  request:
+    api: /search?q=abc&order={{randAlpha 6}}&page=1&size=10
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- name: search-not-found
+  request:
+    api: /search?q={{randAlpha 16}}&order={{index (list "newest" "active" "score" "relevance") (randInt 0 3)}}&page=1&size=10
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- name: tags
+  request:
+    api: /tags/page?page=1&page_size=20&query_cond={{index (list "newest" "popular" "name") (randInt 0 2)}}
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- expect:
+    bodyFieldsExpect:
+      msg: query_cond must be one of [popular name newest]
+    statusCode: 400
+  name: tags-invalid-cond
+  request:
+    api: /tags/page?page=1&page_size=20&query_cond={{randAlpha 16}}
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
+- expect: {}
+  name: user-ranking
+  request:
+    api: /user/ranking
+    header:
+      Authorization: '{{.login.data.access_token}}'
+      Content-Type: application/json
