@@ -312,7 +312,7 @@ backend:
       name:
         other: duplicato
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Questa domanda è già stata posta e ha già una risposta.
       placeholder:
         other: Enter the existing question link
     not_a_answer:
@@ -329,29 +329,29 @@ backend:
       name:
         other: Qualcos'altro
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Questo post richiede l'attenzione dello staff per un altro motivo non elencato sopra.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: Facci sapere nello specifico cosa ti preoccupa
     community_specific:
       name:
-        other: a community-specific reason
+        other: Un motivo legato alla community
       desc:
-        other: This question doesn't meet a community guideline.
+        other: Questa domanda non soddisfa le linee guida della community.
     not_clarity:
       name:
         other: Richiede maggiori dettagli o chiarezza
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: Questa domanda include più domande in una. Dovrebbe concentrarsi su un unico problema.
     looks_ok:
       name:
-        other: looks OK
+        other: sembra OK
       desc:
-        other: This post is good as-is and not low quality.
+        other: Questo post è corretto così com'è e non è di bassa qualità.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: Necessita di modifiche che ho  effettuato
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: Migliora e correggi tu stesso i problemi di questo post.
     needs_close:
       name:
         other: needs close
@@ -428,59 +428,59 @@ backend:
       down_voted_answer:
         other: downvoted answer
       up_voted_comment:
-        other: upvoted comment
+        other: commento approvato
       invited_you_to_answer:
-        other: invited you to answer
+        other: sei invitato a rispondere
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Conferma il tuo nuovo indirizzo email"
       body:
-        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Conferma il tuo nuovo indirizzo email per {{.SiteName}} cliccando sul seguente link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nSe non hai richiesto questa modifica, ignora questa email.\n"
     new_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+        other: "[{{.SiteName}}] {{.DisplayName}} ha risposto alla tua domanda"
       body:
         other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+        other: "[{{.SiteName}}] {{.DisplayName}} ti ha invitato a rispondere"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Credo che potresti sapere la risposta.</blockquote><br>\n<a href='{{.InviteUrl}}'>Visualizzalo su {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Annulla iscrizione</a></small>"
     new_comment:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+        other: "[{{.SiteName}}] {{.DisplayName}} ha commentato il tuo post"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Visualizzalo su {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Annulla iscrizione</a></small>"
     new_question:
       title:
-        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+        other: "[{{.SiteName}}] Nuova domanda: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Annulla l'iscrizione</a></small>"
     pass_reset:
       title:
-        other: "[{{.SiteName }}] Password reset"
+        other: "[{{.SiteName }}] Reimpostazione della password"
       body:
-        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Qualcuno ha chiesto di reimpostare la tua password su {{.SiteName}}.<br><br>\n\nSe non sei stato tu, ignora questa email.<br><br>\n\nClicca sul seguente link per scegliere una nuova password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
-        other: "[{{.SiteName}}] Confirm your new account"
+        other: "[{{.SiteName}}] Conferma il tuo nuovo account"
       body:
-        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Benvenuto su {{.SiteName}}!<br><br>\n\nClicca il seguente link per confermare e attivare il tuo nuovo account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nSe il link qui sopra non è cliccabile, prova a copiarlo e incollarlo nella barra degli indirizzi del tuo browser.\n"
     test:
       title:
-        other: "[{{.SiteName}}] Test Email"
+        other: "[{{.SiteName}}] Email di prova"
       body:
-        other: "This is a test email."
+        other: "Questa è una email di prova."
   action_activity_type:
     upvote:
-      other: upvote
+      other: voto a favore
     upvoted:
-      other: upvoted
+      other: voto a favore
     downvote:
-      other: downvote
+      other: voto negativo
     downvoted:
-      other: downvoted
+      other: votato negativamente
     accept:
       other: Accetta
     accepted:
@@ -500,23 +500,23 @@ ui:
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
-    create_tag: Create Tag
+    create_tag: Crea tag
     edit_tag: Modifica Tag
     ask_a_question: Aggiungi una domanda
     edit_question: Modifica Domanda
-    edit_answer: Edit Answer
+    edit_answer: Modifica risposta
     search: Cerca
     posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
+    settings: Impostazioni
+    notifications: Notifiche
+    login: Accedi
+    sign_up: Registrati
+    account_recovery: Recupero dell'account
+    account_activation: Attivazione account
     confirm_email: Conferma Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
+    account_suspended: Account sospeso
+    admin: Amministratore
+    change_email: Modifica la tua email
     install: Answer Installation
     upgrade: Answer Upgrade
     maintenance: Manutenzione del sito
@@ -547,9 +547,9 @@ ui:
     contact_us: Contattaci
   editor:
     blockquote:
-      text: Blockquote
+      text: Citazione
     bold:
-      text: Strong
+      text: Forte
     chart:
       text: Grafico
       flow_chart: Flow chart
@@ -643,11 +643,11 @@ ui:
     unordered_list:
       text: Bulleted list
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: Tabella
+      heading: Intestazione
+      cell: Cella
   close_modal:
-    title: I am closing this post as...
+    title: Sto chiudendo questo post come...
     btn_cancel: Cancella
     btn_submit: Invia
     remark:
@@ -671,7 +671,7 @@ ui:
     form:
       fields:
         display_name:
-          label: Display name
+          label: Nome da visualizzare
           msg:
             empty: Display name cannot be empty.
             range: Display name up to 35 characters.
@@ -687,9 +687,9 @@ ui:
         revision:
           label: Revisione
         edit_summary:
-          label: Edit summary
+          label: Modifica il riepilogo
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Spiega brevemente le tue modifiche (ortografia rifinita, grammatica corretta, formattazione migliorata)
     btn_cancel: Cancella
     btn_submit: Invia
     btn_post: Pubblica un nuovo tag
@@ -710,7 +710,7 @@ ui:
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>Non è consentita <strong>l'eliminazione di tag con sinonimi</strong>.</p> <p>Per favore, rimuovi prima i sinonimi da questo tag.</p>
       tip: Sei sicuro di voler cancellare?
       close: Chiudi
   edit_tag:
@@ -723,46 +723,46 @@ ui:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
+    now: ora
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
-    hours: hours
-    days: days
+    hour: ora
+    day: giorno
+    hours: ore
+    days: giorni
   comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
-    btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: "{{count}} more comments"
+    btn_add_comment: Aggiungi un commento
+    reply_to: Rispondi a
+    btn_reply: Rispondi
+    btn_edit: Modifica
+    btn_delete: Cancella
+    btn_flag: Segnala
+    btn_save_edits: Salva modifiche
+    btn_cancel: Cancella
+    show_more: "{{count}} altri commenti"
     tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
+      Usa i commenti per chiedere maggiori informazioni o per suggerire miglioramenti. Evita di rispondere alle domande nei commenti.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
+      Utilizza i commenti per rispondere ad altri utenti o avvisarli delle modifiche. Se stai aggiungendo nuove informazioni, modifica il tuo post invece di commentare.
+    tip_vote: Aggiunge qualcosa di utile al post
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
-    default_first_reason: Add answer
+    title: Modifica risposta
+    default_reason: Modifica risposta
+    default_first_reason: Aggiungi risposta
     form:
       fields:
         revision:
-          label: Revision
+          label: Revisione
         answer:
-          label: Answer
+          label: Risposta
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: Il testo deve contenere almeno 6 caratteri.
         edit_summary:
-          label: Edit summary
+          label: Modifica il riepilogo
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
+            Spiega brevemente le tue modifiche (ortografia rifinita, grammatica corretta, formattazione migliorata)
+    btn_save_edits: Salva modifiche
     btn_cancel: Cancel
   tags:
     title: Tags
@@ -886,37 +886,37 @@ ui:
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: Il campo email non può essere vuoto.
   change_email:
-    btn_cancel: Cancel
-    btn_update: Update email address
+    btn_cancel: Cancella
+    btn_update: Aggiorna indirizzo email
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Se un account corrisponde a <strong>{{mail}}</strong>, a breve dovresti ricevere un'email con le istruzioni su come reimpostare la password.
     email:
-      label: New email
+      label: Nuova email
       msg:
-        empty: Email cannot be empty.
+        empty: L'email non può essere vuota.
   oauth:
-    connect: Connect with {{ auth_name }}
-    remove: Remove {{ auth_name }}
+    connect: Connettiti con {{ auth_name }}
+    remove: Rimuovi {{ auth_name }}
   oauth_bind_email:
-    subtitle: Add a recovery email to your account.
-    btn_update: Update email address
+    subtitle: Aggiungi un'email di recupero al tuo account.
+    btn_update: Aggiorna l'indirizzo email
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
-    modal_title: Email already existes.
-    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
-    modal_cancel: Change email
-    modal_confirm: Connect to the existing account
+        empty: L'email non può essere vuota.
+    modal_title: Email già esistente
+    modal_content: Questo indirizzo email è già registrato. Sei sicuro che vuoi connetterti all'account esistente?
+    modal_cancel: Cambia email
+    modal_confirm: Connettiti all'account esistente
   password_reset:
-    page_title: Password Reset
+    page_title: Reimposta la password
     btn_name: Reimposta la mia password
     reset_success: >-
       Hai cambiato con successo la tua password; sarai reindirizzato alla pagina di accesso.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
+      Siamo spiacenti, questo link di reset della password non è più valido. Forse la password è già stata reimpostata?
     to_login: Continua per effettuare il login
     password:
       label: Password
@@ -938,7 +938,7 @@ ui:
       heading: Profilo
       btn_name: Salva
       display_name:
-        label: Display name
+        label: Visualizza nome
         msg: Display name cannot be empty.
         msg_range: Display name up to 30 characters.
       username:
@@ -971,11 +971,11 @@ ui:
         label: Notifiche in arrivo
         description: Risposte alle tue domande, commenti, inviti e altro ancora.
       all_new_question:
-        label: All new questions
+        label: Tutte le nuove domande
         description: Ricevi una notifica per tutte le nuove domande. Fino a 50 domande a settimana.
       all_new_question_for_following_tags:
         label: Tutte le nuove domande per i seguenti tag
-        description: Get notified of new questions for following tags.
+        description: Ricevi una notifica delle nuove domande per i seguenti tag.
     account:
       heading: Profilo
       change_email_btn: Modifica e-mail
@@ -983,41 +983,41 @@ ui:
       change_email_info: >-
         Abbiamo inviato una mail a quell'indirizzo. Si prega di seguire le istruzioni di conferma.
       email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Nuova email
+        msg: La nuova email non può essere vuota.
       pass:
-        label: Current password
-        msg: Password cannot be empty.
+        label: Password attuale
+        msg: La password non può essere vuota
       password_title: Password
       current_pass:
-        label: Current password
+        label: Password attuale
         msg:
-          empty: Current password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: La password attuale non può essere vuota.
+          length: La lunghezza deve essere compresa tra 8 e 32.
+          different: Le due password inserite non corrispondono.
       new_pass:
-        label: New password
+        label: Nuova password
       pass_confirm:
-        label: Confirm new password
+        label: Conferma la nuova password
     interface:
-      heading: Interface
+      heading: Interfaccia
       lang:
-        label: Interface language
-        text: User interface language. It will change when you refresh the page.
+        label: Lingua dell'interfaccia
+        text: La lingua dell'interfaccia utente cambierà quando aggiorni la pagina.
     my_logins:
-      title: My logins
-      label: Log in or sign up on this site using these accounts.
-      modal_title: Remove login
-      modal_content: Are you sure you want to remove this login from your account?
-      modal_confirm_btn: Remove
-      remove_success: Removed successfully
+      title: I miei login
+      label: Accedi o registrati su questo sito utilizzando questi account.
+      modal_title: Rimuovi login
+      modal_content: Sei sicuro di voler rimuovere questo login dal tuo account?
+      modal_confirm_btn: Rimuovi
+      remove_success: Rimosso con successo
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
-    sent_success: Sent successfully
+    update: Aggiornamento riuscito
+    update_password: Password modificata con successo.
+    flag_success: Grazie per la segnalazione.
+    forbidden_operate_self: Vietato operare su se stessi.
+    review: Le tue modifiche verranno visualizzata dopo la revisione.
+    sent_success: Inviato correttamente
   related_question:
     title: Related Questions
     answers: answers
@@ -1118,33 +1118,33 @@ ui:
     reopen: Reopen
     ok: OK
     light: Light
-    dark: Dark
-    system_setting: System setting
-    default: Default
-    reset: Reset
+    dark: Scuro
+    system_setting: Configurazione di sistema
+    default: Predefinito
+    reset: Resetta
   search:
-    title: Search Results
-    keywords: Keywords
-    options: Options
-    follow: Follow
-    following: Following
-    counts: "{{count}} Results"
-    more: More
+    title: Risultati della ricerca
+    keywords: Parole chiave
+    options: Opzioni
+    follow: Segui
+    following: Segui già
+    counts: "{{count}} Risultati"
+    more: Altro
     sort_btns:
-      relevance: Relevance
-      newest: Newest
-      active: Active
-      score: Score
-      more: More
+      relevance: Rilevanza
+      newest: Più recenti
+      active: Attivo
+      score: Punteggio
+      more: Altro
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
+      title: Suggerimenti per ricerca avanzata
+      tag: "<1>[tag]</1> cerca dentro un tag"
+      user: "<1>user:username</1> ricerca per autore"
+      answer: "<1>risposte:0</1> domande senza risposta"
+      score: "<1>punteggio:3</1> messaggi con un punteggio di 3+"
+      question: "<1>is:question</1> cerca domande"
       is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+    empty: Non siamo riusciti a trovare nulla. <br /> Prova parole chiave diverse o meno specifiche.
   share:
     name: Condividi
     copy: Copia il link
@@ -1159,7 +1159,7 @@ ui:
     success: Il tuo nuovo account è confermato; sarai reindirizzato alla home page.
     link: Continua alla Homepage
     invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
+      Siamo spiacenti, questo link di conferma dell'account non è più valido. Forse il tuo account è già attivo?
     confirm_new_email: La tua email è stata aggiornata.
     confirm_new_email_invalid: >-
       Siamo spiacenti, questo link di conferma non è più valido. Forse la tua email è già stata modificata?
@@ -1169,11 +1169,11 @@ ui:
     success_desc: Sei stato rimosso con successo da questa lista e non riceverai ulteriori email
     link: Cambia impostazioni
   question:
-    following_tags: Following Tags
+    following_tags: Tag seguenti
     edit: Modifica
     save: Salva
-    follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
+    follow_tag_tip: Segui i tag per curare la tua lista di domande.
+    hot_questions: Domande scottanti
     all_questions: Tutte le domande
     x_questions: "{{ count }} Domande"
     x_answers: "{{count}} risposte"
@@ -1185,10 +1185,10 @@ ui:
     score: Punteggio
     unanswered: Senza risposta
     modified: Modificato
-    answered: answered
+    answered: Risposte
     asked: chiesto
     closed: Chiuso
-    follow_a_tag: Follow a tag
+    follow_a_tag: Segui un tag
     more: Altro
   personal:
     overview: Informazioni Generali
@@ -1199,21 +1199,21 @@ ui:
     bookmarks: Segnalibri
     reputation: Reputazione
     comments: Commenti
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit profile
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
-    about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
+    votes: Voti
+    newest: Più recenti
+    score: Punteggio
+    edit_profile: Modifica profilo
+    visited_x_days: "{{ count }} giorni visitati"
+    viewed: Visualizzati
+    joined: Iscritto
+    last_login: Visto
+    about_me: Chi sono
+    about_me_empty: "// Ciao, mondo !"
+    top_answers: Migliori risposte
+    top_questions: Domande principali
+    stats: Statistiche
+    list_empty: Nessun post trovato.<br />Forse desideri selezionare una scheda diversa?
+    accepted: Accettato
     answered: answered
     asked: asked
     downvoted: downvoted
