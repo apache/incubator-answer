@@ -324,32 +324,32 @@ backend:
       name:
         other: no longer needed
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Цей коментар є застарілим, розмовним або не стосується цієї публікації.
     something:
       name:
-        other: something else
+        other: інше
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Ця публікація вимагає уваги персоналу з іншої причини, що не вказана вище.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: Дайте нам знати, що саме вас турбує
     community_specific:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn't meet a community guideline.
+        other: Це запитання не відповідає правилам спільноти.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: потребує деталей або ясності
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: Наразі це запитання містить кілька запитань в одному. Воно має бути зосереджене лише на одній проблемі.
     looks_ok:
       name:
-        other: looks OK
+        other: виглядає добре
       desc:
-        other: This post is good as-is and not low quality.
+        other: Цей допис хороший, як є, і не є низької якості.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: потребує редагування, і я це зробив
       desc:
         other: Improve and correct problems with this post yourself.
     needs_close:
@@ -361,29 +361,29 @@ backend:
       name:
         other: потрібно видалити
       desc:
-        other: This post will be deleted.
+        other: Цей допис буде видалено.
   question:
     close:
       duplicate:
         name:
-          other: spam
+          other: спам
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Це питання ставилося раніше, і на нього вже є відповідь.
       guideline:
         name:
           other: a community-specific reason
         desc:
-          other: This question doesn't meet a community guideline.
+          other: Це запитання не відповідає правилам спільноти.
       multiple:
         name:
-          other: needs details or clarity
+          other: потребує деталей або ясності
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: Наразі це запитання містить кілька запитань в одному. Воно має бути зосереджене лише на одній проблемі.
       other:
         name:
-          other: something else
+          other: інше
         desc:
-          other: This post requires another reason not listed above.
+          other: Для цього допису потрібна інша причина, не зазначена вище.
     operation_type:
       asked:
         other: asked
@@ -392,11 +392,11 @@ backend:
       modified:
         other: modified
     deleted_title:
-      other: Deleted question
+      other: Видалене питання
   notification:
     action:
       update_question:
-        other: updated question
+        other: оновлене питання
       answer_the_question:
         other: answered question
       update_answer:
@@ -434,32 +434,32 @@ backend:
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Підтвердіть нову адресу електронної пошти"
       body:
-        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Підтвердіть нову електронну адресу для {{.SiteName}}, натиснувши на наступне посилання:<br><a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nЯкщо ви не надсилали запит на цю зміну, не звертайте уваги на цей електронний лист.\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} відповів(-ла) на ваше запитання"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Переглянути на {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Відписатися</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} запросив(-ла) вас відповісти"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Я думаю, ти маєш знати відповідь.</blockquote><br>\n<a href='{{.InviteUrl}}'>Переглянути на {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Відписатися</a></small>"
     new_comment:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+        other: "[{{.SiteName}}] {{.DisplayName}} прокоментували ваш допис"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Переглянути на {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Відписатися</a></small>"
     new_question:
       title:
-        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+        other: "[{{.SiteName}}] Нове питання: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Відписатися</a></small>"
     pass_reset:
       title:
-        other: "[{{.SiteName }}] Password reset"
+        other: "[{{.SiteName }}] Скидання пароля"
       body:
         other: "Хтось попросив скинути ваш пароль на сайті {{.SiteName}}.<br><br>\n\nЯкщо це були не ви, можете спокійно проігнорувати цей електронний лист.<br><br>\n\nНатисніть це посилання, щоб вибрати новий пароль:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
@@ -513,25 +513,25 @@ ui:
     sign_up: Sign Up
     account_recovery: Account Recovery
     account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
+    confirm_email: Підтвердити електронну адресу
+    account_suspended: Обліковий запис призупинено
+    admin: Адмін
+    change_email: Змінити електронну адресу
     install: Answer Installation
     upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
-    oauth_callback: Processing
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
-    http_403: HTTP Error 403
-    logout: Log Out
+    maintenance: Технічне обслуговування сайту
+    users: Користувачі
+    oauth_callback: Обробка
+    http_404: Помилка HTTP 404
+    http_50X: Помилка HTTP 500
+    http_403: Помилка HTTP 403
+    logout: Вийти
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    new_alerts: New alerts
-    all_read: Mark all as read
+    title: Сповіщення
+    inbox: Вхідні
+    achievement: Досягнення
+    new_alerts: Нові сповіщення
+    all_read: Позначити все як прочитане
     show_more: Показати більше
     someone: Someone
     inbox_type:
@@ -551,7 +551,7 @@ ui:
     bold:
       text: Strong
     chart:
-      text: Chart
+      text: Діаграма
       flow_chart: Блок-схема
       sequence_diagram: Діаграма послідовності
       class_diagram: Діаграма класів
@@ -606,49 +606,49 @@ ui:
               only_image: Допустимі лише файли зображень.
               max_size: Розмір файлу не може перевищувати 4 МБ.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Опис
+      tab_url: URL зображення
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL зображення
             msg:
-              empty: Image URL cannot be empty.
+              empty: URL-адреса зображення не може бути пустою.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: Опис
+      btn_cancel: Скасувати
+      btn_confirm: Додати
+      uploading: Завантаження
     indent:
-      text: Indent
+      text: Абзац
     outdent:
-      text: Outdent
+      text: Відступ
     italic:
       text: Emphasis
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Гіперпосилання
+      add_link: Додати гіперпосилання
       form:
         fields:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: URL-адреса не може бути пустою.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Опис
+      btn_cancel: Скасувати
+      btn_confirm: Додати
     ordered_list:
-      text: Numbered list
+      text: Нумерований список
     unordered_list:
-      text: Bulleted list
+      text: Маркований список
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: Таблиця
+      heading: Заголовок
+      cell: Клітинка
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
+    title: Я закриваю цей пост, оскільки...
+    btn_cancel: Скасувати
     btn_submit: Submit
     remark:
       empty: Cannot be empty.
@@ -657,21 +657,21 @@ ui:
   report_modal:
     flag_title: I am flagging to report this post as...
     close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
+    review_question_title: Переглянути питання
+    review_answer_title: Переглянути відповідь
+    review_comment_title: Переглянути коментар
+    btn_cancel: Скасувати
     btn_submit: Submit
     remark:
-      empty: Cannot be empty.
+      empty: Не може бути порожнім.
     msg:
-      empty: Please select a reason.
+      empty: Будь ласка, оберіть причину.
   tag_modal:
-    title: Create new tag
+    title: Створити новий теґ
     form:
       fields:
         display_name:
-          label: Display name
+          label: Ім'я для відображення
           msg:
             empty: Display name cannot be empty.
             range: Display name up to 35 characters.
@@ -742,112 +742,112 @@ ui:
     btn_cancel: Скасувати
     show_more: "{{count}} more comments"
     tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
+      Використовуйте коментарі, щоб попросити більше інформації або запропонувати покращення. Уникайте відповідей на питання в коментарях.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+      Використовуйте коментарі, щоб відповідати іншим користувачам або повідомляти їх про зміни. Якщо ви додаєте нову інформацію, відредагуйте свою публікацію, а не коментуйте.
     tip_vote: It adds something useful to the post
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
-    default_first_reason: Add answer
+    title: Редагувати відповідь
+    default_reason: Редагувати відповідь
+    default_first_reason: Додати відповідь
     form:
       fields:
         revision:
           label: Revision
         answer:
-          label: Answer
+          label: Відповідь
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: вміст має бути не менше 6 символів.
         edit_summary:
           label: Edit summary
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Коротко поясніть ваші зміни (виправлена орфографія, виправлена граматика, покращене форматування)
+    btn_save_edits: Зберегти зміни
+    btn_cancel: Скасувати
   tags:
-    title: Tags
+    title: Теґи
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: Newest
+      popular: Популярне
+      name: Назва
+      newest: Найновіші
     button_follow: Follow
     button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
+    tag_label: запитання
+    search_placeholder: Фільтрувати за назвою теґу
+    no_desc: Цей теґ не має опису.
+    more: Більше
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    default_first_reason: Add question
-    similar_questions: Similar questions
+    title: Додати питання
+    edit_title: Редагувати питання
+    default_reason: Редагувати питання
+    default_first_reason: Додати питання
+    similar_questions: Подібні питання
     form:
       fields:
         revision:
           label: Revision
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: Назва
+          placeholder: Будьте конкретними та уявіть, що ви ставите запитання іншій людині
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: Назва не може бути порожньою.
+            range: Назва до 150 символів
         body:
           label: Body
           msg:
             empty: Body cannot be empty.
         tags:
-          label: Tags
+          label: Теґи
           msg:
-            empty: Tags cannot be empty.
+            empty: Теґи не можуть бути порожніми.
         answer:
-          label: Answer
+          label: Відповідь
           msg:
-            empty: Answer cannot be empty.
+            empty: Відповідь не може бути порожньою.
         edit_summary:
           label: Edit summary
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
+            Коротко поясніть ваші зміни (виправлена орфографія, виправлена граматика, покращене форматування)
+    btn_post_question: Опублікуйте своє запитання
+    btn_save_edits: Зберегти зміни
+    answer_question: Відповісти на власне питання
     post_question&answer: Post your question and answer
   tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
+    add_btn: Додати теґ
+    create_btn: Створити новий теґ
+    search_tag: Шукати теґ
     hint: "Describe what your question is about, at least one tag is required."
     no_result: No tags matched
     tag_required_text: Required tag (at least one)
   header:
     nav:
-      question: Questions
-      tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
-      admin: Admin
+      question: Запитання
+      tag: Теґи
+      user: Користувачі
+      profile: Профіль
+      setting: Налаштування
+      logout: Вийти
+      admin: Адмін
       review: Review
-      bookmark: Bookmarks
-      moderation: Moderation
+      bookmark: Закладки
+      moderation: Модерація
     search:
-      placeholder: Search
+      placeholder: Пошук
   footer:
     build_on: >-
       Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
-    loading: loading...
+    loading: завантаження...
   pic_auth_code:
     title: Captcha
-    placeholder: Type the text above
+    placeholder: Введіть текст вище
     msg:
       empty: Captcha cannot be empty.
   inactive:
     first: >-
-      You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.
-    info: "If it doesn't arrive, check your spam folder."
+      Ви майже закінчили! Ми надіслали лист для активації на <bold>{{mail}}</bold>. Будь ласка, дотримуйтесь інструкцій, щоб активувати свій обліковий запис.
+    info: "Якщо він не надійшов, перевірте папку зі спамом."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
     btn_name: Resend activation email
@@ -884,71 +884,71 @@ ui:
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: Електронна пошта
       msg:
-        empty: Email cannot be empty.
+        empty: Поле електронної пошти не може бути пустим.
   change_email:
-    btn_cancel: Cancel
-    btn_update: Update email address
+    btn_cancel: Скасувати
+    btn_update: Оновити адресу електронної пошти
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: New email
+      label: Нова електронна пошта
       msg:
-        empty: Email cannot be empty.
+        empty: Поле електронної пошти не може бути пустим.
   oauth:
-    connect: Connect with {{ auth_name }}
-    remove: Remove {{ auth_name }}
+    connect: З'єднати з {{ auth_name }}
+    remove: Видалити {{ auth_name }}
   oauth_bind_email:
     subtitle: Add a recovery email to your account.
-    btn_update: Update email address
+    btn_update: Оновити адресу електронної пошти
     email:
-      label: Email
+      label: Електронна пошта
       msg:
-        empty: Email cannot be empty.
-    modal_title: Email already existes.
-    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
-    modal_cancel: Change email
+        empty: Поле електронної пошти не може бути пустим.
+    modal_title: Електронна адреса вже існує.
+    modal_content: Ця електронна адреса вже зареєстрована. Ви впевнені, що бажаєте підключитися до існуючого облікового запису?
+    modal_cancel: Змінити електронну пошту
     modal_confirm: Connect to the existing account
   password_reset:
     page_title: Password Reset
-    btn_name: Reset my password
+    btn_name: Скинути мій пароль
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      Ви успішно змінили пароль; вас буде перенаправлено на сторінку входу в систему.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
+      На жаль, це посилання для зміни пароля більше недійсне. Можливо, ваш пароль уже скинуто?
     to_login: Continue to log in page
     password:
-      label: Password
+      label: Пароль
       msg:
         empty: Password cannot be empty.
-        length: The length needs to be between 8 and 32
-        different: The passwords entered on both sides are inconsistent
+        length: Довжина повинна бути від 8 до 32 символів
+        different: Двічі введені паролі є несумісними
     password_confirm:
-      label: Confirm new password
+      label: Підтвердити новий пароль
   settings:
-    page_title: Settings
+    page_title: Налаштування
     goto_modify: Go to modify
     nav:
-      profile: Profile
-      notification: Notifications
-      account: Account
-      interface: Interface
+      profile: Профіль
+      notification: Сповіщення
+      account: Обліковий запис
+      interface: Інтерфейс
     profile:
-      heading: Profile
-      btn_name: Save
+      heading: Профіль
+      btn_name: Зберегти
       display_name:
-        label: Display name
+        label: Ім'я для відображення
         msg: Display name cannot be empty.
         msg_range: Display name up to 30 characters.
       username:
-        label: Username
+        label: Ім'я користувача
         caption: People can mention you as "@username".
         msg: Username cannot be empty.
         msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile image
+        label: Зображення профілю
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
