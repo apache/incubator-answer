@@ -296,18 +296,18 @@ backend:
         other: Unsupported file format.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Configurazione del sito non trovata.
   reason:
     spam:
       name:
         other: Spam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: "Questo post è una pubblicità o spam. Non è utile o rilevante per l'argomento attuale.\n"
     rude_or_abusive:
       name:
         other: scortese o offensivo
       desc:
-        other: A reasonable person would find this content inappropriate for respectful discourse.
+        other: Una persona ragionevole troverebbe questo contenuto inappropriato o irrispettoso.
     a_duplicate:
       name:
         other: duplicato
@@ -319,7 +319,7 @@ backend:
       name:
         other: Non è una risposta
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+        other: Ciò è stato pubblicato come una risposta, ma non risponde alla domanda. Dovrebbe essere possibilmente una modifica, un commento, un'altra domanda o cancellato del tutto.
     no_longer_needed:
       name:
         other: Non più necessario
@@ -354,7 +354,7 @@ backend:
         other: Migliora e correggi tu stesso i problemi di questo post.
     needs_close:
       name:
-        other: needs close
+        other: necessita di chiusura
       desc:
         other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
@@ -386,13 +386,13 @@ backend:
           other: Questo articolo richiede un'altro motivo non listato sopra.
     operation_type:
       asked:
-        other: asked
+        other: chiesto
       answered:
-        other: answered
+        other: Risposto
       modified:
-        other: modified
+        other: Modificato
     deleted_title:
-      other: Deleted question
+      other: "\nDomanda cancellata"
   notification:
     action:
       update_question:
@@ -420,13 +420,13 @@ backend:
       your_comment_was_deleted:
         other: il tuo commento è stato rimosso
       up_voted_question:
-        other: upvoted question
+        other: domanda approvata
       down_voted_question:
-        other: downvoted question
+        other: domanda scartata
       up_voted_answer:
-        other: upvoted answer
+        other: risposta approvata
       down_voted_answer:
-        other: downvoted answer
+        other: risposta sfavorevole
       up_voted_comment:
         other: commento approvato
       invited_you_to_answer:
@@ -580,45 +580,45 @@ ui:
         inline: Inline formula
         block: Block formula
     heading:
-      text: Heading
+      text: Intestazione
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Intestazione 1
+        h2: Intestazione 2
+        h3: Intestazione 3
+        h4: Intestazione 4
+        h5: Intestazione 5
+        h6: Intestazione 6
     help:
-      text: Help
+      text: Aiuto
     hr:
       text: Horizontal rule
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Immagine
+      add_image: Aggiungi immagine
+      tab_image: Carica immagine
       form_image:
         fields:
           file:
-            label: Image file
-            btn: Select image
+            label: File d'immagine
+            btn: Scegli immagine
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              empty: Il file non può essere vuoto.
+              only_image: Sono ammesse solo le immagini
+              max_size: La dimensione del file non può superare i 4 MB.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Descrizione
+      tab_url: Url dell'Immagine
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL dell'immagine
             msg:
-              empty: Image URL cannot be empty.
+              empty: L'URL dell'immagine non può essere vuoto.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: Descrizione
+      btn_cancel: Cancella
+      btn_confirm: Aggiungi
+      uploading: Caricamento in corso...
     indent:
       text: Indent
     outdent:
@@ -633,15 +633,15 @@ ui:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: L'URL non può essere vuoto
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Descrizione
+      btn_cancel: Cancella
+      btn_confirm: Aggiungi
     ordered_list:
-      text: Numbered list
+      text: Elenco numerato
     unordered_list:
-      text: Bulleted list
+      text: Elenco puntato
     table:
       text: Tabella
       heading: Intestazione
@@ -876,11 +876,11 @@ ui:
     password:
       label: Password
       msg:
-        empty: Password cannot be empty.
+        empty: La password non può essere vuota.
         different: The passwords entered on both sides are inconsistent
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: Password dimenticata?
+    btn_name: Inviami email di recupero
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
@@ -1019,31 +1019,31 @@ ui:
     review: Le tue modifiche verranno visualizzata dopo la revisione.
     sent_success: Inviato correttamente
   related_question:
-    title: Related Questions
-    answers: answers
+    title: Domande correlate
+    answers: risposte
   invite_to_answer:
     title: People Asked
     desc: Select people who you think might know the answer.
     invite: Invite to answer
-    add: Add people
+    add: Aggiungi contatti
     search: Search people
   question_detail:
     action: Action
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    follow_tip: Follow this question to receive notifications
-    answered: answered
+    Asked: Chiesto
+    asked: chiesto
+    update: Modificato
+    edit: modificato
+    Views: Visualizzati
+    Follow: Segui
+    Following: Segui già
+    follow_tip: Segui questa domanda per ricevere notifiche
+    answered: Risposto
     closed_in: Closed in
-    show_exist: Show existing question.
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    question_bookmark: Bookmark this question
+    show_exist: Mostra domanda esistente.
+    useful: Utile
+    question_useful: È utile e chiaro
+    question_un_useful: Non è chiaro né utile
+    question_bookmark: Aggiungi questa domanda ai segnalibri
     answer_useful: È utile
     answer_un_useful: Non è utile
     answers:
@@ -1098,20 +1098,20 @@ ui:
     signup: Registrati
     logout: Disconnetti
     verify: Verifica
-    add_question: Add question
-    approve: Approve
-    reject: Reject
-    skip: Skip
-    discard_draft: Discard draft
-    pinned: Pinned
+    add_question: Aggiungi una domanda
+    approve: Approva
+    reject: Rifiuta
+    skip: Salta
+    discard_draft: Elimina bozza
+    pinned: Fissato in cima
     all: All
-    question: Question
-    answer: Answer
-    comment: Comment
-    refresh: Refresh
-    resend: Resend
-    deactivate: Deactivate
-    active: Active
+    question: Domanda
+    answer: Risposta
+    comment: Commento
+    refresh: Aggiorna
+    resend: Rinvia
+    deactivate: Disattivare
+    active: Attivo
     suspend: Suspend
     unsuspend: Unsuspend
     close: Close
@@ -1315,27 +1315,27 @@ ui:
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: visualizzazioni
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    votes: Voti
+    answers: risposte
+    accepted: Accettato
   page_error:
-    http_error: HTTP Error {{ code }}
-    desc_403: You don't have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
-    desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    http_error: Errore HTTP {{ code }}
+    desc_403: Non hai i permessi per accedere a questa pagina.
+    desc_404: Sfortunatamente, questa pagina non esiste.
+    desc_50X: Il server ha riscontrato un errore e non è stato possibile completare la richiesta.
+    back_home: Torna alla home page
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "Siamo in manutenzione, torneremo presto."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
+    dashboard: Pannello di controllo
+    contents: Contenuti
+    questions: Domande
+    answers: Risposte
+    users: Utenti
     flags: Flags
-    settings: Settings
-    general: General
-    interface: Interface
+    settings: Impostazioni
+    general: Generale
+    interface: Interfaccia
     smtp: SMTP
     branding: Branding
     legal: Legal
@@ -1343,11 +1343,11 @@ ui:
     tos: Terms of Service
     privacy: Privacy
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: Personalizza
+    themes: Temi
     css_html: CSS/HTML
-    login: Login
-    privileges: Privileges
+    login: Accedi
+    privileges: Privilegi
     plugins: Plugins
     installed_plugins: Installed Plugins
   website_welcome: Welcome to {{site_name}}
