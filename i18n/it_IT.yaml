@@ -1348,28 +1348,28 @@ ui:
     css_html: CSS/HTML
     login: Accedi
     privileges: Privilegi
-    plugins: Plugins
-    installed_plugins: Installed Plugins
-  website_welcome: Welcome to {{site_name}}
+    plugins: Plugin
+    installed_plugins: Plugin installati
+  website_welcome: Benvenuto/a su {{site_name}}!
   user_center:
-    login: Login
-    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
-    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    login: Accedi
+    qrcode_login_tip: Si prega di utilizzare {{ agentName }} per scansionare il codice QR e accedere.
+    login_failed_email_tip: Accesso non riuscito. Consenti a questa app di accedere alle tue informazioni email prima di riprovare.
   admin:
     admin_header:
-      title: Admin
+      title: Amministratore
     dashboard:
-      title: Dashboard
+      title: Pannello di controllo
       welcome: Welcome to Answer Admin!
-      site_statistics: Site statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      users: "Users:"
-      flags: "Flags:"
-      site_health_status: Site health status
-      version: "Version:"
+      site_statistics: Statistiche del sito
+      questions: "Domande:"
+      answers: "Risposte:"
+      comments: "Commenti:"
+      votes: "Voti:"
+      users: "Utenti:"
+      flags: "Flags"
+      site_health_status: Stato di salute del sito
+      version: "Versione:"
       https: "HTTPS:"
       upload_folder: "Upload folder:"
       run_mode: "Running mode:"
@@ -1411,70 +1411,70 @@ ui:
       flagged: Flagged
       flagged_type: Flagged {{ type }}
       created: Created
-      action: Action
-      review: Review
+      action: Azione
+      review: Revisione
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: Cambia ruolo utente in...
+      btn_cancel: Cancella
+      btn_submit: Invia
     new_password_modal:
-      title: Set new password
+      title: Imposta una nuova password
       form:
         fields:
           password:
             label: Password
-            text: The user will be logged out and need to login again.
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            text: L'utente sarà disconnesso e dovrà effettuare nuovamente il login.
+            msg: La password deve contenere da 8 a 32 caratteri.
+      btn_cancel: Cancella
+      btn_submit: Invia
     user_modal:
-      title: Add new user
+      title: Aggiungi un nuovo utente
       form:
         fields:
           users:
             label: Bulk add user
             placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
-            text: Separate “name, email, password” with commas. One user per line.
-            msg: "Please enter the user's email, one per line."
+            text: Separare “nome, email, password” con delle virgole. Un utente per riga.
+            msg: "Inserisci l'email dell'utente, una per riga."
           display_name:
-            label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            label: Nome da visualizzare
+            msg: Il nome visualizzato deve avere una lunghezza compresa tra 4 e 30 caratteri.
           email:
             label: Email
-            msg: Email is not valid.
+            msg: L'email non è valida.
           password:
             label: Password
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            msg: La password deve contenere da 8 a 32 caratteri.
+      btn_cancel: Cancella
+      btn_submit: Invia
     users:
-      title: Users
-      name: Name
+      title: Utenti
+      name: Nome
       email: Email
-      reputation: Reputation
+      reputation: Reputazione
       created_at: Created Time
       delete_at: Deleted Time
       suspend_at: Suspended Time
-      status: Status
-      role: Role
-      action: Action
-      change: Change
-      all: All
-      staff: Staff
-      more: More
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
-      normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      status: Stato
+      role: Ruolo
+      action: Azione
+      change: Modifica
+      all: Tutti
+      staff: Personale
+      more: Altro
+      inactive: Inattivo
+      suspended: Sospeso
+      deleted: Eliminato
+      normal: Normale
+      Moderator: Moderatore
+      Admin: Amministratore
+      User: Utente
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
+        placeholder: "Filtra per nome, utente:id"
+      set_new_password: Imposta una nuova password
+      change_status: Modifica lo stato
+      change_role: Cambia il ruolo
+      show_logs: Visualizza i log
       add_user: Add user
       deactivate_user:
         title: Deactivate user
@@ -1534,38 +1534,38 @@ ui:
         msg: Site description cannot be empty.
         text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
-        label: Contact email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: Email di contatto
+        msg: L'email del contatto non può essere vuota.
+        validate: Email di contatto non valida.
+        text: Indirizzo e-mail del contatto chiave responsabile di questo sito.
     interface:
-      page_title: Interface
+      page_title: Interfaccia
       language:
-        label: Interface language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: Lingua dell'interfaccia
+        msg: La lingua dell'interfaccia non può essere vuota.
+        text: La lingua dell'interfaccia utente cambierà quando aggiorni la pagina.
       time_zone:
-        label: Timezone
-        msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        label: Fuso orario
+        msg: Il fuso orario non può essere vuoto.
+        text: Scegli una città con il tuo stesso fuso orario.
     smtp:
       page_title: SMTP
       from_email:
-        label: From email
+        label: Dall'email
         msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        text: L'indirizzo email da cui vengono inviate le email.
       from_name:
-        label: From name
+        label: Dal nome
         msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        text: Il nome da cui vengono inviate le email.
       smtp_host:
-        label: SMTP host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: Host SMTP
+        msg: L'host SMTP non può essere vuoto.
+        text: Il tuo server di posta.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: Crittografia
+        msg: La crittografia non può essere vuota.
+        text: Per la maggior parte dei server SSL è l'opzione consigliata.
         ssl: SSL
         none: None
       smtp_port:
@@ -1586,20 +1586,20 @@ ui:
         label: Enable authentication
         title: SMTP authentication
         msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
+        "yes": "Sì"
         "no": "No"
     branding:
-      page_title: Branding
+      page_title: Marchio
       logo:
         label: Logo
-        msg: Logo cannot be empty.
+        msg: Il logo non può essere vuoto.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile logo
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
-        label: Square icon
-        msg: Square icon cannot be empty.
+        label: Icona quadrata
+        msg: L'icona quadrata non può essere vuota.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
         label: Favicon
@@ -1646,77 +1646,77 @@ ui:
       navbar_style:
         label: Navbar style
       primary_color:
-        label: Primary color
-        text: Modify the colors used by your themes
+        label: Colore primario
+        text: Modifica i colori utilizzati dai tuoi temi
     css_and_html:
-      page_title: CSS and HTML
+      page_title: CSS e HTML
       custom_css:
-        label: Custom CSS
+        label: CSS personalizzato
         text: >
 
       head:
-        label: Head
+        label: Testata
         text: >
 
       header:
-        label: Header
+        label: Intestazione
         text: >
 
       footer:
-        label: Footer
-        text: This will insert before &lt;/body>.
+        label: Piè di pagina
+        text: Questo verrà inserito prima di &lt;/body>.
       sidebar:
-        label: Sidebar
-        text: This will insert in sidebar.
+        label: Barra laterale
+        text: Questo verrà inserito nella barra laterale.
     login:
-      page_title: Login
+      page_title: Accedi
       membership:
         title: Membership
-        label: Allow new registrations
-        text: Turn off to prevent anyone from creating a new account.
+        label: Consenti nuove registrazioni
+        text: Disattiva per impedire a chiunque di creare un nuovo account.
       email_registration:
-        title: Email registration
-        label: Allow email registration
-        text: Turn off to prevent anyone creating new account through email.
+        title: Registrazione email
+        label: Consenti registrazione email
+        text: Disattiva per impedire a chiunque di creare un nuovo account tramite email.
       allowed_email_domains:
-        title: Allowed email domains
-        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
+        title: Domini email consentiti
+        text: "Domini email con cui gli utenti devono registrare gli account. Un dominio per riga. Verrà ignorato quando vuoto.\n"
       private:
-        title: Private
-        label: Login required
-        text: Only logged in users can access this community.
+        title: Privato
+        label: Login obbligatorio
+        text: Solo gli utenti registrati possono accedere a questa community.
       password_login:
         title: Password login
-        label: Allow email and password login
-        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
+        label: Consenti il login di email e password
+        text: "ATTENZIONE: Se disattivi, potresti non essere in grado di accedere se non hai precedentemente configurato un altro metodo di login."
     installed_plugins:
-      title: Installed Plugins
+      title: Plugin installati
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
-        active: Active
-        inactive: Inactive
-        outdated: Outdated
+        active: Attivo
+        inactive: Inattivo
+        outdated: Obsoleto
       plugins:
-        label: Plugins
-        text: Select an existing plugin.
-      name: Name
-      version: Version
-      status: Status
-      action: Action
-      deactivate: Deactivate
-      activate: Activate
-      settings: Settings
+        label: Plugin
+        text: Seleziona un plugin esistente.
+      name: Nome
+      version: Versione
+      status: Stato
+      action: Azione
+      deactivate: Disattivare
+      activate: Attivare
+      settings: Impostazioni
     settings_users:
-      title: Users
+      title: Utenti
       avatar:
-        label: Default avatar
-        text: For users without a custom avatar of their own.
+        label: Avatar Predefinito
+        text: Per gli utenti senza un proprio avatar personalizzato.
       gravatar_base_url:
         label: Gravatar Base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
-        title: Profile editable
+        title: Profilo modificabile
       allow_update_display_name:
         label: Allow users to change their display name
       allow_update_username:
