@@ -247,7 +247,7 @@ backend:
       review_underway:
         other: Nie można teraz edytować, istnieje wersja w kolejce sprawdzeń.
       no_permission:
-        other: No permission to revise.
+        other: Brak uprawnień do wersji.
     user:
       external_login_missing_user_id:
         other: Platforma zewnętrzna nie dostarcza unikalnego identyfikatora użytkownika (UserID), dlatego nie możesz się zalogować. Skontaktuj się z administratorem witryny.
@@ -685,9 +685,9 @@ ui:
         desc:
           label: Opis
         revision:
-          label: Revision
+          label: Wersja
         edit_summary:
-          label: Edit summary
+          label: Podsumowanie edycji
           placeholder: >-
             Krótkie wyjaśnienie zmian (poprawa pisowni, naprawa gramatyki, poprawa formatowania)
     btn_cancel: Anuluj
@@ -759,7 +759,7 @@ ui:
           feedback:
             characters: Treść musi mieć co najmniej 6 znaków.
         edit_summary:
-          label: Edit summary
+          label: Podsumowanie edycji
           placeholder: >-
             Pokrótce opisz swoje zmiany (poprawa pisowni, naprawa gramatyki, poprawa formatowania)
     btn_save_edits: Zapisz edycje
@@ -805,7 +805,7 @@ ui:
           msg:
             empty: Odpowiedź nie może być pusta.
         edit_summary:
-          label: Edit summary
+          label: Podsumowanie edycji
           placeholder: >-
             Pokrótce opisz swoje zmiany (poprawa pisowni, naprawa gramatyki, poprawa formatowania)
     btn_post_question: Opublikuj swoje pytanie
@@ -1022,7 +1022,7 @@ ui:
     title: Powiązane pytania
     answers: odpowiedzi
   invite_to_answer:
-    title: People Asked
+    title: Ludzie pytali
     desc: Wybierz osoby, które mogą znać odpowiedź.
     invite: Zaproś do odpowiedzi
     add: Dodaj osoby
@@ -1117,10 +1117,10 @@ ui:
     close: Zamknij
     reopen: Otwórz ponownie
     ok: Ok
-    light: Light
-    dark: Dark
-    system_setting: System setting
-    default: Default
+    light: Jasny
+    dark: Ciemny
+    system_setting: Ustawienia systemowe
+    default: Domyślne
     reset: Reset
   search:
     title: Wyniki wyszukiwania
@@ -1642,11 +1642,11 @@ ui:
         label: Motywy
         text: Wybierz istniejący motyw.
       color_scheme:
-        label: Color scheme
+        label: Schemat kolorów
       navbar_style:
-        label: Navbar style
+        label: Styl paska nawigacyjnego
       primary_color:
-        label: Primary color
+        label: Kolor podstawowy
         text: Zmodyfikuj kolory używane przez Twoje motywy.
     css_and_html:
       page_title: CSS i HTML
@@ -1686,7 +1686,7 @@ ui:
         label: Wymagane logowanie
         text: Dostęp do tej społeczności mają tylko zalogowani użytkownicy.
       password_login:
-        title: Password login
+        title: Hasło logowania
         label: Zezwalaj na logowanie email i hasłem
         text: "OSTRZEŻENIE: Jeśli wyłączone, już się nie zalogujesz, jeśli wcześniej nie skonfigurowałeś innej metody logowania."
     installed_plugins:
@@ -1716,7 +1716,7 @@ ui:
         label: Adres URL bazy Gravatar
         text: Adres URL bazy API dostawcy Gravatar. Ignorowane, gdy puste.
       profile_editable:
-        title: Profile editable
+        title: Edycja profilu
       allow_update_display_name:
         label: Zezwalaj użytkownikom na zmianę wyświetlanej nazwy
       allow_update_username:
