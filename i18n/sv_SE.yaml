@@ -497,8 +497,8 @@ ui:
   page_title:
     question: Fråga
     questions: Frågor
-    tag: Tag
-    tags: Tags
+    tag: Tagg
+    tags: Taggar
     tag_wiki: tag wiki
     create_tag: Create Tag
     edit_tag: Edit Tag
@@ -594,8 +594,8 @@ ui:
       text: Horizontal rule
     image:
       text: Bild
-      add_image: Add image
-      tab_image: Upload image
+      add_image: Lägg till bild
+      tab_image: Ladda upp bild
       form_image:
         fields:
           file:
@@ -712,18 +712,18 @@ ui:
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Are you sure you wish to delete?
-      close: Close
+      close: Stäng
   edit_tag:
     title: Edit Tag
     default_reason: Edit tag
-    default_first_reason: Add tag
+    default_first_reason: Lägg till tagg
     btn_save_edits: Save edits
     btn_cancel: Avbryt
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
+    now: nu
     x_seconds_ago: "{{count}} s sedan"
     x_minutes_ago: "{{count}} m sedan"
     x_hours_ago: "{{count}} t sedan"
@@ -948,22 +948,22 @@ ui:
         msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile image
+        label: Profilbild
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
-        custom_text: You can upload your image.
+        custom_text: Du kan ladda upp din bild.
         default: System
         msg: Please upload an avatar
       bio:
         label: About me
       website:
-        label: Website
+        label: Webbplats
         placeholder: "https://example.com"
         msg: Website incorrect format
       location:
         label: Location
-        placeholder: "City, Country"
+        placeholder: "Stad, Land"
     notification:
       heading: Email Notifications
       turn_on: Turn on
@@ -1101,7 +1101,7 @@ ui:
     add_question: Add question
     approve: Approve
     reject: Reject
-    skip: Skip
+    skip: Hoppa över
     discard_draft: Discard draft
     pinned: Pinned
     all: All
@@ -1160,7 +1160,7 @@ ui:
     link: Continue to homepage
     invalid: >-
       Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
-    confirm_new_email: Your email has been updated.
+    confirm_new_email: Din e-postadress har uppdaterats.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
   unsubscribe:
@@ -1278,7 +1278,7 @@ ui:
         empty: Contact email cannot be empty.
         incorrect: Contact email incorrect format.
     login_required:
-      label: Private
+      label: Privat
       switch: Login required
       text: Only logged in users can access this community.
     admin_name:
@@ -1499,7 +1499,7 @@ ui:
       created: Created
       status: Status
       action: Action
-      change: Change
+      change: Ändra
       filter:
         placeholder: "Filter by title, question:id"
     answers:
@@ -1694,8 +1694,8 @@ ui:
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
-        active: Active
-        inactive: Inactive
+        active: Aktiv
+        inactive: Inaktiv
         outdated: Outdated
       plugins:
         label: Plugins
@@ -1705,7 +1705,7 @@ ui:
       status: Status
       action: Action
       deactivate: Deactivate
-      activate: Activate
+      activate: Aktivera
       settings: Inställningar
     settings_users:
       title: Användare
