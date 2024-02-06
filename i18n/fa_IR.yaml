@@ -965,10 +965,10 @@ ui:
         label: موقعیت
         placeholder: "شهر، کشور"
     notification:
-      heading: Email Notifications
-      turn_on: Turn on
+      heading: اعلان های ایمیلی
+      turn_on: روشن کردن
       inbox:
-        label: Inbox notifications
+        label: اعلانات ایمیل
         description: پاسخ به سوالات خود،‌ نظرات،‌ دعوت ها،‌و بیشتر.
       all_new_question:
         label: تمامی سوالات جدید
@@ -1023,7 +1023,7 @@ ui:
     answers: جواب ها
   invite_to_answer:
     title: مردم پرسیدند
-    desc: Select people who you think might know the answer.
+    desc: افرادی را دعوت کنید که فکر می کنید ممکن است پاسخ را بدانند.
     invite: دعوت به پاسخ
     add: افزودن افراد
     search: جستجوی افراد
@@ -1702,15 +1702,15 @@ ui:
         text: Select an existing plugin.
       name: Name
       version: Version
-      status: Status
-      action: Action
+      status: وضعیت
+      action: اقدام
       deactivate: Deactivate
-      activate: Activate
-      settings: Settings
+      activate: فعال سازی
+      settings: تنظیمات
     settings_users:
-      title: Users
+      title: کاربران
       avatar:
-        label: Default avatar
+        label: آواتار پیش فرض
         text: For users without a custom avatar of their own.
       gravatar_base_url:
         label: Gravatar Base URL
