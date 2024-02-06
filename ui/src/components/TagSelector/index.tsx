@@ -203,15 +203,6 @@ const TagSelector: FC<IProps> = ({
     console.log('handleSearch');
     const searchStr = e.currentTarget.value.replace(';', '');
     setSearchValue(searchStr);
-    const ele = document.querySelector('.a-input-width') as HTMLElement;
-    if (ele.offsetWidth > 60) {
-      inputRef.current?.setAttribute(
-        'style',
-        `width:${ele.offsetWidth + 16}px`,
-      );
-    } else {
-      inputRef.current?.setAttribute('style', 'width: 60px');
-    }
     fetchTags(searchStr);
   };
 
@@ -328,6 +319,17 @@ const TagSelector: FC<IProps> = ({
       if ((tags && tags?.length < 5) || maxTagLength === 0) {
         inputRef.current?.focus();
       }
+    }
+
+    // set width of tag Form.Control
+    const ele = document.querySelector('.a-input-width') as HTMLElement;
+    if (ele.offsetWidth > 60) {
+      inputRef.current?.setAttribute(
+        'style',
+        `width:${ele.offsetWidth + 16}px`,
+      );
+    } else {
+      inputRef.current?.setAttribute('style', 'width: 60px');
     }
   }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
 
