@@ -165,6 +165,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	//}
 	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
 		ObjectID:         answerInfo.ID,
 		OriginalObjectID: answerInfo.ID,
 		ActivityTypeKey:  constant.ActAnswerDeleted,
@@ -511,25 +512,15 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	if !exist {
 		return errors.BadRequest(reason.AnswerNotFound)
 	}
-	err = as.answerRepo.UpdateAnswerStatus(ctx, answerInfo.ID, setStatus)
-	if err != nil {
-		return err
-	}
 
 	if setStatus == entity.AnswerStatusDeleted {
-		// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
-		// facing the problem of recovery.
-		//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
-		//if err != nil {
-		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
-		//}
-		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
-			UserID:           req.UserID,
-			TriggerUserID:    converter.StringToInt64(req.UserID),
-			ObjectID:         answerInfo.ID,
-			OriginalObjectID: answerInfo.ID,
-			ActivityTypeKey:  constant.ActAnswerDeleted,
-		})
+		if err := as.RemoveAnswer(ctx, &schema.RemoveAnswerReq{
+			ID:        req.AnswerID,
+			UserID:    req.UserID,
+			CanDelete: true,
+		}); err != nil {
+			return err
+		}
 
 		msg := &schema.NotificationMsg{}
 		msg.ObjectID = answerInfo.ID
@@ -543,13 +534,12 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 
 	// recover
 	if setStatus == entity.QuestionStatusAvailable && answerInfo.Status == entity.QuestionStatusDeleted {
-		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
-			UserID:           req.UserID,
-			TriggerUserID:    converter.StringToInt64(req.UserID),
-			ObjectID:         answerInfo.ID,
-			OriginalObjectID: answerInfo.ID,
-			ActivityTypeKey:  constant.ActAnswerUndeleted,
-		})
+		if err := as.RecoverAnswer(ctx, &schema.RecoverAnswerReq{
+			AnswerID: req.AnswerID,
+			UserID:   req.UserID,
+		}); err != nil {
+			return err
+		}
 	}
 	return nil
 }

@@ -183,7 +183,7 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	return
 }
 
-// GetQuestionCount
+// GetAnswerCount count answer
 func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err error) {
 	var resp = new(entity.Answer)
 	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).Count(resp)
