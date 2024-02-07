@@ -84,7 +84,7 @@ backend:
         other: Nivelul 3 (reputație ridicată necesară pentru comunitatea mature)
     level_custom:
       description:
-        other: Custom Level
+        other: Nivel personalizat
     rank_question_add_label:
       other: Întreabă ceva
     rank_answer_add_label:
@@ -685,11 +685,11 @@ ui:
         desc:
           label: Descriere
         revision:
-          label: Revision
+          label: Versiunea
         edit_summary:
-          label: Edit summary
+          label: Editează sumarul
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Explicați pe scurt modificările (ortografie corectată, gramatică fixată, formatare îmbunătățită)
     btn_cancel: Anulează
     btn_submit: Trimiteți
     btn_post: Postează o nouă etichetă
@@ -740,7 +740,7 @@ ui:
     btn_flag: Marcaj
     btn_save_edits: Salvați modificările
     btn_cancel: Anulați
-    show_more: "{{count}} more comments"
+    show_more: "{{count}} alte comentarii"
     tip_question: >-
       Utilizați comentariile pentru a solicita mai multe informații sau pentru a sugera îmbunătățiri. Evitați răspunsul la întrebări în comentarii.
     tip_answer: >-
@@ -965,10 +965,10 @@ ui:
         label: Locație
         placeholder: "Oraş, Ţară"
     notification:
-      heading: Email Notifications
-      turn_on: Turn on
+      heading: Notificări prin e-mail
+      turn_on: Pornire
       inbox:
-        label: Inbox notifications
+        label: Notificări primite
         description: Răspunde la întrebări, comentarii, invitații și multe altele.
       all_new_question:
         label: Adauga o intrebare noua
@@ -1023,7 +1023,7 @@ ui:
     answers: răspunsuri
   invite_to_answer:
     title: Persoane întrebate
-    desc: Select people who you think might know the answer.
+    desc: Invită persoane care crezi că știu răspunsul.
     invite: Invită să răspundă
     add: Adaugă persoane
     search: Caută persoane
@@ -1117,11 +1117,11 @@ ui:
     close: Închide
     reopen: Redeschide
     ok: OK
-    light: Light
-    dark: Dark
-    system_setting: System setting
+    light: Luminoasă
+    dark: Întunecată
+    system_setting: Setări de sistem
     default: Default
-    reset: Reset
+    reset: Resetează
   search:
     title: Rezultatele căutării
     keywords: Cuvinte cheie
@@ -1642,11 +1642,11 @@ ui:
         label: Teme
         text: Selectaţi o temă existentă.
       color_scheme:
-        label: Color scheme
+        label: Paletă de culori
       navbar_style:
         label: Navbar style
       primary_color:
-        label: Primary color
+        label: Culoare primară
         text: Modifică culorile folosite de temele tale
     css_and_html:
       page_title: CSS și HTML
