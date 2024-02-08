@@ -19,15 +19,15 @@
 backend:
   base:
     success:
-      other: Successo
+      other: Successo.
     unknown:
-      other: Errore sconosciuto
+      other: Errore sconosciuto.
     request_format_error:
-      other: Il formato della richiesta non è valido
+      other: Il formato della richiesta non è valido.
     unauthorized_error:
-      other: Non autorizzato
+      other: Non autorizzato.
     database_error:
-      other: Errore server dati
+      other: Errore nel server dati.
     forbidden_error:
       other: Vietato.
     duplicate_request_error:
@@ -1781,24 +1781,24 @@ ui:
     datetime: Datetime
     type: Type
     by: By
-    comment: Comment
+    comment: Commento
     no_data: "We couldn't find anything."
   users:
-    title: Users
+    title: Utenti
     users_with_the_most_reputation: Users with the highest reputation scores this week
-    users_with_the_most_vote: Users who voted the most this week
-    staffs: Our community staff
-    reputation: reputation
-    votes: votes
+    users_with_the_most_vote: Utenti che hanno votato di più questa settimana
+    staffs: Lo staff della community
+    reputation: reputazione
+    votes: Voti
   prompt:
-    leave_page: Are you sure you want to leave the page?
-    changes_not_save: Your changes may not be saved.
+    leave_page: Sei sicuro di voler lasciare questa pagina?
+    changes_not_save: Le modifiche potrebbero non essere salvate.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: Sei sicuro di voler eliminare la bozza?
   messages:
-    post_deleted: This post has been deleted.
-    post_pin: This post has been pinned.
-    post_unpin: This post has been unpinned.
-    post_hide_list: This post has been hidden from list.
-    post_show_list: This post has been shown to list.
-    post_reopen: This post has been reopened.
+    post_deleted: Questo post è stato eliminato.
+    post_pin: Questo post è stato selezionato.
+    post_unpin: Questo post è stato sbloccato.
+    post_hide_list: Questo post è stato nascosto dall'elenco.
+    post_show_list: Questo post è stato mostrato in elenco.
+    post_reopen: Questo post è stato riaperto.
