@@ -75,16 +75,16 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: "Livello 1 (per team o gruppi privati: richiesta reputazione limitata) \n"
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: 'Livello 2 (per startup community: richiesta reputazione scarsa) '
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: 'Livello 3 (per community riconosciute: richiesta reputazione alta) '
     level_custom:
       description:
-        other: Custom Level
+        other: Livello personalizzato
     rank_question_add_label:
       other: Fai una domanda
     rank_answer_add_label:
@@ -94,41 +94,41 @@ backend:
     rank_report_add_label:
       other: Segnala
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: Approva commento
     rank_link_url_limit_label:
       other: Pubblica più di 2 link alla volta
     rank_question_vote_up_label:
-      other: Upvote question
+      other: Approva domanda
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: Approva risposta
     rank_question_vote_down_label:
-      other: Downvote question
+      other: Disapprova domanda
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: Disapprova risposta
     rank_invite_someone_to_answer_label:
       other: Invita qualcuno a rispondere
     rank_tag_add_label:
       other: Crea un nuovo tag
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Modifica descrizione tag (necessità di revisione)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Modifica la domanda di altri (necessità di revisione)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Modifica la risposta di altri (necessità di revisione)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Modifica la domanda di altri senza bisogno di revisione
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: Modifica la risposta di altri senza bisogno di revisione
     rank_question_audit_label:
-      other: Review question edits
+      other: Rivedi modifiche alla domanda
     rank_answer_audit_label:
-      other: Review answer edits
+      other: Rivedi modifiche alla risposta
     rank_tag_audit_label:
-      other: Review tag edits
+      other: Esamina le modifiche ai tag
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: Modifica la descrizione del tag senza necessità di revisione
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Gestisci sinonimi dei tag
   email:
     other: E-mail
   e_mail:
@@ -174,7 +174,7 @@ backend:
       verify_url_expired:
         other: l'url di verifica email è scaduto, si prega di reinviare la email
       illegal_email_domain_error:
-        other: Email is not allowed from that email domain. Please use another one.
+        other: L'email non è consentita da quel dominio di posta elettronica. Si prega di usarne un altro.
     lang:
       not_found:
         other: lingua non trovata
@@ -210,7 +210,7 @@ backend:
         other: Nessun permesso per l'aggiornamento.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: Il rango di reputazione non soddisfa le condizioni.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
@@ -252,7 +252,7 @@ backend:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
       external_login_unbinding_forbidden:
-        other: Please set a login password for your account before you remove this login.
+        other: Per favore imposta una password di login per il tuo account prima di rimuovere questo accesso.
       email_or_password_wrong:
         other:
           other: Email o password errati
@@ -271,7 +271,7 @@ backend:
       not_allowed_registration:
         other: Attualmente il sito non è aperto per la registrazione.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: Attualmente non è consentito accedere al sito tramite password.
       access_denied:
         other: Accesso negato
       page_access_denied:
