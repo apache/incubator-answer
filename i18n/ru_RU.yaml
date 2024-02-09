@@ -444,19 +444,19 @@ backend:
         other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>{{.DisplayName}}:<br>\n<blockquote>Я думаю, вы можете знать ответ.</blockquote><br> <a href='{{.InviteUrl}}'>Просмотрите его на {{.SiteName}}</a><br><br> --<br> <small><a href='{{.UnsubscribeUrl}}'>Отказаться от подписки</a></small>"
     invited_you_to_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+        other: "[{{.SiteName}}] {{.DisplayName}} приглашает вас в Answer"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Я думаю что вы знаете ответ на этот вопрос.</blockquote><br>\n<a href='{{.InviteUrl}}'>Открыть вопрос в {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Отписаться</a></small>"
     new_comment:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+        other: "[{{.SiteName}}] {{.DisplayName}} прокомментировал под вашей публикацией"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Открыть вопрос в {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Отписаться</a></small>"
     new_question:
       title:
-        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+        other: "[{{.SiteName}}] Новый вопрос: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Отписаться</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Пароль сброшен"
@@ -687,9 +687,9 @@ ui:
         revision:
           label: Revision
         edit_summary:
-          label: Edit summary
+          label: Отредактировать сводку
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Коротко опишите изменения (орфография, грамматики, улучшение формата)
     btn_cancel: Отмена
     btn_submit: Отправить
     btn_post: Создать новый тег
@@ -740,7 +740,7 @@ ui:
     btn_flag: Отметить
     btn_save_edits: Сохранить изменения
     btn_cancel: Отменить
-    show_more: "{{count}} more comments"
+    show_more: "Еще {{count}} комментарий"
     tip_question: >-
       Воспользуйтесь комментариями, чтобы запросить больше информации или предложить улучшения. Не отвечайте на вопросы в комментариях.
     tip_answer: >-
@@ -856,7 +856,7 @@ ui:
       empty: Не может быть пустым.
     resend_email:
       url_label: Вы уверены, что хотите повторно отправить письмо с активацией?
-      url_text: You can also give the activation link above to the user.
+      url_text: Вы также можете предоставить пользователю ссылку для активации выше.
   login:
     login_to_continue: Войдите, чтобы продолжить
     info_sign: У вас нет аккаунта? <1>Зарегистрируйтесь</1>
@@ -882,7 +882,7 @@ ui:
     page_title: Забыли свой пароль
     btn_name: Отправить мне письмо для восстановления пароля
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Если учетная запись соответствует <strong>{{mail}}</strong>, вы должны в ближайшее время получить электронное письмо с инструкциями о том, как сбросить пароль.
     email:
       label: Адрес эл. почты
       msg:
@@ -891,7 +891,7 @@ ui:
     btn_cancel: Отмена
     btn_update: Сменить адрес email
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Если учетная запись соответствует <strong>{{mail}}</strong>, вы должны в ближайшее время получить электронное письмо с инструкциями о том, как сбросить пароль.
     email:
       label: Новый email
       msg:
