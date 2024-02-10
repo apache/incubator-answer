@@ -84,7 +84,7 @@ backend:
         other: Level 3 (high reputation required for mature community)
     level_custom:
       description:
-        other: Custom Level
+        other: Benutzerdefinierter Level
     rank_question_add_label:
       other: Fragen stellen
     rank_answer_add_label:
@@ -271,7 +271,7 @@ backend:
       not_allowed_registration:
         other: Derzeit ist die Seite nicht für die Anmeldung geöffnet.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: Zurzeit ist es auf der Website nicht möglich, sich mit einem Passwort anzumelden.
       access_denied:
         other: Zugriff verweigert
       page_access_denied:
@@ -525,7 +525,7 @@ ui:
     http_404: HTTP-Fehler 404
     http_50X: HTTP-Fehler 500
     http_403: HTTP Fehler 403
-    logout: Log Out
+    logout: Ausloggen
   notifications:
     title: Benachrichtigungen
     inbox: Posteingang
@@ -604,7 +604,7 @@ ui:
             msg:
               empty: Datei darf nicht leer sein.
               only_image: Nur Bilddateien sind erlaubt.
-              max_size: File size cannot exceed 4 MB.
+              max_size: Die Dateigröße darf 4 MB nicht überschreiten.
           desc:
             label: Beschreibung
       tab_url: Bild URL
@@ -685,11 +685,11 @@ ui:
         desc:
           label: Beschreibung
         revision:
-          label: Revision
+          label: Version
         edit_summary:
-          label: Edit summary
+          label: Zusammenfassung bearbeiten
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Erkläre kurz deine Änderungen (korrigierte Rechtschreibung, korrigierte Grammatik, verbesserte Formatierung)
     btn_cancel: Abbrechen
     btn_submit: Senden
     btn_post: Neuen Tag erstellen
@@ -740,7 +740,7 @@ ui:
     btn_flag: Flagge
     btn_save_edits: Änderungen speichern
     btn_cancel: Stornieren
-    show_more: "{{count}} more comments"
+    show_more: "{{count}} mehr Kommentare"
     tip_question: >-
       Verwende Kommentare, um nach weiteren Informationen zu fragen oder Verbesserungen vorzuschlagen. Vermeide es, Fragen in Kommentaren zu beantworten.
     tip_answer: >-
@@ -835,7 +835,7 @@ ui:
       placeholder: Suchen
   footer:
     build_on: >-
-      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Betrieben von <1> Apache Answer </1>- die Open-Source-Software, die Q&A-Communities betreibt.<br />Made with love © {{cc}}.
   upload_img:
     name: Ändern
     loading: wird geladen...
@@ -933,7 +933,7 @@ ui:
       profile: Profil
       notification: Benachrichtigungen
       account: Konto
-      interface: Schnittstelle
+      interface: Benutzeroberfläche
     profile:
       heading: Profil
       btn_name: Speichern
@@ -965,10 +965,10 @@ ui:
         label: Standort
         placeholder: "Stadt, Land"
     notification:
-      heading: Email Notifications
-      turn_on: Turn on
+      heading: E-Mail-Benachrichtigungen
+      turn_on: Aktivieren
       inbox:
-        label: Inbox notifications
+        label: Posteingangsbenachrichtigungen
         description: Antworten auf deine Fragen, Kommentare, Einladungen und mehr.
       all_new_question:
         label: Alle neuen Fragen
@@ -1000,7 +1000,7 @@ ui:
       pass_confirm:
         label: Neues Passwort bestätigen
     interface:
-      heading: Schnittstelle
+      heading: Benutzeroberfläche
       lang:
         label: Sprache der Benutzeroberfläche
         text: Sprache der Benutzeroberfläche. Sie ändert sich, wenn du die Seite aktualisierst.
@@ -1023,13 +1023,13 @@ ui:
     answers: antworten
   invite_to_answer:
     title: Menschen gefragt
-    desc: Select people who you think might know the answer.
+    desc: Wähle Leute aus, von denen du glaubst, dass sie die Antwort wissen könnten.
     invite: Zur Antwort einladen
     add: Personen hinzufügen
     search: Personen suchen
   question_detail:
     action: Aktion
-    Asked: Fragte
+    Asked: Gefragt
     asked: asked
     update: Geändert
     edit: bearbeitet
@@ -1044,8 +1044,8 @@ ui:
     question_useful: Es ist nützlich und klar
     question_un_useful: Es ist unklar oder nicht nützlich
     question_bookmark: Lesezeichen für diese Frage
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    answer_useful: Es ist nützlich
+    answer_un_useful: Es ist nicht nützlich
     answers:
       title: Antworten
       score: Punkte
@@ -1054,7 +1054,7 @@ ui:
       btn_accepted: Akzeptiert
     write_answer:
       title: Deine Antwort
-      edit_answer: Edit my existing answer
+      edit_answer: Meine existierende Antwort bearbeiten
       btn_name: Poste deine Antwort
       add_another_answer: Weitere Antwort hinzufügen
       confirm_title: Antworten fortsetzen
@@ -1085,15 +1085,15 @@ ui:
       <p>Wir empfehlen nicht, <strong>akzeptierte Antworten zu löschen</strong>, denn dadurch wird zukünftigen Lesern dieses Wissen vorenthalten. </p> Das wiederholte Löschen von akzeptierten Antworten kann dazu führen, dass dein Konto für die Beantwortung gesperrt wird. Bist du sicher, dass du löschen möchtest?
     other: Bist du sicher, dass du löschen möchtest?
     tip_answer_deleted: Diese Antwort wurde gelöscht
-    undelete_title: Undelete this post
-    undelete_desc: Are you sure you wish to undelete?
+    undelete_title: Diesen Beitrag wiederherstellen
+    undelete_desc: Bist du sicher, dass du die Löschung umkehren willst?
   btns:
     confirm: Bestätigen
     cancel: Abbrechen
     edit: Bearbeiten
     save: Speichern
     delete: Löschen
-    undelete: Undelete
+    undelete: Wiederherstellen
     login: Einloggen
     signup: Registrieren
     logout: Ausloggen
@@ -1110,18 +1110,18 @@ ui:
     comment: Kommentar
     refresh: Aktualisieren
     resend: Erneut senden
-    deactivate: Deactivate
-    active: Active
-    suspend: Suspend
-    unsuspend: Unsuspend
-    close: Close
-    reopen: Reopen
+    deactivate: Deaktivieren
+    active: Aktiv
+    suspend: Sperren
+    unsuspend: Entsperren
+    close: Schließen
+    reopen: Wieder öffnen
     ok: OK
-    light: Light
-    dark: Dark
-    system_setting: System setting
-    default: Default
-    reset: Reset
+    light: Hell
+    dark: Dunkel
+    system_setting: System-Einstellung
+    default: Standard
+    reset: Zurücksetzen
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -1335,7 +1335,7 @@ ui:
     flags: Meldungen
     settings: Einstellungen
     general: Allgemein
-    interface: Schnittstelle
+    interface: Benutzeroberfläche
     smtp: SMTP
     branding: Branding
     legal: Gesetzliche
@@ -1368,19 +1368,19 @@ ui:
       votes: "Stimmen:"
       users: "Users:"
       flags: "Meldungen:"
-      site_health_status: Site health status
+      site_health_status: Gesundheitszustand der Seite
       version: "Version:"
       https: "HTTPS:"
-      upload_folder: "Upload folder:"
-      run_mode: "Running mode:"
-      private: Private
-      public: Public
+      upload_folder: "Hochladeverzeichnis:"
+      run_mode: "Betriebsmodus:"
+      private: Privat
+      public: Öffentlich
       smtp: "SMTP:"
       timezone: "Zeitzone:"
       system_info: System info
-      go_version: "Go version:"
-      database: "Database:"
-      database_size: "Database size:"
+      go_version: "Go Version:"
+      database: "Datenbank:"
+      database_size: "Datenbankgröße:"
       storage_used: "Verwendeter Speicher:"
       uptime: "Betriebszeit:"
       answer_links: Answer links
@@ -1394,16 +1394,16 @@ ui:
       review: Überprüfung
       config: Konfig
       update_to: Aktualisieren zu
-      latest: Neueste
+      latest: Aktuell
       check_failed: Prüfung fehlgeschlagen
       "yes": "Ja"
       "no": "Nein"
       not_allowed: Nicht erlaubt
       allowed: Erlaubt
-      enabled: Ermöglicht
-      disabled: Behinderte
-      writable: Writable
-      not_writable: Not writable
+      enabled: Aktiviert
+      disabled: Deaktiviert
+      writable: Schreibbar
+      not_writable: Nicht schreibbar
     flags:
       title: Meldungen
       pending: Ausstehend
@@ -1539,7 +1539,7 @@ ui:
         validate: Kontakt-E-Mail ist ungültig.
         text: E-Mail-Adresse des Hauptkontakts, der für diese Website verantwortlich ist.
     interface:
-      page_title: Schnittstelle
+      page_title: Benutzeroberfläche
       language:
         label: Interface Sprache
         msg: Sprache der Benutzeroberfläche darf nicht leer sein.
@@ -1771,7 +1771,7 @@ ui:
     unpin: unpinned
     show: listed
     hide: unlisted
-    title: "Geschichte für"
+    title: "Verlauf von"
     tag_title: "Zeitleiste für"
     show_votes: "Stimmen anzeigen"
     n_or_a: N/A
