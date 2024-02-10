@@ -75,13 +75,13 @@ backend:
   privilege:
     level_1:
       description:
-        other: "Livello 1 (per team o gruppi privati: richiesta reputazione limitata) \n"
+        other: 'Livello 1 (per team o gruppi privati: richiesta reputazione limitata)'
     level_2:
       description:
-        other: 'Livello 2 (per startup community: richiesta reputazione scarsa) '
+        other: 'Livello 2 (per startup community: richiesta reputazione scarsa)'
     level_3:
       description:
-        other: 'Livello 3 (per community riconosciute: richiesta reputazione alta) '
+        other: 'Livello 3 (per community riconosciute: richiesta reputazione alta)'
     level_custom:
       description:
         other: Livello personalizzato
@@ -138,7 +138,7 @@ backend:
   pass:
     other: Password
   email_or_password_wrong_error:
-    other: Email o password errati
+    other: Email o password errati.
   error:
     password:
       space_invalid:
@@ -149,10 +149,10 @@ backend:
       cannot_modify_self_status:
         other: Non è possibile modificare il tuo status.
       email_or_password_wrong:
-        other: Email o password errati
+        other: Email o password errati.
     answer:
       not_found:
-        other: Risposta non trovata
+        other: Risposta non trovata.
       cannot_deleted:
         other: Permesso per cancellare mancante.
       cannot_update:
@@ -161,26 +161,26 @@ backend:
         other: Le domande sono chiuse e non possono essere aggiunte.
     comment:
       edit_without_permission:
-        other: Non si hanno di privilegi sufficienti per modificare il commento
+        other: Non si hanno di privilegi sufficienti per modificare il commento.
       not_found:
-        other: Commento non trovato
+        other: Commento non trovato.
       cannot_edit_after_deadline:
         other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: email già esistente
+        other: Email già esistente.
       need_to_be_verified:
-        other: email deve essere verificata
+        other: L'email deve essere verificata.
       verify_url_expired:
-        other: l'url di verifica email è scaduto, si prega di reinviare la email
+        other: L'url di verifica email è scaduto, si prega di reinviare l'email.
       illegal_email_domain_error:
         other: L'email non è consentita da quel dominio di posta elettronica. Si prega di usarne un altro.
     lang:
       not_found:
-        other: lingua non trovata
+        other: File lingua non trovato.
     object:
       captcha_verification_failed:
-        other: captcha errato
+        other: Captcha errato.
       disallow_follow:
         other: Non sei autorizzato a seguire
       disallow_vote:
@@ -293,7 +293,7 @@ backend:
         other: Can't create the config.yaml file.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Formato file non supportato.
     site_info:
       config_not_found:
         other: Configurazione del sito non trovata.
@@ -314,7 +314,7 @@ backend:
       desc:
         other: Questa domanda è già stata posta e ha già una risposta.
       placeholder:
-        other: Enter the existing question link
+        other: Inserisci il link alla domanda esistente
     not_a_answer:
       name:
         other: Non è una risposta
@@ -506,7 +506,7 @@ ui:
     edit_question: Modifica Domanda
     edit_answer: Modifica risposta
     search: Cerca
-    posts_containing: Posts containing
+    posts_containing: Post contenenti
     settings: Impostazioni
     notifications: Notifiche
     login: Accedi
@@ -552,13 +552,13 @@ ui:
       text: Forte
     chart:
       text: Grafico
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
+      flow_chart: Diagramma di flusso
+      sequence_diagram: Diagramma di sequenza
+      class_diagram: Diagramma di classe
+      state_diagram: Diagramma di stato
       entity_relationship_diagram: Entity relationship diagram
       user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
+      gantt_chart: Diagramma di Gantt
       pie_chart: Grafico a torta
     code:
       text: Esempio di codice
@@ -624,10 +624,10 @@ ui:
     outdent:
       text: Outdent
     italic:
-      text: Emphasis
+      text: Corsivo
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Collegamento ipertestuale
+      add_link: Aggiungi collegamento
       form:
         fields:
           url:
@@ -724,9 +724,9 @@ ui:
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: ora
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
+    x_seconds_ago: "{{count}}s fa"
+    x_minutes_ago: "{{count}}m fa"
+    x_hours_ago: "{{count}}h fa"
     hour: ora
     day: giorno
     hours: ore
@@ -763,9 +763,9 @@ ui:
           placeholder: >-
             Spiega brevemente le tue modifiche (ortografia rifinita, grammatica corretta, formattazione migliorata)
     btn_save_edits: Salva modifiche
-    btn_cancel: Cancel
+    btn_cancel: Annulla
   tags:
-    title: Tags
+    title: Tag
     sort_buttons:
       popular: Popolari
       name: Nome
@@ -862,22 +862,22 @@ ui:
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    forgot_pass: Password dimenticata?
     name:
-      label: Name
+      label: Nome
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        empty: Il nome non può essere vuoto.
+        range: Nome fino a 30 caratteri.
+        character: 'È necessario utilizzare il set di caratteri "a-z", "0-9", " - . _"'
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: L'email non può essere vuota.
     password:
       label: Password
       msg:
         empty: La password non può essere vuota.
-        different: The passwords entered on both sides are inconsistent
+        different: Le password inserite su entrambi i lati non corrispondono
   account_forgot:
     page_title: Password dimenticata?
     btn_name: Inviami email di recupero
@@ -1024,11 +1024,11 @@ ui:
   invite_to_answer:
     title: People Asked
     desc: Select people who you think might know the answer.
-    invite: Invite to answer
+    invite: Invita a rispondere
     add: Aggiungi contatti
-    search: Search people
+    search: Cerca persone
   question_detail:
-    action: Action
+    action: Azione
     Asked: Chiesto
     asked: chiesto
     update: Modificato
@@ -1112,10 +1112,10 @@ ui:
     resend: Rinvia
     deactivate: Disattivare
     active: Attivo
-    suspend: Suspend
-    unsuspend: Unsuspend
-    close: Close
-    reopen: Reopen
+    suspend: Sospendi
+    unsuspend: Riabilita
+    close: Chiudi
+    reopen: Riapri
     ok: OK
     light: Light
     dark: Scuro
@@ -1218,24 +1218,24 @@ ui:
     asked: asked
     downvoted: downvoted
     mod_short: MOD
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    mod_long: Moderatori
+    x_reputation: reputazione
+    x_votes: voti ricevuti
+    x_answers: risposte
+    x_questions: domande
   install:
     title: Answer
-    next: Next
-    done: Done
+    next: Avanti
+    done: Fatto
     config_yaml_error: Can't create the config.yaml file.
     lang:
-      label: Please choose a language
+      label: Scegli una lingua
     db_type:
-      label: Database engine
+      label: Motore database
     db_username:
-      label: Username
+      label: Nome utente
       placeholder: root
-      msg: Username cannot be empty.
+      msg: Il nome utente non può essere vuoto.
     db_password:
       label: Password
       placeholder: root
@@ -1243,9 +1243,9 @@ ui:
     db_host:
       label: Database host
       placeholder: "db:3306"
-      msg: Database host cannot be empty.
+      msg: L'host del database non può essere vuoto.
     db_name:
-      label: Database name
+      label: Nome database
       placeholder: risposta
       msg: Il nome del database non può essere vuoto.
     db_file:
@@ -1254,7 +1254,7 @@ ui:
       msg: Il file del database non può essere vuoto.
     config_yaml:
       title: Crea config.yaml
-      label: The config.yaml file created.
+      label: File config.yaml creato.
       desc: >-
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
       info: Una volta fatto, fai clic sul pulsante "Avanti".
@@ -1340,7 +1340,7 @@ ui:
     branding: Branding
     legal: Legal
     write: Write
-    tos: Terms of Service
+    tos: Termini del servizio
     privacy: Privacy
     seo: SEO
     customize: Personalizza
@@ -1373,12 +1373,12 @@ ui:
       https: "HTTPS:"
       upload_folder: "Upload folder:"
       run_mode: "Running mode:"
-      private: Private
-      public: Public
+      private: Privato
+      public: Pubblico
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System info
-      go_version: "Go version:"
+      timezone: "Fuso orario:"
+      system_info: Info sistema
+      go_version: "Versione Go:"
       database: "Database:"
       database_size: "Database size:"
       storage_used: "Storage used:"
@@ -1396,7 +1396,7 @@ ui:
       update_to: Update to
       latest: Latest
       check_failed: Check failed
-      "yes": "Yes"
+      "yes": "Sì"
       "no": "No"
       not_allowed: Not allowed
       allowed: Allowed
@@ -1489,7 +1489,7 @@ ui:
         title: Suspend this user
         content: A suspended user can't log in.
     questions:
-      page_title: Questions
+      page_title: Domande
       normal: Normal
       closed: Closed
       deleted: Deleted
@@ -1521,17 +1521,17 @@ ui:
         msg: Site name cannot be empty.
         text: "The name of this site, as used in the title tag."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: URL del sito
+        msg: L'url del sito non può essere vuoto.
+        validate: Inserisci un URL valido.
+        text: L'indirizzo del tuo sito.
       short_desc:
-        label: Short site description
-        msg: Short site description cannot be empty.
+        label: Descrizione breve del sito
+        msg: La descrizione breve del sito non può essere vuota.
         text: "Short description, as used in the title tag on homepage."
       desc:
-        label: Site description
-        msg: Site description cannot be empty.
+        label: Descrizione del sito
+        msg: La descrizione del sito non può essere vuota.
         text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
         label: Email di contatto
@@ -1567,17 +1567,17 @@ ui:
         msg: La crittografia non può essere vuota.
         text: Per la maggior parte dei server SSL è l'opzione consigliata.
         ssl: SSL
-        none: None
+        none: Nessuna
       smtp_port:
-        label: SMTP port
-        msg: SMTP port must be number 1 ~ 65535.
+        label: Porta SMTP
+        msg: La porta SMTP deve essere numero 1 ~ 65535.
         text: The port to your mail server.
       smtp_username:
-        label: SMTP username
-        msg: SMTP username cannot be empty.
+        label: Nome utente SMTP
+        msg: Il nome utente SMTP non può essere vuoto.
       smtp_password:
-        label: SMTP password
-        msg: SMTP password cannot be empty.
+        label: Password SMTP
+        msg: La password SMTP non può essere vuota.
       test_email_recipient:
         label: Test email recipients
         text: Provide email address that will receive test sends.
@@ -1735,10 +1735,10 @@ ui:
         label: Reputation required level
         text: Choose the reputation required for the privileges
   form:
-    optional: (optional)
-    empty: cannot be empty
+    optional: (opzionale)
+    empty: non può essere vuoto
     invalid: is invalid
-    btn_submit: Save
+    btn_submit: Salva
     not_found_props: "Required property {{ key }} not found."
     select: Select
   page_review:
@@ -1757,16 +1757,16 @@ ui:
     deleted: deleted
     downvote: downvote
     upvote: upvote
-    accept: accept
+    accept: accetta
     cancelled: cancelled
-    commented: commented
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
+    commented: commentato
+    rollback: ripristino
+    edited: modificato
+    answered: risposto
+    asked: chiesto
+    closed: chiuso
+    reopened: riaperto
+    created: creato
     pin: pinned
     unpin: unpinned
     show: listed
@@ -1774,7 +1774,7 @@ ui:
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
-    n_or_a: N/A
+    n_or_a: N/D
     title_for_question: "Timeline for"
     title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
     title_for_tag: "Timeline for tag"
@@ -1789,7 +1789,7 @@ ui:
     users_with_the_most_vote: Utenti che hanno votato di più questa settimana
     staffs: Lo staff della community
     reputation: reputazione
-    votes: Voti
+    votes: voti
   prompt:
     leave_page: Sei sicuro di voler lasciare questa pagina?
     changes_not_save: Le modifiche potrebbero non essere salvate.
