@@ -1361,12 +1361,12 @@ ui:
     dashboard:
       title: Dashboard
       welcome: Willkommen beim Answer-Admin!
-      site_statistics: Site statistics
+      site_statistics: Website-Statistiken
       questions: "Fragen:"
       answers: "Antworten:"
       comments: "Kommentare:"
       votes: "Stimmen:"
-      users: "Users:"
+      users: "Nutzer:"
       flags: "Meldungen:"
       site_health_status: Gesundheitszustand der Seite
       version: "Version:"
@@ -1387,7 +1387,7 @@ ui:
       plugins: Plugins
       github: GitHub
       blog: Blog
-      contact: Contact
+      contact: Kontakt
       documents: Dokumentation
       feedback: Rückmeldung
       support: Unterstützung
