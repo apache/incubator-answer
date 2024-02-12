@@ -30,7 +30,7 @@ type UserExternalLoginResp struct {
 
 // ExternalLoginBindingUserSendEmailReq external login binding user request
 type ExternalLoginBindingUserSendEmailReq struct {
-	BindingKey string `validate:"required,gt=1,lte=100" json:"binding_key"`
+	BindingKey string `validate:"required,gt=1,lte=128" json:"binding_key"`
 	Email      string `validate:"required,gt=1,lte=512,email" json:"email"`
 	// If must is true, whatever email if exists, try to bind user.
 	// If must is false, when email exist, will only be prompted with a warning.
@@ -45,7 +45,7 @@ type ExternalLoginBindingUserSendEmailResp struct {
 
 // ExternalLoginBindingUserReq external login binding user request
 type ExternalLoginBindingUserReq struct {
-	Code    string `validate:"required,gt=0,lte=500" json:"code"`
+	Code    string `validate:"required,gt=0,lte=512" json:"code"`
 	Content string `json:"-"`
 }
 

@@ -32,7 +32,7 @@ type AddReportReq struct {
 	// report type
 	ReportType int `validate:"required" json:"report_type"`
 	// report content
-	Content string `validate:"omitempty,gt=0,lte=500" json:"content"`
+	Content string `validate:"omitempty,gt=0,lte=512" json:"content"`
 	// user id
 	UserID      string `json:"-"`
 	CaptchaID   string `json:"captcha_id"` // captcha_id

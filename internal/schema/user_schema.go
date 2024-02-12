@@ -36,7 +36,7 @@ import (
 // UserVerifyEmailReq user verify email request
 type UserVerifyEmailReq struct {
 	// code
-	Code string `validate:"required,gt=0,lte=500" form:"code"`
+	Code string `validate:"required,gt=0,lte=512" form:"code"`
 	// content
 	Content string `json:"-"`
 }
@@ -189,17 +189,17 @@ var UserStatusShowMsg = map[int]string{
 
 // UserEmailLoginReq user email login request
 type UserEmailLoginReq struct {
-	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	Email       string `validate:"required,email,gt=0,lte=512" json:"e_mail"`
+	Pass        string `validate:"required,gte=4,lte=128" json:"pass"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
 
 // UserRegisterReq user register request
 type UserRegisterReq struct {
-	Name        string `validate:"required,gt=3,lte=30" json:"name"`
-	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	Name        string `validate:"required,gt=2,lte=32" json:"name"`
+	Email       string `validate:"required,email,gt=0,lte=512" json:"e_mail" `
+	Pass        string `validate:"required,gte=4,lte=128" json:"pass"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 	IP          string `json:"-" `
@@ -217,10 +217,10 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 }
 
 type UserModifyPasswordReq struct {
-	OldPass     string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
-	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
-	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
+	OldPass     string `validate:"omitempty,gte=4,lte=128" json:"old_pass"`
+	Pass        string `validate:"required,gte=4,lte=128" json:"pass"`
+	CaptchaID   string `validate:"omitempty,gt=0,lte=512" json:"captcha_id"`
+	CaptchaCode string `validate:"omitempty,gt=0,lte=512" json:"captcha_code"`
 	UserID      string `json:"-"`
 	AccessToken string `json:"-"`
 }
@@ -237,21 +237,21 @@ func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, 
 }
 
 type UpdateInfoRequest struct {
-	DisplayName string     `validate:"omitempty,gt=0,lte=30" json:"display_name"`
-	Username    string     `validate:"omitempty,gt=3,lte=30" json:"username"`
+	DisplayName string     `validate:"omitempty,gt=0,lte=32" json:"display_name"`
+	Username    string     `validate:"omitempty,gt=3,lte=32" json:"username"`
 	Avatar      AvatarInfo `json:"avatar"`
 	Bio         string     `validate:"omitempty,gt=0,lte=4096" json:"bio"`
 	BioHTML     string     `json:"-"`
-	Website     string     `validate:"omitempty,gt=0,lte=500" json:"website"`
-	Location    string     `validate:"omitempty,gt=0,lte=100" json:"location"`
+	Website     string     `validate:"omitempty,gt=0,lte=512" json:"website"`
+	Location    string     `validate:"omitempty,gt=0,lte=128" json:"location"`
 	UserID      string     `json:"-"`
 	IsAdmin     bool       `json:"-"`
 }
 
 type AvatarInfo struct {
-	Type     string `validate:"omitempty,gt=0,lte=100"  json:"type"`
-	Gravatar string `validate:"omitempty,gt=0,lte=200"  json:"gravatar"`
-	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
+	Type     string `validate:"omitempty,gt=0,lte=128"  json:"type"`
+	Gravatar string `validate:"omitempty,gt=0,lte=256"  json:"gravatar"`
+	Custom   string `validate:"omitempty,gt=0,lte=256"  json:"custom"`
 }
 
 func (a *AvatarInfo) ToJsonString() string {
@@ -285,9 +285,9 @@ func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, er
 // UpdateUserInterfaceRequest update user interface request
 type UpdateUserInterfaceRequest struct {
 	// language
-	Language string `validate:"required,gt=1,lte=100" json:"language"`
+	Language string `validate:"required,gt=1,lte=128" json:"language"`
 	// Color scheme
-	ColorScheme string `validate:"required,gt=1,lte=100" json:"color_scheme"`
+	ColorScheme string `validate:"required,gt=1,lte=128" json:"color_scheme"`
 	// user id
 	UserId string `json:"-"`
 }
@@ -306,13 +306,13 @@ func (req *UpdateUserInterfaceRequest) Check() (errFields []*validator.FormError
 }
 
 type UserRetrievePassWordRequest struct {
-	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
+	Email       string `validate:"required,email,gt=0,lte=512" json:"e_mail"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
 
 type UserRePassWordRequest struct {
-	Code    string `validate:"required,gt=0,lte=100" json:"code"`
+	Code    string `validate:"required,gt=0,lte=128" json:"code"`
 	Pass    string `validate:"required,gt=0,lte=32" json:"pass"`
 	Content string `json:"-"`
 }
@@ -353,7 +353,7 @@ type UserBasicInfo struct {
 }
 
 type GetOtherUserInfoByUsernameReq struct {
-	Username string `validate:"required,gt=0,lte=500" form:"username"`
+	Username string `validate:"required,gt=0,lte=512" form:"username"`
 	UserID   string `json:"-"`
 }
 
@@ -363,19 +363,19 @@ type GetOtherUserInfoResp struct {
 
 type UserChangeEmailSendCodeReq struct {
 	UserVerifyEmailSendReq
-	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
-	Pass   string `validate:"omitempty,gte=8,lte=32" json:"pass"`
+	Email  string `validate:"required,email,gt=0,lte=512" json:"e_mail"`
+	Pass   string `validate:"omitempty,gte=4,lte=128" json:"pass"`
 	UserID string `json:"-"`
 }
 
 type UserChangeEmailVerifyReq struct {
-	Code    string `validate:"required,gt=0,lte=500" json:"code"`
+	Code    string `validate:"required,gt=0,lte=512" json:"code"`
 	Content string `json:"-"`
 }
 
 type UserVerifyEmailSendReq struct {
-	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
-	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
+	CaptchaID   string `validate:"omitempty,gt=0,lte=512" json:"captcha_id"`
+	CaptchaCode string `validate:"omitempty,gt=0,lte=512" json:"captcha_code"`
 }
 
 // UserRankingResp user ranking response
@@ -401,6 +401,6 @@ type UserRankingSimpleInfo struct {
 
 // UserUnsubscribeNotificationReq user unsubscribe email notification request
 type UserUnsubscribeNotificationReq struct {
-	Code    string `validate:"required,gt=0,lte=500" json:"code"`
+	Code    string `validate:"required,gt=0,lte=512" json:"code"`
 	Content string `json:"-"`
 }

@@ -76,13 +76,13 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Level 1 (less required reputation for private team, group)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Level 2 (low required reputation for startup community)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Level 3 (high required reputation for mature community)
     level_custom:
       description:
         other: Custom Level
@@ -283,7 +283,7 @@ backend:
         other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
     config:
       read_config_failed:
-        other: Read config failed
+        other: Read configuration failed
     database:
       connection_failed:
         other: Database connection failed
@@ -297,7 +297,7 @@ backend:
         other: Unsupported file format.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Site configuration not found.
   reason:
     spam:
       name:
@@ -312,7 +312,7 @@ backend:
           discourse.
     a_duplicate:
       name:
-        other: a duplicate
+        other: because it's a duplicate
       desc:
         other: This question has been asked before and already has an answer.
       placeholder:
@@ -338,12 +338,12 @@ backend:
         other: Let us know specifically what you are concerned about
     community_specific:
       name:
-        other: a community-specific reason
+        other: as a community-specific reason
       desc:
         other: This question doesn't meet a community guideline.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: because it's needs details or clarity
       desc:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
@@ -386,7 +386,7 @@ backend:
             focus on one problem only.
       other:
         name:
-          other: something else
+          other: as something else
         desc:
           other: This post requires another reason not listed above.
     operation_type:
@@ -516,8 +516,8 @@ ui:
     tag_wiki: tag wiki
     create_tag: Create Tag
     edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
+    ask_a_question: Add question
+    edit_question: Edit question
     edit_answer: Edit Answer
     search: Search
     posts_containing: Posts containing
@@ -661,7 +661,7 @@ ui:
       heading: Heading
       cell: Cell
   close_modal:
-    title: I am closing this post as...
+    title: I am closing this post...
     btn_cancel: Cancel
     btn_submit: Submit
     remark:
@@ -669,8 +669,8 @@ ui:
     msg:
       empty: Please select a reason.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
+    flag_title: I am flagging to report this post...
+    close_title: I am closing this post...
     review_question_title: Review question
     review_answer_title: Review answer
     review_comment_title: Review comment
@@ -797,8 +797,8 @@ ui:
     no_desc: The tag has no description.
     more: More
   ask:
-    title: Add Question
-    edit_title: Edit Question
+    title: Add question
+    edit_title: Edit question
     default_reason: Edit question
     default_first_reason: Add question
     similar_questions: Similar questions
@@ -1051,7 +1051,7 @@ ui:
     title: Related Questions
     answers: answers
   invite_to_answer:
-    title: People Asked
+    title: Invite people
     desc: Select people who you think might know the answer.
     invite: Invite to answer
     add: Add people
@@ -1302,7 +1302,7 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
-      msg_max_length: Site name must be at maximum 30 characters in length.
+      msg_max_length: Site name must be at maximum 32 characters in length.
     site_url:
       label: Site URL
       text: The address of your site.
@@ -1324,15 +1324,15 @@ ui:
       label: Name
       msg: Name cannot be empty.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
-      msg_max_length: Name must be at maximum 30 characters in length.
+      msg_max_length: Name must be at maximum 32 characters in length.
     admin_password:
       label: Password
       text: >-
         You will need this password to log in. Please store it in a secure
         location.
       msg: Password cannot be empty.
-      msg_min_length: Password must be at least 8 characters in length.
-      msg_max_length: Password must be at maximum 32 characters in length.
+      msg_min_length: Password must be at least 4 characters in length.
+      msg_max_length: Password must be at maximum 128 characters in length.
     admin_email:
       label: Email
       text: You will need this email to log in.
@@ -1405,7 +1405,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to the Answer administration dashboard!
       site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
@@ -1422,7 +1422,7 @@ ui:
       public: Public
       smtp: "SMTP:"
       timezone: "Timezone:"
-      system_info: System info
+      system_info: System information
       go_version: "Go version:"
       database: "Database:"
       database_size: "Database size:"
@@ -1437,8 +1437,8 @@ ui:
       feedback: Feedback
       support: Support
       review: Review
-      config: Config
-      update_to: Update to
+      config: Configuration
+      update_to: Update to {{ version }}
       latest: Latest
       check_failed: Check failed
       "yes": "Yes"
@@ -1774,8 +1774,8 @@ ui:
     privilege:
       title: Privileges
       level:
-        label: Reputation required level
-        text: Choose the reputation required for the privileges
+        label: Required reputation level
+        text: Choose the required reputation for the privileges
 
   form:
     optional: (optional)

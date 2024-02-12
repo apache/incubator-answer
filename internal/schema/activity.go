@@ -34,7 +34,7 @@ type ActivityMsg struct {
 
 // GetObjectTimelineReq get object timeline request
 type GetObjectTimelineReq struct {
-	ObjectID string `validate:"omitempty,gt=0,lte=100" form:"object_id"`
+	ObjectID string `validate:"omitempty,gt=0,lte=128" form:"object_id"`
 	ShowVote bool   `validate:"omitempty" form:"show_vote"`
 	UserID   string `json:"-"`
 	IsAdmin  bool   `json:"-"`
@@ -73,8 +73,8 @@ type ActObjectInfo struct {
 
 // GetObjectTimelineDetailReq get object timeline detail request
 type GetObjectTimelineDetailReq struct {
-	NewRevisionID string `validate:"required,gt=0,lte=100" form:"new_revision_id"`
-	OldRevisionID string `validate:"required,gt=0,lte=100" form:"old_revision_id"`
+	NewRevisionID string `validate:"required,gt=0,lte=128" form:"new_revision_id"`
+	OldRevisionID string `validate:"required,gt=0,lte=128" form:"old_revision_id"`
 	UserID        string `json:"-"`
 }
 

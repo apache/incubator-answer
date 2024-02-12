@@ -30,12 +30,12 @@ type GetUserPluginListResp struct {
 }
 
 type UpdateUserPluginReq struct {
-	PluginSlugName string `validate:"required,gt=1,lte=100" json:"plugin_slug_name"`
+	PluginSlugName string `validate:"required,gt=1,lte=128" json:"plugin_slug_name"`
 	UserID         string `json:"-"`
 }
 
 type GetUserPluginConfigReq struct {
-	PluginSlugName string `validate:"required,gt=1,lte=100" form:"plugin_slug_name"`
+	PluginSlugName string `validate:"required,gt=1,lte=128" form:"plugin_slug_name"`
 	UserID         string `json:"-"`
 }
 
@@ -96,7 +96,7 @@ func (g *GetUserPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plu
 }
 
 type UpdateUserPluginConfigReq struct {
-	PluginSlugName string         `validate:"required,gt=1,lte=100" json:"plugin_slug_name"`
+	PluginSlugName string         `validate:"required,gt=1,lte=128" json:"plugin_slug_name"`
 	ConfigFields   map[string]any `json:"config_fields"`
 	UserID         string         `json:"-"`
 }

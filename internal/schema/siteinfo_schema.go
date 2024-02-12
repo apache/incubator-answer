@@ -125,22 +125,22 @@ type SiteLoginReq struct {
 
 // SiteCustomCssHTMLReq site custom css html
 type SiteCustomCssHTMLReq struct {
-	CustomHead    string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
-	CustomCss     string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
-	CustomHeader  string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
-	CustomFooter  string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
-	CustomSideBar string `validate:"omitempty,gt=0,lte=65536" json:"custom_sidebar"`
+	CustomHead    string `validate:"omitempty,gt=0,lte=99999" json:"custom_head"`
+	CustomCss     string `validate:"omitempty,gt=0,lte=99999" json:"custom_css"`
+	CustomHeader  string `validate:"omitempty,gt=0,lte=99999" json:"custom_header"`
+	CustomFooter  string `validate:"omitempty,gt=0,lte=99999" json:"custom_footer"`
+	CustomSideBar string `validate:"omitempty,gt=0,lte=99999" json:"custom_sidebar"`
 }
 
 // SiteThemeReq site theme config
 type SiteThemeReq struct {
 	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
 	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
-	ColorScheme string                 `validate:"omitempty,gt=0,lte=100" json:"color_scheme"`
+	ColorScheme string                 `validate:"omitempty,gt=0,lte=128" json:"color_scheme"`
 }
 
 type SiteSeoReq struct {
-	Permalink int    `validate:"required,lte=4,gte=0" form:"permalink" json:"permalink"`
+	Permalink int    `validate:"required,gte=0,lte=4" form:"permalink" json:"permalink"`
 	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 

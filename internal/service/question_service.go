@@ -187,15 +187,6 @@ func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*ent
 	return []string{}, nil
 }
 func (qs *QuestionService) CheckAddQuestion(ctx context.Context, req *schema.QuestionAdd) (errorlist any, err error) {
-	if len(req.Tags) == 0 {
-		errorlist := make([]*validator.FormErrorField, 0)
-		errorlist = append(errorlist, &validator.FormErrorField{
-			ErrorField: "tags",
-			ErrorMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.TagNotFound),
-		})
-		err = errors.BadRequest(reason.RecommendTagEnter)
-		return errorlist, err
-	}
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return
@@ -242,15 +233,6 @@ func (qs *QuestionService) HasNewTag(ctx context.Context, tags []*schema.TagItem
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
-	if len(req.Tags) == 0 {
-		errorlist := make([]*validator.FormErrorField, 0)
-		errorlist = append(errorlist, &validator.FormErrorField{
-			ErrorField: "tags",
-			ErrorMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.TagNotFound),
-		})
-		err = errors.BadRequest(reason.RecommendTagEnter)
-		return errorlist, err
-	}
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return

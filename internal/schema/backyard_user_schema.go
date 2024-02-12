@@ -50,7 +50,7 @@ type GetUserPageReq struct {
 	// page size
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// email
-	Query string `validate:"omitempty,gt=0,lte=100" form:"query"`
+	Query string `validate:"omitempty,gt=0,lte=128" form:"query"`
 	// user status
 	Status string `validate:"omitempty,oneof=normal suspended deleted inactive" form:"status"`
 	// staff, if staff is true means query admin or moderator
@@ -110,9 +110,9 @@ type UpdateUserRoleReq struct {
 
 // AddUserReq add user request
 type AddUserReq struct {
-	DisplayName string `validate:"required,gte=4,lte=30" json:"display_name"`
-	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
-	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	DisplayName string `validate:"required,gte=4,lte=32" json:"display_name"`
+	Email       string `validate:"required,email,gt=0,lte=512" json:"email"`
+	Password    string `validate:"required,gte=4,lte=128" json:"password"`
 	LoginUserID string `json:"-"`
 }
 
@@ -182,7 +182,7 @@ func (req *AddUsersReq) ParseUsers(ctx context.Context) (errFields []*validator.
 // UpdateUserPasswordReq update user password request
 type UpdateUserPasswordReq struct {
 	UserID      string `validate:"required" json:"user_id"`
-	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	Password    string `validate:"required,gte=4,lte=128" json:"password"`
 	LoginUserID string `json:"-"`
 }
 
