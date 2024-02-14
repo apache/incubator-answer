@@ -15,6 +15,7 @@
     "clean": "rm -rf node_modules && rm -rf src/plugins/**/node_modules"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
