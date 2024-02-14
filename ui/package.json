@@ -2,7 +2,7 @@
   "name": "answer-static",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "https://answer.apache.org/",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
