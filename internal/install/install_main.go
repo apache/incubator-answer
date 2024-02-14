@@ -49,8 +49,11 @@ func Run(configPath string) {
 	if len(port) == 0 {
 		port = "80"
 	}
-	fmt.Printf("[SUCCESS] answer installation service will run at: http://localhost:%s/install/ \n", port)
-	if err = installServer.Run(":" + port); err != nil {
-		panic(err)
+
+	if (installByEnv, err := TryToInstallByEnv(); !installByEnv) {
+		fmt.Printf("[SUCCESS] Answer installation service will run at: http://localhost:%s/install/ \n", port)
+		if err = installServer.Run(":" + port); err != nil {
+			panic(err)
+		}
 	}
 }
