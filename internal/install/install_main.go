@@ -76,7 +76,7 @@ func Run(configPath string) {
 
 	localIP := getLocalIP()
 
-	if (installByEnv, err := TryToInstallByEnv(); !installByEnv) {
+	if installByEnv, err := TryToInstallByEnv(); !installByEnv {
 		fmt.Printf("[SUCCESS] Answer installation service will run at: http://%s:%s/install/ \n", localIP, port)
 		if err = installServer.Run(":" + port); err != nil {
 			panic(err)
