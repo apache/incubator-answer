@@ -1054,7 +1054,7 @@ ui:
       btn_accepted: پذیرفته شده
     write_answer:
       title: پاسخ شما
-      edit_answer: Edit my existing answer
+      edit_answer: پاسخ فعلی من را ویرایش کنید
       btn_name: پاسخ خود را ارسال کنید
       add_another_answer: پاسخ دیگری اضافه کنید
       confirm_title: به پاسخ دادن ادامه دهید
