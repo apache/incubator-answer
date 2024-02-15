@@ -316,13 +316,13 @@ func generateIndexTsContent(folders []string) string {
 func buildUI(b *buildingMaterial) (err error) {
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/apache/incubator-answer/ui")
 
-	pnpmInstallCmd := b.newExecCmd("pnpm", "pre-install")
+	pnpmInstallCmd := b.newExecCmd("yarn", "pre-install")
 	pnpmInstallCmd.Dir = localUIBuildDir
 	if err = pnpmInstallCmd.Run(); err != nil {
 		return err
 	}
 
-	pnpmBuildCmd := b.newExecCmd("pnpm", "build")
+	pnpmBuildCmd := b.newExecCmd("yarn", "react-app-rewired", "build")
 	pnpmBuildCmd.Dir = localUIBuildDir
 	if err = pnpmBuildCmd.Run(); err != nil {
 		return err
