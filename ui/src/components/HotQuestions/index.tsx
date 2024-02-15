@@ -34,7 +34,7 @@ const HotQuestions: FC = () => {
   }
   return (
     <Card>
-      <Card.Header className="text-nowrap text-capitalize">
+      <Card.Header className="text-nowrap">
         {t('hot_questions')}
       </Card.Header>
       <ListGroup variant="flush">

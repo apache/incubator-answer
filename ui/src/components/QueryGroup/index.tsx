@@ -87,7 +87,7 @@ const Index: FC<Props> = ({
             variant="outline-secondary"
             active={currentSort === name}
             className={classNames(
-              'text-capitalize fit-content',
+              'fit-content',
               data.length > MAX_BUTTON_COUNT &&
                 index > MAX_BUTTON_COUNT - 2 &&
                 'd-none d-md-block',
@@ -125,7 +125,6 @@ const Index: FC<Props> = ({
                 key={key}
                 active={currentSort === name}
                 className={classNames(
-                  'text-capitalize',
                   'd-block d-md-none',
                   className,
                 )}

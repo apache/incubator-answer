@@ -42,7 +42,7 @@ const Dashboard: FC = () => {
 
   return (
     <>
-      <h3 className="text-capitalize">{t('title')}</h3>
+      <h3>{t('title')}</h3>
       <p className="mt-4">{t('welcome', { site_name: siteName })}</p>
       <Row>
         <Col lg={6}>

@@ -220,7 +220,7 @@ const Header: FC = () => {
           <Nav.Item className="lg-none mt-3 pb-1">
             <Link
               to={askUrl}
-              className="text-capitalize text-nowrap btn btn-light">
+              className="text-nowrap btn btn-light">
               {t('btns.add_question')}
             </Link>
           </Nav.Item>
@@ -233,7 +233,7 @@ const Header: FC = () => {
                 <Nav.Item className="me-3">
                   <Link
                     to={askUrl}
-                    className={classnames('text-capitalize text-nowrap btn', {
+                    className={classnames('text-nowrap btn', {
                       'btn-light': navbarStyle !== 'theme-light',
                       'btn-primary': navbarStyle === 'theme-light',
                     })}>
