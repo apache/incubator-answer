@@ -1044,7 +1044,7 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
+    you_can_not_edit_youself: You can't edit yourself
     review: Your revision will show after review.
     sent_success: Sent successfully
   related_question:

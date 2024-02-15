@@ -88,7 +88,7 @@ const UserOperation = ({
     const { user_id, role_id, username } = userData;
     if (username === currentUser.username) {
       Toast.onShow({
-        msg: t('forbidden_operate_self', { keyPrefix: 'toast' }),
+        msg: t('you_can_not_edit_youself', { keyPrefix: 'toast' }),
         variant: 'warning',
       });
       return;
