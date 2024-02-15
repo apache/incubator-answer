@@ -1348,7 +1348,7 @@ ui:
     warn_desc: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the
       configuration items in this file, please delete it first.
-    install_now: You may try <1>installing now</1>.
+    install_now: You may try to <1>installing Answer now</1>.
     installed: Already installed
     installed_desc: >-
       You appear to have already installed. To reinstall please clear your old
