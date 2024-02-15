@@ -9,7 +9,6 @@
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --config ./.prettierrc.json",
     "pre-install": "node ./scripts/preinstall.js && pnpm install",
-    "prepare": "pnpm build:packages",
     "pre-commit": "lint-staged",
     "build:packages": "pnpm -r --filter=./src/plugins/* run build",
     "clean": "rm -rf node_modules && rm -rf src/plugins/**/node_modules"
