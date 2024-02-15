@@ -16,28 +16,29 @@
 # specific language governing permissions and limitations
 # under the License.
 
-set -e
-echo "begin build plugin"
-plugin_file=./script/plugin_list
-if [ ! -f "$plugin_file" ]; then
+cmd="./answer build"
+
+echo "Check, if file plugin_list exist"
+sleep 1
+if ! [ -f "plugin_list" ]; then
   echo "plugin_list is not exist"
   exit 0
 fi
 
-echo "plugin_list exist"
-cmd="./answer build "
-for repo in `cat $plugin_file`
-do
-  echo ${repo}
-  cmd=$cmd" --with "${repo}
+echo "Begin build plugin..."
+sleep 1
+for repo in $(cat plugin_list); do
+  cmd+=" --with ${repo}"
 done
 
-echo "cmd is "$cmd
 $cmd
-if [ ! -f "./new_answer" ]; then
-  echo "new_answer is not exist build failed"
+
+if ! [ -f "./new_answer" ]; then
+  echo "File new_answer is not exist! Build failed"
   exit 1
 fi
+
 rm answer
 mv new_answer answer
+
 ./answer plugin
