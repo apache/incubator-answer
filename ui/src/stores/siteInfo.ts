@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import create from 'zustand';
+import { create } from 'zustand';
 
 import { AdminSettingsGeneral, AdminSettingsUsers } from '@/common/interface';
 import { DEFAULT_SITE_NAME } from '@/common/constants';
