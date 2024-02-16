@@ -75,13 +75,13 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (weniger Reputation für privates Team, Gruppen)
+        other: Level 1 (less reputation required for private team, group)
     level_2:
       description:
-        other: Level 2 (niedrige Reputation erforderlich für Start-Community)
+        other: Level 2 (low reputation required for startup community)
     level_3:
       description:
-        other: Level 3 (hohe Reputation, für ausgereifte Community)
+        other: Level 3 (high reputation required for mature community)
     level_custom:
       description:
         other: Benutzerdefinierter Level
@@ -271,7 +271,7 @@ backend:
       not_allowed_registration:
         other: Derzeit ist die Seite nicht für die Anmeldung geöffnet.
       not_allowed_login_via_password:
-        other: Zurzeit ist es auf der Website nicht möglich, sich mit einem Passwort anzumelden.
+        other: Zurzeit ist es auf der Seite nicht möglich, sich mit einem Passwort anzumelden.
       access_denied:
         other: Zugriff verweigert
       page_access_denied:
@@ -723,11 +723,11 @@ ui:
     long_date: DD. MMM
     long_date_with_year: "DD. MMM YYYY"
     long_date_with_time: "DD. MMM YYYY [at] HH:mm"
-    now: jetzt
+    now: Gerade eben
     x_seconds_ago: "vor {{count}}s"
     x_minutes_ago: "vor {{count}}m"
     x_hours_ago: "vor {{count}}h"
-    hour: stunde
+    hour: Stunde
     day: tag
     hours: Stunden
     days: Tage
@@ -1314,9 +1314,9 @@ ui:
     db_failed_desc: >-
       Das bedeutet entweder, dass die Datenbankinformationen in deiner <1>config.yaml</1> Datei falsch sind oder dass der Kontakt zum Datenbankserver nicht hergestellt werden konnte. Das könnte bedeuten, dass der Datenbankserver deines Hosts ausgefallen ist.
   counts:
-    views: ansehen
-    votes: stimmen
-    answers: antworten
+    views: Ansichten
+    votes: Stimmen
+    answers: Antworten
     accepted: Akzeptiert
   page_error:
     http_error: HTTP Fehler {{ code }}
@@ -1338,7 +1338,7 @@ ui:
     interface: Benutzeroberfläche
     smtp: SMTP
     branding: Branding
-    legal: Gesetzliche
+    legal: Rechtliches
     write: Schreiben
     tos: Nutzungsbedingungen
     privacy: Privatsphäre
@@ -1452,7 +1452,7 @@ ui:
       name: Namen
       email: E-Mail
       reputation: Ansehen
-      created_at: Erstellungszeitpunkt
+      created_at: Erstellt
       delete_at: Löschzeit
       suspend_at: Sperrzeit
       status: Status
@@ -1460,10 +1460,10 @@ ui:
       action: Aktion
       change: Ändern
       all: Alle
-      staff: Mitarbeiter
+      staff: Teammitglieder
       more: Mehr
       inactive: Inaktiv
-      suspended: Ausgesetzt
+      suspended: Gesperrt
       deleted: Gelöscht
       normal: Normal
       Moderator: Moderation
@@ -1605,7 +1605,7 @@ ui:
         label: Favicon
         text: Ein Favicon für deine Website. Um korrekt über ein CDN zu funktionieren, muss es ein png sein. Es wird auf 32x32 verkleinert. Wenn du es leer lässt, wird das "quadratische Symbol" verwendet.
     legal:
-      page_title: Gesetzlich
+      page_title: Rechtliches
       terms_of_service:
         label: Nutzungsbedingungen
         text: "Du kannst hier Inhalte zu den Nutzungsbedingungen hinzufügen. Wenn du bereits ein Dokument hast, das anderswo gehostet wird, gib hier die vollständige URL an."
@@ -1732,8 +1732,8 @@ ui:
     privilege:
       title: Berechtigungen
       level:
-        label: Benötigtes Reputations-Level
-        text: Wähle die für die Privilegien erforderliche Reputation aus
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
   form:
     optional: (optional)
     empty: kann nicht leer sein
@@ -1785,9 +1785,9 @@ ui:
     no_data: "Wir konnten nichts finden."
   users:
     title: Benutzer
-    users_with_the_most_reputation: Benutzer mit den höchsten Ansehenspunkten dieser Woche
+    users_with_the_most_reputation: Users with the highest reputation scores this week
     users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
-    staffs: Benutzer
+    staffs: Unsere Community Teammitglieder
     reputation: Ansehen
     votes: stimmen
   prompt:
