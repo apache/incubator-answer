@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "lint": "eslint . --cache --fix --ext .ts,.tsx",
+    "lint": "eslint --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --config ./.prettierrc.json",
     "pre-install": "node ./scripts/preinstall.js && yarn",
     "pre-commit": "lint-staged",
