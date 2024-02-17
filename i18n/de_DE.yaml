@@ -724,9 +724,9 @@ ui:
     long_date_with_year: "DD. MMM YYYY"
     long_date_with_time: "DD. MMM YYYY [at] HH:mm"
     now: Gerade eben
-    x_seconds_ago: "vor {{count}}s"
-    x_minutes_ago: "vor {{count}}m"
-    x_hours_ago: "vor {{count}}h"
+    x_seconds_ago: "Vor {{count}}s"
+    x_minutes_ago: "Vor {{count}}m"
+    x_hours_ago: "Vor {{count}}h"
     hour: Stunde
     day: tag
     hours: Stunden
@@ -1688,7 +1688,7 @@ ui:
       password_login:
         title: Passwort-Login
         label: E-Mail-und Passwort-Login erlauben
-        text: "WARNUNG: Wenn Sie die Option ausschalten, können Sie sich möglicherweise nicht einloggen, wenn Sie nicht zuvor eine andere Login-Methode konfiguriert haben."
+        text: "WARNUNG: Wenn du diese Option abschaltest, kannst du dich möglicherweise nicht mehr anmelden, wenn du zuvor keine andere Anmeldemethode konfiguriert hast."
     installed_plugins:
       title: Installierte Plugins
       plugin_link: Plugins erweitern und ergänzen die Funktionalität von Answer. Du kannst Plugins im <1>Answer Plugin Repository</1> finden.
