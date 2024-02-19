@@ -45,16 +45,16 @@ const AnswerLinks = () => {
             </a>
           </Col>
           <Col xs={6}>
-            <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
+            <a
+              href="https://answer.apache.org/community"
+              target="_blank"
+              rel="noreferrer">
               {t('support')}
             </a>
           </Col>
           <Col xs={6}>
-            <a
-              href="https://github.com/apache/incubator-answer"
-              target="_blank"
-              rel="noreferrer">
-              {t('github')}
+            <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
+              {t('forum')}
             </a>
           </Col>
           <Col xs={6}>
@@ -67,10 +67,10 @@ const AnswerLinks = () => {
           </Col>
           <Col xs={6}>
             <a
-              href="https://answer.apache.org/contact"
+              href="https://github.com/apache/incubator-answer"
               target="_blank"
               rel="noreferrer">
-              {t('contact')}
+              {t('github')}
             </a>
           </Col>
         </Row>
