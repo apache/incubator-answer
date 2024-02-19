@@ -19,9 +19,9 @@
 backend:
   base:
     success:
-      other: Success.
+      other: విజయవంతమైంది.
     unknown:
-      other: Unknown error.
+      other: తెలియని సమస్య.
     request_format_error:
       other: Request format is not valid.
     unauthorized_error:
@@ -492,30 +492,30 @@ ui:
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
+    prev: మునుపటి
     next: Next
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
+    question: ప్రశ్న
+    questions: ప్రశ్నలు
+    tag: ట్యాగ్
+    tags: టాగ్లు
     tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
+    create_tag: ట్యాగ్‌ని సృష్టించండి
+    edit_tag: ట్యాగ్‌ని సవరించండి
     ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
+    edit_question: ప్రశ్నను సవరించండి
+    edit_answer: సమాధానాన్ని సవరించండి
     search: Search
-    posts_containing: Posts containing
+    posts_containing: కలిగి ఉన్న పోస్ట్‌లు
     settings: Settings
-    notifications: Notifications
+    notifications: నోటిఫికేషన్‌లు
     login: Log In
     sign_up: Sign Up
     account_recovery: Account Recovery
     account_activation: Account Activation
     confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
+    account_suspended: ఖాతా నిలిపివేయబడింది
+    admin: అడ్మిన్
     change_email: Modify Email
     install: Answer Installation
     upgrade: Answer Upgrade
@@ -527,9 +527,9 @@ ui:
     http_403: HTTP Error 403
     logout: Log Out
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
+    title: నోటిఫికేషన్లు
+    inbox: ఇన్‌బాక్స్
+    achievement: విజయాలు
     new_alerts: New alerts
     all_read: Mark all as read
     show_more: Show more
