@@ -108,7 +108,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Пригласить кого-нибудь ответить
     rank_tag_add_label:
-      other: Создать новый тег
+      other: Новый тег
     rank_tag_edit_label:
       other: Редактировать описание тега (требуется проверка)
     rank_question_edit_label:
@@ -667,7 +667,7 @@ ui:
     msg:
       empty: Пожалуйста, выбери причину.
   tag_modal:
-    title: Создать новый тег
+    title: Новый тег
     form:
       fields:
         display_name:
@@ -692,7 +692,7 @@ ui:
             Коротко опишите изменения (орфография, грамматики, улучшение формата)
     btn_cancel: Отмена
     btn_submit: Сохрнаить
-    btn_post: Создать новый тег
+    btn_post: Новый тег
   tag_info:
     created_at: Создано
     edited_at: Отредактировано
@@ -720,7 +720,7 @@ ui:
     btn_save_edits: Сохранить изменения
     btn_cancel: Отмена
   dates:
-    long_date: МММ Д
+    long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: сейчас
@@ -814,7 +814,7 @@ ui:
     post_question&answer: Опубликуйте свой вопрос и ответ
   tag_selector:
     add_btn: Тег
-    create_btn: Создать новый тег
+    create_btn: новый тег
     search_tag: Поиск тега
     hint: "Опишите, о чем ваш вопрос, требуется хотя бы один тег."
     no_result: Нет соответствующих тэгов
@@ -907,16 +907,16 @@ ui:
       msg:
         empty: Адрес электронной почты не может быть пустым.
     modal_title: Электронная почта уже существует.
-    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
+    modal_content: Этот адрес электронной почты уже зарегистрирован. Вы уверены, что хотите подключиться к существующей учетной записи?
     modal_cancel: Изменить адрес электронной почты
     modal_confirm: Подключение к существующей учетной записи
   password_reset:
     page_title: Сброс пароля
     btn_name: Сбросить мой пароль
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      Вы успешно сменили свой пароль; вы будете перенаправлены на страницу входа в систему.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
+      Извините, эта ссылка для сброса пароля больше недействительна. Возможно, ваш пароль уже сброшен?
     to_login: Перейдите на страницу входа в систему
     password:
       label: Пароль
@@ -946,7 +946,7 @@ ui:
         caption: Люди могут упоминать вас как "@username".
         msg: Имя пользователя не может быть пустым.
         msg_range: Имя пользователя должно быть до 30 символов.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
       avatar:
         label: Изображение профиля
         gravatar: Gravatar
@@ -969,7 +969,7 @@ ui:
       turn_on: Вкл.
       inbox:
         label: Email уведомления
-        description: Answers to your questions, comments, invites, and more.
+        description: Ответы на ваши вопросы, комментарии, приглашения и многое другое.
       all_new_question:
         label: Все новые вопросы
         description: Получайте уведомления обо всех новых вопросах. До 50 вопросов в неделю.
@@ -981,20 +981,20 @@ ui:
       change_email_btn: Изменить e-mail
       change_pass_btn: Изменить пароль
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation instructions.
+        Мы отправили электронное письмо на этот адрес. Пожалуйста, следуйте инструкциям из письма.
       email:
         label: Новый email-адрес
         msg: Новый email не может быть пустым.
       pass:
         label: Текущий пароль
-        msg: Password cannot be empty.
+        msg: Пароль не может быть пустым.
       password_title: Пароль
       current_pass:
         label: Текущий пароль
         msg:
           empty: Текущий пароль не может быть пустым.
           length: Длина должна быть от 8 до 32.
-          different: The two entered passwords do not match.
+          different: Введенные пароли не совпадают.
       new_pass:
         label: Новый пароль
       pass_confirm:
@@ -1054,7 +1054,7 @@ ui:
       btn_accepted: Принято
     write_answer:
       title: Ваш ответ
-      edit_answer: Редактировать мой существующий ответ
+      edit_answer: Изменить мой ответ
       btn_name: Ответить
       add_another_answer: Добавить другой ответ
       confirm_title: Перейти к ответу
@@ -1112,7 +1112,7 @@ ui:
     resend: Отправить повторно
     deactivate: Отключить
     active: Активные
-    suspend: Приостановить
+    suspend: Заблокировать
     unsuspend: Разблокировать
     close: Закрыть
     reopen: Открыть повторно
@@ -1141,10 +1141,10 @@ ui:
       tag: "<1>[тег]</1> поиск по тегу"
       user: "<1>user:username</1> поиск по автору"
       answer: "<1>ответов:0</1> вопросы без ответов"
-      score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
+      score: "<1>score:3</1> записи с рейтингом 3+"
+      question: "<1>is:question</1> поиск по вопросам"
       is_answer: "<1>ответ</1> поиск ответов"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+    empty: Мы ничего не смогли найти. <br /> Попробуйте другие или менее специфичные ключевые слова.
   share:
     name: Поделиться
     copy: Скопировать ссылку
@@ -1166,7 +1166,7 @@ ui:
   unsubscribe:
     page_title: Отписаться
     success_title: Вы успешно отписались от рассылки
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
+    success_desc: Вы были успешно удалены из этого списка подписчиков и больше не будете получать от нас никаких электронных писем.
     link: Изменить настройки
   question:
     following_tags: Отслеживаемые теги
@@ -1212,7 +1212,7 @@ ui:
     top_answers: Лучшие ответы
     top_questions: Топ вопросов
     stats: Статистика
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    list_empty: Сообщений не найдено.<br />Возможно, вы хотели бы выбрать другую вкладку?
     accepted: Принято
     answered: отвеченные
     asked: спросил
@@ -1256,7 +1256,7 @@ ui:
       title: Создайте файл config.yaml
       label: Файл config.yaml создан.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
+        Вы можете создать файл <1>config.yaml</1> вручную в каталоге <1>/var/wwww/xxx/</1> и вставить в него следующий текст.
       info: После этого нажмите на кнопку "Далее".
     site_information: Информация о сайте
     admin_account: Администратор
@@ -1268,15 +1268,15 @@ ui:
       label: Адрес сайта
       text: Адрес вашего сайта.
       msg:
-        empty: Site URL cannot be empty.
+        empty: URL-адрес сайта не может быть пустым.
         incorrect: Неверный формат URL-адреса сайта.
-        max_length: Site URL must be at maximum 512 characters in length.
+        max_length: Длина URL-адреса сайта должна составлять не более 512 символов.
     contact_email:
       label: Контактный адрес электронной почты
-      text: Email address of key contact responsible for this site.
+      text: Адрес электронной почты контактного лица, ответственного за этот сайт.
       msg:
         empty: Контактный адрес электронной почты не может быть пустым.
-        incorrect: Contact email incorrect format.
+        incorrect: Некорректный формат контактного адреса электронной почты.
     login_required:
       label: Приватный
       switch: Требуется авторизация
@@ -1285,17 +1285,17 @@ ui:
       label: Имя
       msg: Имя не может быть пустым.
       character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
-      msg_max_length: Name must be at maximum 30 characters in length.
+      msg_max_length: Длина имени должна составлять не более 30 символов.
     admin_password:
       label: Пароль
       text: >-
-        You will need this password to log in. Please store it in a secure location.
+        Этот пароль понадобится вам для входа в систему. Пожалуйста, сохраните его в надежном месте.
       msg: Пароль не может быть пустым.
       msg_min_length: Длина пароля должна составлять не менее 8 символов.
-      msg_max_length: Password must be at maximum 32 characters in length.
+      msg_max_length: Длина пароля должна составлять не более 32 символов.
     admin_email:
       label: Email
-      text: You will need this email to log in.
+      text: Вам понадобится этот адрес электронной почты для входа в систему.
       msg:
         empty: Адрес электронной почты не может быть пустым.
         incorrect: Недопустимый формат e-mail адреса.
@@ -1312,7 +1312,7 @@ ui:
       Похоже, вы уже установили. Для переустановки, пожалуйста, сначала очистите ваши старые таблицы базы данных.
     db_failed: Ошибка подключения к базе данных
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
+      Это означает, что информация о базе данных в вашем файле <1>config.yaml</1> неверна, либо не удалось установить контакт с сервером базы данных. Это может означать, что сервер базы данных вашего хоста недоступен.
   counts:
     views: просмотры
     votes: голоса
@@ -1322,7 +1322,7 @@ ui:
     http_error: Ошибка HTTP {{ code }}
     desc_403: Нет прав доступа для просмотра этой страницы.
     desc_404: К сожалению, эта страница не существует.
-    desc_50X: The server encountered an error and could not complete your request.
+    desc_50X: Сервер обнаружил ошибку и не смог выполнить ваш запрос.
     back_home: Вернуться на главную страницу
   page_maintenance:
     desc: "Мы выполняем техническое обслуживание, скоро вернемся."
@@ -1343,7 +1343,7 @@ ui:
     tos: Пользовательское Соглашение
     privacy: Конфиденциальность
     seo: SEO
-    customize: Настройки
+    customize: Настройки интерфейса
     themes: Тема
     css_html: CSS/HTML
     login: Авторизция
@@ -1353,8 +1353,8 @@ ui:
   website_welcome: Добро пожаловать на {{site_name}}
   user_center:
     login: Авторизация
-    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
-    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    qrcode_login_tip: Пожалуйста, используйте {{ agentName }} для сканирования QR-кода и входа в систему.
+    login_failed_email_tip: Не удалось войти в систему, пожалуйста, разрешите этому приложению получить доступ к вашей электронной почте, прежде чем повторять попытку.
   admin:
     admin_header:
       title: Администратор
@@ -1424,7 +1424,7 @@ ui:
           password:
             label: Пароль
             text: Сессия пользователя будет завершена и ему придется повторить вход.
-            msg: Password must be at 8-32 characters in length.
+            msg: Длина пароля должна составлять от 8 до 32 символов.
       btn_cancel: Отменить
       btn_submit: Сохранить
     user_modal:
@@ -1435,7 +1435,7 @@ ui:
             label: Массовое добавление пользователей
             placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
             text: Разделите “name, email, password” запятыми. По одному пользователю в строке.
-            msg: "Please enter the user's email, one per line."
+            msg: "Пожалуйста, введите адрес электронной почты пользователя, по одному на строку."
           display_name:
             label: Отображаемое имя
             msg: Отображаемое имя должно содержать не менее 4-30 символов.
@@ -1454,7 +1454,7 @@ ui:
       reputation: Репутация
       created_at: Дата создания
       delete_at: Время удаления
-      suspend_at: Suspended Time
+      suspend_at: Дата блокировки
       status: Статус
       role: Роль
       action: Действия
@@ -1463,28 +1463,28 @@ ui:
       staff: Сотрудники
       more: Ещё
       inactive: Неактивный
-      suspended: Приостановленные
+      suspended: Заблокированные
       deleted: Удаленные
       normal: Обычные
       Moderator: Модератор
       Admin: Администратор
       User: Пользователь
       filter:
-        placeholder: "Filter by name, user:id"
+        placeholder: "Фильтровать по имени, user:id"
       set_new_password: Задать новый пароль
       change_status: Изменить статус
       change_role: Изменить роль
       show_logs: Показать логи
       add_user: Добавить пользователя
       deactivate_user:
-        title: Deactivate user
-        content: An inactive user must re-validate their email.
+        title: Деактивировать пользователя
+        content: Неактивный пользователь должен будет повторно подтвердить свою электронную почту.
       delete_user:
         title: Удалить этого пользователя
-        content: Are you sure you want to delete this user? This is permanent!
-        remove: Remove their content
-        label: Remove all questions, answers, comments, etc.
-        text: Don’t check this if you wish to only delete the user’s account.
+        content: Вы уверены, что хотите удалить этого пользователя? Это действие необратимо!
+        remove: Удалить контент пользователя (опционально)
+        label: Удалить все вопросы, ответы, комментарии и т.д.
+        text: Не устанавливайте этот флажок, если вы хотите удалить только учетную запись пользователя.
       suspend_user:
         title: Заблокировать этого пользователя
         content: Заблокированный пользователь не сможет войти.
@@ -1501,7 +1501,7 @@ ui:
       action: Действие
       change: Изменить
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "Фильтровать по заголовку, question:id"
     answers:
       page_title: Ответы
       normal: Обычные
@@ -1513,7 +1513,7 @@ ui:
       action: Действие
       change: Изменить
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "Фильтровать по заголовку, answer:id"
     general:
       page_title: Основные
       name:
@@ -1528,16 +1528,16 @@ ui:
       short_desc:
         label: Краткое описание
         msg: Краткое описание сайта не может быть пустым.
-        text: "Short description, as used in the title tag on homepage."
+        text: "Краткое описание, используемое в теге заголовка на домашней странице."
       desc:
         label: Описание сайта
         msg: Описание сайта не может быть пустым.
         text: "Опишите этот сайт одним предложением, как используется в теге meta description"
       contact_email:
         label: Контактный адрес электронной почты
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        msg: Контактный адрес электронной почты не может быть пустым.
+        validate: Контактный адрес электронной почты не может быть пустым.
+        text: Адрес электронной почты контактного лица, ответственного за данный сайт.
     interface:
       page_title: Интерфейс
       language:
@@ -1579,13 +1579,13 @@ ui:
         label: Пароль SMTP
         msg: Пароль SMTP не может быть пустым.
       test_email_recipient:
-        label: Test email recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: Тестовые получатели электронной почты
+        text: Укажите адрес электронной почты, на который будут отправляться тестовые сообщения.
+        msg: Некорректный тестовый адрес электронной почты
       smtp_authentication:
         label: Включить авторизацию
         title: Аутентификация SMTP
-        msg: SMTP authentication cannot be empty.
+        msg: Аутентификационные данные для SMTP не могут быть пустыми.
         "yes": "Да"
         "no": "Нет"
     branding:
@@ -1599,19 +1599,19 @@ ui:
         text: Логотип, используемый в мобильной версии вашего сайта. Используйте широкое прямоугольное изображение высотой 56. Если оставить пустым, будет использоваться изображение из настройки "Логотип".
       square_icon:
         label: Квадратный значок
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        msg: Square icon не может быть пустым.
+        text: Изображение, используемое в качестве основы для значков метаданных. В идеале должно быть больше 512x512.
       favicon:
         label: Favicon
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        text: Значок для вашего сайта. Для корректной работы через CDN он должен быть в формате png. Размер будет изменен до 32x32. Если оставить пустым, будет использоваться "square icon".
     legal:
       page_title: Правовая информация
       terms_of_service:
         label: Условия использования
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        text: "Вы можете добавить содержимое условий предоставления услуг здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь."
       privacy_policy:
         label: Условия конфиденциальности
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        text: "Вы можете добавить содержание политики конфиденциальности здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь."
     write:
       page_title: Написание
       restrict_answer:
@@ -1632,10 +1632,10 @@ ui:
       page_title: SEO
       permalink:
         label: Постоянная ссылка
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        text: Пользовательские структуры URL-адресов могут улучшить удобство использования и обратную совместимость ваших ссылок.
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: Это приведет к необратимому переопределению всех связанных настроек сайта.
     themes:
       page_title: Тема
       themes:
@@ -1664,7 +1664,7 @@ ui:
 
       footer:
         label: Нижняя панель
-        text: This will insert before &lt;/body>.
+        text: Это будет вставлено перед &lt;/body>.
       sidebar:
         label: Боковая панель
         text: Это будет вставлено в боковую панель.
@@ -1691,7 +1691,7 @@ ui:
         text: "Предупреждение: При отключении, вы не сможете войти, если ранее не настроили другой способ входа."
     installed_plugins:
       title: Установленные плагины
-      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
+      plugin_link: Плагины расширяют функциональность Answer. Вы можете найти плагины в <1>Answer Plugin Repository</1>.
       filter:
         all: Все
         active: Активные
@@ -1732,14 +1732,14 @@ ui:
     privilege:
       title: Привилегии
       level:
-        label: Reputation required level
-        text: Choose the reputation required for the privileges
+        label: Необходимый уровень репутации
+        text: Выберите количество репутации, необходимое для получения привилегий
   form:
-    optional: (optional)
+    optional: (опционально)
     empty: не может быть пустым
-    invalid: is invalid
+    invalid: недействителен
     btn_submit: Сохранить
-    not_found_props: "Required property {{ key }} not found."
+    not_found_props: "Требуемое свойство {{ key }} не найдено."
     select: Select
   page_review:
     review: На проверку
