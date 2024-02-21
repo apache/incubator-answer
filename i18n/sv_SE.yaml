@@ -1459,7 +1459,7 @@ ui:
       role: Roll
       action: Action
       change: Ändra
-      all: All
+      all: Alla
       staff: Staff
       more: More
       inactive: Inactive
@@ -1511,7 +1511,7 @@ ui:
       created: Created
       status: Status
       action: Action
-      change: Change
+      change: Ändra
       filter:
         placeholder: "Filter by title, answer:id"
     general:
@@ -1693,7 +1693,7 @@ ui:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
-        all: All
+        all: Alla
         active: Aktiv
         inactive: Inaktiv
         outdated: Outdated
