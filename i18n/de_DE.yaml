@@ -75,13 +75,13 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Level 1 (weniger Reputation für privates Team, Gruppen)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Level 2 (niedrige Reputation für Startup-Community)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Level 3 (hohe Reputation für eine reife Community)
     level_custom:
       description:
         other: Benutzerdefinierter Level
@@ -300,7 +300,7 @@ backend:
   reason:
     spam:
       name:
-        other: spam
+        other: Spam
       desc:
         other: Dieser Beitrag ist eine Werbung oder Vandalismus. Er ist nicht nützlich oder relevant für das aktuelle Thema.
     rude_or_abusive:
@@ -1732,8 +1732,8 @@ ui:
     privilege:
       title: Berechtigungen
       level:
-        label: Reputation required level
-        text: Choose the reputation required for the privileges
+        label: Benötigtes Reputations-Level
+        text: Wähle die für die Privilegien erforderliche Reputation aus
   form:
     optional: (optional)
     empty: kann nicht leer sein
@@ -1785,7 +1785,7 @@ ui:
     no_data: "Wir konnten nichts finden."
   users:
     title: Benutzer
-    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_reputation: Benutzer mit den höchsten Reputationspunkten dieser Woche
     users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
     staffs: Unsere Community Teammitglieder
     reputation: Ansehen
