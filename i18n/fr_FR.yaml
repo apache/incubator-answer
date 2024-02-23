@@ -75,7 +75,7 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Niveau 1 (moins de réputation requise pour une équipe privée, un groupe)
     level_2:
       description:
         other: Level 2 (low reputation required for startup community)
@@ -84,7 +84,7 @@ backend:
         other: Level 3 (high reputation required for mature community)
     level_custom:
       description:
-        other: Custom Level
+        other: Niveau personnalisé
     rank_question_add_label:
       other: Poser une question
     rank_answer_add_label:
@@ -110,7 +110,7 @@ backend:
     rank_tag_add_label:
       other: Créer une nouvelle étiquette
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Modifier la description de la balise (à réviser)
     rank_question_edit_label:
       other: Edit other's question (need to review)
     rank_answer_edit_label:
@@ -212,7 +212,7 @@ backend:
       fail_to_meet_the_condition:
         other: Le rang de réputation ne remplit pas la condition.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+        other: Merci pour vos commentaires. Vous avez besoin d'au moins {{.Rank}} de réputation pour voter.
       no_enough_rank_to_operate:
         other: Vous avez besoin d'au moins {{.Rank}} de réputation pour faire cela.
     report:
@@ -247,7 +247,7 @@ backend:
       review_underway:
         other: Impossible d'éditer actuellement, il y a une version dans la file d'attente des revues.
       no_permission:
-        other: No permission to revise.
+        other: Aucune autorisation de réviser.
     user:
       external_login_missing_user_id:
         other: La plateforme tierce ne fournit pas un identifiant d'utilisateur unique, vous ne pouvez donc pas vous connecter, veuillez contacter l'administrateur du site.
@@ -314,7 +314,7 @@ backend:
       desc:
         other: Cette question a déjà été posée et a déjà une réponse.
       placeholder:
-        other: Enter the existing question link
+        other: Entrez le lien de la question existante
     not_a_answer:
       name:
         other: n'est pas une réponse
@@ -334,7 +334,7 @@ backend:
         other: Faites-nous savoir précisément ce qui vous préoccupe
     community_specific:
       name:
-        other: a community-specific reason
+        other: une raison spécifique à la communauté
       desc:
         other: Cette question ne répond pas à une directive de la communauté.
     not_clarity:
@@ -344,14 +344,14 @@ backend:
         other: Cette question comprend actuellement plusieurs questions en une seule. Elle ne devrait se concentrer que sur un seul problème.
     looks_ok:
       name:
-        other: looks OK
+        other: semble bien
       desc:
         other: Ce poste est bon en tant que tel et n'est pas de mauvaise qualité.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: a besoin d'être modifié, et je l'ai fait
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: Améliorez et corrigez vous-même les problèmes liés à ce message.
     needs_close:
       name:
         other: nécessite d'être fermé
@@ -366,7 +366,7 @@ backend:
     close:
       duplicate:
         name:
-          other: spam
+          other: indésirable
         desc:
           other: Cette question a déjà été posée auparavant et a déjà une réponse.
       guideline:
@@ -533,9 +533,9 @@ ui:
     new_alerts: Nouvelles notifications
     all_read: Tout marquer comme lu
     show_more: Afficher plus
-    someone: Someone
+    someone: Quelqu'un
     inbox_type:
-      all: All
+      all: Tous
       posts: Publications
       invites: Invitations
       votes: Votes
@@ -685,11 +685,11 @@ ui:
         desc:
           label: Description
         revision:
-          label: Revision
+          label: Révision
         edit_summary:
-          label: Edit summary
+          label: Modifier le résumé
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Expliquez brièvement vos modifications (orthographe corrigée, grammaire corrigée, mise en forme améliorée)
     btn_cancel: Annuler
     btn_submit: Valider
     btn_post: Publier un nouveau tag
@@ -769,7 +769,7 @@ ui:
     sort_buttons:
       popular: Populaire
       name: Nom
-      newest: Newest
+      newest: Le plus récent
     button_follow: Suivre
     button_following: Abonnements
     tag_label: questions
@@ -966,7 +966,7 @@ ui:
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
-      turn_on: Turn on
+      turn_on: Activer
       inbox:
         label: Notifications par e-mail
         description: Réponses à vos questions, commentaires, invitaitons et plus.
@@ -1086,7 +1086,7 @@ ui:
     other: Êtes-vous sûr de vouloir supprimer ?
     tip_answer_deleted: Cette réponse a été supprimée
     undelete_title: Annuler la suppression de ce message
-    undelete_desc: Are you sure you wish to undelete?
+    undelete_desc: Êtes-vous sûr de vouloir annuler la suppression ?
   btns:
     confirm: Confimer
     cancel: Annuler
@@ -1104,24 +1104,24 @@ ui:
     skip: Ignorer
     discard_draft: Abandonner le brouillon
     pinned: Épinglé
-    all: All
+    all: Tous
     question: Question
-    answer: Answer
-    comment: Comment
+    answer: Réponse
+    comment: Commentaire
     refresh: Actualiser
     resend: Resend
-    deactivate: Deactivate
-    active: Active
+    deactivate: Désactiver
+    active: Actif
     suspend: Suspendre
     unsuspend: Lever la suspension
     close: Fermer
     reopen: Rouvrir
     ok: OK
-    light: Light
-    dark: Dark
+    light: Clair
+    dark: Sombre
     system_setting: System setting
-    default: Default
-    reset: Reset
+    default: Défaut
+    reset: Réinitialiser
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1693,9 +1693,9 @@ ui:
       title: Extensions installées
       plugin_link: Les plugins étendent les fonctionnalités d'Answer. Vous pouvez trouver des plugins dans le dépôt <1>Answer Plugin Repositor</1>.
       filter:
-        all: All
-        active: Active
-        inactive: Inactive
+        all: Tous
+        active: Actif
+        inactive: Inactif
         outdated: Outdated
       plugins:
         label: Extensions
@@ -1716,7 +1716,7 @@ ui:
         label: Gravatar Base URL
         text: URL de la base de l'API du fournisseur Gravatar. Ignorée lorsqu'elle est vide.
       profile_editable:
-        title: Profile editable
+        title: Profil modifiable
       allow_update_display_name:
         label: Permettre aux utilisateurs de changer leur nom d'affichage
       allow_update_username:
