@@ -19,6 +19,8 @@
 
 package constant
 
+import "os"
+
 const (
 	DefaultGravatarBaseURL = "https://www.gravatar.com/avatar/"
 	DefaultAvatar          = "system"
@@ -43,4 +45,8 @@ const (
 	ColorSchemeLight   = "light"
 	ColorSchemeDark    = "dark"
 	ColorSchemeSystem  = "system"
+)
+
+var (
+	PublicUrl = os.Getenv("PUBLIC_URL")
 )

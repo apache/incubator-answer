@@ -22,6 +22,7 @@ package install
 import (
 	"embed"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"io/fs"
 	"net/http"
 
@@ -48,7 +49,7 @@ func NewInstallHTTPServer() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
-	r.StaticFS("/static", http.FS(&_resource{
+	r.StaticFS(constant.PublicUrl+"/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 

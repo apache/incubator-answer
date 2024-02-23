@@ -22,6 +22,7 @@ package router
 import (
 	"embed"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"io/fs"
 	"net/http"
 	"os"
@@ -92,7 +93,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	}
 
 	// handle the static file by default ui static files
-	r.StaticFS("/static", http.FS(&_resource{
+	r.StaticFS(constant.PublicUrl+"/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
