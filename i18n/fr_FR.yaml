@@ -78,10 +78,10 @@ backend:
         other: Niveau 1 (moins de réputation requise pour une équipe privée, un groupe)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Niveau 2 (faible réputation requise pour la communauté des startups)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Niveau 3 (haute réputation requise pour une communauté mature)
     level_custom:
       description:
         other: Niveau personnalisé
@@ -112,9 +112,9 @@ backend:
     rank_tag_edit_label:
       other: Modifier la description de la balise (à réviser)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Modifier la question des autres (à revoir)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Modifier la réponse d'un autre (à revoir)
     rank_question_edit_without_review_label:
       other: Modifier la question d'un autre utilisateur sans révision
     rank_answer_edit_without_review_label:
@@ -279,7 +279,7 @@ backend:
       add_bulk_users_format_error:
         other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "Le nombre d'utilisateurs que vous ajoutez simultanément doit être compris entre 1-{{.MaxAmount}}."
     config:
       read_config_failed:
         other: La lecture de la configuration a échoué
@@ -359,7 +359,7 @@ backend:
         other: Une question fermée ne peut pas être répondue, mais peut-être quand même modifiée, votée et commentée.
     needs_delete:
       name:
-        other: needs delete
+        other: doit être supprimé
       desc:
         other: Ce message sera supprimé.
   question:
