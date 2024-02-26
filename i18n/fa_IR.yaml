@@ -1085,15 +1085,15 @@ ui:
       ما <strong>حذف جواب تایید شده</strong> را پیشنهاد نمی کنیم، زیرا انجام این کار خوانندگان آینده را از این دانش محروم می کند.</p><p> حذف مکرر سؤالات پاسخ داده شده می تواند منجر به مسدود شدن حساب شما از سؤال شود. آیا مطمئن هستید که می خواهید حذف کنید?
     other: مطمئنید که میخواهید حذف شود?
     tip_answer_deleted: جواب شما حذف شده است
-    undelete_title: Undelete this post
-    undelete_desc: Are you sure you wish to undelete?
+    undelete_title: حذف این پست
+    undelete_desc: آیا مطمئن به بازگردانی هستید؟
   btns:
     confirm: تایید
     cancel: لغو
     edit: ویرایش
     save: ذخیره
     delete: حذف
-    undelete: Undelete
+    undelete: بازگردانی
     login: ورود
     signup: عضويت
     logout: خروج
@@ -1110,16 +1110,16 @@ ui:
     comment: نظر
     refresh: بارگذاری مجدد
     resend: ارسال مجدد
-    deactivate: Deactivate
-    active: Active
-    suspend: Suspend
-    unsuspend: Unsuspend
-    close: Close
-    reopen: Reopen
-    ok: OK
-    light: Light
-    dark: Dark
-    system_setting: System setting
+    deactivate: غیرفعال کردن
+    active: فعال
+    suspend: تعلیق
+    unsuspend: لغو تعلیق
+    close: بستن
+    reopen: بازگشایی
+    ok: تأیید
+    light: روشن
+    dark: تیره
+    system_setting: تنظیمات سامانه
     default: Default
     reset: Reset
   search:
@@ -1631,7 +1631,7 @@ ui:
     seo:
       page_title: SEO
       permalink:
-        label: Permalink
+        label: پیوند ثابت
         text: Custom URL structures can improve the usability, and forward-compatibility of your links.
       robots:
         label: robots.txt
