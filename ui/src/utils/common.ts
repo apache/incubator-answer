@@ -108,6 +108,11 @@ function parseUserInfo(markdown) {
   return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
+function parseEditMentionUser(markdown) {
+  const globalReg = /\[@([^\]]+)\]\([^)]+\)/g;
+  return markdown.replace(globalReg, '@$1');
+}
+
 function formatUptime(value) {
   const t = i18next.t.bind(i18next);
   const second = parseInt(value, 10);
@@ -273,6 +278,7 @@ export {
   bgFadeOut,
   matchedUsers,
   parseUserInfo,
+  parseEditMentionUser,
   formatUptime,
   escapeRemove,
   handleFormError,
