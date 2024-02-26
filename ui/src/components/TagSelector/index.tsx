@@ -320,7 +320,9 @@ const TagSelector: FC<IProps> = ({
         inputRef.current?.focus();
       }
     }
+  }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
 
+  useEffect(() => {
     // set width of tag Form.Control
     const ele = document.querySelector('.a-input-width') as HTMLElement;
     if (ele.offsetWidth > 60) {
@@ -331,7 +333,7 @@ const TagSelector: FC<IProps> = ({
     } else {
       inputRef.current?.setAttribute('style', 'width: 60px');
     }
-  }, [focusState, tags, hiddenCreateBtn, searchValue, maxTagLength]);
+  }, [searchValue]);
 
   return (
     <div ref={containerRef} className="position-relative">
