@@ -76,6 +76,8 @@ const Index: FC<Props> = ({ data }) => {
           className="my-2 my-sm-0"
           showViews={false}
           isAccepted={data.object?.accepted}
+          showAnswers={data.object_type === 'question'}
+          showAccepted={data.object?.accepted && data.object_type === 'answer'}
           data={{
             votes: data.object?.vote_count,
             answers: data.object?.answer_count,
