@@ -1378,7 +1378,7 @@ ui:
       votes: "投票:"
       users: "用户:"
       flags: "举报:"
-      site_health_status: "健康状态:"
+      site_health_status: '健康状态:'
       version: "版本"
       https: "HTTPS:"
       upload_folder: "上传文件夹："
@@ -1757,7 +1757,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: "标签管理: 编辑标签"
+    tag_edit: '标签管理: 编辑标签'
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1770,7 +1770,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: "评论:"
+    commented: '评论:'
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于
