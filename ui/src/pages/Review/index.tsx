@@ -18,7 +18,7 @@
  */
 
 import { FC, useEffect, useState } from 'react';
-import { Row, Col, Alert, Stack, Button } from 'react-bootstrap';
+import { Row, Col, Alert, Stack, Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -109,15 +109,13 @@ const Index: FC = () => {
   };
 
   let itemLink = '';
-  let itemTitle = '';
-  let editBadge = '';
+  let itemId = '';
   let editSummary = unreviewed_info?.reason;
   const editor = unreviewed_info?.user_info;
   const editTime = unreviewed_info?.create_at;
   if (type === 'question') {
     itemLink = pathFactory.questionLanding(info?.object_id, info?.url_title);
-    itemTitle = info?.title;
-    editBadge = t('question_edit');
+    itemId = info?.object_id;
     editSummary ||= t('edit_question');
   } else if (type === 'answer') {
     itemLink = pathFactory.answerLanding({
@@ -126,14 +124,12 @@ const Index: FC = () => {
       slugTitle: info?.url_title,
       answerId: unreviewed_info.object_id,
     });
-    itemTitle = info?.title;
-    editBadge = t('answer_edit');
+    itemId = unreviewed_info.object_id;
     editSummary ||= t('edit_answer');
   } else if (type === 'tag') {
     const tagInfo = unreviewed_info.content as Type.Tag;
     itemLink = pathFactory.tagLanding(tagInfo.slug_name);
-    itemTitle = tagInfo.display_name;
-    editBadge = t('tag_edit');
+    itemId = tagInfo?.tag_id || tagInfo.slug_name;
     editSummary ||= t('edit_tag');
   }
   useEffect(() => {
@@ -147,106 +143,133 @@ const Index: FC = () => {
       <h3 className="mb-4">{t('review')}</h3>
       <Col className="page-main flex-auto">
         {!noTasks && ro && (
-          <>
-            <Alert variant="secondary">
-              <Stack className="align-items-start">
-                <span className="badge text-bg-secondary mb-2">
-                  {editBadge}
-                </span>
-                <Link to={itemLink} target="_blank">
-                  {itemTitle}
-                </Link>
-                <p className="mb-0">
-                  {t('edit_summary')}: {editSummary}
-                </p>
-              </Stack>
-              <Stack
-                direction="horizontal"
-                gap={1}
-                className="align-items-baseline mt-2">
-                <BaseUserCard data={editor} avatarSize="24" />
-                {editTime && (
-                  <FormatTime
-                    time={editTime}
-                    className="small text-secondary"
-                    preFix={t('proposed')}
+          <Card>
+            <Card.Header>
+              {t('suggest_type_edit', {
+                type:
+                  type === 'question' || type === 'answer'
+                    ? t('post_lowercase', { keyPrefix: 'btns' })
+                    : type,
+              })}
+            </Card.Header>
+            <Card.Body className="p-0">
+              <Alert variant="info" className="border-0 rounded-0 mb-0">
+                <Stack
+                  direction="horizontal"
+                  gap={1}
+                  className="align-items-center mb-2">
+                  <BaseUserCard data={editor} avatarSize="24" />
+                  {editTime && (
+                    <FormatTime
+                      time={editTime}
+                      className="small text-secondary"
+                      preFix={t('proposed')}
+                    />
+                  )}
+                </Stack>
+                <Stack className="align-items-start">
+                  <p className="mb-0">{editSummary}</p>
+                </Stack>
+              </Alert>
+              <div className="p-3">
+                <small className="d-block text-secondary mb-4">
+                  <span>{t(type, { keyPrefix: 'btns' })} </span>
+                  <Link
+                    to={itemLink}
+                    target="_blank"
+                    className="link-secondary">
+                    #{itemId}
+                  </Link>
+                </small>
+                {type === 'question' &&
+                  info &&
+                  reviewInfo &&
+                  'content' in reviewInfo && (
+                    <DiffContent
+                      className="mt-2"
+                      objectType={type}
+                      oldData={{
+                        title: info.title,
+                        original_text: info.content,
+                        tags: info.tags,
+                      }}
+                      newData={{
+                        title: reviewInfo.title,
+                        original_text: reviewInfo.content,
+                        tags: reviewInfo.tags,
+                      }}
+                    />
+                  )}
+                {type === 'answer' &&
+                  info &&
+                  reviewInfo &&
+                  'content' in reviewInfo && (
+                    <DiffContent
+                      className="mt-2"
+                      objectType={type}
+                      newData={{
+                        original_text: reviewInfo.content,
+                      }}
+                      oldData={{
+                        original_text: info.content,
+                      }}
+                    />
+                  )}
+
+                {type === 'tag' && info && reviewInfo && (
+                  <DiffContent
+                    className="mt-2"
+                    objectType={type}
+                    newData={{
+                      original_text: reviewInfo.original_text,
+                    }}
+                    oldData={{
+                      original_text: info.content,
+                    }}
+                    opts={{ showTitle: false, showTagUrlSlug: false }}
                   />
                 )}
+              </div>
+            </Card.Body>
+            <Card.Footer className="p-3">
+              <p>{t('approve_tip')}</p>
+              <Stack direction="horizontal" gap={2}>
+                <Button
+                  variant="outline-primary"
+                  disabled={isLoading}
+                  onClick={handlingApprove}>
+                  {t('approve', { keyPrefix: 'btns' })}
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  disabled={isLoading}
+                  onClick={handlingReject}>
+                  {t('reject', { keyPrefix: 'btns' })}
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  disabled={isLoading}
+                  onClick={handlingSkip}>
+                  {t('skip', { keyPrefix: 'btns' })}
+                </Button>
               </Stack>
-            </Alert>
-            {type === 'question' &&
-              info &&
-              reviewInfo &&
-              'content' in reviewInfo && (
-                <DiffContent
-                  className="mt-2"
-                  objectType={type}
-                  oldData={{
-                    title: info.title,
-                    original_text: info.content,
-                    tags: info.tags,
-                  }}
-                  newData={{
-                    title: reviewInfo.title,
-                    original_text: reviewInfo.content,
-                    tags: reviewInfo.tags,
-                  }}
-                />
-              )}
-            {type === 'answer' &&
-              info &&
-              reviewInfo &&
-              'content' in reviewInfo && (
-                <DiffContent
-                  className="mt-2"
-                  objectType={type}
-                  newData={{
-                    original_text: reviewInfo.content,
-                  }}
-                  oldData={{
-                    original_text: info.content,
-                  }}
-                />
-              )}
-            {type === 'tag' && info && reviewInfo && (
-              <DiffContent
-                className="mt-2"
-                objectType={type}
-                newData={{
-                  original_text: reviewInfo.original_text,
-                }}
-                oldData={{
-                  original_text: info.content,
-                }}
-                opts={{ showTitle: false, showTagUrlSlug: false }}
-              />
-            )}
-            <Stack direction="horizontal" gap={2} className="mt-4">
-              <Button
-                variant="outline-primary"
-                disabled={isLoading}
-                onClick={handlingApprove}>
-                {t('approve', { keyPrefix: 'btns' })}
-              </Button>
-              <Button
-                variant="outline-primary"
-                disabled={isLoading}
-                onClick={handlingReject}>
-                {t('reject', { keyPrefix: 'btns' })}
-              </Button>
-              <Button
-                variant="outline-primary"
-                disabled={isLoading}
-                onClick={handlingSkip}>
-                {t('skip', { keyPrefix: 'btns' })}
-              </Button>
-            </Stack>
-          </>
+            </Card.Footer>
+          </Card>
         )}
         {noTasks && <Empty>{t('empty')}</Empty>}
       </Col>
 
-      <Col className="page-right-side mt-4 mt-xl-0" />
+      <Col className="page-right-side mt-4 mt-xl-0">
+        <Card>
+          <Card.Header>{t('filter', { keyPrefix: 'btns' })}</Card.Header>
+          <Card.Body>
+            <Form.Group>
+              <Form.Label>{t('filter_label')}</Form.Label>
+              <Form.Check type="radio" label="Queued post (99+)" />
+            </Form.Group>
+          </Card.Body>
+        </Card>
+      </Col>
     </Row>
   );
 };

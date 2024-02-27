@@ -1158,6 +1158,9 @@ ui:
     system_setting: System setting
     default: Default
     reset: Reset
+    tag: Tag
+    post_lowercase: post
+    filter: Filter
   search:
     title: Search Results
     keywords: Keywords
@@ -1797,6 +1800,15 @@ ui:
     edit_answer: Edit answer
     edit_tag: Edit tag
     empty: No review tasks left.
+    approve_tip: Do you approve this revision?
+    suggest_type_edit: Suggest {{ type }} edit
+    filter_label: Type
+    queued_post: Queued post
+    queued_user: Queued user
+    flagged_post: Flagged post
+    flagged_user: Flagged user
+    suggested_post_edit: Suggested post edit
+    suggested_tag_edit: Suggested tag edit
   timeline:
     undeleted: undeleted
     deleted: deleted

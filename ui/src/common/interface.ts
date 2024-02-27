@@ -56,6 +56,7 @@ export interface TagBase {
 export interface Tag extends TagBase {
   main_tag_slug_name?: string;
   parsed_text?: string;
+  tag_id?: string;
 }
 
 export interface SynonymsTag extends Tag {
