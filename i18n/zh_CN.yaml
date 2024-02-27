@@ -1074,13 +1074,13 @@ ui:
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
     list:
-      confirm_btn: 显示
-      title: 显示这个帖子
-      content: 确定要显示这个帖子吗？
+      confirm_btn: 列表显示
+      title: 列表中显示这个帖子
+      content: 确定要列表中显示这个帖子吗？
     unlist:
-      confirm_btn: 隐藏
-      title: 隐藏这个帖子
-      content: 确定要隐藏这个帖子吗？
+      confirm_btn: 列表隐藏
+      title: 从列表中隐藏这个帖子
+      content: 确定要从列表中隐藏这个帖子吗？
     pin:
       title: 置顶该帖子
       content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
@@ -1102,8 +1102,8 @@ ui:
     save: 保存
     delete: 删除
     undelete: 撤消删除
-    list: 显示
-    unlist: 隐藏
+    list: 列表显示
+    unlist: 列表隐藏
     login: 登录
     signup: 注册
     logout: 退出
@@ -1378,7 +1378,7 @@ ui:
       votes: "投票:"
       users: "用户:"
       flags: "举报:"
-      site_health_status: '健康状态:'
+      site_health_status: "健康状态:"
       version: "版本"
       https: "HTTPS:"
       upload_folder: "上传文件夹："
@@ -1757,7 +1757,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: '标签管理: 编辑标签'
+    tag_edit: "标签管理: 编辑标签"
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1770,7 +1770,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: '评论:'
+    commented: "评论:"
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于
