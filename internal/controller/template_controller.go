@@ -22,12 +22,15 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/internal/entity"
 	"html/template"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/apache/incubator-answer/internal/entity"
+	"golang.org/x/exp/utf8string"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -188,7 +191,7 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 	needChangeShortID := false
 
 	objectType, err := obj.GetObjectTypeStrByObjectID(answerID)
-	if err == nil && objectType == constant.AnswerObjectType {
+	if err == nil && objectType == constant.AnswerObjectType && utf8string.NewString(title).IsASCII() {
 		titleIsAnswerID = true
 	}
 
@@ -281,7 +284,8 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		return
 	}
 	encodeTitle := htmltext.UrlTitle(detail.Title)
-	if encodeTitle == title {
+	decodeTitle, err := url.QueryUnescape(encodeTitle)
+	if encodeTitle == title || decodeTitle == title {
 		correctTitle = true
 	}
 

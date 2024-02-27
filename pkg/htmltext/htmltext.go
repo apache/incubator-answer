@@ -20,15 +20,16 @@
 package htmltext
 
 import (
-	"github.com/Chain-Zhang/pinyin"
-	"github.com/apache/incubator-answer/pkg/checker"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
+	"unicode"
 
-	"github.com/Machiel/slugify"
+	"github.com/Chain-Zhang/pinyin"
+	"github.com/apache/incubator-answer/pkg/checker"
+
 	strip "github.com/grokify/html-strip-tags-go"
 )
 
@@ -69,10 +70,26 @@ func ClearText(html string) (text string) {
 func UrlTitle(title string) (text string) {
 	title = convertChinese(title)
 	title = clearEmoji(title)
-	title = slugify.Slugify(title)
+	title = slugify(title)
 	title = url.QueryEscape(title)
 	title = cutLongTitle(title)
 	return title
+}
+
+func slugify(s string) string {
+	var slug strings.Builder
+	for _, r := range s {
+		switch {
+		case unicode.IsLetter(r) || unicode.IsNumber(r):
+			// Add letters and numbers directly
+			slug.WriteRune(r)
+		case unicode.IsSpace(r):
+			// Replace spaces with a hyphen
+			slug.WriteString("-")
+		}
+	}
+	// Return the resulting string in lowercase
+	return strings.ToLower(slug.String())
 }
 
 func clearEmoji(s string) string {
@@ -99,10 +116,25 @@ func convertChinese(content string) string {
 }
 
 func cutLongTitle(title string) string {
-	if len(title) > 150 {
-		return title[0:150]
+	if len(title) <= 150 {
+		return title
 	}
-	return title
+
+	// Cut the title to 1500 characters
+	cutTitle := title[:150]
+
+	if cutTitle[len(cutTitle)-1] == '%' || cutTitle[len(cutTitle)-2] == '%' {
+		// String ends with a single '%'
+		cutTitle = cutTitle[:len(cutTitle)-1]
+	}
+
+	if cutTitle[len(cutTitle)-1] == '%' {
+		// String ends with a single '%'
+		cutTitle = cutTitle[:len(cutTitle)-1]
+	}
+
+	return cutTitle
+
 }
 
 // FetchExcerpt return the excerpt from the HTML string
