@@ -1073,6 +1073,14 @@ ui:
       confirm_btn: 重新打开
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
+    list:
+      confirm_btn: 列表显示
+      title: 列表中显示这个帖子
+      content: 确定要列表中显示这个帖子吗？
+    unlist:
+      confirm_btn: 列表隐藏
+      title: 从列表中隐藏这个帖子
+      content: 确定要从列表中隐藏这个帖子吗？
     pin:
       title: 置顶该帖子
       content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
@@ -1094,6 +1102,8 @@ ui:
     save: 保存
     delete: 删除
     undelete: 撤消删除
+    list: 列表显示
+    unlist: 列表隐藏
     login: 登录
     signup: 注册
     logout: 退出
@@ -1494,6 +1504,7 @@ ui:
       closed: 已关闭
       deleted: 已删除
       post: 标题
+      unlisted: 已隐藏
       votes: 得票数
       answers: 回答数
       created: 创建于
@@ -1802,3 +1813,5 @@ ui:
     post_hide_list: 此帖子已经从列表中隐藏。
     post_show_list: 该帖子已显示到列表中。
     post_reopen: 这个帖子已被重新打开.
+    post_list: 这个帖子已经被显示
+    post_unlist: 这个帖子已经被隐藏
