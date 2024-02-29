@@ -191,3 +191,32 @@ func (rc *RevisionController) CheckCanUpdateRevision(ctx *gin.Context) {
 	resp, err := rc.revisionListService.CheckCanUpdateRevision(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
+
+// GetReviewingType get reviewing type
+// @Summary get reviewing type
+// @Description get reviewing type
+// @Tags Revision
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.RespBody{data=[]schema.GetReviewingTypeResp}
+// @Router /answer/api/v1/reviewing/type [get]
+func (rc *RevisionController) GetReviewingType(ctx *gin.Context) {
+	req := &schema.GetReviewingTypeReq{}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := rc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.QuestionAudit,
+		permission.AnswerAudit,
+		permission.TagAudit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanReviewQuestion = canList[0]
+	req.CanReviewAnswer = canList[1]
+	req.CanReviewTag = canList[2]
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
+
+	resp, err := rc.revisionListService.GetReviewingType(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}

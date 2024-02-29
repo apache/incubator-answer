@@ -34,6 +34,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/report_common"
 	"github.com/apache/incubator-answer/internal/service/revision"
 	"github.com/apache/incubator-answer/internal/service/tag_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
@@ -58,6 +59,7 @@ type RevisionService struct {
 	tagCommon                *tagcommon.TagCommonService
 	notificationQueueService notice_queue.NotificationQueueService
 	activityQueueService     activity_queue.ActivityQueueService
+	reportRepo               report_common.ReportRepo
 }
 
 func NewRevisionService(
@@ -72,6 +74,7 @@ func NewRevisionService(
 	tagCommon *tagcommon.TagCommonService,
 	notificationQueueService notice_queue.NotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
+	reportRepo report_common.ReportRepo,
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:             revisionRepo,
@@ -85,6 +88,7 @@ func NewRevisionService(
 		tagCommon:                tagCommon,
 		notificationQueueService: notificationQueueService,
 		activityQueueService:     activityQueueService,
+		reportRepo:               reportRepo,
 	}
 }
 
@@ -441,4 +445,43 @@ func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *sche
 		return &schema.ErrTypeToast, errors.BadRequest(reason.RevisionReviewUnderway)
 	}
 	return nil, nil
+}
+
+// GetReviewingType get reviewing type
+func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.GetReviewingTypeReq) (resp []*schema.GetReviewingTypeResp, err error) {
+	resp = make([]*schema.GetReviewingTypeResp, 0)
+
+	// TODO: get queue amount
+	resp = append(resp, &schema.GetReviewingTypeResp{
+		Name:       string(constant.QueuedPost),
+		Label:      "",
+		TodoAmount: 0,
+	})
+
+	// get flag amount
+	if req.IsAdmin {
+		reportCount, err := rs.reportRepo.GetReportCount(ctx)
+		if err != nil {
+			log.Errorf("get report count failed: %v", err)
+		} else {
+			resp = append(resp, &schema.GetReviewingTypeResp{
+				Name:       string(constant.FlaggedPost),
+				Label:      "",
+				TodoAmount: reportCount,
+			})
+		}
+	}
+
+	// get suggestion amount
+	countUnreviewedRevision, err := rs.revisionRepo.CountUnreviewedRevision(ctx, req.GetCanReviewObjectTypes())
+	if err != nil {
+		log.Errorf("get unreviewed revision count failed: %v", err)
+	} else {
+		resp = append(resp, &schema.GetReviewingTypeResp{
+			Name:       string(constant.SuggestedPostEdit),
+			Label:      "",
+			TodoAmount: countUnreviewedRevision,
+		})
+	}
+	return resp, nil
 }
