@@ -1161,6 +1161,7 @@ ui:
     tag: Tag
     post_lowercase: post
     filter: Filter
+    ignore: Ignore
   search:
     title: Search Results
     keywords: Keywords
@@ -1800,8 +1801,9 @@ ui:
     edit_answer: Edit answer
     edit_tag: Edit tag
     empty: No review tasks left.
-    approve_tip: Do you approve this revision?
+    approve_this_type: Do you approve this {{ type }}?
     suggest_type_edit: Suggest {{ type }} edit
+    flag_type: Flag {{ type }}
     filter_label: Type
     queued_post: Queued post
     queued_user: Queued user
@@ -1809,6 +1811,7 @@ ui:
     flagged_user: Flagged user
     suggested_post_edit: Suggested post edit
     suggested_tag_edit: Suggested tag edit
+    reputation: reputation
   timeline:
     undeleted: undeleted
     deleted: deleted

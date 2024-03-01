@@ -18,7 +18,7 @@
  */
 
 import { FC, useEffect, useState } from 'react';
-import { Row, Col, Alert, Stack, Button, Card, Form } from 'react-bootstrap';
+import { Row, Col, Alert, Stack, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -28,6 +28,8 @@ import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import { scrollToDocTop } from '@/utils';
 import type * as Type from '@/common/interface';
+
+import { Filter, ApproveDropdown, FlagContent } from './components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
@@ -107,7 +109,6 @@ const Index: FC = () => {
         setIsLoading(false);
       });
   };
-
   let itemLink = '';
   let itemId = '';
   let editSummary = unreviewed_info?.reason;
@@ -138,6 +139,47 @@ const Index: FC = () => {
   usePageTags({
     title: t('review'),
   });
+
+  let newData: Record<string, any> = {};
+  let oldData: Record<string, any> = {};
+  let diffOpts: Partial<{
+    showTitle: boolean;
+    showTagUrlSlug: boolean;
+  }> = {
+    showTitle: true,
+    showTagUrlSlug: true,
+  };
+  if (type === 'question' && info && reviewInfo && 'content' in reviewInfo) {
+    newData = {
+      title: reviewInfo.title,
+      original_text: reviewInfo.content,
+      tags: reviewInfo.tags,
+    };
+    oldData = {
+      title: info.title,
+      original_text: info.content,
+      tags: info.tags,
+    };
+  }
+  if (type === 'answer' && info && reviewInfo && 'content' in reviewInfo) {
+    newData = {
+      original_text: reviewInfo.content,
+    };
+    oldData = {
+      original_text: info.content,
+    };
+  }
+
+  if (type === 'tag' && info && reviewInfo) {
+    newData = {
+      original_text: reviewInfo.original_text,
+    };
+    oldData = {
+      original_text: info.content,
+    };
+    diffOpts = { showTitle: false, showTagUrlSlug: false };
+  }
+
   return (
     <Row className="pt-4 mb-5">
       <h3 className="mb-4">{t('review')}</h3>
@@ -181,58 +223,18 @@ const Index: FC = () => {
                     #{itemId}
                   </Link>
                 </small>
-                {type === 'question' &&
-                  info &&
-                  reviewInfo &&
-                  'content' in reviewInfo && (
-                    <DiffContent
-                      className="mt-2"
-                      objectType={type}
-                      oldData={{
-                        title: info.title,
-                        original_text: info.content,
-                        tags: info.tags,
-                      }}
-                      newData={{
-                        title: reviewInfo.title,
-                        original_text: reviewInfo.content,
-                        tags: reviewInfo.tags,
-                      }}
-                    />
-                  )}
-                {type === 'answer' &&
-                  info &&
-                  reviewInfo &&
-                  'content' in reviewInfo && (
-                    <DiffContent
-                      className="mt-2"
-                      objectType={type}
-                      newData={{
-                        original_text: reviewInfo.content,
-                      }}
-                      oldData={{
-                        original_text: info.content,
-                      }}
-                    />
-                  )}
 
-                {type === 'tag' && info && reviewInfo && (
-                  <DiffContent
-                    className="mt-2"
-                    objectType={type}
-                    newData={{
-                      original_text: reviewInfo.original_text,
-                    }}
-                    oldData={{
-                      original_text: info.content,
-                    }}
-                    opts={{ showTitle: false, showTagUrlSlug: false }}
-                  />
-                )}
+                <DiffContent
+                  className="mt-2"
+                  objectType={type}
+                  newData={newData}
+                  oldData={oldData}
+                  opts={diffOpts}
+                />
               </div>
             </Card.Body>
             <Card.Footer className="p-3">
-              <p>{t('approve_tip')}</p>
+              <p>{t('approve_this_type', { type: 'revision' })}</p>
               <Stack direction="horizontal" gap={2}>
                 <Button
                   variant="outline-primary"
@@ -240,11 +242,18 @@ const Index: FC = () => {
                   onClick={handlingApprove}>
                   {t('approve', { keyPrefix: 'btns' })}
                 </Button>
+                <ApproveDropdown />
                 <Button
                   variant="outline-primary"
                   disabled={isLoading}
                   onClick={handlingReject}>
                   {t('reject', { keyPrefix: 'btns' })}
+                </Button>
+                <Button
+                  variant="outline-primary"
+                  disabled={isLoading}
+                  onClick={handlingReject}>
+                  {t('ignore', { keyPrefix: 'btns' })}
                 </Button>
                 <Button
                   variant="outline-primary"
@@ -257,18 +266,12 @@ const Index: FC = () => {
           </Card>
         )}
         {noTasks && <Empty>{t('empty')}</Empty>}
+
+        <FlagContent />
       </Col>
 
       <Col className="page-right-side mt-4 mt-xl-0">
-        <Card>
-          <Card.Header>{t('filter', { keyPrefix: 'btns' })}</Card.Header>
-          <Card.Body>
-            <Form.Group>
-              <Form.Label>{t('filter_label')}</Form.Label>
-              <Form.Check type="radio" label="Queued post (99+)" />
-            </Form.Group>
-          </Card.Body>
-        </Card>
+        <Filter />
       </Col>
     </Row>
   );
