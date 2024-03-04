@@ -20,11 +20,12 @@
 package schema
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/validator"
 	"github.com/apache/incubator-answer/plugin"
-	"regexp"
-	"strings"
 )
 
 type SearchDTO struct {
@@ -40,7 +41,7 @@ type SearchDTO struct {
 func (s *SearchDTO) Check() (errField []*validator.FormErrorField, err error) {
 	// Replace special characters.
 	// Special characters will cause the search abnormal, such as search for "#" will get nearly all the content that Markdown format.
-	s.Query = regexp.MustCompile(`[+#.<>\-_()*]`).ReplaceAllString(s.Query, " ")
+	s.Query = regexp.MustCompile(`[+#.<>_()*]`).ReplaceAllString(s.Query, " ")
 	s.Query = regexp.MustCompile(`\s+`).ReplaceAllString(s.Query, " ")
 	s.Query = strings.TrimSpace(s.Query)
 	return nil, nil
