@@ -1050,6 +1050,7 @@ ui:
       title: 个回答
       score: 评分
       newest: 最新
+      oldest: 最旧
       btn_accept: 采纳
       btn_accepted: 已被采纳
     write_answer:

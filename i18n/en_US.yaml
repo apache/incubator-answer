@@ -1079,6 +1079,7 @@ ui:
       title: Answers
       score: Score
       newest: Newest
+      oldest: Oldest
       btn_accept: Accept
       btn_accepted: Accepted
     write_answer:
