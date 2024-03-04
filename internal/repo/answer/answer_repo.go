@@ -334,8 +334,10 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		session = session.And("user_id = ?", search.UserID)
 	}
 	switch search.Order {
-	case entity.AnswerSearchOrderByTime:
+	case entity.AnswerSearchOrderByTimeDesc:
 		session = session.OrderBy("created_at desc")
+	case entity.AnswerSearchOrderByTime:
+		session = session.OrderBy("created_at")
 	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
 	default:

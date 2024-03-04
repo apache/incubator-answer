@@ -92,7 +92,7 @@ const Index = () => {
 
   const requestAnswers = async () => {
     const res = await getAnswers({
-      order: order === 'updated' ? order : 'default',
+      order: order === 'updated' || order === 'oldest' ? order : 'default',
       question_id: qid,
       page: 1,
       page_size: 999,

@@ -22,9 +22,10 @@ package entity
 import "time"
 
 const (
-	AnswerSearchOrderByDefault = "default"
-	AnswerSearchOrderByTime    = "updated"
-	AnswerSearchOrderByVote    = "vote"
+	AnswerSearchOrderByDefault  = "default"
+	AnswerSearchOrderByTime     = "oldest"
+	AnswerSearchOrderByTimeDesc = "updated"
+	AnswerSearchOrderByVote     = "vote"
 
 	AnswerStatusAvailable = 1
 	AnswerStatusDeleted   = 10

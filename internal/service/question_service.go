@@ -1034,7 +1034,7 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 	answersearch.PageSize = req.PageSize
 	answersearch.Page = req.Page
 	if req.OrderCond == "newest" {
-		answersearch.Order = entity.AnswerSearchOrderByTime
+		answersearch.Order = entity.AnswerSearchOrderByTimeDesc
 	} else {
 		answersearch.Order = entity.AnswerSearchOrderByDefault
 	}
