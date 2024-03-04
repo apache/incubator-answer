@@ -12,7 +12,7 @@ func TestReplaceSearchContent(t *testing.T) {
 	replacedContent, patterns := ReplaceSearchContent(content)
 	ret := strings.Join(append(patterns, replacedContent), " ")
 
-	assert.Equal(t, "user:aaa [tag]ssssfdfdf as fsadf", ret)
+	assert.Equal(t, "user:aaa [tag] ssssfdfdf as fsadf", ret)
 
 	content = "user:aaa-sss [tag1] ssssfdfdf-as#fsadf [tag2] score:3"
 	replacedContent, patterns = ReplaceSearchContent(content)
