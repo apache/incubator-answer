@@ -25,6 +25,7 @@ const (
 	AnswerSearchOrderByDefault = "default"
 	AnswerSearchOrderByTime    = "updated"
 	AnswerSearchOrderByVote    = "vote"
+	AnswerSearchOrderByTimeAsc = "created"
 
 	AnswerStatusAvailable = 1
 	AnswerStatusDeleted   = 10
