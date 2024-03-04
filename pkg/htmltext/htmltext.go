@@ -20,13 +20,14 @@
 package htmltext
 
 import (
-	"github.com/Chain-Zhang/pinyin"
-	"github.com/apache/incubator-answer/pkg/checker"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
+
+	"github.com/Chain-Zhang/pinyin"
+	"github.com/apache/incubator-answer/pkg/checker"
 
 	"github.com/Machiel/slugify"
 	strip "github.com/grokify/html-strip-tags-go"
@@ -72,6 +73,9 @@ func UrlTitle(title string) (text string) {
 	title = slugify.Slugify(title)
 	title = url.QueryEscape(title)
 	title = cutLongTitle(title)
+	if len(title) == 0 {
+		title = "topic"
+	}
 	return title
 }
 
