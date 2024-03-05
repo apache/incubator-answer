@@ -20,6 +20,7 @@
 const {
   addWebpackModuleRule,
   addWebpackAlias,
+  setWebpackOptimizationSplitChunks,
 } = require("customize-cra");
 
 const path = require("path");
@@ -35,6 +36,91 @@ module.exports = {
     addWebpackModuleRule({
       test: /\.ya?ml$/,
       use: "yaml-loader"
+    })(config);
+
+    setWebpackOptimizationSplitChunks({
+      maxInitialRequests: 20,
+      minSize: 20 * 1024,
+      minChunks: 2,
+      cacheGroups: {
+        automaticNamePrefix: 'chunk',
+        components: {
+          test: /[\\/]components[\\/]/,
+          name: 'components',
+          priority: 13,
+          minChunks: 2,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        commons: {
+          test: /[\\/]common[\\/]/,
+          name: 'common',
+          priority: 12,
+          minChunks: 2,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        i18next: {
+          name: 'i18next',
+          test: /[\/]node_modules[\/](i18next)[\/]/,
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          priority: 11,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
+        },
+        reactBootstrap: {
+          name: 'react-bootstrap',
+          test: /[\/]node_modules[\/](react-bootstrap)[\/]/,
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          priority: 10,
+          minChunks: 1,
+          chunks: 'initial',
+          reuseExistingChunk: true,
+        },
+        codemirror: {
+          name: 'codemirror',
+          test: /[\/]node_modules[\/](codemirror)[\/]/,
+          priority: 9,
+          reuseExistingChunk: true,
+          enforce: true,
+        },
+        nextShare: {
+          name: 'next-share',
+          test: /[\/]node_modules[\/](next-share)[\/]/,
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          priority: 8,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
+        },
+        marked: {
+          name: 'marked',
+          test: /[\/]node_modules[\/](marked)[\/]/,
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          priority: 7,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
+        },
+        nodesAsync: {
+          name: 'chunk-nodesAsync',
+          test: /[\/]node_modules[\/]/,
+          priority: 2,
+          minChunks: 2,
+          chunks: 'async', // 仅打包异步引用的依赖
+          reuseExistingChunk: true, // 重复使用已经存在的块
+        },
+        nodesInitial: {
+          name: 'chunk-nodesInitial',
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          test: /[\/]node_modules[\/]/,
+          priority: 1,
+          minChunks: 1,
+          chunks: 'initial',
+          reuseExistingChunk: true,
+        },
+      },
     })(config);
 
     // add i18n dir to ModuleScopePlugin allowedPaths
