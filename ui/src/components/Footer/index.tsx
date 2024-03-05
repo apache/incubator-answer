@@ -25,28 +25,31 @@ import dayjs from 'dayjs';
 
 import { siteInfoStore } from '@/stores';
 
-const Index = () => {
-  const fullYear = dayjs().format('YYYY');
-  const siteName = siteInfoStore((state) => state.siteInfo.name);
-  const cc = `${fullYear} ${siteName}`;
-  return (
-    <footer className="bg-light">
-      <Container className="py-3">
-        <p className="text-center mb-0 small text-secondary">
-          <Trans i18nKey="footer.build_on" values={{ cc }}>
-            Powered by
-            {/* eslint-disable-next-line react/jsx-no-target-blank */}
-            <a href="https://answer.apache.org" target="_blank">
-              Apache Answer
-            </a>
-            - the open-source software that powers Q&A communities.
-            <br />
-            Made with love. © 2022 Answer.
-          </Trans>
-        </p>
-      </Container>
-    </footer>
-  );
-};
+class Index extends React.Component {
+  fullYear = dayjs().format('YYYY');
+  siteName = siteInfoStore((state) => state.siteInfo.name);
+  cc = `${this.fullYear} ${this.siteName}`;
+
+  render() {
+    return (
+      <footer className="bg-light">
+        <Container className="py-3">
+          <p className="text-center mb-0 small text-secondary">
+            <Trans i18nKey="footer.build_on" values={{ cc }}>
+              Powered by
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
+              <a href="https://answer.apache.org" target="_blank">
+                Apache Answer
+              </a>
+              - the open-source software that powers Q&A communities.
+              <br />
+              Made with love. © 2022 Answer.
+            </Trans>
+          </p>
+        </Container>
+      </footer>
+    );
+  }
+}
 
 export default React.memo(Index);
