@@ -6554,7 +6554,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "value": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 }
             }
         },
@@ -7094,6 +7095,12 @@ const docTemplate = `{
                 "action": {
                     "$ref": "#/definitions/schema.UIOptionAction"
                 },
+                "class_name": {
+                    "type": "string"
+                },
+                "field_class_name": {
+                    "type": "string"
+                },
                 "input_type": {
                     "type": "string"
                 },
@@ -7372,6 +7379,10 @@ const docTemplate = `{
                 },
                 "bio_html": {
                     "description": "bio html",
+                    "type": "string"
+                },
+                "color_scheme": {
+                    "description": "Color scheme",
                     "type": "string"
                 },
                 "created_at": {
@@ -8161,12 +8172,14 @@ const docTemplate = `{
             "enum": [
                 1,
                 2,
-                3
+                3,
+                99
             ],
             "x-enum-varnames": [
                 "PrivilegeLevel1",
                 "PrivilegeLevel2",
-                "PrivilegeLevel3"
+                "PrivilegeLevel3",
+                "PrivilegeLevelCustom"
             ]
         },
         "schema.PrivilegeOption": {
@@ -9074,6 +9087,10 @@ const docTemplate = `{
                 "theme"
             ],
             "properties": {
+                "color_scheme": {
+                    "type": "string",
+                    "maxLength": 100
+                },
                 "theme": {
                     "type": "string",
                     "maxLength": 255
@@ -9087,6 +9104,9 @@ const docTemplate = `{
         "schema.SiteThemeResp": {
             "type": "object",
             "properties": {
+                "color_scheme": {
+                    "type": "string"
+                },
                 "theme": {
                     "type": "string"
                 },
@@ -9435,8 +9455,13 @@ const docTemplate = `{
                 "level"
             ],
             "properties": {
+                "custom_privileges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/constant.Privilege"
+                    }
+                },
                 "level": {
-                    "maximum": 3,
                     "minimum": 1,
                     "allOf": [
                         {
@@ -9542,9 +9567,15 @@ const docTemplate = `{
         "schema.UpdateUserInterfaceRequest": {
             "type": "object",
             "required": [
+                "color_scheme",
                 "language"
             ],
             "properties": {
+                "color_scheme": {
+                    "description": "Color scheme",
+                    "type": "string",
+                    "maxLength": 100
+                },
                 "language": {
                     "description": "language",
                     "type": "string",
@@ -9652,6 +9683,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "language": {
+                    "type": "string"
+                },
                 "location": {
                     "type": "string"
                 },
@@ -9755,6 +9789,10 @@ const docTemplate = `{
                 },
                 "bio_html": {
                     "description": "bio html",
+                    "type": "string"
+                },
+                "color_scheme": {
+                    "description": "Color scheme",
                     "type": "string"
                 },
                 "created_at": {
