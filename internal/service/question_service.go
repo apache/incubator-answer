@@ -1235,7 +1235,17 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 		search.Tag = tagNames[0]
 	}
 	search.LoginUserID = loginUserID
-	return qs.GetQuestionPage(ctx, search)
+	similarQuestions, _ , err := qs.GetQuestionPage(ctx, search)
+	if err !=nil {
+		return nil, 0, err
+	}
+	var result []*schema.QuestionPageResp
+  for _, v := range similarQuestions {
+      if v.ID != questionID {
+          result = append(result, v)
+      }
+  }
+	return result, int64(len(result)), nil
 }
 
 // GetQuestionPage query questions page
