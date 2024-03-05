@@ -29,6 +29,7 @@ definitions:
       label:
         type: string
       value:
+        minimum: 1
         type: integer
     type: object
   handler.RespBody:
@@ -403,6 +404,10 @@ definitions:
     properties:
       action:
         $ref: '#/definitions/schema.UIOptionAction'
+      class_name:
+        type: string
+      field_class_name:
+        type: string
       input_type:
         type: string
       label:
@@ -602,6 +607,9 @@ definitions:
         type: string
       bio_html:
         description: bio html
+        type: string
+      color_scheme:
+        description: Color scheme
         type: string
       created_at:
         description: create time
@@ -1156,11 +1164,13 @@ definitions:
     - 1
     - 2
     - 3
+    - 99
     type: integer
     x-enum-varnames:
     - PrivilegeLevel1
     - PrivilegeLevel2
     - PrivilegeLevel3
+    - PrivilegeLevelCustom
   schema.PrivilegeOption:
     properties:
       level:
@@ -1783,6 +1793,9 @@ definitions:
     type: object
   schema.SiteThemeReq:
     properties:
+      color_scheme:
+        maxLength: 100
+        type: string
       theme:
         maxLength: 255
         type: string
@@ -1794,6 +1807,8 @@ definitions:
     type: object
   schema.SiteThemeResp:
     properties:
+      color_scheme:
+        type: string
       theme:
         type: string
       theme_config:
@@ -2030,10 +2045,13 @@ definitions:
     type: object
   schema.UpdatePrivilegesConfigReq:
     properties:
+      custom_privileges:
+        items:
+          $ref: '#/definitions/constant.Privilege'
+        type: array
       level:
         allOf:
         - $ref: '#/definitions/schema.PrivilegeLevel'
-        maximum: 3
         minimum: 1
     required:
     - level
@@ -2107,11 +2125,16 @@ definitions:
     type: object
   schema.UpdateUserInterfaceRequest:
     properties:
+      color_scheme:
+        description: Color scheme
+        maxLength: 100
+        type: string
       language:
         description: language
         maxLength: 100
         type: string
     required:
+    - color_scheme
     - language
     type: object
   schema.UpdateUserNotificationConfigReq:
@@ -2182,6 +2205,8 @@ definitions:
       display_name:
         type: string
       id:
+        type: string
+      language:
         type: string
       location:
         type: string
@@ -2256,6 +2281,9 @@ definitions:
         type: string
       bio_html:
         description: bio html
+        type: string
+      color_scheme:
+        description: Color scheme
         type: string
       created_at:
         description: create time
