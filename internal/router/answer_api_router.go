@@ -40,7 +40,6 @@ type AnswerAPIRouter struct {
 	searchController        *controller.SearchController
 	revisionController      *controller.RevisionController
 	rankController          *controller.RankController
-	adminReportController   *controller_admin.ReportController
 	adminUserController     *controller_admin.UserAdminController
 	reasonController        *controller.ReasonController
 	themeController         *controller_admin.ThemeController
@@ -70,7 +69,6 @@ func NewAnswerAPIRouter(
 	searchController *controller.SearchController,
 	revisionController *controller.RevisionController,
 	rankController *controller.RankController,
-	adminReportController *controller_admin.ReportController,
 	adminUserController *controller_admin.UserAdminController,
 	reasonController *controller.ReasonController,
 	themeController *controller_admin.ThemeController,
@@ -99,7 +97,6 @@ func NewAnswerAPIRouter(
 		searchController:        searchController,
 		revisionController:      revisionController,
 		rankController:          rankController,
-		adminReportController:   adminReportController,
 		adminUserController:     adminUserController,
 		reasonController:        reasonController,
 		themeController:         themeController,
@@ -279,6 +276,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
 	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
 	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
+
+	// report
+	r.GET("/reports/page", a.reportController.ListReportPage)
+	r.PUT("/report", a.reportController.Handle)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
@@ -286,10 +287,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question/status", a.questionController.AdminUpdateQuestionStatus)
 	r.GET("/answer/page", a.questionController.AdminAnswerPage)
 	r.PUT("/answer/status", a.answerController.AdminUpdateAnswerStatus)
-
-	// report
-	r.GET("/reports/page", a.adminReportController.ListReportPage)
-	r.PUT("/report", a.adminReportController.Handle)
 
 	// user
 	r.GET("/users/page", a.adminUserController.GetUserPage)

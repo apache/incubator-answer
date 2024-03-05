@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package report_handle_admin
+package report_handle
 
 import (
 	"context"

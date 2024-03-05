@@ -43,8 +43,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/reason"
 	"github.com/apache/incubator-answer/internal/service/report"
-	"github.com/apache/incubator-answer/internal/service/report_admin"
-	"github.com/apache/incubator-answer/internal/service/report_handle_admin"
+	"github.com/apache/incubator-answer/internal/service/report_handle"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/search_parser"
@@ -89,8 +88,7 @@ var ProviderSetService = wire.NewSet(
 	NewSearchService,
 	meta.NewMetaService,
 	object_info.NewObjService,
-	report_handle_admin.NewReportHandle,
-	report_admin.NewReportAdminService,
+	report_handle.NewReportHandle,
 	user_admin.NewUserAdminService,
 	reason.NewReasonService,
 	siteinfo_common.NewSiteInfoCommonService,
