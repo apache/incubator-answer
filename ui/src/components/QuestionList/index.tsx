@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,7 @@ import {
   Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
+import { useSkeletonControl } from '@/hooks';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'active',
@@ -59,11 +60,20 @@ const QuestionList: FC<Props> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const [urlSearchParams] = useSearchParams();
+  const { isSkeletonShow, openSkeleton, closeSkeleton } =
+    useSkeletonControl(true);
   const curOrder =
     order || urlSearchParams.get('order') || QUESTION_ORDER_KEYS[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
   const count = data?.count || 0;
+  useEffect(() => {
+    if (isLoading) {
+      openSkeleton();
+    } else {
+      closeSkeleton();
+    }
+  }, [isLoading, openSkeleton, closeSkeleton]);
   return (
     <div>
       <div className="mb-3 d-flex flex-wrap justify-content-between">
@@ -80,7 +90,7 @@ const QuestionList: FC<Props> = ({
         />
       </div>
       <ListGroup className="rounded-0">
-        {isLoading ? (
+        {isSkeletonShow ? (
           <QuestionListLoader />
         ) : (
           data?.list?.map((li) => {

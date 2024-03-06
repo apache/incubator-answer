@@ -21,16 +21,30 @@ import { useCallback, useRef, useState } from 'react';
 
 import { SKELETON_NEED_TIME, SKELETON_SHOW_MIN_TIME } from '@/common/constants';
 
-interface IRef {
+interface IControlRef {
   startTime?: number;
   timer?: NodeJS.Timeout;
   isSkeletonShow?: boolean;
 }
 
-const useSkeletonControl = () => {
+/**
+ * @param needShowFirst whether the skeleton should show at first
+ *
+ * Why need 'needShowFirst' param?
+ * Sometimes we need skeleton screens to take up space in the dom from the start
+ *
+ * If you set the 'needShowFirst' param as false, If the interface time is too short,
+ * the skeleton screen will not be displayed, which can reduce the time occupation
+ */
+const useSkeletonControl = (needShowFirst: boolean = false) => {
   const [isSkeletonShow, setIsSkeletonShow] = useState(false);
-  const controlRef = useRef<IRef>({});
+  const controlRef = useRef<IControlRef>({});
   const openSkeleton = () => {
+    if (needShowFirst) {
+      setIsSkeletonShow(true);
+      controlRef.current.startTime = Date.now();
+      return;
+    }
     if (!controlRef.current.timer) {
       controlRef.current.timer = setTimeout(() => {
         setIsSkeletonShow(true);
@@ -45,7 +59,6 @@ const useSkeletonControl = () => {
     if (isSkeletonShow && controlRef.current.startTime) {
       const delayTime =
         Date.now() - controlRef.current.startTime + SKELETON_SHOW_MIN_TIME;
-      console.log(delayTime);
       setTimeout(
         () => {
           setIsSkeletonShow(false);
