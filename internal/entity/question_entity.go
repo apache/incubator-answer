@@ -27,6 +27,7 @@ const (
 	QuestionStatusAvailable = 1
 	QuestionStatusClosed    = 2
 	QuestionStatusDeleted   = 10
+	QuestionStatusPending   = 11
 	QuestionUnPin           = 1
 	QuestionPin             = 2
 	QuestionShow            = 1

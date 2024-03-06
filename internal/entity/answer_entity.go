@@ -28,6 +28,7 @@ const (
 
 	AnswerStatusAvailable = 1
 	AnswerStatusDeleted   = 10
+	AnswerStatusPending   = 11
 )
 
 var AdminAnswerSearchStatus = map[string]int{
