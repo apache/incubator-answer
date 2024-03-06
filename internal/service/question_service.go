@@ -1241,7 +1241,7 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 	}
 	var result []*schema.QuestionPageResp
 	for _, v := range similarQuestions {
-		if v.ID != questionID {
+		if uid.DeShortID(v.ID) != questionID {
 			result = append(result, v)
 		}
 	}
