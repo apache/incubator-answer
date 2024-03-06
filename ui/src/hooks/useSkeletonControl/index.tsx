@@ -19,7 +19,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import { SKELETON_SHOW_MIN_TIME } from '@/common/constants';
+import { SKELETON_NEED_TIME, SKELETON_SHOW_MIN_TIME } from '@/common/constants';
 
 interface IRef {
   startTime?: number;
@@ -35,7 +35,7 @@ const useSkeletonControl = () => {
       controlRef.current.timer = setTimeout(() => {
         setIsSkeletonShow(true);
         controlRef.current.startTime = Date.now();
-      }, 1000);
+      }, SKELETON_NEED_TIME);
     }
   };
 

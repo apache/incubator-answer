@@ -31,6 +31,7 @@ export const QUESTIONS_ORDER_STORAGE_KEY = '_a_qok_';
 export const DEFAULT_THEME = 'system';
 export const ADMIN_PRIVILEGE_CUSTOM_LEVEL = 99;
 export const SKELETON_SHOW_MIN_TIME = 3000;
+export const SKELETON_NEED_TIME = 1000;
 
 export const USER_AGENT_NAMES = {
   SegmentFault: 'SegmentFault',
