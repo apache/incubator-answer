@@ -17,12 +17,12 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Row, Col, Card, Button, Form, Stack } from 'react-bootstrap';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { usePageTags } from '@/hooks';
+import { usePageTags, useSkeletonControl } from '@/hooks';
 import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
 import { formatCount, escapeRemove } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
@@ -35,6 +35,7 @@ const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const [searchTag, setSearchTag] = useState('');
+  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
   const { role_id } = loggedUserInfoStore((_) => _.user);
 
   const page = Number(urlSearch.get('page')) || 1;
@@ -70,6 +71,13 @@ const Tags = () => {
   usePageTags({
     title: t('tags', { keyPrefix: 'page_title' }),
   });
+  useEffect(() => {
+    if (isLoading) {
+      openSkeleton();
+    } else {
+      closeSkeleton();
+    }
+  }, [isLoading, openSkeleton, closeSkeleton]);
   return (
     <Row className="py-4 mb-4">
       <Col xxl={12}>
@@ -106,7 +114,7 @@ const Tags = () => {
 
       <Col className="mt-4" xxl={12}>
         <Row>
-          {isLoading ? (
+          {isSkeletonShow ? (
             <TagsLoader />
           ) : (
             tags?.list?.map((tag) => (
