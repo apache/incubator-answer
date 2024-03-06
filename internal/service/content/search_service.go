@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package service
+package content
 
 import (
 	"context"
+
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/search_common"
 	"github.com/apache/incubator-answer/internal/service/search_parser"

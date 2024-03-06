@@ -70,10 +70,9 @@ type ReportHandleReq struct {
 
 // GetReportListPageDTO report list data transfer object
 type GetReportListPageDTO struct {
-	ObjectType string
-	Status     string
-	Page       int
-	PageSize   int
+	Page     int
+	PageSize int
+	Status   int
 }
 
 // GetReportListPageResp get report list
@@ -106,7 +105,6 @@ type GetReportListPageResp struct {
 
 	UserID         string `json:"-"`
 	ReportedUserID string `json:"-"`
-	Status         int    `json:"-"`
 	ObjectType     int    `json:"-"`
 	ReportType     int    `json:"-"`
 	FlaggedType    int    `json:"-"`
@@ -118,4 +116,21 @@ func (r *GetReportListPageResp) Format() {
 
 	r.CreatedAtParsed = r.CreatedAt.Unix()
 	r.UpdatedAtParsed = r.UpdatedAt.Unix()
+}
+
+// GetUnreviewedReportPostPageReq get unreviewed report post page request
+type GetUnreviewedReportPostPageReq struct {
+	Page int `json:"page" form:"page"`
+}
+
+// ReviewReportReq review report request
+type ReviewReportReq struct {
+	ReportID      string     `validate:"required" json:"report_id"`
+	OperationType string     `validate:"required,oneof=edit_post close_post delete_post unlist_post ignore_report" json:"operation_type"`
+	CloseType     int        `validate:"omitempty" json:"close_type"`
+	CloseMsg      string     `validate:"omitempty" json:"close_msg"`
+	Title         string     `validate:"omitempty,notblank,gte=6,lte=150" json:"title"`
+	Content       string     `validate:"omitempty,notblank,gte=6,lte=65535" json:"content"`
+	Tags          []*TagItem `validate:"omitempty,dive" json:"tags"`
+	UserID        string     `json:"-"`
 }

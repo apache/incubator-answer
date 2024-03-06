@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package service
+package content
 
 import (
 	"encoding/json"
@@ -513,7 +513,8 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	// 	 log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	// }
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
-		UserID:           req.UserID,
+		UserID:           questionInfo.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,

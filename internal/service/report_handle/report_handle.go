@@ -22,94 +22,111 @@ package report_handle
 import (
 	"context"
 
-	"github.com/apache/incubator-answer/internal/service/config"
-	"github.com/apache/incubator-answer/internal/service/notice_queue"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/comment"
-	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/content"
+	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/obj"
 )
 
 type ReportHandle struct {
-	questionCommon           *questioncommon.QuestionCommon
-	commentRepo              comment.CommentRepo
-	configService            *config.ConfigService
-	notificationQueueService notice_queue.NotificationQueueService
+	questionService *content.QuestionService
+	answerService   *content.AnswerService
+	commentService  *comment.CommentService
 }
 
 func NewReportHandle(
-	questionCommon *questioncommon.QuestionCommon,
-	commentRepo comment.CommentRepo,
-	configService *config.ConfigService,
-	notificationQueueService notice_queue.NotificationQueueService,
+	questionService *content.QuestionService,
+	answerService *content.AnswerService,
+	commentService *comment.CommentService,
 ) *ReportHandle {
 	return &ReportHandle{
-		questionCommon:           questionCommon,
-		commentRepo:              commentRepo,
-		configService:            configService,
-		notificationQueueService: notificationQueueService,
+		questionService: questionService,
+		answerService:   answerService,
+		commentService:  commentService,
 	}
 }
 
-// HandleObject this handle object status
-func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Report, req schema.ReportHandleReq) (err error) {
-	reasonDeleteCfg, err := rh.configService.GetConfigByKey(ctx, "reason.needs_delete")
-	if err != nil {
-		return err
-	}
-	reasonCloseCfg, err := rh.configService.GetConfigByKey(ctx, "reason.needs_close")
-	if err != nil {
-		return err
-	}
-	var (
-		objectID       = reported.ObjectID
-		reportedUserID = reported.ReportedUserID
-		objectKey      string
-	)
-
-	objectKey, err = obj.GetObjectTypeStrByObjectID(objectID)
+// UpdateReportedObject this handle object status
+func (rh *ReportHandle) UpdateReportedObject(ctx context.Context,
+	report *entity.Report, req *schema.ReviewReportReq) (err error) {
+	objectKey, err := obj.GetObjectTypeStrByObjectID(report.ObjectID)
 	if err != nil {
 		return err
 	}
 	switch objectKey {
-	case "question":
-		switch req.FlaggedType {
-		case reasonDeleteCfg.ID:
-			err = rh.questionCommon.RemoveQuestion(ctx, &schema.RemoveQuestionReq{ID: objectID})
-		case reasonCloseCfg.ID:
-			err = rh.questionCommon.CloseQuestion(ctx, &schema.CloseQuestionReq{
-				ID:        objectID,
-				CloseType: req.FlaggedType,
-				CloseMsg:  req.FlaggedContent,
-			})
-		}
-	case "answer":
-		switch req.FlaggedType {
-		case reasonDeleteCfg.ID:
-			err = rh.questionCommon.RemoveAnswer(ctx, objectID)
-		}
-	case "comment":
-		switch req.FlaggedType {
-		case reasonCloseCfg.ID:
-			err = rh.commentRepo.RemoveComment(ctx, objectID)
-			rh.sendNotification(ctx, reportedUserID, objectID, constant.NotificationYourCommentWasDeleted)
-		}
+	case constant.QuestionObjectType:
+		err = rh.updateReportedQuestionReport(ctx, report, req)
+	case constant.AnswerObjectType:
+		err = rh.updateReportedAnswerReport(ctx, report, req)
+	case constant.CommentObjectType:
+		err = rh.updateReportedCommentReport(ctx, report, req)
 	}
 	return
 }
 
-// sendNotification send rank triggered notification
-func (rh *ReportHandle) sendNotification(ctx context.Context, reportedUserID, objectID, notificationAction string) {
-	msg := &schema.NotificationMsg{
-		TriggerUserID:      reportedUserID,
-		ReceiverUserID:     reportedUserID,
-		Type:               schema.NotificationTypeInbox,
-		ObjectID:           objectID,
-		ObjectType:         constant.ReportObjectType,
-		NotificationAction: notificationAction,
+func (rh *ReportHandle) updateReportedQuestionReport(ctx context.Context,
+	report *entity.Report, req *schema.ReviewReportReq) (err error) {
+	switch req.OperationType {
+	case constant.ReportOperationUnlistPost:
+		err = rh.questionService.OperationQuestion(ctx, &schema.OperationQuestionReq{
+			ID: report.ObjectID, Operation: schema.QuestionOperationHide, UserID: req.UserID})
+	case constant.ReportOperationDeletePost:
+		err = rh.questionService.RemoveQuestion(ctx, &schema.RemoveQuestionReq{
+			ID: report.ObjectID, UserID: req.UserID, IsAdmin: true})
+	case constant.ReportOperationClosePost:
+		err = rh.questionService.CloseQuestion(ctx, &schema.CloseQuestionReq{
+			ID:        report.ObjectID,
+			CloseType: req.CloseType,
+			CloseMsg:  req.CloseMsg,
+			UserID:    req.UserID,
+		})
+	case constant.ReportOperationEditPost:
+		_, err = rh.questionService.UpdateQuestion(ctx, &schema.QuestionUpdate{
+			ID:           report.ObjectID,
+			Title:        req.Title,
+			Content:      req.Content,
+			HTML:         converter.Markdown2HTML(req.Content),
+			Tags:         req.Tags,
+			UserID:       req.UserID,
+			NoNeedReview: true,
+		})
 	}
-	rh.notificationQueueService.Send(ctx, msg)
+	return
+}
+
+func (rh *ReportHandle) updateReportedAnswerReport(ctx context.Context, report *entity.Report, req *schema.ReviewReportReq) (err error) {
+	switch req.OperationType {
+	case constant.ReportOperationDeletePost:
+		err = rh.answerService.RemoveAnswer(ctx, &schema.RemoveAnswerReq{
+			ID: report.ObjectID, UserID: req.UserID})
+	case constant.ReportOperationEditPost:
+		_, err = rh.answerService.Update(ctx, &schema.AnswerUpdateReq{
+			ID:           report.ObjectID,
+			Title:        req.Title,
+			Content:      req.Content,
+			HTML:         converter.Markdown2HTML(req.Content),
+			UserID:       req.UserID,
+			NoNeedReview: true,
+		})
+	}
+	return nil
+}
+
+func (rh *ReportHandle) updateReportedCommentReport(ctx context.Context, report *entity.Report, req *schema.ReviewReportReq) (err error) {
+	switch req.OperationType {
+	case constant.ReportOperationDeletePost:
+		err = rh.commentService.RemoveComment(ctx, &schema.RemoveCommentReq{
+			CommentID: report.ObjectID, UserID: req.UserID})
+	case constant.ReportOperationEditPost:
+		_, err = rh.commentService.UpdateComment(ctx, &schema.UpdateCommentReq{
+			CommentID:    report.ObjectID,
+			OriginalText: req.Content,
+			ParsedText:   converter.Markdown2HTML(req.Content),
+			UserID:       req.UserID,
+		})
+	}
+	return nil
 }

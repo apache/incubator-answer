@@ -20,6 +20,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/base/pager"
@@ -28,8 +30,8 @@ import (
 	"github.com/apache/incubator-answer/internal/base/validator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service"
 	"github.com/apache/incubator-answer/internal/service/action"
+	"github.com/apache/incubator-answer/internal/service/content"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
@@ -37,13 +39,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"net/http"
 )
 
 // QuestionController question controller
 type QuestionController struct {
-	questionService     *service.QuestionService
-	answerService       *service.AnswerService
+	questionService     *content.QuestionService
+	answerService       *content.AnswerService
 	rankService         *rank.RankService
 	siteInfoService     siteinfo_common.SiteInfoCommonService
 	actionService       *action.CaptchaService
@@ -52,8 +53,8 @@ type QuestionController struct {
 
 // NewQuestionController new controller
 func NewQuestionController(
-	questionService *service.QuestionService,
-	answerService *service.AnswerService,
+	questionService *content.QuestionService,
+	answerService *content.AnswerService,
 	rankService *rank.RankService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	actionService *action.CaptchaService,

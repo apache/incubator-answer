@@ -26,7 +26,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service"
+	"github.com/apache/incubator-answer/internal/service/content"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/pkg/obj"
@@ -37,13 +37,13 @@ import (
 
 // RevisionController revision controller
 type RevisionController struct {
-	revisionListService *service.RevisionService
+	revisionListService *content.RevisionService
 	rankService         *rank.RankService
 }
 
 // NewRevisionController new controller
 func NewRevisionController(
-	revisionListService *service.RevisionService,
+	revisionListService *content.RevisionService,
 	rankService *rank.RankService,
 ) *RevisionController {
 	return &RevisionController{

@@ -200,6 +200,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// report
 	r.POST("/report", a.reportController.AddReport)
+	r.GET("/report/unreviewed/post", a.reportController.GetUnreviewedReportPostPage)
+	r.PUT("/report/review", a.reportController.ReviewReport)
 
 	// vote
 	r.POST("/vote/up", a.voteController.VoteUp)
@@ -276,10 +278,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
 	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
 	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
-
-	// report
-	r.GET("/reports/page", a.reportController.ListReportPage)
-	r.PUT("/report", a.reportController.Handle)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {

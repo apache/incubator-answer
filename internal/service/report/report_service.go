@@ -21,6 +21,8 @@ package report
 
 import (
 	"encoding/json"
+
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -102,26 +104,21 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 	return rs.reportRepo.AddReport(ctx, report)
 }
 
-// ListReportPage list report pages
-func (rs *ReportService) ListReportPage(ctx context.Context, dto schema.GetReportListPageDTO) (pageModel *pager.PageModel, err error) {
-	var (
-		resp  []*schema.GetReportListPageResp
-		flags []entity.Report
-		total int64
-
-		flaggedUserIds,
-		userIds []string
-
-		flaggedUsers,
-		users map[string]*schema.UserBasicInfo
-	)
-
-	flags, total, err = rs.reportRepo.GetReportListPage(ctx, dto)
+// GetUnreviewedReportPostPage get unreviewed report post page
+func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *schema.GetUnreviewedReportPostPageReq) (
+	pageModel *pager.PageModel, err error) {
+	reports, total, err := rs.reportRepo.GetReportListPage(ctx, &schema.GetReportListPageDTO{
+		Page:     req.Page,
+		PageSize: 1,
+		Status:   entity.ReportStatusPending,
+	})
 	if err != nil {
 		return
 	}
 
-	_ = copier.Copy(&resp, flags)
+	resp := make([]*schema.GetReportListPageResp, 0)
+	_ = copier.Copy(&resp, reports)
+	var flaggedUserIds, userIds []string
 	for _, r := range resp {
 		flaggedUserIds = append(flaggedUserIds, r.ReportedUserID)
 		userIds = append(userIds, r.UserID)
@@ -129,13 +126,13 @@ func (rs *ReportService) ListReportPage(ctx context.Context, dto schema.GetRepor
 	}
 
 	// flagged users
-	flaggedUsers, err = rs.commonUser.BatchUserBasicInfoByID(ctx, flaggedUserIds)
+	flaggedUsers, err := rs.commonUser.BatchUserBasicInfoByID(ctx, flaggedUserIds)
 	if err != nil {
 		return nil, err
 	}
 
 	// flag users
-	users, err = rs.commonUser.BatchUserBasicInfoByID(ctx, userIds)
+	users, err := rs.commonUser.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
 		return nil, err
 	}
@@ -147,39 +144,30 @@ func (rs *ReportService) ListReportPage(ctx context.Context, dto schema.GetRepor
 	return pager.NewPageModel(total, resp), nil
 }
 
-// HandleReported handle the reported object
-func (rs *ReportService) HandleReported(ctx context.Context, req schema.ReportHandleReq) (err error) {
-	var (
-		reported   *entity.Report
-		handleData = entity.Report{
-			FlaggedContent: req.FlaggedContent,
-			FlaggedType:    req.FlaggedType,
-			Status:         entity.ReportStatusCompleted,
-		}
-		exist bool
-	)
-
-	reported, exist, err = rs.reportRepo.GetByID(ctx, req.ID)
+// ReviewReport review report
+func (rs *ReportService) ReviewReport(ctx context.Context, req *schema.ReviewReportReq) (err error) {
+	report, exist, err := rs.reportRepo.GetByID(ctx, req.ReportID)
 	if err != nil {
-		err = errors.BadRequest(reason.ReportHandleFailed).WithError(err).WithStack()
-		return
+		return err
 	}
 	if !exist {
-		err = errors.NotFound(reason.ReportNotFound)
-		return
+		return errors.NotFound(reason.ReportNotFound)
 	}
-
 	// check if handle or not
-	if reported.Status != entity.ReportStatusPending {
+	if report.Status != entity.ReportStatusPending {
+		return nil
+	}
+
+	// ignore this report
+	if req.OperationType == constant.ReportOperationIgnoreReport {
+		return rs.reportRepo.UpdateStatus(ctx, report.ID, entity.ReportStatusIgnore)
+	}
+
+	if err = rs.reportHandle.UpdateReportedObject(ctx, report, req); err != nil {
 		return
 	}
 
-	if err = rs.reportHandle.HandleObject(ctx, reported, req); err != nil {
-		return
-	}
-
-	err = rs.reportRepo.UpdateByID(ctx, reported.ID, handleData)
-	return
+	return rs.reportRepo.UpdateStatus(ctx, report.ID, entity.ReportStatusCompleted)
 }
 
 func (rs *ReportService) decorateReportResp(ctx context.Context, resp *schema.GetReportListPageResp) {
