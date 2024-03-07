@@ -457,14 +457,14 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 
 	// get queue amount
 	if req.IsAdmin {
-		reportCount, err := rs.reviewService.GetReviewPendingCount(ctx)
+		reviewCount, err := rs.reviewService.GetReviewPendingCount(ctx)
 		if err != nil {
 			log.Errorf("get report count failed: %v", err)
 		} else {
 			resp = append(resp, &schema.GetReviewingTypeResp{
 				Name:       string(constant.QueuedPost),
 				Label:      "Queued post",
-				TodoAmount: reportCount,
+				TodoAmount: reviewCount,
 			})
 		}
 	}

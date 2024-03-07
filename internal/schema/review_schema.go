@@ -1,5 +1,10 @@
 package schema
 
+import (
+	"github.com/apache/incubator-answer/internal/base/validator"
+	"github.com/apache/incubator-answer/pkg/uid"
+)
+
 // UpdateReviewReq update review request
 type UpdateReviewReq struct {
 	ReviewID int    `validate:"required" json:"review_id"`
@@ -17,9 +22,18 @@ func (r *UpdateReviewReq) IsReject() bool {
 
 // GetUnreviewedPostPageReq get review page request
 type GetUnreviewedPostPageReq struct {
-	Page            int               `json:"page" form:"page"`
+	ObjectID        string            `validate:"omitempty" form:"object_id"`
+	Page            int               `validate:"omitempty" form:"page"`
 	ReviewerMapping map[string]string `json:"-"`
 	UserID          string            `json:"-"`
+}
+
+func (r *GetUnreviewedPostPageReq) Check() (errField []*validator.FormErrorField, err error) {
+	if len(r.ObjectID) > 0 {
+		r.Page = 1
+		r.ObjectID = uid.DeShortID(r.ObjectID)
+	}
+	return
 }
 
 // GetUnreviewedPostPageResp get review page response
