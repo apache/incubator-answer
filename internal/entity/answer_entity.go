@@ -34,6 +34,7 @@ const (
 var AdminAnswerSearchStatus = map[string]int{
 	"available": AnswerStatusAvailable,
 	"deleted":   AnswerStatusDeleted,
+	"pending":   AnswerStatusPending,
 }
 
 // Answer answer

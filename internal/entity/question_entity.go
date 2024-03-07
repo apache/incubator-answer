@@ -38,12 +38,14 @@ var AdminQuestionSearchStatus = map[string]int{
 	"available": QuestionStatusAvailable,
 	"closed":    QuestionStatusClosed,
 	"deleted":   QuestionStatusDeleted,
+	"pending":   QuestionStatusPending,
 }
 
 var AdminQuestionSearchStatusIntToString = map[int]string{
 	QuestionStatusAvailable: "available",
 	QuestionStatusClosed:    "closed",
 	QuestionStatusDeleted:   "deleted",
+	QuestionStatusPending:   "pending",
 }
 
 // Question question

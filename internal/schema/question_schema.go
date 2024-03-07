@@ -405,7 +405,7 @@ type QuestionPageRespOperator struct {
 type AdminQuestionPageReq struct {
 	Page        int    `validate:"omitempty,min=1" form:"page"`
 	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
-	StatusCond  string `validate:"omitempty,oneof=normal closed deleted" form:"status"`
+	StatusCond  string `validate:"omitempty,oneof=normal closed deleted pending" form:"status"`
 	Query       string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" `
 	Status      int    `json:"-"`
 	LoginUserID string `json:"-"`
@@ -426,7 +426,7 @@ func (req *AdminQuestionPageReq) Check() (errField []*validator.FormErrorField, 
 type AdminAnswerPageReq struct {
 	Page          int    `validate:"omitempty,min=1" form:"page"`
 	PageSize      int    `validate:"omitempty,min=1" form:"page_size"`
-	StatusCond    string `validate:"omitempty,oneof=normal deleted" form:"status"`
+	StatusCond    string `validate:"omitempty,oneof=normal deleted pending" form:"status"`
 	Query         string `validate:"omitempty,gt=0,lte=100" form:"query"`
 	QuestionID    string `validate:"omitempty,gt=0,lte=24" form:"question_id"`
 	QuestionTitle string `json:"-"`

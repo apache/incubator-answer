@@ -2611,7 +2611,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,deleted]
+      description: Status:[available,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2625,6 +2625,7 @@ paths:
         enum:
         - available
         - deleted
+        - pending
         in: query
         name: status
         type: string
@@ -2812,7 +2813,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,closed,deleted]
+      description: Status:[available,closed,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2827,6 +2828,7 @@ paths:
         - available
         - closed
         - deleted
+        - pending
         in: query
         name: status
         type: string

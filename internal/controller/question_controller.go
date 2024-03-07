@@ -870,14 +870,14 @@ func (qc *QuestionController) PersonalCollectionPage(ctx *gin.Context) {
 
 // AdminQuestionPage admin question page
 // @Summary AdminQuestionPage admin question page
-// @Description Status:[available,closed,deleted]
+// @Description Status:[available,closed,deleted,pending]
 // @Tags admin
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
-// @Param status query string false "user status" Enums(available, closed, deleted)
+// @Param status query string false "user status" Enums(available, closed, deleted, pending)
 // @Param query query string false "question id or title"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/question/page [get]
@@ -894,14 +894,14 @@ func (qc *QuestionController) AdminQuestionPage(ctx *gin.Context) {
 
 // AdminAnswerPage admin answer page
 // @Summary AdminAnswerPage admin answer page
-// @Description Status:[available,deleted]
+// @Description Status:[available,deleted,pending]
 // @Tags admin
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
-// @Param status query string false "user status" Enums(available,deleted)
+// @Param status query string false "user status" Enums(available,deleted,pending)
 // @Param query query string false "answer id or question title"
 // @Param question_id query string false "question id"
 // @Success 200 {object} handler.RespBody

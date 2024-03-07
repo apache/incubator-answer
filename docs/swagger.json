@@ -27,7 +27,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,deleted]",
+                "description": "Status:[available,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -54,7 +54,8 @@
                     {
                         "enum": [
                             "available",
-                            "deleted"
+                            "deleted",
+                            "pending"
                         ],
                         "type": "string",
                         "description": "user status",
@@ -357,7 +358,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,closed,deleted]",
+                "description": "Status:[available,closed,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -385,7 +386,8 @@
                         "enum": [
                             "available",
                             "closed",
-                            "deleted"
+                            "deleted",
+                            "pending"
                         ],
                         "type": "string",
                         "description": "user status",
