@@ -819,6 +819,41 @@ definitions:
         description: url title
         type: string
     type: object
+  schema.GetReportListPageResp:
+    properties:
+      _:
+        type: string
+      answer_id:
+        type: string
+      comment_id:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: integer
+      excerpt:
+        type: string
+      flagged_content:
+        type: string
+      flagged_reason:
+        $ref: '#/definitions/schema.ReasonItem'
+      id:
+        type: string
+      object_type:
+        type: string
+      question_id:
+        type: string
+      reason:
+        $ref: '#/definitions/schema.ReasonItem'
+      report_user:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      reported_user:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      title:
+        type: string
+      updated_at:
+        type: integer
+    type: object
   schema.GetReviewingTypeResp:
     properties:
       label:
@@ -990,6 +1025,37 @@ definitions:
         items:
           $ref: '#/definitions/schema.TagSynonym'
         type: array
+    type: object
+  schema.GetUnreviewedPostPageResp:
+    properties:
+      author_user_id:
+        type: string
+      created_at:
+        type: integer
+      object_id:
+        type: string
+      object_type:
+        enum:
+        - question
+        - answer
+        - comment
+        type: string
+      parsed_text:
+        type: string
+      review_id:
+        type: string
+      submit_at:
+        type: integer
+      submitter_display_name:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
+      user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
     type: object
   schema.GetUnreviewedRevisionResp:
     properties:
@@ -1387,6 +1453,19 @@ definitions:
     required:
     - id
     type: object
+  schema.ReasonItem:
+    properties:
+      content_type:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      placeholder:
+        type: string
+      reason_type:
+        type: integer
+    type: object
   schema.RecoverAnswerReq:
     properties:
       answer_id:
@@ -1451,17 +1530,37 @@ definitions:
       question_id:
         type: string
     type: object
-  schema.ReportHandleReq:
+  schema.ReviewReportReq:
     properties:
-      flagged_content:
+      close_msg:
         type: string
-      flagged_type:
+      close_type:
         type: integer
-      id:
+      content:
+        maxLength: 65535
+        minLength: 6
+        type: string
+      operation_type:
+        enum:
+        - edit_post
+        - close_post
+        - delete_post
+        - unlist_post
+        - ignore_report
+        type: string
+      report_id:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      title:
+        maxLength: 150
+        minLength: 6
         type: string
     required:
-    - flagged_type
-    - id
+    - operation_type
+    - report_id
     type: object
   schema.RevisionAuditReq:
     properties:
@@ -1956,7 +2055,11 @@ definitions:
     properties:
       content:
         type: string
+      created_at:
+        type: integer
       html:
+        type: string
+      object_creator_user_id:
         type: string
       object_id:
         type: string
@@ -2047,6 +2150,19 @@ definitions:
         minimum: 1
     required:
     - level
+    type: object
+  schema.UpdateReviewReq:
+    properties:
+      review_id:
+        type: string
+      status:
+        enum:
+        - approve
+        - reject
+        type: string
+    required:
+    - review_id
+    - status
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -5097,18 +5213,18 @@ paths:
       summary: add report
       tags:
       - Report
-  /answer/api/v1/report/:
+  /answer/api/v1/report/review:
     put:
       consumes:
       - application/json
-      description: handle flag
+      description: review report
       parameters:
       - description: flag
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.ReportHandleReq'
+          $ref: '#/definitions/schema.ReviewReportReq'
       produces:
       - application/json
       responses:
@@ -5119,41 +5235,55 @@ paths:
       security:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
-      summary: handle flag
+      summary: review report
       tags:
       - Report
-  /answer/api/v1/reports/page:
+  /answer/api/v1/report/unreviewed/post:
     get:
       consumes:
       - application/json
-      description: list report records
+      description: get unreviewed report post page
       parameters:
-      - description: status
-        enum:
-        - pending
-        - completed
-        in: query
-        name: status
-        required: true
-        type: string
-      - description: object_type
-        enum:
-        - all
-        - question
-        - answer
-        - comment
-        in: query
-        name: object_type
-        required: true
-        type: string
-      - description: page size
+      - description: page
         in: query
         name: page
         type: integer
-      - description: page size
-        in: query
-        name: page_size
-        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetReportListPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get unreviewed report post page
+      tags:
+      - Report
+  /answer/api/v1/review/pending/post:
+    put:
+      consumes:
+      - application/json
+      description: update review
+      parameters:
+      - description: review
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateReviewReq'
       produces:
       - application/json
       responses:
@@ -5164,9 +5294,43 @@ paths:
       security:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
-      summary: list report page
+      summary: update review
       tags:
-      - Report
+      - Review
+  /answer/api/v1/review/pending/post/page:
+    get:
+      consumes:
+      - application/json
+      description: get unreviewed post page
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetUnreviewedPostPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get unreviewed post page
+      tags:
+      - Review
   /answer/api/v1/reviewing/type:
     get:
       description: get reviewing type
