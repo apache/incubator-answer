@@ -46,6 +46,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/reason"
 	"github.com/apache/incubator-answer/internal/service/report"
 	"github.com/apache/incubator-answer/internal/service/report_handle"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/search_parser"
@@ -113,4 +114,5 @@ var ProviderSetService = wire.NewSet(
 	user_notification_config.NewUserNotificationConfigService,
 	notification.NewExternalNotificationService,
 	notice_queue.NewNewQuestionNotificationQueueService,
+	review.NewReviewService,
 )

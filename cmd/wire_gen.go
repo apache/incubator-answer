@@ -33,6 +33,7 @@ import (
 	"github.com/apache/incubator-answer/internal/repo/rank"
 	"github.com/apache/incubator-answer/internal/repo/reason"
 	"github.com/apache/incubator-answer/internal/repo/report"
+	"github.com/apache/incubator-answer/internal/repo/review"
 	"github.com/apache/incubator-answer/internal/repo/revision"
 	"github.com/apache/incubator-answer/internal/repo/role"
 	"github.com/apache/incubator-answer/internal/repo/search_common"
@@ -70,6 +71,7 @@ import (
 	reason2 "github.com/apache/incubator-answer/internal/service/reason"
 	report2 "github.com/apache/incubator-answer/internal/service/report"
 	"github.com/apache/incubator-answer/internal/service/report_handle"
+	review2 "github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	role2 "github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/search_parser"
@@ -191,7 +193,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon, tagCommonService)
 	searchService := content.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService, captchaService)
-	contentRevisionService := content.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService, notificationQueueService, activityQueueService, reportRepo)
+	reviewRepo := review.NewReviewRepo(dataData)
+	reviewService := review2.NewReviewService(reviewRepo, objService, userCommon)
+	contentRevisionService := content.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService, notificationQueueService, activityQueueService, reportRepo, reviewService)
 	revisionController := controller.NewRevisionController(contentRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
 	userAdminRepo := user.NewUserAdminRepo(dataData, authRepo)
@@ -224,7 +228,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	pluginController := controller_admin.NewPluginController(pluginCommonService)
 	permissionController := controller.NewPermissionController(rankService)
 	userPluginController := controller.NewUserPluginController(pluginCommonService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController)
+	reviewController := controller.NewReviewController(reviewService, rankService, captchaService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(controllerSiteInfoController, siteInfoCommonService)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)

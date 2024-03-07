@@ -38,6 +38,7 @@ import (
 	"github.com/apache/incubator-answer/internal/repo/rank"
 	"github.com/apache/incubator-answer/internal/repo/reason"
 	"github.com/apache/incubator-answer/internal/repo/report"
+	"github.com/apache/incubator-answer/internal/repo/review"
 	"github.com/apache/incubator-answer/internal/repo/revision"
 	"github.com/apache/incubator-answer/internal/repo/role"
 	"github.com/apache/incubator-answer/internal/repo/search_common"
@@ -97,4 +98,5 @@ var ProviderSetRepo = wire.NewSet(
 	user_notification_config.NewUserNotificationConfigRepo,
 	limit.NewRateLimitRepo,
 	plugin_config.NewPluginUserConfigRepo,
+	review.NewReviewRepo,
 )

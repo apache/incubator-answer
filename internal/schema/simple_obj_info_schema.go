@@ -34,9 +34,11 @@ type SimpleObjectInfo struct {
 }
 
 type UnreviewedRevisionInfoInfo struct {
-	ObjectID string     `json:"object_id"`
-	Title    string     `json:"title"`
-	Content  string     `json:"content"`
-	Html     string     `json:"html"`
-	Tags     []*TagResp `json:"tags"`
+	CreatedAt           int64      `json:"created_at"`
+	ObjectID            string     `json:"object_id"`
+	ObjectCreatorUserID string     `json:"object_creator_user_id"`
+	Title               string     `json:"title"`
+	Content             string     `json:"content"`
+	Html                string     `json:"html"`
+	Tags                []*TagResp `json:"tags"`
 }

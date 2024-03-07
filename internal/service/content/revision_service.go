@@ -35,6 +35,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/report_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision"
 	"github.com/apache/incubator-answer/internal/service/tag_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
@@ -60,6 +61,7 @@ type RevisionService struct {
 	notificationQueueService notice_queue.NotificationQueueService
 	activityQueueService     activity_queue.ActivityQueueService
 	reportRepo               report_common.ReportRepo
+	reviewService            *review.ReviewService
 }
 
 func NewRevisionService(
@@ -75,6 +77,7 @@ func NewRevisionService(
 	notificationQueueService notice_queue.NotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
 	reportRepo report_common.ReportRepo,
+	reviewService *review.ReviewService,
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:             revisionRepo,
@@ -89,6 +92,7 @@ func NewRevisionService(
 		notificationQueueService: notificationQueueService,
 		activityQueueService:     activityQueueService,
 		reportRepo:               reportRepo,
+		reviewService:            reviewService,
 	}
 }
 
@@ -451,12 +455,19 @@ func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *sche
 func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.GetReviewingTypeReq) (resp []*schema.GetReviewingTypeResp, err error) {
 	resp = make([]*schema.GetReviewingTypeResp, 0)
 
-	// TODO: get queue amount
-	resp = append(resp, &schema.GetReviewingTypeResp{
-		Name:       string(constant.QueuedPost),
-		Label:      "",
-		TodoAmount: 0,
-	})
+	// get queue amount
+	if req.IsAdmin {
+		reportCount, err := rs.reviewService.GetReviewPendingCount(ctx)
+		if err != nil {
+			log.Errorf("get report count failed: %v", err)
+		} else {
+			resp = append(resp, &schema.GetReviewingTypeResp{
+				Name:       string(constant.QueuedPost),
+				Label:      "Queued post",
+				TodoAmount: reportCount,
+			})
+		}
+	}
 
 	// get flag amount
 	if req.IsAdmin {
@@ -466,7 +477,7 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 		} else {
 			resp = append(resp, &schema.GetReviewingTypeResp{
 				Name:       string(constant.FlaggedPost),
-				Label:      "",
+				Label:      "Flagged post",
 				TodoAmount: reportCount,
 			})
 		}
@@ -479,7 +490,7 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 	} else {
 		resp = append(resp, &schema.GetReviewingTypeResp{
 			Name:       string(constant.SuggestedPostEdit),
-			Label:      "",
+			Label:      "Suggested edits",
 			TodoAmount: countUnreviewedRevision,
 		})
 	}

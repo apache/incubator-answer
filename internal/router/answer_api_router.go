@@ -53,6 +53,7 @@ type AnswerAPIRouter struct {
 	pluginController        *controller_admin.PluginController
 	permissionController    *controller.PermissionController
 	userPluginController    *controller.UserPluginController
+	reviewController        *controller.ReviewController
 }
 
 func NewAnswerAPIRouter(
@@ -82,6 +83,7 @@ func NewAnswerAPIRouter(
 	pluginController *controller_admin.PluginController,
 	permissionController *controller.PermissionController,
 	userPluginController *controller.UserPluginController,
+	reviewController *controller.ReviewController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -110,6 +112,7 @@ func NewAnswerAPIRouter(
 		pluginController:        pluginController,
 		permissionController:    permissionController,
 		userPluginController:    userPluginController,
+		reviewController:        reviewController,
 	}
 }
 
@@ -202,6 +205,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/report", a.reportController.AddReport)
 	r.GET("/report/unreviewed/post", a.reportController.GetUnreviewedReportPostPage)
 	r.PUT("/report/review", a.reportController.ReviewReport)
+
+	// review
+	r.GET("/review/pending/post/page", a.reviewController.GetUnreviewedPostPage)
+	r.PUT("/review/pending/post", a.reviewController.UpdateReview)
 
 	// vote
 	r.POST("/vote/up", a.voteController.VoteUp)
