@@ -1043,7 +1043,7 @@ definitions:
       parsed_text:
         type: string
       review_id:
-        type: string
+        type: integer
       submit_at:
         type: integer
       submitter_display_name:
@@ -2154,7 +2154,7 @@ definitions:
   schema.UpdateReviewReq:
     properties:
       review_id:
-        type: string
+        type: integer
       status:
         enum:
         - approve

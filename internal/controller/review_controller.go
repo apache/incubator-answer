@@ -21,6 +21,7 @@ package controller
 
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/action"
 	"github.com/apache/incubator-answer/internal/service/rank"
@@ -96,6 +97,7 @@ func (rc *ReviewController) UpdateReview(ctx *gin.Context) {
 	}
 
 	// TODO: check permission
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	err := rc.reviewService.UpdateReview(ctx, req)
 	handler.HandleResponse(ctx, err, nil)

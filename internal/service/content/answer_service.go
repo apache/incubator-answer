@@ -235,13 +235,15 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.QuestionID = req.QuestionID
 	insertData.RevisionID = "0"
 	insertData.LastEditUserID = "0"
-	insertData.Status = entity.AnswerStatusAvailable
+	insertData.Status = entity.AnswerStatusPending
 	//insertData.UpdatedAt = now
-	if as.reviewService.AddAnswerReview(ctx, insertData) {
-		insertData.Status = entity.AnswerStatusPending
-	}
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
+	}
+	if as.reviewService.AddAnswerReview(ctx, insertData) {
+		if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, entity.AnswerStatusAvailable); err != nil {
+			return "", err
+		}
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {

@@ -52,7 +52,7 @@ func (cr *reviewRepo) AddReview(ctx context.Context, review *entity.Review) (err
 }
 
 // UpdateReviewStatus update review status
-func (cr *reviewRepo) UpdateReviewStatus(ctx context.Context, reviewID, reviewerUserID string, status int) (err error) {
+func (cr *reviewRepo) UpdateReviewStatus(ctx context.Context, reviewID int, reviewerUserID string, status int) (err error) {
 	_, err = cr.data.DB.Context(ctx).ID(reviewID).Update(&entity.Review{
 		ReviewerUserID: reviewerUserID, Status: status})
 	if err != nil {
@@ -62,7 +62,7 @@ func (cr *reviewRepo) UpdateReviewStatus(ctx context.Context, reviewID, reviewer
 }
 
 // GetReview get review one
-func (cr *reviewRepo) GetReview(ctx context.Context, reviewID string) (
+func (cr *reviewRepo) GetReview(ctx context.Context, reviewID int) (
 	review *entity.Review, exist bool, err error) {
 	review = &entity.Review{}
 	exist, err = cr.data.DB.Context(ctx).ID(reviewID).Get(review)

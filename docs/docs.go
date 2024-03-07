@@ -8144,7 +8144,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "review_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "submit_at": {
                     "type": "integer"
@@ -9764,7 +9764,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "review_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",

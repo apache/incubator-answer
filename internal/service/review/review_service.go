@@ -32,6 +32,7 @@ import (
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/apache/incubator-answer/plugin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -41,8 +42,8 @@ import (
 // ReviewRepo review repository
 type ReviewRepo interface {
 	AddReview(ctx context.Context, review *entity.Review) (err error)
-	UpdateReviewStatus(ctx context.Context, reviewID, reviewerUserID string, status int) (err error)
-	GetReview(ctx context.Context, reviewID string) (review *entity.Review, exist bool, err error)
+	UpdateReviewStatus(ctx context.Context, reviewID int, reviewerUserID string, status int) (err error)
+	GetReview(ctx context.Context, reviewID int) (review *entity.Review, exist bool, err error)
 	GetReviewCount(ctx context.Context, status int) (count int64, err error)
 	GetReviewPage(ctx context.Context, page, pageSize int, cond *entity.Review) (reviewList []*entity.Review, total int64, err error)
 }
@@ -80,8 +81,9 @@ func NewReviewService(
 func (cs *ReviewService) AddQuestionReview(ctx context.Context,
 	question *entity.Question, tags []*schema.TagItem) (needReview bool) {
 	reviewContent := &plugin.ReviewContent{
-		Title:   question.Title,
-		Content: question.ParsedText,
+		ObjectType: constant.QuestionObjectType,
+		Title:      question.Title,
+		Content:    question.ParsedText,
 	}
 	for _, tag := range tags {
 		reviewContent.Tags = append(reviewContent.Tags, tag.SlugName)
@@ -124,12 +126,14 @@ func (cs *ReviewService) callPluginToReview(ctx context.Context, userID, objectI
 	reviewContent *plugin.ReviewContent) (approved bool) {
 	// As default, no need review
 	approved = true
+	objectID = uid.DeShortID(objectID)
 
 	r := &entity.Review{
-		UserID:     userID,
-		ObjectID:   objectID,
-		ObjectType: constant.ObjectTypeStrMapping[reviewContent.ObjectType],
-		Status:     entity.ReviewStatusPending,
+		UserID:         userID,
+		ObjectID:       objectID,
+		ObjectType:     constant.ObjectTypeStrMapping[reviewContent.ObjectType],
+		ReviewerUserID: "0",
+		Status:         entity.ReviewStatusPending,
 	}
 
 	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {
@@ -223,7 +227,7 @@ func (cs *ReviewService) GetReviewPendingCount(ctx context.Context) (count int64
 // GetUnreviewedPostPage get review page
 func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.GetUnreviewedPostPageReq) (
 	pageModel *pager.PageModel, err error) {
-	reviewList, total, err := cs.reviewRepo.GetReviewPage(ctx, req.Page, 1, &entity.Review{})
+	reviewList, total, err := cs.reviewRepo.GetReviewPage(ctx, req.Page, 1, &entity.Review{Status: entity.ReviewStatusPending})
 	if err != nil {
 		return
 	}
@@ -257,6 +261,7 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 		if exists {
 			_ = copier.Copy(&r.UserInfo, userInfo)
 		}
+		resp = append(resp, r)
 	}
 	return pager.NewPageModel(total, resp), nil
 }

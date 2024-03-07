@@ -2,7 +2,7 @@ package schema
 
 // UpdateReviewReq update review request
 type UpdateReviewReq struct {
-	ReviewID string `validate:"required" json:"review_id"`
+	ReviewID int    `validate:"required" json:"review_id"`
 	Status   string `validate:"required,oneof=approve reject" json:"status"`
 	UserID   string `json:"-"`
 }
@@ -24,7 +24,7 @@ type GetUnreviewedPostPageReq struct {
 
 // GetUnreviewedPostPageResp get review page response
 type GetUnreviewedPostPageResp struct {
-	ReviewID             string        `json:"review_id"`
+	ReviewID             int           `json:"review_id"`
 	CreatedAt            int64         `json:"created_at"`
 	ObjectID             string        `json:"object_id"`
 	ObjectType           string        `json:"object_type" enums:"question,answer,comment"`

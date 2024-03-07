@@ -8132,7 +8132,7 @@
                     "type": "string"
                 },
                 "review_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "submit_at": {
                     "type": "integer"
@@ -9752,7 +9752,7 @@
             ],
             "properties": {
                 "review_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",

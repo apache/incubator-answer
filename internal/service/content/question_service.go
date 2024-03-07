@@ -303,19 +303,21 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.LastAnswerID = "0"
 	question.LastEditUserID = "0"
 	//question.PostUpdateTime = nil
-	question.Status = entity.QuestionStatusAvailable
+	question.Status = entity.QuestionStatusPending
 	question.RevisionID = "0"
 	question.CreatedAt = now
 	question.PostUpdateTime = now
 	question.Pin = entity.QuestionUnPin
 	question.Show = entity.QuestionShow
 	//question.UpdatedAt = nil
-	if qs.reviewService.AddQuestionReview(ctx, question, req.Tags) {
-		question.Status = entity.QuestionStatusPending
-	}
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
 		return
+	}
+	if qs.reviewService.AddQuestionReview(ctx, question, req.Tags) {
+		if err := qs.questionRepo.UpdateQuestionStatus(ctx, question.ID, entity.QuestionStatusAvailable); err != nil {
+			return nil, err
+		}
 	}
 	objectTagData := schema.TagChange{}
 	objectTagData.ObjectID = question.ID
