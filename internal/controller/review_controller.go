@@ -25,6 +25,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/action"
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/review"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 
@@ -65,6 +66,13 @@ func (rc *ReviewController) GetUnreviewedPostPage(ctx *gin.Context) {
 	}
 
 	// TODO: check permission
+
+	req.ReviewerMapping = make(map[string]string)
+	_ = plugin.CallReviewer(func(base plugin.Reviewer) error {
+		info := base.Info()
+		req.ReviewerMapping[info.SlugName] = info.Name.Translate(ctx)
+		return nil
+	})
 
 	resp, err := rc.reviewService.GetUnreviewedPostPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)

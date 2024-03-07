@@ -22,12 +22,17 @@ package review
 import (
 	"context"
 
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"github.com/apache/incubator-answer/internal/service/object_info"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -47,6 +52,9 @@ type ReviewService struct {
 	reviewRepo        ReviewRepo
 	objectInfoService *object_info.ObjService
 	userCommon        *usercommon.UserCommon
+	questionRepo      questioncommon.QuestionRepo
+	answerRepo        answercommon.AnswerRepo
+	userRoleService   *role.UserRoleRelService
 }
 
 // NewReviewService new review service
@@ -54,17 +62,74 @@ func NewReviewService(
 	reviewRepo ReviewRepo,
 	objectInfoService *object_info.ObjService,
 	userCommon *usercommon.UserCommon,
+	questionRepo questioncommon.QuestionRepo,
+	answerRepo answercommon.AnswerRepo,
+	userRoleService *role.UserRoleRelService,
 ) *ReviewService {
 	return &ReviewService{
 		reviewRepo:        reviewRepo,
 		objectInfoService: objectInfoService,
 		userCommon:        userCommon,
+		questionRepo:      questionRepo,
+		answerRepo:        answerRepo,
+		userRoleService:   userRoleService,
 	}
 }
 
-// AddReview add review
-func (cs *ReviewService) AddReview(ctx context.Context, review *entity.Review) (err error) {
-	return cs.reviewRepo.AddReview(ctx, review)
+// AddQuestionReview add review for question if needed
+func (cs *ReviewService) AddQuestionReview(ctx context.Context,
+	question *entity.Question, tags []*schema.TagItem) (needReview bool) {
+	reviewContent := &plugin.ReviewContent{
+		Title:   question.Title,
+		Content: question.ParsedText,
+	}
+	for _, tag := range tags {
+		reviewContent.Tags = append(reviewContent.Tags, tag.SlugName)
+	}
+	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, question.UserID)
+
+	needReview = true
+	r := &entity.Review{
+		UserID:     question.UserID,
+		ObjectID:   question.ID,
+		ObjectType: constant.ObjectTypeStrMapping[constant.QuestionObjectType],
+		Status:     entity.ReviewStatusPending,
+	}
+	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {
+		result := reviewer.Review(reviewContent)
+		if result.Approved {
+			needReview = false
+		} else {
+			r.Reason = result.Reason
+			r.Submitter = reviewer.Info().SlugName
+		}
+		return nil
+	})
+
+	if needReview {
+		if err := cs.reviewRepo.AddReview(ctx, r); err != nil {
+			log.Errorf("add review failed, err: %v", err)
+		}
+	}
+	return needReview
+}
+
+// get review content author info
+func (cs *ReviewService) getReviewContentAuthorInfo(ctx context.Context, userID string) (author plugin.ReviewContentAuthor) {
+	user, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, userID)
+	if err != nil {
+		log.Errorf("get user info failed, err: %v", err)
+		return
+	}
+	if !exist {
+		log.Errorf("user not found by id: %s", userID)
+		return
+	}
+	author.Rank = user.Rank
+	author.ApprovedQuestionAmount, _ = cs.questionRepo.GetUserQuestionCount(ctx, userID)
+	author.ApprovedAnswerAmount, _ = cs.answerRepo.GetCountByUserID(ctx, userID)
+	author.Role, _ = cs.userRoleService.GetUserRole(ctx, userID)
+	return
 }
 
 // UpdateReview update review
@@ -80,10 +145,8 @@ func (cs *ReviewService) UpdateReview(ctx context.Context, req *schema.UpdateRev
 		return nil
 	}
 
-	if req.IsApprove() {
-		// TODO update object status
-	} else {
-		// TODO update object status
+	if err = cs.updateObjectStatus(ctx, review, req.IsApprove()); err != nil {
+		return err
 	}
 
 	if req.IsApprove() {
@@ -92,6 +155,43 @@ func (cs *ReviewService) UpdateReview(ctx context.Context, req *schema.UpdateRev
 		err = cs.reviewRepo.UpdateReviewStatus(ctx, req.ReviewID, req.UserID, entity.ReviewStatusRejected)
 	}
 	return
+}
+
+// update object status
+func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.Review, isApprove bool) (err error) {
+	objectType := constant.ObjectTypeNumberMapping[review.ObjectType]
+	switch objectType {
+	case constant.QuestionObjectType:
+		question, exist, err := cs.questionRepo.GetQuestion(ctx, review.ObjectID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.ObjectNotFound)
+		}
+		if isApprove {
+			question.Status = entity.QuestionStatusAvailable
+		} else {
+			question.Status = entity.QuestionStatusDeleted
+		}
+		return cs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status)
+	case constant.AnswerObjectType:
+		answer, exist, err := cs.answerRepo.GetAnswer(ctx, review.ObjectID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.ObjectNotFound)
+		}
+		if isApprove {
+			answer.Status = entity.AnswerStatusAvailable
+		} else {
+			answer.Status = entity.AnswerStatusDeleted
+		}
+		return cs.answerRepo.UpdateAnswerStatus(ctx, answer.ID, answer.Status)
+	}
+	return
+
 }
 
 // GetReviewPendingCount get review pending count
@@ -125,7 +225,7 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 			Tags:                 info.Tags,
 			AuthorUserID:         info.ObjectCreatorUserID,
 			SubmitAt:             review.CreatedAt.Unix(),
-			SubmitterDisplayName: review.SubmitterDisplayName,
+			SubmitterDisplayName: req.ReviewerMapping[review.Submitter],
 		}
 
 		// get user info

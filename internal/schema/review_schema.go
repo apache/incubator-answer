@@ -17,8 +17,9 @@ func (r *UpdateReviewReq) IsReject() bool {
 
 // GetUnreviewedPostPageReq get review page request
 type GetUnreviewedPostPageReq struct {
-	Page   int    `json:"page" form:"page"`
-	UserID string `json:"-"`
+	Page            int               `json:"page" form:"page"`
+	ReviewerMapping map[string]string `json:"-"`
+	UserID          string            `json:"-"`
 }
 
 // GetUnreviewedPostPageResp get review page response

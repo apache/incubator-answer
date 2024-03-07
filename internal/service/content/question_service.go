@@ -42,6 +42,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/notification"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
@@ -77,6 +78,7 @@ type QuestionService struct {
 	activityQueueService             activity_queue.ActivityQueueService
 	siteInfoService                  siteinfo_common.SiteInfoCommonService
 	newQuestionNotificationService   *notification.ExternalNotificationService
+	reviewService                    *review.ReviewService
 }
 
 func NewQuestionService(
@@ -96,6 +98,7 @@ func NewQuestionService(
 	activityQueueService activity_queue.ActivityQueueService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	newQuestionNotificationService *notification.ExternalNotificationService,
+	reviewService *review.ReviewService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:                     questionRepo,
@@ -114,6 +117,7 @@ func NewQuestionService(
 		activityQueueService:             activityQueueService,
 		siteInfoService:                  siteInfoService,
 		newQuestionNotificationService:   newQuestionNotificationService,
+		reviewService:                    reviewService,
 	}
 }
 
@@ -306,6 +310,9 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.Pin = entity.QuestionUnPin
 	question.Show = entity.QuestionShow
 	//question.UpdatedAt = nil
+	if qs.reviewService.AddQuestionReview(ctx, question, req.Tags) {
+		question.Status = entity.QuestionStatusPending
+	}
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
 		return
