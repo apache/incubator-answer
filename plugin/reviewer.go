@@ -7,9 +7,11 @@ type Reviewer interface {
 
 // ReviewContent is a struct that contains the content of a review
 type ReviewContent struct {
-	Title   string
-	Content string
-	Tags    []string
+	// The type of the content, e.g. question, answer
+	ObjectType string
+	Title      string
+	Content    string
+	Tags       []string
 	// The author of the content
 	Author ReviewContentAuthor
 }

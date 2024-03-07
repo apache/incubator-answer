@@ -174,7 +174,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reviewRepo := review.NewReviewRepo(dataData)
 	reviewService := review2.NewReviewService(reviewRepo, objService, userCommon, questionRepo, answerRepo, userRoleRelService)
 	questionService := content.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, userRoleRelService, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService, reviewService)
-	answerService := content.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService)
+	answerService := content.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService, reviewService)
 	reportHandle := report_handle.NewReportHandle(questionService, answerService, commentService)
 	reportService := report2.NewReportService(reportRepo, objService, userCommon, answerRepo, questionRepo, commentCommonRepo, reportHandle, configService)
 	reportController := controller.NewReportController(reportService, rankService, captchaService)

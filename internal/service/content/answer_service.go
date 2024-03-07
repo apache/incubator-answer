@@ -37,6 +37,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
@@ -64,6 +65,7 @@ type AnswerService struct {
 	notificationQueueService         notice_queue.NotificationQueueService
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
 	activityQueueService             activity_queue.ActivityQueueService
+	reviewService                    *review.ReviewService
 }
 
 func NewAnswerService(
@@ -82,6 +84,7 @@ func NewAnswerService(
 	notificationQueueService notice_queue.NotificationQueueService,
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
+	reviewService *review.ReviewService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:                       answerRepo,
@@ -99,6 +102,7 @@ func NewAnswerService(
 		notificationQueueService:         notificationQueueService,
 		externalNotificationQueueService: externalNotificationQueueService,
 		activityQueueService:             activityQueueService,
+		reviewService:                    reviewService,
 	}
 }
 
@@ -223,7 +227,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		err = errors.BadRequest(reason.AnswerCannotAddByClosedQuestion)
 		return "", err
 	}
-	insertData := new(entity.Answer)
+	insertData := &entity.Answer{}
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
@@ -233,6 +237,9 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.LastEditUserID = "0"
 	insertData.Status = entity.AnswerStatusAvailable
 	//insertData.UpdatedAt = now
+	if as.reviewService.AddAnswerReview(ctx, insertData) {
+		insertData.Status = entity.AnswerStatusPending
+	}
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}

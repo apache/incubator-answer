@@ -87,31 +87,18 @@ func (cs *ReviewService) AddQuestionReview(ctx context.Context,
 		reviewContent.Tags = append(reviewContent.Tags, tag.SlugName)
 	}
 	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, question.UserID)
+	return cs.callPluginToReview(ctx, question.UserID, question.ID, reviewContent)
+}
 
-	needReview = true
-	r := &entity.Review{
-		UserID:     question.UserID,
-		ObjectID:   question.ID,
-		ObjectType: constant.ObjectTypeStrMapping[constant.QuestionObjectType],
-		Status:     entity.ReviewStatusPending,
+// AddAnswerReview add review for answer if needed
+func (cs *ReviewService) AddAnswerReview(ctx context.Context,
+	answer *entity.Answer) (needReview bool) {
+	reviewContent := &plugin.ReviewContent{
+		ObjectType: constant.AnswerObjectType,
+		Content:    answer.ParsedText,
 	}
-	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {
-		result := reviewer.Review(reviewContent)
-		if result.Approved {
-			needReview = false
-		} else {
-			r.Reason = result.Reason
-			r.Submitter = reviewer.Info().SlugName
-		}
-		return nil
-	})
-
-	if needReview {
-		if err := cs.reviewRepo.AddReview(ctx, r); err != nil {
-			log.Errorf("add review failed, err: %v", err)
-		}
-	}
-	return needReview
+	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, answer.UserID)
+	return cs.callPluginToReview(ctx, answer.UserID, answer.ID, reviewContent)
 }
 
 // get review content author info
@@ -130,6 +117,40 @@ func (cs *ReviewService) getReviewContentAuthorInfo(ctx context.Context, userID 
 	author.ApprovedAnswerAmount, _ = cs.answerRepo.GetCountByUserID(ctx, userID)
 	author.Role, _ = cs.userRoleService.GetUserRole(ctx, userID)
 	return
+}
+
+// call plugin to review
+func (cs *ReviewService) callPluginToReview(ctx context.Context, userID, objectID string,
+	reviewContent *plugin.ReviewContent) (approved bool) {
+	// As default, no need review
+	approved = true
+
+	r := &entity.Review{
+		UserID:     userID,
+		ObjectID:   objectID,
+		ObjectType: constant.ObjectTypeStrMapping[reviewContent.ObjectType],
+		Status:     entity.ReviewStatusPending,
+	}
+
+	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {
+		// If one of the reviewer plugin return false, then the review is not approved
+		if !approved {
+			return nil
+		}
+		if result := reviewer.Review(reviewContent); !result.Approved {
+			approved = false
+			r.Reason = result.Reason
+			r.Submitter = reviewer.Info().SlugName
+		}
+		return nil
+	})
+
+	if !approved {
+		if err := cs.reviewRepo.AddReview(ctx, r); err != nil {
+			log.Errorf("add review failed, err: %v", err)
+		}
+	}
+	return approved
 }
 
 // UpdateReview update review
