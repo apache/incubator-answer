@@ -23,11 +23,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/pkg/converter"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/apache/incubator-answer/pkg/converter"
 	"xorm.io/xorm/schemas"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -101,7 +102,14 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		dashboardInfo.ReportCount = ds.reportCount(ctx)
 		dashboardInfo.VoteCount = ds.voteCount(ctx)
 		dashboardInfo.OccupyingStorageSpace = ds.calculateStorage()
-		dashboardInfo.VersionInfo.RemoteVersion = ds.remoteVersion(ctx)
+		general, err := ds.siteInfoService.GetSiteGeneral(ctx)
+		if err != nil {
+			log.Errorf("get general site info failed: %s", err)
+			return dashboardInfo, nil
+		}
+		if general.CheckUpdate {
+			dashboardInfo.VersionInfo.RemoteVersion = ds.remoteVersion(ctx)
+		}
 		dashboardInfo.DatabaseVersion = ds.getDatabaseInfo()
 		dashboardInfo.DatabaseSize = ds.GetDatabaseSize()
 	}
