@@ -821,6 +821,8 @@ definitions:
     type: object
   schema.GetReportListPageResp:
     properties:
+      answer_count:
+        type: integer
       answer_id:
         type: string
       author_user_info:
@@ -1605,7 +1607,7 @@ definitions:
       question_id:
         type: string
       status:
-        description: ObjectStatus
+        description: Status
         type: string
       tags:
         description: tags
@@ -2069,6 +2071,8 @@ definitions:
     type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
+      answer_count:
+        type: integer
       answer_id:
         type: string
       comment_id:
@@ -2639,7 +2643,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: ObjectStatus:[available,deleted,pending]
+      description: Status:[available,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2841,7 +2845,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: ObjectStatus:[available,closed,deleted,pending]
+      description: Status:[available,closed,deleted,pending]
       parameters:
       - description: page size
         in: query

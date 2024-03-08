@@ -95,6 +95,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 			Title:               questionInfo.Title,
 			Content:             questionInfo.OriginalText,
 			Html:                questionInfo.ParsedText,
+			AnswerCount:         questionInfo.AnswerCount,
 			Tags:                tags,
 			Status:              questionInfo.Status,
 			ShowStatus:          questionInfo.Show,

@@ -80,6 +80,7 @@ type GetReportListPageResp struct {
 	ObjectType       string        `json:"object_type" enums:"question,answer,comment"`
 	Title            string        `json:"title"`
 	OriginalText     string        `json:"original_text"`
+	AnswerCount      int           `json:"answer_count"`
 	Tags             []*TagResp    `json:"tags"`
 	ObjectStatus     int           `json:"object_status"`
 	ObjectShowStatus int           `json:"object_show_status"`

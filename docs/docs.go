@@ -39,7 +39,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "ObjectStatus:[available,deleted,pending]",
+                "description": "Status:[available,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -370,7 +370,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "ObjectStatus:[available,closed,deleted,pending]",
+                "description": "Status:[available,closed,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -7822,6 +7822,9 @@ const docTemplate = `{
         "schema.GetReportListPageResp": {
             "type": "object",
             "properties": {
+                "answer_count": {
+                    "type": "integer"
+                },
                 "answer_id": {
                     "type": "string"
                 },
@@ -8955,7 +8958,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "ObjectStatus",
+                    "description": "Status",
                     "type": "string"
                 },
                 "tags": {
@@ -9636,6 +9639,9 @@ const docTemplate = `{
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
+                "answer_count": {
+                    "type": "integer"
+                },
                 "answer_id": {
                     "type": "string"
                 },
