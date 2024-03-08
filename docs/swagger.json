@@ -27,7 +27,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,deleted,pending]",
+                "description": "ObjectStatus:[available,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -358,7 +358,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,closed,deleted,pending]",
+                "description": "ObjectStatus:[available,closed,deleted,pending]",
                 "consumes": [
                     "application/json"
                 ],
@@ -7810,34 +7810,39 @@
         "schema.GetReportListPageResp": {
             "type": "object",
             "properties": {
-                "_": {
-                    "type": "string"
-                },
                 "answer_id": {
                     "type": "string"
                 },
-                "comment_id": {
-                    "type": "string"
+                "author_user_info": {
+                    "$ref": "#/definitions/schema.UserBasicInfo"
                 },
-                "content": {
+                "comment_id": {
                     "type": "string"
                 },
                 "created_at": {
                     "type": "integer"
                 },
-                "excerpt": {
+                "flag_id": {
                     "type": "string"
                 },
-                "flagged_content": {
+                "object_id": {
                     "type": "string"
                 },
-                "flagged_reason": {
-                    "$ref": "#/definitions/schema.ReasonItem"
+                "object_show_status": {
+                    "type": "integer"
                 },
-                "id": {
-                    "type": "string"
+                "object_status": {
+                    "type": "integer"
                 },
                 "object_type": {
+                    "type": "string",
+                    "enum": [
+                        "question",
+                        "answer",
+                        "comment"
+                    ]
+                },
+                "original_text": {
                     "type": "string"
                 },
                 "question_id": {
@@ -7846,17 +7851,20 @@
                 "reason": {
                     "$ref": "#/definitions/schema.ReasonItem"
                 },
-                "report_user": {
+                "submit_at": {
+                    "type": "integer"
+                },
+                "submitter_user": {
                     "$ref": "#/definitions/schema.UserBasicInfo"
                 },
-                "reported_user": {
-                    "$ref": "#/definitions/schema.UserBasicInfo"
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagResp"
+                    }
                 },
                 "title": {
                     "type": "string"
-                },
-                "updated_at": {
-                    "type": "integer"
                 }
             }
         },
@@ -8113,7 +8121,13 @@
         "schema.GetUnreviewedPostPageResp": {
             "type": "object",
             "properties": {
-                "author_user_id": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "author_user_info": {
+                    "$ref": "#/definitions/schema.UserBasicInfo"
+                },
+                "comment_id": {
                     "type": "string"
                 },
                 "created_at": {
@@ -8121,6 +8135,12 @@
                 },
                 "object_id": {
                     "type": "string"
+                },
+                "object_show_status": {
+                    "type": "integer"
+                },
+                "object_status": {
+                    "type": "integer"
                 },
                 "object_type": {
                     "type": "string",
@@ -8130,7 +8150,13 @@
                         "comment"
                     ]
                 },
-                "parsed_text": {
+                "original_text": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                },
+                "reason": {
                     "type": "string"
                 },
                 "review_id": {
@@ -8150,9 +8176,6 @@
                 },
                 "title": {
                     "type": "string"
-                },
-                "user_info": {
-                    "$ref": "#/definitions/schema.UserBasicInfo"
                 }
             }
         },
@@ -8920,7 +8943,7 @@
                     "type": "string"
                 },
                 "status": {
-                    "description": "Status",
+                    "description": "ObjectStatus",
                     "type": "string"
                 },
                 "tags": {
@@ -9601,6 +9624,12 @@
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "comment_id": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -9615,6 +9644,18 @@
                 },
                 "object_id": {
                     "type": "string"
+                },
+                "object_type": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                },
+                "show_status": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
                 },
                 "tags": {
                     "type": "array",

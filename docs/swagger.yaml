@@ -821,38 +821,44 @@ definitions:
     type: object
   schema.GetReportListPageResp:
     properties:
-      _:
-        type: string
       answer_id:
         type: string
+      author_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
       comment_id:
-        type: string
-      content:
         type: string
       created_at:
         type: integer
-      excerpt:
+      flag_id:
         type: string
-      flagged_content:
+      object_id:
         type: string
-      flagged_reason:
-        $ref: '#/definitions/schema.ReasonItem'
-      id:
-        type: string
+      object_show_status:
+        type: integer
+      object_status:
+        type: integer
       object_type:
+        enum:
+        - question
+        - answer
+        - comment
+        type: string
+      original_text:
         type: string
       question_id:
         type: string
       reason:
         $ref: '#/definitions/schema.ReasonItem'
-      report_user:
+      submit_at:
+        type: integer
+      submitter_user:
         $ref: '#/definitions/schema.UserBasicInfo'
-      reported_user:
-        $ref: '#/definitions/schema.UserBasicInfo'
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
       title:
         type: string
-      updated_at:
-        type: integer
     type: object
   schema.GetReviewingTypeResp:
     properties:
@@ -1028,19 +1034,31 @@ definitions:
     type: object
   schema.GetUnreviewedPostPageResp:
     properties:
-      author_user_id:
+      answer_id:
+        type: string
+      author_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      comment_id:
         type: string
       created_at:
         type: integer
       object_id:
         type: string
+      object_show_status:
+        type: integer
+      object_status:
+        type: integer
       object_type:
         enum:
         - question
         - answer
         - comment
         type: string
-      parsed_text:
+      original_text:
+        type: string
+      question_id:
+        type: string
+      reason:
         type: string
       review_id:
         type: integer
@@ -1054,8 +1072,6 @@ definitions:
         type: array
       title:
         type: string
-      user_info:
-        $ref: '#/definitions/schema.UserBasicInfo'
     type: object
   schema.GetUnreviewedRevisionResp:
     properties:
@@ -1589,7 +1605,7 @@ definitions:
       question_id:
         type: string
       status:
-        description: Status
+        description: ObjectStatus
         type: string
       tags:
         description: tags
@@ -2053,6 +2069,10 @@ definitions:
     type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
+      answer_id:
+        type: string
+      comment_id:
+        type: string
       content:
         type: string
       created_at:
@@ -2063,6 +2083,14 @@ definitions:
         type: string
       object_id:
         type: string
+      object_type:
+        type: string
+      question_id:
+        type: string
+      show_status:
+        type: integer
+      status:
+        type: integer
       tags:
         items:
           $ref: '#/definitions/schema.TagResp'
@@ -2611,7 +2639,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,deleted,pending]
+      description: ObjectStatus:[available,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2813,7 +2841,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,closed,deleted,pending]
+      description: ObjectStatus:[available,closed,deleted,pending]
       parameters:
       - description: page size
         in: query

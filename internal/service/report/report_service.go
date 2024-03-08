@@ -36,7 +36,6 @@ import (
 	"github.com/apache/incubator-answer/internal/service/report_common"
 	"github.com/apache/incubator-answer/internal/service/report_handle"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
-	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/obj"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -107,6 +106,7 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 // GetUnreviewedReportPostPage get unreviewed report post page
 func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *schema.GetUnreviewedReportPostPageReq) (
 	pageModel *pager.PageModel, err error) {
+	lang := handler.GetLangByCtx(ctx)
 	reports, total, err := rs.reportRepo.GetReportListPage(ctx, &schema.GetReportListPageDTO{
 		Page:     req.Page,
 		PageSize: 1,
@@ -117,29 +117,58 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 	}
 
 	resp := make([]*schema.GetReportListPageResp, 0)
-	_ = copier.Copy(&resp, reports)
-	var flaggedUserIds, userIds []string
-	for _, r := range resp {
-		flaggedUserIds = append(flaggedUserIds, r.ReportedUserID)
-		userIds = append(userIds, r.UserID)
-		r.Format()
-	}
+	for _, report := range reports {
+		info, err := rs.objectInfoService.GetUnreviewedRevisionInfo(ctx, report.ObjectID)
+		if err != nil {
+			log.Errorf("GetUnreviewedRevisionInfo failed, err: %v", err)
+			continue
+		}
 
-	// flagged users
-	flaggedUsers, err := rs.commonUser.BatchUserBasicInfoByID(ctx, flaggedUserIds)
-	if err != nil {
-		return nil, err
-	}
+		r := &schema.GetReportListPageResp{
+			FlagID:           report.ID,
+			CreatedAt:        info.CreatedAt,
+			ObjectID:         info.ObjectID,
+			ObjectType:       info.ObjectType,
+			QuestionID:       info.QuestionID,
+			AnswerID:         info.AnswerID,
+			CommentID:        info.CommentID,
+			Title:            info.Title,
+			OriginalText:     info.Content,
+			Tags:             info.Tags,
+			SubmitAt:         report.CreatedAt.Unix(),
+			ObjectStatus:     info.Status,
+			ObjectShowStatus: info.ShowStatus,
+		}
 
-	// flag users
-	users, err := rs.commonUser.BatchUserBasicInfoByID(ctx, userIds)
-	if err != nil {
-		return nil, err
-	}
-	for _, r := range resp {
-		r.ReportedUser = flaggedUsers[r.ReportedUserID]
-		r.ReportUser = users[r.UserID]
-		rs.decorateReportResp(ctx, r)
+		// get user info
+		userInfo, exists, e := rs.commonUser.GetUserBasicInfoByID(ctx, info.ObjectCreatorUserID)
+		if e != nil {
+			log.Errorf("user not found by id: %s, err: %v", info.ObjectCreatorUserID, e)
+		}
+		if exists {
+			_ = copier.Copy(&r.AuthorUserInfo, userInfo)
+		}
+
+		// get submitter info
+		submitter, exists, e := rs.commonUser.GetUserBasicInfoByID(ctx, report.ReportedUserID)
+		if e != nil {
+			log.Errorf("user not found by id: %s, err: %v", info.ObjectCreatorUserID, e)
+		}
+		if exists {
+			_ = copier.Copy(&r.SubmitterUser, submitter)
+		}
+
+		if report.ReportType > 0 {
+			r.Reason = &schema.ReasonItem{ReasonType: report.ReportType}
+			cf, err := rs.configService.GetConfigByID(ctx, report.ReportType)
+			if err != nil {
+				log.Error(err)
+			} else {
+				_ = json.Unmarshal([]byte(cf.Value), r.Reason)
+				r.Reason.Translate(cf.Key, lang)
+			}
+		}
+		resp = append(resp, r)
 	}
 	return pager.NewPageModel(total, resp), nil
 }
@@ -168,40 +197,4 @@ func (rs *ReportService) ReviewReport(ctx context.Context, req *schema.ReviewRep
 	}
 
 	return rs.reportRepo.UpdateStatus(ctx, report.ID, entity.ReportStatusCompleted)
-}
-
-func (rs *ReportService) decorateReportResp(ctx context.Context, resp *schema.GetReportListPageResp) {
-	lang := handler.GetLangByCtx(ctx)
-	objectInfo, err := rs.objectInfoService.GetInfo(ctx, resp.ObjectID)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	resp.QuestionID = objectInfo.QuestionID
-	resp.AnswerID = objectInfo.AnswerID
-	resp.CommentID = objectInfo.CommentID
-	resp.Title = objectInfo.Title
-	resp.Excerpt = htmltext.FetchExcerpt(objectInfo.Content, "...", 240)
-
-	if resp.ReportType > 0 {
-		resp.Reason = &schema.ReasonItem{ReasonType: resp.ReportType}
-		cf, err := rs.configService.GetConfigByID(ctx, resp.ReportType)
-		if err != nil {
-			log.Error(err)
-		} else {
-			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
-			resp.Reason.Translate(cf.Key, lang)
-		}
-	}
-	if resp.FlaggedType > 0 {
-		resp.FlaggedReason = &schema.ReasonItem{ReasonType: resp.FlaggedType}
-		cf, err := rs.configService.GetConfigByID(ctx, resp.FlaggedType)
-		if err != nil {
-			log.Error(err)
-		} else {
-			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
-			resp.Reason.Translate(cf.Key, lang)
-		}
-	}
 }

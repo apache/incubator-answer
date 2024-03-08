@@ -247,13 +247,18 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 			ReviewID:             review.ID,
 			CreatedAt:            info.CreatedAt,
 			ObjectID:             info.ObjectID,
-			ObjectType:           info.ObjectID,
+			QuestionID:           info.QuestionID,
+			AnswerID:             info.AnswerID,
+			CommentID:            info.CommentID,
+			ObjectType:           info.ObjectType,
 			Title:                info.Title,
-			ParsedText:           info.Html,
+			OriginalText:         info.Content,
 			Tags:                 info.Tags,
-			AuthorUserID:         info.ObjectCreatorUserID,
+			ObjectStatus:         info.Status,
+			ObjectShowStatus:     info.ShowStatus,
 			SubmitAt:             review.CreatedAt.Unix(),
 			SubmitterDisplayName: req.ReviewerMapping[review.Submitter],
+			Reason:               review.Reason,
 		}
 
 		// get user info
@@ -262,7 +267,7 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 			log.Errorf("user not found by id: %s, err: %v", info.ObjectCreatorUserID, e)
 		}
 		if exists {
-			_ = copier.Copy(&r.UserInfo, userInfo)
+			_ = copier.Copy(&r.AuthorUserInfo, userInfo)
 		}
 		resp = append(resp, r)
 	}

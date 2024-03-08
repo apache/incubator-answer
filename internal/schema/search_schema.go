@@ -20,11 +20,12 @@
 package schema
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/validator"
 	"github.com/apache/incubator-answer/plugin"
-	"regexp"
-	"strings"
 )
 
 type SearchDTO struct {

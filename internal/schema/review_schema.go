@@ -41,12 +41,17 @@ type GetUnreviewedPostPageResp struct {
 	ReviewID             int           `json:"review_id"`
 	CreatedAt            int64         `json:"created_at"`
 	ObjectID             string        `json:"object_id"`
+	QuestionID           string        `json:"question_id"`
+	AnswerID             string        `json:"answer_id"`
+	CommentID            string        `json:"comment_id"`
 	ObjectType           string        `json:"object_type" enums:"question,answer,comment"`
 	Title                string        `json:"title"`
-	ParsedText           string        `json:"parsed_text"`
+	OriginalText         string        `json:"original_text"`
 	Tags                 []*TagResp    `json:"tags"`
-	AuthorUserID         string        `json:"author_user_id"`
-	UserInfo             UserBasicInfo `json:"user_info"`
+	ObjectStatus         int           `json:"object_status"`
+	ObjectShowStatus     int           `json:"object_show_status"`
+	AuthorUserInfo       UserBasicInfo `json:"author_user_info"`
 	SubmitAt             int64         `json:"submit_at"`
 	SubmitterDisplayName string        `json:"submitter_display_name"`
+	Reason               string        `json:"reason"`
 }

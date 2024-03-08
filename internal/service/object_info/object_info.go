@@ -89,11 +89,15 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			CreatedAt:           questionInfo.CreatedAt.Unix(),
 			ObjectID:            questionInfo.ID,
+			QuestionID:          questionInfo.ID,
+			ObjectType:          objectType,
 			ObjectCreatorUserID: questionInfo.UserID,
 			Title:               questionInfo.Title,
 			Content:             questionInfo.OriginalText,
 			Html:                questionInfo.ParsedText,
 			Tags:                tags,
+			Status:              questionInfo.Status,
+			ShowStatus:          questionInfo.Show,
 		}
 	case constant.AnswerObjectType:
 		answerInfo, exist, err := os.answerRepo.GetAnswer(ctx, objectID)
@@ -117,10 +121,14 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			CreatedAt:           answerInfo.CreatedAt.Unix(),
 			ObjectID:            answerInfo.ID,
+			QuestionID:          answerInfo.QuestionID,
+			AnswerID:            answerInfo.ID,
+			ObjectType:          objectType,
 			ObjectCreatorUserID: answerInfo.UserID,
 			Title:               questionInfo.Title,
 			Content:             answerInfo.OriginalText,
 			Html:                answerInfo.ParsedText,
+			Status:              answerInfo.Status,
 		}
 	case constant.TagObjectType:
 		tagInfo, exist, err := os.tagRepo.GetTagByID(ctx, objectID, true)
@@ -131,11 +139,13 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 			break
 		}
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
-			CreatedAt: tagInfo.CreatedAt.Unix(),
-			ObjectID:  tagInfo.ID,
-			Title:     tagInfo.SlugName,
-			Content:   tagInfo.OriginalText,
-			Html:      tagInfo.ParsedText,
+			CreatedAt:  tagInfo.CreatedAt.Unix(),
+			ObjectID:   tagInfo.ID,
+			ObjectType: objectType,
+			Title:      tagInfo.SlugName,
+			Content:    tagInfo.OriginalText,
+			Html:       tagInfo.ParsedText,
+			Status:     tagInfo.Status,
 		}
 	case constant.CommentObjectType:
 		commentInfo, exist, err := os.commentRepo.GetComment(ctx, objectID)
@@ -148,9 +158,28 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			CreatedAt:           commentInfo.CreatedAt.Unix(),
 			ObjectID:            commentInfo.ID,
+			CommentID:           commentInfo.ID,
+			ObjectType:          objectType,
 			ObjectCreatorUserID: commentInfo.UserID,
 			Content:             commentInfo.OriginalText,
 			Html:                commentInfo.ParsedText,
+			Status:              commentInfo.Status,
+		}
+		if len(commentInfo.QuestionID) > 0 {
+			questionInfo, exist, err := os.questionRepo.GetQuestion(ctx, commentInfo.QuestionID)
+			if err != nil {
+				return nil, err
+			}
+			if exist {
+				objInfo.QuestionID = questionInfo.ID
+			}
+			answerInfo, exist, err := os.answerRepo.GetAnswer(ctx, commentInfo.ObjectID)
+			if err != nil {
+				return nil, err
+			}
+			if exist {
+				objInfo.AnswerID = answerInfo.ID
+			}
 		}
 	}
 	if objInfo == nil {
