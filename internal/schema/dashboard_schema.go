@@ -55,8 +55,6 @@ type DashboardInfoVersion struct {
 }
 
 type RemoteVersion struct {
-	Release struct {
-		Version string `json:"version"`
-		URL     string `json:"url"`
-	} `json:"release"`
+	Version string `json:"tag_name"`
+	URL     string `json:"html_url"`
 }

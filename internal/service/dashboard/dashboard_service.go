@@ -210,7 +210,7 @@ func (ds *dashboardService) voteCount(ctx context.Context) int64 {
 }
 
 func (ds *dashboardService) remoteVersion(ctx context.Context) string {
-	req, _ := http.NewRequest("GET", "https://getlatest.answer.dev/", nil)
+	req, _ := http.NewRequest("GET", "https://api.github.com/repos/apache/incubator-answer/releases/latest", nil)
 	req.Header.Set("User-Agent", "Answer/"+constant.Version)
 	httpClient := &http.Client{}
 	httpClient.Timeout = 15 * time.Second
@@ -231,7 +231,7 @@ func (ds *dashboardService) remoteVersion(ctx context.Context) string {
 		log.Errorf("parsing response body failed: %s", err)
 		return ""
 	}
-	return remoteVersion.Release.Version
+	return remoteVersion.Version
 }
 
 func (ds *dashboardService) smtpStatus(ctx context.Context) (smtpStatus string) {
