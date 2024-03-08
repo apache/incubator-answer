@@ -72,6 +72,7 @@ const General: FC = () => {
       check_update: {
         type: 'boolean',
         title: t('check_update.label'),
+        default: true,
       },
     },
   };
