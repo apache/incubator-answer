@@ -17,16 +17,17 @@
  * under the License.
  */
 
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useCaptchaModal } from '@/hooks';
 import type { FormDataType, RegisterReqParams } from '@/common/interface';
-import { register, useLegalTos, useLegalPrivacy } from '@/services';
+import { register } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
 import { handleFormError } from '@/utils';
+import { legalClick } from '@/behaviour/clicks';
 
 interface Props {
   callback: () => void;
@@ -84,27 +85,6 @@ const Index: React.FC<Props> = ({ callback }) => {
       ...formData,
     });
     return bol;
-  };
-
-  const { data: tos } = useLegalTos();
-  const { data: privacy } = useLegalPrivacy();
-  const argumentClick = (evt: MouseEvent, type: 'tos' | 'privacy') => {
-    evt.stopPropagation();
-    const contentText =
-      type === 'tos'
-        ? tos?.terms_of_service_original_text
-        : privacy?.privacy_policy_original_text;
-    let matchUrl: URL | undefined;
-    try {
-      if (contentText) {
-        matchUrl = new URL(contentText);
-      }
-      // eslint-disable-next-line no-empty
-    } catch (ex) {}
-    if (matchUrl) {
-      evt.preventDefault();
-      window.open(matchUrl.toString());
-    }
   };
 
   const handleRegister = (event?: any) => {
@@ -232,7 +212,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           <Link
             to="/privacy"
             onClick={(evt) => {
-              argumentClick(evt, 'privacy');
+              legalClick(evt, 'privacy');
             }}
             target="_blank">
             privacy policy
@@ -241,7 +221,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           <Link
             to="/tos"
             onClick={(evt) => {
-              argumentClick(evt, 'tos');
+              legalClick(evt, 'tos');
             }}
             target="_blank">
             terms of service
