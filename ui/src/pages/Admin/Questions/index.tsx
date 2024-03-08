@@ -96,8 +96,8 @@ const Questions: FC = () => {
             <th>{t('post')}</th>
             <th style={{ width: '8%' }}>{t('votes')}</th>
             <th style={{ width: '8%' }}>{t('answers')}</th>
-            <th style={{ width: '20%' }}>{t('created')}</th>
-            <th style={{ width: '9%' }}>{t('status')}</th>
+            <th style={{ width: '15%' }}>{t('created')}</th>
+            <th style={{ width: '14%' }}>{t('status')}</th>
             <th style={{ width: '10%' }} className="text-end">
               {t('action')}
             </th>
@@ -143,10 +143,21 @@ const Questions: FC = () => {
                   <span
                     className={classNames(
                       'badge',
+                      'me-1',
+                      'mb-1',
                       ADMIN_LIST_STATUS[curFilter]?.variant,
                     )}>
                     {t(ADMIN_LIST_STATUS[curFilter]?.name)}
                   </span>
+                  {li.show === 2 && (
+                    <span
+                      className={classNames(
+                        'badge',
+                        ADMIN_LIST_STATUS.unlisted.variant,
+                      )}>
+                      {t(ADMIN_LIST_STATUS.unlisted.name)}
+                    </span>
+                  )}
                 </td>
 
                 <td className="text-end">
@@ -154,6 +165,8 @@ const Questions: FC = () => {
                     itemData={{ id: li.id, answer_count: li.answer_count }}
                     refreshList={refreshList}
                     curFilter={curFilter}
+                    show={li.show}
+                    pin={li.pin}
                   />
                 </td>
               </tr>

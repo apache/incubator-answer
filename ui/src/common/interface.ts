@@ -251,7 +251,7 @@ export interface QuestionDetailRes {
 }
 
 export interface AnswersReq extends Paging {
-  order?: 'default' | 'updated';
+  order?: 'default' | 'updated' | 'created';
   question_id: string;
 }
 

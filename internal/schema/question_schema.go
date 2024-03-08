@@ -265,6 +265,8 @@ type AdminQuestionInfo struct {
 	ID               string         `json:"id"`
 	Title            string         `json:"title"`
 	VoteCount        int            `json:"vote_count"`
+	Show             int            `json:"show"`
+	Pin              int            `json:"pin"`
 	AnswerCount      int            `json:"answer_count"`
 	AcceptedAnswerID string         `json:"accepted_answer_id"`
 	CreateTime       int64          `json:"create_time"`
