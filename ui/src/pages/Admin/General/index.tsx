@@ -168,12 +168,10 @@ const General: FC = () => {
     Object.keys(formData).forEach((k) => {
       formMeta[k] = { ...formData[k], value: setting[k] };
     });
-    console.log(formMeta);
     setFormData({ ...formData, ...formMeta });
   }, [setting]);
 
   const handleOnChange = (data) => {
-    console.table(data);
     setFormData(data);
   };
 
