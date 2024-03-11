@@ -48,5 +48,6 @@ const (
 )
 
 var (
-	PublicUrl = os.Getenv("PUBLIC_URL")
+	PublicUrl   = os.Getenv("PUBLIC_URL")
+	BaseUrlPath = os.Getenv("REACT_APP_BASE_URL_PATH")
 )

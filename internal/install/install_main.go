@@ -21,6 +21,7 @@ package install
 
 import (
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"os"
 
 	"github.com/apache/incubator-answer/internal/base/translator"
@@ -49,7 +50,7 @@ func Run(configPath string) {
 	if len(port) == 0 {
 		port = "80"
 	}
-	fmt.Printf("[SUCCESS] answer installation service will run at: http://localhost:%s/install/ \n", port)
+	fmt.Printf("[SUCCESS] answer installation service will run at: http://localhost:%s%s/install/ \n", port, constant.BaseUrlPath)
 	if err = installServer.Run(":" + port); err != nil {
 		panic(err)
 	}
