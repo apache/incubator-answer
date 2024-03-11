@@ -214,7 +214,7 @@ type QuestionBaseInfo struct {
 	AcceptedAnswer  bool   `json:"accepted_answer"`
 }
 
-type QuestionInfo struct {
+type QuestionInfoResp struct {
 	ID                   string         `json:"id" `
 	Title                string         `json:"title"`
 	UrlTitle             string         `json:"url_title"`

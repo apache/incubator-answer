@@ -151,7 +151,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 }
 
 func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
-	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
+	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfoResp)
 	if ok {
 		var PostUpdateTime time.Time
 		dbquestion, exist, dberr := rs.questionRepo.GetQuestion(ctx, questioninfo.ID)
@@ -388,7 +388,7 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 	var (
 		err          error
 		question     entity.QuestionWithTagsRevision
-		questionInfo *schema.QuestionInfo
+		questionInfo *schema.QuestionInfoResp
 		answer       entity.Answer
 		answerInfo   *schema.AnswerInfo
 		tag          entity.Tag

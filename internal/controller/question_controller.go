@@ -543,7 +543,7 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		return
 	}
 	//add the question id to the answer
-	questionInfo, ok := resp.(*schema.QuestionInfo)
+	questionInfo, ok := resp.(*schema.QuestionInfoResp)
 	if ok {
 		answerReq := &schema.AnswerAddReq{}
 		answerReq.QuestionID = uid.DeShortID(questionInfo.ID)
@@ -657,7 +657,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
-	respInfo, ok := resp.(*schema.QuestionInfo)
+	respInfo, ok := resp.(*schema.QuestionInfoResp)
 	if !ok {
 		handler.HandleResponse(ctx, err, resp)
 		return

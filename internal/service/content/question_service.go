@@ -764,7 +764,7 @@ func (qs *QuestionService) notificationInviteUser(
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
 	var canUpdate bool
-	questionInfo = &schema.QuestionInfo{}
+	questionInfo = &schema.QuestionInfoResp{}
 
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
@@ -927,7 +927,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 
 // GetQuestion get question one
 func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID string,
-	per schema.QuestionPermission) (resp *schema.QuestionInfo, err error) {
+	per schema.QuestionPermission) (resp *schema.QuestionInfoResp, err error) {
 	question, err := qs.questioncommon.Info(ctx, questionID, userID)
 	if err != nil {
 		return
@@ -976,7 +976,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 // GetQuestionAndAddPV get question one
 func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
 	per schema.QuestionPermission) (
-	resp *schema.QuestionInfo, err error) {
+	resp *schema.QuestionInfoResp, err error) {
 	err = qs.questioncommon.UpdatePv(ctx, questionID)
 	if err != nil {
 		log.Error(err)
@@ -1090,7 +1090,7 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 // PersonalCollectionPage get collection list by user
 func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *schema.PersonalCollectionPageReq) (
 	pageModel *pager.PageModel, err error) {
-	list := make([]*schema.QuestionInfo, 0)
+	list := make([]*schema.QuestionInfoResp, 0)
 	collectionSearch := &entity.CollectionSearch{}
 	collectionSearch.UserID = req.UserID
 	collectionSearch.Page = req.Page
