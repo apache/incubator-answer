@@ -33,6 +33,7 @@ import {
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
 import { login, UcAgent } from '@/services';
 import { setupAppTheme } from '@/utils/localize';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -207,7 +208,9 @@ const Index: React.FC = () => {
                 <Form.Group controlId="password" className="mb-3">
                   <div className="d-flex justify-content-between">
                     <Form.Label>{t('password.label')}</Form.Label>
-                    <Link to="/users/account-recovery" tabIndex={2}>
+                    <Link
+                      to={`${BASE_URL_PATH}/users/account-recovery`}
+                      tabIndex={2}>
                       <small>{t('forgot_pass')}</small>
                     </Link>
                   </div>

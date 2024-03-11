@@ -22,12 +22,12 @@ package install
 import (
 	"embed"
 	"fmt"
-	"io/fs"
-	"net/http"
-
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
+	"io/fs"
+	"net/http"
 )
 
 const UIStaticPath = "build/static"
@@ -48,14 +48,14 @@ func NewInstallHTTPServer() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
-	r.StaticFS("/static", http.FS(&_resource{
+	r.StaticFS(constant.PublicUrl+"/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
 	installApi := r.Group("")
-	installApi.GET("/", CheckConfigFileAndRedirectToInstallPage)
-	installApi.GET("/install", WebPage)
-	installApi.GET("/50x", WebPage)
+	installApi.GET(constant.BaseUrlPath+"/", CheckConfigFileAndRedirectToInstallPage)
+	installApi.GET(constant.BaseUrlPath+"/install", WebPage)
+	installApi.GET(constant.BaseUrlPath+"/50x", WebPage)
 	installApi.GET("/installation/language/options", LangOptions)
 	installApi.POST("/installation/db/check", CheckDatabase)
 	installApi.POST("/installation/config-file/check", CheckConfigFile)

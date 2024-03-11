@@ -18,7 +18,7 @@
  */
 
 import { Suspense, lazy } from 'react';
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
 
@@ -31,14 +31,20 @@ const routes: RouteNode[] = [];
 const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
   routeNodes.forEach((rn) => {
     if (rn.page === 'pages/Layout') {
-      rn.element = rn.guard ? (
-        <RouteGuard onEnter={rn.guard} path={rn.path} page={rn.page}>
+      if (rn.redirect) {
+        // Handle redirect
+        rn.element = <Navigate to={rn.redirect} replace />;
+        rn.errorElement = <RouteErrorBoundary />;
+      } else {
+        rn.element = rn.guard ? (
+          <RouteGuard onEnter={rn.guard} path={rn.path} page={rn.page}>
+            <Layout />
+          </RouteGuard>
+        ) : (
           <Layout />
-        </RouteGuard>
-      ) : (
-        <Layout />
-      );
-      rn.errorElement = <RouteErrorBoundary />;
+        );
+        rn.errorElement = <RouteErrorBoundary />;
+      }
     } else {
       /**
        * cannot use a fully dynamic import statement

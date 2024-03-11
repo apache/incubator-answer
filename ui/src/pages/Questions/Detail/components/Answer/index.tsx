@@ -36,6 +36,7 @@ import { scrollToElementTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 import { useRenderHtmlPlugin } from '@/utils/pluginKit';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: AnswerItem;
@@ -163,10 +164,11 @@ const Index: FC<Props> = ({
               time={Number(data.update_time)}
               preFix={t('edit')}
               isLogged={isLogged}
-              timelinePath={`/posts/${data.question_id}/${data.id}/timeline`}
+              timelinePath={`${BASE_URL_PATH}/posts/${data.question_id}/${data.id}/timeline`}
             />
           ) : isLogged ? (
-            <Link to={`/posts/${data.question_id}/${data.id}/timeline`}>
+            <Link
+              to={`${BASE_URL_PATH}/posts/${data.question_id}/${data.id}/timeline`}>
               <FormatTime
                 time={Number(data.update_time)}
                 preFix={t('edit')}

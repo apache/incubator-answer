@@ -27,6 +27,7 @@ import classnames from 'classnames';
 import { loggedUserInfoStore, sideNavStore } from '@/stores';
 import { Icon } from '@/components';
 import './index.scss';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation();
@@ -52,7 +53,7 @@ const Index: FC = () => {
       <div className="nav-wrap pt-4">
         <Nav variant="pills" className="flex-column">
           <NavLink
-            to="/questions"
+            to={`${BASE_URL_PATH}/questions`}
             className={({ isActive }) =>
               isActive || pathname === '/' ? 'nav-link active' : 'nav-link'
             }>
@@ -61,14 +62,14 @@ const Index: FC = () => {
           </NavLink>
 
           <Nav.Link
-            href="/tags"
-            active={pathname === '/tags'}
-            onClick={(e) => handleNavClick(e, '/tags')}>
+            href={`${BASE_URL_PATH}/tags`}
+            active={pathname === `${BASE_URL_PATH}/tags`}
+            onClick={(e) => handleNavClick(e, `${BASE_URL_PATH}/tags`)}>
             <Icon name="tags-fill" className="me-2" />
             <span>{t('header.nav.tag')}</span>
           </Nav.Link>
 
-          <NavLink to="/users" className="nav-link">
+          <NavLink to={`${BASE_URL_PATH}/users`} className="nav-link">
             <Icon name="people-fill" className="me-2" />
             <span>{t('header.nav.user')}</span>
           </NavLink>
@@ -79,7 +80,7 @@ const Index: FC = () => {
                 {t('header.nav.moderation')}
               </div>
               {can_revision && (
-                <NavLink to="/review" className="nav-link">
+                <NavLink to={`${BASE_URL_PATH}/review`} className="nav-link">
                   <span>{t('header.nav.review')}</span>
                   <span className="float-end">
                     {revision > 99 ? '99+' : revision > 0 ? revision : ''}
@@ -88,7 +89,7 @@ const Index: FC = () => {
               )}
 
               {userInfo?.role_id === 2 ? (
-                <NavLink to="/admin" className="nav-link">
+                <NavLink to={`${BASE_URL_PATH}/admin`} className="nav-link">
                   {t('header.nav.admin')}
                 </NavLink>
               ) : null}

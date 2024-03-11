@@ -27,6 +27,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { changeEmail } from '@/services';
 import { handleFormError } from '@/utils';
 import { useCaptchaModal } from '@/hooks';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'change_email' });
@@ -82,7 +83,7 @@ const Index: FC = () => {
         await emailCaptcha.close();
         userInfo.e_mail = formData.e_mail.value;
         updateUser(userInfo);
-        navigate('/users/login', { replace: true });
+        navigate(`${BASE_URL_PATH}/users/login`, { replace: true });
       })
       .catch((err) => {
         if (err.isError) {
@@ -106,7 +107,7 @@ const Index: FC = () => {
   };
 
   const goBack = () => {
-    navigate('/users/login?status=inactive', { replace: true });
+    navigate(`${BASE_URL_PATH}/users/login?status=inactive`, { replace: true });
   };
 
   return (

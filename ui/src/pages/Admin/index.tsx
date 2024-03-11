@@ -29,7 +29,7 @@ import { AccordionNav } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
 import { useQueryPlugins } from '@/services';
 import { interfaceStore } from '@/stores';
-
+import { BASE_URL_PATH } from '@/router/alias';
 import './index.scss';
 
 const g10Paths = [
@@ -97,7 +97,7 @@ const Index: FC = () => {
       <Container className="admin-container">
         <Row>
           <Col lg={2}>
-            <AccordionNav menus={menus} path="/admin/" />
+            <AccordionNav menus={menus} path={`${BASE_URL_PATH}/admin/`} />
           </Col>
           <Col lg={g10Paths.find((v) => curPath === v) ? 10 : 6}>
             <Outlet />

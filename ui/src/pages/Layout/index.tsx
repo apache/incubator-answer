@@ -44,7 +44,7 @@ const Layout: FC = () => {
   };
   const { code: httpStatusCode, reset: httpStatusReset } = errorCodeStore();
   const { show: showLoginToContinueModal } = loginToContinueStore();
-
+  console.log('lyz:', location);
   useEffect(() => {
     httpStatusReset();
   }, [location]);

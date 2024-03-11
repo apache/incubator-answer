@@ -28,6 +28,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { getTimelineData } from '@/services';
 import { Empty } from '@/components';
 import * as Type from '@/common/interface';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import HistoryItem from './components/Item';
 
@@ -85,7 +86,7 @@ const Index: FC = () => {
   }
 
   if (timelineData?.object_info.object_type === 'tag') {
-    linkUrl = `/tags/${
+    linkUrl = `${BASE_URL_PATH}/tags/${
       timelineData?.object_info.main_tag_slug_name
         ? encodeURIComponent(timelineData?.object_info.main_tag_slug_name)
         : encodeURIComponent(timelineData?.object_info.title)

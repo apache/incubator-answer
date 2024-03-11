@@ -20,6 +20,7 @@
 package install
 
 import (
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -60,9 +61,9 @@ func LangOptions(ctx *gin.Context) {
 // @Router / [get]
 func CheckConfigFileAndRedirectToInstallPage(ctx *gin.Context) {
 	if cli.CheckConfigFile(confPath) {
-		ctx.Redirect(http.StatusFound, "/50x")
+		ctx.Redirect(http.StatusFound, constant.BaseUrlPath+"/50x")
 	} else {
-		ctx.Redirect(http.StatusFound, "/install")
+		ctx.Redirect(http.StatusFound, constant.BaseUrlPath+"/install")
 	}
 }
 

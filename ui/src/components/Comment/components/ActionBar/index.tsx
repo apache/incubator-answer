@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { Icon, FormatTime } from '@/components';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const ActionBar = ({
   nickName,
@@ -45,7 +46,7 @@ const ActionBar = ({
       <div className="d-flex align-items-center flex-wrap link-secondary">
         {userStatus !== 'deleted' ? (
           <Link
-            to={`/users/${username}`}
+            to={`${BASE_URL_PATH}/users/${username}`}
             className="name-ellipsis"
             style={{ maxWidth: '200px' }}>
             {nickName}

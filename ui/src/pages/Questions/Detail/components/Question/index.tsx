@@ -37,6 +37,7 @@ import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: any;
@@ -186,7 +187,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
               timelinePath={`/posts/${data.id}/timeline`}
             />
           ) : isLogged ? (
-            <Link to={`/posts/${data.id}/timeline`}>
+            <Link to={`${BASE_URL_PATH}/posts/${data.id}/timeline`}>
               <FormatTime
                 time={data.edit_time}
                 preFix={t('edit')}
@@ -207,7 +208,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
             time={data.create_time}
             preFix={t('asked')}
             isLogged={isLogged}
-            timelinePath={`/posts/${data.id}/timeline`}
+            timelinePath={`${BASE_URL_PATH}/posts/${data.id}/timeline`}
           />
         </div>
       </div>

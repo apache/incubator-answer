@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index = ({
   httpCode = '',
@@ -63,7 +64,7 @@ const Index = ({
         {errMsg || t(`desc_${httpCode}`)}
       </div>
       <div className="text-center">
-        <Link to="/" className="btn btn-link">
+        <Link to={`${BASE_URL_PATH}/`} className="btn btn-link">
           {t('back_home')}
         </Link>
       </div>
