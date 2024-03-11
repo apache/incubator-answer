@@ -821,6 +821,8 @@ definitions:
     type: object
   schema.GetReportListPageResp:
     properties:
+      answer_accepted:
+        type: boolean
       answer_count:
         type: integer
       answer_id:
@@ -1558,6 +1560,8 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
+      flag_id:
+        type: string
       operation_type:
         enum:
         - edit_post
@@ -1565,8 +1569,6 @@ definitions:
         - delete_post
         - unlist_post
         - ignore_report
-        type: string
-      report_id:
         type: string
       tags:
         items:
@@ -1577,8 +1579,8 @@ definitions:
         minLength: 6
         type: string
     required:
+    - flag_id
     - operation_type
-    - report_id
     type: object
   schema.RevisionAuditReq:
     properties:
@@ -2071,6 +2073,8 @@ definitions:
     type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
+      answer_accepted:
+        type: boolean
       answer_count:
         type: integer
       answer_id:

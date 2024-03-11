@@ -45,6 +45,7 @@ type UnreviewedRevisionInfoInfo struct {
 	Content             string     `json:"content"`
 	Html                string     `json:"html"`
 	AnswerCount         int        `json:"answer_count"`
+	AnswerAccepted      bool       `json:"answer_accepted"`
 	Tags                []*TagResp `json:"tags"`
 	Status              int        `json:"status"`
 	ShowStatus          int        `json:"show_status"`

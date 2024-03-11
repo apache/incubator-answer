@@ -135,6 +135,7 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 			Title:            info.Title,
 			OriginalText:     info.Content,
 			AnswerCount:      info.AnswerCount,
+			AnswerAccepted:   info.AnswerAccepted,
 			Tags:             info.Tags,
 			SubmitAt:         report.CreatedAt.Unix(),
 			ObjectStatus:     info.Status,
@@ -176,7 +177,7 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 
 // ReviewReport review report
 func (rs *ReportService) ReviewReport(ctx context.Context, req *schema.ReviewReportReq) (err error) {
-	report, exist, err := rs.reportRepo.GetByID(ctx, req.ReportID)
+	report, exist, err := rs.reportRepo.GetByID(ctx, req.FlagID)
 	if err != nil {
 		return err
 	}

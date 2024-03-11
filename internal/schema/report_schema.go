@@ -81,6 +81,7 @@ type GetReportListPageResp struct {
 	Title            string        `json:"title"`
 	OriginalText     string        `json:"original_text"`
 	AnswerCount      int           `json:"answer_count"`
+	AnswerAccepted   bool          `json:"answer_accepted"`
 	Tags             []*TagResp    `json:"tags"`
 	ObjectStatus     int           `json:"object_status"`
 	ObjectShowStatus int           `json:"object_show_status"`
@@ -97,7 +98,7 @@ type GetUnreviewedReportPostPageReq struct {
 
 // ReviewReportReq review report request
 type ReviewReportReq struct {
-	ReportID      string     `validate:"required" json:"report_id"`
+	FlagID        string     `validate:"required" json:"flag_id"`
 	OperationType string     `validate:"required,oneof=edit_post close_post delete_post unlist_post ignore_report" json:"operation_type"`
 	CloseType     int        `validate:"omitempty" json:"close_type"`
 	CloseMsg      string     `validate:"omitempty" json:"close_msg"`

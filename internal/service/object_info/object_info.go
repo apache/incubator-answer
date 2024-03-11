@@ -30,6 +30,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/comment_common"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/obj"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
@@ -96,6 +97,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 			Content:             questionInfo.OriginalText,
 			Html:                questionInfo.ParsedText,
 			AnswerCount:         questionInfo.AnswerCount,
+			AnswerAccepted:      !checker.IsNotZeroString(questionInfo.AcceptedAnswerID),
 			Tags:                tags,
 			Status:              questionInfo.Status,
 			ShowStatus:          questionInfo.Show,
@@ -130,6 +132,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 			Content:             answerInfo.OriginalText,
 			Html:                answerInfo.ParsedText,
 			Status:              answerInfo.Status,
+			AnswerAccepted:      questionInfo.AcceptedAnswerID == answerInfo.ID,
 		}
 	case constant.TagObjectType:
 		tagInfo, exist, err := os.tagRepo.GetTagByID(ctx, objectID, true)

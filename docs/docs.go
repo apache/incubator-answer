@@ -7822,6 +7822,9 @@ const docTemplate = `{
         "schema.GetReportListPageResp": {
             "type": "object",
             "properties": {
+                "answer_accepted": {
+                    "type": "boolean"
+                },
                 "answer_count": {
                     "type": "integer"
                 },
@@ -8878,8 +8881,8 @@ const docTemplate = `{
         "schema.ReviewReportReq": {
             "type": "object",
             "required": [
-                "operation_type",
-                "report_id"
+                "flag_id",
+                "operation_type"
             ],
             "properties": {
                 "close_msg": {
@@ -8893,6 +8896,9 @@ const docTemplate = `{
                     "maxLength": 65535,
                     "minLength": 6
                 },
+                "flag_id": {
+                    "type": "string"
+                },
                 "operation_type": {
                     "type": "string",
                     "enum": [
@@ -8902,9 +8908,6 @@ const docTemplate = `{
                         "unlist_post",
                         "ignore_report"
                     ]
-                },
-                "report_id": {
-                    "type": "string"
                 },
                 "tags": {
                     "type": "array",
@@ -9639,6 +9642,9 @@ const docTemplate = `{
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
+                "answer_accepted": {
+                    "type": "boolean"
+                },
                 "answer_count": {
                     "type": "integer"
                 },

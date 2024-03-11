@@ -9,9 +9,12 @@ type Reviewer interface {
 type ReviewContent struct {
 	// The type of the content, e.g. question, answer
 	ObjectType string
-	Title      string
-	Content    string
-	Tags       []string
+	// The title of the content, only available for the question
+	Title string
+	// The content of the review, always available
+	Content string
+	// The tags of the content, only available for the question
+	Tags []string
 	// The author of the content
 	Author ReviewContentAuthor
 }
@@ -19,9 +22,10 @@ type ReviewContent struct {
 type ReviewContentAuthor struct {
 	// The user's reputation
 	Rank int
-	// The amount of questions and answers that the user has approved
+	// The amount of questions that has approved
 	ApprovedQuestionAmount int64
-	ApprovedAnswerAmount   int64
+	// The amount of answers that has approved
+	ApprovedAnswerAmount int64
 	// 1:User 2:Admin 3:Moderator
 	Role int
 }
