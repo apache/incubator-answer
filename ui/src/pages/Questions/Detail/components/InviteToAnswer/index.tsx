@@ -28,6 +28,7 @@ import { Avatar } from '@/components';
 import { getInviteUser, putInviteUser } from '@/services';
 import type * as Type from '@/common/interface';
 import { useCaptchaModal } from '@/hooks';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import PeopleDropdown from './PeopleDropdown';
 
@@ -127,7 +128,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
             return (
               <Link
                 key={user.username}
-                to={`/users/${user.username}`}
+                to={`${BASE_URL_PATH}/users/${user.username}`}
                 className="mx-2 my-1 d-inline-flex flex-nowrap">
                 <Avatar
                   avatar={user.avatar}

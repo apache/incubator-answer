@@ -24,7 +24,7 @@ import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 
 import { Empty } from '@/components';
-
+import { BASE_URL_PATH } from '@/router/alias';
 import './index.scss';
 
 const Achievements = ({ data, handleReadNotification }) => {
@@ -42,13 +42,13 @@ const Achievements = ({ data, handleReadNotification }) => {
         let url = '';
         switch (item.object_info.object_type) {
           case 'question':
-            url = `/questions/${item.object_info.object_id}`;
+            url = `${BASE_URL_PATH}/questions/${item.object_info.object_id}`;
             break;
           case 'answer':
-            url = `/questions/${question}/${item.object_info.object_id}`;
+            url = `${BASE_URL_PATH}/questions/${question}/${item.object_info.object_id}`;
             break;
           case 'comment':
-            url = `/questions/${question}/${answer}?commentId=${comment}`;
+            url = `${BASE_URL_PATH}/questions/${question}/${answer}?commentId=${comment}`;
             break;
           default:
             url = '';

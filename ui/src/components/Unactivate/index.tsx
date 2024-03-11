@@ -27,6 +27,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { resendEmail } from '@/services';
 import { handleFormError } from '@/utils';
 import { useCaptchaModal } from '@/hooks';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface IProps {
   visible?: boolean;
@@ -99,7 +100,10 @@ const Index: React.FC<IProps> = () => {
           <Button variant="link" onClick={onSentEmail}>
             {t('btn_name')}
           </Button>
-          <Link to="/users/change-email" replace className="btn btn-link ms-2">
+          <Link
+            to={`${BASE_URL_PATH}/users/change-email`}
+            replace
+            className="btn btn-link ms-2">
             {t('change_btn_name')}
           </Link>
         </>

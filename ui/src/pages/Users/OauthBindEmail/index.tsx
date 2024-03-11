@@ -30,6 +30,7 @@ import { oAuthBindEmail, getLoggedUserInfo } from '@/services';
 import Storage from '@/utils/storage';
 import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { handleFormError } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -78,7 +79,9 @@ const Index: FC = () => {
     getLoggedUserInfo().then((user) => {
       updateUser(user);
       setTimeout(() => {
-        navigate('/users/login?status=inactive', { replace: true });
+        navigate(`${BASE_URL_PATH}/users/login?status=inactive`, {
+          replace: true,
+        });
       }, 0);
     });
   };
@@ -149,7 +152,7 @@ const Index: FC = () => {
 
   useEffect(() => {
     if (!binding_key) {
-      navigate('/', { replace: true });
+      navigate(`${BASE_URL_PATH}/`, { replace: true });
     }
   }, []);
   return (

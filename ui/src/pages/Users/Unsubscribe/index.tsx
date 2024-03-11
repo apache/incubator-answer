@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 import { unsubscribe } from '@/services';
 import { usePageTags } from '@/hooks';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'unsubscribe' });
@@ -44,7 +45,9 @@ const Index: FC = () => {
           <h3 className="text-center mt-3 mb-5">{t('success_title')}</h3>
           <p className="text-center">{t('success_desc')}</p>
           <div className="text-center">
-            <Link to="/users/settings/notify">{t('link')}</Link>
+            <Link to={`${BASE_URL_PATH}/users/settings/notify`}>
+              {t('link')}
+            </Link>
           </div>
         </Col>
       </Row>

@@ -18,33 +18,40 @@
  */
 
 import { seoSettingStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const tagLanding = (slugName: string) => {
-  const r = slugName ? `/tags/${encodeURIComponent(slugName)}` : '/tags';
+  const r = slugName
+    ? `${BASE_URL_PATH}/tags/${encodeURIComponent(slugName)}`
+    : `${BASE_URL_PATH}/tags`;
   return r;
 };
 
 const tagInfo = (slugName: string) => {
-  const r = slugName ? `/tags/${encodeURIComponent(slugName)}/info` : '/tags';
+  const r = slugName
+    ? `${BASE_URL_PATH}/tags/${encodeURIComponent(slugName)}/info`
+    : `${BASE_URL_PATH}/tags`;
   return r;
 };
 
 const tagEdit = (tagId: string) => {
-  const r = `/tags/${tagId}/edit`;
+  const r = `${BASE_URL_PATH}/tags/${tagId}/edit`;
   return r;
 };
 
 const questionLanding = (questionId: string, slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
   if (!questionId) {
-    return slugTitle ? `/questions/null/${slugTitle}` : '/questions/null';
+    return slugTitle
+      ? `${BASE_URL_PATH}/questions/null/${slugTitle}`
+      : `${BASE_URL_PATH}/questions/null`;
   }
   // @ts-ignore
   if (/[13]/.test(seo.permalink) && slugTitle) {
-    return `/questions/${questionId}/${slugTitle}`;
+    return `${BASE_URL_PATH}/questions/${questionId}/${slugTitle}`;
   }
 
-  return `/questions/${questionId}`;
+  return `${BASE_URL_PATH}/questions/${questionId}`;
 };
 
 const answerLanding = (params: {

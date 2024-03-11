@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const { gt, gte } = require('semver');
 
@@ -98,7 +99,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             {data.smtp !== 'not_configured' ? (
               <strong>{t(data.smtp)}</strong>
             ) : (
-              <Link to="/admin/smtp" className="ms-2">
+              <Link to={`${BASE_URL_PATH}/admin/smtp`} className="ms-2">
                 {t('config')}
               </Link>
             )}

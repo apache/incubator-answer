@@ -38,6 +38,7 @@ import {
 import { tryNormalLogged } from '@/utils/guard';
 import { floppyNavigation } from '@/utils';
 import { toastStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -70,7 +71,9 @@ const Index: FC<IProps> = ({
   };
   const closeModal = useReportModal(refreshQuestion);
   const editUrl =
-    type === 'answer' ? `/posts/${qid}/${aid}/edit` : `/posts/${qid}/edit`;
+    type === 'answer'
+      ? `${BASE_URL_PATH}/posts/${qid}/${aid}/edit`
+      : `${BASE_URL_PATH}/posts/${qid}/edit`;
 
   const handleReport = () => {
     reportModal.onShow({

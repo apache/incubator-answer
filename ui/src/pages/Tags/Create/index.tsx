@@ -31,6 +31,7 @@ import type * as Type from '@/common/interface';
 import { createTag } from '@/services';
 import { handleFormError } from '@/utils';
 import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface FormDataItem {
   displayName: Type.FormValue<string>;
@@ -175,9 +176,12 @@ const Index = () => {
     };
     createTag(params)
       .then((res) => {
-        navigate(`/tags/${encodeURIComponent(res.slug_name)}/info`, {
-          replace: true,
-        });
+        navigate(
+          `${BASE_URL_PATH}/tags/${encodeURIComponent(res.slug_name)}/info`,
+          {
+            replace: true,
+          },
+        );
       })
       .catch((err) => {
         if (err.isError) {

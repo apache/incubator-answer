@@ -28,6 +28,7 @@ import { Empty, QueryGroup, Icon } from '@/components';
 import * as Type from '@/common/interface';
 import { useQueryPlugins, updatePluginStatus } from '@/services';
 import PluginKit from '@/utils/pluginKit';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const InstalledPluginsFilterKeys: Type.InstalledPluginsFilterBy[] = [
   'all',
@@ -73,7 +74,7 @@ const Users: FC = () => {
     });
   };
   const handleSettings = (plugin) => {
-    const url = `/admin/${plugin.slug_name}`;
+    const url = `${BASE_URL_PATH}/admin/${plugin.slug_name}`;
     navigate(url);
   };
 

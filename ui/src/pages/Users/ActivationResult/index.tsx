@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { WelcomeTitle } from '@/components';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_result' });
@@ -40,7 +41,7 @@ const Index: FC = () => {
             <>
               <p className="text-center">{t('success')}</p>
               <div className="text-center">
-                <Link to="/">{t('link')}</Link>
+                <Link to={`${BASE_URL_PATH}/`}>{t('link')}</Link>
               </div>
             </>
           )}

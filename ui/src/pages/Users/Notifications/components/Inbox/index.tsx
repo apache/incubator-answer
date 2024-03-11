@@ -25,6 +25,7 @@ import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 
 import { FormatTime, Empty } from '@/components';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Inbox = ({ data, handleReadNotification }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'notifications' });
@@ -42,13 +43,13 @@ const Inbox = ({ data, handleReadNotification }) => {
         let url = '';
         switch (item.object_info.object_type) {
           case 'question':
-            url = `/questions/${item.object_info.object_id}`;
+            url = `${BASE_URL_PATH}/questions/${item.object_info.object_id}`;
             break;
           case 'answer':
-            url = `/questions/${question}/${item.object_info.object_id}`;
+            url = `${BASE_URL_PATH}/questions/${question}/${item.object_info.object_id}`;
             break;
           case 'comment':
-            url = `/questions/${question}/${answer}?commentId=${comment}`;
+            url = `${BASE_URL_PATH}/questions/${question}/${answer}?commentId=${comment}`;
             break;
           default:
             url = '';
@@ -62,7 +63,7 @@ const Inbox = ({ data, handleReadNotification }) => {
             )}>
             <div>
               {item.user_info && item.user_info.status !== 'deleted' ? (
-                <Link to={`/users/${item.user_info.username}`}>
+                <Link to={`${BASE_URL_PATH}/users/${item.user_info.username}`}>
                   {item.user_info.display_name}{' '}
                 </Link>
               ) : (

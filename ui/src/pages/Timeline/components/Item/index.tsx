@@ -26,6 +26,7 @@ import { Icon, BaseUserCard, DiffContent, FormatTime } from '@/components';
 import { TIMELINE_NORMAL_ACTIVITY_TYPE } from '@/common/constants';
 import * as Type from '@/common/interface';
 import { getTimelineDetail } from '@/services';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: Type.TimelineItem;
@@ -90,7 +91,7 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
           )}
           {data.activity_type === 'accept' && (
             <Link
-              to={`/questions/${objectInfo.question_id}/${data?.object_id}`}>
+              to={`${BASE_URL_PATH}/questions/${objectInfo.question_id}/${data?.object_id}`}>
               {t(data.activity_type)}
             </Link>
           )}
@@ -98,7 +99,7 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
           {objectInfo.object_type === 'question' &&
             data.activity_type === 'answered' && (
               <Link
-                to={`/questions/${objectInfo.question_id}/${data.object_id}`}>
+                to={`${BASE_URL_PATH}/questions/${objectInfo.question_id}/${data.object_id}`}>
                 {t(data.activity_type)}
               </Link>
             )}
@@ -107,8 +108,8 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
             <Link
               to={
                 objectInfo.object_type === 'answer'
-                  ? `/questions/${objectInfo.question_id}/${objectInfo.answer_id}?commentId=${data.object_id}`
-                  : `/questions/${objectInfo.question_id}?commentId=${data.object_id}`
+                  ? `${BASE_URL_PATH}/questions/${objectInfo.question_id}/${objectInfo.answer_id}?commentId=${data.object_id}`
+                  : `${BASE_URL_PATH}/questions/${objectInfo.question_id}?commentId=${data.object_id}`
               }>
               {t(data.activity_type)}
             </Link>

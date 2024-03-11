@@ -26,6 +26,7 @@ import { usePageTags } from '@/hooks';
 import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import { guard } from '@/utils';
 import { loginSettingStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -62,7 +63,8 @@ const Index: React.FC = () => {
           {showSignupForm ? <SignUpForm callback={onStep} /> : null}
           <div className="text-center mt-5">
             <Trans i18nKey="login.info_login" ns="translation">
-              Already have an account? <Link to="/users/login">Log in</Link>
+              Already have an account?{' '}
+              <Link to={`${BASE_URL_PATH}/users/login`}>Log in</Link>
             </Trans>
           </div>
         </Col>

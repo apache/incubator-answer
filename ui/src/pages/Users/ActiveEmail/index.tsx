@@ -24,6 +24,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore } from '@/stores';
 import { activateAccount } from '@/services';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
@@ -37,11 +38,13 @@ const Index: FC = () => {
       activateAccount(encodeURIComponent(code)).then((res) => {
         updateUser(res);
         setTimeout(() => {
-          navigate('/users/account-activation/success', { replace: true });
+          navigate(`${BASE_URL_PATH}/users/account-activation/success`, {
+            replace: true,
+          });
         }, 0);
       });
     } else {
-      navigate('/', { replace: true });
+      navigate(`${BASE_URL_PATH}/`, { replace: true });
     }
   }, []);
   usePageTags({

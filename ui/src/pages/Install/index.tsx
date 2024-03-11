@@ -31,6 +31,7 @@ import {
 } from '@/services';
 import { Storage, handleFormError, scrollToDocTop } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import {
   FirstStep,
@@ -312,7 +313,7 @@ const Index: FC = () => {
 
                   <Fifth
                     visible={step === 5}
-                    siteUrl={formData.site_url.value}
+                    siteUrl={formData.site_url.value + BASE_URL_PATH}
                   />
                   {step === 6 && (
                     <div>

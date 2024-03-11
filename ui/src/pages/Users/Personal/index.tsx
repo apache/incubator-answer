@@ -31,6 +31,7 @@ import {
   usePersonalListByTabName,
 } from '@/services';
 import type { UserInfoRes } from '@/common/interface';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import {
   UserInfo,
@@ -94,7 +95,7 @@ const Personal: FC = () => {
             <div className="mb-3">
               <Link
                 className="btn btn-outline-secondary"
-                to="/users/settings/profile">
+                to={`${BASE_URL_PATH}/users/settings/profile`}>
                 {t('edit_profile')}
               </Link>
             </div>

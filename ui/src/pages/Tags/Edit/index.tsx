@@ -31,6 +31,7 @@ import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
 import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
 import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface FormDataItem {
   displayName: Type.FormValue<string>;
@@ -202,10 +203,15 @@ const Index = () => {
       edit_summary: formData.editSummary.value,
     };
     modifyTag(params).then((res) => {
-      navigate(`/tags/${encodeURIComponent(formData.slugName.value)}/info`, {
-        replace: true,
-        state: { isReview: res.wait_for_review },
-      });
+      navigate(
+        `${BASE_URL_PATH}/tags/${encodeURIComponent(
+          formData.slugName.value,
+        )}/info`,
+        {
+          replace: true,
+          state: { isReview: res.wait_for_review },
+        },
+      );
     });
   };
 

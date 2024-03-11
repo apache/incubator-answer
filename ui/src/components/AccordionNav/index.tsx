@@ -27,13 +27,14 @@ import classNames from 'classnames';
 import { floppyNavigation } from '@/utils';
 import { Icon } from '@/components';
 import './index.css';
+import { BASE_URL_PATH } from '@/router/alias';
 
 function MenuNode({
   menu,
   callback,
   activeKey,
   expanding = false,
-  path = '/',
+  path = `${BASE_URL_PATH}/`,
 }) {
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
   const isLeaf = !menu.children.length;

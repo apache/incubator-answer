@@ -32,6 +32,7 @@ import { postAnswer } from '@/services';
 import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
 import { writeSettingStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   visible?: boolean;
@@ -314,7 +315,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
       {data.answered && !showEditor ? (
         // the 0th answer is the oldest one
         <Link
-          to={`/posts/${data.qid}/${data.first_answer_id}/edit`}
+          to={`${BASE_URL_PATH}/posts/${data.qid}/${data.first_answer_id}/edit`}
           className="btn btn-primary">
           {t('edit_answer')}
         </Link>

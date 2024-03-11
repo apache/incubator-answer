@@ -36,6 +36,7 @@ import {
   Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
+import { BASE_URL_PATH } from '@/router/alias';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'active',
@@ -75,7 +76,7 @@ const QuestionList: FC<Props> = ({
         <QueryGroup
           data={QUESTION_ORDER_KEYS}
           currentSort={curOrder}
-          pathname={source === 'questions' ? '/questions' : ''}
+          pathname={source === 'questions' ? `${BASE_URL_PATH}/questions` : ''}
           i18nKeyPrefix="question"
         />
       </div>
@@ -147,7 +148,7 @@ const QuestionList: FC<Props> = ({
           currentPage={curPage}
           totalSize={count}
           pageSize={pageSize}
-          pathname={source === 'questions' ? '/questions' : ''}
+          pathname={source === 'questions' ? `${BASE_URL_PATH}/questions` : ''}
         />
       </div>
     </div>

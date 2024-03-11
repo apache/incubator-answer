@@ -27,6 +27,7 @@ import type { FormDataType, RegisterReqParams } from '@/common/interface';
 import { register, useLegalTos, useLegalPrivacy } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
 import { handleFormError } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   callback: () => void;
@@ -230,7 +231,7 @@ const Index: React.FC<Props> = ({ callback }) => {
         <Trans i18nKey="login.agreements" ns="translation">
           By registering, you agree to the
           <Link
-            to="/privacy"
+            to={`${BASE_URL_PATH}/privacy`}
             onClick={(evt) => {
               argumentClick(evt, 'privacy');
             }}
@@ -239,7 +240,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           </Link>
           and
           <Link
-            to="/tos"
+            to={`${BASE_URL_PATH}/tos`}
             onClick={(evt) => {
               argumentClick(evt, 'tos');
             }}

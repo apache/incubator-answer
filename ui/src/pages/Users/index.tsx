@@ -25,6 +25,7 @@ import { Fragment } from 'react';
 import { usePageTags } from '@/hooks';
 import { useQueryContributeUsers } from '@/services';
 import { Avatar } from '@/components';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Users = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -69,7 +70,7 @@ const Users = () => {
                     xs={12}
                     className="mb-4">
                     <div className="d-flex">
-                      <Link to={`/users/${user.username}`}>
+                      <Link to={`${BASE_URL_PATH}/users/${user.username}`}>
                         <Avatar
                           size="48px"
                           avatar={user?.avatar}
@@ -80,7 +81,7 @@ const Users = () => {
                       <div className="ms-2">
                         <Link
                           className="text-break"
-                          to={`/users/${user.username}`}>
+                          to={`${BASE_URL_PATH}/users/${user.username}`}>
                           {user.display_name}
                         </Link>
                         <div className="text-secondary small">

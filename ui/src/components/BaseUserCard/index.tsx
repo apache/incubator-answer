@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 
 import { Avatar } from '@/components';
 import { formatCount } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: any;
@@ -48,7 +49,7 @@ const Index: FC<Props> = ({
     <div className={`d-flex align-items-center  text-secondary ${className}`}>
       {data?.status !== 'deleted' ? (
         <Link
-          to={`/users/${data?.username}`}
+          to={`${BASE_URL_PATH}/users/${data?.username}`}
           className="d-flex align-items-center">
           {showAvatar && (
             <Avatar

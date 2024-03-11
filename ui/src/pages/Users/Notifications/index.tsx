@@ -32,6 +32,7 @@ import {
   readNotification,
 } from '@/services';
 import { floppyNavigation } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import Inbox from './components/Inbox';
 import Achievements from './components/Achievements';
@@ -87,7 +88,7 @@ const Notifications = () => {
     }
     setPage(1);
     setNotificationData([]);
-    navigate(`/users/notifications/${val}`);
+    navigate(`${BASE_URL_PATH}/users/notifications/${val}`);
   };
 
   const handleLoadMore = () => {
@@ -113,7 +114,7 @@ const Notifications = () => {
           <ButtonGroup size="sm">
             <Button
               as="a"
-              href="/users/notifications/inbox"
+              href={`${BASE_URL_PATH}/users/notifications/inbox`}
               variant="outline-secondary"
               active={type === 'inbox'}
               onClick={(evt) => handleTypeChange(evt, 'inbox')}>
@@ -121,7 +122,7 @@ const Notifications = () => {
             </Button>
             <Button
               as="a"
-              href="/users/notifications/achievement"
+              href={`${BASE_URL_PATH}/users/notifications/achievement`}
               variant="outline-secondary"
               active={type === 'achievement'}
               onClick={(evt) => handleTypeChange(evt, 'achievement')}>
@@ -139,7 +140,7 @@ const Notifications = () => {
           <>
             <Nav className="inbox-nav small">
               {inboxTypeNavs.map((nav) => {
-                const navLinkHref = `/users/notifications/inbox/${nav}`;
+                const navLinkHref = `${BASE_URL_PATH}/users/notifications/inbox/${nav}`;
                 const navLinkName = t(`inbox_type.${nav}`);
                 return (
                   <Nav.Item key={nav}>

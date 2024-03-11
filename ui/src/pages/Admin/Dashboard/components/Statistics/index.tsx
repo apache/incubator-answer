@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface IProps {
   data: Type.AdminDashboard['info'];
@@ -58,7 +59,7 @@ const Statistics: FC<IProps> = ({ data }) => {
           <Col xs={6}>
             <span className="text-secondary me-1">{t('flags')}</span>
             <strong>
-              <Link to="/admin/flags" className="ms-2">
+              <Link to={`${BASE_URL_PATH}/admin/flags`} className="ms-2">
                 {data.report_count}
               </Link>
             </strong>

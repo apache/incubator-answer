@@ -41,6 +41,7 @@ import HotQuestions from '@/components/HotQuestions';
 import { escapeRemove, guard, Storage, scrollToDocTop } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -169,7 +170,7 @@ const Index: FC = () => {
                   </Button>
                   <Link
                     className="btn btn-outline-secondary ms-2"
-                    to="/users/settings/notify">
+                    to={`${BASE_URL_PATH}/users/settings/notify`}>
                     <Icon name="bell-fill" />
                   </Link>
                 </div>
