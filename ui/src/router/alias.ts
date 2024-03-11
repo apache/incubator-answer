@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-export const BASE_URL_PATH = process.env.REACT_APP_BASE_URL_PATH;
+export const BASE_URL_PATH = process.env.REACT_APP_BASE_URL_PATH || '';
 export const RouteAlias = {
   home: `${BASE_URL_PATH}/`,
   login: `${BASE_URL_PATH}/users/login`,
