@@ -22,6 +22,7 @@ package router
 import (
 	"embed"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"io/fs"
 	"net/http"
 	"os"
@@ -92,7 +93,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	}
 
 	// handle the static file by default ui static files
-	r.StaticFS("/static", http.FS(&_resource{
+	r.StaticFS(constant.PublicUrl+"/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
@@ -101,7 +102,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 		urlPath := c.Request.URL.Path
 		filePath := ""
 		switch urlPath {
-		case "/favicon.ico":
+		case constant.BaseUrlPath + "/favicon.ico":
 			branding, err := a.siteInfoService.GetSiteBranding(c)
 			if err != nil {
 				log.Error(err)
@@ -117,13 +118,13 @@ func (a *UIRouter) Register(r *gin.Engine) {
 				filePath = UIRootFilePath + urlPath
 
 			}
-		case "/manifest.json":
+		case constant.BaseUrlPath + "/manifest.json":
 			// filePath = UIRootFilePath + urlPath
 			a.siteInfoController.GetManifestJson(c)
 			return
-		case "/install":
+		case constant.BaseUrlPath + "/install":
 			// if answer is running by run command user can not access install page.
-			c.Redirect(http.StatusFound, "/")
+			c.Redirect(http.StatusFound, constant.BaseUrlPath+"/")
 			return
 		default:
 			filePath = UIIndexFilePath

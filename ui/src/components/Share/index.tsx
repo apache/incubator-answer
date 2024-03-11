@@ -25,6 +25,7 @@ import { FacebookShareButton, TwitterShareButton } from 'next-share';
 import copy from 'copy-to-clipboard';
 
 import { loggedUserInfoStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -42,8 +43,8 @@ const Index: FC<IProps> = ({ type, qid, aid, title }) => {
   const { t } = useTranslation();
   let baseUrl =
     type === 'question'
-      ? `${window.location.origin}/questions/${qid}`
-      : `${window.location.origin}/questions/${qid}/${aid}`;
+      ? `${window.location.origin}${BASE_URL_PATH}/questions/${qid}`
+      : `${window.location.origin}${BASE_URL_PATH}/questions/${qid}/${aid}`;
   if (user.id) {
     baseUrl = `${baseUrl}?shareUserId=${user.username}`;
   }

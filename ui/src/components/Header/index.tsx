@@ -48,6 +48,7 @@ import {
   sideNavStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import NavItems from './components/NavItems';
 
@@ -70,7 +71,7 @@ const Header: FC = () => {
    * Automatically append `tag` information when creating a question
    */
   const tagMatch = useMatch('/tags/:slugName');
-  let askUrl = '/questions/ask';
+  let askUrl = `${BASE_URL_PATH}/questions/ask`;
   if (tagMatch && tagMatch.params.slugName) {
     askUrl = `${askUrl}?tags=${encodeURIComponent(tagMatch.params.slugName)}`;
   }
@@ -90,7 +91,9 @@ const Header: FC = () => {
     if (!searchStr) {
       return;
     }
-    const searchUrl = `/search?q=${encodeURIComponent(searchStr)}`;
+    const searchUrl = `${BASE_URL_PATH}/search?q=${encodeURIComponent(
+      searchStr,
+    )}`;
     navigate(searchUrl);
   };
 
@@ -145,7 +148,10 @@ const Header: FC = () => {
         />
 
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-5 p-0">
+          <Navbar.Brand
+            to={`${BASE_URL_PATH}/`}
+            as={Link}
+            className="lh-1 me-0 me-sm-5 p-0">
             {brandingInfo.logo ? (
               <>
                 <img
@@ -240,7 +246,6 @@ const Header: FC = () => {
                     {t('btns.add_question')}
                   </Link>
                 </Nav.Item>
-
                 <NavItems
                   redDot={redDot}
                   userInfo={user}

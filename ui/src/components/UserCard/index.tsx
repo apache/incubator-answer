@@ -24,6 +24,7 @@ import classnames from 'classnames';
 
 import { Avatar, FormatTime } from '@/components';
 import { formatCount } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: any;
@@ -45,7 +46,7 @@ const Index: FC<Props> = ({
   return (
     <div className={classnames('d-flex', className)}>
       {data?.status !== 'deleted' ? (
-        <Link to={`/users/${data?.username}`}>
+        <Link to={`${BASE_URL_PATH}/users/${data?.username}`}>
           <Avatar
             avatar={data?.avatar}
             size="40px"
@@ -85,7 +86,7 @@ const Index: FC<Props> = ({
         <div className="me-1 me-md-0 d-flex align-items-center">
           {data?.status !== 'deleted' ? (
             <Link
-              to={`/users/${data?.username}`}
+              to={`${BASE_URL_PATH}/users/${data?.username}`}
               className="me-1 text-break name-ellipsis"
               style={{ maxWidth: '100px' }}>
               {data?.display_name}

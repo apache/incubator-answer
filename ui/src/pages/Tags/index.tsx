@@ -28,6 +28,7 @@ import { formatCount, escapeRemove } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import { useQueryTags, following } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const sortBtns = ['popular', 'name', 'newest'];
 
@@ -90,7 +91,7 @@ const Tags = () => {
             {role_id === 2 || role_id === 3 ? (
               <Link
                 className="btn btn-outline-primary btn-sm"
-                to="/tags/create">
+                to={`${BASE_URL_PATH}/tags/create`}>
                 {t('title', { keyPrefix: 'tag_modal' })}
               </Link>
             ) : null}

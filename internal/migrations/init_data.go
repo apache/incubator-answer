@@ -20,23 +20,24 @@
 package migrations
 
 import (
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/service/permission"
 )
 
-const (
+var (
 	defaultSEORobotTxt = `User-agent: *
-Disallow: /admin
-Disallow: /search
-Disallow: /install
-Disallow: /review
-Disallow: /users/login
-Disallow: /users/register
-Disallow: /users/account-recovery
-Disallow: /users/oauth/*
-Disallow: /users/*/*
-Disallow: /answer/api
-Disallow: /*?code*
+Disallow: ` + constant.BaseUrlPath + `/admin
+Disallow: ` + constant.BaseUrlPath + `/search
+Disallow: ` + constant.BaseUrlPath + `/install
+Disallow: ` + constant.BaseUrlPath + `/review
+Disallow: ` + constant.BaseUrlPath + `/users/login
+Disallow: ` + constant.BaseUrlPath + `/users/register
+Disallow: ` + constant.BaseUrlPath + `/users/account-recovery
+Disallow: ` + constant.BaseUrlPath + `/users/oauth/*
+Disallow: ` + constant.BaseUrlPath + `/users/*/*
+Disallow: ` + constant.BaseUrlPath + `/answer/api
+Disallow: ` + constant.BaseUrlPath + `/*?code*
 
 Sitemap: `
 )

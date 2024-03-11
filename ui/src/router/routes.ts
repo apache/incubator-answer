@@ -23,6 +23,7 @@ import { guard } from '@/utils';
 import type { TGuardFunc } from '@/utils/guard';
 import { editCheck } from '@/services';
 import { isEditable } from '@/utils/guard';
+import { BASE_URL_PATH } from '@/router/alias';
 
 type IndexRouteNode = Omit<IndexRouteObject, 'children'>;
 type NonIndexRouteNode = Omit<NonIndexRouteObject, 'children'>;
@@ -31,6 +32,7 @@ type UnionRouteNode = IndexRouteNode | NonIndexRouteNode;
 export type RouteNode = UnionRouteNode & {
   page: string;
   children?: RouteNode[];
+  redirect?: string;
   /**
    * a method to auto guard route before route enter
    * if the `ok` field in guard returned `TGuardResult` is true,
@@ -43,7 +45,7 @@ export type RouteNode = UnionRouteNode & {
 
 const routes: RouteNode[] = [
   {
-    path: '/',
+    path: `${BASE_URL_PATH}/`,
     page: 'pages/Layout',
     loader: async () => {
       await guard.setupApp();
@@ -108,7 +110,7 @@ const routes: RouteNode[] = [
             page: 'pages/Questions/Detail',
           },
           {
-            path: '/search',
+            path: `${BASE_URL_PATH}/search`,
             page: 'pages/Search',
             guard: () => {
               return guard.googleSnapshotRedirect();
@@ -192,21 +194,21 @@ const routes: RouteNode[] = [
             page: 'pages/Users/Notifications',
           },
           {
-            path: '/posts/:qid/timeline',
+            path: `${BASE_URL_PATH}/posts/:qid/timeline`,
             page: 'pages/Timeline',
             guard: () => {
               return guard.logged();
             },
           },
           {
-            path: '/posts/:qid/:aid/timeline',
+            path: `${BASE_URL_PATH}/posts/:qid/:aid/timeline`,
             page: 'pages/Timeline',
             guard: () => {
               return guard.logged();
             },
           },
           {
-            path: '/tags/:tid/timeline',
+            path: `${BASE_URL_PATH}/tags/:tid/timeline`,
             page: 'pages/Timeline',
             guard: () => {
               return guard.logged();
@@ -284,29 +286,29 @@ const routes: RouteNode[] = [
         },
       },
       {
-        path: '/users/account-activation/failed',
+        path: `${BASE_URL_PATH}/users/account-activation/failed`,
         page: 'pages/Users/ActivationResult',
         guard: () => {
           return guard.notActivated();
         },
       },
       {
-        path: '/users/confirm-new-email',
+        path: `${BASE_URL_PATH}/users/confirm-new-email`,
         page: 'pages/Users/ConfirmNewEmail',
       },
       {
-        path: '/users/account-suspended',
+        path: `${BASE_URL_PATH}/users/account-suspended`,
         page: 'pages/Users/Suspended',
         guard: () => {
           return guard.forbidden();
         },
       },
       {
-        path: '/users/confirm-email',
+        path: `${BASE_URL_PATH}/users/confirm-email`,
         page: 'pages/Users/OauthBindEmail',
       },
       {
-        path: '/users/auth-landing',
+        path: `${BASE_URL_PATH}/users/auth-landing`,
         page: 'pages/Users/AuthCallback',
       },
       // for admin
@@ -408,7 +410,7 @@ const routes: RouteNode[] = [
         ],
       },
       {
-        path: '/user-center/auth',
+        path: `${BASE_URL_PATH}/user-center/auth`,
         page: 'pages/UserCenter/Auth',
         guard: () => {
           const notLogged = guard.notLogged();
@@ -416,7 +418,7 @@ const routes: RouteNode[] = [
         },
       },
       {
-        path: '/user-center/auth-failed',
+        path: `${BASE_URL_PATH}/user-center/auth-failed`,
         page: 'pages/UserCenter/AuthFailed',
       },
       {
@@ -430,7 +432,7 @@ const routes: RouteNode[] = [
     ],
   },
   {
-    path: '/',
+    path: `${BASE_URL_PATH}/`,
     page: 'pages/Layout',
     loader: async () => {
       await guard.setupApp();
@@ -456,7 +458,7 @@ const routes: RouteNode[] = [
         ],
       },
       {
-        path: '/users/unsubscribe',
+        path: `${BASE_URL_PATH}/users/unsubscribe`,
         page: 'pages/Users/Unsubscribe',
       },
       {
@@ -466,12 +468,18 @@ const routes: RouteNode[] = [
     ],
   },
   {
-    path: '/install',
+    path: `${BASE_URL_PATH}/install`,
     page: 'pages/Install',
   },
   {
-    path: '/maintenance',
+    path: `${BASE_URL_PATH}/maintenance`,
     page: 'pages/Maintenance',
+  },
+  // Default route for all other paths
+  {
+    path: '/:path(.*)', // Match any path
+    page: 'pages/Layout',
+    redirect: `${BASE_URL_PATH}/`, // Redirect to BASE_URL_PATH
   },
 ];
 export default routes;

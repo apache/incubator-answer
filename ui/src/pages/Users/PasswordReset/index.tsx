@@ -27,6 +27,7 @@ import { loggedUserInfoStore } from '@/stores';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
 import { handleFormError } from '@/utils';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'password_reset' });
@@ -197,7 +198,7 @@ const Index: React.FC = () => {
         <Col className="mx-auto px-4" md={6}>
           <div className="text-center">
             <p>{t('reset_success')}</p>
-            <Link to="/users/login">{t('to_login')}</Link>
+            <Link to={`${BASE_URL_PATH}/users/login`}>{t('to_login')}</Link>
           </div>
         </Col>
       )}
@@ -206,7 +207,7 @@ const Index: React.FC = () => {
         <Col className="mx-auto px-4" md={6}>
           <div className="text-center">
             <p>{t('link_invalid')}</p>
-            <Link to="/users/login">{t('to_login')}</Link>
+            <Link to={`${BASE_URL_PATH}/users/login`}>{t('to_login')}</Link>
           </div>
         </Col>
       )}

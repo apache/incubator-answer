@@ -36,6 +36,7 @@ import {
 } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore, toastStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 const TagIntroduction = () => {
   const userInfo = loggedUserInfoStore((state) => state.user);
@@ -143,7 +144,7 @@ const TagIntroduction = () => {
       confirmBtnVariant: 'danger',
       onConfirm: () => {
         deleteTag(tagInfo.tag_id).then(() => {
-          navigate('/tags', { replace: true });
+          navigate(`${BASE_URL_PATH}/tags`, { replace: true });
         });
       },
     });
@@ -220,7 +221,7 @@ const TagIntroduction = () => {
           })}
           {isLogged && (
             <Link
-              to={`/tags/${tagInfo?.tag_id}/timeline`}
+              to={`${BASE_URL_PATH}/tags/${tagInfo?.tag_id}/timeline`}
               className={classNames(
                 'link-secondary btn-no-border p-0 small',
                 tagInfo?.member_actions?.length > 0 && 'ms-3',

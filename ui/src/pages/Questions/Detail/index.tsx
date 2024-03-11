@@ -37,6 +37,7 @@ import type {
   AnswerItem,
 } from '@/common/interface';
 import { questionDetail, getAnswers } from '@/services';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import {
   Question,
@@ -161,6 +162,7 @@ const Index = () => {
             avatar_url: res?.last_answered_user_info?.avatar,
           },
         ]);
+        console.log('xx1', res);
         setQuestion(res);
       }
       setIsLoading(false);
@@ -172,7 +174,7 @@ const Index = () => {
   const initPage = (type: string) => {
     if (type === 'delete_question') {
       setTimeout(() => {
-        navigate('/', { replace: true });
+        navigate(`${BASE_URL_PATH}/`, { replace: true });
       }, 1000);
       return;
     }

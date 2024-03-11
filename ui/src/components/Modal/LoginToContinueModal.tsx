@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom';
 import { loginToContinueStore, siteInfoStore } from '@/stores';
 import { floppyNavigation } from '@/utils';
 import { WelcomeTitle } from '@/components';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface IProps {
   visible: boolean;
@@ -59,13 +60,13 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
         </div>
         <div className="d-grid gap-2">
           <Link
-            to="/users/login"
+            to={`${BASE_URL_PATH}/users/login`}
             className="btn btn-primary"
             onClick={linkClick}>
             {t('login', { keyPrefix: 'btns' })}
           </Link>
           <Link
-            to="/users/register"
+            to={`${BASE_URL_PATH}/users/register`}
             className="btn btn-link"
             onClick={linkClick}>
             {t('signup', { keyPrefix: 'btns' })}

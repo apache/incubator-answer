@@ -22,6 +22,8 @@ import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { BASE_URL_PATH } from '@/router/alias';
+
 interface Props {
   slug: string;
   isSelf: boolean;
@@ -74,7 +76,7 @@ const Index: FC<Props> = ({ slug, tabName = 'overview', isSelf }) => {
         if (item.path) {
           return (
             <NavLink
-              to={`/users/${slug}${item.path}`}
+              to={`${BASE_URL_PATH}/users/${slug}${item.path}`}
               key={item.name}
               className="nav-link">
               {t(item.name)}
@@ -84,7 +86,7 @@ const Index: FC<Props> = ({ slug, tabName = 'overview', isSelf }) => {
         return (
           <NavLink
             key={item.name}
-            to={`/users/${slug}`}
+            to={`${BASE_URL_PATH}/users/${slug}`}
             className={({ isActive }) =>
               isActive && tabName === 'overview'
                 ? 'nav-link active'

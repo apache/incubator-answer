@@ -28,6 +28,7 @@ import { Avatar, Icon, SvgIcon } from '@/components';
 import type { UserInfoRes } from '@/common/interface';
 import { getUcBranding, UcBrandingEntry } from '@/services';
 import { userCenterStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   data: UserInfoRes;
@@ -57,7 +58,7 @@ const Index: FC<Props> = ({ data }) => {
   return (
     <div className="d-flex flex-column flex-md-row mb-4">
       {data?.status !== 'deleted' ? (
-        <Link to={`/users/${data.username}`} reloadDocument>
+        <Link to={`${BASE_URL_PATH}/users/${data.username}`} reloadDocument>
           <Avatar
             avatar={data.avatar}
             size="160px"
@@ -78,7 +79,7 @@ const Index: FC<Props> = ({ data }) => {
         <div className="d-flex align-items-center mb-2">
           {data?.status !== 'deleted' ? (
             <Link
-              to={`/users/${data.username}`}
+              to={`${BASE_URL_PATH}/users/${data.username}`}
               className="link-dark h3 mb-0"
               reloadDocument>
               {data.display_name}

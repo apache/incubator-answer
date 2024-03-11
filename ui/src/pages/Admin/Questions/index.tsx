@@ -36,6 +36,7 @@ import { ADMIN_LIST_STATUS } from '@/common/constants';
 import * as Type from '@/common/interface';
 import { useQuestionSearch } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
+import { BASE_URL_PATH } from '@/router/alias';
 
 import Action from './components/Action';
 
@@ -125,7 +126,7 @@ const Questions: FC = () => {
                 <td>{li.vote_count}</td>
                 <td>
                   <Link
-                    to={`/admin/answers?questionId=${li.id}`}
+                    to={`${BASE_URL_PATH}/admin/answers?questionId=${li.id}`}
                     rel="noreferrer">
                     {li.answer_count}
                   </Link>

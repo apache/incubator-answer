@@ -26,6 +26,7 @@ import type * as Type from '@/common/interface';
 import { Avatar, Icon } from '@/components';
 import { floppyNavigation } from '@/utils';
 import { userCenterStore } from '@/stores';
+import { BASE_URL_PATH } from '@/router/alias';
 
 interface Props {
   redDot: Type.NotificationStatus | undefined;
@@ -50,7 +51,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
       <Nav className="flex-row">
         <Nav.Link
           as={NavLink}
-          to="/users/notifications/inbox"
+          to={`${BASE_URL_PATH}/users/notifications/inbox`}
           title={t('inbox', { keyPrefix: 'notifications' })}
           className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
           <Icon name="bell-fill" className="fs-4" />
@@ -65,7 +66,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
 
         <Nav.Link
           as={NavLink}
-          to="/users/notifications/achievement"
+          to={`${BASE_URL_PATH}/users/notifications/achievement`}
           title={t('achievement', { keyPrefix: 'notifications' })}
           className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
           <Icon name="trophy-fill" className="fs-4" />
@@ -96,22 +97,24 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
 
         <Dropdown.Menu>
           <Dropdown.Item
-            href={`/users/${userInfo.username}`}
+            href={`${BASE_URL_PATH}/users/${userInfo.username}`}
             onClick={handleLinkClick}>
             {t('header.nav.profile')}
           </Dropdown.Item>
           <Dropdown.Item
-            href={`/users/${userInfo.username}/bookmarks`}
+            href={`${BASE_URL_PATH}/users/${userInfo.username}/bookmarks`}
             onClick={handleLinkClick}>
             {t('header.nav.bookmark')}
           </Dropdown.Item>
           <Dropdown.Item
-            href="/users/settings/profile"
+            href={`${BASE_URL_PATH}/users/settings/profile`}
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
           </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item href="/users/logout" onClick={(e) => logOut(e)}>
+          <Dropdown.Item
+            href={`${BASE_URL_PATH}/users/logout`}
+            onClick={(e) => logOut(e)}>
             {t('header.nav.logout')}
           </Dropdown.Item>
         </Dropdown.Menu>
