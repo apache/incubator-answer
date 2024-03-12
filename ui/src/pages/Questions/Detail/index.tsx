@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollToElementTop, scrollToDocTop } from '@/utils';
-import { usePageTags, usePageUsers } from '@/hooks';
+import { usePageTags, usePageUsers, useSkeletonControl } from '@/hooks';
 import type {
   ListResult,
   QuestionDetailRes,
@@ -68,6 +68,7 @@ const Index = () => {
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
@@ -239,7 +240,7 @@ const Index = () => {
     <Row className="questionDetailPage pt-4 mb-5">
       <Col className="page-main flex-auto">
         {question?.operation?.level && <Alert data={question.operation} />}
-        {isLoading ? (
+        {isSkeletonShow ? (
           <ContentLoader />
         ) : (
           <Question
