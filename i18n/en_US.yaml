@@ -1173,6 +1173,7 @@ ui:
     post_lowercase: post
     filter: Filter
     ignore: Ignore
+    submit: Submit
   search:
     title: Search Results
     keywords: Keywords
@@ -1678,8 +1679,8 @@ ui:
       page_title: Write
       restrict_answer:
         title: Restrict answer
-        label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        label: Each user can only write one answer for the same question
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
@@ -1814,16 +1815,16 @@ ui:
     edit_tag: Edit tag
     empty: No review tasks left.
     approve_this_type: Do you approve this {{ type }}?
-    suggest_type_edit: Suggest {{ type }} edit
-    flag_type: Flag {{ type }}
+    suggest_edits: Suggested edits
+    flag_post: Flag post
+    flag_user: Flag user
     filter_label: Type
-    queued_post: Queued post
-    queued_user: Queued user
-    flagged_post: Flagged post
-    flagged_user: Flagged user
-    suggested_post_edit: Suggested post edit
-    suggested_tag_edit: Suggested tag edit
     reputation: reputation
+    flag_post_type: Flagged this post as {{ type }}
+    flag_user_type: Flagged this user as {{ type }}
+    edit_post: Edit post
+    list_post: List post
+    unlist_post: Unlist post
   timeline:
     undeleted: undeleted
     deleted: deleted

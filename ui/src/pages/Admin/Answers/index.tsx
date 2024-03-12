@@ -118,13 +118,13 @@ const Answers: FC = () => {
                         className="text-break text-wrap"
                         rel="noreferrer">
                         {li.question_info.title}
+                        {li.accepted === 2 && (
+                          <Icon
+                            name="check-circle-fill"
+                            className="ms-2 text-success"
+                          />
+                        )}
                       </a>
-                      {li.accepted === 2 && (
-                        <Icon
-                          name="check-circle-fill"
-                          className="ms-2 text-success"
-                        />
-                      )}
                     </Stack>
                     <div
                       className="text-truncate-2 small"

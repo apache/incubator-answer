@@ -66,9 +66,9 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-danger',
     name: 'deleted',
   },
-  unlisted: {
+  unlist: {
     variant: 'text-bg-secondary',
-    name: 'unlisted',
+    name: 'unlist',
   },
 };
 

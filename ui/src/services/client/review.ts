@@ -16,17 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+// import useSWR from 'swr';
 
-export * from './activity';
-export * from './personal';
-export * from './notification';
-export * from './question';
-export * from './search';
-export * from './tag';
-export * from './settings';
-export * from './legal';
-export * from './timeline';
-export * from './revision';
-export * from './user';
-export * from './Oauth';
-export * from './review';
+import request from '@/utils/request';
+import * as Type from '@/common/interface';
+
+export const getSuggestReviewList = (page: number) => {
+  const apiUrl = `/answer/api/v1/revisions/unreviewed?page=${page}`;
+  return request.get<Type.SuggestReviewResp>(apiUrl);
+};
+
+export const getReviewType = () => {
+  return request.get<Type.ReviewTypeItem[]>('/answer/api/v1/reviewing/type');
+};
+
+export const getFlagReviewPostList = (page: number) => {
+  const apiUrl = `/answer/api/v1/report/unreviewed/post?page=${page}`;
+  return request.get<Type.FlagReviewResp>(apiUrl);
+};
+
+export const putFlagReviewAction = (params: Type.PutFlagReviewParams) => {
+  return request.put('/answer/api/v1/report/review', params);
+};

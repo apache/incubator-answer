@@ -1,101 +1,235 @@
-import { FC } from 'react';
-import { Card, Badge } from 'react-bootstrap';
+import { FC, useEffect, useState } from 'react';
+import { Card, Alert, Stack, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { BaseUserCard, Tag, FormatTime, Avatar } from '@/components';
+import classNames from 'classnames';
 
-const tag = [
-  {
-    display_name: 'bug',
-    slug_name: 'bug',
-    original_text: '111',
-    recommend: true,
-  },
-  {
-    display_name: 'react',
-    slug_name: 'react',
-    original_text: '222',
-    reserved: true,
-  },
-  {
-    display_name: 'test',
-    slug_name: 'test',
-    original_text: '111',
-    recommend: false,
-    reserved: false,
-  },
-];
+import { getFlagReviewPostList, putFlagReviewAction } from '@/services';
+import { BaseUserCard, Tag, FormatTime } from '@/components';
+import { pathFactory } from '@/router/pathFactory';
+import { scrollToDocTop } from '@/utils';
+import type * as Type from '@/common/interface';
+import { ADMIN_LIST_STATUS } from '@/common/constants';
+import ApproveDropdown from '../ApproveDropdown';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
-  const objectType = 'question';
+  const [noTasks, setNoTasks] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [reviewResp, setReviewResp] = useState<Type.FlagReviewResp>();
+  const flagItemData = reviewResp?.list[0] as Type.FlagReviewItem;
+
+  console.log('reviewResp', reviewResp);
+
+  const resolveNextOne = (resp, pageNumber) => {
+    const { count, list = [] } = resp;
+    // auto rollback
+    if (!list.length && count && page !== 1) {
+      pageNumber = 1;
+      setPage(pageNumber);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      queryNextOne(pageNumber);
+      return;
+    }
+    if (pageNumber !== page) {
+      setPage(pageNumber);
+    }
+    setReviewResp(resp);
+    if (!list.length) {
+      setNoTasks(true);
+    }
+    setTimeout(() => {
+      scrollToDocTop();
+    }, 150);
+  };
+
+  const queryNextOne = (pageNumber) => {
+    getFlagReviewPostList(pageNumber)
+      .then((resp) => {
+        resolveNextOne(resp, pageNumber);
+      })
+      .catch((ex) => {
+        console.error('review next error: ', ex);
+      });
+  };
+
+  useEffect(() => {
+    queryNextOne(page);
+  }, []);
+
+  const handlingApprove = () => {
+    if (!flagItemData) {
+      return;
+    }
+    queryNextOne(page);
+  };
+
+  const handleIgnore = () => {
+    setIsLoading(true);
+    putFlagReviewAction({
+      operation_type: 'ignore_report',
+      flag_id: String(flagItemData?.flag_id),
+    })
+      .then(() => {
+        queryNextOne(page + 1);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const {
+    object_type,
+    submitter_user,
+    author_user_info,
+    object_status,
+    reason,
+  } = flagItemData || {
+    object_type: '',
+    submitter_user: null,
+    author_user_info: null,
+    reason: null,
+    object_status: 0,
+  };
+  let itemLink = '';
+  let itemId = '';
+  let itemTimePrefix = '';
+
+  if (object_type === 'question') {
+    itemLink = pathFactory.questionLanding(
+      String(flagItemData?.question_id),
+      flagItemData?.title,
+    );
+    itemId = String(flagItemData?.question_id);
+    itemTimePrefix = 'asked';
+  } else if (object_type === 'answer') {
+    itemLink = pathFactory.answerLanding({
+      // @ts-ignore
+      questionId: flagItemData?.question_id,
+      slugTitle: flagItemData?.title,
+      answerId: String(flagItemData?.object_id),
+    });
+    itemId = String(flagItemData?.object_id);
+    itemTimePrefix = 'answered';
+  } else if (object_type === 'comment') {
+    if (flagItemData?.question_id && flagItemData?.answer_id) {
+      itemLink = `${pathFactory.answerLanding({
+        questionId: flagItemData?.question_id,
+        answerId: flagItemData?.answer_id,
+      })}?commentId=${flagItemData?.comment_id}`;
+    } else {
+      itemLink = `${pathFactory.questionLanding(
+        String(flagItemData?.question_id),
+        flagItemData?.title,
+      )}?commentId=${flagItemData?.comment_id}`;
+    }
+    itemId = String(flagItemData?.comment_id);
+    itemTimePrefix = 'commented';
+  }
+
+  if (noTasks) return null;
   return (
     <Card>
-      <Card.Header>{t('flag_type', { type: 'post' })}</Card.Header>
+      <Card.Header>
+        {object_type !== 'user' ? t('flag_post') : t('flag_user')}
+      </Card.Header>
       <Card.Body className="p-0">
+        <Alert variant="info" className="border-0 rounded-0 mb-0">
+          <Stack
+            direction="horizontal"
+            gap={1}
+            className="align-items-center mb-2">
+            <BaseUserCard data={submitter_user} avatarSize="24" />
+            {flagItemData?.submit_at && (
+              <FormatTime
+                time={flagItemData.submit_at}
+                className="small text-secondary"
+                preFix={t('proposed')}
+              />
+            )}
+          </Stack>
+          <Stack className="align-items-start">
+            <p className="mb-0">
+              {object_type !== 'user'
+                ? t('flag_post_type', { type: reason?.name })
+                : t('flag_user_type', { type: reason?.name })}
+            </p>
+          </Stack>
+        </Alert>
         <div className="p-3">
-          <h5 className="mb-3">
-            How do I test weather variable against multiple
-          </h5>
-          {objectType === 'question' && (
-            <div className="mb-4">
-              {tag?.map((item) => {
-                return (
-                  <Tag key={item.slug_name} className="me-1" data={item} />
-                );
-              })}
-            </div>
+          <small className="d-block text-secondary mb-4">
+            <span>{t(object_type, { keyPrefix: 'btns' })} </span>
+            <Link to={itemLink} target="_blank" className="link-secondary">
+              #{itemId}
+            </Link>
+          </small>
+          {object_type === 'question' && (
+            <>
+              <h5 className="mb-3">{flagItemData?.title}</h5>
+              <div className="mb-4">
+                {flagItemData?.tags?.map((item) => {
+                  return (
+                    <Tag key={item.slug_name} className="me-1" data={item} />
+                  );
+                })}
+              </div>
+            </>
           )}
           <div className="small font-monospace">
-            Python is a multi-paradigm, dynamically typed, multi-purpose
-            programming language. It is designed to be quick to learn,
-            understand, and use, and enforces a clean and uniform syntax. Please
-            note that Python 2 is officially out of support as of 2020-01-01.
-            For version-specific Python questions, add the [python-2.7] or
-            [python-3.x] tag. When using a Python variant library (e.g. Pandas,
-            NumPy), please include it in the tags.
+            {flagItemData?.original_text}
           </div>
-          <div className="d-flex align-items-center justify-content-between mt-4">
-            <Badge bg="success">normal</Badge>
+          <div className="d-flex flex-wrap align-items-center justify-content-between mt-4">
+            <div>
+              <span
+                className={classNames(
+                  'badge',
+                  ADMIN_LIST_STATUS[object_status]?.variant,
+                )}>
+                {t(ADMIN_LIST_STATUS[object_status]?.name, {
+                  keyPrefix: 'admin.questions',
+                })}
+              </span>
+              {flagItemData?.object_show_status === 2 && (
+                <span
+                  className={classNames(
+                    'ms-1 badge',
+                    ADMIN_LIST_STATUS.unlist.variant,
+                  )}>
+                  {t(ADMIN_LIST_STATUS.unlist.name, { keyPrefix: 'btns' })}
+                </span>
+              )}
+            </div>
             <div className="d-flex align-items-center small">
-              <BaseUserCard
-                data={{
-                  username: 'username',
-                  display_name: 'username',
-                  avatar: '',
-                  reputation: 100,
-                }}
-                avatarSize="24"
-              />
+              <BaseUserCard data={author_user_info} avatarSize="24" />
               <FormatTime
-                time={1688107033}
+                time={Number(flagItemData?.created_at)}
                 className="text-secondary ms-1 flex-shrink-0"
-                preFix="answered"
+                preFix={t(itemTimePrefix, { keyPrefix: 'question_detail' })}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="p-3 d-flex">
-          <Avatar
-            avatar=""
-            size="40"
-            searchStr="s=48"
-            alt=""
-            className="me-2"
-          />
-          <div className="small">
-            <Link to="/test">
-              111 <span className="text-secondary">@111</span>
-            </Link>
-            <div className="mt-1">
-              I'm a web developer with in-depth experience in UI/UX design.
-            </div>
-            <div className="text-secondary mt-1">280 {t('reputation')}</div>
           </div>
         </div>
       </Card.Body>
+
+      <Card.Footer className="p-3">
+        <p>{t('approve_this_type', { type: 'revision' })}</p>
+        <Stack direction="horizontal" gap={2}>
+          <ApproveDropdown
+            objectType={object_type}
+            itemData={flagItemData}
+            curFilter={ADMIN_LIST_STATUS[object_status]?.name}
+            approveCallback={handlingApprove}
+          />
+          <Button
+            variant="outline-primary"
+            disabled={isLoading}
+            onClick={handleIgnore}>
+            {t('ignore', { keyPrefix: 'btns' })}
+          </Button>
+        </Stack>
+      </Card.Footer>
     </Card>
   );
 };

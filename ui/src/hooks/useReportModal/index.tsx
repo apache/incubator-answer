@@ -25,14 +25,20 @@ import ReactDOM from 'react-dom/client';
 
 import { useToast, useCaptchaModal } from '@/hooks';
 import type * as Type from '@/common/interface';
-import { reportList, postReport, closeQuestion, putReport } from '@/services';
+import {
+  reportList,
+  postReport,
+  closeQuestion,
+  putReport,
+  putFlagReviewAction,
+} from '@/services';
 
 interface Params {
   isBackend?: boolean;
   type: Type.ReportType;
   id: string;
   title?: string;
-  action: Type.ReportAction;
+  action: Type.ReportAction | 'flag_review_close';
 }
 
 const useReportModal = (callback?: () => void) => {
@@ -63,6 +69,7 @@ const useReportModal = (callback?: () => void) => {
     rootRef.current.root = ReactDOM.createRoot(div);
   }, []);
   const getList = ({ type, action, isBackend }: Params) => {
+    // @ts-ignore
     reportList({ type, action, isBackend }).then((res) => {
       setList(res);
       setShow(true);
@@ -115,6 +122,19 @@ const useReportModal = (callback?: () => void) => {
     if (params.type === 'question' && params.action === 'close') {
       closeQuestion({
         id: params.id,
+        close_type: reportType.type,
+        close_msg: content.value,
+      }).then(() => {
+        onClose();
+        asyncCallback();
+      });
+      return;
+    }
+
+    if (params.type === 'question' && params.action === 'flag_review_close') {
+      putFlagReviewAction({
+        flag_id: params.id,
+        operation_type: 'close_post',
         close_type: reportType.type,
         close_msg: content.value,
       }).then(() => {

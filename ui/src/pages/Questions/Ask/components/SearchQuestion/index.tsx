@@ -46,7 +46,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                 <ListGroup.Item
                   action
                   as="a"
-                  className="link-dark text-wrap text-break"
+                  className="link-dark text-wrap text-break grid gap-0 row-gap-3"
                   key={item.id}
                   href={pathFactory.questionLanding(item.id, item.url_title)}
                   target="_blank">
@@ -56,7 +56,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                     : null}
 
                   {item.accepted_answer ? (
-                    <span className="small ms-3 text-success">
+                    <span className="small ms-3 text-success d-inline-block">
                       <Icon type="bi" name="check-circle-fill" />
                       <span className="ms-1">
                         {t('x_answers', {
@@ -67,7 +67,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                     </span>
                   ) : (
                     item.answer_count > 0 && (
-                      <span className="small ms-3 text-secondary">
+                      <span className="small ms-3 text-secondary d-inline-block">
                         <Icon type="bi" name="chat-square-text-fill" />
                         <span className="ms-1">
                           {t('x_answers', {
