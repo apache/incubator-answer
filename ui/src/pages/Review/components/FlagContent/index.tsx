@@ -25,7 +25,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
   const [reviewResp, setReviewResp] = useState<Type.FlagReviewResp>();
   const flagItemData = reviewResp?.list[0] as Type.FlagReviewItem;
 
-  console.log('reviewResp', reviewResp);
+  // console.log('reviewResp', reviewResp);
 
   const resolveNextOne = (resp, pageNumber) => {
     const { count, list = [] } = resp;

@@ -58,7 +58,7 @@ const Statistics: FC<IProps> = ({ data }) => {
           <Col xs={6}>
             <span className="text-secondary me-1">{t('flags')}</span>
             <strong>
-              <Link to="/admin/flags" className="ms-2">
+              <Link to="/review?type=flagged" className="ms-2">
                 {data.report_count}
               </Link>
             </strong>

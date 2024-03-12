@@ -20,6 +20,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { usePageTags } from '@/hooks';
 import { Empty } from '@/components';
@@ -34,6 +35,8 @@ import {
 } from './components';
 
 const Index: FC = () => {
+  const [urlSearch, setUrlSearchParams] = useSearchParams();
+  const searchType = urlSearch.get('type');
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
   const [reviewTypeList, setReviewTypeList] = useState<Type.ReviewTypeItem[]>();
   const [currentReviewType, setCurrentReviewType] = useState('');
@@ -42,19 +45,34 @@ const Index: FC = () => {
   const fetchReviewType = (changeReviewType: boolean) => {
     getReviewType()
       .then((resp) => {
-        const filterData = resp.filter((item) => item.todo_amount > 0);
-        if (filterData.length > 0) {
-          if (changeReviewType) {
+        if (searchType) {
+          const filterData = resp.filter((item) =>
+            item.name.includes(searchType),
+          );
+          if (filterData.length > 0) {
             setCurrentReviewType(filterData[0].name);
           }
         } else {
-          setIsEmpty(true);
+          const filterData = resp.filter((item) => item.todo_amount > 0);
+          if (filterData.length > 0) {
+            if (changeReviewType) {
+              setCurrentReviewType(filterData[0].name);
+            }
+          } else {
+            setIsEmpty(true);
+          }
         }
         setReviewTypeList(resp);
       })
       .catch((ex) => {
         console.error('getReviewType error: ', ex);
       });
+  };
+
+  const handleTypeChange = (name) => {
+    urlSearch.delete('type');
+    setUrlSearchParams(urlSearch);
+    setCurrentReviewType(name);
   };
 
   useEffect(() => {
@@ -87,9 +105,7 @@ const Index: FC = () => {
         <ReviewType
           list={reviewTypeList}
           checked={currentReviewType}
-          callback={(name) => {
-            setCurrentReviewType(name);
-          }}
+          callback={handleTypeChange}
         />
       </Col>
     </Row>

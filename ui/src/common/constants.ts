@@ -90,10 +90,6 @@ export const ADMIN_NAV_MENUS = [
     name: 'users',
   },
   {
-    name: 'flags',
-    // badgeContent: 5,
-  },
-  {
     name: 'customize',
     children: [
       {

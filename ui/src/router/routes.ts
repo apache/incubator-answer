@@ -333,10 +333,6 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Answers',
           },
           {
-            path: 'flags',
-            page: 'pages/Admin/Flags',
-          },
-          {
             path: 'themes',
             page: 'pages/Admin/Themes',
           },

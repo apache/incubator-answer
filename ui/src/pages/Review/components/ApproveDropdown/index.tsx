@@ -21,7 +21,6 @@ const Index: FC<IProps> = ({
   curFilter,
   approveCallback,
 }) => {
-  console.log(objectType);
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
 
   const [isLoading, setIsLoading] = useState(false);

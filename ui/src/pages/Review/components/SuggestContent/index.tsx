@@ -66,13 +66,9 @@ const Index: FC<IProps> = ({ refreshCount }) => {
     }, 150);
   };
   const queryNextOne = (pageNumber) => {
-    getSuggestReviewList(pageNumber)
-      .then((resp) => {
-        resolveNextOne(resp, pageNumber);
-      })
-      .catch((ex) => {
-        console.error('review next error: ', ex);
-      });
+    getSuggestReviewList(pageNumber).then((resp) => {
+      resolveNextOne(resp, pageNumber);
+    });
   };
   const reviewInfo = unreviewed_info?.content;
 
@@ -85,9 +81,6 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       .then(() => {
         refreshCount();
         queryNextOne(page);
-      })
-      .catch((ex) => {
-        console.error('revisionAudit approve error: ', ex);
       })
       .finally(() => {
         setIsLoading(false);
