@@ -42,12 +42,16 @@ const useSkeletonControl = (isLoading: boolean) => {
     }, SKELETON_SHOW_TIME);
   };
 
+  const closeSkeleton = () => {
+    clearTimeout(timer.current as NodeJS.Timeout);
+    setIsSkeletonShow(false);
+  };
+
   useEffect(() => {
     if (isLoading) {
       openSkeleton();
     } else {
-      clearTimeout(timer.current as NodeJS.Timeout);
-      setIsSkeletonShow(false);
+      closeSkeleton();
     }
   }, [isLoading]);
 
