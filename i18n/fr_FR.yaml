@@ -126,7 +126,7 @@ backend:
     rank_tag_audit_label:
       other: Évaluer les modifications des tags
     rank_tag_edit_without_review_label:
-      other: Modifier la description du tag sans le relire
+      other: Modifier la description du tag sans révision
     rank_tag_synonym_label:
       other: Gérer les tags synonyme
   email:
@@ -322,7 +322,7 @@ backend:
         other: Cela a été posté comme une réponse, mais il n'essaie pas de répondre à la question. Il devrait s'agir d'un commentaire, d'une autre question, ou devrait être supprimé totalement.
     no_longer_needed:
       name:
-        other: n’est plus nécessaire
+        other: ce n’est plus nécessaire
       desc:
         other: Ce commentaire est obsolète, conversationnel ou non pertinent pour ce post.
     something:
@@ -354,7 +354,7 @@ backend:
         other: Améliorez et corrigez vous-même les problèmes liés à ce message.
     needs_close:
       name:
-        other: nécessite d'être fermé
+        other: a besoin de fermer
       desc:
         other: Une question fermée ne peut pas être répondue, mais peut-être quand même modifiée, votée et commentée.
     needs_delete:
@@ -366,14 +366,14 @@ backend:
     close:
       duplicate:
         name:
-          other: indésirable
+          other: spam
         desc:
           other: Cette question a déjà été posée auparavant et a déjà une réponse.
       guideline:
         name:
           other: une raison spécifique à la communauté
         desc:
-          other: Cette question ne répond pas à une règle communautaire.
+          other: Cette question ne répond pas à une directive de la communauté.
       multiple:
         name:
           other: a besoin de détails ou de clarté
@@ -386,9 +386,9 @@ backend:
           other: Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus.
     operation_type:
       asked:
-        other: a demandé
+        other: demandé
       answered:
-        other: a répondu
+        other: répondu
       modified:
         other: modifié
     deleted_title:
@@ -424,7 +424,7 @@ backend:
       down_voted_question:
         other: downvoted question
       up_voted_answer:
-        other: upvoted answer
+        other: voter favorablement la réponse
       down_voted_answer:
         other: downvoted answer
       up_voted_comment:
@@ -513,7 +513,7 @@ ui:
     sign_up: S'inscrire
     account_recovery: Récupération de compte
     account_activation: Activation du compte
-    confirm_email: Confirmez votre adresse e-mail
+    confirm_email: Confirmer l'email
     account_suspended: Compte suspendu
     admin: Admin
     change_email: Modifier l'e-mail
@@ -529,7 +529,7 @@ ui:
   notifications:
     title: Notifications
     inbox: Boîte de réception
-    achievement: Succès
+    achievement: Accomplissements
     new_alerts: Nouvelles notifications
     all_read: Tout marquer comme lu
     show_more: Afficher plus
