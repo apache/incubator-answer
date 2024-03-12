@@ -26,19 +26,29 @@ import { Empty } from '@/components';
 import { getReviewType } from '@/services';
 import type * as Type from '@/common/interface';
 
-import { Filter, FlagContent, SuggestEditContent } from './components';
+import {
+  ReviewType,
+  FlagContent,
+  SuggestContent,
+  QueuedContent,
+} from './components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
   const [reviewTypeList, setReviewTypeList] = useState<Type.ReviewTypeItem[]>();
   const [currentReviewType, setCurrentReviewType] = useState('');
+  const [isEmpty, setIsEmpty] = useState(false);
 
-  const fetchReviewType = () => {
+  const fetchReviewType = (changeReviewType: boolean) => {
     getReviewType()
       .then((resp) => {
         const filterData = resp.filter((item) => item.todo_amount > 0);
         if (filterData.length > 0) {
-          setCurrentReviewType(filterData[0].name);
+          if (changeReviewType) {
+            setCurrentReviewType(filterData[0].name);
+          }
+        } else {
+          setIsEmpty(true);
         }
         setReviewTypeList(resp);
       })
@@ -48,7 +58,7 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    fetchReviewType();
+    fetchReviewType(true);
   }, []);
 
   usePageTags({
@@ -59,15 +69,22 @@ const Index: FC = () => {
     <Row className="pt-4 mb-5">
       <h3 className="mb-4">{t('review')}</h3>
       <Col className="page-main flex-auto">
-        {currentReviewType === 'suggested_post_edit' && <SuggestEditContent />}
+        {currentReviewType === 'suggested_post_edit' && (
+          <SuggestContent refreshCount={() => fetchReviewType(false)} />
+        )}
 
-        {/* {currentReviewType === 'flagged_post' && <FlagContent />} */}
-        <FlagContent />
-        <Empty>{t('empty')}</Empty>
+        {currentReviewType === 'flagged_post' && (
+          <FlagContent refreshCount={() => fetchReviewType(false)} />
+        )}
+
+        {currentReviewType === 'queued_post' && (
+          <QueuedContent refreshCount={() => fetchReviewType(false)} />
+        )}
+        {isEmpty && <Empty>{t('empty')}</Empty>}
       </Col>
 
       <Col className="page-right-side mt-4 mt-xl-0">
-        <Filter
+        <ReviewType
           list={reviewTypeList}
           checked={currentReviewType}
           callback={(name) => {

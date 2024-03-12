@@ -38,3 +38,15 @@ export const getFlagReviewPostList = (page: number) => {
 export const putFlagReviewAction = (params: Type.PutFlagReviewParams) => {
   return request.put('/answer/api/v1/report/review', params);
 };
+
+export const getPendingReviewPostList = (page: number) => {
+  const apiUrl = `/answer/api/v1/review/pending/post/page?page=${page}`;
+  return request.get<Type.QueuedReviewResp>(apiUrl);
+};
+
+export const putPendingReviewAction = (params: {
+  review_id: string;
+  status: 'approve' | 'reject';
+}) => {
+  return request.put('/answer/api/v1/review/pending/post', params);
+};

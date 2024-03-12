@@ -1563,6 +1563,7 @@ ui:
       status: Status
       action: Action
       change: Change
+      pending: Pending
       filter:
         placeholder: "Filter by title, question:id"
     answers:
@@ -1814,10 +1815,15 @@ ui:
     edit_answer: Edit answer
     edit_tag: Edit tag
     empty: No review tasks left.
-    approve_this_type: Do you approve this {{ type }}?
+    approve_revision_tip: Do you approve this revision?
+    approve_flag_tip: Do you approve this flag?
+    approve_post_tip: Do you approve this post?
+    approve_user_tip: Do you approve this user?
     suggest_edits: Suggested edits
     flag_post: Flag post
     flag_user: Flag user
+    queued_post: Queued post
+    queued_user: Queued user
     filter_label: Type
     reputation: reputation
     flag_post_type: Flagged this post as {{ type }}

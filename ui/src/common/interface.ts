@@ -597,7 +597,7 @@ export interface ReasonItem {
   reason_type: number;
 }
 
-export interface FlagReviewItem {
+export interface BaseReviewItem {
   object_type: 'question' | 'answer' | 'comment' | 'user';
   object_id: string;
   object_show_status: number;
@@ -605,9 +605,7 @@ export interface FlagReviewItem {
   tags: Tag[];
   title: string;
   original_text: string;
-  reason: ReasonItem;
   author_user_info: UserInfoBase;
-  submitter_user: UserInfoBase;
   created_at: number;
   submit_at: number;
   comment_id: string;
@@ -618,9 +616,24 @@ export interface FlagReviewItem {
   flag_id: string;
 }
 
+export interface FlagReviewItem extends BaseReviewItem {
+  reason: ReasonItem;
+  submitter_user: UserInfoBase;
+}
+
 export interface FlagReviewResp {
   count: number;
   list: FlagReviewItem[];
+}
+
+export interface QueuedReviewItem extends BaseReviewItem {
+  reason: string;
+  submitter_display_name: string;
+}
+
+export interface QueuedReviewResp {
+  count: number;
+  list: QueuedReviewItem[];
 }
 
 export interface UserRoleItem {

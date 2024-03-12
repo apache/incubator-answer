@@ -54,6 +54,11 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-danger',
     name: 'deleted',
   },
+  // pending
+  11: {
+    variant: 'text-bg-warning',
+    name: 'pending',
+  },
   normal: {
     variant: 'text-bg-success',
     name: 'normal',

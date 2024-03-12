@@ -28,7 +28,11 @@ import { pathFactory } from '@/router/pathFactory';
 import { scrollToDocTop } from '@/utils';
 import type * as Type from '@/common/interface';
 
-const Index: FC = () => {
+interface IProps {
+  refreshCount: () => void;
+}
+
+const Index: FC<IProps> = ({ refreshCount }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
   const [isLoading, setIsLoading] = useState(false);
   const [noTasks, setNoTasks] = useState(false);
@@ -79,6 +83,7 @@ const Index: FC = () => {
     setIsLoading(true);
     revisionAudit(unreviewed_info.id, 'approve')
       .then(() => {
+        refreshCount();
         queryNextOne(page);
       })
       .catch((ex) => {
@@ -96,6 +101,7 @@ const Index: FC = () => {
     setIsLoading(true);
     revisionAudit(unreviewed_info.id, 'reject')
       .then(() => {
+        refreshCount();
         queryNextOne(page);
       })
       .catch((ex) => {
@@ -223,7 +229,7 @@ const Index: FC = () => {
         </div>
       </Card.Body>
       <Card.Footer className="p-3">
-        <p>{t('approve_this_type', { type: 'revision' })}</p>
+        <p>{t('approve_revision_tip')}</p>
         <Stack direction="horizontal" gap={2}>
           <Button
             variant="outline-primary"
