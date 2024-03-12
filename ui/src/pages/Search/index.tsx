@@ -43,7 +43,7 @@ const Index = () => {
   const q = searchParams.get('q') || '';
   const order = searchParams.get('order') || 'active';
   const [isLoading, setIsLoading] = useState(false);
-  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
   const [data, setData] = useState<SearchRes>({
     count: 0,
     list: [],
@@ -96,13 +96,6 @@ const Index = () => {
   usePageTags({
     title: pageTitle,
   });
-  useEffect(() => {
-    if (isLoading) {
-      openSkeleton();
-    } else {
-      closeSkeleton();
-    }
-  }, [isLoading, openSkeleton, closeSkeleton]);
 
   return (
     <Row className="pt-4 mb-5">

@@ -68,7 +68,7 @@ const Index = () => {
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
@@ -235,14 +235,6 @@ const Index = () => {
       canInvitePeople = true;
     }
   }
-
-  useEffect(() => {
-    if (isLoading) {
-      openSkeleton();
-    } else {
-      closeSkeleton();
-    }
-  }, [isLoading, openSkeleton, closeSkeleton]);
 
   return (
     <Row className="questionDetailPage pt-4 mb-5">

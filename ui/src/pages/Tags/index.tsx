@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Row, Col, Card, Button, Form, Stack } from 'react-bootstrap';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,6 @@ const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const [searchTag, setSearchTag] = useState('');
-  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
   const { role_id } = loggedUserInfoStore((_) => _.user);
 
   const page = Number(urlSearch.get('page')) || 1;
@@ -53,6 +52,8 @@ const Tags = () => {
     ...(sort ? { query_cond: sort } : {}),
   });
 
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
+
   const handleChange = (e) => {
     setSearchTag(e.target.value);
   };
@@ -68,16 +69,11 @@ const Tags = () => {
       mutate();
     });
   };
+
   usePageTags({
     title: t('tags', { keyPrefix: 'page_title' }),
   });
-  useEffect(() => {
-    if (isLoading) {
-      openSkeleton();
-    } else {
-      closeSkeleton();
-    }
-  }, [isLoading, openSkeleton, closeSkeleton]);
+
   return (
     <Row className="py-4 mb-4">
       <Col xxl={12}>
