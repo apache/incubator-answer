@@ -17,15 +17,9 @@
  * under the License.
  */
 
-import { useCallback, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { SKELETON_SHOW_TIME } from '@/common/constants';
-
-interface IControlRef {
-  startTime?: number;
-  timer?: NodeJS.Timeout;
-  isSkeletonShow?: boolean;
-}
 
 /**
  * @param needShowFirst whether the skeleton should show at first
@@ -36,28 +30,32 @@ interface IControlRef {
  * If you set the 'needShowFirst' param as false, If the interface time is too short,
  * the skeleton screen will not be displayed, which can reduce the time occupation
  */
-const useSkeletonControl = () => {
-  const [isSkeletonShow, setIsSkeletonShow] = useState(true);
-  const controlRef = useRef<IControlRef>({});
+const useSkeletonControl = (isLoading: boolean) => {
+  const [isSkeletonShow, setIsSkeletonShow] = useState(false);
+  const timer = useRef<NodeJS.Timeout | null>(null);
   const openSkeleton = () => {
-    setIsSkeletonShow(true);
-    controlRef.current.startTime = Date.now();
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      setIsSkeletonShow(true);
+    }, SKELETON_SHOW_TIME);
   };
 
-  const closeSkeleton = useCallback(() => {
-    if (isSkeletonShow && controlRef.current.startTime) {
-      const delayTime =
-        Date.now() - controlRef.current.startTime + SKELETON_SHOW_TIME;
-      setTimeout(
-        () => {
-          setIsSkeletonShow(false);
-        },
-        delayTime <= 0 ? 0 : delayTime,
-      );
-    }
-  }, [isSkeletonShow]);
+  const closeSkeleton = () => {
+    clearTimeout(timer.current as NodeJS.Timeout);
+    setIsSkeletonShow(false);
+  };
 
-  return { isSkeletonShow, openSkeleton, closeSkeleton };
+  useEffect(() => {
+    if (isLoading) {
+      openSkeleton();
+    } else {
+      closeSkeleton();
+    }
+  }, [isLoading]);
+
+  return { isSkeletonShow };
 };
 
 export default useSkeletonControl;
