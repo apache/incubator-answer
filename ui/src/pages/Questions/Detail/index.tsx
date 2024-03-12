@@ -68,8 +68,7 @@ const Index = () => {
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isSkeletonShow, openSkeleton, closeSkeleton } =
-    useSkeletonControl(true);
+  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],

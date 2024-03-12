@@ -19,7 +19,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import { SKELETON_NEED_TIME, SKELETON_SHOW_MIN_TIME } from '@/common/constants';
+import { SKELETON_SHOW_TIME } from '@/common/constants';
 
 interface IControlRef {
   startTime?: number;
@@ -36,29 +36,18 @@ interface IControlRef {
  * If you set the 'needShowFirst' param as false, If the interface time is too short,
  * the skeleton screen will not be displayed, which can reduce the time occupation
  */
-const useSkeletonControl = (needShowFirst: boolean = false) => {
-  const [isSkeletonShow, setIsSkeletonShow] = useState(false);
+const useSkeletonControl = () => {
+  const [isSkeletonShow, setIsSkeletonShow] = useState(true);
   const controlRef = useRef<IControlRef>({});
   const openSkeleton = () => {
-    if (needShowFirst) {
-      setIsSkeletonShow(true);
-      controlRef.current.startTime = Date.now();
-      return;
-    }
-    if (!controlRef.current.timer) {
-      controlRef.current.timer = setTimeout(() => {
-        setIsSkeletonShow(true);
-        controlRef.current.startTime = Date.now();
-      }, SKELETON_NEED_TIME);
-    }
+    setIsSkeletonShow(true);
+    controlRef.current.startTime = Date.now();
   };
 
   const closeSkeleton = useCallback(() => {
-    clearTimeout(controlRef.current.timer);
-    controlRef.current.timer = undefined;
     if (isSkeletonShow && controlRef.current.startTime) {
       const delayTime =
-        Date.now() - controlRef.current.startTime + SKELETON_SHOW_MIN_TIME;
+        Date.now() - controlRef.current.startTime + SKELETON_SHOW_TIME;
       setTimeout(
         () => {
           setIsSkeletonShow(false);

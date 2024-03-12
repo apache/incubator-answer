@@ -60,8 +60,7 @@ const QuestionList: FC<Props> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const [urlSearchParams] = useSearchParams();
-  const { isSkeletonShow, openSkeleton, closeSkeleton } =
-    useSkeletonControl(true);
+  const { isSkeletonShow, openSkeleton, closeSkeleton } = useSkeletonControl();
   const curOrder =
     order || urlSearchParams.get('order') || QUESTION_ORDER_KEYS[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
