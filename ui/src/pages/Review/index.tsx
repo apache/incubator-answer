@@ -57,6 +57,13 @@ const Index: FC = () => {
           if (filterData.length > 0) {
             if (changeReviewType) {
               setCurrentReviewType(filterData[0].name);
+            } else {
+              const currentTypeItem = resp.find(
+                (item) => item.name === currentReviewType,
+              );
+              if (currentTypeItem?.todo_amount === 0) {
+                setCurrentReviewType(filterData[0].name);
+              }
             }
           } else {
             setIsEmpty(true);
