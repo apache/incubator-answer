@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Card, Alert, Stack, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import classNames from 'classnames';
 
@@ -17,6 +17,8 @@ interface IProps {
 }
 
 const Index: FC<IProps> = ({ refreshCount }) => {
+  const [urlSearch, setUrlSearchParams] = useSearchParams();
+  const objectId = urlSearch.get('objectId') || '';
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
   const [noTasks, setNoTasks] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +35,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       pageNumber = 1;
       setPage(pageNumber);
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      queryNextOne(pageNumber);
+      queryNextOne(pageNumber, '');
       return;
     }
     if (pageNumber !== page) {
@@ -48,14 +50,14 @@ const Index: FC<IProps> = ({ refreshCount }) => {
     }, 150);
   };
 
-  const queryNextOne = (pageNumber) => {
-    getPendingReviewPostList(pageNumber).then((resp) => {
+  const queryNextOne = (pageNumber, id) => {
+    getPendingReviewPostList(pageNumber, id).then((resp) => {
       resolveNextOne(resp, pageNumber);
     });
   };
 
   useEffect(() => {
-    queryNextOne(page);
+    queryNextOne(page, objectId);
   }, []);
 
   const handleAction = (type: 'approve' | 'reject') => {
@@ -69,7 +71,11 @@ const Index: FC<IProps> = ({ refreshCount }) => {
     })
       .then(() => {
         refreshCount();
-        queryNextOne(page + 1);
+        queryNextOne(page, '');
+        if (objectId) {
+          urlSearch.delete('objectId');
+          setUrlSearchParams(urlSearch);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -144,7 +150,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
                   ADMIN_LIST_STATUS[object_status]?.variant,
                 )}>
                 {t(ADMIN_LIST_STATUS[object_status]?.name, {
-                  keyPrefix: 'admin.questions',
+                  keyPrefix: 'btns',
                 })}
               </span>
               {flagItemData?.object_show_status === 2 && (

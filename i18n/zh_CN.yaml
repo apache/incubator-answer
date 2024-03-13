@@ -1133,6 +1133,15 @@ ui:
     system_setting: System setting
     default: Default
     reset: Reset
+    tag: Tag
+    post_lowercase: 帖子
+    filter: Filter
+    ignore: 忽略
+    submit: 提交
+    normal: 正常
+    closed: 已关闭
+    deleted: 已删除
+    pending: Pending
   search:
     title: 搜索结果
     keywords: 关键词

@@ -177,14 +177,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
 
   return (
     <Card>
-      <Card.Header>
-        {t('suggest_type_edit', {
-          type:
-            type === 'question' || type === 'answer'
-              ? t('post_lowercase', { keyPrefix: 'btns' })
-              : type,
-        })}
-      </Card.Header>
+      <Card.Header>{t('suggest_edits')}</Card.Header>
       <Card.Body className="p-0">
         <Alert variant="info" className="border-0 rounded-0 mb-0">
           <Stack

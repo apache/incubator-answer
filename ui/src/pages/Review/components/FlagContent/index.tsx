@@ -161,7 +161,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
                   ADMIN_LIST_STATUS[object_status]?.variant,
                 )}>
                 {t(ADMIN_LIST_STATUS[object_status]?.name, {
-                  keyPrefix: 'admin.questions',
+                  keyPrefix: 'btns',
                 })}
               </span>
               {flagItemData?.object_show_status === 2 && (

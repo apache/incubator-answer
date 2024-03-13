@@ -1174,6 +1174,10 @@ ui:
     filter: Filter
     ignore: Ignore
     submit: Submit
+    normal: Normal
+    closed: Closed
+    deleted: Deleted
+    pending: Pending
   search:
     title: Search Results
     keywords: Keywords
@@ -1552,9 +1556,6 @@ ui:
         content: A suspended user can't log in.
     questions:
       page_title: Questions
-      normal: Normal
-      closed: Closed
-      deleted: Deleted
       unlisted: Unlisted
       post: Post
       votes: Votes
@@ -1568,8 +1569,6 @@ ui:
         placeholder: "Filter by title, question:id"
     answers:
       page_title: Answers
-      normal: Normal
-      deleted: Deleted
       post: Post
       votes: Votes
       created: Created

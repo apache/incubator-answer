@@ -39,8 +39,8 @@ export const putFlagReviewAction = (params: Type.PutFlagReviewParams) => {
   return request.put('/answer/api/v1/report/review', params);
 };
 
-export const getPendingReviewPostList = (page: number) => {
-  const apiUrl = `/answer/api/v1/review/pending/post/page?page=${page}`;
+export const getPendingReviewPostList = (page: number, objectId?: string) => {
+  const apiUrl = `/answer/api/v1/review/pending/post/page?page=${page}&object_id=${objectId}`;
   return request.get<Type.QueuedReviewResp>(apiUrl);
 };
 

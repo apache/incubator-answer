@@ -300,9 +300,13 @@ export interface QueryQuestionsReq extends Paging {
   in_days?: number;
 }
 
-export type AdminQuestionStatus = 'available' | 'closed' | 'deleted';
+export type AdminQuestionStatus =
+  | 'available'
+  | 'pending'
+  | 'closed'
+  | 'deleted';
 
-export type AdminContentsFilterBy = 'normal' | 'closed' | 'deleted';
+export type AdminContentsFilterBy = 'normal' | 'pending' | 'closed' | 'deleted';
 
 export interface AdminContentsReq extends Paging {
   status: AdminContentsFilterBy;

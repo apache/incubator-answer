@@ -46,11 +46,11 @@ const Index: FC = () => {
     getReviewType()
       .then((resp) => {
         if (searchType) {
-          const filterData = resp.filter((item) =>
-            item.name.includes(searchType),
-          );
-          if (filterData.length > 0) {
-            setCurrentReviewType(filterData[0].name);
+          const filterData = resp.find((item) => item.name === searchType);
+          if (Number(filterData?.todo_amount) > 0) {
+            setCurrentReviewType(filterData?.name || '');
+          } else {
+            setIsEmpty(true);
           }
         } else {
           const filterData = resp.filter((item) => item.todo_amount > 0);

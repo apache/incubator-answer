@@ -40,7 +40,11 @@ import { pathFactory } from '@/router/pathFactory';
 
 import AnswerAction from './components/Action';
 
-const answerFilterItems: Type.AdminContentsFilterBy[] = ['normal', 'deleted'];
+const answerFilterItems: Type.AdminContentsFilterBy[] = [
+  'normal',
+  'pending',
+  'deleted',
+];
 
 const Answers: FC = () => {
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
@@ -77,7 +81,7 @@ const Answers: FC = () => {
           data={answerFilterItems}
           currentSort={curFilter}
           sortKey="status"
-          i18nKeyPrefix="admin.answers"
+          i18nKeyPrefix="btns"
         />
 
         <Form.Control
@@ -150,7 +154,9 @@ const Answers: FC = () => {
                       'badge',
                       ADMIN_LIST_STATUS[curFilter]?.variant,
                     )}>
-                    {t(ADMIN_LIST_STATUS[curFilter]?.name)}
+                    {t(ADMIN_LIST_STATUS[curFilter]?.name, {
+                      keyPrefix: 'btns',
+                    })}
                   </span>
                 </td>
                 <td className="text-end">
