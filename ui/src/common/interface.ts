@@ -631,6 +631,7 @@ export interface FlagReviewResp {
 }
 
 export interface QueuedReviewItem extends BaseReviewItem {
+  review_id: number;
   reason: string;
   submitter_display_name: string;
 }

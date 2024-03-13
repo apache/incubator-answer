@@ -67,7 +67,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
     setIsLoading(true);
     putPendingReviewAction({
       status: type,
-      review_id: String(flagItemData?.flag_id),
+      review_id: flagItemData?.review_id,
     })
       .then(() => {
         refreshCount();

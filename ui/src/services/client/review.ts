@@ -45,7 +45,7 @@ export const getPendingReviewPostList = (page: number, objectId?: string) => {
 };
 
 export const putPendingReviewAction = (params: {
-  review_id: string;
+  review_id: number;
   status: 'approve' | 'reject';
 }) => {
   return request.put('/answer/api/v1/review/pending/post', params);
