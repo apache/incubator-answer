@@ -210,7 +210,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	controllerSiteInfoController := controller.NewSiteInfoController(siteInfoCommonService)
 	notificationRepo := notification2.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService, notificationQueueService, userExternalLoginRepo, siteInfoCommonService)
-	notificationService := notification.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService, userRepo)
+	notificationService := notification.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService, userRepo, reportRepo, reviewService)
 	notificationController := controller.NewNotificationController(notificationService, rankService)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configService, siteInfoCommonService, serviceConf, dataData)
 	dashboardController := controller.NewDashboardController(dashboardService)
