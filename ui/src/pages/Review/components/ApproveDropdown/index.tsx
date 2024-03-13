@@ -111,7 +111,8 @@ const Index: FC<IProps> = ({
       closeModal.onShow({
         type: 'question',
         id: itemData?.flag_id || '',
-        action: 'flag_review_close',
+        action: 'close',
+        source: 'review',
       });
     }
 

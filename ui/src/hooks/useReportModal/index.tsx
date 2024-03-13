@@ -38,7 +38,8 @@ interface Params {
   type: Type.ReportType;
   id: string;
   title?: string;
-  action: Type.ReportAction | 'flag_review_close';
+  action: Type.ReportAction;
+  source?: string;
 }
 
 const useReportModal = (callback?: () => void) => {
@@ -70,7 +71,11 @@ const useReportModal = (callback?: () => void) => {
   }, []);
   const getList = ({ type, action, isBackend }: Params) => {
     // @ts-ignore
-    reportList({ type, action, isBackend }).then((res) => {
+    reportList({
+      type,
+      action,
+      isBackend,
+    }).then((res) => {
       setList(res);
       setShow(true);
     });
@@ -120,21 +125,20 @@ const useReportModal = (callback?: () => void) => {
       return;
     }
     if (params.type === 'question' && params.action === 'close') {
+      if (params?.source === 'review') {
+        putFlagReviewAction({
+          flag_id: params.id,
+          operation_type: 'close_post',
+          close_type: reportType.type,
+          close_msg: content.value,
+        }).then(() => {
+          onClose();
+          asyncCallback();
+        });
+        return;
+      }
       closeQuestion({
         id: params.id,
-        close_type: reportType.type,
-        close_msg: content.value,
-      }).then(() => {
-        onClose();
-        asyncCallback();
-      });
-      return;
-    }
-
-    if (params.type === 'question' && params.action === 'flag_review_close') {
-      putFlagReviewAction({
-        flag_id: params.id,
-        operation_type: 'close_post',
         close_type: reportType.type,
         close_msg: content.value,
       }).then(() => {
