@@ -58,6 +58,7 @@ func NewReviewController(
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query int false "page"
+// @Param object_id query string false "object_id"
 // @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetUnreviewedPostPageResp}}
 // @Router /answer/api/v1/review/pending/post/page [get]
 func (rc *ReviewController) GetUnreviewedPostPage(ctx *gin.Context) {

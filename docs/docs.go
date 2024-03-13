@@ -4509,6 +4509,12 @@ const docTemplate = `{
                         "description": "page",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "object_id",
+                        "name": "object_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {

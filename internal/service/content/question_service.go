@@ -365,8 +365,10 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		RevisionID:       revisionID,
 	})
 
-	qs.externalNotificationQueueService.Send(ctx,
-		schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+	if question.Status == entity.QuestionStatusAvailable {
+		qs.externalNotificationQueueService.Send(ctx,
+			schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+	}
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return

@@ -28,10 +28,13 @@ import (
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/role"
+	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/apache/incubator-answer/plugin"
 	"github.com/jinzhu/copier"
@@ -50,12 +53,16 @@ type ReviewRepo interface {
 
 // ReviewService user service
 type ReviewService struct {
-	reviewRepo        ReviewRepo
-	objectInfoService *object_info.ObjService
-	userCommon        *usercommon.UserCommon
-	questionRepo      questioncommon.QuestionRepo
-	answerRepo        answercommon.AnswerRepo
-	userRoleService   *role.UserRoleRelService
+	reviewRepo                       ReviewRepo
+	objectInfoService                *object_info.ObjService
+	userCommon                       *usercommon.UserCommon
+	userRepo                         usercommon.UserRepo
+	questionRepo                     questioncommon.QuestionRepo
+	answerRepo                       answercommon.AnswerRepo
+	userRoleService                  *role.UserRoleRelService
+	tagCommon                        *tagcommon.TagCommonService
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
+	notificationQueueService         notice_queue.NotificationQueueService
 }
 
 // NewReviewService new review service
@@ -66,14 +73,20 @@ func NewReviewService(
 	questionRepo questioncommon.QuestionRepo,
 	answerRepo answercommon.AnswerRepo,
 	userRoleService *role.UserRoleRelService,
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
+	tagCommon *tagcommon.TagCommonService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *ReviewService {
 	return &ReviewService{
-		reviewRepo:        reviewRepo,
-		objectInfoService: objectInfoService,
-		userCommon:        userCommon,
-		questionRepo:      questionRepo,
-		answerRepo:        answerRepo,
-		userRoleService:   userRoleService,
+		reviewRepo:                       reviewRepo,
+		objectInfoService:                objectInfoService,
+		userCommon:                       userCommon,
+		questionRepo:                     questionRepo,
+		answerRepo:                       answerRepo,
+		userRoleService:                  userRoleService,
+		externalNotificationQueueService: externalNotificationQueueService,
+		tagCommon:                        tagCommon,
+		notificationQueueService:         notificationQueueService,
 	}
 }
 
@@ -199,9 +212,19 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 		} else {
 			question.Status = entity.QuestionStatusDeleted
 		}
-		return cs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status)
+		if err := cs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status); err != nil {
+			return err
+		}
+		if isApprove {
+			tags, err := cs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+			if err != nil {
+				log.Errorf("get question tags failed, err: %v", err)
+			}
+			cs.externalNotificationQueueService.Send(ctx,
+				schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+		}
 	case constant.AnswerObjectType:
-		answer, exist, err := cs.answerRepo.GetAnswer(ctx, review.ObjectID)
+		answerInfo, exist, err := cs.answerRepo.GetAnswer(ctx, review.ObjectID)
 		if err != nil {
 			return err
 		}
@@ -209,14 +232,72 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 			return errors.BadRequest(reason.ObjectNotFound)
 		}
 		if isApprove {
-			answer.Status = entity.AnswerStatusAvailable
+			answerInfo.Status = entity.AnswerStatusAvailable
 		} else {
-			answer.Status = entity.AnswerStatusDeleted
+			answerInfo.Status = entity.AnswerStatusDeleted
 		}
-		return cs.answerRepo.UpdateAnswerStatus(ctx, answer.ID, answer.Status)
+		if err := cs.answerRepo.UpdateAnswerStatus(ctx, answerInfo.ID, answerInfo.Status); err != nil {
+			return err
+		}
+		questionInfo, exist, err := cs.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.ObjectNotFound)
+		}
+		if isApprove {
+			cs.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, answerInfo.ID,
+				answerInfo.UserID, questionInfo.Title, answerInfo.OriginalText)
+		}
 	}
 	return
+}
 
+func (cs *ReviewService) notificationAnswerTheQuestion(ctx context.Context,
+	questionUserID, questionID, answerID, answerUserID, questionTitle, answerSummary string) {
+	// If the question is answered by me, there is no notification for myself.
+	if questionUserID == answerUserID {
+		return
+	}
+	msg := &schema.NotificationMsg{
+		TriggerUserID:  answerUserID,
+		ReceiverUserID: questionUserID,
+		Type:           schema.NotificationTypeInbox,
+		ObjectID:       answerID,
+	}
+	msg.ObjectType = constant.AnswerObjectType
+	msg.NotificationAction = constant.NotificationAnswerTheQuestion
+	cs.notificationQueueService.Send(ctx, msg)
+
+	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, questionUserID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !exist {
+		log.Warnf("user %s not found", questionUserID)
+		return
+	}
+
+	externalNotificationMsg := &schema.ExternalNotificationMsg{
+		ReceiverUserID: receiverUserInfo.ID,
+		ReceiverEmail:  receiverUserInfo.EMail,
+		ReceiverLang:   receiverUserInfo.Language,
+	}
+	rawData := &schema.NewAnswerTemplateRawData{
+		QuestionTitle:   questionTitle,
+		QuestionID:      questionID,
+		AnswerID:        answerID,
+		AnswerSummary:   answerSummary,
+		UnsubscribeCode: token.GenerateToken(),
+	}
+	answerUser, _, _ := cs.userCommon.GetUserBasicInfoByID(ctx, answerUserID)
+	if answerUser != nil {
+		rawData.AnswerUserDisplayName = answerUser.DisplayName
+	}
+	externalNotificationMsg.NewAnswerTemplateRawData = rawData
+	cs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }
 
 // GetReviewPendingCount get review pending count
@@ -227,10 +308,11 @@ func (cs *ReviewService) GetReviewPendingCount(ctx context.Context) (count int64
 // GetUnreviewedPostPage get review page
 func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.GetUnreviewedPostPageReq) (
 	pageModel *pager.PageModel, err error) {
-	reviewList, total, err := cs.reviewRepo.GetReviewPage(ctx, req.Page, 1, &entity.Review{
+	cond := &entity.Review{
 		ObjectID: req.ObjectID,
 		Status:   entity.ReviewStatusPending,
-	})
+	}
+	reviewList, total, err := cs.reviewRepo.GetReviewPage(ctx, req.Page, 1, cond)
 	if err != nil {
 		return
 	}

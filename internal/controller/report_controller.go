@@ -144,6 +144,7 @@ func (rc *ReportController) ReviewReport(ctx *gin.Context) {
 	}
 
 	// TODO: check permission
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	err := rc.reportService.ReviewReport(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
