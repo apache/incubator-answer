@@ -23,6 +23,8 @@ import pattern from '@/common/pattern';
 import { USER_AGENT_NAMES } from '@/common/constants';
 import type * as Type from '@/common/interface';
 
+const Diff = require('diff');
+
 function thousandthDivision(num) {
   const reg = /\d{1,3}(?=(\d{3})+$)/g;
   return `${num}`.replace(reg, '$&,');
@@ -184,30 +186,28 @@ function diffText(newText: string, oldText?: string): string {
     return escapeHtml(newText);
   }
   let result = [];
-  import('diff').then((Diff) => {
-    const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
-    result = diff.map((part) => {
-      if (part.added) {
-        if (part.value.replace(/\n/g, '').length <= 0) {
-          return `<span class="review-text-add d-block">${part.value.replace(
-            /\n/g,
-            '↵\n',
-          )}</span>`;
-        }
-        return `<span class="review-text-add">${part.value}</span>`;
+  const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
+  result = diff.map((part) => {
+    if (part.added) {
+      if (part.value.replace(/\n/g, '').length <= 0) {
+        return `<span class="review-text-add d-block">${part.value.replace(
+          /\n/g,
+          '↵\n',
+        )}</span>`;
       }
-      if (part.removed) {
-        if (part.value.replace(/\n/g, '').length <= 0) {
-          return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
-            /\n/g,
-            '↵\n',
-          )}</span>`;
-        }
-        return `<span class="review-text-delete">${part.value}</span>`;
+      return `<span class="review-text-add">${part.value}</span>`;
+    }
+    if (part.removed) {
+      if (part.value.replace(/\n/g, '').length <= 0) {
+        return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
+          /\n/g,
+          '↵\n',
+        )}</span>`;
       }
+      return `<span class="review-text-delete">${part.value}</span>`;
+    }
 
-      return part.value;
-    });
+    return part.value;
   });
 
   return result.join('');
