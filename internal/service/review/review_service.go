@@ -200,7 +200,7 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 	objectType := constant.ObjectTypeNumberMapping[review.ObjectType]
 	switch objectType {
 	case constant.QuestionObjectType:
-		question, exist, err := cs.questionRepo.GetQuestion(ctx, review.ObjectID)
+		questionInfo, exist, err := cs.questionRepo.GetQuestion(ctx, review.ObjectID)
 		if err != nil {
 			return err
 		}
@@ -208,20 +208,29 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 			return errors.BadRequest(reason.ObjectNotFound)
 		}
 		if isApprove {
-			question.Status = entity.QuestionStatusAvailable
+			questionInfo.Status = entity.QuestionStatusAvailable
 		} else {
-			question.Status = entity.QuestionStatusDeleted
+			questionInfo.Status = entity.QuestionStatusDeleted
 		}
-		if err := cs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status); err != nil {
+		if err := cs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, questionInfo.Status); err != nil {
 			return err
 		}
 		if isApprove {
-			tags, err := cs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+			tags, err := cs.tagCommon.GetObjectEntityTag(ctx, questionInfo.ID)
 			if err != nil {
 				log.Errorf("get question tags failed, err: %v", err)
 			}
 			cs.externalNotificationQueueService.Send(ctx,
-				schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+				schema.CreateNewQuestionNotificationMsg(questionInfo.ID, questionInfo.Title, questionInfo.UserID, tags))
+		}
+		userQuestionCount, err := cs.questionRepo.GetUserQuestionCount(ctx, questionInfo.UserID)
+		if err != nil {
+			log.Errorf("get user question count failed, err: %v", err)
+		} else {
+			err = cs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
+			if err != nil {
+				log.Errorf("update user question count failed, err: %v", err)
+			}
 		}
 	case constant.AnswerObjectType:
 		answerInfo, exist, err := cs.answerRepo.GetAnswer(ctx, review.ObjectID)
@@ -249,6 +258,15 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 		if isApprove {
 			cs.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, answerInfo.ID,
 				answerInfo.UserID, questionInfo.Title, answerInfo.OriginalText)
+		}
+		userAnswerCount, err := cs.answerRepo.GetCountByUserID(ctx, answerInfo.UserID)
+		if err != nil {
+			log.Errorf("get user answer count failed, err: %v", err)
+		} else {
+			err = cs.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, int(userAnswerCount))
+			if err != nil {
+				log.Errorf("update user answer count failed, err: %v", err)
+			}
 		}
 	}
 	return
