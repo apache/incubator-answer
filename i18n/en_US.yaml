@@ -1062,6 +1062,7 @@ ui:
     asked: asked
     update: Modified
     edit: edited
+    commented: commented
     Views: Viewed
     Follow: Follow
     Following: Following
