@@ -1,20 +1,3 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -836,6 +819,60 @@ definitions:
         description: url title
         type: string
     type: object
+  schema.GetReportListPageResp:
+    properties:
+      answer_accepted:
+        type: boolean
+      answer_count:
+        type: integer
+      answer_id:
+        type: string
+      author_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      comment_id:
+        type: string
+      created_at:
+        type: integer
+      flag_id:
+        type: string
+      object_id:
+        type: string
+      object_show_status:
+        type: integer
+      object_status:
+        type: integer
+      object_type:
+        enum:
+        - question
+        - answer
+        - comment
+        type: string
+      original_text:
+        type: string
+      question_id:
+        type: string
+      reason:
+        $ref: '#/definitions/schema.ReasonItem'
+      submit_at:
+        type: integer
+      submitter_user:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
+    type: object
+  schema.GetReviewingTypeResp:
+    properties:
+      label:
+        type: string
+      name:
+        type: string
+      todo_amount:
+        type: integer
+    type: object
   schema.GetRevisionResp:
     properties:
       content:
@@ -998,6 +1035,47 @@ definitions:
         items:
           $ref: '#/definitions/schema.TagSynonym'
         type: array
+    type: object
+  schema.GetUnreviewedPostPageResp:
+    properties:
+      answer_id:
+        type: string
+      author_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      comment_id:
+        type: string
+      created_at:
+        type: integer
+      object_id:
+        type: string
+      object_show_status:
+        type: integer
+      object_status:
+        type: integer
+      object_type:
+        enum:
+        - question
+        - answer
+        - comment
+        type: string
+      original_text:
+        type: string
+      question_id:
+        type: string
+      reason:
+        type: string
+      review_id:
+        type: integer
+      submit_at:
+        type: integer
+      submitter_display_name:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
     type: object
   schema.GetUnreviewedRevisionResp:
     properties:
@@ -1395,6 +1473,19 @@ definitions:
     required:
     - id
     type: object
+  schema.ReasonItem:
+    properties:
+      content_type:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      placeholder:
+        type: string
+      reason_type:
+        type: integer
+    type: object
   schema.RecoverAnswerReq:
     properties:
       answer_id:
@@ -1459,17 +1550,37 @@ definitions:
       question_id:
         type: string
     type: object
-  schema.ReportHandleReq:
+  schema.ReviewReportReq:
     properties:
-      flagged_content:
+      close_msg:
         type: string
-      flagged_type:
+      close_type:
         type: integer
-      id:
+      content:
+        maxLength: 65535
+        minLength: 6
+        type: string
+      flag_id:
+        type: string
+      operation_type:
+        enum:
+        - edit_post
+        - close_post
+        - delete_post
+        - unlist_post
+        - ignore_report
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      title:
+        maxLength: 150
+        minLength: 6
         type: string
     required:
-    - flagged_type
-    - id
+    - flag_id
+    - operation_type
     type: object
   schema.RevisionAuditReq:
     properties:
@@ -1962,12 +2073,32 @@ definitions:
     type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
+      answer_accepted:
+        type: boolean
+      answer_count:
+        type: integer
+      answer_id:
+        type: string
+      comment_id:
+        type: string
       content:
         type: string
+      created_at:
+        type: integer
       html:
+        type: string
+      object_creator_user_id:
         type: string
       object_id:
         type: string
+      object_type:
+        type: string
+      question_id:
+        type: string
+      show_status:
+        type: integer
+      status:
+        type: integer
       tags:
         items:
           $ref: '#/definitions/schema.TagResp'
@@ -2055,6 +2186,19 @@ definitions:
         minimum: 1
     required:
     - level
+    type: object
+  schema.UpdateReviewReq:
+    properties:
+      review_id:
+        type: integer
+      status:
+        enum:
+        - approve
+        - reject
+        type: string
+    required:
+    - review_id
+    - status
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -2503,7 +2647,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,deleted]
+      description: Status:[available,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2517,6 +2661,7 @@ paths:
         enum:
         - available
         - deleted
+        - pending
         in: query
         name: status
         type: string
@@ -2704,7 +2849,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Status:[available,closed,deleted]
+      description: Status:[available,closed,deleted,pending]
       parameters:
       - description: page size
         in: query
@@ -2719,6 +2864,7 @@ paths:
         - available
         - closed
         - deleted
+        - pending
         in: query
         name: status
         type: string
@@ -2800,76 +2946,6 @@ paths:
       summary: get reasons by object type and action
       tags:
       - reason
-  /answer/admin/api/report/:
-    put:
-      consumes:
-      - application/json
-      description: handle flag
-      parameters:
-      - description: flag
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.ReportHandleReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      - ApiKeyAuth: []
-      summary: handle flag
-      tags:
-      - admin
-  /answer/admin/api/reports/page:
-    get:
-      consumes:
-      - application/json
-      description: list report records
-      parameters:
-      - description: status
-        enum:
-        - pending
-        - completed
-        in: query
-        name: status
-        required: true
-        type: string
-      - description: object_type
-        enum:
-        - all
-        - question
-        - answer
-        - comment
-        in: query
-        name: object_type
-        required: true
-        type: string
-      - description: page size
-        in: query
-        name: page
-        type: integer
-      - description: page size
-        in: query
-        name: page_size
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      - ApiKeyAuth: []
-      summary: list report page
-      tags:
-      - admin
   /answer/admin/api/roles:
     get:
       description: get role list
@@ -5175,6 +5251,150 @@ paths:
       summary: add report
       tags:
       - Report
+  /answer/api/v1/report/review:
+    put:
+      consumes:
+      - application/json
+      description: review report
+      parameters:
+      - description: flag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ReviewReportReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: review report
+      tags:
+      - Report
+  /answer/api/v1/report/unreviewed/post:
+    get:
+      consumes:
+      - application/json
+      description: get unreviewed report post page
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetReportListPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get unreviewed report post page
+      tags:
+      - Report
+  /answer/api/v1/review/pending/post:
+    put:
+      consumes:
+      - application/json
+      description: update review
+      parameters:
+      - description: review
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateReviewReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: update review
+      tags:
+      - Review
+  /answer/api/v1/review/pending/post/page:
+    get:
+      consumes:
+      - application/json
+      description: get unreviewed post page
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: object_id
+        in: query
+        name: object_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetUnreviewedPostPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get unreviewed post page
+      tags:
+      - Review
+  /answer/api/v1/reviewing/type:
+    get:
+      description: get reviewing type
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetReviewingTypeResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get reviewing type
+      tags:
+      - Revision
   /answer/api/v1/revisions:
     get:
       description: get revision list

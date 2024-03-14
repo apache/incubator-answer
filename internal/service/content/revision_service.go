@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package service
+package content
 
 import (
 	"context"
@@ -34,6 +34,8 @@ import (
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/report_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision"
 	"github.com/apache/incubator-answer/internal/service/tag_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
@@ -58,6 +60,8 @@ type RevisionService struct {
 	tagCommon                *tagcommon.TagCommonService
 	notificationQueueService notice_queue.NotificationQueueService
 	activityQueueService     activity_queue.ActivityQueueService
+	reportRepo               report_common.ReportRepo
+	reviewService            *review.ReviewService
 }
 
 func NewRevisionService(
@@ -72,6 +76,8 @@ func NewRevisionService(
 	tagCommon *tagcommon.TagCommonService,
 	notificationQueueService notice_queue.NotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
+	reportRepo report_common.ReportRepo,
+	reviewService *review.ReviewService,
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:             revisionRepo,
@@ -85,6 +91,8 @@ func NewRevisionService(
 		tagCommon:                tagCommon,
 		notificationQueueService: notificationQueueService,
 		activityQueueService:     activityQueueService,
+		reportRepo:               reportRepo,
+		reviewService:            reviewService,
 	}
 }
 
@@ -143,7 +151,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 }
 
 func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
-	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
+	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfoResp)
 	if ok {
 		var PostUpdateTime time.Time
 		dbquestion, exist, dberr := rs.questionRepo.GetQuestion(ctx, questioninfo.ID)
@@ -380,7 +388,7 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 	var (
 		err          error
 		question     entity.QuestionWithTagsRevision
-		questionInfo *schema.QuestionInfo
+		questionInfo *schema.QuestionInfoResp
 		answer       entity.Answer
 		answerInfo   *schema.AnswerInfo
 		tag          entity.Tag
@@ -441,4 +449,50 @@ func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *sche
 		return &schema.ErrTypeToast, errors.BadRequest(reason.RevisionReviewUnderway)
 	}
 	return nil, nil
+}
+
+// GetReviewingType get reviewing type
+func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.GetReviewingTypeReq) (resp []*schema.GetReviewingTypeResp, err error) {
+	resp = make([]*schema.GetReviewingTypeResp, 0)
+
+	// get queue amount
+	if req.IsAdmin {
+		reviewCount, err := rs.reviewService.GetReviewPendingCount(ctx)
+		if err != nil {
+			log.Errorf("get report count failed: %v", err)
+		} else {
+			resp = append(resp, &schema.GetReviewingTypeResp{
+				Name:       string(constant.QueuedPost),
+				Label:      "Queued post",
+				TodoAmount: reviewCount,
+			})
+		}
+	}
+
+	// get flag amount
+	if req.IsAdmin {
+		reportCount, err := rs.reportRepo.GetReportCount(ctx)
+		if err != nil {
+			log.Errorf("get report count failed: %v", err)
+		} else {
+			resp = append(resp, &schema.GetReviewingTypeResp{
+				Name:       string(constant.FlaggedPost),
+				Label:      "Flagged post",
+				TodoAmount: reportCount,
+			})
+		}
+	}
+
+	// get suggestion amount
+	countUnreviewedRevision, err := rs.revisionRepo.CountUnreviewedRevision(ctx, req.GetCanReviewObjectTypes())
+	if err != nil {
+		log.Errorf("get unreviewed revision count failed: %v", err)
+	} else {
+		resp = append(resp, &schema.GetReviewingTypeResp{
+			Name:       string(constant.SuggestedPostEdit),
+			Label:      "Suggested edits",
+			TodoAmount: countUnreviewedRevision,
+		})
+	}
+	return resp, nil
 }

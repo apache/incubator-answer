@@ -112,3 +112,33 @@ type GetRevisionResp struct {
 	UserInfo        UserBasicInfo `json:"user_info"`
 	Log             string        `json:"reason"`
 }
+
+// GetReviewingTypeReq get reviewing type request
+type GetReviewingTypeReq struct {
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
+	IsAdmin           bool   `json:"-"`
+	UserID            string `json:"-"`
+}
+
+func (r *GetReviewingTypeReq) GetCanReviewObjectTypes() []int {
+	objectType := make([]int, 0)
+	if r.CanReviewAnswer {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.AnswerObjectType])
+	}
+	if r.CanReviewQuestion {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.QuestionObjectType])
+	}
+	if r.CanReviewTag {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.TagObjectType])
+	}
+	return objectType
+}
+
+// GetReviewingTypeResp get reviewing type response
+type GetReviewingTypeResp struct {
+	Name       string `json:"name"`
+	Label      string `json:"label"`
+	TodoAmount int64  `json:"todo_amount"`
+}

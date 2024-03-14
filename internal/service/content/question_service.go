@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package service
+package content
 
 import (
 	"encoding/json"
@@ -42,6 +42,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/notification"
 	"github.com/apache/incubator-answer/internal/service/permission"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
@@ -77,6 +78,7 @@ type QuestionService struct {
 	activityQueueService             activity_queue.ActivityQueueService
 	siteInfoService                  siteinfo_common.SiteInfoCommonService
 	newQuestionNotificationService   *notification.ExternalNotificationService
+	reviewService                    *review.ReviewService
 }
 
 func NewQuestionService(
@@ -96,6 +98,7 @@ func NewQuestionService(
 	activityQueueService activity_queue.ActivityQueueService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	newQuestionNotificationService *notification.ExternalNotificationService,
+	reviewService *review.ReviewService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:                     questionRepo,
@@ -114,6 +117,7 @@ func NewQuestionService(
 		activityQueueService:             activityQueueService,
 		siteInfoService:                  siteInfoService,
 		newQuestionNotificationService:   newQuestionNotificationService,
+		reviewService:                    reviewService,
 	}
 }
 
@@ -299,7 +303,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.LastAnswerID = "0"
 	question.LastEditUserID = "0"
 	//question.PostUpdateTime = nil
-	question.Status = entity.QuestionStatusAvailable
+	question.Status = entity.QuestionStatusPending
 	question.RevisionID = "0"
 	question.CreatedAt = now
 	question.PostUpdateTime = now
@@ -309,6 +313,11 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
 		return
+	}
+	if qs.reviewService.AddQuestionReview(ctx, question, req.Tags) {
+		if err := qs.questionRepo.UpdateQuestionStatus(ctx, question.ID, entity.QuestionStatusAvailable); err != nil {
+			return nil, err
+		}
 	}
 	objectTagData := schema.TagChange{}
 	objectTagData.ObjectID = question.ID
@@ -356,8 +365,10 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		RevisionID:       revisionID,
 	})
 
-	qs.externalNotificationQueueService.Send(ctx,
-		schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+	if question.Status == entity.QuestionStatusAvailable {
+		qs.externalNotificationQueueService.Send(ctx,
+			schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
+	}
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
@@ -513,7 +524,8 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	// 	 log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	// }
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
-		UserID:           req.UserID,
+		UserID:           questionInfo.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
@@ -754,7 +766,7 @@ func (qs *QuestionService) notificationInviteUser(
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
 	var canUpdate bool
-	questionInfo = &schema.QuestionInfo{}
+	questionInfo = &schema.QuestionInfoResp{}
 
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
@@ -917,7 +929,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 
 // GetQuestion get question one
 func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID string,
-	per schema.QuestionPermission) (resp *schema.QuestionInfo, err error) {
+	per schema.QuestionPermission) (resp *schema.QuestionInfoResp, err error) {
 	question, err := qs.questioncommon.Info(ctx, questionID, userID)
 	if err != nil {
 		return
@@ -966,7 +978,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 // GetQuestionAndAddPV get question one
 func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
 	per schema.QuestionPermission) (
-	resp *schema.QuestionInfo, err error) {
+	resp *schema.QuestionInfoResp, err error) {
 	err = qs.questioncommon.UpdatePv(ctx, questionID)
 	if err != nil {
 		log.Error(err)
@@ -1080,7 +1092,7 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 // PersonalCollectionPage get collection list by user
 func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *schema.PersonalCollectionPageReq) (
 	pageModel *pager.PageModel, err error) {
-	list := make([]*schema.QuestionInfo, 0)
+	list := make([]*schema.QuestionInfoResp, 0)
 	collectionSearch := &entity.CollectionSearch{}
 	collectionSearch.UserID = req.UserID
 	collectionSearch.Page = req.Page
