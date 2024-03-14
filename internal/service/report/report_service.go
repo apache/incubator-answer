@@ -106,6 +106,9 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 // GetUnreviewedReportPostPage get unreviewed report post page
 func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *schema.GetUnreviewedReportPostPageReq) (
 	pageModel *pager.PageModel, err error) {
+	if !req.IsAdmin {
+		return pager.NewPageModel(0, make([]*schema.GetReportListPageResp, 0)), nil
+	}
 	lang := handler.GetLangByCtx(ctx)
 	reports, total, err := rs.reportRepo.GetReportListPage(ctx, &schema.GetReportListPageDTO{
 		Page:     req.Page,

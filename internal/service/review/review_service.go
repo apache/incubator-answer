@@ -70,6 +70,7 @@ func NewReviewService(
 	reviewRepo ReviewRepo,
 	objectInfoService *object_info.ObjService,
 	userCommon *usercommon.UserCommon,
+	userRepo usercommon.UserRepo,
 	questionRepo questioncommon.QuestionRepo,
 	answerRepo answercommon.AnswerRepo,
 	userRoleService *role.UserRoleRelService,
@@ -81,6 +82,7 @@ func NewReviewService(
 		reviewRepo:                       reviewRepo,
 		objectInfoService:                objectInfoService,
 		userCommon:                       userCommon,
+		userRepo:                         userRepo,
 		questionRepo:                     questionRepo,
 		answerRepo:                       answerRepo,
 		userRoleService:                  userRoleService,
@@ -326,6 +328,9 @@ func (cs *ReviewService) GetReviewPendingCount(ctx context.Context) (count int64
 // GetUnreviewedPostPage get review page
 func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.GetUnreviewedPostPageReq) (
 	pageModel *pager.PageModel, err error) {
+	if !req.IsAdmin {
+		return pager.NewPageModel(0, make([]*schema.GetUnreviewedPostPageResp, 0)), nil
+	}
 	cond := &entity.Review{
 		ObjectID: req.ObjectID,
 		Status:   entity.ReviewStatusPending,

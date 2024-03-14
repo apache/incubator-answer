@@ -93,7 +93,9 @@ type GetReportListPageResp struct {
 
 // GetUnreviewedReportPostPageReq get unreviewed report post page request
 type GetUnreviewedReportPostPageReq struct {
-	Page int `json:"page" form:"page"`
+	Page    int    `json:"page" form:"page"`
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 // ReviewReportReq review report request
@@ -106,4 +108,5 @@ type ReviewReportReq struct {
 	Content       string     `validate:"omitempty,notblank,gte=6,lte=65535" json:"content"`
 	Tags          []*TagItem `validate:"omitempty,dive" json:"tags"`
 	UserID        string     `json:"-"`
+	IsAdmin       bool       `json:"-"`
 }

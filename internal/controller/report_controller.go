@@ -120,7 +120,8 @@ func (rc *ReportController) GetUnreviewedReportPostPage(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: check permission
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
 
 	resp, err := rc.reportService.GetUnreviewedReportPostPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -143,8 +144,12 @@ func (rc *ReportController) ReviewReport(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: check permission
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
+	if !req.IsAdmin {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
+		return
+	}
 
 	err := rc.reportService.ReviewReport(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
