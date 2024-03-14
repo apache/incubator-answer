@@ -363,6 +363,42 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	return rows, count, nil
 }
 
+// GetPersonalAnswerPage personal answer page
+func (ar *answerRepo) GetPersonalAnswerPage(ctx context.Context, req *entity.PersonalAnswerPageQueryCond) (
+	resp []*entity.Answer, total int64, err error) {
+	cond := &entity.Answer{
+		UserID: req.UserID,
+	}
+	session := ar.data.DB.Context(ctx)
+	switch req.Order {
+	case entity.AnswerSearchOrderByTime:
+		session = session.OrderBy("created_at desc")
+	case entity.AnswerSearchOrderByTimeAsc:
+		session = session.OrderBy("created_at asc")
+	case entity.AnswerSearchOrderByVote:
+		session = session.OrderBy("vote_count desc")
+	default:
+		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
+	}
+	if req.ShowPending {
+		session = session.And("status != ?", entity.AnswerStatusDeleted)
+	} else {
+		session = session.And("status = ?", entity.AnswerStatusAvailable)
+	}
+	resp = make([]*entity.Answer, 0)
+	total, err = pager.Help(req.Page, req.PageSize, &resp, cond, session)
+	if err != nil {
+		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range resp {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
+	}
+	return resp, total, nil
+}
+
 func (ar *answerRepo) AdminSearchList(ctx context.Context, req *schema.AdminAnswerPageReq) (
 	resp []*entity.Answer, total int64, err error) {
 	cond := &entity.Answer{}

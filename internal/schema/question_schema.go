@@ -356,6 +356,7 @@ type QuestionPageReq struct {
 	LoginUserID      string `json:"-"`
 	UserIDBeSearched string `json:"-"`
 	TagID            string `json:"-"`
+	ShowPending      bool   `json:"-"`
 }
 
 const (
@@ -473,6 +474,7 @@ type PersonalQuestionPageReq struct {
 	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
 	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	LoginUserID string `json:"-"`
+	IsAdmin     bool   `json:"-"`
 }
 
 type PersonalAnswerPageReq struct {
@@ -481,6 +483,7 @@ type PersonalAnswerPageReq struct {
 	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
 	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	LoginUserID string `json:"-"`
+	IsAdmin     bool   `json:"-"`
 }
 
 type PersonalCollectionPageReq struct {
