@@ -93,7 +93,9 @@ const HealthStatus: FC<IProps> = ({ data }) => {
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('timezone')}</span>
-            <strong>{data.time_zone.split('/')?.[1]}</strong>
+            <strong>
+              {data.time_zone.split('/')?.[1].replaceAll('_', ' ')}
+            </strong>
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('smtp')}</span>

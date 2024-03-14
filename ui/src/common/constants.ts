@@ -55,6 +55,11 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-danger',
     name: 'deleted',
   },
+  // pending
+  11: {
+    variant: 'text-bg-warning',
+    name: 'pending',
+  },
   normal: {
     variant: 'text-bg-success',
     name: 'normal',
@@ -67,9 +72,13 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-danger',
     name: 'deleted',
   },
-  unlisted: {
+  pending: {
+    variant: 'text-bg-warning',
+    name: 'pending',
+  },
+  unlist: {
     variant: 'text-bg-secondary',
-    name: 'unlisted',
+    name: 'unlist',
   },
 };
 
@@ -84,10 +93,6 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'users',
-  },
-  {
-    name: 'flags',
-    // badgeContent: 5,
   },
   {
     name: 'customize',

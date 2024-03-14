@@ -1169,6 +1169,15 @@ ui:
     system_setting: System setting
     default: Default
     reset: Reset
+    tag: Tag
+    post_lowercase: post
+    filter: Filter
+    ignore: Ignore
+    submit: Submit
+    normal: Normal
+    closed: Closed
+    deleted: Deleted
+    pending: Pending
   search:
     title: Search Results
     keywords: Keywords
@@ -1444,6 +1453,7 @@ ui:
       github: GitHub
       blog: Blog
       contact: Contact
+      forum: Forum
       documents: Documents
       feedback: Feedback
       support: Support
@@ -1546,9 +1556,6 @@ ui:
         content: A suspended user can't log in.
     questions:
       page_title: Questions
-      normal: Normal
-      closed: Closed
-      deleted: Deleted
       unlisted: Unlisted
       post: Post
       votes: Votes
@@ -1557,12 +1564,11 @@ ui:
       status: Status
       action: Action
       change: Change
+      pending: Pending
       filter:
         placeholder: "Filter by title, question:id"
     answers:
       page_title: Answers
-      normal: Normal
-      deleted: Deleted
       post: Post
       votes: Votes
       created: Created
@@ -1676,8 +1682,8 @@ ui:
       page_title: Write
       restrict_answer:
         title: Restrict answer
-        label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        label: Each user can only write one answer for the same question
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
@@ -1811,6 +1817,22 @@ ui:
     edit_answer: Edit answer
     edit_tag: Edit tag
     empty: No review tasks left.
+    approve_revision_tip: Do you approve this revision?
+    approve_flag_tip: Do you approve this flag?
+    approve_post_tip: Do you approve this post?
+    approve_user_tip: Do you approve this user?
+    suggest_edits: Suggested edits
+    flag_post: Flag post
+    flag_user: Flag user
+    queued_post: Queued post
+    queued_user: Queued user
+    filter_label: Type
+    reputation: reputation
+    flag_post_type: Flagged this post as {{ type }}
+    flag_user_type: Flagged this user as {{ type }}
+    edit_post: Edit post
+    list_post: List post
+    unlist_post: Unlist post
   timeline:
     undeleted: undeleted
     deleted: deleted

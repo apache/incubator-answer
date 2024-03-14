@@ -41,6 +41,7 @@ import Action from './components/Action';
 
 const questionFilterItems: Type.AdminContentsFilterBy[] = [
   'normal',
+  'pending',
   'closed',
   'deleted',
 ];
@@ -78,7 +79,7 @@ const Questions: FC = () => {
           data={questionFilterItems}
           currentSort={curFilter}
           sortKey="status"
-          i18nKeyPrefix="admin.questions"
+          i18nKeyPrefix="btns"
         />
 
         <Form.Control
@@ -147,15 +148,19 @@ const Questions: FC = () => {
                       'mb-1',
                       ADMIN_LIST_STATUS[curFilter]?.variant,
                     )}>
-                    {t(ADMIN_LIST_STATUS[curFilter]?.name)}
+                    {t(ADMIN_LIST_STATUS[curFilter]?.name, {
+                      keyPrefix: 'btns',
+                    })}
                   </span>
                   {li.show === 2 && (
                     <span
                       className={classNames(
                         'badge',
-                        ADMIN_LIST_STATUS.unlisted.variant,
+                        ADMIN_LIST_STATUS.unlist.variant,
                       )}>
-                      {t(ADMIN_LIST_STATUS.unlisted.name)}
+                      {t(ADMIN_LIST_STATUS.unlist.name, {
+                        keyPrefix: 'btns',
+                      })}
                     </span>
                   )}
                 </td>

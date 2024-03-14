@@ -108,6 +108,11 @@ function parseUserInfo(markdown) {
   return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
+function parseEditMentionUser(markdown) {
+  const globalReg = /\[@([^\]]+)\]\([^)]+\)/g;
+  return markdown.replace(globalReg, '@$1');
+}
+
 function formatUptime(value) {
   const t = i18next.t.bind(i18next);
   const second = parseInt(value, 10);
@@ -170,8 +175,6 @@ function escapeHtml(str: string) {
   return str.replace(/[&<>"'`]/g, (tag) => tagsToReplace[tag] || tag);
 }
 
-const Diff = require('diff');
-
 function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
@@ -180,28 +183,31 @@ function diffText(newText: string, oldText?: string): string {
   if (typeof oldText !== 'string') {
     return escapeHtml(newText);
   }
-  const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
-  const result = diff.map((part) => {
-    if (part.added) {
-      if (part.value.replace(/\n/g, '').length <= 0) {
-        return `<span class="review-text-add d-block">${part.value.replace(
-          /\n/g,
-          '↵\n',
-        )}</span>`;
+  let result = [];
+  import('diff').then((Diff) => {
+    const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
+    result = diff.map((part) => {
+      if (part.added) {
+        if (part.value.replace(/\n/g, '').length <= 0) {
+          return `<span class="review-text-add d-block">${part.value.replace(
+            /\n/g,
+            '↵\n',
+          )}</span>`;
+        }
+        return `<span class="review-text-add">${part.value}</span>`;
       }
-      return `<span class="review-text-add">${part.value}</span>`;
-    }
-    if (part.removed) {
-      if (part.value.replace(/\n/g, '').length <= 0) {
-        return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
-          /\n/g,
-          '↵\n',
-        )}</span>`;
+      if (part.removed) {
+        if (part.value.replace(/\n/g, '').length <= 0) {
+          return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
+            /\n/g,
+            '↵\n',
+          )}</span>`;
+        }
+        return `<span class="review-text-delete">${part.value}</span>`;
       }
-      return `<span class="review-text-delete">${part.value}</span>`;
-    }
 
-    return part.value;
+      return part.value;
+    });
   });
 
   return result.join('');
@@ -273,6 +279,7 @@ export {
   bgFadeOut,
   matchedUsers,
   parseUserInfo,
+  parseEditMentionUser,
   formatUptime,
   escapeRemove,
   handleFormError,
