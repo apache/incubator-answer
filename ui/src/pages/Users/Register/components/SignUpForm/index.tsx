@@ -27,7 +27,7 @@ import type { FormDataType, RegisterReqParams } from '@/common/interface';
 import { register } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
 import { handleFormError } from '@/utils';
-import { legalClick } from '@/behaviour/clicks';
+import { useLegalClick } from '@/behaviour/clicks';
 
 interface Props {
   callback: () => void;
@@ -86,6 +86,8 @@ const Index: React.FC<Props> = ({ callback }) => {
     });
     return bol;
   };
+
+  const legalClick = useLegalClick();
 
   const handleRegister = (event?: any) => {
     if (event) {
