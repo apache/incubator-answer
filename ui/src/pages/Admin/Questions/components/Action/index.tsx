@@ -21,10 +21,14 @@ import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, Modal } from '@/components';
-import { changeQuestionStatus, reopenQuestion } from '@/services';
+import {
+  changeQuestionStatus,
+  questionOperation,
+  reopenQuestion,
+} from '@/services';
 import { useReportModal, useToast } from '@/hooks';
 
-const AnswerActions = ({ itemData, refreshList, curFilter }) => {
+const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
   const closeModal = useReportModal(refreshList);
   const toast = useToast();
@@ -90,6 +94,29 @@ const AnswerActions = ({ itemData, refreshList, curFilter }) => {
         },
       });
     }
+
+    if (type === 'list' || type === 'unlist') {
+      const keyPrefix =
+        type === 'list' ? 'question_detail.list' : 'question_detail.unlist';
+      Modal.confirm({
+        title: t('title', { keyPrefix }),
+        content: t('content', { keyPrefix }),
+        cancelBtnVariant: 'link',
+        confirmText: t('confirm_btn', { keyPrefix }),
+        onConfirm: () => {
+          questionOperation({
+            id: itemData.id,
+            operation: type === 'list' ? 'show' : 'hide',
+          }).then(() => {
+            toast.onShow({
+              msg: t(`post_${type}`, { keyPrefix: 'messages' }),
+              variant: 'success',
+            });
+            refreshList();
+          });
+        },
+      });
+    }
   };
 
   return (
@@ -119,6 +146,17 @@ const AnswerActions = ({ itemData, refreshList, curFilter }) => {
           <Dropdown.Item onClick={() => handleAction('undelete')}>
             {t('undelete', { keyPrefix: 'btns' })}
           </Dropdown.Item>
+        )}
+        {show === 2 ? (
+          <Dropdown.Item onClick={() => handleAction('list')}>
+            {t('list', { keyPrefix: 'btns' })}
+          </Dropdown.Item>
+        ) : (
+          pin !== 2 && (
+            <Dropdown.Item onClick={() => handleAction('unlist')}>
+              {t('unlist', { keyPrefix: 'btns' })}
+            </Dropdown.Item>
+          )
         )}
       </Dropdown.Menu>
     </Dropdown>

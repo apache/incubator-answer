@@ -95,7 +95,7 @@ func (cr *commentRepo) UpdateCommentContent(
 func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
 	comment *entity.Comment, exist bool, err error) {
 	comment = &entity.Comment{}
-	exist, err = cr.data.DB.Context(ctx).ID(commentID).Get(comment)
+	exist, err = cr.data.DB.Context(ctx).Where("status = ?", entity.CommentStatusAvailable).ID(commentID).Get(comment)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

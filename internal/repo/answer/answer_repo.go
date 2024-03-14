@@ -183,7 +183,7 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	return
 }
 
-// GetQuestionCount
+// GetAnswerCount count answer
 func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err error) {
 	var resp = new(entity.Answer)
 	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).Count(resp)
@@ -336,6 +336,8 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	switch search.Order {
 	case entity.AnswerSearchOrderByTime:
 		session = session.OrderBy("created_at desc")
+	case entity.AnswerSearchOrderByTimeAsc:
+		session = session.OrderBy("created_at asc")
 	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
 	default:

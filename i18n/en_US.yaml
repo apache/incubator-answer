@@ -1079,6 +1079,7 @@ ui:
       title: Answers
       score: Score
       newest: Newest
+      oldest: Oldest
       btn_accept: Accept
       btn_accepted: Accepted
     write_answer:
@@ -1103,6 +1104,14 @@ ui:
       confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
+    list:
+      confirm_btn: List
+      title: List this post
+      content: Are you sure you want to list?
+    unlist:
+      confirm_btn: Unlist
+      title: Unlist this post
+      content: Are you sure you want to unlist?
     pin:
       title: Pin this post
       content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
@@ -1130,6 +1139,8 @@ ui:
     save: Save
     delete: Delete
     undelete: Undelete
+    list: List
+    unlist: Unlist
     login: Log in
     signup: Sign up
     logout: Log out
@@ -1538,6 +1549,7 @@ ui:
       normal: Normal
       closed: Closed
       deleted: Deleted
+      unlisted: Unlisted
       post: Post
       votes: Votes
       answers: Answers
@@ -1583,6 +1595,9 @@ ui:
         msg: Contact email cannot be empty.
         validate: Contact email is not valid.
         text: Email address of key contact responsible for this site.
+      check_update:
+        label: Software updates
+        text: Automatically check for updates
     interface:
       page_title: Interface
       language:
@@ -1846,3 +1861,5 @@ ui:
     post_hide_list:  This post has been hidden from list.
     post_show_list: This post has been shown to list.
     post_reopen: This post has been reopened.
+    post_list: This post has been listed.
+    post_unlist: This post has been unlisted.

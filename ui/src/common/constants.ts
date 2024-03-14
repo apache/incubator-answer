@@ -30,6 +30,7 @@ export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
 export const QUESTIONS_ORDER_STORAGE_KEY = '_a_qok_';
 export const DEFAULT_THEME = 'system';
 export const ADMIN_PRIVILEGE_CUSTOM_LEVEL = 99;
+export const SKELETON_SHOW_TIME = 1000;
 
 export const USER_AGENT_NAMES = {
   SegmentFault: 'SegmentFault',
@@ -65,6 +66,10 @@ export const ADMIN_LIST_STATUS = {
   deleted: {
     variant: 'text-bg-danger',
     name: 'deleted',
+  },
+  unlisted: {
+    variant: 'text-bg-secondary',
+    name: 'unlisted',
   },
 };
 
