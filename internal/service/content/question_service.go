@@ -934,8 +934,9 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	if err != nil {
 		return
 	}
-	// If the question is deleted, only the administrator and the author can view it
-	if question.Status == entity.QuestionStatusDeleted && !per.CanReopen && question.UserID != userID {
+	// If the question is deleted or pending, only the administrator and the author can view it
+	if (question.Status == entity.QuestionStatusDeleted ||
+		question.Status == entity.QuestionStatusPending) && !per.CanReopen && question.UserID != userID {
 		return nil, errors.NotFound(reason.QuestionNotFound)
 	}
 	if question.Status != entity.QuestionStatusClosed {
@@ -1021,6 +1022,10 @@ func (qs *QuestionService) PersonalQuestionPage(ctx context.Context, req *schema
 	search.PageSize = req.PageSize
 	search.UserIDBeSearched = userinfo.ID
 	search.LoginUserID = req.LoginUserID
+	// Only author and administrator can view the pending question
+	if req.LoginUserID == userinfo.ID || req.IsAdmin {
+		search.ShowPending = true
+	}
 	questionList, total, err := qs.GetQuestionPage(ctx, search)
 	if err != nil {
 		return nil, err
@@ -1047,17 +1052,18 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	answersearch := &entity.AnswerSearch{}
-	answersearch.UserID = userinfo.ID
-	answersearch.PageSize = req.PageSize
-	answersearch.Page = req.Page
+	cond := &entity.PersonalAnswerPageQueryCond{}
+	cond.UserID = userinfo.ID
+	cond.Page = req.Page
+	cond.PageSize = req.PageSize
+	cond.ShowPending = req.IsAdmin || req.LoginUserID == cond.UserID
 	if req.OrderCond == "newest" {
-		answersearch.Order = entity.AnswerSearchOrderByTime
+		cond.Order = entity.AnswerSearchOrderByTime
 	} else {
-		answersearch.Order = entity.AnswerSearchOrderByDefault
+		cond.Order = entity.AnswerSearchOrderByDefault
 	}
 	questionIDs := make([]string, 0)
-	answerList, total, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
+	answerList, total, err := qs.questioncommon.AnswerCommon.PersonalAnswerPage(ctx, cond)
 	if err != nil {
 		return nil, err
 	}
@@ -1311,7 +1317,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		tagIDs, req.UserIDBeSearched, req.OrderCond, req.InDays, showHidden)
+		tagIDs, req.UserIDBeSearched, req.OrderCond, req.InDays, showHidden, req.ShowPending)
 	if err != nil {
 		return nil, 0, err
 	}

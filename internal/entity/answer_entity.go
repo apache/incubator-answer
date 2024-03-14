@@ -64,6 +64,14 @@ type AnswerSearch struct {
 	PageSize       int    `json:"page_size" form:"page_size"` // Search page size
 }
 
+type PersonalAnswerPageQueryCond struct {
+	Page        int
+	PageSize    int
+	UserID      string
+	Order       string
+	ShowPending bool
+}
+
 // TableName answer table name
 func (Answer) TableName() string {
 	return "answer"

@@ -817,6 +817,7 @@ func (qc *QuestionController) PersonalQuestionPage(ctx *gin.Context) {
 	}
 
 	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
 	resp, err := qc.questionService.PersonalQuestionPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
@@ -841,6 +842,7 @@ func (qc *QuestionController) PersonalAnswerPage(ctx *gin.Context) {
 	}
 
 	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
 	resp, err := qc.questionService.PersonalAnswerPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
