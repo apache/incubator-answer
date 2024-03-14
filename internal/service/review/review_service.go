@@ -326,6 +326,9 @@ func (cs *ReviewService) GetReviewPendingCount(ctx context.Context) (count int64
 // GetUnreviewedPostPage get review page
 func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.GetUnreviewedPostPageReq) (
 	pageModel *pager.PageModel, err error) {
+	if !req.IsAdmin {
+		return pager.NewPageModel(0, make([]*schema.GetUnreviewedPostPageResp, 0)), nil
+	}
 	cond := &entity.Review{
 		ObjectID: req.ObjectID,
 		Status:   entity.ReviewStatusPending,
