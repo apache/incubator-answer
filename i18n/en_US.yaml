@@ -492,6 +492,13 @@ backend:
       other: accept
     accepted:
       other: accepted
+  review:
+    queued_post:
+      other: Queued post
+    flagged_post:
+      other: Flagged post
+    suggested_post_edit:
+      other: Suggested edits
 
 # The following fields are used for interface presentation(Front-end)
 ui:
