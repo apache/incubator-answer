@@ -152,7 +152,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 			Status:     tagInfo.Status,
 		}
 	case constant.CommentObjectType:
-		commentInfo, exist, err := os.commentRepo.GetComment(ctx, objectID)
+		commentInfo, exist, err := os.commentRepo.GetCommentWithoutStatus(ctx, objectID)
 		if err != nil {
 			return nil, err
 		}

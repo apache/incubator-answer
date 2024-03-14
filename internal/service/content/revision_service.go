@@ -25,8 +25,10 @@ import (
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
@@ -463,7 +465,7 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 		} else {
 			resp = append(resp, &schema.GetReviewingTypeResp{
 				Name:       string(constant.QueuedPost),
-				Label:      "Queued post",
+				Label:      translator.Tr(handler.GetLangByCtx(ctx), constant.ReviewQueuedPostLabel),
 				TodoAmount: reviewCount,
 			})
 		}
@@ -477,7 +479,7 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 		} else {
 			resp = append(resp, &schema.GetReviewingTypeResp{
 				Name:       string(constant.FlaggedPost),
-				Label:      "Flagged post",
+				Label:      translator.Tr(handler.GetLangByCtx(ctx), constant.ReviewFlaggedPostLabel),
 				TodoAmount: reportCount,
 			})
 		}
@@ -490,7 +492,7 @@ func (rs *RevisionService) GetReviewingType(ctx context.Context, req *schema.Get
 	} else {
 		resp = append(resp, &schema.GetReviewingTypeResp{
 			Name:       string(constant.SuggestedPostEdit),
-			Label:      "Suggested edits",
+			Label:      translator.Tr(handler.GetLangByCtx(ctx), constant.ReviewSuggestedPostEditLabel),
 			TodoAmount: countUnreviewedRevision,
 		})
 	}

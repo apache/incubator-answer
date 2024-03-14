@@ -17,3 +17,9 @@ const (
 	ReportOperationUnlistPost   = "unlist_post"
 	ReportOperationIgnoreReport = "ignore_report"
 )
+
+const (
+	ReviewQueuedPostLabel        = "review.queued_post"
+	ReviewFlaggedPostLabel       = "review.flagged_post"
+	ReviewSuggestedPostEditLabel = "review.suggested_post_edit"
+)
