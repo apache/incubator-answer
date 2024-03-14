@@ -1050,6 +1050,7 @@ ui:
       title: 个回答
       score: 评分
       newest: 最新
+      oldest: 最旧
       btn_accept: 采纳
       btn_accepted: 已被采纳
     write_answer:
@@ -1549,6 +1550,9 @@ ui:
         msg: 联系人邮箱不能为空。
         validate: 联系人邮箱无效。
         text: 本网站的主要联系邮箱地址。
+      check_update:
+        label: 软件更新
+        text: 自动检查软件更新
     interface:
       page_title: 界面
       language:

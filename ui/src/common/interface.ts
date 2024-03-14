@@ -250,7 +250,7 @@ export interface QuestionDetailRes {
 }
 
 export interface AnswersReq extends Paging {
-  order?: 'default' | 'updated';
+  order?: 'default' | 'updated' | 'created';
   question_id: string;
 }
 
@@ -347,6 +347,8 @@ export interface AdminSettingsGeneral {
   description: string;
   site_url: string;
   contact_email: string;
+  check_update: boolean;
+  permalink?: number;
 }
 
 export interface HelmetBase {

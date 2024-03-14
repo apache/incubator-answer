@@ -645,6 +645,12 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	if err != nil {
 		return nil, err
 	}
+	// if email status is to be verified, active user as well
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
+			log.Error(err)
+		}
+	}
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
