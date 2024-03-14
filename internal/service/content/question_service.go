@@ -965,6 +965,12 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 		operation.Level = schema.OperationLevelDanger
 		question.Operation = operation
 	}
+	if question.Status == entity.QuestionStatusPending {
+		operation := &schema.Operation{}
+		operation.Msg = translator.Tr(handler.GetLangByCtx(ctx), reason.QuestionUnderReview)
+		operation.Level = schema.OperationLevelSecondary
+		question.Operation = operation
+	}
 
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID, question.Status,

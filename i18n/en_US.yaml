@@ -201,6 +201,8 @@ backend:
     question:
       already_deleted:
         other: This post has been deleted.
+      under_review:
+        other: Your post is awaiting review. It will be visible after it has been approved.
       not_found:
         other: Question not found.
       cannot_deleted:

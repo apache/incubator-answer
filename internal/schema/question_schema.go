@@ -279,9 +279,10 @@ type AdminQuestionInfo struct {
 type OperationLevel string
 
 const (
-	OperationLevelInfo    OperationLevel = "info"
-	OperationLevelDanger  OperationLevel = "danger"
-	OperationLevelWarning OperationLevel = "warning"
+	OperationLevelInfo      OperationLevel = "info"
+	OperationLevelDanger    OperationLevel = "danger"
+	OperationLevelWarning   OperationLevel = "warning"
+	OperationLevelSecondary OperationLevel = "secondary"
 )
 
 type Operation struct {
