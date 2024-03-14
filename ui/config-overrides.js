@@ -44,14 +44,14 @@ module.exports = {
       minChunks: 2,
       cacheGroups: {
         automaticNamePrefix: 'chunk',
-        // components: {
-        //   test: /[\\/]components[\\/]/,
-        //   name: 'components',
-        //   priority: 14,
-        //   reuseExistingChunk: true,
-        //   minChunks: 1,
-        //   chunks: 'initial',
-        // },
+        components: {
+          test: /[\\/]components[\\/]/,
+          name: 'components',
+          priority: 14,
+          reuseExistingChunk: true,
+          minChunks: process.env.NODE_ENV === 'production' ? 1 : 2,
+          chunks: 'initial',
+        },
         i18next: {
           name: 'i18next',
           test: /[\/]node_modules[\/](i18next)[\/]/,

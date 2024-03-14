@@ -1885,3 +1885,4 @@ ui:
     post_reopen: This post has been reopened.
     post_list: This post has been listed.
     post_unlist: This post has been unlisted.
+    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
