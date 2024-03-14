@@ -22,12 +22,14 @@ package controller
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/action"
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/plugin"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // ReviewController review controller
@@ -67,7 +69,8 @@ func (rc *ReviewController) GetUnreviewedPostPage(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: check permission
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
 
 	req.ReviewerMapping = make(map[string]string)
 	_ = plugin.CallReviewer(func(base plugin.Reviewer) error {
@@ -97,8 +100,12 @@ func (rc *ReviewController) UpdateReview(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: check permission
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
+	if !req.IsAdmin {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
+		return
+	}
 
 	err := rc.reviewService.UpdateReview(ctx, req)
 	handler.HandleResponse(ctx, err, nil)

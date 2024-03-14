@@ -10,6 +10,7 @@ type UpdateReviewReq struct {
 	ReviewID int    `validate:"required" json:"review_id"`
 	Status   string `validate:"required,oneof=approve reject" json:"status"`
 	UserID   string `json:"-"`
+	IsAdmin  bool   `json:"-"`
 }
 
 func (r *UpdateReviewReq) IsApprove() bool {
@@ -26,6 +27,7 @@ type GetUnreviewedPostPageReq struct {
 	Page            int               `validate:"omitempty" form:"page"`
 	ReviewerMapping map[string]string `json:"-"`
 	UserID          string            `json:"-"`
+	IsAdmin         bool              `json:"-"`
 }
 
 func (r *GetUnreviewedPostPageReq) Check() (errField []*validator.FormErrorField, err error) {
