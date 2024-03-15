@@ -1559,6 +1559,9 @@ ui:
         msg: 联系人邮箱不能为空。
         validate: 联系人邮箱无效。
         text: 本网站的主要联系邮箱地址。
+      check_update:
+        label: 软件更新
+        text: 自动检查软件更新
     interface:
       page_title: 界面
       language:

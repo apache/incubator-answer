@@ -352,6 +352,8 @@ export interface AdminSettingsGeneral {
   description: string;
   site_url: string;
   contact_email: string;
+  check_update: boolean;
+  permalink?: number;
 }
 
 export interface HelmetBase {

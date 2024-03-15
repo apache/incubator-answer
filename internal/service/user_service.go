@@ -23,9 +23,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/service/user_notification_config"
-	"time"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -643,6 +644,12 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	err = us.userRepo.UpdateEmailStatus(ctx, data.UserID, entity.EmailStatusAvailable)
 	if err != nil {
 		return nil, err
+	}
+	// if email status is to be verified, active user as well
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
+			log.Error(err)
+		}
 	}
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
