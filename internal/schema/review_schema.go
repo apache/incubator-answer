@@ -50,6 +50,7 @@ type GetUnreviewedPostPageResp struct {
 	Title                string        `json:"title"`
 	UrlTitle             string        `json:"url_title"`
 	OriginalText         string        `json:"original_text"`
+	ParsedText           string        `json:"parsed_text"`
 	Tags                 []*TagResp    `json:"tags"`
 	ObjectStatus         int           `json:"object_status"`
 	ObjectShowStatus     int           `json:"object_show_status"`

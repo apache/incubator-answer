@@ -849,6 +849,8 @@ definitions:
         type: string
       original_text:
         type: string
+      parsed_text:
+        type: string
       question_id:
         type: string
       reason:
@@ -862,6 +864,8 @@ definitions:
           $ref: '#/definitions/schema.TagResp'
         type: array
       title:
+        type: string
+      url_title:
         type: string
     type: object
   schema.GetReviewingTypeResp:
@@ -1060,6 +1064,8 @@ definitions:
         type: string
       original_text:
         type: string
+      parsed_text:
+        type: string
       question_id:
         type: string
       reason:
@@ -1075,6 +1081,8 @@ definitions:
           $ref: '#/definitions/schema.TagResp'
         type: array
       title:
+        type: string
+      url_title:
         type: string
     type: object
   schema.GetUnreviewedRevisionResp:
@@ -1735,6 +1743,8 @@ definitions:
     type: object
   schema.SiteGeneralReq:
     properties:
+      check_update:
+        type: boolean
       contact_email:
         maxLength: 512
         type: string
@@ -1757,6 +1767,8 @@ definitions:
     type: object
   schema.SiteGeneralResp:
     properties:
+      check_update:
+        type: boolean
       contact_email:
         maxLength: 512
         type: string

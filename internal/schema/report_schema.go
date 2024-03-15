@@ -81,6 +81,7 @@ type GetReportListPageResp struct {
 	Title            string        `json:"title"`
 	UrlTitle         string        `json:"url_title"`
 	OriginalText     string        `json:"original_text"`
+	ParsedText       string        `json:"parsed_text"`
 	AnswerCount      int           `json:"answer_count"`
 	AnswerAccepted   bool          `json:"answer_accepted"`
 	Tags             []*TagResp    `json:"tags"`

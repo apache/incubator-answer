@@ -7857,6 +7857,9 @@
                 "original_text": {
                     "type": "string"
                 },
+                "parsed_text": {
+                    "type": "string"
+                },
                 "question_id": {
                     "type": "string"
                 },
@@ -7876,6 +7879,9 @@
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 }
             }
@@ -8165,6 +8171,9 @@
                 "original_text": {
                     "type": "string"
                 },
+                "parsed_text": {
+                    "type": "string"
+                },
                 "question_id": {
                     "type": "string"
                 },
@@ -8187,6 +8196,9 @@
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 }
             }
@@ -9147,6 +9159,9 @@
                 "site_url"
             ],
             "properties": {
+                "check_update": {
+                    "type": "boolean"
+                },
                 "contact_email": {
                     "type": "string",
                     "maxLength": 512
@@ -9177,6 +9192,9 @@
                 "site_url"
             ],
             "properties": {
+                "check_update": {
+                    "type": "boolean"
+                },
                 "contact_email": {
                     "type": "string",
                     "maxLength": 512

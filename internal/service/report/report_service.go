@@ -139,6 +139,7 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 			Title:            info.Title,
 			UrlTitle:         htmltext.UrlTitle(info.Title),
 			OriginalText:     info.Content,
+			ParsedText:       info.Html,
 			AnswerCount:      info.AnswerCount,
 			AnswerAccepted:   info.AnswerAccepted,
 			Tags:             info.Tags,

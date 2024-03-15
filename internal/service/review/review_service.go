@@ -360,6 +360,7 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 			Title:                info.Title,
 			UrlTitle:             htmltext.UrlTitle(info.Title),
 			OriginalText:         info.Content,
+			ParsedText:           info.Html,
 			Tags:                 info.Tags,
 			ObjectStatus:         info.Status,
 			ObjectShowStatus:     info.ShowStatus,
