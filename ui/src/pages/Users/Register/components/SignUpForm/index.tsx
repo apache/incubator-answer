@@ -27,7 +27,7 @@ import type { FormDataType, RegisterReqParams } from '@/common/interface';
 import { register } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
 import { handleFormError } from '@/utils';
-import { useLegalClick } from '@/behaviour/clicks';
+import { useLegalClick } from '@/behaviour/useLegalClick';
 
 interface Props {
   callback: () => void;
