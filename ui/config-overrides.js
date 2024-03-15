@@ -118,8 +118,8 @@ module.exports = {
           test: /[\/]node_modules[\/]/,
           priority: 2,
           minChunks: 2,
-          chunks: 'async', // 仅打包异步引用的依赖
-          reuseExistingChunk: true, // 重复使用已经存在的块
+          chunks: 'async', // only package dependencies that are referenced asynchronously
+          reuseExistingChunk: true, // reuse an existing block
         },
         nodesInitial: {
           name: 'chunk-nodesInitial',
