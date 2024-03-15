@@ -7869,6 +7869,9 @@ const docTemplate = `{
                 "original_text": {
                     "type": "string"
                 },
+                "parsed_text": {
+                    "type": "string"
+                },
                 "question_id": {
                     "type": "string"
                 },
@@ -7888,6 +7891,9 @@ const docTemplate = `{
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 }
             }
@@ -8177,6 +8183,9 @@ const docTemplate = `{
                 "original_text": {
                     "type": "string"
                 },
+                "parsed_text": {
+                    "type": "string"
+                },
                 "question_id": {
                     "type": "string"
                 },
@@ -8199,6 +8208,9 @@ const docTemplate = `{
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 }
             }
@@ -9159,6 +9171,9 @@ const docTemplate = `{
                 "site_url"
             ],
             "properties": {
+                "check_update": {
+                    "type": "boolean"
+                },
                 "contact_email": {
                     "type": "string",
                     "maxLength": 512
@@ -9189,6 +9204,9 @@ const docTemplate = `{
                 "site_url"
             ],
             "properties": {
+                "check_update": {
+                    "type": "boolean"
+                },
                 "contact_email": {
                     "type": "string",
                     "maxLength": 512
