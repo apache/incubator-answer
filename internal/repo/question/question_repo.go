@@ -284,10 +284,10 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 	return count, nil
 }
 
-func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
 	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted})
-	count, err = session.Count(&entity.Question{UserID: userID})
+	count, err = session.Count(&entity.Question{UserID: userID, Show: show})
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

@@ -115,7 +115,10 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.GetOtherUserInfoByUsername(ctx, req.Username)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
+
+	resp, err := uc.userService.GetOtherUserInfoByUsername(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
 
