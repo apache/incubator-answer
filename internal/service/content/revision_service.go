@@ -44,6 +44,7 @@ import (
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/obj"
+	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -397,6 +398,10 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 		tagInfo      *schema.GetTagResp
 	)
 
+	shortID := handler.GetEnableShortID(ctx)
+	if shortID {
+		item.ObjectID = uid.EnShortID(item.ObjectID)
+	}
 	switch item.ObjectType {
 	case constant.ObjectTypeStrMapping["question"]:
 		err = json.Unmarshal([]byte(item.Content), &question)
@@ -404,6 +409,9 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 			break
 		}
 		questionInfo = rs.questionCommon.ShowFormatWithTag(ctx, &question)
+		if shortID {
+			questionInfo.ID = uid.EnShortID(questionInfo.ID)
+		}
 		item.ContentParsed = questionInfo
 	case constant.ObjectTypeStrMapping["answer"]:
 		err = json.Unmarshal([]byte(item.Content), &answer)
@@ -411,6 +419,10 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 			break
 		}
 		answerInfo = rs.answerService.ShowFormat(ctx, &answer)
+		if shortID {
+			answerInfo.ID = uid.EnShortID(answerInfo.ID)
+			answerInfo.QuestionID = uid.EnShortID(answerInfo.QuestionID)
+		}
 		item.ContentParsed = answerInfo
 	case constant.ObjectTypeStrMapping["tag"]:
 		err = json.Unmarshal([]byte(item.Content), &tag)
