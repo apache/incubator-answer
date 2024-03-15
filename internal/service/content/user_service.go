@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/user_notification_config"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -63,6 +64,7 @@ type UserService struct {
 	userExternalLoginService      *user_external_login.UserExternalLoginService
 	userNotificationConfigRepo    user_notification_config.UserNotificationConfigRepo
 	userNotificationConfigService *user_notification_config.UserNotificationConfigService
+	questionService               *questioncommon.QuestionCommon
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -76,6 +78,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 	userExternalLoginService *user_external_login.UserExternalLoginService,
 	userNotificationConfigRepo user_notification_config.UserNotificationConfigRepo,
 	userNotificationConfigService *user_notification_config.UserNotificationConfigService,
+	questionService *questioncommon.QuestionCommon,
 ) *UserService {
 	return &UserService{
 		userCommonService:             userCommonService,
@@ -89,6 +92,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 		userExternalLoginService:      userExternalLoginService,
 		userNotificationConfigRepo:    userNotificationConfigRepo,
 		userNotificationConfigService: userNotificationConfigService,
+		questionService:               questionService,
 	}
 }
 
@@ -118,9 +122,9 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	return resp, nil
 }
 
-func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
+func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, req *schema.GetOtherUserInfoByUsernameReq) (
 	resp *schema.GetOtherUserInfoByUsernameResp, err error) {
-	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)
+	userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -130,6 +134,13 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 	resp = &schema.GetOtherUserInfoByUsernameResp{}
 	resp.ConvertFromUserEntity(userInfo)
 	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
+
+	// Only the user himself and the administrator can see the hidden questions
+	questionCount, err := us.questionService.GetPersonalUserQuestionCount(ctx, req.UserID, userInfo.ID, req.IsAdmin)
+	if err != nil {
+		return nil, err
+	}
+	resp.QuestionCount = int(questionCount)
 	return resp, nil
 }
 

@@ -130,7 +130,7 @@ func (cs *ReviewService) getReviewContentAuthorInfo(ctx context.Context, userID 
 		return
 	}
 	author.Rank = user.Rank
-	author.ApprovedQuestionAmount, _ = cs.questionRepo.GetUserQuestionCount(ctx, userID)
+	author.ApprovedQuestionAmount, _ = cs.questionRepo.GetUserQuestionCount(ctx, userID, 0)
 	author.ApprovedAnswerAmount, _ = cs.answerRepo.GetCountByUserID(ctx, userID)
 	author.Role, _ = cs.userRoleService.GetUserRole(ctx, userID)
 	return
@@ -225,7 +225,7 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 			cs.externalNotificationQueueService.Send(ctx,
 				schema.CreateNewQuestionNotificationMsg(questionInfo.ID, questionInfo.Title, questionInfo.UserID, tags))
 		}
-		userQuestionCount, err := cs.questionRepo.GetUserQuestionCount(ctx, questionInfo.UserID)
+		userQuestionCount, err := cs.questionRepo.GetUserQuestionCount(ctx, questionInfo.UserID, 0)
 		if err != nil {
 			log.Errorf("get user question count failed, err: %v", err)
 		} else {

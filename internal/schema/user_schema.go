@@ -21,6 +21,7 @@ package schema
 
 import (
 	"encoding/json"
+
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/segmentfault/pacman/errors"
@@ -355,6 +356,7 @@ type UserBasicInfo struct {
 type GetOtherUserInfoByUsernameReq struct {
 	Username string `validate:"required,gt=0,lte=500" form:"username"`
 	UserID   string `json:"-"`
+	IsAdmin  bool   `json:"-"`
 }
 
 type GetOtherUserInfoResp struct {
