@@ -105,7 +105,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             gap={1}
             className="align-items-center mb-2">
             <div className="small d-flex align-items-center">
-              <Icon type="bi" name="plugin" size="24px" className="me-1" />
+              <Icon type="bi" name="plugin" size="24px" className="me-2 lh-1" />
               <span>{flagItemData?.submitter_display_name}</span>
             </div>
             {flagItemData?.submit_at && (
@@ -164,7 +164,11 @@ const Index: FC<IProps> = ({ refreshCount }) => {
               )}
             </div>
             <div className="d-flex align-items-center small">
-              <BaseUserCard data={author_user_info} avatarSize="24" />
+              <BaseUserCard
+                data={author_user_info}
+                avatarSize="24"
+                avatarClass="me-2"
+              />
               <FormatTime
                 time={Number(flagItemData?.created_at)}
                 className="text-secondary ms-1 flex-shrink-0"

@@ -112,9 +112,13 @@ const Index: FC<IProps> = ({ refreshCount }) => {
         <Alert variant="info" className="border-0 rounded-0 mb-0">
           <Stack
             direction="horizontal"
-            gap={1}
+            gap={0.5}
             className="align-items-center mb-2">
-            <BaseUserCard data={submitter_user} avatarSize="24" />
+            <BaseUserCard
+              data={submitter_user}
+              avatarSize="24px"
+              avatarClass="me-2"
+            />
             {flagItemData?.submit_at && (
               <FormatTime
                 time={flagItemData.submit_at}
@@ -175,7 +179,11 @@ const Index: FC<IProps> = ({ refreshCount }) => {
               )}
             </div>
             <div className="d-flex align-items-center small">
-              <BaseUserCard data={author_user_info} avatarSize="24" />
+              <BaseUserCard
+                data={author_user_info}
+                avatarSize="24px"
+                avatarClass="me-2"
+              />
               <FormatTime
                 time={Number(flagItemData?.created_at)}
                 className="text-secondary ms-1 flex-shrink-0"
