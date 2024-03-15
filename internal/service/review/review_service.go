@@ -32,6 +32,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/apache/incubator-answer/internal/service/role"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/htmltext"
@@ -64,6 +65,7 @@ type ReviewService struct {
 	tagCommon                        *tagcommon.TagCommonService
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
 	notificationQueueService         notice_queue.NotificationQueueService
+	siteInfoService                  siteinfo_common.SiteInfoCommonService
 }
 
 // NewReviewService new review service
@@ -78,6 +80,7 @@ func NewReviewService(
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	tagCommon *tagcommon.TagCommonService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *ReviewService {
 	return &ReviewService{
 		reviewRepo:                       reviewRepo,
@@ -90,6 +93,7 @@ func NewReviewService(
 		externalNotificationQueueService: externalNotificationQueueService,
 		tagCommon:                        tagCommon,
 		notificationQueueService:         notificationQueueService,
+		siteInfoService:                  siteInfoService,
 	}
 }
 
@@ -150,6 +154,9 @@ func (cs *ReviewService) callPluginToReview(ctx context.Context, userID, objectI
 		ObjectType:     constant.ObjectTypeStrMapping[reviewContent.ObjectType],
 		ReviewerUserID: "0",
 		Status:         entity.ReviewStatusPending,
+	}
+	if siteInterface, _ := cs.siteInfoService.GetSiteInterface(ctx); siteInterface != nil {
+		reviewContent.Language = siteInterface.Language
 	}
 
 	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {

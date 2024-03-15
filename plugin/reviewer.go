@@ -17,6 +17,9 @@ type ReviewContent struct {
 	Tags []string
 	// The author of the content
 	Author ReviewContentAuthor
+	// Review Language, the site language. e.g. en_US
+	// The plugin may reply the review result according to the language
+	Language string
 }
 
 type ReviewContentAuthor struct {

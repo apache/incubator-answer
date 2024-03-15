@@ -172,7 +172,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, configService)
 	externalNotificationService := notification.NewExternalNotificationService(dataData, userNotificationConfigRepo, followRepo, emailService, userRepo, externalNotificationQueueService, userExternalLoginRepo, siteInfoCommonService)
 	reviewRepo := review.NewReviewRepo(dataData)
-	reviewService := review2.NewReviewService(reviewRepo, objService, userCommon, userRepo, questionRepo, answerRepo, userRoleRelService, externalNotificationQueueService, tagCommonService, notificationQueueService)
+	reviewService := review2.NewReviewService(reviewRepo, objService, userCommon, userRepo, questionRepo, answerRepo, userRoleRelService, externalNotificationQueueService, tagCommonService, notificationQueueService, siteInfoCommonService)
 	questionService := content.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, userRoleRelService, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService, reviewService)
 	answerService := content.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService, reviewService)
 	reportHandle := report_handle.NewReportHandle(questionService, answerService, commentService)
