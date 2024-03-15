@@ -15,21 +15,21 @@ export default (data: any) => {
     question_id = '',
     answer_id = '',
     comment_id = '',
-    title = '',
+    url_title = '',
   } = data;
   let itemLink = '';
   let itemId = '';
   let itemTimePrefix = '';
 
   if (object_type === 'question') {
-    itemLink = pathFactory.questionLanding(String(object_id), title);
+    itemLink = pathFactory.questionLanding(String(object_id), url_title);
     itemId = String(question_id);
     itemTimePrefix = 'asked';
   } else if (object_type === 'answer') {
     itemLink = pathFactory.answerLanding({
       // @ts-ignore
       questionId: question_id,
-      slugTitle: title,
+      slugTitle: url_title,
       answerId: String(object_id),
     });
     itemId = String(object_id);
@@ -43,7 +43,7 @@ export default (data: any) => {
     } else {
       itemLink = `${pathFactory.questionLanding(
         String(question_id),
-        title,
+        url_title,
       )}?commentId=${comment_id}`;
     }
     itemId = String(comment_id);
