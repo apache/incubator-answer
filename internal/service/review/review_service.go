@@ -34,6 +34,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/role"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/apache/incubator-answer/plugin"
@@ -357,6 +358,7 @@ func (cs *ReviewService) GetUnreviewedPostPage(ctx context.Context, req *schema.
 			CommentID:            info.CommentID,
 			ObjectType:           info.ObjectType,
 			Title:                info.Title,
+			UrlTitle:             htmltext.UrlTitle(info.Title),
 			OriginalText:         info.Content,
 			Tags:                 info.Tags,
 			ObjectStatus:         info.Status,

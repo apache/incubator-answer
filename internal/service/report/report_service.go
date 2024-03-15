@@ -36,6 +36,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/report_common"
 	"github.com/apache/incubator-answer/internal/service/report_handle"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/obj"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -136,6 +137,7 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 			AnswerID:         info.AnswerID,
 			CommentID:        info.CommentID,
 			Title:            info.Title,
+			UrlTitle:         htmltext.UrlTitle(info.Title),
 			OriginalText:     info.Content,
 			AnswerCount:      info.AnswerCount,
 			AnswerAccepted:   info.AnswerAccepted,
