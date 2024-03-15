@@ -628,7 +628,7 @@ func (qs *QuestionService) RecoverQuestion(ctx context.Context, req *schema.Ques
 	}
 
 	// update tag's question count
-	if err = qs.tagCommon.RemoveTagRelListByObjectID(ctx, questionInfo.ID); err != nil {
+	if err = qs.tagCommon.RecoverTagRelListByObjectID(ctx, questionInfo.ID); err != nil {
 		log.Errorf("remove tag rel list by object id error %v", err)
 	}
 
