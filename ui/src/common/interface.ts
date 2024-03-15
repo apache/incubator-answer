@@ -620,6 +620,8 @@ export interface BaseReviewItem {
   answer_count: number;
   answer_accepted?: boolean;
   flag_id: string;
+  url_title: string;
+  parsed_text: string;
 }
 
 export interface FlagReviewItem extends BaseReviewItem {

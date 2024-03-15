@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { Card, Alert, Stack, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,13 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { getFlagReviewPostList, putFlagReviewAction } from '@/services';
-import { BaseUserCard, Tag, FormatTime } from '@/components';
+import {
+  BaseUserCard,
+  Tag,
+  FormatTime,
+  ImgViewer,
+  htmlRender,
+} from '@/components';
 import { scrollToDocTop } from '@/utils';
 import type * as Type from '@/common/interface';
 import { ADMIN_LIST_STATUS } from '@/common/constants';
@@ -19,6 +25,7 @@ interface IProps {
 
 const Index: FC<IProps> = ({ refreshCount }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_review' });
+  const ref = useRef<HTMLDivElement>(null);
   const [noTasks, setNoTasks] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -85,6 +92,14 @@ const Index: FC<IProps> = ({ refreshCount }) => {
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    htmlRender(ref.current);
+  }, [ref.current]);
 
   const {
     object_type,
@@ -155,7 +170,13 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             </>
           )}
           <div className="small font-monospace">
-            {flagItemData?.original_text}
+            <ImgViewer>
+              <article
+                ref={ref}
+                className="fmt text-break text-wrap"
+                dangerouslySetInnerHTML={{ __html: flagItemData?.parsed_text }}
+              />
+            </ImgViewer>
           </div>
           <div className="d-flex flex-wrap align-items-center justify-content-between mt-4">
             <div>
