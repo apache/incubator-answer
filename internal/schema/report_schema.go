@@ -79,6 +79,7 @@ type GetReportListPageResp struct {
 	CommentID        string        `json:"comment_id"`
 	ObjectType       string        `json:"object_type" enums:"question,answer,comment"`
 	Title            string        `json:"title"`
+	UrlTitle         string        `json:"url_title"`
 	OriginalText     string        `json:"original_text"`
 	AnswerCount      int           `json:"answer_count"`
 	AnswerAccepted   bool          `json:"answer_accepted"`

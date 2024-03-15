@@ -23,7 +23,6 @@ import (
 	"context"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
-	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
@@ -32,7 +31,6 @@ import (
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/obj"
-	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -71,9 +69,6 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		questionInfo, exist, err := os.questionRepo.GetQuestion(ctx, objectID)
 		if err != nil {
 			return nil, err
-		}
-		if handler.GetEnableShortID(ctx) {
-			questionInfo.ID = uid.EnShortID(questionInfo.ID)
 		}
 		if !exist {
 			break
@@ -117,9 +112,6 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		}
 		if !exist {
 			break
-		}
-		if handler.GetEnableShortID(ctx) {
-			questionInfo.ID = uid.EnShortID(questionInfo.ID)
 		}
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			CreatedAt:           answerInfo.CreatedAt.Unix(),

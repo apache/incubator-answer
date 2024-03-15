@@ -48,6 +48,7 @@ type GetUnreviewedPostPageResp struct {
 	CommentID            string        `json:"comment_id"`
 	ObjectType           string        `json:"object_type" enums:"question,answer,comment"`
 	Title                string        `json:"title"`
+	UrlTitle             string        `json:"url_title"`
 	OriginalText         string        `json:"original_text"`
 	Tags                 []*TagResp    `json:"tags"`
 	ObjectStatus         int           `json:"object_status"`
