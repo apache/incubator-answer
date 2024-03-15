@@ -46,7 +46,7 @@ const AnswerLinks = () => {
           </Col>
           <Col xs={6}>
             <a
-              href="https://answer.apache.org/community"
+              href="https://answer.apache.org/community/support"
               target="_blank"
               rel="noreferrer">
               {t('support')}
