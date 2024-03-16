@@ -18,12 +18,19 @@
  */
 
 import { memo, FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { pathFactory } from '@/router/pathFactory';
-import { Tag, FormatTime, BaseUserCard, Counts } from '@/components';
+import {
+  Tag,
+  FormatTime,
+  BaseUserCard,
+  Counts,
+  HighlightText,
+} from '@/components';
+import Pattern from '@/common/pattern';
 import type { SearchResItem } from '@/common/interface';
 import { escapeRemove } from '@/utils';
 
@@ -47,6 +54,10 @@ const Index: FC<Props> = ({ data }) => {
     });
   }
 
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get('q');
+  const keywords = q?.replace(Pattern.search, '').split(' ') || [];
+
   return (
     <ListGroupItem className="py-3 px-0 border-start-0 border-end-0 bg-transparent">
       <div className="mb-2 clearfix">
@@ -56,7 +67,7 @@ const Index: FC<Props> = ({ data }) => {
           {data.object_type === 'question' ? 'Q' : 'A'}
         </span>
         <Link className="h5 mb-0 link-dark text-break" to={itemUrl}>
-          {data.object.title}
+          <HighlightText text={data.object.title} keywords={keywords} />
           {data.object.status === 'closed'
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
             : null}
@@ -88,7 +99,10 @@ const Index: FC<Props> = ({ data }) => {
 
       {data.object?.excerpt && (
         <p className="small text-truncate-2 mb-2 last-p text-break">
-          {escapeRemove(data.object.excerpt)}
+          <HighlightText
+            text={escapeRemove(data.object.excerpt) || ''}
+            keywords={keywords}
+          />
         </p>
       )}
 
