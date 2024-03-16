@@ -34,15 +34,15 @@ backend:
       other: Duplicate submission.
   action:
     report:
-      other: Flag
+      other: Rapor Et
     edit:
       other: Edit
     delete:
-      other: Delete
+      other: Sil
     close:
-      other: Close
+      other: Kapat
     reopen:
-      other: Reopen
+      other: Yeniden Aç
     forbidden_error:
       other: Forbidden.
     pin:
@@ -52,7 +52,7 @@ backend:
     unpin:
       other: Unpin
     show:
-      other: List
+      other: Listele
     invite_someone_to_answer:
       other: Edit
     undelete:
@@ -88,7 +88,7 @@ backend:
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
-      other: Write answer
+      other: Cevapla
     rank_comment_add_label:
       other: Write comment
     rank_report_add_label:
