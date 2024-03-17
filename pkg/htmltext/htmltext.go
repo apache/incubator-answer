@@ -125,20 +125,7 @@ func cutLongTitle(title string) string {
 
 // FetchExcerpt return the excerpt from the HTML string
 func FetchExcerpt(html, trimMarker string, limit int) (text string) {
-	if len(html) == 0 {
-		text = html
-		return
-	}
-
-	text = ClearText(html)
-	runeText := []rune(text)
-	if len(runeText) <= limit {
-		text = string(runeText)
-		return
-	}
-
-	text = string(runeText[0:limit]) + trimMarker
-	return
+	return FetchRangedExcerpt(html, trimMarker, 0, limit)
 }
 
 // findFirstMatchedWord returns the first matched word and its index
