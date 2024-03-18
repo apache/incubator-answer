@@ -76,6 +76,7 @@ const Index: FC<Props> = ({
     if (bol) {
       callback?.();
     }
+    setFormData(initFormData);
     handleClose();
     setLoaded(false);
   };
