@@ -38,6 +38,7 @@ export default (data: any) => {
     if (question_id && answer_id) {
       itemLink = `${pathFactory.answerLanding({
         questionId: question_id,
+        slugTitle: url_title,
         answerId: answer_id,
       })}?commentId=${comment_id}`;
     } else {
