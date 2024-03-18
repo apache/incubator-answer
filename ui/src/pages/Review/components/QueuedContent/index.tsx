@@ -100,6 +100,14 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       });
   };
 
+  const handlingSkip = () => {
+    queryNextOne(page + 1, '');
+    if (objectId) {
+      urlSearch.delete('objectId');
+      setUrlSearchParams(urlSearch);
+    }
+  };
+
   const { object_type, author_user_info, object_status, reason } =
     flagItemData || {
       object_type: '',
@@ -221,6 +229,13 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             disabled={isLoading}
             onClick={() => handleAction('reject')}>
             {t('reject', { keyPrefix: 'btns' })}
+          </Button>
+
+          <Button
+            variant="outline-primary"
+            disabled={isLoading}
+            onClick={handlingSkip}>
+            {t('skip', { keyPrefix: 'btns' })}
           </Button>
         </Stack>
       </Card.Footer>
