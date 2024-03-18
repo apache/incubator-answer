@@ -69,7 +69,9 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       return;
     }
 
-    htmlRender(ref.current);
+    setTimeout(() => {
+      htmlRender(ref.current);
+    }, 70);
   }, [ref.current]);
 
   useEffect(() => {
