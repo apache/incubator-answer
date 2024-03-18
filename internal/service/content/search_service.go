@@ -94,6 +94,6 @@ func (ss *SearchService) searchByPlugin(ctx context.Context, finder plugin.Searc
 		res, resp.Total, err = finder.SearchAnswers(ctx, cond.Convert2PluginSearchCond(dto.Page, dto.Size, dto.Order))
 	}
 
-	resp.SearchResults, err = ss.searchRepo.ParseSearchPluginResult(ctx, res)
+	resp.SearchResults, err = ss.searchRepo.ParseSearchPluginResult(ctx, res, cond.Words)
 	return resp, err
 }
