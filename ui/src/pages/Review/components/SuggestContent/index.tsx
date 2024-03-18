@@ -105,6 +105,10 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       });
   };
 
+  const handlingSkip = () => {
+    queryNextOne(page + 1);
+  };
+
   let itemLink = '';
   let itemId = '';
   let editSummary = unreviewed_info?.reason;
@@ -184,7 +188,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             direction="horizontal"
             gap={1}
             className="align-items-center mb-2">
-            <BaseUserCard data={editor} avatarSize="24" />
+            <BaseUserCard data={editor} avatarSize="24" avatarClass="me-2" />
             {editTime && (
               <FormatTime
                 time={editTime}
@@ -228,6 +232,12 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             disabled={isLoading}
             onClick={handlingReject}>
             {t('reject', { keyPrefix: 'btns' })}
+          </Button>
+          <Button
+            variant="outline-primary"
+            disabled={isLoading}
+            onClick={handlingSkip}>
+            {t('skip', { keyPrefix: 'btns' })}
           </Button>
         </Stack>
       </Card.Footer>

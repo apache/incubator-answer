@@ -69,7 +69,9 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       return;
     }
 
-    htmlRender(ref.current);
+    setTimeout(() => {
+      htmlRender(ref.current);
+    }, 70);
   }, [ref.current]);
 
   useEffect(() => {
@@ -96,6 +98,14 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handlingSkip = () => {
+    queryNextOne(page + 1, '');
+    if (objectId) {
+      urlSearch.delete('objectId');
+      setUrlSearchParams(urlSearch);
+    }
   };
 
   const { object_type, author_user_info, object_status, reason } =
@@ -219,6 +229,13 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             disabled={isLoading}
             onClick={() => handleAction('reject')}>
             {t('reject', { keyPrefix: 'btns' })}
+          </Button>
+
+          <Button
+            variant="outline-primary"
+            disabled={isLoading}
+            onClick={handlingSkip}>
+            {t('skip', { keyPrefix: 'btns' })}
           </Button>
         </Stack>
       </Card.Footer>

@@ -93,6 +93,10 @@ const Index: FC<IProps> = ({ refreshCount }) => {
       });
   };
 
+  const handlingSkip = () => {
+    queryNextOne(page + 1);
+  };
+
   useEffect(() => {
     if (!ref.current) {
       return;
@@ -100,7 +104,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
 
     setTimeout(() => {
       htmlRender(ref.current);
-    }, 60);
+    }, 70);
   }, [ref.current]);
 
   const {
@@ -231,6 +235,13 @@ const Index: FC<IProps> = ({ refreshCount }) => {
             disabled={isLoading}
             onClick={handleIgnore}>
             {t('ignore', { keyPrefix: 'btns' })}
+          </Button>
+
+          <Button
+            variant="outline-primary"
+            disabled={isLoading}
+            onClick={handlingSkip}>
+            {t('skip', { keyPrefix: 'btns' })}
           </Button>
         </Stack>
       </Card.Footer>
