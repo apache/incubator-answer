@@ -43,6 +43,7 @@ import (
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
+	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/obj"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
@@ -344,6 +345,8 @@ func (rs *RevisionService) GetUnreviewedRevisionPage(ctx context.Context, req *s
 			_ = copier.Copy(&uinfo, userInfo)
 			item.UnreviewedInfo.UserInfo = uinfo
 		}
+		item.Info.UrlTitle = htmltext.UrlTitle(item.Info.Title)
+		item.UnreviewedInfo.UrlTitle = htmltext.UrlTitle(item.UnreviewedInfo.Title)
 		revisionResp = append(revisionResp, item)
 	}
 	return pager.NewPageModel(total, revisionResp), nil

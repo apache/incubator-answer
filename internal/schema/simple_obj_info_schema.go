@@ -42,6 +42,7 @@ type UnreviewedRevisionInfoInfo struct {
 	ObjectType          string     `json:"object_type"`
 	ObjectCreatorUserID string     `json:"object_creator_user_id"`
 	Title               string     `json:"title"`
+	UrlTitle            string     `json:"url_title"`
 	Content             string     `json:"content"`
 	Html                string     `json:"html"`
 	AnswerCount         int        `json:"answer_count"`

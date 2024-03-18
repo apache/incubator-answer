@@ -90,23 +90,15 @@ type GetUnreviewedRevisionResp struct {
 
 // GetRevisionResp get revision response
 type GetRevisionResp struct {
-	// id
-	ID string `json:"id"`
-	// user id
-	UserID string `json:"use_id"`
-	// object id
-	ObjectID string `json:"object_id"`
-	// object type
-	ObjectType int `json:"-"`
-	// title
-	Title string `json:"title"`
-	// content
-	Content string `json:"-"`
-	// content parsed
-	ContentParsed interface{} `json:"content"`
-	// revision status(normal: 1; delete 2)
-	Status int `json:"status"`
-	// create time
+	ID              string        `json:"id"`
+	UserID          string        `json:"use_id"`
+	ObjectID        string        `json:"object_id"`
+	ObjectType      int           `json:"-"`
+	Title           string        `json:"title"`
+	UrlTitle        string        `json:"url_title"`
+	Content         string        `json:"-"`
+	ContentParsed   interface{}   `json:"content"`
+	Status          int           `json:"status"`
 	CreatedAt       time.Time     `json:"-"`
 	CreatedAtParsed int64         `json:"create_at"`
 	UserInfo        UserBasicInfo `json:"user_info"`
