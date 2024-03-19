@@ -33,7 +33,9 @@ const Index: FC<IProps> = ({ text = '', keywords = [] }) => {
     <span className="highlight-text">
       {text.split(regex).map((piece: string, index: number) => {
         const key = `${piece.substring(0, 6)}_${index}`;
-        return keywords.find((kw: string) => kw === piece) ? (
+        return keywords.find(
+          (kw: string) => kw.toLocaleLowerCase() === piece.toLocaleLowerCase(),
+        ) ? (
           <mark key={key}>{piece}</mark>
         ) : (
           piece
