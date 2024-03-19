@@ -17,14 +17,30 @@
  * under the License.
  */
 
-const pattern = {
-  email:
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+\.)+[a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}))$/,
-  search:
-    /(\[.*\])|(is:answer)|(is:question)|(score:\d*)|(user:\S*)|(answers:\d*)/g,
-  uaWeChat: /micromessenger/i,
-  uaWeCom: /wxwork/i,
-  uaDingTalk: /dingtalk/i,
+import { memo, FC } from 'react';
+
+import './index.scss';
+
+interface IProps {
+  text: string;
+  keywords: string[];
+}
+
+const Index: FC<IProps> = ({ text = '', keywords = [] }) => {
+  const regex = new RegExp(`(${keywords.join('|')})`, 'gi');
+
+  return (
+    <span className="highlight-text">
+      {text.split(regex).map((piece: string, index: number) => {
+        const key = `${piece.substring(0, 6)}_${index}`;
+        return keywords.find((kw: string) => kw === piece) ? (
+          <mark key={key}>{piece}</mark>
+        ) : (
+          piece
+        );
+      })}
+    </span>
+  );
 };
 
-export default pattern;
+export default memo(Index);
