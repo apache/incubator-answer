@@ -91,6 +91,7 @@ type GetReportListPageResp struct {
 	SubmitAt         int64         `json:"submit_at"`
 	SubmitterUser    UserBasicInfo `json:"submitter_user"`
 	Reason           *ReasonItem   `json:"reason"`
+	ReasonContent    string        `json:"reason_content"`
 }
 
 // GetUnreviewedReportPostPageReq get unreviewed report post page request

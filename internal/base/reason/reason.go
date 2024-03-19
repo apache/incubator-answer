@@ -100,9 +100,9 @@ const (
 	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 	UserAccessDenied                 = "error.user.access_denied"
 	UserPageAccessDenied             = "error.user.page_access_denied"
-
-	AddBulkUsersFormatError = "error.user.add_bulk_users_format_error"
-	AddBulkUsersAmountError = "error.user.add_bulk_users_amount_error"
+	AddBulkUsersFormatError          = "error.user.add_bulk_users_format_error"
+	AddBulkUsersAmountError          = "error.user.add_bulk_users_amount_error"
+	InvalidURLError                  = "error.common.invalid_url"
 )
 
 // user external login reasons
