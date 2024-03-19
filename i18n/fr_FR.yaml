@@ -359,7 +359,7 @@ backend:
         other: Une question fermée ne peut pas être répondue, mais peut-être quand même modifiée, votée et commentée.
     needs_delete:
       name:
-        other: doit être supprimé
+        other: a besoin d'être supprimé
       desc:
         other: Ce message sera supprimé.
   question:
