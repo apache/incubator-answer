@@ -56,7 +56,11 @@ const Index: FC<Props> = ({ data }) => {
 
   const [searchParams] = useSearchParams();
   const q = searchParams.get('q');
-  const keywords = q?.replace(Pattern.search, '').split(' ') || [];
+  const keywords =
+    q
+      ?.replace(Pattern.search, '')
+      ?.split(' ')
+      ?.filter((v) => v !== '') || [];
 
   return (
     <ListGroupItem className="py-3 px-0 border-start-0 border-end-0 bg-transparent">
