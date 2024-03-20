@@ -7878,6 +7878,9 @@ const docTemplate = `{
                 "reason": {
                     "$ref": "#/definitions/schema.ReasonItem"
                 },
+                "reason_content": {
+                    "type": "string"
+                },
                 "submit_at": {
                     "type": "integer"
                 },
@@ -7915,33 +7918,29 @@ const docTemplate = `{
         "schema.GetRevisionResp": {
             "type": "object",
             "properties": {
-                "content": {
-                    "description": "content parsed"
-                },
+                "content": {},
                 "create_at": {
                     "type": "integer"
                 },
                 "id": {
-                    "description": "id",
                     "type": "string"
                 },
                 "object_id": {
-                    "description": "object id",
                     "type": "string"
                 },
                 "reason": {
                     "type": "string"
                 },
                 "status": {
-                    "description": "revision status(normal: 1; delete 2)",
                     "type": "integer"
                 },
                 "title": {
-                    "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 },
                 "use_id": {
-                    "description": "user id",
                     "type": "string"
                 },
                 "user_info": {
@@ -8792,6 +8791,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "placeholder": {
+                    "type": "string"
+                },
+                "reason_key": {
                     "type": "string"
                 },
                 "reason_type": {
@@ -9712,6 +9714,9 @@ const docTemplate = `{
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "url_title": {
                     "type": "string"
                 }
             }
