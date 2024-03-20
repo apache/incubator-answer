@@ -18,6 +18,7 @@
 # The following fields are used for back-end
 
 backend:
+
   base:
     success:
       other: Success.
@@ -141,6 +142,9 @@ backend:
   email_or_password_wrong_error:
     other: Email and password do not match.
   error:
+    common:
+      invalid_url:
+        other: Invalid URL.
     password:
       space_invalid:
         other: Password cannot contain spaces.

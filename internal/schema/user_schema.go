@@ -280,6 +280,12 @@ func CustomAvatar(url string) *AvatarInfo {
 
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	req.BioHTML = converter.Markdown2BasicHTML(req.Bio)
+	if len(req.Website) > 0 && !checker.IsURL(req.Website) {
+		return append(errFields, &validator.FormErrorField{
+			ErrorField: "website",
+			ErrorMsg:   reason.InvalidURLError,
+		}), errors.BadRequest(reason.InvalidURLError)
+	}
 	return nil, nil
 }
 

@@ -146,6 +146,7 @@ func (rs *ReportService) GetUnreviewedReportPostPage(ctx context.Context, req *s
 			SubmitAt:         report.CreatedAt.Unix(),
 			ObjectStatus:     info.Status,
 			ObjectShowStatus: info.ShowStatus,
+			ReasonContent:    report.Content,
 		}
 
 		// get user info
