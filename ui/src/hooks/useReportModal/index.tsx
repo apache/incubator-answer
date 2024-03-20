@@ -107,6 +107,43 @@ const useReportModal = (callback?: () => void) => {
     setShow(false);
   };
 
+  const checkValidate = () => {
+    if (reportType.haveContent && !content.value) {
+      setContent({
+        value: content.value,
+        isInvalid: true,
+        errorMsg: t('remark.empty'),
+      });
+      return false;
+    }
+
+    if (reportType.type === 60) {
+      // a duplicate
+      let url: URL | undefined;
+      try {
+        url = new URL(content.value);
+      } catch {
+        setContent({
+          value: content.value,
+          isInvalid: true,
+          errorMsg: t('msg.not_a_url'),
+        });
+      }
+      if (!url) return false;
+
+      if (url.origin !== window.location.origin) {
+        setContent({
+          value: content.value,
+          isInvalid: true,
+          errorMsg: t('msg.url_not_match'),
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleSubmit = () => {
     if (!params) {
       return;
@@ -116,14 +153,10 @@ const useReportModal = (callback?: () => void) => {
       return;
     }
 
-    if (reportType.haveContent && !content.value) {
-      setContent({
-        value: content.value,
-        isInvalid: true,
-        errorMsg: t('remark.empty'),
-      });
+    if (!checkValidate()) {
       return;
     }
+
     if (params.type === 'question' && params.action === 'close') {
       if (params?.source === 'review') {
         putFlagReviewAction({

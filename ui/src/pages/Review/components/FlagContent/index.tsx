@@ -133,7 +133,7 @@ const Index: FC<IProps> = ({ refreshCount }) => {
         <Alert variant="info" className="border-0 rounded-0 mb-0">
           <Stack
             direction="horizontal"
-            gap={0.5}
+            gap={1}
             className="align-items-center mb-2">
             <BaseUserCard
               data={submitter_user}
@@ -153,6 +153,19 @@ const Index: FC<IProps> = ({ refreshCount }) => {
               {object_type !== 'user'
                 ? t('flag_post_type', { type: reason?.name })
                 : t('flag_user_type', { type: reason?.name })}
+
+              {flagItemData?.reason_content &&
+                reason?.content_type &&
+                (reason?.reason_type !== 60 ? (
+                  <span> {flagItemData?.reason_content}</span>
+                ) : (
+                  <a href={flagItemData.reason_content} className="alert-exist">
+                    <strong>
+                      {' '}
+                      {t('show_exist', { keyPrefix: 'question_detail' })}
+                    </strong>
+                  </a>
+                ))}
             </p>
           </Stack>
         </Alert>

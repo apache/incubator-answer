@@ -80,16 +80,21 @@ const Index = () => {
   const isModerator = userInfo?.role_id === 3;
   const isLogged = Boolean(userInfo?.access_token);
   const loggedUserRank = userInfo?.rank;
-  const { state: locationState } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    if (locationState?.isReview) {
+    if (location.state?.isReview) {
       toastStore.getState().show({
         msg: t('review', { keyPrefix: 'toast' }),
         variant: 'warning',
       });
+
+      // remove state isReview
+      const newLocation = { ...location };
+      delete newLocation.state;
+      window.history.replaceState(null, '', newLocation.pathname);
     }
-  }, [locationState]);
+  }, [location.state]);
 
   const requestAnswers = async () => {
     const res = await getAnswers({
