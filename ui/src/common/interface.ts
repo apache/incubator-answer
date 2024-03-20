@@ -626,6 +626,7 @@ export interface BaseReviewItem {
 
 export interface FlagReviewItem extends BaseReviewItem {
   reason: ReasonItem;
+  reason_content: string;
   submitter_user: UserInfoBase;
 }
 

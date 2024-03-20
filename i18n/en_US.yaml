@@ -680,6 +680,8 @@ ui:
       empty: Cannot be empty.
     msg:
       empty: Please select a reason.
+      not_a_url: URL format is incorrect.
+      url_not_match: URL origin does not match the current website.
   tag_modal:
     title: Create new tag
     form:
@@ -1829,8 +1831,8 @@ ui:
     queued_user: Queued user
     filter_label: Type
     reputation: reputation
-    flag_post_type: Flagged this post as {{ type }}
-    flag_user_type: Flagged this user as {{ type }}
+    flag_post_type: Flagged this post as {{ type }}.
+    flag_user_type: Flagged this user as {{ type }}.
     edit_post: Edit post
     list_post: List post
     unlist_post: Unlist post
