@@ -79,16 +79,22 @@ const useReportModal = (callback?: () => void) => {
       isBackend,
     }).then((res) => {
       setList(res);
-      if (content) {
-        setReportType({
-          type: otherParams.reportType || -1,
-          haveContent: Boolean(otherParams.content),
-        });
-        setContent({
-          value: otherParams.content || '',
-          isInvalid: false,
-          errorMsg: '',
-        });
+      if (otherParams.reportType) {
+        const findType = res.find(
+          (v) => v.reason_type === otherParams.reportType,
+        );
+        if (findType) {
+          setReportType({
+            type: findType.reason_type,
+            haveContent: Boolean(findType.content_type),
+          });
+
+          setContent({
+            value: otherParams.content || '',
+            isInvalid: false,
+            errorMsg: '',
+          });
+        }
       }
       setShow(true);
     });
@@ -101,7 +107,8 @@ const useReportModal = (callback?: () => void) => {
   const handleRadio = (val) => {
     setInvalidState(false);
     setContent({
-      value: '',
+      value:
+        val.reason_type === params?.reportType ? String(params?.content) : '',
       isInvalid: false,
       errorMsg: '',
     });
