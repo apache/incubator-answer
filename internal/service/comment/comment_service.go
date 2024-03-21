@@ -213,7 +213,7 @@ func (cs *CommentService) addCommentNotification(
 			resp.ReplyUserStatus = replyUser.Status
 		}
 		cs.notificationCommentReply(ctx, replyUser.ID, comment.ID, req.UserID,
-			objInfo.QuestionID, objInfo.Title, comment.ParsedText)
+			objInfo.QuestionID, objInfo.Title, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 		alreadyNotifiedUserID[replyUser.ID] = true
 		return nil, nil
 	}
@@ -229,10 +229,10 @@ func (cs *CommentService) addCommentNotification(
 
 	if objInfo.ObjectType == constant.QuestionObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
 		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID,
-			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, comment.ParsedText)
+			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 	} else if objInfo.ObjectType == constant.AnswerObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
 		cs.notificationAnswerComment(ctx, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID,
-			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, comment.ParsedText)
+			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 	}
 	return nil, nil
 }
