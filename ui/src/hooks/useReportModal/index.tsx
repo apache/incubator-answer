@@ -119,6 +119,10 @@ const useReportModal = (callback?: () => void) => {
   };
 
   const onClose = () => {
+    setReportType({
+      type: -1,
+      haveContent: false,
+    });
     setContent({
       value: '',
       isInvalid: false,
