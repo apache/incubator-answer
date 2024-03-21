@@ -158,13 +158,15 @@ const Index: FC<IProps> = ({ refreshCount }) => {
                 reason?.content_type &&
                 (reason?.reason_type !== 60 ? (
                   <span> {flagItemData?.reason_content}</span>
-                ) : (
+                ) : flagItemData.reason_content?.startsWith('http') ? (
                   <a href={flagItemData.reason_content} className="alert-exist">
                     <strong>
                       {' '}
                       {t('show_exist', { keyPrefix: 'question_detail' })}
                     </strong>
                   </a>
+                ) : (
+                  <strong> {flagItemData?.reason_content}</strong>
                 ))}
             </p>
           </Stack>
