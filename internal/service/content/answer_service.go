@@ -279,7 +279,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	}
 	if insertData.Status == entity.AnswerStatusAvailable {
 		as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, insertData.ID, req.UserID, questionInfo.Title,
-			insertData.OriginalText)
+			insertData.ParsedText)
 	}
 
 	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
