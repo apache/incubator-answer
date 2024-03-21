@@ -41,6 +41,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/converter"
+	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
@@ -269,7 +270,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		return insertData.ID, err
 	}
 	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, insertData.ID, req.UserID, questionInfo.Title,
-		insertData.ParsedText)
+		htmltext.FetchExcerpt(insertData.ParsedText, "...", 240))
 
 	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           insertData.UserID,
