@@ -1005,7 +1005,7 @@ ui:
         label: Langue de l'interface
         text: Langue de l'interface utilisateur. Cela changera lorsque vous rafraîchissez la page.
     my_logins:
-      title: Mes connexions
+      title: Mes identifiants
       label: Connectez-vous ou inscrivez-vous sur ce site en utilisant ces comptes.
       modal_title: Supprimer la connexion
       modal_content: Confirmez-vous vouloir supprimer cette connexion de votre compte ?
@@ -1364,12 +1364,12 @@ ui:
       site_statistics: Statistiques du site
       questions: "Questions :"
       answers: "Réponses :"
-      comments: "Commentaires :"
+      comments: "Commentaires:"
       votes: "Votes :"
       users: "Utilisateurs :"
       flags: "Signalements:"
       site_health_status: État de santé du site
-      version: "Version :"
+      version: "Version:"
       https: "HTTPS :"
       upload_folder: "Dossier de téléversement :"
       run_mode: "Mode de fonctionnement :"
