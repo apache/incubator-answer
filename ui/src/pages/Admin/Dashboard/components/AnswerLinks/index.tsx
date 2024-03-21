@@ -26,7 +26,7 @@ const AnswerLinks = () => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h6 className="mb-3">{t('answer_links')}</h6>
+        <h6 className="mb-3">{t('links')}</h6>
         <Row>
           <Col xs={6}>
             <a

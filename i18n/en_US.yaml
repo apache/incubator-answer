@@ -1053,8 +1053,8 @@ ui:
     title: Related Questions
     answers: answers
   invite_to_answer:
-    title: People Asked
-    desc: Select people who you think might know the answer.
+    title: Invite People
+    desc: Invite people you think can answer.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1144,6 +1144,7 @@ ui:
     undelete: Undelete
     list: List
     unlist: Unlist
+    unlisted: Unlisted
     login: Log in
     signup: Sign up
     logout: Log out
@@ -1436,7 +1437,7 @@ ui:
       votes: "Votes:"
       users: "Users:"
       flags: "Flags:"
-      site_health_status: Site health status
+      site_health: Site health
       version: "Version:"
       https: "HTTPS:"
       upload_folder: "Upload folder:"
@@ -1451,7 +1452,7 @@ ui:
       database_size: "Database size:"
       storage_used: "Storage used:"
       uptime: "Uptime:"
-      answer_links: Answer links
+      links: Links
       plugins: Plugins
       github: GitHub
       blog: Blog
