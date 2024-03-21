@@ -330,6 +330,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if qs.reviewService.AddQuestionReview(ctx, question, req.Tags) {
 		if err := qs.questionRepo.UpdateQuestionStatus(ctx, question.ID, entity.QuestionStatusAvailable); err != nil {
 			return nil, err
+		} else {
+			question.Status = entity.AnswerStatusAvailable
 		}
 	}
 	objectTagData := schema.TagChange{}
