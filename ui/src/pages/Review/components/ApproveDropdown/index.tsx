@@ -99,6 +99,9 @@ const Index: FC<IProps> = ({
             });
         });
       },
+      onCancel: () => {
+        setIsLoading(false);
+      },
     });
   };
 
@@ -113,6 +116,8 @@ const Index: FC<IProps> = ({
         id: itemData?.flag_id || '',
         action: 'close',
         source: 'review',
+        content: itemData?.reason_content,
+        reportType: itemData?.reason.reason_type || -1,
       });
     }
 

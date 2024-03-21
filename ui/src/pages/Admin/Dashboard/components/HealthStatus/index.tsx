@@ -44,7 +44,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h6 className="mb-3">{t('site_health_status')}</h6>
+        <h6 className="mb-3">{t('site_health')}</h6>
         <Row>
           <Col xs={6} className="mb-1 d-flex align-items-center">
             <span className="text-secondary me-1">{t('version')}</span>

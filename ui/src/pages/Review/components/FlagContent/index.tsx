@@ -214,9 +214,9 @@ const Index: FC<IProps> = ({ refreshCount }) => {
                 <span
                   className={classNames(
                     'ms-1 badge',
-                    ADMIN_LIST_STATUS.unlist.variant,
+                    ADMIN_LIST_STATUS.unlisted.variant,
                   )}>
-                  {t(ADMIN_LIST_STATUS.unlist.name, { keyPrefix: 'btns' })}
+                  {t(ADMIN_LIST_STATUS.unlisted.name, { keyPrefix: 'btns' })}
                 </span>
               )}
             </div>

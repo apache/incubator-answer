@@ -76,9 +76,9 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-warning',
     name: 'pending',
   },
-  unlist: {
+  unlisted: {
     variant: 'text-bg-secondary',
-    name: 'unlist',
+    name: 'unlisted',
   },
 };
 

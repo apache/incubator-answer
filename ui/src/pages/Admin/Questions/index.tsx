@@ -156,9 +156,9 @@ const Questions: FC = () => {
                     <span
                       className={classNames(
                         'badge',
-                        ADMIN_LIST_STATUS.unlist.variant,
+                        ADMIN_LIST_STATUS.unlisted.variant,
                       )}>
-                      {t(ADMIN_LIST_STATUS.unlist.name, {
+                      {t(ADMIN_LIST_STATUS.unlisted.name, {
                         keyPrefix: 'btns',
                       })}
                     </span>

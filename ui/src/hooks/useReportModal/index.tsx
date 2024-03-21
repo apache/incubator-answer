@@ -40,6 +40,8 @@ interface Params {
   title?: string;
   action: Type.ReportAction;
   source?: string;
+  content?: string;
+  reportType?: any;
 }
 
 const useReportModal = (callback?: () => void) => {
@@ -69,7 +71,7 @@ const useReportModal = (callback?: () => void) => {
     const div = document.createElement('div');
     rootRef.current.root = ReactDOM.createRoot(div);
   }, []);
-  const getList = ({ type, action, isBackend }: Params) => {
+  const getList = ({ type, action, isBackend, ...otherParams }: Params) => {
     // @ts-ignore
     reportList({
       type,
@@ -77,6 +79,17 @@ const useReportModal = (callback?: () => void) => {
       isBackend,
     }).then((res) => {
       setList(res);
+      if (content) {
+        setReportType({
+          type: otherParams.reportType || -1,
+          haveContent: Boolean(otherParams.content),
+        });
+        setContent({
+          value: otherParams.content || '',
+          isInvalid: false,
+          errorMsg: '',
+        });
+      }
       setShow(true);
     });
   };
