@@ -243,6 +243,8 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if as.reviewService.AddAnswerReview(ctx, insertData) {
 		if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, entity.AnswerStatusAvailable); err != nil {
 			return "", err
+		} else {
+			insertData.Status = entity.AnswerStatusAvailable
 		}
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
