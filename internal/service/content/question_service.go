@@ -36,6 +36,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/activity"
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
 	collectioncommon "github.com/apache/incubator-answer/internal/service/collection_common"
+	"github.com/apache/incubator-answer/internal/service/config"
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/meta"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
@@ -48,6 +49,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/token"
@@ -79,6 +81,7 @@ type QuestionService struct {
 	siteInfoService                  siteinfo_common.SiteInfoCommonService
 	newQuestionNotificationService   *notification.ExternalNotificationService
 	reviewService                    *review.ReviewService
+	configService                    *config.ConfigService
 }
 
 func NewQuestionService(
@@ -99,6 +102,7 @@ func NewQuestionService(
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	newQuestionNotificationService *notification.ExternalNotificationService,
 	reviewService *review.ReviewService,
+	configService *config.ConfigService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:                     questionRepo,
@@ -118,6 +122,7 @@ func NewQuestionService(
 		siteInfoService:                  siteInfoService,
 		newQuestionNotificationService:   newQuestionNotificationService,
 		reviewService:                    reviewService,
+		configService:                    configService,
 	}
 }
 
@@ -128,6 +133,14 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	}
 	if !has {
 		return nil
+	}
+
+	cf, err := qs.configService.GetConfigByID(ctx, req.CloseType)
+	if err != nil || cf == nil {
+		return errors.BadRequest(reason.ReportNotFound)
+	}
+	if cf.Key == constant.ReasonADuplicate && !checker.IsURL(req.CloseMsg) {
+		return errors.BadRequest(reason.InvalidURLError)
 	}
 
 	questionInfo.Status = entity.QuestionStatusClosed

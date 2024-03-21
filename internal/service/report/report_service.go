@@ -36,6 +36,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/report_common"
 	"github.com/apache/incubator-answer/internal/service/report_handle"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/obj"
 	"github.com/jinzhu/copier"
@@ -86,10 +87,17 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 		return err
 	}
 
-	// TODO this reported user id should be get by revision
 	objInfo, err := rs.objectInfoService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
 		return err
+	}
+
+	cf, err := rs.configService.GetConfigByID(ctx, req.ReportType)
+	if err != nil || cf == nil {
+		return errors.BadRequest(reason.ReportNotFound)
+	}
+	if cf.Key == constant.ReasonADuplicate && !checker.IsURL(req.Content) {
+		return errors.BadRequest(reason.InvalidURLError)
 	}
 
 	report := &entity.Report{
