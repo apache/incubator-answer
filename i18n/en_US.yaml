@@ -496,6 +496,8 @@ backend:
       other: accept
     accepted:
       other: accepted
+    edit:
+      other: edit
   review:
     queued_post:
       other: Queued post

@@ -31,6 +31,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/activity"
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
@@ -66,6 +67,7 @@ type RevisionService struct {
 	activityQueueService     activity_queue.ActivityQueueService
 	reportRepo               report_common.ReportRepo
 	reviewService            *review.ReviewService
+	reviewActivity           activity.ReviewActivityRepo
 }
 
 func NewRevisionService(
@@ -82,6 +84,7 @@ func NewRevisionService(
 	activityQueueService activity_queue.ActivityQueueService,
 	reportRepo report_common.ReportRepo,
 	reviewService *review.ReviewService,
+	reviewActivity activity.ReviewActivityRepo,
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:             revisionRepo,
@@ -97,6 +100,7 @@ func NewRevisionService(
 		activityQueueService:     activityQueueService,
 		reportRepo:               reportRepo,
 		reviewService:            reviewService,
+		reviewActivity:           reviewActivity,
 	}
 }
 
@@ -148,6 +152,28 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 			return saveErr
 		}
 		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus, req.UserID)
+		if err != nil {
+			return err
+		}
+		err = rs.reviewActivity.Review(ctx, &schema.PassReviewActivity{
+			UserID:           revisioninfo.UserID,
+			TriggerUserID:    req.UserID,
+			ObjectID:         revisioninfo.ObjectID,
+			OriginalObjectID: "0",
+			RevisionID:       revisioninfo.ID,
+		})
+		if err != nil {
+			log.Errorf("add review activity failed: %v", err)
+		}
+
+		msg := &schema.NotificationMsg{
+			TriggerUserID:  req.UserID,
+			ReceiverUserID: revisioninfo.UserID,
+			Type:           schema.NotificationTypeAchievement,
+			ObjectID:       revisioninfo.ObjectID,
+			ObjectType:     objectType,
+		}
+		rs.notificationQueueService.Send(ctx, msg)
 		return
 	}
 
