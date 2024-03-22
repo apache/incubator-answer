@@ -19,7 +19,7 @@
 
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Row, Col, Form, Button, Card } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import dayjs from 'dayjs';
@@ -217,12 +217,12 @@ const Index = () => {
       <h3 className="mb-4">{t('title')}</h3>
       <Row>
         <Col className="page-main flex-auto">
-          <a
-            href={pathFactory.questionLanding(qid, data?.question.url_title)}
+          <Link
+            to={pathFactory.questionLanding(qid, data?.question.url_title)}
             target="_blank"
             rel="noreferrer">
             <h5 className="mb-3">{data?.question.title}</h5>
-          </a>
+          </Link>
 
           <div className="question-content-wrap">
             <div

@@ -20,6 +20,7 @@
 import { FC, useEffect, useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
+import { REACT_BASE_PATH } from '@/router/alias';
 import { brandingStore, pageTagStore, siteInfoStore } from '@/stores';
 import { getCurrentLang } from '@/utils/localize';
 
@@ -76,7 +77,7 @@ const Index: FC = () => {
       <link
         rel="icon"
         type="image/png"
-        href={favicon || square_icon || '/favicon.ico'}
+        href={favicon || square_icon || `${REACT_BASE_PATH}/favicon.ico`}
       />
       <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
       <link rel="apple-touch-icon" type="image/png" href={square_icon} />
@@ -84,7 +85,10 @@ const Index: FC = () => {
       {keywords && <meta name="keywords" content={keywords} />}
       {description && <meta name="description" content={description} />}
       {doInsertCustomCSS && (
-        <link rel="stylesheet" href={`${process.env.PUBLIC_URL}/custom.css`} />
+        <link
+          rel="stylesheet"
+          href={`${process.env.PUBLIC_URL}${REACT_BASE_PATH}/custom.css`}
+        />
       )}
     </Helmet>
   );
