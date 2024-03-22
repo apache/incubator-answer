@@ -19,9 +19,9 @@
 backend:
   base:
     success:
-      other: Success.
+      other: విజయవంతమైంది.
     unknown:
-      other: Unknown error.
+      other: తెలియని సమస్య.
     request_format_error:
       other: Request format is not valid.
     unauthorized_error:
@@ -134,7 +134,7 @@ backend:
   e_mail:
     other: Email
   password:
-    other: Heslo
+    other: Password
   pass:
     other: Password
   email_or_password_wrong_error:
@@ -145,45 +145,45 @@ backend:
         other: Invalid URL.
     password:
       space_invalid:
-        other: Heslo nesmí obsahovat mezery.
+        other: Password cannot contain spaces.
     admin:
       cannot_update_their_password:
-        other: Nemůžete změnit své heslo.
+        other: You cannot modify your password.
       cannot_modify_self_status:
-        other: Nemůžete změnit svůj stav.
+        other: You cannot modify your status.
       email_or_password_wrong:
-        other: Email a heslo nesouhlasí.
+        other: Email and password do not match.
     answer:
       not_found:
-        other: Odpověď nebyla nalezena.
+        other: Answer do not found.
       cannot_deleted:
-        other: Nemáte právo mazat.
+        other: No permission to delete.
       cannot_update:
-        other: Nemáte právo aktualizovat.
+        other: No permission to update.
       question_closed_cannot_add:
-        other: Otázky jsou uzavřené a není možno je přidávat.
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
-        other: Nejsou povoleny úpravy komentáře.
+        other: Comment are not allowed to edit.
       not_found:
-        other: Komentář nebyl nalezen.
+        other: Comment not found.
       cannot_edit_after_deadline:
-        other: Tento komentář byl pro úpravy příliš dlouhý.
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: Email už existuje.
+        other: Email already exists.
       need_to_be_verified:
-        other: Email musí být ověřen.
+        other: Email should be verified.
       verify_url_expired:
-        other: Platnost ověřovacího URL vypršela, pošlete si ověřovací email znovu.
+        other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
-        other: Email z této domény není povolen. Použijte jinou doménu.
+        other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
         other: Language file not found.
     object:
       captcha_verification_failed:
-        other: Nesprávně vyplněná Captcha.
+        other: Captcha wrong.
       disallow_follow:
         other: You are not allowed to follow.
       disallow_vote:
@@ -506,30 +506,30 @@ ui:
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
+    prev: మునుపటి
     next: Next
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
+    question: ప్రశ్న
+    questions: ప్రశ్నలు
+    tag: ట్యాగ్
+    tags: టాగ్లు
     tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
+    create_tag: ట్యాగ్‌ని సృష్టించండి
+    edit_tag: ట్యాగ్‌ని సవరించండి
     ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
+    edit_question: ప్రశ్నను సవరించండి
+    edit_answer: సమాధానాన్ని సవరించండి
     search: Search
-    posts_containing: Posts containing
+    posts_containing: కలిగి ఉన్న పోస్ట్‌లు
     settings: Settings
-    notifications: Notifications
+    notifications: నోటిఫికేషన్‌లు
     login: Log In
     sign_up: Sign Up
     account_recovery: Account Recovery
     account_activation: Account Activation
     confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
+    account_suspended: ఖాతా నిలిపివేయబడింది
+    admin: అడ్మిన్
     change_email: Modify Email
     install: Answer Installation
     upgrade: Answer Upgrade
@@ -541,9 +541,9 @@ ui:
     http_403: HTTP Error 403
     logout: Log Out
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
+    title: నోటిఫికేషన్లు
+    inbox: ఇన్‌బాక్స్
+    achievement: విజయాలు
     new_alerts: New alerts
     all_read: Mark all as read
     show_more: Show more
@@ -1753,7 +1753,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: URL základny Gravatar
+        label: Gravatar base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable
