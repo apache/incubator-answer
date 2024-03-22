@@ -78,10 +78,10 @@ backend:
         other: Level 1 (weniger Reputation für privates Team, Gruppen)
     level_2:
       description:
-        other: Level 2 (niedrige Reputation für Startup-Community)
+        other: Level 2 (niedrige Reputation erforderlich für Start-Community)
     level_3:
       description:
-        other: Level 3 (hohe Reputation für eine reife Community)
+        other: Level 3 (hohe Reputation, für ausgereifte Community)
     level_custom:
       description:
         other: Benutzerdefinierter Level
@@ -1038,8 +1038,8 @@ ui:
     title: Verwandte Fragen
     answers: antworten
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Menschen gefragt
+    desc: Wähle Leute aus, von denen du glaubst, dass sie die Antwort wissen könnten.
     invite: Zur Antwort einladen
     add: Personen hinzufügen
     search: Personen suchen
@@ -1656,8 +1656,8 @@ ui:
       page_title: Schreiben
       restrict_answer:
         title: Antwort einschränken
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Jeder Benutzer kann für jede Frage nur eine Antwort schreiben
+        text: "Sie können den Bearbeiten-Link verwenden, um ihre bestehende Antwort zu verfeinern und zu verbessern."
       recommend_tags:
         label: Empfohlene Tags
         text: "Bitte gib den Tag-Slug oben ein, ein Tag pro Zeile."
@@ -1841,7 +1841,7 @@ ui:
     no_data: "Wir konnten nichts finden."
   users:
     title: Benutzer
-    users_with_the_most_reputation: Benutzer mit den höchsten Reputationspunkten dieser Woche
+    users_with_the_most_reputation: Benutzer mit den höchsten Ansehenspunkten dieser Woche
     users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
     staffs: Unsere Community Teammitglieder
     reputation: Ansehen
