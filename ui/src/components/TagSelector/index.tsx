@@ -200,7 +200,6 @@ const TagSelector: FC<IProps> = ({
   };
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleSearch');
     const searchStr = e.currentTarget.value.replace(';', '');
     setSearchValue(searchStr);
     fetchTags(searchStr);
