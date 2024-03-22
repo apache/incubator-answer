@@ -28,6 +28,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/apache/incubator-answer/internal/service/review"
+	"github.com/apache/incubator-answer/internal/service/revision"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"xorm.io/xorm/schemas"
 
@@ -58,6 +60,8 @@ type dashboardService struct {
 	configService   *config.ConfigService
 	siteInfoService siteinfo_common.SiteInfoCommonService
 	serviceConfig   *service_config.ServiceConfig
+	reviewService   *review.ReviewService
+	revisionRepo    revision.RevisionRepo
 	data            *data.Data
 }
 
@@ -71,6 +75,8 @@ func NewDashboardService(
 	configService *config.ConfigService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	serviceConfig *service_config.ServiceConfig,
+	reviewService *review.ReviewService,
+	revisionRepo revision.RevisionRepo,
 	data *data.Data,
 ) DashboardService {
 	return &dashboardService{
@@ -83,6 +89,8 @@ func NewDashboardService(
 		configService:   configService,
 		siteInfoService: siteInfoService,
 		serviceConfig:   serviceConfig,
+		reviewService:   reviewService,
+		revisionRepo:    revisionRepo,
 		data:            data,
 	}
 }
@@ -187,11 +195,23 @@ func (ds *dashboardService) userCount(ctx context.Context) int64 {
 }
 
 func (ds *dashboardService) reportCount(ctx context.Context) int64 {
+	reviewCount, err := ds.reviewService.GetReviewPendingCount(ctx)
+	if err != nil {
+		log.Errorf("get review count failed: %s", err)
+	}
 	reportCount, err := ds.reportRepo.GetReportCount(ctx)
 	if err != nil {
 		log.Errorf("get report count failed: %s", err)
 	}
-	return reportCount
+	countUnreviewedRevision, err := ds.revisionRepo.CountUnreviewedRevision(ctx, []int{
+		constant.ObjectTypeStrMapping[constant.AnswerObjectType],
+		constant.ObjectTypeStrMapping[constant.QuestionObjectType],
+		constant.ObjectTypeStrMapping[constant.TagObjectType],
+	})
+	if err != nil {
+		log.Errorf("get revision count failed: %s", err)
+	}
+	return reviewCount + reportCount + countUnreviewedRevision
 }
 
 // count vote

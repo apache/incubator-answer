@@ -213,7 +213,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService, notificationQueueService, userExternalLoginRepo, siteInfoCommonService)
 	notificationService := notification.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService, userRepo, reportRepo, reviewService)
 	notificationController := controller.NewNotificationController(notificationService, rankService)
-	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configService, siteInfoCommonService, serviceConf, dataData)
+	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configService, siteInfoCommonService, serviceConf, reviewService, revisionRepo, dataData)
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
 	uploadController := controller.NewUploadController(uploaderService)
