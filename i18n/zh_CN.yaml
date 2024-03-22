@@ -140,6 +140,9 @@ backend:
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
+    common:
+      invalid_url:
+        other: Invalid URL.
     password:
       space_invalid:
         other: 密码不得含有空格。
@@ -200,6 +203,8 @@ backend:
     question:
       already_deleted:
         other: 该帖子已被删除。
+      under_review:
+        other: Your post is awaiting review. It will be visible after it has been approved.
       not_found:
         other: 问题未找到。
       cannot_deleted:
@@ -485,6 +490,15 @@ backend:
       other: 采纳
     accepted:
       other: 已采纳
+    edit:
+      other: edit
+  review:
+    queued_post:
+      other: Queued post
+    flagged_post:
+      other: Flagged post
+    suggested_post_edit:
+      other: Suggested edits
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -666,6 +680,8 @@ ui:
       empty: 不能为空
     msg:
       empty: 请选择一个原因。
+      not_a_url: URL format is incorrect.
+      url_not_match: URL origin does not match the current website.
   tag_modal:
     title: 创建新标签
     form:
@@ -1033,6 +1049,7 @@ ui:
     asked: 提问于
     update: 修改于
     edit: 编辑于
+    commented: commented
     Views: 阅读次数
     Follow: 关注此问题
     Following: 已关注
@@ -1050,6 +1067,7 @@ ui:
       title: 个回答
       score: 评分
       newest: 最新
+      oldest: 最旧
       btn_accept: 采纳
       btn_accepted: 已被采纳
     write_answer:
@@ -1073,6 +1091,14 @@ ui:
       confirm_btn: 重新打开
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
+    list:
+      confirm_btn: 列表显示
+      title: 列表中显示这个帖子
+      content: 确定要列表中显示这个帖子吗？
+    unlist:
+      confirm_btn: 列表隐藏
+      title: 从列表中隐藏这个帖子
+      content: 确定要从列表中隐藏这个帖子吗？
     pin:
       title: 置顶该帖子
       content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
@@ -1094,6 +1120,9 @@ ui:
     save: 保存
     delete: 删除
     undelete: 撤消删除
+    list: 列表显示
+    unlist: 列表隐藏
+    unlisted: Unlisted
     login: 登录
     signup: 注册
     logout: 退出
@@ -1122,6 +1151,15 @@ ui:
     system_setting: 跟随系统
     default: 默认
     reset: 重置
+    tag: Tag
+    post_lowercase: 帖子
+    filter: Filter
+    ignore: 忽略
+    submit: 提交
+    normal: 正常
+    closed: 已关闭
+    deleted: 已删除
+    pending: Pending
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1368,7 +1406,8 @@ ui:
       votes: "投票:"
       users: "用户:"
       flags: "举报:"
-      site_health_status: '健康状态:'
+      reviews: "Reviews:"
+      site_health: Site health
       version: "版本"
       https: "HTTPS:"
       upload_folder: "上传文件夹："
@@ -1383,11 +1422,12 @@ ui:
       database_size: "数据库大小："
       storage_used: "已用存储空间："
       uptime: "运行时间："
-      answer_links: 回答链接
+      links: Links
       plugins: 插件
       github: GitHub
       blog: 博客
       contact: 联系
+      forum: Forum
       documents: 文档
       feedback: 用户反馈
       support: 帮助
@@ -1490,9 +1530,7 @@ ui:
         content: 被封禁的用户将无法登录。
     questions:
       page_title: 问题
-      normal: 正常
-      closed: 已关闭
-      deleted: 已删除
+      unlisted: 已隐藏
       post: 标题
       votes: 得票数
       answers: 回答数
@@ -1500,12 +1538,11 @@ ui:
       status: 状态
       action: 操作
       change: 更改
+      pending: Pending
       filter:
         placeholder: "按标题过滤，问题:id"
     answers:
       page_title: 回答
-      normal: 正常
-      deleted: 已删除
       post: 标题
       votes: 得票数
       created: 创建于
@@ -1538,6 +1575,9 @@ ui:
         msg: 联系人邮箱不能为空。
         validate: 联系人邮箱无效。
         text: 本网站的主要联系邮箱地址。
+      check_update:
+        label: 软件更新
+        text: 自动检查软件更新
     interface:
       page_title: 界面
       language:
@@ -1616,8 +1656,8 @@ ui:
       page_title: 编辑
       restrict_answer:
         title: 限制一个回答
-        label: 每个用户对于每个问题只能有一个回答
-        text: "用户可以使用编辑按钮优化已有的回答"
+        label: 每个用户只能为同一问题写一个回答
+        text: "关闭以允许用户对同一问题编写多个回答，这可能会导致回答不集中。"
       recommend_tags:
         label: 推荐标签
         text: "请在上方输入标签固定链接，每行一个标签。"
@@ -1752,6 +1792,22 @@ ui:
     edit_answer: 编辑回答
     edit_tag: 编辑标签
     empty: 没有剩余的审核任务。
+    approve_revision_tip: Do you approve this revision?
+    approve_flag_tip: Do you approve this flag?
+    approve_post_tip: Do you approve this post?
+    approve_user_tip: Do you approve this user?
+    suggest_edits: Suggested edits
+    flag_post: Flag post
+    flag_user: Flag user
+    queued_post: Queued post
+    queued_user: Queued user
+    filter_label: Type
+    reputation: reputation
+    flag_post_type: Flagged this post as {{ type }}.
+    flag_user_type: Flagged this user as {{ type }}.
+    edit_post: Edit post
+    list_post: List post
+    unlist_post: Unlist post
   timeline:
     undeleted: 取消删除
     deleted: 删除
@@ -1802,3 +1858,6 @@ ui:
     post_hide_list: 此帖子已经从列表中隐藏。
     post_show_list: 该帖子已显示到列表中。
     post_reopen: 这个帖子已被重新打开.
+    post_list: 这个帖子已经被显示
+    post_unlist: 这个帖子已经被隐藏
+    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
