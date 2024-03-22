@@ -1038,8 +1038,8 @@ ui:
     title: Întrebări conexe
     answers: răspunsuri
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Persoane întrebate
+    desc: Invită persoane care crezi că știu răspunsul.
     invite: Invită să răspundă
     add: Adaugă persoane
     search: Caută persoane
@@ -1656,8 +1656,8 @@ ui:
       page_title: Scrie
       restrict_answer:
         title: Restricționare răspuns
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Fiecare utilizator poate scrie doar câte un răspuns pentru fiecare întrebare
+        text: "Ei pot folosi link-ul de editare pentru a rafina și îmbunătăți răspunsul existent, în schimb."
       recommend_tags:
         label: Etichete recomandate
         text: "Vă rugăm să introduceți eticheta slug mai sus, câte o etichetă pe linie."
