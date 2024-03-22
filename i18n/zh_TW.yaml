@@ -1038,8 +1038,8 @@ ui:
     title: 相關問題
     answers: 個回答
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: People Asked
+    desc: Invite people who you think might know the answer.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1656,8 +1656,8 @@ ui:
       page_title: 編輯
       restrict_answer:
         title: Restrict answer
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "請在上方輸入標籤固定連結，每行一個標籤。"
