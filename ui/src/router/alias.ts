@@ -17,6 +17,8 @@
  * under the License.
  */
 
+export const REACT_BASE_PATH = process.env.REACT_APP_BASE_URL || '';
+
 export const RouteAlias = {
   home: '/',
   login: '/users/login',

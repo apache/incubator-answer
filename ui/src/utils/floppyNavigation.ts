@@ -137,7 +137,7 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
     } else if (handler === 'replace') {
       window.location.replace(to);
     } else if (typeof handler === 'function') {
-      handler(to, config.options);
+      handler(to === '/test' ? '/' : to, config.options);
     }
   }
   if (typeof to === 'number' && typeof handler === 'function') {

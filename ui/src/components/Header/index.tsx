@@ -249,24 +249,26 @@ const Header: FC = () => {
               </Nav>
             ) : (
               <>
-                <Button
-                  variant="link"
-                  className={classnames('me-2', {
+                <Link
+                  className={classnames('me-2 btn btn-link', {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
                   onClick={() => floppyNavigation.storageLoginRedirect()}
-                  href={userCenter.getLoginUrl()}>
+                  to={userCenter.getLoginUrl()}>
                   {t('btns.login')}
-                </Button>
+                </Link>
                 {loginSetting.allow_new_registrations && (
-                  <Button
-                    variant={
-                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
-                    }
-                    href={userCenter.getSignUpUrl()}>
+                  <Link
+                    className={classnames(
+                      'btn',
+                      navbarStyle === 'theme-colored'
+                        ? 'btn-light'
+                        : 'btn-primary',
+                    )}
+                    to={userCenter.getSignUpUrl()}>
                     {t('btns.signup')}
-                  </Button>
+                  </Link>
                 )}
               </>
             )}
