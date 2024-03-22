@@ -1038,8 +1038,8 @@ ui:
     title: Powiązane pytania
     answers: odpowiedzi
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Ludzie pytali
+    desc: Wybierz osoby, które mogą znać odpowiedź.
     invite: Zaproś do odpowiedzi
     add: Dodaj osoby
     search: Wyszukaj osoby
@@ -1656,8 +1656,8 @@ ui:
       page_title: Pisanie
       restrict_answer:
         title: Ogranicz odpowiedź
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Każdy użytkownik może napisać tylko jedną odpowiedź na każde pytanie
+        text: "Mogą użyć linku edycji, aby udoskonalić i ulepszyć swoją istniejącą odpowiedź."
       recommend_tags:
         label: Rekomendowane tagi
         text: "Proszę wpisać tutaj tag slug, jeden tag na linię."
