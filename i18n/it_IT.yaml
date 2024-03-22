@@ -1038,8 +1038,8 @@ ui:
     title: Domande correlate
     answers: risposte
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Persone Interpellate
+    desc: Seleziona le persone che pensi potrebbero conoscere la risposta.
     invite: Invita a rispondere
     add: Aggiungi contatti
     search: Cerca persone
@@ -1351,7 +1351,6 @@ ui:
     db_failed: Connessione al database fallita
     db_failed_desc: >-
       Questo significa che le informazioni sul database nel file <1>config.yaml</1> non sono corrette o che non è stato possibile stabilire il contatto con il server del database. Ciò potrebbe significare che il server del database del tuo host è inattivo.
-
   counts:
     views: visualizzazioni
     votes: Voti
@@ -1657,8 +1656,8 @@ ui:
       page_title: Scrivi
       restrict_answer:
         title: Limita risposta
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Ogni utente può scrivere una sola risposta per ogni domanda
+        text: "Possono invece utilizzare il link di modifica per affinare e migliorare la loro risposta esistente."
       recommend_tags:
         label: Raccomanda tag
         text: "Inserisci il tag slug sopra, un tag per riga."
