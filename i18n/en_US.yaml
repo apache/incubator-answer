@@ -1437,6 +1437,7 @@ ui:
       votes: "Votes:"
       users: "Users:"
       flags: "Flags:"
+      reviews: "Reviews:"
       site_health: Site health
       version: "Version:"
       https: "HTTPS:"
