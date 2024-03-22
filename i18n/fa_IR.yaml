@@ -1038,8 +1038,8 @@ ui:
     title: سوالات مرتبط
     answers: جواب ها
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: مردم پرسیدند
+    desc: افرادی را دعوت کنید که فکر می کنید ممکن است پاسخ را بدانند.
     invite: دعوت به پاسخ
     add: افزودن افراد
     search: جستجوی افراد
@@ -1656,8 +1656,8 @@ ui:
       page_title: نوشتن
       restrict_answer:
         title: Restrict answer
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Each user can only write one answer for each question
+        text: "They can use the edit link to refine and improve their existing answer, instead."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
