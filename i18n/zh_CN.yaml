@@ -1050,6 +1050,7 @@ ui:
       title: 个回答
       score: 评分
       newest: 最新
+      oldest: 最旧
       btn_accept: 采纳
       btn_accepted: 已被采纳
     write_answer:
@@ -1073,6 +1074,14 @@ ui:
       confirm_btn: 重新打开
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
+    list:
+      confirm_btn: 列表显示
+      title: 列表中显示这个帖子
+      content: 确定要列表中显示这个帖子吗？
+    unlist:
+      confirm_btn: 列表隐藏
+      title: 从列表中隐藏这个帖子
+      content: 确定要从列表中隐藏这个帖子吗？
     pin:
       title: 置顶该帖子
       content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
@@ -1094,6 +1103,8 @@ ui:
     save: 保存
     delete: 删除
     undelete: 撤消删除
+    list: 列表显示
+    unlist: 列表隐藏
     login: 登录
     signup: 注册
     logout: 退出
@@ -1122,6 +1133,15 @@ ui:
     system_setting: System setting
     default: Default
     reset: Reset
+    tag: Tag
+    post_lowercase: 帖子
+    filter: Filter
+    ignore: 忽略
+    submit: 提交
+    normal: 正常
+    closed: 已关闭
+    deleted: 已删除
+    pending: Pending
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1494,6 +1514,7 @@ ui:
       closed: 已关闭
       deleted: 已删除
       post: 标题
+      unlisted: 已隐藏
       votes: 得票数
       answers: 回答数
       created: 创建于
@@ -1538,6 +1559,9 @@ ui:
         msg: 联系人邮箱不能为空。
         validate: 联系人邮箱无效。
         text: 本网站的主要联系邮箱地址。
+      check_update:
+        label: 软件更新
+        text: 自动检查软件更新
     interface:
       page_title: 界面
       language:
@@ -1616,8 +1640,8 @@ ui:
       page_title: 编辑
       restrict_answer:
         title: 限制一个回答
-        label: 每个用户对于每个问题只能有一个回答
-        text: "用户可以使用编辑按钮优化已有的回答"
+        label: 每个用户只能为同一问题写一个回答
+        text: "关闭以允许用户对同一问题编写多个回答，这可能会导致回答不集中。"
       recommend_tags:
         label: 推荐标签
         text: "请在上方输入标签固定链接，每行一个标签。"
@@ -1802,3 +1826,5 @@ ui:
     post_hide_list: 此帖子已经从列表中隐藏。
     post_show_list: 该帖子已显示到列表中。
     post_reopen: 这个帖子已被重新打开.
+    post_list: 这个帖子已经被显示
+    post_unlist: 这个帖子已经被隐藏

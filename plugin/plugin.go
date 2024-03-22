@@ -21,6 +21,7 @@ package plugin
 
 import (
 	"encoding/json"
+
 	"github.com/segmentfault/pacman/i18n"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -87,6 +88,10 @@ func Register(p Base) {
 
 	if _, ok := p.(Notification); ok {
 		registerNotification(p.(Notification))
+	}
+
+	if _, ok := p.(Reviewer); ok {
+		registerReviewer(p.(Reviewer))
 	}
 }
 
