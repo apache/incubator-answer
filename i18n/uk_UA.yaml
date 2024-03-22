@@ -1038,8 +1038,8 @@ ui:
     title: Пов'язані запитання
     answers: відповіді
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Люди запитували
+    desc: Виберіть людей, які, на вашу думку, можуть знати відповідь.
     invite: Запросити відповісти
     add: Додати людей
     search: Шукати людей
@@ -1656,8 +1656,8 @@ ui:
       page_title: Write
       restrict_answer:
         title: Restrict answer
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Кожен користувач може написати лише одну відповідь на кожне запитання
+        text: "Натомість вони можуть скористатися посиланням для редагування, щоб уточнити та покращити наявну відповідь."
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
