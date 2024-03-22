@@ -1656,8 +1656,8 @@ ui:
       page_title: 编辑
       restrict_answer:
         title: 限制一个回答
-        label: 每个用户只能为同一问题写一个回答
-        text: "关闭以允许用户对同一问题编写多个回答，这可能会导致回答不集中。"
+        label: 每个用户对于每个问题只能有一个回答
+        text: "用户可以使用编辑按钮优化已有的回答"
       recommend_tags:
         label: 推荐标签
         text: "请在上方输入标签固定链接，每行一个标签。"
