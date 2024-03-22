@@ -140,6 +140,9 @@ backend:
   email_or_password_wrong_error:
     other: Неверное имя пользователя или пароль.
   error:
+    common:
+      invalid_url:
+        other: Invalid URL.
     password:
       space_invalid:
         other: Пароль не должен содержать пробелы.
@@ -200,6 +203,8 @@ backend:
     question:
       already_deleted:
         other: Этот пост был удалён.
+      under_review:
+        other: Your post is awaiting review. It will be visible after it has been approved.
       not_found:
         other: Вопрос не найден.
       cannot_deleted:
@@ -485,6 +490,15 @@ backend:
       other: принять
     accepted:
       other: принято
+    edit:
+      other: edit
+  review:
+    queued_post:
+      other: Queued post
+    flagged_post:
+      other: Flagged post
+    suggested_post_edit:
+      other: Suggested edits
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -666,6 +680,8 @@ ui:
       empty: Не может быть пустым.
     msg:
       empty: Пожалуйста, выбери причину.
+      not_a_url: URL format is incorrect.
+      url_not_match: URL origin does not match the current website.
   tag_modal:
     title: Новый тег
     form:
@@ -1022,8 +1038,8 @@ ui:
     title: Похожие вопросы
     answers: ответы
   invite_to_answer:
-    title: Позвать на помощь
-    desc: Выберите людей, которые, по вашему мнению, могут знать ответ.
+    title: Invite People
+    desc: Invite people you think can answer.
     invite: Пригласил вас ответить
     add: Добавить пользователей
     search: Поиск людей
@@ -1033,6 +1049,7 @@ ui:
     asked: спросил(а)
     update: Изменён
     edit: отредактировал
+    commented: commented
     Views: Просмотрен
     Follow: Подписаться
     Following: Подписки
@@ -1050,6 +1067,7 @@ ui:
       title: Ответы
       score: Оценка
       newest: Последние
+      oldest: Oldest
       btn_accept: Принять
       btn_accepted: Принято
     write_answer:
@@ -1073,6 +1091,14 @@ ui:
       confirm_btn: Снова открыть
       title: Открыть повторно этот пост
       content: Вы уверены, что хотите открыть заново?
+    list:
+      confirm_btn: List
+      title: List this post
+      content: Are you sure you want to list?
+    unlist:
+      confirm_btn: Unlist
+      title: Unlist this post
+      content: Are you sure you want to unlist?
     pin:
       title: Закрепить сообщение
       content: Вы уверены, что хотите закрепить глобально? Это сообщение появится вверху всех списков сообщений.
@@ -1094,6 +1120,9 @@ ui:
     save: Сохранить
     delete: Удалить
     undelete: Отменить удаление
+    list: List
+    unlist: Unlist
+    unlisted: Unlisted
     login: Войти
     signup: Регистрация
     logout: Выйти
@@ -1122,6 +1151,15 @@ ui:
     system_setting: Настройки системы
     default: По умолчанию
     reset: Сбросить
+    tag: Tag
+    post_lowercase: post
+    filter: Filter
+    ignore: Ignore
+    submit: Submit
+    normal: Normal
+    closed: Closed
+    deleted: Deleted
+    pending: Pending
   search:
     title: Результаты поиска
     keywords: Ключевые слова
@@ -1368,7 +1406,8 @@ ui:
       votes: "Голоса:"
       users: "Пользователи:"
       flags: "Жалобы:"
-      site_health_status: Состояние работоспособности сайта
+      reviews: "Reviews:"
+      site_health: Site health
       version: "Версия:"
       https: "HTTPS:"
       upload_folder: "Каталог загрузки:"
@@ -1383,11 +1422,12 @@ ui:
       database_size: "Размер базы данных:"
       storage_used: "Использовано хранилища: "
       uptime: "Время работы:"
-      answer_links: Ссылки на ответы
+      links: Links
       plugins: Плагины
       github: GitHub
       blog: Блог
       contact: Контакты
+      forum: Forum
       documents: Документы
       feedback: Обратная связь
       support: Поддержка
@@ -1490,9 +1530,7 @@ ui:
         content: Заблокированный пользователь не сможет войти.
     questions:
       page_title: Вопросы
-      normal: Обычные
-      closed: Закрытые
-      deleted: Удаленные
+      unlisted: Unlisted
       post: Публикация
       votes: Голоса
       answers: Ответы
@@ -1500,12 +1538,11 @@ ui:
       status: Статус
       action: Действие
       change: Изменить
+      pending: Pending
       filter:
         placeholder: "Фильтровать по заголовку, question:id"
     answers:
       page_title: Ответы
-      normal: Обычные
-      deleted: Удаленные
       post: Публикация
       votes: Голоса
       created: Создан
@@ -1538,6 +1575,9 @@ ui:
         msg: Контактный адрес электронной почты не может быть пустым.
         validate: Контактный адрес электронной почты не может быть пустым.
         text: Адрес электронной почты контактного лица, ответственного за данный сайт.
+      check_update:
+        label: Software updates
+        text: Automatically check for updates
     interface:
       page_title: Интерфейс
       language:
@@ -1616,8 +1656,8 @@ ui:
       page_title: Написание
       restrict_answer:
         title: Ограничения
-        label: Каждый пользователь может написать только один ответ на каждый вопрос
-        text: "Они могут использовать ссылку редактирования для уточнения и улучшения существующего ответа."
+        label: Each user can only write one answer for the same question
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Рекомендованные теги
         text: "Пожалуйста, введите slug тегов выше, один тег на строку."
@@ -1752,6 +1792,22 @@ ui:
     edit_answer: Редактирование ответа
     edit_tag: Редактирование тега
     empty: Нет задач для проверки.
+    approve_revision_tip: Do you approve this revision?
+    approve_flag_tip: Do you approve this flag?
+    approve_post_tip: Do you approve this post?
+    approve_user_tip: Do you approve this user?
+    suggest_edits: Suggested edits
+    flag_post: Flag post
+    flag_user: Flag user
+    queued_post: Queued post
+    queued_user: Queued user
+    filter_label: Type
+    reputation: reputation
+    flag_post_type: Flagged this post as {{ type }}.
+    flag_user_type: Flagged this user as {{ type }}.
+    edit_post: Edit post
+    list_post: List post
+    unlist_post: Unlist post
   timeline:
     undeleted: Восстановлен
     deleted: Удаленные
@@ -1802,3 +1858,6 @@ ui:
     post_hide_list: Это сообщение было скрыто из списка.
     post_show_list: Этот пост был показан в списке.
     post_reopen: Этот пост был вновь открыт.
+    post_list: This post has been listed.
+    post_unlist: This post has been unlisted.
+    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
