@@ -244,7 +244,7 @@ func (us *uploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHead
 	}
 	defer src.Close()
 
-	if !checker.IsSupportedImageFile(src, filepath.Ext(fileSubPath)) {
+	if !checker.IsSupportedImageFile(filePath) {
 		return "", errors.BadRequest(reason.UploadFileUnsupportedFileFormat)
 	}
 
