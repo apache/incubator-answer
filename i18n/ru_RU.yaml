@@ -386,7 +386,7 @@ backend:
           other: В настоящее время этот вопрос включает в себя несколько вопросов в одном. Он должен быть сосредоточен только на одной проблеме.
       other:
         name:
-          other: Прочее
+          other: прочее
         desc:
           other: Для этого поста требуется другая причина, не указанная выше.
     operation_type:
@@ -427,13 +427,13 @@ backend:
       up_voted_question:
         other: поддержанный вопрос
       down_voted_question:
-        other: бесполезный вопрос
+        other: неподдержанный вопрос
       up_voted_answer:
-        other: Полезный вопрос
+        other: ответ "за"
       down_voted_answer:
-        other: бесполезный ответ
+        other: ответ "против"
       up_voted_comment:
-        other: полезный комментарий
+        other: поддержанный комментарий
       invited_you_to_answer:
         other: пригласил вас ответить
   email_tpl:
@@ -479,13 +479,13 @@ backend:
         other: "Это тестовое письмо."
   action_activity_type:
     upvote:
-      other: Полезный ответ
+      other: проголосовать за
     upvoted:
-      other: Полезные ответы
+      other: проголосовано за
     downvote:
       other: бесполезный
     downvoted:
-      other: бесполезно
+      other: проголосовано против
     accept:
       other: принять
     accepted:
@@ -502,7 +502,7 @@ backend:
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: 'Форматирование:'
+    title: Как отформатировать
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">создание ссылок: </p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">пробел между абзацами</p></li><li><p class="mb-2"><em>_italic_</em> или **<strong>bold</strong>**</p></li><li><p class="mb-2">отступ для кода - 4 пробела</p></li><li><p class="mb-2">тег  <code>&gt;</code> для цитаты в начале строки</p></li><li><p class="mb-2">обратные кавычки для строки кода <code>`like _this_`</code></p></li><li><p class="mb-2">тройные обратные кавычки для блоков кода <code>`</code></p><pre class="mb-0"><code>```<br/>тут код<br/>```</code></pre></li></ul>
   pagination:
@@ -708,7 +708,7 @@ ui:
             Коротко опишите изменения (орфография, грамматики, улучшение формата)
     btn_cancel: Отмена
     btn_submit: Сохрнаить
-    btn_post: Новый тег
+    btn_post: Создать новый тег
   tag_info:
     created_at: Создано
     edited_at: Отредактировано
@@ -785,7 +785,7 @@ ui:
     sort_buttons:
       popular: Популярное
       name: Имя
-      newest: Последние
+      newest: Самые новые
     button_follow: Подписаться
     button_following: Подписки
     tag_label: вопросы
@@ -824,7 +824,7 @@ ui:
           label: Изменить краткое описание
           placeholder: >-
             Кратко опишите вносимые изменения (исправлена орфография, исправлена грамматика, улучшено форматирование)
-    btn_post_question: Задать вопрос
+    btn_post_question: Задайте свой вопрос
     btn_save_edits: Сохранить изменения
     answer_question: Ответить на свой собственный вопрос
     post_question&answer: Опубликуйте свой вопрос и ответ
@@ -834,7 +834,7 @@ ui:
     search_tag: Поиск тега
     hint: "Опишите, о чем ваш вопрос, требуется хотя бы один тег."
     no_result: Нет соответствующих тэгов
-    tag_required_text: Обязательные теги (хотя бы один)
+    tag_required_text: Обязательный тег (хотя бы один)
   header:
     nav:
       question: Вопросы
@@ -844,7 +844,7 @@ ui:
       setting: Настройки
       logout: Выйти
       admin: Управление
-      review: На проверку
+      review: Рецензия
       bookmark: Закладки
       moderation: Модерирование
     search:
@@ -1038,8 +1038,8 @@ ui:
     title: Похожие вопросы
     answers: ответы
   invite_to_answer:
-    title: Invite People
-    desc: Invite people you think can answer.
+    title: Позвать на помощь
+    desc: Выберите людей, которые, по вашему мнению, могут знать ответ.
     invite: Пригласил вас ответить
     add: Добавить пользователей
     search: Поиск людей
@@ -1066,13 +1066,13 @@ ui:
     answers:
       title: Ответы
       score: Оценка
-      newest: Последние
+      newest: Самые новые
       oldest: Oldest
       btn_accept: Принять
       btn_accepted: Принято
     write_answer:
       title: Ваш ответ
-      edit_answer: Изменить мой ответ
+      edit_answer: Редактировать мой существующий ответ
       btn_name: Ответить
       add_another_answer: Добавить другой ответ
       confirm_title: Перейти к ответу
@@ -1123,7 +1123,7 @@ ui:
     list: List
     unlist: Unlist
     unlisted: Unlisted
-    login: Войти
+    login: Авторизоваться
     signup: Регистрация
     logout: Выйти
     verify: Подтвердить
@@ -1170,7 +1170,7 @@ ui:
     more: Ещё
     sort_btns:
       relevance: По релевантности
-      newest: Последние
+      newest: Самые новые
       active: Активные
       score: Оценки
       more: Больше
@@ -1207,7 +1207,7 @@ ui:
     success_desc: Вы были успешно удалены из этого списка подписчиков и больше не будете получать от нас никаких электронных писем.
     link: Изменить настройки
   question:
-    following_tags: Отслеживаемые теги
+    following_tags: Подписка на теги
     edit: Редактировать
     save: Сохранить
     follow_tag_tip: Подпишитесь на теги, чтобы следить за интересующими темами.
@@ -1217,8 +1217,8 @@ ui:
     x_answers: "{{ count }} ответов"
     questions: Вопросы
     answers: Ответы
-    newest: Последние
-    active: Активные
+    newest: Самые новые
+    active: Активный
     frequent: Популярные
     score: Оценка
     unanswered: Без ответа
@@ -1238,7 +1238,7 @@ ui:
     reputation: Репутация
     comments: Комментарии
     votes: Голоса
-    newest: Последние
+    newest: Самые новые
     score: Оценки
     edit_profile: Редактировать профиль
     visited_x_days: "Посещено {{ count }} дней"
@@ -1254,7 +1254,7 @@ ui:
     accepted: Принято
     answered: отвеченные
     asked: спросил
-    downvoted: бесполезно
+    downvoted: проголосовано против
     mod_short: MOD
     mod_long: Модераторы
     x_reputation: репутация
@@ -1370,7 +1370,7 @@ ui:
     questions: Вопросы
     answers: Ответы
     users: Пользователи
-    flags: Жалобы
+    flags: Отметить
     settings: Настройки
     general: Основные
     interface: Интерфейс
@@ -1382,15 +1382,15 @@ ui:
     privacy: Конфиденциальность
     seo: SEO
     customize: Настройки интерфейса
-    themes: Тема
+    themes: Темы
     css_html: CSS/HTML
-    login: Авторизция
+    login: Вход
     privileges: Привилегии
     plugins: Плагины
     installed_plugins: Установленные плагины
   website_welcome: Добро пожаловать на {{site_name}}
   user_center:
-    login: Авторизация
+    login: Вход
     qrcode_login_tip: Пожалуйста, используйте {{ agentName }} для сканирования QR-кода и входа в систему.
     login_failed_email_tip: Не удалось войти в систему, пожалуйста, разрешите этому приложению получить доступ к вашей электронной почте, прежде чем повторять попытку.
   admin:
@@ -1405,7 +1405,7 @@ ui:
       comments: "Комментарии:"
       votes: "Голоса:"
       users: "Пользователи:"
-      flags: "Жалобы:"
+      flags: "Флаги:"
       reviews: "Reviews:"
       site_health: Site health
       version: "Версия:"
@@ -1413,7 +1413,7 @@ ui:
       upload_folder: "Каталог загрузки:"
       run_mode: "Режим приватности:"
       private: Приватный
-      public: Публичный
+      public: Публичные
       smtp: "SMTP:"
       timezone: "Часовой пояс:"
       system_info: Информация о системе
@@ -1456,7 +1456,7 @@ ui:
     user_role_modal:
       title: Изменить роль пользователя на...
       btn_cancel: Отмена
-      btn_submit: Сохрнанить
+      btn_submit: Отправить
     new_password_modal:
       title: Задать новый пароль
       form:
@@ -1466,7 +1466,7 @@ ui:
             text: Сессия пользователя будет завершена и ему придется повторить вход.
             msg: Длина пароля должна составлять от 8 до 32 символов.
       btn_cancel: Отменить
-      btn_submit: Сохранить
+      btn_submit: Отправить
     user_modal:
       title: Создание новых пользователей
       form:
@@ -1486,7 +1486,7 @@ ui:
             label: Пароль
             msg: Длина пароля должна составлять от 8 до 32 символов.
       btn_cancel: Отменить
-      btn_submit: Сохранить
+      btn_submit: Отправить
     users:
       title: Пользователи
       name: Имя
@@ -1505,7 +1505,7 @@ ui:
       inactive: Неактивный
       suspended: Заблокированные
       deleted: Удаленные
-      normal: Обычные
+      normal: Обычный
       Moderator: Модератор
       Admin: Администратор
       User: Пользователь
@@ -1642,7 +1642,7 @@ ui:
         msg: Square icon не может быть пустым.
         text: Изображение, используемое в качестве основы для значков метаданных. В идеале должно быть больше 512x512.
       favicon:
-        label: Favicon
+        label: Иконка
         text: Значок для вашего сайта. Для корректной работы через CDN он должен быть в формате png. Размер будет изменен до 32x32. Если оставить пустым, будет использоваться "square icon".
     legal:
       page_title: Правовая информация
@@ -1653,16 +1653,16 @@ ui:
         label: Условия конфиденциальности
         text: "Вы можете добавить содержание политики конфиденциальности здесь. Если у вас уже есть документ, размещенный в другом месте, укажите полный URL-адрес здесь."
     write:
-      page_title: Написание
+      page_title: Написать
       restrict_answer:
         title: Ограничения
-        label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        label: Каждый пользователь может написать только один ответ на каждый вопрос
+        text: "Они могут использовать ссылку редактирования для уточнения и улучшения существующего ответа."
       recommend_tags:
         label: Рекомендованные теги
         text: "Пожалуйста, введите slug тегов выше, один тег на строку."
       required_tag:
-        title: Обязательные теги
+        title: Обязательный тег
         label: Установите рекомендованный тег как обязательный.
         text: "Каждый новый вопрос должен иметь хотя бы один рекомендуемый тег."
       reserved_tags:
@@ -1677,9 +1677,9 @@ ui:
         label: robots.txt
         text: Это приведет к необратимому переопределению всех связанных настроек сайта.
     themes:
-      page_title: Тема
+      page_title: Темы
       themes:
-        label: Тема
+        label: Темы
         text: Выберите существующую тему.
       color_scheme:
         label: Цветовая схема
@@ -1709,7 +1709,7 @@ ui:
         label: Боковая панель
         text: Это будет вставлено в боковую панель.
     login:
-      page_title: Войти
+      page_title: Авторизоваться
       membership:
         title: Участие в сообществах
         label: Разрешить новые регистрации
@@ -1726,7 +1726,7 @@ ui:
         label: Требуется авторизация
         text: Только зарегистрированные пользователи могут получить доступ к этому сообществу.
       password_login:
-        title: Пароль
+        title: Вход в пароль
         label: Разрешить вход по паролю
         text: "Предупреждение: При отключении, вы не сможете войти, если ранее не настроили другой способ входа."
     installed_plugins:
@@ -1812,7 +1812,7 @@ ui:
     undeleted: Восстановлен
     deleted: Удаленные
     downvote: бесполезный
-    upvote: Полезный ответ
+    upvote: оценить
     accept: принять
     cancelled: отменен
     commented: прокомментированный
