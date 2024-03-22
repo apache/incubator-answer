@@ -140,6 +140,9 @@ backend:
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
+    common:
+      invalid_url:
+        other: Invalid URL.
     password:
       space_invalid:
         other: La password non può contenere spazi.
@@ -200,6 +203,8 @@ backend:
     question:
       already_deleted:
         other: Questo post è stato eliminato.
+      under_review:
+        other: Your post is awaiting review. It will be visible after it has been approved.
       not_found:
         other: domanda non trovata
       cannot_deleted:
@@ -485,6 +490,15 @@ backend:
       other: Accetta
     accepted:
       other: Accettato
+    edit:
+      other: edit
+  review:
+    queued_post:
+      other: Queued post
+    flagged_post:
+      other: Flagged post
+    suggested_post_edit:
+      other: Suggested edits
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -666,6 +680,8 @@ ui:
       empty: Non può essere vuoto.
     msg:
       empty: Per favore seleziona un motivo
+      not_a_url: URL format is incorrect.
+      url_not_match: URL origin does not match the current website.
   tag_modal:
     title: Crea un nuovo tag
     form:
@@ -1022,8 +1038,8 @@ ui:
     title: Domande correlate
     answers: risposte
   invite_to_answer:
-    title: Persone Interpellate
-    desc: Seleziona le persone che pensi potrebbero conoscere la risposta.
+    title: Invite People
+    desc: Invite people you think can answer.
     invite: Invita a rispondere
     add: Aggiungi contatti
     search: Cerca persone
@@ -1033,6 +1049,7 @@ ui:
     asked: chiesto
     update: Modificato
     edit: modificato
+    commented: commented
     Views: Visualizzati
     Follow: Segui
     Following: Segui già
@@ -1050,6 +1067,7 @@ ui:
       title: Risposte
       score: Punteggio
       newest: Più recenti
+      oldest: Oldest
       btn_accept: Accetta
       btn_accepted: Accettato
     write_answer:
@@ -1073,6 +1091,14 @@ ui:
       confirm_btn: Riapri
       title: Riapri questo post
       content: Sei sicuro di voler riaprire?
+    list:
+      confirm_btn: List
+      title: List this post
+      content: Are you sure you want to list?
+    unlist:
+      confirm_btn: Unlist
+      title: Unlist this post
+      content: Are you sure you want to unlist?
     pin:
       title: Fissa questo post in cima al profilo
       content: Sei sicuro di voler fissare in blocco? Questo post apparirà in cima a tutte le liste.
@@ -1094,6 +1120,9 @@ ui:
     save: Salva
     delete: Elimina
     undelete: Ripristina
+    list: List
+    unlist: Unlist
+    unlisted: Unlisted
     login: Accedi
     signup: Registrati
     logout: Disconnetti
@@ -1122,6 +1151,15 @@ ui:
     system_setting: Configurazione di sistema
     default: Predefinito
     reset: Resetta
+    tag: Tag
+    post_lowercase: post
+    filter: Filter
+    ignore: Ignore
+    submit: Submit
+    normal: Normal
+    closed: Closed
+    deleted: Deleted
+    pending: Pending
   search:
     title: Risultati della ricerca
     keywords: Parole chiave
@@ -1369,7 +1407,8 @@ ui:
       votes: "Voti:"
       users: "Utenti:"
       flags: "Flags"
-      site_health_status: Stato di salute del sito
+      reviews: "Reviews:"
+      site_health: Site health
       version: "Versione:"
       https: "HTTPS:"
       upload_folder: "Carica Cartella"
@@ -1384,11 +1423,12 @@ ui:
       database_size: "Dimensioni del database"
       storage_used: "Spazio di archiviazione utilizzato:"
       uptime: "Tempo di attività:"
-      answer_links: Link di risposta
+      links: Links
       plugins: Plugin
       github: GitHub
       blog: Blog
       contact: Contatti
+      forum: Forum
       documents: Documenti
       feedback: Feedback
       support: Assistenza
@@ -1491,9 +1531,7 @@ ui:
         content: Un utente sospeso non può accedere.
     questions:
       page_title: Domande
-      normal: Normale
-      closed: Chiuso
-      deleted: Eliminato
+      unlisted: Unlisted
       post: Posta
       votes: Voti
       answers: Risposte
@@ -1501,12 +1539,11 @@ ui:
       status: Stato
       action: Azione
       change: Modifica
+      pending: Pending
       filter:
         placeholder: "Filtra per titolo, domanda:id"
     answers:
       page_title: Risposte
-      normal: Normale
-      deleted: Eliminato
       post: Post
       votes: Voti
       created: Creato
@@ -1539,6 +1576,9 @@ ui:
         msg: L'email del contatto non può essere vuota.
         validate: Email di contatto non valida.
         text: Indirizzo e-mail del contatto chiave responsabile di questo sito.
+      check_update:
+        label: Software updates
+        text: Automatically check for updates
     interface:
       page_title: Interfaccia
       language:
@@ -1617,8 +1657,8 @@ ui:
       page_title: Scrivi
       restrict_answer:
         title: Limita risposta
-        label: Ogni utente può scrivere una sola risposta per ogni domanda
-        text: "Possono invece utilizzare il link di modifica per affinare e migliorare la loro risposta esistente."
+        label: Each user can only write one answer for the same question
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Raccomanda tag
         text: "Inserisci il tag slug sopra, un tag per riga."
@@ -1753,6 +1793,22 @@ ui:
     edit_answer: Edita la risposta
     edit_tag: Edita  tag
     empty: Nessuna attività di revisione rimasta.
+    approve_revision_tip: Do you approve this revision?
+    approve_flag_tip: Do you approve this flag?
+    approve_post_tip: Do you approve this post?
+    approve_user_tip: Do you approve this user?
+    suggest_edits: Suggested edits
+    flag_post: Flag post
+    flag_user: Flag user
+    queued_post: Queued post
+    queued_user: Queued user
+    filter_label: Type
+    reputation: reputation
+    flag_post_type: Flagged this post as {{ type }}.
+    flag_user_type: Flagged this user as {{ type }}.
+    edit_post: Edit post
+    list_post: List post
+    unlist_post: Unlist post
   timeline:
     undeleted: Non cancellato
     deleted: eliminato
@@ -1803,3 +1859,6 @@ ui:
     post_hide_list: Questo post è stato nascosto dall'elenco.
     post_show_list: Questo post è stato mostrato in elenco.
     post_reopen: Questo post è stato riaperto.
+    post_list: This post has been listed.
+    post_unlist: This post has been unlisted.
+    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
