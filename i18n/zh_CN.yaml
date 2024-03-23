@@ -142,7 +142,7 @@ backend:
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: 不合法的 URL
     password:
       space_invalid:
         other: 密码不得含有空格。
@@ -204,7 +204,7 @@ backend:
       already_deleted:
         other: 该帖子已被删除。
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: 您的帖子正在等待审核。它将在它获得批准后可见。
       not_found:
         other: 问题未找到。
       cannot_deleted:
@@ -491,14 +491,14 @@ backend:
     accepted:
       other: 已采纳
     edit:
-      other: edit
+      other: 编辑
   review:
     queued_post:
-      other: Queued post
+      other: 排队的帖子
     flagged_post:
-      other: Flagged post
+      other: 举报的帖子
     suggested_post_edit:
-      other: Suggested edits
+      other: 建议的编辑
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -680,8 +680,8 @@ ui:
       empty: 不能为空
     msg:
       empty: 请选择一个原因。
-      not_a_url: URL format is incorrect.
-      url_not_match: URL origin does not match the current website.
+      not_a_url: URL 格式不正确。
+      url_not_match: URL 来源与当前网站不匹配。
   tag_modal:
     title: 创建新标签
     form:
@@ -1049,7 +1049,7 @@ ui:
     asked: 提问于
     update: 修改于
     edit: 编辑于
-    commented: commented
+    commented: 评论
     Views: 阅读次数
     Follow: 关注此问题
     Following: 已关注
@@ -1122,7 +1122,7 @@ ui:
     undelete: 撤消删除
     list: 列表显示
     unlist: 列表隐藏
-    unlisted: Unlisted
+    unlisted: 已隐藏
     login: 登录
     signup: 注册
     logout: 退出
@@ -1151,15 +1151,15 @@ ui:
     system_setting: 跟随系统
     default: 默认
     reset: 重置
-    tag: Tag
+    tag: 标签
     post_lowercase: 帖子
-    filter: Filter
+    filter: 筛选
     ignore: 忽略
     submit: 提交
     normal: 正常
     closed: 已关闭
     deleted: 已删除
-    pending: Pending
+    pending: 等待处理
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1406,8 +1406,8 @@ ui:
       votes: "投票:"
       users: "用户:"
       flags: "举报:"
-      reviews: "Reviews:"
-      site_health: Site health
+      reviews: "审查:"
+      site_health: 网站健康
       version: "版本"
       https: "HTTPS:"
       upload_folder: "上传文件夹："
@@ -1422,12 +1422,12 @@ ui:
       database_size: "数据库大小："
       storage_used: "已用存储空间："
       uptime: "运行时间："
-      links: Links
+      links: 链接
       plugins: 插件
       github: GitHub
       blog: 博客
       contact: 联系
-      forum: Forum
+      forum: 论坛
       documents: 文档
       feedback: 用户反馈
       support: 帮助
@@ -1538,7 +1538,7 @@ ui:
       status: 状态
       action: 操作
       change: 更改
-      pending: Pending
+      pending: 等待处理
       filter:
         placeholder: "按标题过滤，问题:id"
     answers:
@@ -1792,22 +1792,22 @@ ui:
     edit_answer: 编辑回答
     edit_tag: 编辑标签
     empty: 没有剩余的审核任务。
-    approve_revision_tip: Do you approve this revision?
-    approve_flag_tip: Do you approve this flag?
-    approve_post_tip: Do you approve this post?
-    approve_user_tip: Do you approve this user?
-    suggest_edits: Suggested edits
-    flag_post: Flag post
-    flag_user: Flag user
-    queued_post: Queued post
-    queued_user: Queued user
-    filter_label: Type
-    reputation: reputation
-    flag_post_type: Flagged this post as {{ type }}.
-    flag_user_type: Flagged this user as {{ type }}.
-    edit_post: Edit post
-    list_post: List post
-    unlist_post: Unlist post
+    approve_revision_tip: 您是否批准此修订？
+    approve_flag_tip: 您是否批准此举报？
+    approve_post_tip: 您是否批准此帖子？
+    approve_user_tip: 您是否批准此修订？
+    suggest_edits: 建议的编辑
+    flag_post: 举报帖子
+    flag_user: 举报用户
+    queued_post: 排队的帖子
+    queued_user: 排队用户
+    filter_label: 类型
+    reputation: 声望值
+    flag_post_type: 举报这个帖子的类型是 {{ type }}
+    flag_user_type: 举报这个用户的类型是 {{ type }}
+    edit_post: 编辑帖子
+    list_post: 文章列表
+    unlist_post: 隐藏的帖子
   timeline:
     undeleted: 取消删除
     deleted: 删除
@@ -1860,4 +1860,4 @@ ui:
     post_reopen: 这个帖子已被重新打开.
     post_list: 这个帖子已经被显示
     post_unlist: 这个帖子已经被隐藏
-    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_pending: 您的帖子正在等待审核。它将在它获得批准后可见。
