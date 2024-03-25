@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { FacebookShareButton, TwitterShareButton } from 'next-share';
 import copy from 'copy-to-clipboard';
 
+import { BASE_ORIGIN } from '@/router/alias';
 import { loggedUserInfoStore } from '@/stores';
 
 interface IProps {
@@ -42,8 +43,8 @@ const Index: FC<IProps> = ({ type, qid, aid, title }) => {
   const { t } = useTranslation();
   let baseUrl =
     type === 'question'
-      ? `${window.location.origin}/questions/${qid}`
-      : `${window.location.origin}/questions/${qid}/${aid}`;
+      ? `${BASE_ORIGIN}/questions/${qid}`
+      : `${BASE_ORIGIN}/questions/${qid}/${aid}`;
   if (user.id) {
     baseUrl = `${baseUrl}?shareUserId=${user.username}`;
   }
