@@ -19,30 +19,30 @@
 backend:
   base:
     success:
-      other: Başarılı.
+      other: విజయవంతమైంది.
     unknown:
-      other: Bilinmeyen hata.
+      other: తెలియని సమస్య.
     request_format_error:
       other: Request format is not valid.
     unauthorized_error:
-      other: İzin yok.
+      other: Unauthorized.
     database_error:
-      other: Veri sunucu hatası.
+      other: Data server error.
     forbidden_error:
       other: Forbidden.
     duplicate_request_error:
       other: Duplicate submission.
   action:
     report:
-      other: Rapor Et
+      other: Flag
     edit:
       other: Edit
     delete:
-      other: Sil
+      other: Delete
     close:
-      other: Kapat
+      other: Close
     reopen:
-      other: Yeniden Aç
+      other: Reopen
     forbidden_error:
       other: Forbidden.
     pin:
@@ -52,7 +52,7 @@ backend:
     unpin:
       other: Unpin
     show:
-      other: Listele
+      other: List
     invite_someone_to_answer:
       other: Edit
     undelete:
@@ -60,11 +60,11 @@ backend:
   role:
     name:
       user:
-        other: Kullanıcı
+        other: User
       admin:
-        other: Yönetici
+        other: Admin
       moderator:
-        other: Moderatör
+        other: Moderator
     description:
       user:
         other: Default with no special access.
@@ -88,7 +88,7 @@ backend:
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
-      other: Cevapla
+      other: Write answer
     rank_comment_add_label:
       other: Write comment
     rank_report_add_label:
@@ -130,15 +130,15 @@ backend:
     rank_tag_synonym_label:
       other: Manage tag synonyms
   email:
-    other: E-Posta
+    other: Email
   e_mail:
     other: Email
   password:
-    other: Parola
+    other: Password
   pass:
     other: Password
   email_or_password_wrong_error:
-    other: E-Posta ve parola eşleşmiyor.
+    other: Email and password do not match.
   error:
     common:
       invalid_url:
@@ -152,67 +152,67 @@ backend:
       cannot_modify_self_status:
         other: You cannot modify your status.
       email_or_password_wrong:
-        other: E-Posta ve parola eşleşmiyor.
+        other: Email and password do not match.
     answer:
       not_found:
-        other: Cevap bulunamadı.
+        other: Answer do not found.
       cannot_deleted:
-        other: Silme izni yok.
+        other: No permission to delete.
       cannot_update:
-        other: Düzenleme izni yok.
+        other: No permission to update.
       question_closed_cannot_add:
         other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
-        other: Yorum düzenleme izni yok.
+        other: Comment are not allowed to edit.
       not_found:
-        other: Yorum bulunamadı.
+        other: Comment not found.
       cannot_edit_after_deadline:
         other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: Bu e-posta adresi kullanılmaktadır.
+        other: Email already exists.
       need_to_be_verified:
-        other: E-Posta doğrulanmalı.
+        other: Email should be verified.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
         other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
-        other: Dil dosyası bulunamadı.
+        other: Language file not found.
     object:
       captcha_verification_failed:
-        other: Captcha yanlış.
+        other: Captcha wrong.
       disallow_follow:
-        other: Takip etme izniniz yok.
+        other: You are not allowed to follow.
       disallow_vote:
-        other: Oy verme yetkiniz yok.
+        other: You are not allowed to vote.
       disallow_vote_your_self:
-        other: Kendi mesajınız için oy kullanamazsınız.
+        other: You can't vote for your own post.
       not_found:
-        other: Nesne bulunamadı.
+        other: Object not found.
       verification_failed:
-        other: Doğrulama başarısız.
+        other: Verification failed.
       email_or_password_incorrect:
-        other: E-Posta ve parola eşleşmiyor.
+        other: Email and password do not match.
       old_password_verification_failed:
-        other: Eski parola doğrulaması başarısız
+        other: The old password verification failed
       new_password_same_as_previous_setting:
-        other: Yeni parola bir önceki parolanızın aynısı.
+        other: The new password is the same as the previous one.
     question:
       already_deleted:
         other: This post has been deleted.
       under_review:
         other: Your post is awaiting review. It will be visible after it has been approved.
       not_found:
-        other: Soru bulunamadı.
+        other: Question not found.
       cannot_deleted:
-        other: Silme izni yok.
+        other: No permission to delete.
       cannot_close:
-        other: Kapatma izni yok.
+        other: No permission to close.
       cannot_update:
-        other: Düzenleme izni yok.
+        other: No permission to update.
     rank:
       fail_to_meet_the_condition:
         other: Reputation rank fail to meet the condition.
@@ -222,22 +222,22 @@ backend:
         other: You need at least {{.Rank}} reputation to do this.
     report:
       handle_failed:
-        other: Rapor işlenemedi.
+        other: Report handle failed.
       not_found:
-        other: Rapor bulunamadı.
+        other: Report not found.
     tag:
       already_exist:
         other: Tag already exists.
       not_found:
-        other: Etiket bulunamadı.
+        other: Tag not found.
       recommend_tag_not_found:
         other: Recommend tag is not exist.
       recommend_tag_enter:
-        other: Lütfen en az bir adet gerekli etiket giriniz.
+        other: Please enter at least one required tag.
       not_contain_synonym_tags:
         other: Should not contain synonym tags.
       cannot_update:
-        other: Düzenleme izni yok.
+        other: No permission to update.
       is_used_cannot_delete:
         other: You cannot delete a tag that is in use.
       cannot_set_synonym_as_itself:
@@ -247,7 +247,7 @@ backend:
         other: The from name cannot be a email address.
     theme:
       not_found:
-        other: Tema bulunamadı.
+        other: Theme not found.
     revision:
       review_underway:
         other: Can't edit currently, there is a version in the review queue.
@@ -260,19 +260,19 @@ backend:
         other: Please set a login password for your account before you remove this login.
       email_or_password_wrong:
         other:
-          other: E-Posta ve parola eşleşmiyor.
+          other: Email and password do not match.
       not_found:
-        other: Kullanıcı bulunamadı.
+        other: User not found.
       suspended:
-        other: Kullanıcı askıya alındı.
+        other: User has been suspended.
       username_invalid:
-        other: Kullanıcı adı geçersiz.
+        other: Username is invalid.
       username_duplicate:
-        other: Kullanıcı adı zaten kullanımda.
+        other: Username is already in use.
       set_avatar:
-        other: Avatar ayarlama başarısız.
+        other: Avatar set failed.
       cannot_update_your_role:
-        other: Kendi rolünüzü değiştiremezsiniz.
+        other: You cannot modify your role.
       not_allowed_registration:
         other: Currently the site is not open for registration.
       not_allowed_login_via_password:
@@ -290,15 +290,15 @@ backend:
         other: Read config failed
     database:
       connection_failed:
-        other: Veri tabanı bağlantısı başarısız
+        other: Database connection failed
       create_table_failed:
-        other: Tablo oluşturulamadı
+        other: Create table failed
     install:
       create_config_failed:
-        other: Config.yaml dosyası oluşturulamadı.
+        other: Can't create the config.yaml file.
     upload:
       unsupported_file_format:
-        other: Desteklenmeyen dosya formatı.
+        other: Unsupported file format.
     site_info:
       config_not_found:
         other: Site config not found.
@@ -415,15 +415,15 @@ backend:
       reply_to_you:
         other: replied to you
       mention_you:
-        other: sizden bahsetti
+        other: mentioned you
       your_question_is_closed:
-        other: Sorunuz kapatıldı
+        other: Your question has been closed
       your_question_was_deleted:
-        other: Sorunuz silindi
+        other: Your question has been deleted
       your_answer_was_deleted:
-        other: Cevabınız silindi
+        other: Your answer has been deleted
       your_comment_was_deleted:
-        other: Yorumunuz silindi
+        other: Your comment has been deleted
       up_voted_question:
         other: upvoted question
       down_voted_question:
@@ -506,47 +506,47 @@ ui:
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Önceki
-    next: Sonraki
+    prev: మునుపటి
+    next: Next
   page_title:
-    question: Soru
-    questions: Sorular
-    tag: Etiket
-    tags: Etiketler
+    question: ప్రశ్న
+    questions: ప్రశ్నలు
+    tag: ట్యాగ్
+    tags: టాగ్లు
     tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Etiketi Düzenle
-    ask_a_question: Soru Ekle
-    edit_question: Soruyu Düzenle
-    edit_answer: Cevabı Düzenle
-    search: Ara
-    posts_containing: Posts containing
-    settings: Ayarlar
-    notifications: Bildirimler
-    login: Oturum Aç
-    sign_up: Üye Ol
-    account_recovery: Hesap Kurtarma
-    account_activation: Hesap Aktivasyonu
-    confirm_email: E-Posta Adresinizi Onaylayın
-    account_suspended: Hesap Askıya Alındı
-    admin: Yönetici
-    change_email: E-Postayı değiştir
+    create_tag: ట్యాగ్‌ని సృష్టించండి
+    edit_tag: ట్యాగ్‌ని సవరించండి
+    ask_a_question: Add Question
+    edit_question: ప్రశ్నను సవరించండి
+    edit_answer: సమాధానాన్ని సవరించండి
+    search: Search
+    posts_containing: కలిగి ఉన్న పోస్ట్‌లు
+    settings: Settings
+    notifications: నోటిఫికేషన్‌లు
+    login: Log In
+    sign_up: Sign Up
+    account_recovery: Account Recovery
+    account_activation: Account Activation
+    confirm_email: Confirm Email
+    account_suspended: ఖాతా నిలిపివేయబడింది
+    admin: అడ్మిన్
+    change_email: Modify Email
     install: Answer Installation
     upgrade: Answer Upgrade
-    maintenance: Website Bakımı
-    users: Kullanıcılar
+    maintenance: Website Maintenance
+    users: Users
     oauth_callback: Processing
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
     logout: Log Out
   notifications:
-    title: Bildirimler
-    inbox: Gelen Kutusu
-    achievement: Başarılar
+    title: నోటిఫికేషన్లు
+    inbox: ఇన్‌బాక్స్
+    achievement: విజయాలు
     new_alerts: New alerts
-    all_read: Tümünü okundu olarak işaretle
-    show_more: Daha fazla göster
+    all_read: Mark all as read
+    show_more: Show more
     someone: Someone
     inbox_type:
       all: All
@@ -554,19 +554,19 @@ ui:
       invites: Invites
       votes: Votes
   suspended:
-    title: Hesabınız Askıya Alındı
+    title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."
     forever: This user was suspended forever.
     end: You don't meet a community guideline.
     contact_us: Contact us
   editor:
     blockquote:
-      text: Alıntı
+      text: Blockquote
     bold:
       text: Strong
     chart:
       text: Chart
-      flow_chart: Akış Şeması
+      flow_chart: Flow chart
       sequence_diagram: Sequence diagram
       class_diagram: Class diagram
       state_diagram: State diagram
@@ -630,9 +630,9 @@ ui:
               empty: Image URL cannot be empty.
           name:
             label: Description
-      btn_cancel: İptal
-      btn_confirm: Ekle
-      uploading: Gönderiliyor
+      btn_cancel: Cancel
+      btn_confirm: Add
+      uploading: Uploading
     indent:
       text: Indent
     outdent:
@@ -640,56 +640,56 @@ ui:
     italic:
       text: Emphasis
     link:
-      text: Bağlantı
-      add_link: Bağlantı ekle
+      text: Hyperlink
+      add_link: Add hyperlink
       form:
         fields:
           url:
             label: URL
             msg:
-              empty: URL boş olamaz.
+              empty: URL cannot be empty.
           name:
             label: Description
-      btn_cancel: İptal Et
-      btn_confirm: Ekle
+      btn_cancel: Cancel
+      btn_confirm: Add
     ordered_list:
       text: Numbered list
     unordered_list:
       text: Bulleted list
     table:
-      text: Tablo
-      heading: Başlık
-      cell: Hücre
+      text: Table
+      heading: Heading
+      cell: Cell
   close_modal:
     title: I am closing this post as...
-    btn_cancel: İptal Et
-    btn_submit: Gönder
+    btn_cancel: Cancel
+    btn_submit: Submit
     remark:
-      empty: Boş olamaz.
+      empty: Cannot be empty.
     msg:
-      empty: Lütfen bir sebep seçin.
+      empty: Please select a reason.
   report_modal:
     flag_title: I am flagging to report this post as...
     close_title: I am closing this post as...
     review_question_title: Review question
     review_answer_title: Review answer
     review_comment_title: Review comment
-    btn_cancel: İptal Et
-    btn_submit: Gönder
+    btn_cancel: Cancel
+    btn_submit: Submit
     remark:
-      empty: Boş olamaz.
+      empty: Cannot be empty.
     msg:
-      empty: Lütfen bir sebep seçin.
+      empty: Please select a reason.
       not_a_url: URL format is incorrect.
       url_not_match: URL origin does not match the current website.
   tag_modal:
-    title: Yeni etiket oluştur
+    title: Create new tag
     form:
       fields:
         display_name:
           label: Display name
           msg:
-            empty: Görünen ad boş olamaz.
+            empty: Display name cannot be empty.
             range: Display name up to 35 characters.
         slug_name:
           label: URL slug
@@ -706,15 +706,15 @@ ui:
           label: Edit summary
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_cancel: İptal Et
-    btn_submit: Gönder
+    btn_cancel: Cancel
+    btn_submit: Submit
     btn_post: Post new tag
   tag_info:
-    created_at: Oluşturuldu
-    edited_at: Düzenlendi
-    history: Geçmiş
+    created_at: Created
+    edited_at: Edited
+    history: History
     synonyms:
-      title: Eş anlamlılar
+      title: Synonyms
       text: The following tags will be remapped to
       empty: No synonyms found.
       btn_add: Add a synonym
@@ -722,18 +722,18 @@ ui:
       btn_save: Save
     synonyms_text: The following tags will be remapped to
     delete:
-      title: Bu etiketi sil
+      title: Delete this tag
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Are you sure you wish to delete?
-      close: Kapat
+      close: Close
   edit_tag:
-    title: Etiketi Düzenle
-    default_reason: Etiketi düzenle
+    title: Edit Tag
+    default_reason: Edit tag
     default_first_reason: Add tag
-    btn_save_edits: Düzenlemeleri kaydet
+    btn_save_edits: Save edits
     btn_cancel: Cancel
   dates:
     long_date: MMM D
@@ -1753,7 +1753,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
+        label: Gravatar base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable
