@@ -151,7 +151,14 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
       }
       window.location.replace(to);
     } else if (typeof handler === 'function') {
-      handler(to === '/test' ? '/' : to, config.options);
+      if (to === '/test') {
+        to = '/';
+      }
+
+      if (to !== '/test' && to.startsWith('/test')) {
+        to = to.replace('/test', '');
+      }
+      handler(to, config.options);
     }
   }
   if (typeof to === 'number' && typeof handler === 'function') {
