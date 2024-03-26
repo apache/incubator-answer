@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         我們已經寄出一封郵件至此電子郵件地址，請遵照說明進行確認。
       email:
+        label: Email
+      new_email:
         label: New email
         msg: New email cannot be empty.
       pass:
