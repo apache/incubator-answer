@@ -66,7 +66,7 @@ const Index: FC = () => {
       formData.e_mail = {
         value: '',
         isInvalid: true,
-        errorMsg: t('email.msg'),
+        errorMsg: t('new_email.msg'),
       };
     }
 
@@ -194,7 +194,7 @@ const Index: FC = () => {
           </Form.Group>
 
           <Form.Group controlId="newEmail" className="mb-3">
-            <Form.Label>{t('email.label')}</Form.Label>
+            <Form.Label>{t('new_email.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
               required

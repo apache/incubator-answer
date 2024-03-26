@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         Wir haben eine E-Mail an diese Adresse geschickt. Bitte befolge die Anweisungen zur Bestätigung.
       email:
+        label: E-Mail
+      new_email:
         label: Neue E-Mail
         msg: Neue E-Mail darf nicht leer sein.
       pass:

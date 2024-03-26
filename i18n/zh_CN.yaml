@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         邮件已发送。请根据指引完成验证。
       email:
+        label: 电子邮件地址
+      new_email:
         label: 新的电子邮件地址
         msg: 新邮箱不能为空。
       pass:

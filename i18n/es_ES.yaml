@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         Te hemos enviado un email a esa dirección. Por favor sigue las instrucciones de confirmación.
       email:
+        label: Correo
+      new_email:
         label: Nuevo correo
         msg: El nuevo correo no puede estar vacío.
       pass:
