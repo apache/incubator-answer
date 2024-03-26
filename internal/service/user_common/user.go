@@ -48,7 +48,7 @@ type UserRepo interface {
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
 	UpdateEmail(ctx context.Context, userID, email string) error
-	UpdateLanguage(ctx context.Context, userID, language string) error
+	UpdateUserInterface(ctx context.Context, userID, language, colorSchema string) (err error)
 	UpdatePass(ctx context.Context, userID, pass string) error
 	UpdateInfo(ctx context.Context, userInfo *entity.User) (err error)
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
@@ -153,6 +153,7 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.DisplayName = userInfo.DisplayName
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
+	userBasicInfo.Language = userInfo.Language
 	userBasicInfo.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
 	if userBasicInfo.Status == constant.UserDeleted {
 		userBasicInfo.Avatar = ""

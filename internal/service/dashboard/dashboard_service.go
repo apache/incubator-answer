@@ -28,6 +28,11 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/apache/incubator-answer/internal/service/review"
+	"github.com/apache/incubator-answer/internal/service/revision"
+	"github.com/apache/incubator-answer/pkg/converter"
+	"xorm.io/xorm/schemas"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -55,6 +60,8 @@ type dashboardService struct {
 	configService   *config.ConfigService
 	siteInfoService siteinfo_common.SiteInfoCommonService
 	serviceConfig   *service_config.ServiceConfig
+	reviewService   *review.ReviewService
+	revisionRepo    revision.RevisionRepo
 	data            *data.Data
 }
 
@@ -68,6 +75,8 @@ func NewDashboardService(
 	configService *config.ConfigService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	serviceConfig *service_config.ServiceConfig,
+	reviewService *review.ReviewService,
+	revisionRepo revision.RevisionRepo,
 	data *data.Data,
 ) DashboardService {
 	return &dashboardService{
@@ -80,6 +89,8 @@ func NewDashboardService(
 		configService:   configService,
 		siteInfoService: siteInfoService,
 		serviceConfig:   serviceConfig,
+		reviewService:   reviewService,
+		revisionRepo:    revisionRepo,
 		data:            data,
 	}
 }
@@ -99,7 +110,16 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		dashboardInfo.ReportCount = ds.reportCount(ctx)
 		dashboardInfo.VoteCount = ds.voteCount(ctx)
 		dashboardInfo.OccupyingStorageSpace = ds.calculateStorage()
-		dashboardInfo.VersionInfo.RemoteVersion = ds.remoteVersion(ctx)
+		general, err := ds.siteInfoService.GetSiteGeneral(ctx)
+		if err != nil {
+			log.Errorf("get general site info failed: %s", err)
+			return dashboardInfo, nil
+		}
+		if general.CheckUpdate {
+			dashboardInfo.VersionInfo.RemoteVersion = ds.remoteVersion(ctx)
+		}
+		dashboardInfo.DatabaseVersion = ds.getDatabaseInfo()
+		dashboardInfo.DatabaseSize = ds.GetDatabaseSize()
 	}
 
 	dashboardInfo.SMTP = ds.smtpStatus(ctx)
@@ -109,6 +129,10 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", time.Now().Unix()-schema.AppStartTime.Unix())
 	dashboardInfo.VersionInfo.Version = constant.Version
 	dashboardInfo.VersionInfo.Revision = constant.Revision
+	dashboardInfo.GoVersion = constant.GoVersion
+	if siteLogin, err := ds.siteInfoService.GetSiteLogin(ctx); err == nil {
+		dashboardInfo.LoginRequired = siteLogin.LoginRequired
+	}
 
 	ds.setCache(ctx, dashboardInfo)
 	return dashboardInfo, nil
@@ -171,11 +195,23 @@ func (ds *dashboardService) userCount(ctx context.Context) int64 {
 }
 
 func (ds *dashboardService) reportCount(ctx context.Context) int64 {
+	reviewCount, err := ds.reviewService.GetReviewPendingCount(ctx)
+	if err != nil {
+		log.Errorf("get review count failed: %s", err)
+	}
 	reportCount, err := ds.reportRepo.GetReportCount(ctx)
 	if err != nil {
 		log.Errorf("get report count failed: %s", err)
 	}
-	return reportCount
+	countUnreviewedRevision, err := ds.revisionRepo.CountUnreviewedRevision(ctx, []int{
+		constant.ObjectTypeStrMapping[constant.AnswerObjectType],
+		constant.ObjectTypeStrMapping[constant.QuestionObjectType],
+		constant.ObjectTypeStrMapping[constant.TagObjectType],
+	})
+	if err != nil {
+		log.Errorf("get revision count failed: %s", err)
+	}
+	return reviewCount + reportCount + countUnreviewedRevision
 }
 
 // count vote
@@ -226,19 +262,23 @@ func (ds *dashboardService) remoteVersion(ctx context.Context) string {
 	return remoteVersion.Release.Version
 }
 
-func (ds *dashboardService) smtpStatus(ctx context.Context) (enabled bool) {
+func (ds *dashboardService) smtpStatus(ctx context.Context) (smtpStatus string) {
+	smtpStatus = "not_configured"
 	emailConf, err := ds.configService.GetStringValue(ctx, "email.config")
 	if err != nil {
 		log.Errorf("get email config failed: %s", err)
-		return false
+		return "disabled"
 	}
 	ec := &export.EmailConfig{}
 	err = json.Unmarshal([]byte(emailConf), ec)
 	if err != nil {
 		log.Errorf("parsing email config failed: %s", err)
-		return false
+		return "disabled"
 	}
-	return ec.SMTPHost != ""
+	if ec.SMTPHost != "" {
+		smtpStatus = "enabled"
+	}
+	return smtpStatus
 }
 
 func (ds *dashboardService) httpsStatus(ctx context.Context) (enabled bool) {
@@ -270,4 +310,51 @@ func (ds *dashboardService) calculateStorage() string {
 		return ""
 	}
 	return dir.FormatFileSize(dirSize)
+}
+
+func (ds *dashboardService) getDatabaseInfo() (versionDesc string) {
+	dbVersion, err := ds.data.DB.DBVersion()
+	if err != nil {
+		log.Errorf("get db version failed: %s", err)
+	} else {
+		versionDesc = fmt.Sprintf("%s %s", ds.data.DB.Dialect().URI().DBType, dbVersion.Number)
+	}
+	return versionDesc
+}
+
+func (ds *dashboardService) GetDatabaseSize() (dbSize string) {
+	switch ds.data.DB.Dialect().URI().DBType {
+	case schemas.MYSQL:
+		sql := fmt.Sprintf("SELECT SUM(DATA_LENGTH) as db_size FROM information_schema.TABLES WHERE table_schema = '%s'",
+			ds.data.DB.Dialect().URI().DBName)
+		res, err := ds.data.DB.QueryInterface(sql)
+		if err != nil {
+			log.Warnf("get db size failed: %s", err)
+		} else {
+			if res != nil && len(res) > 0 && res[0]["db_size"] != nil {
+				dbSizeStr, _ := res[0]["db_size"].(string)
+				dbSize = dir.FormatFileSize(converter.StringToInt64(dbSizeStr))
+			}
+		}
+	case schemas.POSTGRES:
+		sql := fmt.Sprintf("SELECT pg_database_size('%s') AS db_size",
+			ds.data.DB.Dialect().URI().DBName)
+		res, err := ds.data.DB.QueryInterface(sql)
+		if err != nil {
+			log.Warnf("get db size failed: %s", err)
+		} else {
+			if res != nil && len(res) > 0 && res[0]["db_size"] != nil {
+				dbSizeStr, _ := res[0]["db_size"].(int32)
+				dbSize = dir.FormatFileSize(int64(dbSizeStr))
+			}
+		}
+	case schemas.SQLITE:
+		dirSize, err := dir.DirSize(ds.data.DB.DataSourceName())
+		if err != nil {
+			log.Errorf("get upload dir size failed: %s", err)
+			return ""
+		}
+		dbSize = dir.FormatFileSize(dirSize)
+	}
+	return dbSize
 }

@@ -32,6 +32,7 @@ const (
 	ConfigTypeTimezone ConfigType = "timezone"
 	ConfigTypeSwitch   ConfigType = "switch"
 	ConfigTypeButton   ConfigType = "button"
+	ConfigTypeLegend   ConfigType = "legend"
 )
 
 const (
@@ -63,13 +64,15 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder Translator      `json:"placeholder,omitempty"`
-	Rows        string          `json:"rows,omitempty"`
-	InputType   InputType       `json:"input_type,omitempty"`
-	Label       Translator      `json:"label,omitempty"`
-	Action      *UIOptionAction `json:"action,omitempty"`
-	Variant     string          `json:"variant,omitempty"`
-	Text        Translator      `json:"text,omitempty"`
+	Placeholder    Translator      `json:"placeholder,omitempty"`
+	Rows           string          `json:"rows,omitempty"`
+	InputType      InputType       `json:"input_type,omitempty"`
+	Label          Translator      `json:"label,omitempty"`
+	Action         *UIOptionAction `json:"action,omitempty"`
+	Variant        string          `json:"variant,omitempty"`
+	Text           Translator      `json:"text,omitempty"`
+	ClassName      string          `json:"class_name,omitempty"`
+	FieldClassName string          `json:"field_class_name,omitempty"`
 }
 
 type ConfigFieldOption struct {

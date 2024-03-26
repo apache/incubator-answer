@@ -25,6 +25,7 @@ const (
 )
 
 var (
-	Version  string = ""
-	Revision string = ""
+	Version   = ""
+	Revision  = ""
+	GoVersion = ""
 )

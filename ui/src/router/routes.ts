@@ -181,6 +181,10 @@ const routes: RouteNode[] = [
                 path: 'interface',
                 page: 'pages/Users/Settings/Interface',
               },
+              {
+                path: ':slug_name',
+                page: 'pages/Users/Settings/Plugins',
+              },
             ],
           },
           {
@@ -215,7 +219,6 @@ const routes: RouteNode[] = [
           },
         ],
       },
-
       {
         path: 'users/login',
         page: 'pages/Users/Login',
@@ -244,6 +247,13 @@ const routes: RouteNode[] = [
             }
           }
           return notLogged;
+        },
+      },
+      {
+        path: 'users/logout',
+        page: 'pages/Users/Logout',
+        guard: () => {
+          return guard.loggedRedirectHome();
         },
       },
       {
@@ -321,10 +331,6 @@ const routes: RouteNode[] = [
           {
             path: 'answers',
             page: 'pages/Admin/Answers',
-          },
-          {
-            path: 'flags',
-            page: 'pages/Admin/Flags',
           },
           {
             path: 'themes',

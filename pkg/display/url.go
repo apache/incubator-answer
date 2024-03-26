@@ -58,3 +58,8 @@ func CommentURL(permalink int, siteUrl, questionID, title, answerID, commentID s
 	}
 	return QuestionURL(permalink, siteUrl, questionID, title) + "?commentId=" + commentID
 }
+
+// UserURL get user url
+func UserURL(siteUrl, username string) string {
+	return siteUrl + "/users/" + username
+}

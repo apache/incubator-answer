@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
-import { unionBy } from 'lodash';
+import unionBy from 'lodash/unionBy';
 
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
@@ -74,10 +74,8 @@ const Comment = ({ objectId, mode, commentId }) => {
 
   useEffect(() => {
     if (pageIndex === 0 && commentId) {
-      console.log('scrollCallback');
       setTimeout(() => {
         const el = document.getElementById(commentId);
-        console.log(el);
         scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);
@@ -91,6 +89,9 @@ const Comment = ({ objectId, mode, commentId }) => {
   useEffect(() => {
     if (!data) {
       return;
+    }
+    if (data.count <= 3) {
+      data.list.sort((a, b) => a.created_at - b.created_at);
     }
     if (pageIndex === 1 || pageIndex === 0) {
       setComments(data?.list);
@@ -328,16 +329,17 @@ const Comment = ({ objectId, mode, commentId }) => {
     );
   };
   return (
-    <div className="comments-wrap">
-      {comments.map((item, index) => {
+    <div
+      className={classNames(
+        'comments-wrap',
+        comments.length > 0 && 'bg-light px-3 py-2 rounded',
+      )}>
+      {comments.map((item) => {
         return (
           <div
             key={item.comment_id}
             id={item.comment_id}
-            className={classNames(
-              'border-bottom py-2 comment-item',
-              index === 0 && 'border-top',
-            )}>
+            className="py-2 comment-item">
             {item.showEdit ? (
               <Form
                 className="mt-2"
@@ -397,7 +399,7 @@ const Comment = ({ objectId, mode, commentId }) => {
         );
       })}
 
-      <div className="mt-2">
+      <div className={classNames(comments.length > 0 && 'py-2')}>
         <Button
           variant="link"
           className="p-0 btn-no-border"
@@ -409,23 +411,30 @@ const Comment = ({ objectId, mode, commentId }) => {
           }}>
           {t('btn_add_comment')}
         </Button>
-        {data && (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
-          <Button
-            variant="link"
-            size="sm"
-            className="p-0 ms-3 btn-no-border"
-            onClick={() => {
-              setPageIndex(pageIndex + 1);
-            }}>
-            {t('show_more')}
-          </Button>
-        )}
+        {data &&
+          (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
+            <Button
+              variant="link"
+              size="sm"
+              className="p-0 ms-3 btn-no-border"
+              onClick={() => {
+                setPageIndex(pageIndex + 1);
+              }}>
+              {t('show_more', {
+                count:
+                  data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
+              })}
+            </Button>
+          )}
       </div>
 
       {visibleComment && (
         <Form
           mode={mode}
-          className="mt-2"
+          className={classNames(
+            'mt-2',
+            comments.length <= 0 && 'bg-light p-3 rounded',
+          )}
           onSendReply={(value) => handleSendReply({ value, type: 'comment' })}
           onCancel={() => setVisibleComment(!visibleComment)}
         />

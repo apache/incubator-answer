@@ -29,6 +29,7 @@ import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
+import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
 import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
 
 interface FormDataItem {
@@ -70,9 +71,6 @@ const Index = () => {
 
   const { data } = useTagInfo({ id: tagId });
   const { data: revisions = [] } = useQueryRevisions(data?.tag_id);
-  initFormData.displayName.value = data?.display_name || '';
-  initFormData.slugName.value = data?.slug_name || '';
-  initFormData.description.value = data?.original_text || '';
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
@@ -86,15 +84,20 @@ const Index = () => {
   });
 
   useEffect(() => {
+    initFormData.displayName.value = data?.display_name || '';
+    initFormData.slugName.value = data?.slug_name || '';
+    initFormData.description.value = data?.original_text || '';
+    setFormData(initFormData);
+    setImmData(initFormData);
+  }, [data]);
+
+  useEffect(() => {
     const { displayName, slugName, description, editSummary } = formData;
     const {
       displayName: display_name,
       slugName: slug_name,
       description: original_text,
     } = immData;
-    if (!display_name || !slug_name || !original_text) {
-      return;
-    }
 
     if (
       display_name.value !== displayName.value ||
@@ -121,14 +124,51 @@ const Index = () => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { slugName } = formData;
+    const { displayName, slugName } = formData;
+
+    if (!displayName.value) {
+      bol = false;
+      formData.displayName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.empty', {
+          keyPrefix: 'tag_modal',
+        }),
+      };
+    } else if (displayName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.range', {
+          keyPrefix: 'tag_modal',
+        }),
+      };
+    } else {
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
 
     if (!slugName.value) {
       bol = false;
       formData.slugName = {
         value: '',
         isInvalid: true,
-        errorMsg: '标题不能为空',
+        errorMsg: t('form.fields.slug_name.msg.empty', {
+          keyPrefix: 'tag_modal',
+        }),
+      };
+    } else if (slugName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.range', {
+          keyPrefix: 'tag_modal',
+        }),
       };
     } else {
       formData.slugName = {
@@ -162,7 +202,7 @@ const Index = () => {
       edit_summary: formData.editSummary.value,
     };
     modifyTag(params).then((res) => {
-      navigate(`/tags/${formData.slugName.value}/info`, {
+      navigate(`/tags/${encodeURIComponent(formData.slugName.value)}/info`, {
         replace: true,
         state: { isReview: res.wait_for_review },
       });
@@ -213,7 +253,9 @@ const Index = () => {
         <Col className="page-main flex-auto">
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="revision" className="mb-3">
-              <Form.Label>{t('form.fields.revision.label')}</Form.Label>
+              <Form.Label>
+                {t('form.fields.revision.label', { keyPrefix: 'tag_modal' })}
+              </Form.Label>
               <Form.Select onChange={handleSelectedRevision}>
                 {revisions.map(({ create_at, reason, user_info }, index) => {
                   const date = dayjs(create_at * 1000)
@@ -233,7 +275,11 @@ const Index = () => {
               </Form.Select>
             </Form.Group>
             <Form.Group controlId="display_name" className="mb-3">
-              <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
+              <Form.Label>
+                {t('form.fields.display_name.label', {
+                  keyPrefix: 'tag_modal',
+                })}
+              </Form.Label>
               <Form.Control
                 value={formData.displayName.value}
                 isInvalid={formData.displayName.isInvalid}
@@ -246,21 +292,27 @@ const Index = () => {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="slug_name" className="mb-3">
-              <Form.Label>{t('form.fields.slug_name.label')}</Form.Label>
+              <Form.Label>
+                {t('form.fields.slug_name.label', { keyPrefix: 'tag_modal' })}
+              </Form.Label>
               <Form.Control
                 value={formData.slugName.value}
                 isInvalid={formData.slugName.isInvalid}
                 disabled={role_id !== 2 && role_id !== 3}
                 onChange={handleSlugNameChange}
               />
-              <Form.Text as="div">{t('form.fields.slug_name.info')}</Form.Text>
+              <Form.Text as="div">
+                {t('form.fields.slug_name.desc', { keyPrefix: 'tag_modal' })}
+              </Form.Text>
               <Form.Control.Feedback type="invalid">
                 {formData.slugName.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="description" className="mt-4">
-              <Form.Label>{t('form.fields.desc.label')}</Form.Label>
+              <Form.Label>
+                {t('form.fields.desc.label', { keyPrefix: 'tag_modal' })}
+              </Form.Label>
               <Editor
                 value={formData.description.value}
                 onChange={handleDescriptionChange}
@@ -288,13 +340,19 @@ const Index = () => {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="edit_summary" className="my-3">
-              <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
+              <Form.Label>
+                {t('form.fields.edit_summary.label', {
+                  keyPrefix: 'tag_modal',
+                })}
+              </Form.Label>
               <Form.Control
                 type="text"
                 defaultValue={formData.editSummary.value}
                 isInvalid={formData.editSummary.isInvalid}
                 onChange={handleEditSummaryChange}
-                placeholder={t('form.fields.edit_summary.placeholder')}
+                placeholder={t('form.fields.edit_summary.placeholder', {
+                  keyPrefix: 'tag_modal',
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {formData.editSummary.errorMsg}

@@ -17,14 +17,15 @@
  * under the License.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
 
 import { usePageTags, usePromptWithUnload, useCaptchaModal } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
@@ -35,7 +36,7 @@ import {
   questionDetail,
   modifyQuestion,
   useQueryRevisions,
-  useQueryQuestionByTitle,
+  queryQuestionByTitle,
   getTagsBySlugName,
   saveQuestionWithAnswer,
 } from '@/services';
@@ -94,6 +95,7 @@ const Ask = () => {
     setCheckState(false);
     setForceType('');
   };
+  const [similarQuestions, setSimilarQuestions] = useState([]);
 
   const editorRef = useRef<EditorRef>({
     getHtml: () => '',
@@ -117,9 +119,6 @@ const Ask = () => {
   };
 
   const isEdit = qid !== undefined;
-  const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
-    isEdit ? '' : formData.title.value,
-  );
 
   const saveCaptcha = useCaptchaModal('question');
   const editCaptcha = useCaptchaModal('edit');
@@ -221,11 +220,26 @@ const Ask = () => {
     });
   }, [qid]);
 
+  const querySimilarQuestions = useCallback(
+    debounce((title) => {
+      queryQuestionByTitle(title).then((res) => {
+        setSimilarQuestions(res);
+      });
+    }, 400),
+    [],
+  );
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       title: { ...formData.title, value: e.currentTarget.value, errorMsg: '' },
     });
+    if (e.currentTarget.value.length >= 10) {
+      querySimilarQuestions(e.currentTarget.value);
+    }
+    if (e.currentTarget.value.length === 0) {
+      setSimilarQuestions([]);
+    }
   };
   const handleContentChange = (value: string) => {
     setFormData({
@@ -404,6 +418,7 @@ const Ask = () => {
                 onChange={handleTitleChange}
                 placeholder={t('form.fields.title.placeholder')}
                 autoFocus
+                contentEditable
               />
 
               <Form.Control.Feedback type="invalid">
@@ -447,7 +462,8 @@ const Ask = () => {
               <TagSelector
                 value={formData.tags.value}
                 onChange={handleTagsChange}
-                showRequiredTagText
+                showRequiredTag
+                maxTagLength={5}
               />
               <Form.Control.Feedback type="invalid">
                 {formData.tags.errorMsg}
@@ -462,6 +478,7 @@ const Ask = () => {
                   isInvalid={formData.edit_summary.isInvalid}
                   placeholder={t('form.fields.edit_summary.placeholder')}
                   onChange={handleSummaryChange}
+                  contentEditable
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.edit_summary.errorMsg}

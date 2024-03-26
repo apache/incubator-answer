@@ -32,6 +32,7 @@ import {
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
 import { login, UcAgent } from '@/services';
+import { setupAppTheme } from '@/utils/localize';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -45,7 +46,8 @@ const Index: React.FC = () => {
     ucAgentInfo = ucAgent.agent_info;
   }
   const canOriginalLogin =
-    !ucAgentInfo || ucAgentInfo.enabled_original_user_system;
+    (!ucAgentInfo || ucAgentInfo.enabled_original_user_system) &&
+    loginSetting.allow_password_login;
 
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -115,6 +117,7 @@ const Index: React.FC = () => {
       .then(async (res) => {
         await passwordCaptcha.close();
         updateUser(res);
+        setupAppTheme();
         const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
           // inactive

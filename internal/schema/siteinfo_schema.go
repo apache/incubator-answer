@@ -40,6 +40,7 @@ type SiteGeneralReq struct {
 	Description      string `validate:"omitempty,sanitizer,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,sanitizer,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,sanitizer,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+	CheckUpdate      bool   `validate:"omitempty,sanitizer" form:"check_update" json:"check_update"`
 }
 
 func (r *SiteGeneralReq) FormatSiteUrl() {
@@ -66,10 +67,11 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RequiredTag   bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
-	RecommendTags []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
-	ReservedTags  []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
-	UserID        string   `json:"-"`
+	RestrictAnswer bool     `validate:"omitempty" form:"restrict_answer" json:"restrict_answer"`
+	RequiredTag    bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
+	RecommendTags  []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
+	ReservedTags   []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
+	UserID         string   `json:"-"`
 }
 
 // SiteLegalReq site branding request
@@ -117,6 +119,7 @@ type SiteUsersReq struct {
 type SiteLoginReq struct {
 	AllowNewRegistrations   bool     `json:"allow_new_registrations"`
 	AllowEmailRegistrations bool     `json:"allow_email_registrations"`
+	AllowPasswordLogin      bool     `json:"allow_password_login"`
 	LoginRequired           bool     `json:"login_required"`
 	AllowEmailDomains       []string `json:"allow_email_domains"`
 }
@@ -134,6 +137,7 @@ type SiteCustomCssHTMLReq struct {
 type SiteThemeReq struct {
 	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
 	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
+	ColorScheme string                 `validate:"omitempty,gt=0,lte=100" json:"color_scheme"`
 }
 
 type SiteSeoReq struct {
@@ -169,6 +173,7 @@ type SiteThemeResp struct {
 	ThemeOptions []*ThemeOption         `json:"theme_options"`
 	Theme        string                 `json:"theme"`
 	ThemeConfig  map[string]interface{} `json:"theme_config"`
+	ColorScheme  string                 `json:"color_scheme"`
 }
 
 func (s *SiteThemeResp) TrTheme(ctx context.Context) {
@@ -207,6 +212,7 @@ type SiteInfoResp struct {
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoResp           `json:"site_seo"`
 	SiteUsers     *SiteUsersResp         `json:"site_users"`
+	Write         *SiteWriteResp         `json:"site_write"`
 	Version       string                 `json:"version"`
 	Revision      string                 `json:"revision"`
 }
@@ -281,6 +287,8 @@ const (
 	PrivilegeLevel2 PrivilegeLevel = 2
 	// PrivilegeLevel3 high
 	PrivilegeLevel3 PrivilegeLevel = 3
+	// PrivilegeLevelCustom custom
+	PrivilegeLevelCustom PrivilegeLevel = 99
 )
 
 type PrivilegeLevel int
@@ -305,16 +313,18 @@ type GetPrivilegesConfigResp struct {
 type PrivilegeOption struct {
 	Level      PrivilegeLevel        `json:"level"`
 	LevelDesc  string                `json:"level_desc"`
-	Privileges []*constant.Privilege `json:"privileges"`
+	Privileges []*constant.Privilege `validate:"dive" json:"privileges"`
 }
 
 // UpdatePrivilegesConfigReq update privileges config request
 type UpdatePrivilegesConfigReq struct {
-	Level PrivilegeLevel `validate:"required,min=1,max=3" json:"level"`
+	Level            PrivilegeLevel        `validate:"required,min=1,max=3|eq=99" json:"level"`
+	CustomPrivileges []*constant.Privilege `validate:"dive" json:"custom_privileges"`
 }
 
 var (
 	DefaultPrivilegeOptions      PrivilegeOptions
+	DefaultCustomPrivilegeOption *PrivilegeOption
 	privilegeOptionsLevelMapping = map[string][]int{
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
@@ -364,5 +374,12 @@ func init() {
 				Key:   privilege.Key,
 			})
 		}
+	}
+
+	// set up default custom privilege option
+	DefaultCustomPrivilegeOption = &PrivilegeOption{
+		Level:      PrivilegeLevelCustom,
+		LevelDesc:  reason.PrivilegeLevelCustomDesc,
+		Privileges: DefaultPrivilegeOptions[0].Privileges,
 	}
 }

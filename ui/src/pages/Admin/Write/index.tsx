@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
@@ -28,6 +28,7 @@ import {
   postRequireAndReservedTag,
 } from '@/services';
 import { handleFormError } from '@/utils';
+import { writeSettingStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -38,6 +39,12 @@ const Index: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
+      restrict_answer: {
+        type: 'boolean',
+        title: t('restrict_answer.title'),
+        description: t('restrict_answer.text'),
+        default: true,
+      },
       recommend_tags: {
         type: 'string',
         title: t('recommend_tags.label'),
@@ -56,6 +63,12 @@ const Index: FC = () => {
     },
   };
   const uiSchema: UISchema = {
+    restrict_answer: {
+      'ui:widget': 'switch',
+      'ui:options': {
+        label: t('restrict_answer.label'),
+      },
+    },
     recommend_tags: {
       'ui:widget': 'textarea',
       'ui:options': {
@@ -92,6 +105,7 @@ const Index: FC = () => {
       recommend_tags,
       reserved_tags,
       required_tag: formData.required_tag.value,
+      restrict_answer: formData.restrict_answer.value,
     };
     postRequireAndReservedTag(reqParams)
       .then(() => {
@@ -99,6 +113,9 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        writeSettingStore
+          .getState()
+          .update({ restrict_answer: reqParams.restrict_answer });
       })
       .catch((err) => {
         if (err.isError) {
@@ -114,6 +131,7 @@ const Index: FC = () => {
         formData.recommend_tags.value = res.recommend_tags.join('\n');
       }
       formData.required_tag.value = res.required_tag;
+      formData.restrict_answer.value = res.restrict_answer;
       if (Array.isArray(res.reserved_tags)) {
         formData.reserved_tags.value = res.reserved_tags.join('\n');
       }

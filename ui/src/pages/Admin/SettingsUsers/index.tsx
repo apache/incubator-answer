@@ -137,7 +137,7 @@ const Index: FC = () => {
       'ui:widget': 'switch',
       'ui:options': {
         label: t('allow_update_location.label'),
-        fieldClassName: 'mb-3',
+        field_class_name: 'mb-3',
         simplify: true,
       },
     },

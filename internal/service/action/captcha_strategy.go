@@ -36,10 +36,6 @@ func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionTy
 		log.Error(err)
 		return false
 	}
-	// If no operation previously, it is considered to be the first operation
-	if info == nil {
-		return true
-	}
 	switch actionType {
 	case entity.CaptchaActionEmail:
 		return cs.CaptchaActionEmail(ctx, unit, info)
@@ -71,119 +67,152 @@ func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionTy
 	return false
 }
 
-func (cs *CaptchaService) CaptchaActionEmail(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionEmail(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
 	// You need a verification code every time
 	return false
 }
 
-func (cs *CaptchaService) CaptchaActionPassword(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionPassword(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime && actionInfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
+	if now-actionInfo.LastTime != 0 && now-actionInfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionPassword, "", 0)
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionEditUserinfo(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionEditUserinfo(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime && actionInfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
+	if now-actionInfo.LastTime != 0 && now-actionInfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionEditUserinfo, "", 0)
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionQuestion(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionQuestion(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 10
 	setTime := int64(5) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime || actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionAnswer(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionAnswer(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 10
 	setTime := int64(5) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime || actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionComment(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionComment(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 30
 	setTime := int64(1) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime || actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionEdit(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionEdit(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 10
-	if actioninfo.Num >= setNum {
+	if actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionInvitationAnswer(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionInvitationAnswer(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 30
-	if actioninfo.Num >= setNum {
+	if actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionSearch(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionSearch(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	now := time.Now().Unix()
 	setNum := 20
 	setTime := int64(60) //seconds
-	if now-int64(actioninfo.LastTime) <= setTime && actioninfo.Num >= setNum {
+	if now-int64(actionInfo.LastTime) <= setTime && actionInfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime > setTime {
+	if now-actionInfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionSearch, "", 0)
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionReport(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionReport(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 30
 	setTime := int64(1) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime || actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionDelete(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionDelete(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 5
 	setTime := int64(5) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actionInfo.LastTime <= setTime || actionInfo.Num >= setNum {
 		return false
 	}
 	return true
 }
 
-func (cs *CaptchaService) CaptchaActionVote(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
+func (cs *CaptchaService) CaptchaActionVote(ctx context.Context, unit string, actionInfo *entity.ActionRecordInfo) bool {
+	if actionInfo == nil {
+		return true
+	}
 	setNum := 40
-	if actioninfo.Num >= setNum {
+	if actionInfo.Num >= setNum {
 		return false
 	}
 	return true

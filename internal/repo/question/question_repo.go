@@ -23,18 +23,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/plugin"
-	"github.com/segmentfault/pacman/log"
 	"strings"
 	"time"
 	"unicode"
 	"xorm.io/xorm"
 
-	"github.com/apache/incubator-answer/internal/base/handler"
-	"xorm.io/builder"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
@@ -43,8 +39,11 @@ import (
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/uid"
-
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
+	"xorm.io/builder"
+	"xorm.io/xorm"
 )
 
 // questionRepo question repository
@@ -77,7 +76,6 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 	if handler.GetEnableShortID(ctx) {
 		question.ID = uid.EnShortID(question.ID)
 	}
-	_ = qr.updateSearch(ctx, question.ID)
 	return
 }
 
@@ -101,7 +99,7 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 	if handler.GetEnableShortID(ctx) {
 		question.ID = uid.EnShortID(question.ID)
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return
 }
 
@@ -112,7 +110,7 @@ func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (e
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -124,7 +122,7 @@ func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -156,7 +154,7 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, questionID str
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, questionID)
+	_ = qr.UpdateSearch(ctx, questionID)
 	return nil
 }
 
@@ -166,7 +164,7 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -176,7 +174,7 @@ func (qr *questionRepo) RecoverQuestion(ctx context.Context, questionID string) 
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, questionID)
+	_ = qr.UpdateSearch(ctx, questionID)
 	return nil
 }
 
@@ -195,7 +193,7 @@ func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Que
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -205,7 +203,7 @@ func (qr *questionRepo) UpdateLastAnswer(ctx context.Context, question *entity.Q
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.UpdateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -279,7 +277,7 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 
 func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
-	session.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted})
 	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
 	if err != nil {
 		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -287,10 +285,10 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 	return count, nil
 }
 
-func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
-	session.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
-	count, err = session.Count(&entity.Question{UserID: userID})
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted})
+	count, err = session.Count(&entity.Question{UserID: userID, Show: show})
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -347,19 +345,26 @@ func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
+	tagIDs []string, userID, orderCond string, inDays int, showHidden, showPending bool) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
-
-	session := qr.data.DB.Context(ctx).Where("question.status = ? OR question.status = ?",
-		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
-	if len(tagID) > 0 {
+	session := qr.data.DB.Context(ctx)
+	status := []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}
+	if showPending {
+		status = append(status, entity.QuestionStatusPending)
+	}
+	session.In("question.status", status)
+	if len(tagIDs) > 0 {
 		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session.And("tag_rel.tag_id = ?", tagID)
+		session.In("tag_rel.tag_id", tagIDs)
 		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
+		if !showHidden {
+			session.And("question.show = ?", entity.QuestionShow)
+		}
 	} else {
 		session.And("question.show = ?", entity.QuestionShow)
 	}
@@ -462,8 +467,8 @@ func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.Ad
 	return rows, count, nil
 }
 
-// updateSearch update search, if search plugin not enable, do nothing
-func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (err error) {
+// UpdateSearch update search, if search plugin not enable, do nothing
+func (qr *questionRepo) UpdateSearch(ctx context.Context, questionID string) (err error) {
 	// check search plugin
 	var s plugin.Search
 	_ = plugin.CallSearch(func(search plugin.Search) error {
@@ -544,7 +549,7 @@ func (qr *questionRepo) RemoveAllUserQuestion(ctx context.Context, userID string
 
 	// update search content
 	for _, id := range questionIDs {
-		_ = qr.updateSearch(ctx, id)
+		_ = qr.UpdateSearch(ctx, id)
 	}
 	return nil
 }

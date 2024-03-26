@@ -306,11 +306,7 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			ReceiverUserID: act.ActivityUserID,
 			TriggerUserID:  act.TriggerUserID,
 		}
-		if act.ActivityUserID == op.QuestionUserID {
-			msg.ObjectType = constant.AnswerObjectType
-		} else {
-			msg.ObjectType = constant.AnswerObjectType
-		}
+		msg.ObjectType = constant.AnswerObjectType
 		if msg.TriggerUserID != msg.ReceiverUserID {
 			ar.notificationQueueService.Send(ctx, msg)
 		}

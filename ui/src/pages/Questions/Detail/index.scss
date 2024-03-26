@@ -18,7 +18,7 @@
  */
 
 .answer-item {
-  border-top: 1px solid rgba(33, 37, 41, 0.25);
+  border-top: 1px solid var(--an-answer-item-border-top);
 }
 
 @media screen and (max-width: 768px) {

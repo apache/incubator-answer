@@ -1,12 +1,12 @@
 .PHONY: build clean ui
 
-VERSION=1.2.0
+VERSION=1.3.0
 BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
 
 GO_ENV=CGO_ENABLED=0 GO111MODULE=on
-Revision=$(shell git rev-parse --short HEAD)
+Revision=$(shell git rev-parse --short HEAD 2>/dev/null || echo "")
 GO_FLAGS=-ldflags="-X github.com/apache/incubator-answer/cmd.Version=$(VERSION) -X 'github.com/apache/incubator-answer/cmd.Revision=$(Revision)' -X 'github.com/apache/incubator-answer/cmd.Time=`date +%s`' -extldflags -static"
 GO=$(GO_ENV) $(shell which go)
 

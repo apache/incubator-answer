@@ -22,9 +22,13 @@ import { Nav } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch } from 'react-router-dom';
 
+import { useGetUserPluginList } from '@/services';
+
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings.nav' });
   const settingMatch = useMatch('/users/settings/:setting');
+  const { data } = useGetUserPluginList();
+
   return (
     <Nav variant="pills" className="flex-column">
       <NavLink
@@ -43,6 +47,16 @@ const Index: FC = () => {
       <NavLink className="nav-link" to="/users/settings/interface">
         {t('interface')}
       </NavLink>
+      {data?.map((item) => {
+        return (
+          <NavLink
+            key={item.slug_name}
+            className="nav-link w-100 text-truncate"
+            to={`/users/settings/${item.slug_name}`}>
+            {item.name}
+          </NavLink>
+        );
+      })}
     </Nav>
   );
 };

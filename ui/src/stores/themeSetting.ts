@@ -25,11 +25,13 @@ interface IType {
   theme: AdminSettingsTheme['theme'];
   theme_config: AdminSettingsTheme['theme_config'];
   theme_options: AdminSettingsTheme['theme_options'];
+  color_scheme: AdminSettingsTheme['color_scheme'];
   update: (params: AdminSettingsTheme) => void;
 }
 
 const store = create<IType>((set) => ({
   theme: 'default',
+  color_scheme: 'system',
   theme_options: [{ label: 'Default', value: 'default' }],
   theme_config: {
     default: {

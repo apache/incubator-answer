@@ -26,6 +26,7 @@ permissions:
 
 jobs:
   build-goreleaser:
+    if: ${{ github.repository_owner == 'apache' }}
     runs-on: ubuntu-latest
 
     steps:

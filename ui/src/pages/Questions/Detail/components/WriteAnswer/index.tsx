@@ -20,6 +20,7 @@
 import { memo, useState, FC, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { marked } from 'marked';
 import classNames from 'classnames';
@@ -30,6 +31,7 @@ import { FormDataType, PostAnswerReq } from '@/common/interface';
 import { postAnswer } from '@/services';
 import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
+import { writeSettingStore } from '@/stores';
 
 interface Props {
   visible?: boolean;
@@ -38,6 +40,7 @@ interface Props {
     qid: string;
     answered?: boolean;
     loggedUserRank: number;
+    first_answer_id?: string;
   };
   callback?: (obj) => void;
 }
@@ -61,6 +64,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [hasDraft, setHasDraft] = useState(false);
   const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
   const aCaptcha = useCaptchaModal('answer');
+  const writeInfo = writeSettingStore((state) => state.write);
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
@@ -195,6 +199,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     if (!guard.tryNormalLogged(true)) {
       return;
     }
+
     if (data?.answered && !showEditor) {
       Modal.confirm({
         title: t('confirm_title'),
@@ -223,6 +228,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     setShowEditor(true);
     setEditorFocusState(true);
   };
+
   return (
     <Form noValidate className="mt-4">
       {(!data.answered || showEditor) && (
@@ -306,10 +312,22 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
       )}
 
       {data.answered && !showEditor ? (
-        <Button onClick={clickBtn}>{t('add_another_answer')}</Button>
+        // the 0th answer is the oldest one
+        <Link
+          to={`/posts/${data.qid}/${data.first_answer_id}/edit`}
+          className="btn btn-primary">
+          {t('edit_answer')}
+        </Link>
       ) : (
         <Button onClick={clickBtn}>{t('btn_name')}</Button>
       )}
+
+      {data.answered && !showEditor && !writeInfo.restrict_answer && (
+        <Button onClick={clickBtn} className="ms-2 " variant="outline-primary">
+          {t('add_another_answer')}
+        </Button>
+      )}
+
       {hasDraft && (
         <Button variant="link" className="ms-2" onClick={deleteDraft}>
           {t('discard_draft', { keyPrefix: 'btns' })}

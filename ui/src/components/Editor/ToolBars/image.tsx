@@ -29,8 +29,8 @@ import { IEditorContext } from '../types';
 import { uploadImage } from '@/services';
 
 let context: IEditorContext;
-const Image = () => {
-  const [editor, setEditor] = useState<Editor>(null);
+const Image = ({ editorInstance }) => {
+  const [editor, setEditor] = useState<Editor>(editorInstance);
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const loadingText = `![${t('image.uploading')}...]()`;
@@ -117,7 +117,7 @@ const Image = () => {
 
     editor.replaceSelection(loadingText);
     const urls = await upload(fileList).catch((ex) => {
-      console.log('ex: ', ex);
+      console.error('upload file error: ', ex);
     });
 
     const text: string[] = [];
@@ -167,17 +167,29 @@ const Image = () => {
     }
     event.preventDefault();
 
-    const newHtml = new DOMParser()
+    let innerText = '';
+    const allPTag = new DOMParser()
       .parseFromString(
         htmlStr.replace(
           /<img([\s\S]*?) src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi,
-          `<p>\n![${t('image.text')}]($3)\n</p>`,
+          `<p>![${t('image.text')}]($3)\n\n</p>`,
         ),
         'text/html',
       )
-      .querySelector('body')?.innerText as string;
+      .querySelectorAll('body p');
 
-    editor.replaceSelection(newHtml);
+    allPTag.forEach((p, index) => {
+      const text = p.textContent || '';
+      if (text !== '') {
+        if (index === allPTag.length - 1) {
+          innerText += `${p.textContent}`;
+        } else {
+          innerText += `${p.textContent}${text.endsWith('\n') ? '' : '\n\n'}`;
+        }
+      }
+    });
+
+    editor.replaceSelection(innerText);
   };
   const handleClick = () => {
     if (!link.value) {
@@ -218,9 +230,6 @@ const Image = () => {
   const addLink = (ctx) => {
     context = ctx;
     setEditor(context.editor);
-    if (!editor) {
-      return;
-    }
     const text = context.editor?.getSelection();
 
     setImageName({ ...imageName, value: text });

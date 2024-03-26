@@ -50,7 +50,7 @@ func (ur *pluginConfigRepo) SavePluginConfig(ctx context.Context, pluginSlugName
 		old.Value = configValue
 		_, err = ur.data.DB.Context(ctx).ID(old.ID).Update(old)
 	} else {
-		_, err = ur.data.DB.Context(ctx).InsertOne(&entity.PluginConfig{PluginSlugName: pluginSlugName, Value: configValue})
+		_, err = ur.data.DB.Context(ctx).Insert(&entity.PluginConfig{PluginSlugName: pluginSlugName, Value: configValue})
 	}
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

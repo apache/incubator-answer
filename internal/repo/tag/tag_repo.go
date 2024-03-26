@@ -21,6 +21,7 @@ package tag
 
 import (
 	"context"
+
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
@@ -112,6 +113,15 @@ func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []strin
 
 func (tr *tagRepo) GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error) {
 	count, err = tr.data.DB.Context(ctx).Count(&entity.Tag{MainTagID: converter.StringToInt64(tagID), Status: entity.TagStatusAvailable})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetIDsByMainTagId(ctx context.Context, mainTagID string) (tagIDs []string, err error) {
+	session := tr.data.DB.Context(ctx).Table(entity.Tag{}.TableName()).Where(builder.Eq{"status": entity.TagStatusAvailable, "main_tag_id": converter.StringToInt64(mainTagID)}).Cols("id")
+	err = session.Find(&tagIDs)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

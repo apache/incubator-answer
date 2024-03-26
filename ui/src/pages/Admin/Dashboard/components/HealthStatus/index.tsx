@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
+import { siteInfoStore } from '@/stores';
 
 const { gt, gte } = require('semver');
 
@@ -33,6 +34,7 @@ interface IProps {
 const HealthStatus: FC<IProps> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.dashboard' });
   const { version, remote_version } = data.version_info || {};
+  const { siteInfo } = siteInfoStore();
   let isLatest = false;
   let hasNewerVersion = false;
   if (version && remote_version) {
@@ -42,7 +44,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h6 className="mb-3">{t('site_health_status')}</h6>
+        <h6 className="mb-3">{t('site_health')}</h6>
         <Row>
           <Col xs={6} className="mb-1 d-flex align-items-center">
             <span className="text-secondary me-1">{t('version')}</span>
@@ -65,7 +67,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
                 {t('update_to')} {remote_version}
               </a>
             )}
-            {!isLatest && !remote_version && (
+            {!isLatest && !remote_version && siteInfo.check_update && (
               <a
                 className="ms-1 badge rounded-pill text-bg-danger"
                 target="_blank"
@@ -76,28 +78,34 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             )}
           </Col>
           <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('run_mode')}</span>
+            <strong>{data.login_required ? t('private') : t('public')}</strong>
+          </Col>
+          <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('upload_folder')}</span>
+            <strong>
+              {data.uploading_files ? t('writable') : t('not_writable')}
+            </strong>
+          </Col>
+          <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('https')}</span>
             <strong>{data.https ? t('yes') : t('no')}</strong>
           </Col>
-          <Col xs={6} className="mb-1">
-            <span className="text-secondary me-1">{t('uploading_files')}</span>
+          <Col xs={6}>
+            <span className="text-secondary me-1">{t('timezone')}</span>
             <strong>
-              {data.uploading_files ? t('allowed') : t('not_allowed')}
+              {data.time_zone.split('/')?.[1]?.replaceAll('_', ' ')}
             </strong>
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('smtp')}</span>
-            {data.smtp ? (
-              <strong>{t('enabled')}</strong>
+            {data.smtp !== 'not_configured' ? (
+              <strong>{t(data.smtp)}</strong>
             ) : (
               <Link to="/admin/smtp" className="ms-2">
                 {t('config')}
               </Link>
             )}
-          </Col>
-          <Col xs={6}>
-            <span className="text-secondary me-1">{t('timezone')}</span>
-            <strong>{data.time_zone}</strong>
           </Col>
         </Row>
       </Card.Body>

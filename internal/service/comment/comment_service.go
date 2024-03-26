@@ -21,7 +21,6 @@ package comment
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/pkg/token"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -38,6 +37,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/permission"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -212,7 +212,8 @@ func (cs *CommentService) addCommentNotification(
 			resp.ReplyUserDisplayName = replyUser.DisplayName
 			resp.ReplyUserStatus = replyUser.Status
 		}
-		cs.notificationCommentReply(ctx, replyUser.ID, comment.ID, req.UserID)
+		cs.notificationCommentReply(ctx, replyUser.ID, comment.ID, req.UserID,
+			objInfo.QuestionID, objInfo.Title, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 		alreadyNotifiedUserID[replyUser.ID] = true
 		return nil, nil
 	}
@@ -228,10 +229,10 @@ func (cs *CommentService) addCommentNotification(
 
 	if objInfo.ObjectType == constant.QuestionObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
 		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID,
-			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, comment.OriginalText)
+			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 	} else if objInfo.ObjectType == constant.AnswerObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
 		cs.notificationAnswerComment(ctx, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID,
-			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, comment.OriginalText)
+			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, htmltext.FetchExcerpt(comment.ParsedText, "...", 240))
 	}
 	return nil, nil
 }
@@ -580,7 +581,8 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 	cs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }
 
-func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUserID, commentID, commentUserID string) {
+func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUserID, commentID, commentUserID,
+	questionID, questionTitle, commentSummary string) {
 	msg := &schema.NotificationMsg{
 		ReceiverUserID: replyUserID,
 		TriggerUserID:  commentUserID,
@@ -590,6 +592,35 @@ func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUse
 	msg.ObjectType = constant.CommentObjectType
 	msg.NotificationAction = constant.NotificationReplyToYou
 	cs.notificationQueueService.Send(ctx, msg)
+
+	// Send external notification.
+	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, replyUserID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !exist {
+		log.Warnf("user %s not found", replyUserID)
+		return
+	}
+	externalNotificationMsg := &schema.ExternalNotificationMsg{
+		ReceiverUserID: receiverUserInfo.ID,
+		ReceiverEmail:  receiverUserInfo.EMail,
+		ReceiverLang:   receiverUserInfo.Language,
+	}
+	rawData := &schema.NewCommentTemplateRawData{
+		QuestionTitle:   questionTitle,
+		QuestionID:      questionID,
+		CommentID:       commentID,
+		CommentSummary:  commentSummary,
+		UnsubscribeCode: token.GenerateToken(),
+	}
+	commentUser, _, _ := cs.userCommon.GetUserBasicInfoByID(ctx, commentUserID)
+	if commentUser != nil {
+		rawData.CommentUserDisplayName = commentUser.DisplayName
+	}
+	externalNotificationMsg.NewCommentTemplateRawData = rawData
+	cs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }
 
 func (cs *CommentService) notificationMention(

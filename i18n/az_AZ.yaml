@@ -355,7 +355,7 @@ ui:
             msg:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              max_size: File size cannot exceed 4 MB.
           desc:
             label: Description (optional)
       tab_url: Image URL
@@ -428,7 +428,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -466,7 +466,7 @@ ui:
           label: Display Name
         slug_name:
           label: URL Slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: URL slug up to 35 characters.
         desc:
           label: Description
         edit_summary:

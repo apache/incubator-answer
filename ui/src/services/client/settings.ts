@@ -17,10 +17,12 @@
  * under the License.
  */
 
+import qs from 'qs';
 import useSWR from 'swr';
 
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
+import type { PluginConfig } from '@/services/admin/plugins';
 
 export const getLanguageConfig = () => {
   return request.get('/answer/api/v1/language/config');
@@ -30,10 +32,12 @@ export const getLanguageOptions = () => {
   return request.get<Type.LangsType[]>('/answer/api/v1/language/options');
 };
 
-export const updateUserInterface = (lang: string) => {
-  return request.put('/answer/api/v1/user/interface', {
-    language: lang,
-  });
+interface userSettingInterface {
+  language: '';
+  color_scheme: '';
+}
+export const updateUserInterface = (data: userSettingInterface) => {
+  return request.put('/answer/api/v1/user/interface', data);
 };
 
 export const useGetNotificationConfig = () => {
@@ -45,4 +49,29 @@ export const useGetNotificationConfig = () => {
 
 export const putNotificationConfig = (data: Type.NotificationConfig) => {
   return request.put('/answer/api/v1/user/notification/config', data);
+};
+
+export const useGetUserPluginList = () => {
+  return useSWR<Type.UserPluginsConfigRes[]>(
+    '/answer/api/v1/user/plugin/configs',
+    request.instance.get,
+  );
+};
+
+export const useGetUserPluginConfig = (params) => {
+  const apiUrl = `/answer/api/v1/user/plugin/config?${qs.stringify(params)}`;
+  const { data, error, mutate } = useSWR<PluginConfig, Error>(
+    apiUrl,
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+    mutate,
+  };
+};
+
+export const updateUserPluginConfig = (params) => {
+  return request.put('/answer/api/v1/user/plugin/config', params);
 };

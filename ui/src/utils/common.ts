@@ -23,6 +23,8 @@ import pattern from '@/common/pattern';
 import { USER_AGENT_NAMES } from '@/common/constants';
 import type * as Type from '@/common/interface';
 
+const Diff = require('diff');
+
 function thousandthDivision(num) {
   const reg = /\d{1,3}(?=(\d{3})+$)/g;
   return `${num}`.replace(reg, '$&,');
@@ -108,15 +110,24 @@ function parseUserInfo(markdown) {
   return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
+function parseEditMentionUser(markdown) {
+  const globalReg = /\[@([^\]]+)\]\([^)]+\)/g;
+  return markdown.replace(globalReg, '@$1');
+}
+
 function formatUptime(value) {
   const t = i18next.t.bind(i18next);
   const second = parseInt(value, 10);
 
   if (second > 60 * 60 && second < 60 * 60 * 24) {
-    return `${Math.floor(second / 3600)} ${t('dates.hour')}`;
+    const hour = second / 3600;
+    return `${Math.floor(hour)} ${
+      hour > 1 ? t('dates.hours') : t('dates.hour')
+    }`;
   }
   if (second > 60 * 60 * 24) {
-    return `${Math.floor(second / 3600 / 24)} ${t('dates.day')}`;
+    const day = second / 3600 / 24;
+    return `${Math.floor(day)} ${day > 1 ? t('dates.days') : t('dates.day')}`;
   }
 
   return `< 1 ${t('dates.hour')}`;
@@ -166,8 +177,6 @@ function escapeHtml(str: string) {
   return str.replace(/[&<>"'`]/g, (tag) => tagsToReplace[tag] || tag);
 }
 
-const Diff = require('diff');
-
 function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
@@ -176,8 +185,9 @@ function diffText(newText: string, oldText?: string): string {
   if (typeof oldText !== 'string') {
     return escapeHtml(newText);
   }
+  let result = [];
   const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
-  const result = diff.map((part) => {
+  result = diff.map((part) => {
     if (part.added) {
       if (part.value.replace(/\n/g, '').length <= 0) {
         return `<span class="review-text-add d-block">${part.value.replace(
@@ -204,26 +214,30 @@ function diffText(newText: string, oldText?: string): string {
 }
 
 function base64ToSvg(base64: string, svgClassName?: string) {
-  // base64 to svg xml
-  const svgxml = atob(base64);
+  try {
+    // base64 to svg xml
+    const svgxml = atob(base64);
 
-  // svg add class
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(svgxml, 'image/svg+xml');
-  const parseError = doc.querySelector('parsererror');
-  const svg = doc.querySelector('svg');
-  let str = '';
-  if (svg && !parseError) {
-    if (svgClassName) {
-      svg.setAttribute('class', svgClassName);
+    // svg add class
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgxml, 'image/svg+xml');
+    const parseError = doc.querySelector('parsererror');
+    const svg = doc.querySelector('svg');
+    let str = '';
+    if (svg && !parseError) {
+      if (svgClassName) {
+        svg.setAttribute('class', svgClassName);
+      }
+      // svg.classList.add('me-2');
+
+      // transform svg to string
+      const serializer = new XMLSerializer();
+      str = serializer.serializeToString(doc);
     }
-    // svg.classList.add('me-2');
-
-    // transform svg to string
-    const serializer = new XMLSerializer();
-    str = serializer.serializeToString(doc);
+    return str;
+  } catch (error) {
+    return '';
   }
-  return str;
 }
 
 // Determine whether the user is in WeChat or Enterprise WeChat or DingTalk, and return the corresponding type
@@ -242,6 +256,21 @@ function getUaType() {
   return null;
 }
 
+function changeTheme(mode: 'default' | 'light' | 'dark' | 'system') {
+  const htmlTag = document.querySelector('html') as HTMLHtmlElement;
+  if (mode === 'system') {
+    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (systemThemeQuery.matches) {
+      htmlTag.setAttribute('data-bs-theme', 'dark');
+    } else {
+      htmlTag.setAttribute('data-bs-theme', 'light');
+    }
+  } else {
+    htmlTag.setAttribute('data-bs-theme', mode);
+  }
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -250,10 +279,12 @@ export {
   bgFadeOut,
   matchedUsers,
   parseUserInfo,
+  parseEditMentionUser,
   formatUptime,
   escapeRemove,
   handleFormError,
   diffText,
   base64ToSvg,
   getUaType,
+  changeTheme,
 };

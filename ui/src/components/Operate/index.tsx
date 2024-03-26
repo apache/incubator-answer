@@ -148,7 +148,7 @@ const Index: FC<IProps> = ({
                   msg: t('tip_answer_deleted'),
                   variant: 'success',
                 });
-                callback?.('all');
+                callback?.('delete_answer');
               })
               .catch((ex) => {
                 if (ex.isError) {

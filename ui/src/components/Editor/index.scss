@@ -20,16 +20,16 @@
 .md-editor-wrap {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  border: 1px solid #ced4da;
+  background-color: var(-bs-body-bg);
+  border: 1px solid var(--an-ced4da);
   overflow: hidden;
   .toolbar-wrap {
-    border-bottom: 1px solid #ced4da;
+    border-bottom: 1px solid var(--an-ced4da);
     .toolbar-divider {
       float: left;
       width: 1px;
       height: 15px;
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: var(--an-toolbar-divider);
       margin: 10px 8px;
     }
     .toolbar-item-wrap {
@@ -57,7 +57,7 @@
       box-sizing: border-box;
       outline: none;
       cursor: pointer;
-      background-color: #fff;
+      background-color: var(--bs-body-bg);
       height: 100%;
       width: 100%;
       border-radius: 0;
@@ -66,10 +66,10 @@
       border-radius: 3px;
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: var(--an-editor-toolbar-hover);
       }
       &:focus {
-        background-color: #dae0e5;
+        background-color: var(--ans-editor-toolbar-focus);
       }
       &.icon-heading {
         background-position: 0px -144px;
@@ -204,7 +204,7 @@
       padding: 16px 0;
     }
     .CodeMirror-placeholder {
-      color: #6c757d;
+      color: var(--an-editor-placeholder-color);
     }
   }
 }

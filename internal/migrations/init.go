@@ -72,6 +72,7 @@ func (m *Mentor) InitDB() error {
 	m.do("init site info seo config", m.initSiteInfoSEOConfig)
 	m.do("init site info user config", m.initSiteInfoUsersConfig)
 	m.do("init site info privilege rank", m.initSiteInfoPrivilegeRank)
+	m.do("init site info write", m.initSiteInfoWrite)
 	return m.err
 }
 
@@ -179,6 +180,7 @@ func (m *Mentor) initSiteInfoLoginConfig() {
 	loginConfig := map[string]bool{
 		"allow_new_registrations":   true,
 		"allow_email_registrations": true,
+		"allow_password_login":      true,
 		"login_required":            m.userData.LoginRequired,
 	}
 	loginConfigDataBytes, _ := json.Marshal(loginConfig)
@@ -238,6 +240,18 @@ func (m *Mentor) initSiteInfoPrivilegeRank() {
 	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{
 		Type:    "privileges",
 		Content: string(privilegeRankDataBytes),
+		Status:  1,
+	})
+}
+
+func (m *Mentor) initSiteInfoWrite() {
+	writeData := map[string]interface{}{
+		"restrict_answer": true,
+	}
+	writeDataBytes, _ := json.Marshal(writeData)
+	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{
+		Type:    "write",
+		Content: string(writeDataBytes),
 		Status:  1,
 	})
 }

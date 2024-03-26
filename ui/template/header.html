@@ -29,6 +29,7 @@
     <meta name="description" content="{{.description}}" data-rh="true" />
     <meta name="generator" content="Answer {{.Version}} - https://github.com/apache/incubator-answer version {{.Revision}}">
     {{if .keywords }}<meta name="keywords" content="{{.keywords}}" data-rh="true" />{{end}}
+    {{if .noindex }}<meta name="robots" content="noindex">{{end}}
 
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json" />
@@ -53,7 +54,9 @@
       href="{{.siteinfo.Branding.SquareIcon}}"
       data-rh="true"
     />
-    <script defer="defer" src="{{.scriptPath}}"></script>
+    {{range $path := .scriptPath}}
+    <script defer="defer" src="{{$path}}"></script>
+    {{end}}
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
   </head>
 

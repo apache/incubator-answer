@@ -79,7 +79,9 @@ const Index: FC<Props> = ({
         <Modal.Footer>
           {showCancel && (
             <Button variant={cancelBtnVariant} onClick={onCancel}>
-              {cancelText || t('btns.cancel')}
+              {cancelText === 'close'
+                ? t('btns.close')
+                : cancelText || t('btns.cancel')}
             </Button>
           )}
           {showConfirm && (

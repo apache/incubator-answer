@@ -155,8 +155,9 @@ func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err 
 	return
 }
 
-func (ur *userRepo) UpdateLanguage(ctx context.Context, userID, language string) (err error) {
-	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Update(&entity.User{Language: language})
+func (ur *userRepo) UpdateUserInterface(ctx context.Context, userID, language, colorSchema string) (err error) {
+	session := ur.data.DB.Context(ctx).Where("id = ?", userID)
+	_, err = session.Cols("language", "color_scheme").Update(&entity.User{Language: language, ColorScheme: colorSchema})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -236,12 +237,13 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 }
 
 func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
-	list := make([]*entity.User, 0)
-	count, err = ur.data.DB.Context(ctx).Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	session := ur.data.DB.Context(ctx)
+	session.Where("status = ? OR status = ?", entity.UserStatusAvailable, entity.UserStatusSuspended)
+	count, err = session.Count(&entity.User{})
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return
+	return count, nil
 }
 
 func (ur *userRepo) SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error) {

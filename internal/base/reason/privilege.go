@@ -20,9 +20,10 @@
 package reason
 
 const (
-	PrivilegeLevel1Desc = "privilege.level_1.description"
-	PrivilegeLevel2Desc = "privilege.level_2.description"
-	PrivilegeLevel3Desc = "privilege.level_3.description"
+	PrivilegeLevel1Desc      = "privilege.level_1.description"
+	PrivilegeLevel2Desc      = "privilege.level_2.description"
+	PrivilegeLevel3Desc      = "privilege.level_3.description"
+	PrivilegeLevelCustomDesc = "privilege.level_custom.description"
 
 	RankQuestionAddLabel               = "privilege.rank_question_add_label"
 	RankAnswerAddLabel                 = "privilege.rank_answer_add_label"

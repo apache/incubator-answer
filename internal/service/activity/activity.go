@@ -206,7 +206,7 @@ func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objec
 		if err != nil {
 			log.Error(err)
 		} else {
-			return revision.Log
+			return converter.Markdown2HTML(revision.Log)
 		}
 		return
 	}
@@ -218,7 +218,7 @@ func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objec
 		} else {
 			closeMsg := &schema.CloseQuestionMeta{}
 			if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err == nil {
-				return closeMsg.CloseMsg
+				return converter.Markdown2HTML(closeMsg.CloseMsg)
 			}
 		}
 	}

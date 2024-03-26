@@ -37,3 +37,10 @@ const (
 	// PermalinkQuestionIDByShortID /questions/11
 	PermalinkQuestionIDByShortID
 )
+
+const (
+	ColorSchemeDefault = "default"
+	ColorSchemeLight   = "light"
+	ColorSchemeDark    = "dark"
+	ColorSchemeSystem  = "system"
+)
