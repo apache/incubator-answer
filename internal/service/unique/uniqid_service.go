@@ -21,9 +21,27 @@ package unique
 
 import (
 	"context"
+	"strconv"
 )
 
 // UniqueIDRepo unique id repository
 type UniqueIDRepo interface {
 	GenUniqueIDStr(ctx context.Context, key string) (uniqueID string, err error)
+}
+
+type UniqueIDService struct {
+	
+}
+
+func NewUniqueIDService() *UniqueIDService {
+	return &UniqueIDService{}
+}
+
+func (us *UniqueIDService) GetObjectType(uniqueID string) (ObjectType int, err error) {
+	objectTypeStr := uniqueID[1:4]
+	objectType, err := strconv.Atoi(objectTypeStr)
+	if err != nil {
+		return 0, err
+	}
+	return objectType, nil
 }
