@@ -25,6 +25,10 @@ if ! [ -f "plugin_list" ]; then
   exit 0
 fi
 
+echo "Following plugins will be installed:"
+echo "$(cat plugin_list)"
+sleep 1
+
 echo "Begin build plugin..."
 sleep 1
 for repo in $(cat plugin_list); do
