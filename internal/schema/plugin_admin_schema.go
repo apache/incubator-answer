@@ -52,12 +52,12 @@ type GetAllPluginStatusResp struct {
 }
 
 type UpdatePluginStatusReq struct {
-	PluginSlugName string `validate:"required,gt=1,lte=100" json:"plugin_slug_name"`
+	PluginSlugName string `validate:"required,gt=1,lte=128" json:"plugin_slug_name"`
 	Enabled        bool   `json:"enabled"`
 }
 
 type GetPluginConfigReq struct {
-	PluginSlugName string `validate:"required,gt=1,lte=100" form:"plugin_slug_name"`
+	PluginSlugName string `validate:"required,gt=1,lte=128" form:"plugin_slug_name"`
 }
 
 type GetPluginConfigResp struct {
@@ -164,6 +164,6 @@ type OnCompleteAction struct {
 }
 
 type UpdatePluginConfigReq struct {
-	PluginSlugName string         `validate:"required,gt=1,lte=100" json:"plugin_slug_name"`
+	PluginSlugName string         `validate:"required,gt=1,lte=128" json:"plugin_slug_name"`
 	ConfigFields   map[string]any `json:"config_fields"`
 }

@@ -38,8 +38,13 @@ const HealthStatus: FC<IProps> = ({ data }) => {
   let isLatest = false;
   let hasNewerVersion = false;
   if (version && remote_version) {
-    isLatest = gte(version, remote_version);
-    hasNewerVersion = gt(remote_version, version);
+    if (version === '0.0.0') {
+      isLatest = true;
+      hasNewerVersion = false;
+    } else {
+      isLatest = gte(version, remote_version);
+      hasNewerVersion = gt(remote_version, version);
+    }
   }
   return (
     <Card className="mb-4">
@@ -50,13 +55,9 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             <span className="text-secondary me-1">{t('version')}</span>
             <strong>{version}</strong>
             {isLatest && (
-              <a
-                className="ms-1 badge rounded-pill text-bg-success"
-                target="_blank"
-                href="https://github.com/apache/incubator-answer/releases"
-                rel="noreferrer">
+              <p className="ms-1 badge rounded-pill text-bg-success">
                 {t('latest')}
-              </a>
+              </p>
             )}
             {!isLatest && hasNewerVersion && (
               <a
@@ -64,7 +65,9 @@ const HealthStatus: FC<IProps> = ({ data }) => {
                 target="_blank"
                 href="https://github.com/apache/incubator-answer/releases"
                 rel="noreferrer">
-                {t('update_to')} {remote_version}
+                {t('update_to', {
+                  version: remote_version,
+                })}
               </a>
             )}
             {!isLatest && !remote_version && siteInfo.check_update && (
@@ -74,7 +77,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
                 href="https://github.com/apache/incubator-answer/releases"
                 rel="noreferrer">
                 {t('check_failed')}
-              </a>
+              </p>
             )}
           </Col>
           <Col xs={6} className="mb-1">

@@ -110,7 +110,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
 
   return (
     <Card className="invite-answer-card position-relative border-0 mb-4">
-      <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
+      <Card.Header className="text-nowrap d-flex justify-content-between">
         {t('title')}
         {!readOnly && (
           <Button

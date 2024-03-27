@@ -210,7 +210,7 @@ type GetCommentPersonalWithPageReq struct {
 	// page size
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// username
-	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	Username string `validate:"omitempty,gt=0,lte=128" form:"username"`
 	// user id
 	UserID string `json:"-"`
 }

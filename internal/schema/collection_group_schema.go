@@ -44,7 +44,7 @@ type AddCollectionGroupReq struct {
 	//
 	UserID int64 `validate:"required" comment:"" json:"user_id"`
 	// the collection group name
-	Name string `validate:"required,gt=0,lte=50" comment:"the collection group name" json:"name"`
+	Name string `validate:"required,gt=0,lte=64" comment:"the collection group name" json:"name"`
 	// mark this group is default, default 1
 	DefaultGroup int `validate:"required" comment:"mark this group is default, default 1" json:"default_group"`
 	//
@@ -60,7 +60,7 @@ type UpdateCollectionGroupReq struct {
 	//
 	UserID int64 `validate:"omitempty" comment:"" json:"user_id"`
 	// the collection group name
-	Name string `validate:"omitempty,gt=0,lte=50" comment:"the collection group name" json:"name"`
+	Name string `validate:"omitempty,gt=0,lte=64" comment:"the collection group name" json:"name"`
 	// mark this group is default, default 1
 	DefaultGroup int `validate:"omitempty" comment:"mark this group is default, default 1" json:"default_group"`
 	//

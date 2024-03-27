@@ -312,17 +312,17 @@ func generateIndexTsContent(folders []string) string {
 	return builder.String()
 }
 
-// buildUI run pnpm install and pnpm build commands to build ui
+// buildUI run yarn and yarn react-app-rewired build commands to build ui
 func buildUI(b *buildingMaterial) (err error) {
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/apache/incubator-answer/ui")
 
-	pnpmInstallCmd := b.newExecCmd("pnpm", "pre-install")
+	pnpmInstallCmd := b.newExecCmd("yarn", "pre-install")
 	pnpmInstallCmd.Dir = localUIBuildDir
 	if err = pnpmInstallCmd.Run(); err != nil {
 		return err
 	}
 
-	pnpmBuildCmd := b.newExecCmd("pnpm", "build")
+	pnpmBuildCmd := b.newExecCmd("yarn", "react-app-rewired", "build")
 	pnpmBuildCmd.Dir = localUIBuildDir
 	if err = pnpmBuildCmd.Run(); err != nil {
 		return err

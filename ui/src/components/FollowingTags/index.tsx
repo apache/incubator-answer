@@ -76,11 +76,11 @@ const Index: FC = () => {
     </Card>
   ) : (
     <Card className="mb-4">
-      <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
+      <Card.Header className="text-nowrap d-flex justify-content-between">
         {t('following_tags')}
         <Button
           variant="link"
-          className="p-0 btn-no-border text-capitalize"
+          className="p-0 btn-no-border"
           onClick={() => setEditState(true)}>
           {t('edit')}
         </Button>

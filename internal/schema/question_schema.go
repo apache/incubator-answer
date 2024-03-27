@@ -74,9 +74,9 @@ type ReopenQuestionReq struct {
 
 type QuestionAdd struct {
 	// question title
-	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,notblank,gte=2,lte=50" json:"title"`
 	// content
-	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,notblank,gte=4,lte=99999" json:"content"`
 	// html
 	HTML string `json:"-"`
 	// tags
@@ -100,12 +100,12 @@ func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err erro
 
 type QuestionAddByAnswer struct {
 	// question title
-	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,notblank,gte=2,lte=50" json:"title"`
 	// content
-	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,notblank,gte=4,lte=99999" json:"content"`
 	// html
 	HTML          string `json:"-"`
-	AnswerContent string `validate:"required,notblank,gte=6,lte=65535" json:"answer_content"`
+	AnswerContent string `validate:"required,notblank,gte=4,lte=99999" json:"answer_content"`
 	AnswerHTML    string `json:"-"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
@@ -165,9 +165,9 @@ type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
 	// question title
-	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,notblank,gte=2,lte=50" json:"title"`
 	// content
-	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,notblank,gte=4,lte=99999" json:"content"`
 	// html
 	HTML       string   `json:"-"`
 	InviteUser []string `validate:"omitempty"  json:"invite_user"`
@@ -349,8 +349,8 @@ type QuestionPageReq struct {
 	Page      int    `validate:"omitempty,min=1" form:"page"`
 	PageSize  int    `validate:"omitempty,min=1" form:"page_size"`
 	OrderCond string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
-	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
-	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	Tag       string `validate:"omitempty,gt=0,lte=128" form:"tag"`
+	Username  string `validate:"omitempty,gt=0,lte=128" form:"username"`
 	InDays    int    `validate:"omitempty,min=1" form:"in_days"`
 
 	LoginUserID      string `json:"-"`
@@ -472,7 +472,7 @@ type PersonalQuestionPageReq struct {
 	Page        int    `validate:"omitempty,min=1" form:"page"`
 	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
 	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
-	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	Username    string `validate:"omitempty,gt=0,lte=128" form:"username"`
 	LoginUserID string `json:"-"`
 	IsAdmin     bool   `json:"-"`
 }
@@ -481,7 +481,7 @@ type PersonalAnswerPageReq struct {
 	Page        int    `validate:"omitempty,min=1" form:"page"`
 	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
 	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
-	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	Username    string `validate:"omitempty,gt=0,lte=128" form:"username"`
 	LoginUserID string `json:"-"`
 	IsAdmin     bool   `json:"-"`
 }
