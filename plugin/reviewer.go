@@ -39,6 +39,10 @@ type ReviewContent struct {
 	// Review Language, the site language. e.g. en_US
 	// The plugin may reply the review result according to the language
 	Language string
+	// The user agent of the request web browser
+	UserAgent string
+	// The IP address of the request
+	IP string
 }
 
 type ReviewContentAuthor struct {
