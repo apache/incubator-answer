@@ -99,11 +99,13 @@ func NewReviewService(
 
 // AddQuestionReview add review for question if needed
 func (cs *ReviewService) AddQuestionReview(ctx context.Context,
-	question *entity.Question, tags []*schema.TagItem) (questionStatus int) {
+	question *entity.Question, tags []*schema.TagItem, ip, ua string) (questionStatus int) {
 	reviewContent := &plugin.ReviewContent{
 		ObjectType: constant.QuestionObjectType,
 		Title:      question.Title,
 		Content:    question.ParsedText,
+		IP:         ip,
+		UserAgent:  ua,
 	}
 	for _, tag := range tags {
 		reviewContent.Tags = append(reviewContent.Tags, tag.SlugName)
@@ -123,10 +125,12 @@ func (cs *ReviewService) AddQuestionReview(ctx context.Context,
 
 // AddAnswerReview add review for answer if needed
 func (cs *ReviewService) AddAnswerReview(ctx context.Context,
-	answer *entity.Answer) (answerStatus int) {
+	answer *entity.Answer, ip, ua string) (answerStatus int) {
 	reviewContent := &plugin.ReviewContent{
 		ObjectType: constant.AnswerObjectType,
 		Content:    answer.ParsedText,
+		IP:         ip,
+		UserAgent:  ua,
 	}
 	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, answer.UserID)
 	reviewStatus := cs.callPluginToReview(ctx, answer.UserID, answer.ID, reviewContent)

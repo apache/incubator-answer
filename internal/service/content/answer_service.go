@@ -216,7 +216,7 @@ func (as *AnswerService) RecoverAnswer(ctx context.Context, req *schema.RecoverA
 	return nil
 }
 
-func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (string, error) {
+func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq, ip, ua string) (string, error) {
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return "", err
@@ -241,7 +241,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData)
+	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData, ip, ua)
 	if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, insertData.Status); err != nil {
 		return "", err
 	}
