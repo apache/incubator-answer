@@ -241,12 +241,9 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	if as.reviewService.AddAnswerReview(ctx, insertData) {
-		if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, entity.AnswerStatusAvailable); err != nil {
-			return "", err
-		} else {
-			insertData.Status = entity.AnswerStatusAvailable
-		}
+	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData)
+	if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, insertData.Status); err != nil {
+		return "", err
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
