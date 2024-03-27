@@ -35,14 +35,17 @@ import (
 type tagRelRepo struct {
 	data         *data.Data
 	uniqueIDRepo unique.UniqueIDRepo
+	uniqueIDService unique.UniqueIDService
 }
 
 // NewTagRelRepo new repository
 func NewTagRelRepo(data *data.Data,
-	uniqueIDRepo unique.UniqueIDRepo) tagcommon.TagRelRepo {
+	uniqueIDRepo unique.UniqueIDRepo,
+	uniqueIDService unique.UniqueIDService,) tagcommon.TagRelRepo {
 	return &tagRelRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,
+		uniqueIDService: uniqueIDService,
 	}
 }
 
@@ -50,6 +53,7 @@ func NewTagRelRepo(data *data.Data,
 func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error) {
 	for _, item := range tagList {
 		item.ObjectID = uid.DeShortID(item.ObjectID)
+		item.ObjectType, _ = tr.uniqueIDService.GetObjectType(item.ObjectID)
 	}
 	_, err = tr.data.DB.Context(ctx).Insert(tagList)
 	if err != nil {

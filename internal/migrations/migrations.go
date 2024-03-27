@@ -96,6 +96,7 @@ var migrations = []Migration{
 	NewMigration("v1.2.1", "add password login control", addPasswordLoginControl, true),
 	NewMigration("v1.2.5", "add notification plugin and theme config", addNotificationPluginAndThemeConfig, true),
 	NewMigration("v1.3.0", "add review", addReview, false),
+	// NewMigration("<TDB>", "tag relation refactor", refactorTagRelationTable, true),
 }
 
 func GetMigrations() []Migration {
