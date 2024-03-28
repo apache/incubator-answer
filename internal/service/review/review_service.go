@@ -119,6 +119,8 @@ func (cs *ReviewService) AddQuestionReview(ctx context.Context,
 		questionStatus = entity.QuestionStatusPending
 	case plugin.ReviewStatusDeleteDirectly:
 		questionStatus = entity.QuestionStatusDeleted
+	default:
+		questionStatus = entity.QuestionStatusAvailable
 	}
 	return questionStatus
 }
@@ -141,6 +143,8 @@ func (cs *ReviewService) AddAnswerReview(ctx context.Context,
 		answerStatus = entity.AnswerStatusPending
 	case plugin.ReviewStatusDeleteDirectly:
 		answerStatus = entity.AnswerStatusDeleted
+	default:
+		answerStatus = entity.AnswerStatusAvailable
 	}
 	return answerStatus
 }

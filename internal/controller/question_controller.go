@@ -434,10 +434,10 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		return
 	}
 
-	ua := ctx.GetHeader("User-Agent")
-	ip := ctx.ClientIP()
+	req.UserAgent = ctx.GetHeader("User-Agent")
+	req.IP = ctx.ClientIP()
 
-	resp, err := qc.questionService.AddQuestion(ctx, req, ip, ua)
+	resp, err := qc.questionService.AddQuestion(ctx, req)
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)
 		if ok {
@@ -529,9 +529,9 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		return
 	}
 
-	ua := ctx.GetHeader("User-Agent")
-	ip := ctx.ClientIP()
-	resp, err := qc.questionService.AddQuestion(ctx, questionReq, ip, ua)
+	req.UserAgent = ctx.GetHeader("User-Agent")
+	req.IP = ctx.ClientIP()
+	resp, err := qc.questionService.AddQuestion(ctx, questionReq)
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)
 		if ok {
@@ -555,7 +555,7 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		answerReq.UserID = middleware.GetLoginUserIDFromContext(ctx)
 		answerReq.Content = req.AnswerContent
 		answerReq.HTML = req.AnswerHTML
-		answerID, err := qc.answerService.Insert(ctx, answerReq, ip, ua)
+		answerID, err := qc.answerService.Insert(ctx, answerReq)
 		if err != nil {
 			handler.HandleResponse(ctx, err, nil)
 			return

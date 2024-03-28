@@ -260,10 +260,10 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		}
 	}
 
-	ua := ctx.GetHeader("User-Agent")
-	ip := ctx.ClientIP()
+	req.UserAgent = ctx.GetHeader("User-Agent")
+	req.IP = ctx.ClientIP()
 
-	answerID, err := ac.answerService.Insert(ctx, req, ip, ua)
+	answerID, err := ac.answerService.Insert(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

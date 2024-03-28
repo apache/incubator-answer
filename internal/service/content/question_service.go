@@ -258,7 +258,7 @@ func (qs *QuestionService) HasNewTag(ctx context.Context, tags []*schema.TagItem
 }
 
 // AddQuestion add question
-func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd, ip, ua string) (questionInfo any, err error) {
+func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
 	if len(req.Tags) == 0 {
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
@@ -327,7 +327,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err != nil {
 		return
 	}
-	question.Status = qs.reviewService.AddQuestionReview(ctx, question, req.Tags, ip, ua)
+	question.Status = qs.reviewService.AddQuestionReview(ctx, question, req.Tags, req.IP, req.UserAgent)
 	if err := qs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status); err != nil {
 		return nil, err
 	}
