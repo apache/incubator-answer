@@ -17,21 +17,15 @@
  * under the License.
  */
 
-import { memo, useState, FC, useEffect } from 'react';
+import { memo, FC } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 
-import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { usePromptWithUnload, useCaptchaModal } from '@/hooks';
-import { Editor, Modal, TextArea } from '@/components';
-import { FormDataType, PostAnswerReq } from '@/common/interface';
-import { postAnswer } from '@/services';
-import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
-import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
-import { writeSettingStore } from '@/stores';
+import { Editor, TextArea } from '@/components';
+import { useWriteAnswer } from '@/behaviour/useWriteAnswer';
 
 interface Props {
   visible?: boolean;
@@ -45,222 +39,47 @@ interface Props {
   callback?: (obj) => void;
 }
 
-const saveDraft = new SaveDraft({ type: 'answer' });
-
-const Index: FC<Props> = ({ visible = false, data, callback }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'question_detail.write_answer',
-  });
-  const [formData, setFormData] = useState<FormDataType>({
-    content: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
+const Index: FC<Props> = ({ visible = false, data: inputData, callback }) => {
+  const { data: writeAnswerData, methods: writeAnswerMethods } = useWriteAnswer(
+    {
+      visible,
+      data: inputData,
+      callback,
     },
-  });
-  const [showEditor, setShowEditor] = useState<boolean>(visible);
-  const [focusType, setFocusType] = useState('');
-  const [editorFocusState, setEditorFocusState] = useState(false);
-  const [hasDraft, setHasDraft] = useState(false);
-  const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
-  const aCaptcha = useCaptchaModal('answer');
-  const writeInfo = writeSettingStore((state) => state.write);
-
-  usePromptWithUnload({
-    when: Boolean(formData.content.value),
-  });
-
-  const removeDraft = () => {
-    // immediately remove debounced save
-    saveDraft.save.cancel();
-    saveDraft.remove();
-    setHasDraft(false);
-  };
-
-  useEffect(() => {
-    const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
-    if (draft?.questionId === data.qid && draft?.content) {
-      setFormData({
-        content: {
-          value: draft.content,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-      setShowEditor(true);
-      setHasDraft(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
-    const { content } = formData;
-
-    if (content.value) {
-      // save Draft
-      saveDraft.save({
-        questionId: data?.qid,
-        content: content.value,
-      });
-
-      setHasDraft(true);
-    } else if (draft?.questionId === data.qid && !content.value) {
-      removeDraft();
-    }
-  }, [formData.content.value]);
-
-  const checkValidated = (): boolean => {
-    let bol = true;
-    const { content } = formData;
-
-    if (!content.value || Array.from(content.value.trim()).length < 6) {
-      bol = false;
-      formData.content = {
-        value: content.value,
-        isInvalid: true,
-        errorMsg: t('characters'),
-      };
-    } else {
-      formData.content = {
-        value: content.value,
-        isInvalid: false,
-        errorMsg: '',
-      };
-    }
-
-    setFormData({
-      ...formData,
-    });
-    return bol;
-  };
-
-  const resetForm = () => {
-    setFormData({
-      content: {
-        value: '',
-        isInvalid: false,
-        errorMsg: '',
-      },
-    });
-  };
-
-  const deleteDraft = () => {
-    const res = window.confirm(t('discard_confirm', { keyPrefix: 'draft' }));
-    if (res) {
-      removeDraft();
-      resetForm();
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!guard.tryNormalLogged(true)) {
-      return;
-    }
-    if (!checkValidated()) {
-      return;
-    }
-
-    aCaptcha.check(() => {
-      const params: PostAnswerReq = {
-        question_id: data?.qid,
-        content: formData.content.value,
-        html: marked.parse(formData.content.value),
-      };
-      const imgCode = aCaptcha.getCaptcha();
-      if (imgCode.verify) {
-        params.captcha_code = imgCode.captcha_code;
-        params.captcha_id = imgCode.captcha_id;
-      }
-      postAnswer(params)
-        .then(async (res) => {
-          await aCaptcha.close();
-          setShowEditor(false);
-          setFormData({
-            content: {
-              value: '',
-              isInvalid: false,
-              errorMsg: '',
-            },
-          });
-          removeDraft();
-          callback?.(res.info);
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            aCaptcha.handleCaptchaError(ex.list);
-            const stateData = handleFormError(ex, formData);
-            setFormData({ ...stateData });
-          }
-        });
-    });
-  };
-
-  const clickBtn = () => {
-    if (!guard.tryNormalLogged(true)) {
-      return;
-    }
-
-    if (data?.answered && !showEditor) {
-      Modal.confirm({
-        title: t('confirm_title'),
-        content: t('confirm_info'),
-        confirmText: t('continue'),
-        onConfirm: () => {
-          setShowEditor(true);
-        },
-      });
-      return;
-    }
-
-    if (!showEditor) {
-      setShowEditor(true);
-      return;
-    }
-
-    handleSubmit();
-  };
-  const handleFocusForTextArea = (evt) => {
-    if (!guard.tryNormalLogged(true)) {
-      evt.currentTarget.blur();
-      return;
-    }
-    setFocusType('answer');
-    setShowEditor(true);
-    setEditorFocusState(true);
-  };
+  );
 
   return (
     <Form noValidate className="mt-4">
-      {(!data.answered || showEditor) && (
+      {(!inputData.answered || writeAnswerData.showEditor) && (
         <Form.Group className="mb-3">
           <Form.Label>
-            <h5>{t('title')}</h5>
+            <h5>{writeAnswerMethods.translate('title')}</h5>
           </Form.Label>
           <Form.Control
-            isInvalid={formData.content.isInvalid}
+            isInvalid={writeAnswerData.formData.content.isInvalid}
             className="d-none"
           />
-          {!showEditor && !data.answered && (
+          {!writeAnswerData.showEditor && !inputData.answered && (
             <div className="d-flex">
               <TextArea
                 className="w-100"
                 rows={8}
                 autoFocus={false}
-                onFocus={handleFocusForTextArea}
+                onFocus={writeAnswerMethods.handleFocusForTextArea}
               />
             </div>
           )}
-          {showEditor && (
+          {writeAnswerData.showEditor && (
             <>
               <Editor
                 className={classNames(
                   'form-control p-0',
-                  focusType === 'answer' && 'focus',
+                  writeAnswerData.focusType === 'answer' && 'focus',
                 )}
-                value={formData.content.value}
-                autoFocus={editorFocusState}
+                value={writeAnswerData.formData.content.value}
+                autoFocus={writeAnswerData.editorFocusState}
                 onChange={(val) => {
-                  setFormData({
+                  writeAnswerMethods.setFormData({
                     content: {
                       value: val,
                       isInvalid: false,
@@ -269,20 +88,22 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                   });
                 }}
                 onFocus={() => {
-                  setFocusType('answer');
+                  writeAnswerMethods.setFocusType('answer');
                 }}
                 onBlur={() => {
-                  setFocusType('');
+                  writeAnswerMethods.setFocusType('');
                 }}
               />
 
               <Alert
                 variant="warning"
-                show={data.loggedUserRank < 100 && showTips}
-                onClose={() => setShowTips(false)}
+                show={
+                  inputData.loggedUserRank < 100 && writeAnswerData.showTips
+                }
+                onClose={() => writeAnswerMethods.setShowTips(false)}
                 dismissible
                 className="mt-3">
-                <p>{t('tips.header_1')}</p>
+                <p>{writeAnswerMethods.translate('tips.header_1')}</p>
                 <ul>
                   <li>
                     <Trans
@@ -290,7 +111,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                       components={{ strong: <strong /> }}
                     />
                   </li>
-                  <li>{t('tips.li1_2')}</li>
+                  <li>{writeAnswerMethods.translate('tips.li1_2')}</li>
                 </ul>
                 <p>
                   <Trans
@@ -299,38 +120,48 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                   />
                 </p>
                 <ul className="mb-0">
-                  <li>{t('tips.li2_1')}</li>
+                  <li>{writeAnswerMethods.translate('tips.li2_1')}</li>
                 </ul>
               </Alert>
             </>
           )}
 
           <Form.Control.Feedback type="invalid">
-            {formData.content.errorMsg}
+            {writeAnswerData.formData.content.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
       )}
 
-      {data.answered && !showEditor ? (
+      {inputData.answered && !writeAnswerData.showEditor ? (
         // the 0th answer is the oldest one
         <Link
-          to={`/posts/${data.qid}/${data.first_answer_id}/edit`}
+          to={`/posts/${inputData.qid}/${inputData.first_answer_id}/edit`}
           className="btn btn-primary">
-          {t('edit_answer')}
+          {writeAnswerMethods.translate('edit_answer')}
         </Link>
       ) : (
-        <Button onClick={clickBtn}>{t('btn_name')}</Button>
-      )}
-
-      {data.answered && !showEditor && !writeInfo.restrict_answer && (
-        <Button onClick={clickBtn} className="ms-2 " variant="outline-primary">
-          {t('add_another_answer')}
+        <Button onClick={writeAnswerMethods.clickBtn}>
+          {writeAnswerMethods.translate('btn_name')}
         </Button>
       )}
 
-      {hasDraft && (
-        <Button variant="link" className="ms-2" onClick={deleteDraft}>
-          {t('discard_draft', { keyPrefix: 'btns' })}
+      {inputData.answered &&
+        !writeAnswerData.showEditor &&
+        !writeAnswerData.writeInfo.restrict_answer && (
+          <Button
+            onClick={writeAnswerMethods.clickBtn}
+            className="ms-2 "
+            variant="outline-primary">
+            {writeAnswerMethods.translate('add_another_answer')}
+          </Button>
+        )}
+
+      {writeAnswerData.hasDraft && (
+        <Button
+          variant="link"
+          className="ms-2"
+          onClick={writeAnswerMethods.deleteDraft}>
+          {writeAnswerMethods.translate('discard_draft', { keyPrefix: 'btns' })}
         </Button>
       )}
     </Form>
