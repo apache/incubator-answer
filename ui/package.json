@@ -16,6 +16,9 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.2.4",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.26.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.10.5",
