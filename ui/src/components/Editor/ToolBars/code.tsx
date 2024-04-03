@@ -156,8 +156,8 @@ const Code = () => {
 
   const item = {
     label: 'code',
-    keyMap: ['Ctrl-K'],
-    tip: `${t('code.text')} (Ctrl+K)`,
+    keyMap: ['Ctrl-k'],
+    tip: `${t('code.text')} (Ctrl+k)`,
   };
 
   const [code, setCode] = useState({
