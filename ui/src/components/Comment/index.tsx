@@ -178,8 +178,13 @@ const Comment = ({ objectId, mode, commentId }) => {
           })
           .catch((err) => {
             if (err.isError) {
-              editCaptcha.handleCaptchaError(err.list);
+              const captchaErr = editCaptcha.handleCaptchaError(err.list);
+              // If it is not a CAPTCHA error, leave it to the subsequent error handling logic to continue processing.
+              if (!(captchaErr && err.list.length === 1)) {
+                return Promise.reject(err);
+              }
             }
+            return Promise.resolve();
           });
       });
     }
