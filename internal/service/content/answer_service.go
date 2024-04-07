@@ -510,6 +510,18 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
+func (as *AnswerService) GetDetail(ctx context.Context, answerID string) (*schema.AnswerInfo, error) {
+	answerInfo, has, err := as.answerRepo.GetByID(ctx, answerID)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, errors.BadRequest(reason.AnswerNotFound)
+	}
+	info := as.ShowFormat(ctx, answerInfo)
+	return info, nil
+}
+
 func (as *AnswerService) GetCountByUserIDQuestionID(ctx context.Context, userId string, questionId string) (ids []string, err error) {
 	return as.answerRepo.GetIDsByUserIDAndQuestionID(ctx, userId, questionId)
 }

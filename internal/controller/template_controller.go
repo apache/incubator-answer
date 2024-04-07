@@ -218,6 +218,11 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 		}
 	}
 
+	if _, err := tc.templateRenderController.AnswerDetail(ctx, answerID); err != nil {
+		answerID = ""
+		titleIsAnswerID = false
+	}
+
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, questionID)
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID || siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {

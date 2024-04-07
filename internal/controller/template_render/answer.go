@@ -28,3 +28,7 @@ import (
 func (t *TemplateRenderController) AnswerList(ctx context.Context, req *schema.AnswerListReq) ([]*schema.AnswerInfo, int64, error) {
 	return t.answerService.SearchList(ctx, req)
 }
+
+func (t *TemplateRenderController) AnswerDetail(ctx context.Context, id string) (*schema.AnswerInfo, error) {
+	return t.answerService.GetDetail(ctx, id)
+}
