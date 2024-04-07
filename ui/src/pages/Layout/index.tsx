@@ -75,7 +75,7 @@ const Layout: FC = () => {
         }}>
         <Header />
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-        <div className="position-relative page-wrap">
+        <div className="position-relative page-wrap d-flex flex-column flex-fill">
           {httpStatusCode ? (
             <HttpErrorContent httpCode={httpStatusCode} />
           ) : (
