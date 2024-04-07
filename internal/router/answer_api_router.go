@@ -131,7 +131,6 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 	routerGroup := r.Group("", middleware.BanAPIForUserCenter)
 	routerGroup.POST("/user/login/email", a.userController.UserEmailLogin)
 	routerGroup.POST("/user/register/email", a.userController.UserRegisterByEmail)
-	routerGroup.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
 	routerGroup.POST("/user/email/verification", a.userController.UserVerifyEmail)
 	routerGroup.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)

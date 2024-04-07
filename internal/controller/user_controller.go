@@ -509,19 +509,6 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 
 }
 
-// UserRegisterCaptcha godoc
-// @Summary UserRegisterCaptcha
-// @Description UserRegisterCaptcha
-// @Tags User
-// @Accept json
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
-// @Router /answer/api/v1/user/register/captcha [get]
-func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
-	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // GetUserNotificationConfig get user's notification config
 // @Summary get user's notification config
 // @Description get user's notification config

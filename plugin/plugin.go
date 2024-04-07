@@ -93,6 +93,10 @@ func Register(p Base) {
 	if _, ok := p.(Reviewer); ok {
 		registerReviewer(p.(Reviewer))
 	}
+
+	if _, ok := p.(Captcha); ok {
+		registerCaptcha(p.(Captcha))
+	}
 }
 
 type Stack[T Base] struct {
