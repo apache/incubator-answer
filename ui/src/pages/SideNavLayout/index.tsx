@@ -27,8 +27,8 @@ import '@/common/sideNavLayout.scss';
 
 const Index: FC = () => {
   return (
-    <Container>
-      <Row>
+    <Container className="d-flex flex-column flex-fill">
+      <Row className="flex-fill">
         <SideNav />
         <Col xl={10} lg={9} md={12}>
           <Outlet />
