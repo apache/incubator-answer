@@ -35,17 +35,23 @@ import i18next from 'i18next';
 
 const I18N_NS = 'plugin';
 
-export type PluginType = 'connector' | 'search' | 'editor';
+export type PluginType = 'connector' | 'search' | 'editor' | 'route';
 export interface PluginInfo {
   slug_name: string;
   type: PluginType;
   name?: string;
   description?: string;
+  route?: string;
 }
 
 export interface Plugin {
   info: PluginInfo;
   component: NamedExoticComponent | FC;
+  i18nConfig?;
+  hooks?: {
+    useRender?: Array<(element: HTMLElement | null) => void>;
+  };
+  activated?: boolean;
 }
 
 interface I18nResource {
