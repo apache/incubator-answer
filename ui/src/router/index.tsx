@@ -21,6 +21,7 @@ import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
+import { mergeRoutePlugins } from '@/utils/pluginKit';
 
 import baseRoutes, { RouteNode } from './routes';
 import RouteGuard from './RouteGuard';
@@ -69,5 +70,6 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
 };
 
 routeWrapper(baseRoutes, routes);
+const mergedRoutes = mergeRoutePlugins(routes);
 
-export default routes as RouteObject[];
+export default mergedRoutes as RouteObject[];

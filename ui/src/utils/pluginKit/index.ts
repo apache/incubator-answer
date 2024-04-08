@@ -17,14 +17,16 @@
  * under the License.
  */
 
-import { NamedExoticComponent, FC } from 'react';
+import React from 'react';
 
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
 import type * as Type from '@/common/interface';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { getPluginsStatus } from '@/services';
+import Storage from '@/utils/storage';
 
-import { initI18nResource } from './utils';
+import { initI18nResource, Plugin, PluginInfo, PluginType } from './utils';
 
 /**
  * This information is to be defined for all components.
@@ -37,24 +39,6 @@ import { initI18nResource } from './utils';
  * @field name: Plugin name, optionally configurable. Usually read from the `i18n` file
  * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
  */
-
-export type PluginType = 'connector' | 'search' | 'editor';
-export interface PluginInfo {
-  slug_name: string;
-  type: PluginType;
-  name?: string;
-  description?: string;
-}
-
-export interface Plugin {
-  info: PluginInfo;
-  component: NamedExoticComponent | FC;
-  i18nConfig?;
-  hooks?: {
-    useRender?: Array<(element: HTMLElement | null) => void>;
-  };
-  activated?: boolean;
-}
 
 class Plugins {
   plugins: Plugin[] = [];
@@ -155,5 +139,46 @@ const useRenderHtmlPlugin = (element: HTMLElement | null) => {
     });
 };
 
-export { useRenderHtmlPlugin };
+const getRoutePlugins = () => {
+  return plugins.getPlugins().filter((plugin) => plugin.info.type === 'route');
+};
+
+const defaultProps = () => {
+  const token = Storage.get(LOGGED_TOKEN_STORAGE_KEY) || '';
+  return {
+    key: token,
+    headers: {
+      Authorization: token,
+    },
+  };
+};
+
+const mergeRoutePlugins = (routes) => {
+  const routePlugins = getRoutePlugins();
+  if (routePlugins.length === 0) {
+    return routes;
+  }
+  routes.forEach((route) => {
+    if (route.page === 'pages/Layout') {
+      route.children?.forEach((child) => {
+        if (child.page === 'pages/SideNavLayout') {
+          routePlugins.forEach((plugin) => {
+            const { slug_name, route: path } = plugin.info;
+            const Component = plugin.component;
+
+            child.children.push({
+              page: `plugin/${slug_name}`,
+              path,
+              element: React.createElement(Component, defaultProps(), null),
+            });
+          });
+        }
+      });
+    }
+  });
+  return routes;
+};
+
+export { useRenderHtmlPlugin, mergeRoutePlugins };
+export type { Plugin, PluginInfo, PluginType };
 export default plugins;
