@@ -65,6 +65,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
   const aCaptcha = useCaptchaModal('answer');
   const writeInfo = writeSettingStore((state) => state.write);
+  const [editorCanSave, setEditorCanSave] = useState(false);
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
@@ -80,6 +81,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   useEffect(() => {
     const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
     if (draft?.questionId === data.qid && draft?.content) {
+      setShowEditor(true);
       setFormData({
         content: {
           value: draft.content,
@@ -87,9 +89,11 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
           errorMsg: '',
         },
       });
-      setShowEditor(true);
       setHasDraft(true);
     }
+    setTimeout(() => {
+      setEditorCanSave(true);
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -260,13 +264,15 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 value={formData.content.value}
                 autoFocus={editorFocusState}
                 onChange={(val) => {
-                  setFormData({
-                    content: {
-                      value: val,
-                      isInvalid: false,
-                      errorMsg: '',
-                    },
-                  });
+                  if (editorCanSave) {
+                    setFormData({
+                      content: {
+                        value: val,
+                        isInvalid: false,
+                        errorMsg: '',
+                      },
+                    });
+                  }
                 }}
                 onFocus={() => {
                   setFocusType('answer');
