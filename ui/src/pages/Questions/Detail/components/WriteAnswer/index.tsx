@@ -25,7 +25,7 @@ import { Trans } from 'react-i18next';
 import classNames from 'classnames';
 
 import { Editor, TextArea } from '@/components';
-import { useWriteAnswer } from '@/behaviour/useWriteAnswer';
+import { useWriteAnswer } from '@/pages/Questions/Detail/components/WriteAnswer/useWriteAnswer';
 
 interface Props {
   visible?: boolean;
