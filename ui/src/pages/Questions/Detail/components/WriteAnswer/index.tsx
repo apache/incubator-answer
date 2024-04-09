@@ -25,7 +25,8 @@ import { Link } from 'react-router-dom';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { usePromptWithUnload, useCaptchaModal } from '@/hooks';
+import { usePromptWithUnload } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType, PostAnswerReq } from '@/common/interface';
 import { postAnswer } from '@/services';
@@ -63,7 +64,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [editorFocusState, setEditorFocusState] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
   const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
-  const aCaptcha = useCaptchaModal('answer');
+  const aCaptcha = useCaptchaPlugin('answer');
   const writeInfo = writeSettingStore((state) => state.write);
   const [editorCanSave, setEditorCanSave] = useState(false);
 
@@ -156,6 +157,40 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     }
   };
 
+  const submitAnswer = () => {
+    const params: PostAnswerReq = {
+      question_id: data?.qid,
+      content: formData.content.value,
+      html: marked.parse(formData.content.value),
+    };
+    const imgCode = aCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
+      params.captcha_code = imgCode.captcha_code;
+      params.captcha_id = imgCode.captcha_id;
+    }
+    postAnswer(params)
+      .then(async (res) => {
+        await aCaptcha?.close();
+        setShowEditor(false);
+        setFormData({
+          content: {
+            value: '',
+            isInvalid: false,
+            errorMsg: '',
+          },
+        });
+        removeDraft();
+        callback?.(res.info);
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          aCaptcha?.handleCaptchaError(ex.list);
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
+      });
+  };
+
   const handleSubmit = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
@@ -163,40 +198,11 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     if (!checkValidated()) {
       return;
     }
-
-    aCaptcha.check(() => {
-      const params: PostAnswerReq = {
-        question_id: data?.qid,
-        content: formData.content.value,
-        html: marked.parse(formData.content.value),
-      };
-      const imgCode = aCaptcha.getCaptcha();
-      if (imgCode.verify) {
-        params.captcha_code = imgCode.captcha_code;
-        params.captcha_id = imgCode.captcha_id;
-      }
-      postAnswer(params)
-        .then(async (res) => {
-          await aCaptcha.close();
-          setShowEditor(false);
-          setFormData({
-            content: {
-              value: '',
-              isInvalid: false,
-              errorMsg: '',
-            },
-          });
-          removeDraft();
-          callback?.(res.info);
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            aCaptcha.handleCaptchaError(ex.list);
-            const stateData = handleFormError(ex, formData);
-            setFormData({ ...stateData });
-          }
-        });
-    });
+    if (!aCaptcha) {
+      submitAnswer();
+      return;
+    }
+    aCaptcha.check(() => submitAnswer());
   };
 
   const clickBtn = () => {

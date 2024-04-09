@@ -121,6 +121,11 @@ class Plugins {
     return this.plugins.find((p) => p.info.slug_name === slug_name);
   }
 
+  getOnePluginHooks(slug_name: string) {
+    const plugin = this.getPlugin(slug_name);
+    return plugin?.hooks;
+  }
+
   getPlugins() {
     return this.plugins;
   }
@@ -179,6 +184,16 @@ const mergeRoutePlugins = (routes) => {
   return routes;
 };
 
-export { useRenderHtmlPlugin, mergeRoutePlugins };
+// Only one captcha type plug-in can be enabled at the same time
+const useCaptchaPlugin = (key: Type.CaptchaKey) => {
+  const captcha = plugins
+    .getPlugins()
+    .filter((plugin) => plugin.info.type === 'captcha');
+  const pluginHooks = plugins.getOnePluginHooks(captcha[0]?.info.slug_name);
+  return pluginHooks?.useCaptcha?.(key);
+};
+
 export type { Plugin, PluginInfo, PluginType };
+
+export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin };
 export default plugins;

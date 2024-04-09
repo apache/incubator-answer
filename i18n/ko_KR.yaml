@@ -1178,7 +1178,7 @@ ui:
       more: More
     tips:
       title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>user:username</1> search by author"
       answer: "<1>answers:0</1> unanswered questions"
       score: "<1>score:3</1> posts with a 3+ score"

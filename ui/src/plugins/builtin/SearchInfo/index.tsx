@@ -20,8 +20,11 @@
 import { memo, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PluginInfo } from '@/utils/pluginKit';
-import { getTransNs, getTransKeyPrefix } from '@/utils/pluginKit/utils';
+import {
+  getTransNs,
+  getTransKeyPrefix,
+  PluginInfo,
+} from '@/utils/pluginKit/utils';
 import { SvgIcon } from '@/components';
 
 import info from './info.yaml';
