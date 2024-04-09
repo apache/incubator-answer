@@ -22,7 +22,8 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { useToast, useCaptchaModal } from '@/hooks';
+import { useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { getLoggedUserInfo, changeEmail } from '@/services';
 import { handleFormError } from '@/utils';
 
@@ -45,7 +46,7 @@ const Index: FC = () => {
   });
   const [userInfo, setUserInfo] = useState<Type.UserInfoRes>();
   const toast = useToast();
-  const emailCaptcha = useCaptchaModal('edit_userinfo');
+  const emailCaptcha = useCaptchaPlugin('edit_userinfo');
 
   useEffect(() => {
     getLoggedUserInfo().then((resp) => {
@@ -66,7 +67,7 @@ const Index: FC = () => {
       formData.e_mail = {
         value: '',
         isInvalid: true,
-        errorMsg: t('email.msg'),
+        errorMsg: t('new_email.msg'),
       };
     }
 
@@ -108,14 +109,14 @@ const Index: FC = () => {
       pass: formData.pass.value,
     };
 
-    const imgCode = emailCaptcha.getCaptcha();
-    if (imgCode.verify) {
+    const imgCode = emailCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
     changeEmail(params)
       .then(async () => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         setStep(1);
         toast.onShow({
           msg: t('change_email_info'),
@@ -125,7 +126,7 @@ const Index: FC = () => {
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
         }
@@ -138,7 +139,10 @@ const Index: FC = () => {
     if (!checkValidated()) {
       return;
     }
-
+    if (!emailCaptcha) {
+      postEmail();
+      return;
+    }
     emailCaptcha.check(() => {
       postEmail();
     });
@@ -194,7 +198,7 @@ const Index: FC = () => {
           </Form.Group>
 
           <Form.Group controlId="newEmail" className="mb-3">
-            <Form.Label>{t('email.label')}</Form.Label>
+            <Form.Label>{t('new_email.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
               required

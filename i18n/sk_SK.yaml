@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         Na túto adresu sme poslali e-mail. Postupujte podľa pokynov na potvrdenie.
       email:
+        label: Email
+      new_email:
         label: New email
         msg: New email cannot be empty.
       pass:

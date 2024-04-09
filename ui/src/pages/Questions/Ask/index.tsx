@@ -27,7 +27,7 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 
-import { usePageTags, usePromptWithUnload, useCaptchaModal } from '@/hooks';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
 import type * as Type from '@/common/interface';
 import { DRAFT_QUESTION_STORAGE_KEY } from '@/common/constants';
@@ -42,6 +42,7 @@ import {
 } from '@/services';
 import { handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 import SearchQuestion from './components/SearchQuestion';
 
@@ -120,8 +121,8 @@ const Ask = () => {
 
   const isEdit = qid !== undefined;
 
-  const saveCaptcha = useCaptchaModal('question');
-  const editCaptcha = useCaptchaModal('edit');
+  const saveCaptcha = useCaptchaPlugin('question');
+  const editCaptcha = useCaptchaPlugin('edit');
 
   const removeDraft = () => {
     saveDraft.save.cancel();
@@ -276,6 +277,79 @@ const Ask = () => {
     }
   };
 
+  const submitModifyQuestion = (params) => {
+    contentChangedRef.current = false;
+    const ep = {
+      ...params,
+      id: qid,
+      edit_summary: formData.edit_summary.value,
+    };
+    const imgCode = editCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
+      ep.captcha_code = imgCode.captcha_code;
+      ep.captcha_id = imgCode.captcha_id;
+    }
+    modifyQuestion(ep)
+      .then(async (res) => {
+        await editCaptcha?.close();
+        navigate(pathFactory.questionLanding(qid, res?.url_title), {
+          state: { isReview: res?.wait_for_review },
+        });
+      })
+      .catch((err) => {
+        if (err.isError) {
+          editCaptcha?.handleCaptchaError(err.list);
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
+        }
+      });
+  };
+
+  const submitQuestion = async (params) => {
+    contentChangedRef.current = false;
+    const imgCode = saveCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
+      params.captcha_code = imgCode.captcha_code;
+      params.captcha_id = imgCode.captcha_id;
+    }
+    let res;
+    if (checked) {
+      res = await saveQuestionWithAnswer({
+        ...params,
+        answer_content: formData.answer_content.value,
+      }).catch((err) => {
+        if (err.isError) {
+          const captchaErr = saveCaptcha?.handleCaptchaError(err.list);
+          if (!(captchaErr && err.list.length === 1)) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
+          }
+        }
+      });
+    } else {
+      res = await saveQuestion(params).catch((err) => {
+        if (err.isError) {
+          const captchaErr = saveCaptcha?.handleCaptchaError(err.list);
+          if (!(captchaErr && err.list.length === 1)) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
+          }
+        }
+      });
+    }
+
+    const id = res?.id || res?.question?.id;
+    if (id) {
+      await saveCaptcha?.close();
+      if (checked) {
+        navigate(pathFactory.questionLanding(id, res?.question?.url_title));
+      } else {
+        navigate(pathFactory.questionLanding(id, res?.url_title));
+      }
+    }
+    removeDraft();
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -287,77 +361,20 @@ const Ask = () => {
     };
 
     if (isEdit) {
+      if (!editCaptcha) {
+        submitModifyQuestion(params);
+        return;
+      }
       editCaptcha.check(() => {
-        contentChangedRef.current = false;
-        const ep = {
-          ...params,
-          id: qid,
-          edit_summary: formData.edit_summary.value,
-        };
-        const imgCode = editCaptcha.getCaptcha();
-        if (imgCode.verify) {
-          ep.captcha_code = imgCode.captcha_code;
-          ep.captcha_id = imgCode.captcha_id;
-        }
-        modifyQuestion(ep)
-          .then(async (res) => {
-            await editCaptcha.close();
-            navigate(pathFactory.questionLanding(qid, res?.url_title), {
-              state: { isReview: res?.wait_for_review },
-            });
-          })
-          .catch((err) => {
-            if (err.isError) {
-              editCaptcha.handleCaptchaError(err.list);
-              const data = handleFormError(err, formData);
-              setFormData({ ...data });
-            }
-          });
+        submitModifyQuestion(params);
       });
     } else {
-      saveCaptcha.check(async () => {
-        contentChangedRef.current = false;
-        const imgCode = saveCaptcha.getCaptcha();
-        if (imgCode.verify) {
-          params.captcha_code = imgCode.captcha_code;
-          params.captcha_id = imgCode.captcha_id;
-        }
-        let res;
-        if (checked) {
-          res = await saveQuestionWithAnswer({
-            ...params,
-            answer_content: formData.answer_content.value,
-          }).catch((err) => {
-            if (err.isError) {
-              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
-              if (!(captchaErr && err.list.length === 1)) {
-                const data = handleFormError(err, formData);
-                setFormData({ ...data });
-              }
-            }
-          });
-        } else {
-          res = await saveQuestion(params).catch((err) => {
-            if (err.isError) {
-              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
-              if (!(captchaErr && err.list.length === 1)) {
-                const data = handleFormError(err, formData);
-                setFormData({ ...data });
-              }
-            }
-          });
-        }
-
-        const id = res?.id || res?.question?.id;
-        if (id) {
-          await saveCaptcha.close();
-          if (checked) {
-            navigate(pathFactory.questionLanding(id, res?.question?.url_title));
-          } else {
-            navigate(pathFactory.questionLanding(id, res?.url_title));
-          }
-        }
-        removeDraft();
+      if (!saveCaptcha) {
+        submitQuestion(params);
+        return;
+      }
+      saveCaptcha?.check(async () => {
+        submitQuestion(params);
       });
     }
   };

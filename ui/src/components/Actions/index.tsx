@@ -25,7 +25,8 @@ import classNames from 'classnames';
 
 import { Icon } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
-import { useToast, useCaptchaModal } from '@/hooks';
+import { useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { tryNormalLogged } from '@/utils/guard';
 import { bookmark, postVote } from '@/services';
 import * as Types from '@/common/interface';
@@ -56,7 +57,7 @@ const Index: FC<Props> = ({ className, data, source }) => {
   const { username = '' } = loggedUserInfoStore((state) => state.user);
   const toast = useToast();
   const { t } = useTranslation();
-  const vCaptcha = useCaptchaModal('vote');
+  const vCaptcha = useCaptchaPlugin('vote');
 
   useEffect(() => {
     if (data) {
@@ -70,6 +71,42 @@ const Index: FC<Props> = ({ className, data, source }) => {
     }
   }, []);
 
+  const submitVote = (type) => {
+    const isCancel = (type === 'up' && like) || (type === 'down' && hate);
+    const imgCode: Types.ImgCodeReq = {
+      captcha_id: undefined,
+      captcha_code: undefined,
+    };
+    vCaptcha?.resolveCaptchaReq?.(imgCode);
+
+    postVote(
+      {
+        object_id: data?.id,
+        is_cancel: isCancel,
+        ...imgCode,
+      },
+      type,
+    )
+      .then(async (res) => {
+        await vCaptcha?.close();
+        setVotes(res.votes);
+        setLike(res.vote_status === 'vote_up');
+        setHated(res.vote_status === 'vote_down');
+      })
+      .catch((err) => {
+        if (err?.isError) {
+          vCaptcha?.handleCaptchaError(err.list);
+        }
+        const errMsg = err?.value;
+        if (errMsg) {
+          toast.onShow({
+            msg: errMsg,
+            variant: 'danger',
+          });
+        }
+      });
+  };
+
   const handleVote = (type: 'up' | 'down') => {
     if (!tryNormalLogged(true)) {
       return;
@@ -82,39 +119,14 @@ const Index: FC<Props> = ({ className, data, source }) => {
       });
       return;
     }
-    const isCancel = (type === 'up' && like) || (type === 'down' && hate);
+
+    if (!vCaptcha) {
+      submitVote(type);
+      return;
+    }
+
     vCaptcha.check(() => {
-      const imgCode: Types.ImgCodeReq = {
-        captcha_id: undefined,
-        captcha_code: undefined,
-      };
-      vCaptcha.resolveCaptchaReq(imgCode);
-      postVote(
-        {
-          object_id: data?.id,
-          is_cancel: isCancel,
-          ...imgCode,
-        },
-        type,
-      )
-        .then(async (res) => {
-          await vCaptcha.close();
-          setVotes(res.votes);
-          setLike(res.vote_status === 'vote_up');
-          setHated(res.vote_status === 'vote_down');
-        })
-        .catch((err) => {
-          if (err?.isError) {
-            vCaptcha.handleCaptchaError(err.list);
-          }
-          const errMsg = err?.value;
-          if (errMsg) {
-            toast.onShow({
-              msg: errMsg,
-              variant: 'danger',
-            });
-          }
-        });
+      submitVote(type);
     });
   };
 

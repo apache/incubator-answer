@@ -518,7 +518,7 @@ ui:
     edit_tag: タグを編集
     ask_a_question: 質問を追加
     edit_question: 質問を編集
-    edit_answer: 回答を編集　
+    edit_answer: 回答を編集
     search: 検索
     posts_containing: Posts containing
     settings: 設定
@@ -763,8 +763,8 @@ ui:
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
     tip_vote: It adds something useful to the post
   edit_answer:
-    title: 回答を編集　
-    default_reason: 回答を編集　
+    title: 回答を編集
+    default_reason: 回答を編集
     default_first_reason: 回答を追加
     form:
       fields:
@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
+        label: Email
+      new_email:
         label: New email
         msg: New email cannot be empty.
       pass:
@@ -1176,7 +1178,7 @@ ui:
       more: More
     tips:
       title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>user:username</1> search by author"
       answer: "<1>answers:0</1> unanswered questions"
       score: "<1>score:3</1> posts with a 3+ score"

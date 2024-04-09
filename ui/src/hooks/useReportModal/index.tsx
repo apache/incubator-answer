@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { useToast, useCaptchaModal } from '@/hooks';
+import { useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type * as Type from '@/common/interface';
 import {
   reportList,
@@ -65,7 +66,7 @@ const useReportModal = (callback?: () => void) => {
   const [show, setShow] = useState(false);
   const [list, setList] = useState<any[]>([]);
 
-  const rCaptcha = useCaptchaModal('report');
+  const rCaptcha = useCaptchaPlugin('report');
 
   useEffect(() => {
     const div = document.createElement('div');
@@ -168,6 +169,34 @@ const useReportModal = (callback?: () => void) => {
     return true;
   };
 
+  const submitReport = (data) => {
+    const flagReq = {
+      source: data.type,
+      report_type: reportType.type,
+      object_id: data.id,
+      content: content.value,
+      captcha_code: undefined,
+      captcha_id: undefined,
+    };
+    rCaptcha?.resolveCaptchaReq(flagReq);
+
+    postReport(flagReq)
+      .then(async () => {
+        await rCaptcha?.close();
+        toast.onShow({
+          msg: t('flag_success', { keyPrefix: 'toast' }),
+          variant: 'warning',
+        });
+        onClose();
+        asyncCallback();
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          rCaptcha?.handleCaptchaError(ex.list);
+        }
+      });
+  };
+
   const handleSubmit = () => {
     if (!params) {
       return;
@@ -205,32 +234,12 @@ const useReportModal = (callback?: () => void) => {
       return;
     }
     if (!params.isBackend && params.action === 'flag') {
+      if (!rCaptcha) {
+        submitReport(params);
+        return;
+      }
       rCaptcha.check(() => {
-        const flagReq = {
-          source: params.type,
-          report_type: reportType.type,
-          object_id: params.id,
-          content: content.value,
-          captcha_code: undefined,
-          captcha_id: undefined,
-        };
-        rCaptcha.resolveCaptchaReq(flagReq);
-
-        postReport(flagReq)
-          .then(async () => {
-            await rCaptcha.close();
-            toast.onShow({
-              msg: t('flag_success', { keyPrefix: 'toast' }),
-              variant: 'warning',
-            });
-            onClose();
-            asyncCallback();
-          })
-          .catch((ex) => {
-            if (ex.isError) {
-              rCaptcha.handleCaptchaError(ex.list);
-            }
-          });
+        submitReport(params);
       });
     }
 

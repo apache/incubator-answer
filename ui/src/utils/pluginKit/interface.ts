@@ -17,25 +17,11 @@
  * under the License.
  */
 
-import { FC, memo } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Outlet } from 'react-router-dom';
+export type PluginType = 'connector' | 'search' | 'editor' | 'captcha';
 
-import { SideNav } from '@/components';
-
-import '@/common/sideNavLayout.scss';
-
-const Index: FC = () => {
-  return (
-    <Container className="d-flex flex-column flex-fill">
-      <Row className="flex-fill">
-        <SideNav />
-        <Col xl={10} lg={9} md={12}>
-          <Outlet />
-        </Col>
-      </Row>
-    </Container>
-  );
-};
-
-export default memo(Index);
+export interface PluginInfo {
+  slug_name: string;
+  type: PluginType;
+  name?: string;
+  description?: string;
+}
