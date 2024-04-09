@@ -22,7 +22,13 @@ import { useEffect, useState } from 'react';
 
 import type { Position } from 'codemirror';
 import { EditorSelection, EditorState, StateEffect } from '@codemirror/state';
-import { EditorView, keymap, KeyBinding, Command } from '@codemirror/view';
+import {
+  EditorView,
+  keymap,
+  KeyBinding,
+  Command,
+  placeholder,
+} from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
 import type CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -305,7 +311,7 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
 };
 export const useEditor = ({
   editorRef,
-  placeholder,
+  placeholder: placeholderText,
   autoFocus,
   onChange,
   onFocus,
@@ -333,7 +339,7 @@ export const useEditor = ({
       },
     });
     let startState = EditorState.create({
-      extensions: [markdown(), theme],
+      extensions: [markdown(), theme, placeholder(placeholderText)],
     });
 
     const view = new EditorView({
