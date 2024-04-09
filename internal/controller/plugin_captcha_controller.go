@@ -19,34 +19,35 @@
 
 package controller
 
-import "github.com/google/wire"
+import (
+	"encoding/json"
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
+	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/plugin"
+	"github.com/gin-gonic/gin"
 )
+
+// CaptchaController comment controller
+type CaptchaController struct {
+}
+
+// NewCaptchaController new controller
+func NewCaptchaController() *CaptchaController {
+	return &CaptchaController{}
+}
+
+type GetCaptchaConfigResp struct {
+	SlugName string         `json:"slug_name"`
+	Config   map[string]any `json:"config"`
+}
+
+// GetCaptchaConfig get captcha config
+func (uc *CaptchaController) GetCaptchaConfig(ctx *gin.Context) {
+	resp := &GetCaptchaConfigResp{}
+	_ = plugin.CallCaptcha(func(fn plugin.Captcha) error {
+		resp.SlugName = fn.Info().SlugName
+		_ = json.Unmarshal([]byte(fn.GetConfig()), &resp.Config)
+		return nil
+	})
+	handler.HandleResponse(ctx, nil, resp)
+}

@@ -81,9 +81,10 @@ func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRe
 	}
 	verificationResult := cs.ValidationStrategy(ctx, unit, req.Action)
 	if !verificationResult {
+		resp.Verify = true
 		resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
-		if len(resp.CaptchaID) > 0 {
-			resp.Verify = true
+		if err != nil {
+			log.Errorf("GenerateCaptcha error: %v", err)
 		}
 	}
 	return
@@ -132,6 +133,7 @@ func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string
 // GenerateCaptcha generate captcha
 func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase64 string, err error) {
 	realCaptcha := ""
+	key = token.GenerateToken()
 	_ = plugin.CallCaptcha(func(fn plugin.Captcha) error {
 		if captcha, code := fn.Create(); len(code) > 0 {
 			captchaBase64 = captcha
@@ -140,15 +142,11 @@ func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase
 		return nil
 	})
 	if len(realCaptcha) == 0 {
-		return "", "", nil
+		return key, captchaBase64, nil
 	}
 
-	id := token.GenerateToken()
-	err = cs.captchaRepo.SetCaptcha(ctx, id, realCaptcha)
-	if err != nil {
-		return "", "", err
-	}
-	return id, captchaBase64, nil
+	err = cs.captchaRepo.SetCaptcha(ctx, key, realCaptcha)
+	return key, captchaBase64, err
 }
 
 // VerifyCaptcha generate captcha

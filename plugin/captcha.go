@@ -21,6 +21,9 @@ package plugin
 
 type Captcha interface {
 	Base
+	// GetConfig required. Get the captcha plugin configuration.
+	// The configuration is used to generate the captcha for frontend. Such as the token for third-party service.
+	GetConfig() (configJsonStr string)
 	// Create optional. If this plugin need to create captcha via backend, implement this method.
 	// On other hand, if this plugin create captcha via third-party service, ignore this method.
 	// Return captcha: The captcha image base64 string, code: The real captcha code.
