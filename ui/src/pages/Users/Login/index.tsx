@@ -171,17 +171,6 @@ const Index: React.FC = () => {
       <WelcomeTitle />
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
-          <PluginRender
-            type="captcha"
-            slug_name="captcha_basic"
-            className="mb-5"
-          />
-
-          <PluginRender
-            type="captcha"
-            slug_name="captcha_google_v2"
-            className="mb-5"
-          />
           {ucAgentInfo ? (
             <PluginRender
               type="connector"

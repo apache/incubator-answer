@@ -188,7 +188,7 @@ const mergeRoutePlugins = (routes) => {
 const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   const captcha = plugins
     .getPlugins()
-    .filter((plugin) => plugin.info.type === 'captcha');
+    .filter((plugin) => plugin.info.type === 'captcha' && plugin.activated);
   const pluginHooks = plugins.getOnePluginHooks(captcha[0]?.info.slug_name);
   return pluginHooks?.useCaptcha?.(key);
 };
