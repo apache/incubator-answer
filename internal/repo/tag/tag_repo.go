@@ -77,7 +77,7 @@ func (tr *tagRepo) RecoverTag(ctx context.Context, tagID string) (err error) {
 	return
 }
 
-// MustGetTagByID get tag by id
+// MustGetTagByNameOrID get tag by name or id
 func (tr *tagRepo) MustGetTagByNameOrID(ctx context.Context, tagID, slugName string) (
 	tag *entity.Tag, exist bool, err error) {
 	if len(tagID) == 0 && len(slugName) == 0 {
