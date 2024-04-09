@@ -25,26 +25,7 @@ import type * as Type from '@/common/interface';
 import { getPluginsStatus } from '@/services';
 
 import { initI18nResource } from './utils';
-
-/**
- * This information is to be defined for all components.
- * It may be used for feature upgrades or version compatibility processing.
- *
- * @field slug_name: Unique identity string for the plugin, usually configured in `info.yaml`
- * @field type: The type of plugin is defined and a single type of plugin can have multiple implementations.
- *              For example, a plugin of type `connector` can have a `google` implementation and a `github` implementation.
- *              `PluginRender` automatically renders the plug-in types already included in `PluginType`.
- * @field name: Plugin name, optionally configurable. Usually read from the `i18n` file
- * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
- */
-
-export type PluginType = 'connector' | 'search' | 'editor';
-export interface PluginInfo {
-  slug_name: string;
-  type: PluginType;
-  name?: string;
-  description?: string;
-}
+import type { PluginInfo } from './interface';
 
 export interface Plugin {
   info: PluginInfo;
@@ -52,6 +33,13 @@ export interface Plugin {
   i18nConfig?;
   hooks?: {
     useRender?: Array<(element: HTMLElement | null) => void>;
+    useCaptcha?: (key: Type.CaptchaKey) => {
+      getCaptcha: () => Record<string, any>;
+      check: (t: () => void) => void;
+      handleCaptchaError: (error) => any;
+      close: () => Promise<void>;
+      resolveCaptchaReq: (data) => void;
+    };
   };
   activated?: boolean;
 }
@@ -137,6 +125,11 @@ class Plugins {
     return this.plugins.find((p) => p.info.slug_name === slug_name);
   }
 
+  getOnePluginHooks(slug_name: string) {
+    const plugin = this.getPlugin(slug_name);
+    return plugin?.hooks;
+  }
+
   getPlugins() {
     return this.plugins;
   }
@@ -155,5 +148,14 @@ const useRenderHtmlPlugin = (element: HTMLElement | null) => {
     });
 };
 
-export { useRenderHtmlPlugin };
+// Only one captcha type plug-in can be enabled at the same time
+const useCaptchaPlugin = (key: Type.CaptchaKey) => {
+  const captcha = plugins
+    .getPlugins()
+    .filter((plugin) => plugin.info.type === 'captcha');
+  const pluginHooks = plugins.getOnePluginHooks(captcha[0]?.info.slug_name);
+  return pluginHooks?.useCaptcha?.(key);
+};
+
+export { useRenderHtmlPlugin, useCaptchaPlugin };
 export default plugins;

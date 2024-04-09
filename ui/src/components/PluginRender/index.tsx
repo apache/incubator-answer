@@ -19,7 +19,8 @@
 
 import React, { FC, ReactNode } from 'react';
 
-import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
+import PluginKit, { Plugin } from '@/utils/pluginKit';
+import type { PluginType } from '@/utils/pluginKit/interface';
 /**
  * Note：Please set at least either of the `slug_name` and `type` attributes, otherwise no plugins will be rendered.
  *

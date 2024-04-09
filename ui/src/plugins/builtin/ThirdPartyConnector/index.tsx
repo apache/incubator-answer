@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
 
-import { PluginInfo } from '@/utils/pluginKit';
+import type { PluginInfo } from '@/utils/pluginKit/interface';
 import { getTransNs, getTransKeyPrefix } from '@/utils/pluginKit/utils';
 import { SvgIcon } from '@/components';
 

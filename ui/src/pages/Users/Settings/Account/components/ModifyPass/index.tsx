@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next';
 
 import classname from 'classnames';
 
-import { useToast, useCaptchaModal } from '@/hooks';
+import { useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@/services';
 import { handleFormError } from '@/utils';
@@ -54,7 +55,7 @@ const Index: FC = () => {
     },
   });
 
-  const infoCaptcha = useCaptchaModal('edit_userinfo');
+  const infoCaptcha = useCaptchaPlugin('edit_userinfo');
 
   const handleFormState = () => {
     setFormState((pre) => !pre);
@@ -134,14 +135,14 @@ const Index: FC = () => {
       pass: formData.pass.value,
     };
 
-    const imgCode = infoCaptcha.getCaptcha();
-    if (imgCode.verify) {
+    const imgCode = infoCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
     modifyPassword(params)
       .then(async () => {
-        await infoCaptcha.close();
+        await infoCaptcha?.close();
         toast.onShow({
           msg: t('update_password', { keyPrefix: 'toast' }),
           variant: 'success',
@@ -150,7 +151,7 @@ const Index: FC = () => {
       })
       .catch((err) => {
         if (err.isError) {
-          infoCaptcha.handleCaptchaError(err.list);
+          infoCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
         }
@@ -161,6 +162,10 @@ const Index: FC = () => {
     event.preventDefault();
     event.stopPropagation();
     if (!checkValidated()) {
+      return;
+    }
+    if (!infoCaptcha) {
+      postModifyPass();
       return;
     }
 

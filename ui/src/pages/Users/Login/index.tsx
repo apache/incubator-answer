@@ -22,7 +22,7 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { usePageTags, useCaptchaModal } from '@/hooks';
+import { usePageTags } from '@/hooks';
 import type { LoginReqParams, FormDataType } from '@/common/interface';
 import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import {
@@ -31,6 +31,7 @@ import {
   userCenterStore,
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { login, UcAgent } from '@/services';
 import { setupAppTheme } from '@/utils/localize';
 
@@ -68,7 +69,7 @@ const Index: React.FC = () => {
     setFormData({ ...formData, ...params });
   };
 
-  const passwordCaptcha = useCaptchaModal('password');
+  const passwordCaptcha = useCaptchaPlugin('password');
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -107,7 +108,7 @@ const Index: React.FC = () => {
       pass: formData.pass.value,
     };
 
-    const captcha = passwordCaptcha.getCaptcha();
+    const captcha = passwordCaptcha?.getCaptcha();
     if (captcha?.verify) {
       params.captcha_code = captcha.captcha_code;
       params.captcha_id = captcha.captcha_id;
@@ -115,7 +116,7 @@ const Index: React.FC = () => {
 
     login(params)
       .then(async (res) => {
-        await passwordCaptcha.close();
+        await passwordCaptcha?.close?.();
         updateUser(res);
         setupAppTheme();
         const userStat = guard.deriveLoginState();
@@ -130,7 +131,7 @@ const Index: React.FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
-          passwordCaptcha.handleCaptchaError(err.list);
+          passwordCaptcha?.handleCaptchaError?.(err.list);
         }
       });
   };
@@ -143,7 +144,12 @@ const Index: React.FC = () => {
       return;
     }
 
-    passwordCaptcha.check(() => {
+    if (!passwordCaptcha) {
+      handleLogin();
+      return;
+    }
+
+    passwordCaptcha?.check?.(() => {
       handleLogin();
     });
   };
@@ -165,6 +171,17 @@ const Index: React.FC = () => {
       <WelcomeTitle />
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
+          <PluginRender
+            type="captcha"
+            slug_name="captcha_basic"
+            className="mb-5"
+          />
+
+          <PluginRender
+            type="captcha"
+            slug_name="captcha_google_v2"
+            className="mb-5"
+          />
           {ucAgentInfo ? (
             <PluginRender
               type="connector"

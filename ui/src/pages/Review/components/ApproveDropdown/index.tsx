@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components';
 import { putFlagReviewAction } from '@/services';
-import { useCaptchaModal, useReportModal, useToast } from '@/hooks';
+import { useReportModal, useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type * as Type from '@/common/interface';
 import EditPostModal from '../EditPostModal';
 
@@ -46,10 +47,50 @@ const Index: FC<IProps> = ({
   const [showEditPostModal, setShowEditPostModal] = useState(false);
   const closeModal = useReportModal(approveCallback);
   const toast = useToast();
-  const dCaptcha = useCaptchaModal('delete');
+  const dCaptcha = useCaptchaPlugin('delete');
 
   const handleEditPostModalState = () => {
     setShowEditPostModal(!showEditPostModal);
+  };
+
+  const submitReviewAction = () => {
+    const req: Type.PutFlagReviewParams = {
+      operation_type: 'delete_post',
+      flag_id: String(itemData?.flag_id),
+      captcha_code: undefined,
+      captcha_id: undefined,
+    };
+    dCaptcha?.resolveCaptchaReq(req);
+
+    delete req.captcha_code;
+    delete req.captcha_id;
+
+    putFlagReviewAction(req)
+      .then(async () => {
+        await dCaptcha?.close();
+        let msg = '';
+        if (objectType === 'question') {
+          msg = t('post_deleted', { keyPrefix: 'messages' });
+        }
+        if (objectType === 'answer') {
+          msg = t('tip_answer_deleted');
+        }
+        if (objectType === 'answer' || objectType === 'question') {
+          toast.onShow({
+            msg,
+            variant: 'success',
+          });
+        }
+        approveCallback();
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          dCaptcha?.handleCaptchaError(ex.list);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleDelete = () => {
@@ -78,45 +119,11 @@ const Index: FC<IProps> = ({
       confirmBtnVariant: 'danger',
       confirmText: t('delete', { keyPrefix: 'btns' }),
       onConfirm: () => {
-        dCaptcha.check(() => {
-          const req: Type.PutFlagReviewParams = {
-            operation_type: 'delete_post',
-            flag_id: String(itemData?.flag_id),
-            captcha_code: undefined,
-            captcha_id: undefined,
-          };
-          dCaptcha.resolveCaptchaReq(req);
-
-          delete req.captcha_code;
-          delete req.captcha_id;
-
-          putFlagReviewAction(req)
-            .then(async () => {
-              await dCaptcha.close();
-              let msg = '';
-              if (objectType === 'question') {
-                msg = t('post_deleted', { keyPrefix: 'messages' });
-              }
-              if (objectType === 'answer') {
-                msg = t('tip_answer_deleted');
-              }
-              if (objectType === 'answer' || objectType === 'question') {
-                toast.onShow({
-                  msg,
-                  variant: 'success',
-                });
-              }
-              approveCallback();
-            })
-            .catch((ex) => {
-              if (ex.isError) {
-                dCaptcha.handleCaptchaError(ex.list);
-              }
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
-        });
+        if (!dCaptcha) {
+          submitReviewAction();
+          return;
+        }
+        dCaptcha.check(() => submitReviewAction());
       },
       onCancel: () => {
         setIsLoading(false);

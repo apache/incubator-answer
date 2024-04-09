@@ -34,7 +34,7 @@ const tagEdit = (tagId: string) => {
   return r;
 };
 
-const questionLanding = (questionId: string, slugTitle: string = '') => {
+const questionLanding = (questionId: string = '', slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
   if (!questionId) {
     return slugTitle ? `/questions/null/${slugTitle}` : '/questions/null';
