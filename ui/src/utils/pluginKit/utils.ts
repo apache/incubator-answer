@@ -57,7 +57,7 @@ export interface Plugin {
   i18nConfig?;
   hooks?: {
     useRender?: Array<(element: HTMLElement | null) => void>;
-    useCaptcha?: (key: Type.CaptchaKey) => {
+    useCaptcha?: (props: { captchaKey: Type.CaptchaKey; commonProps: any }) => {
       getCaptcha: () => Record<string, any>;
       check: (t: () => void) => void;
       handleCaptchaError: (error) => any;
