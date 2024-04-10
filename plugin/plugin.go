@@ -150,7 +150,14 @@ type statusManager struct {
 func (m *statusManager) Enable(name string, enabled bool) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+	if !enabled {
+		m.status[name] = enabled
+		return
+	}
 	m.status[name] = enabled
+	for _, slugName := range coordinatedCaptchaPlugins(name) {
+		m.status[slugName] = false
+	}
 }
 
 func (m *statusManager) IsEnabled(name string) bool {
