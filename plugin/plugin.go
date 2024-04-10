@@ -21,6 +21,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"sync"
 
 	"github.com/segmentfault/pacman/i18n"
 
@@ -142,10 +143,13 @@ func MakePlugin[T Base](super bool) (CallFn[T], RegisterFn[T]) {
 }
 
 type statusManager struct {
+	lock   sync.Mutex
 	status map[string]bool
 }
 
 func (m *statusManager) Enable(name string, enabled bool) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	m.status[name] = enabled
 }
 

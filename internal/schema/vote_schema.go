@@ -20,11 +20,11 @@
 package schema
 
 type VoteReq struct {
-	ObjectID    string `validate:"required" form:"object_id" json:"object_id"`  //	 id
-	IsCancel    bool   `validate:"omitempty" form:"is_cancel" json:"is_cancel"` // is cancel
-	UserID      string `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
+	ObjectID    string `validate:"required" json:"object_id"`
+	IsCancel    bool   `validate:"omitempty" json:"is_cancel"`
+	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
+	UserID      string `json:"-"`
 }
 
 type VoteResp struct {
