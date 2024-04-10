@@ -63,3 +63,20 @@ func CaptchaEnabled() (enabled bool) {
 	})
 	return
 }
+
+func coordinatedCaptchaPlugins(slugName string) (enabledSlugNames []string) {
+	isCaptcha := false
+	_ = callCaptcha(func(captcha Captcha) error {
+		name := captcha.Info().SlugName
+		if slugName == name {
+			isCaptcha = true
+		} else {
+			enabledSlugNames = append(enabledSlugNames, name)
+		}
+		return nil
+	})
+	if isCaptcha {
+		return enabledSlugNames
+	}
+	return nil
+}
