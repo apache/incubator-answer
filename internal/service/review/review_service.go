@@ -99,28 +99,54 @@ func NewReviewService(
 
 // AddQuestionReview add review for question if needed
 func (cs *ReviewService) AddQuestionReview(ctx context.Context,
-	question *entity.Question, tags []*schema.TagItem) (needReview bool) {
+	question *entity.Question, tags []*schema.TagItem, ip, ua string) (questionStatus int) {
 	reviewContent := &plugin.ReviewContent{
 		ObjectType: constant.QuestionObjectType,
 		Title:      question.Title,
 		Content:    question.ParsedText,
+		IP:         ip,
+		UserAgent:  ua,
 	}
 	for _, tag := range tags {
 		reviewContent.Tags = append(reviewContent.Tags, tag.SlugName)
 	}
 	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, question.UserID)
-	return cs.callPluginToReview(ctx, question.UserID, question.ID, reviewContent)
+	reviewStatus := cs.callPluginToReview(ctx, question.UserID, question.ID, reviewContent)
+	switch reviewStatus {
+	case plugin.ReviewStatusApproved:
+		questionStatus = entity.QuestionStatusAvailable
+	case plugin.ReviewStatusNeedReview:
+		questionStatus = entity.QuestionStatusPending
+	case plugin.ReviewStatusDeleteDirectly:
+		questionStatus = entity.QuestionStatusDeleted
+	default:
+		questionStatus = entity.QuestionStatusAvailable
+	}
+	return questionStatus
 }
 
 // AddAnswerReview add review for answer if needed
 func (cs *ReviewService) AddAnswerReview(ctx context.Context,
-	answer *entity.Answer) (needReview bool) {
+	answer *entity.Answer, ip, ua string) (answerStatus int) {
 	reviewContent := &plugin.ReviewContent{
 		ObjectType: constant.AnswerObjectType,
 		Content:    answer.ParsedText,
+		IP:         ip,
+		UserAgent:  ua,
 	}
 	reviewContent.Author = cs.getReviewContentAuthorInfo(ctx, answer.UserID)
-	return cs.callPluginToReview(ctx, answer.UserID, answer.ID, reviewContent)
+	reviewStatus := cs.callPluginToReview(ctx, answer.UserID, answer.ID, reviewContent)
+	switch reviewStatus {
+	case plugin.ReviewStatusApproved:
+		answerStatus = entity.AnswerStatusAvailable
+	case plugin.ReviewStatusNeedReview:
+		answerStatus = entity.AnswerStatusPending
+	case plugin.ReviewStatusDeleteDirectly:
+		answerStatus = entity.AnswerStatusDeleted
+	default:
+		answerStatus = entity.AnswerStatusAvailable
+	}
+	return answerStatus
 }
 
 // get review content author info
@@ -143,9 +169,9 @@ func (cs *ReviewService) getReviewContentAuthorInfo(ctx context.Context, userID 
 
 // call plugin to review
 func (cs *ReviewService) callPluginToReview(ctx context.Context, userID, objectID string,
-	reviewContent *plugin.ReviewContent) (approved bool) {
+	reviewContent *plugin.ReviewContent) (reviewStatus plugin.ReviewStatus) {
 	// As default, no need review
-	approved = true
+	reviewStatus = plugin.ReviewStatusApproved
 	objectID = uid.DeShortID(objectID)
 
 	r := &entity.Review{
@@ -161,23 +187,23 @@ func (cs *ReviewService) callPluginToReview(ctx context.Context, userID, objectI
 
 	_ = plugin.CallReviewer(func(reviewer plugin.Reviewer) error {
 		// If one of the reviewer plugin return false, then the review is not approved
-		if !approved {
+		if reviewStatus != plugin.ReviewStatusApproved {
 			return nil
 		}
 		if result := reviewer.Review(reviewContent); !result.Approved {
-			approved = false
+			reviewStatus = result.ReviewStatus
 			r.Reason = result.Reason
 			r.Submitter = reviewer.Info().SlugName
 		}
 		return nil
 	})
 
-	if !approved {
+	if reviewStatus == plugin.ReviewStatusNeedReview {
 		if err := cs.reviewRepo.AddReview(ctx, r); err != nil {
 			log.Errorf("add review failed, err: %v", err)
 		}
 	}
-	return approved
+	return reviewStatus
 }
 
 // UpdateReview update review

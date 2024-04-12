@@ -86,6 +86,8 @@ type QuestionAdd struct {
 	QuestionPermission
 	CaptchaID   string `json:"captcha_id"` // captcha_id
 	CaptchaCode string `json:"captcha_code"`
+	IP          string `json:"-"`
+	UserAgent   string `json:"-"`
 }
 
 func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err error) {
@@ -115,6 +117,8 @@ type QuestionAddByAnswer struct {
 	QuestionPermission
 	CaptchaID   string `json:"captcha_id"` // captcha_id
 	CaptchaCode string `json:"captcha_code"`
+	IP          string `json:"-"`
+	UserAgent   string `json:"-"`
 }
 
 func (req *QuestionAddByAnswer) Check() (errFields []*validator.FormErrorField, err error) {
