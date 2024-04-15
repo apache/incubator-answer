@@ -16,7 +16,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^0.28.1",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.10.5",
     "classnames": "^2.3.1",
