@@ -21,20 +21,16 @@ import { useEffect, useState, memo } from 'react';
 import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { EditorView } from '@codemirror/view';
 import { EditorState, StateEffect } from '@codemirror/state';
 
 import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
-import { IEditorContext } from '../types';
+import { IEditorContext, Editor } from '../types';
 import { uploadImage } from '@/services';
-import { ExtendEditor } from '../utils';
 
 let context: IEditorContext;
 const Image = ({ editorInstance }) => {
-  const [editor, setEditor] = useState<EditorView & ExtendEditor>(
-    editorInstance,
-  );
+  const [editor, setEditor] = useState<Editor>(editorInstance);
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const loadingText = `![${t('image.uploading')}...]()`;

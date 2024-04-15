@@ -1,4 +1,3 @@
-/* eslint-disable */
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,18 +19,13 @@
 
 import { useEffect, useState } from 'react';
 
-import type { Position } from 'codemirror';
+import { minimalSetup } from 'codemirror';
 import { EditorSelection, EditorState, StateEffect } from '@codemirror/state';
-import {
-  EditorView,
-  keymap,
-  KeyBinding,
-  Command,
-  placeholder,
-} from '@codemirror/view';
-import { markdown } from '@codemirror/lang-markdown';
-import type CodeMirror from 'codemirror';
-import 'codemirror/lib/codemirror.css';
+import { EditorView, keymap, KeyBinding, placeholder } from '@codemirror/view';
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { languages } from '@codemirror/language-data';
+
+import { Editor, Position } from '../types';
 
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
@@ -72,46 +66,8 @@ export function htmlRender(el: HTMLElement | null) {
     }
   });
 }
-export interface ExtendEditor {
-  addKeyMap: (keyMap: Record<string, Command>) => void;
-  on: (
-    event:
-      | 'change'
-      | 'focus'
-      | 'blur'
-      | 'dragenter'
-      | 'dragover'
-      | 'drop'
-      | 'paste',
-    callback: (e?) => void,
-  ) => void;
-  getValue: () => string;
-  setValue: (value: string) => void;
-  off: (
-    event:
-      | 'change'
-      | 'focus'
-      | 'blur'
-      | 'dragenter'
-      | 'dragover'
-      | 'drop'
-      | 'paste',
-    callback: (e?) => void,
-  ) => void;
-  getSelection: () => string;
-  replaceSelection: (value: string) => void;
-  focus: () => void;
-  wrapText: (before: string, after?: string, defaultText?: string) => void;
-  replaceLines: (
-    replace: Parameters<Array<string>['map']>[0],
-    symbolLen?: number,
-  ) => void;
-  appendBlock: (content: string) => Position;
-  getCursor: () => Position;
-  replaceRange: (value: string, from: Position, to: Position) => void;
-}
 
-const createEditorUtils = (editor: EditorView & ExtendEditor) => {
+const createEditorUtils = (editor: Editor) => {
   editor.focus = () => {
     editor.contentDOM.focus();
   };
@@ -119,9 +75,8 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
   editor.getCursor = () => {
     const range = editor.state.selection.ranges[0];
     const line = editor.state.doc.lineAt(range.from).number;
-    const from = editor.state.doc.line(line).from;
-    const to = editor.state.doc.line(line).to;
-    return { from, to, ch: range.from - from };
+    const { from, to } = editor.state.doc.line(line);
+    return { from, to, ch: range.from - from, line };
   };
 
   editor.addKeyMap = (keyMap) => {
@@ -158,6 +113,19 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
       selection: EditorSelection.cursor(
         editor.state.selection.main.from + value.length,
       ),
+    });
+  };
+
+  editor.setSelection = (anchor: Position, head?: Position) => {
+    editor.dispatch({
+      selection: EditorSelection.create([
+        EditorSelection.range(
+          editor.state.doc.line(anchor.line).from + anchor.ch,
+          head
+            ? editor.state.doc.line(head.line).from + head.ch
+            : editor.state.doc.line(anchor.line).from + anchor.ch,
+        ),
+      ]),
     });
   };
 
@@ -242,11 +210,13 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
       editor.replaceSelection(`${before}${defaultText}${after}`);
     }
   };
-  editor.replaceLines = (replace: Parameters<Array<string>['map']>[0]) => {
+  editor.replaceLines = (
+    replace: Parameters<Array<string>['map']>[0],
+    symbolLen = 0,
+  ) => {
     const range = editor.state.selection.ranges[0];
     const line = editor.state.doc.lineAt(range.from).number;
-    const from = editor.state.doc.line(line).from;
-    const to = editor.state.doc.line(line).to;
+    const { from, to } = editor.state.doc.line(line);
     const lines = editor.state.sliceDoc(from, to).split('\n');
 
     const insert = lines.map(replace).join('\n');
@@ -261,20 +231,25 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
           insert,
         },
       ],
-      selection: EditorSelection.single(selectionStart, selectionEnd),
+      selection: EditorSelection.create([
+        EditorSelection.range(selectionStart + symbolLen, selectionEnd),
+      ]),
     });
   };
 
-  editor.appendBlock = (content: string): Position => {
+  editor.appendBlock = (content: string) => {
     const range = editor.state.selection.ranges[0];
     const line = editor.state.doc.lineAt(range.from).number;
-    const from = editor.state.doc.line(line).from;
-    const to = editor.state.doc.line(line).to;
+    const { from, to } = editor.state.doc.line(line);
+
     let insert = `\n\n${content}`;
+
     let selection = EditorSelection.single(to, to + content.length);
     if (from === to) {
       insert = `${content}\n`;
-      selection = EditorSelection.single(from, from + content.length);
+      selection = EditorSelection.create([
+        EditorSelection.cursor(to + content.length),
+      ]);
     }
 
     editor.dispatch({
@@ -293,8 +268,9 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
     selectionStart: Position,
     selectionEnd: Position,
   ) => {
-    const from = selectionStart.from;
-    const to = selectionEnd.to + selectionEnd.ch;
+    const from =
+      editor.state.doc.line(selectionStart.line).from + selectionStart.ch;
+    const to = editor.state.doc.line(selectionEnd.line).from + selectionEnd.ch;
     editor.dispatch({
       changes: [
         {
@@ -309,6 +285,7 @@ const createEditorUtils = (editor: EditorView & ExtendEditor) => {
 
   return editor;
 };
+
 export const useEditor = ({
   editorRef,
   placeholder: placeholderText,
@@ -317,29 +294,41 @@ export const useEditor = ({
   onFocus,
   onBlur,
 }) => {
-  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
   const [value, setValue] = useState<string>('');
   const init = async () => {
-    const theme = EditorView.theme({
-      '&': {
-        width: '100%',
-        height: '100%',
+    const theme = EditorView.theme(
+      {
+        '&': {
+          width: '100%',
+          height: '100%',
+        },
+        '&.cm-focused': {
+          outline: 'none',
+        },
+        '.cm-content': {
+          width: '100%',
+          padding: '1rem',
+        },
+        '.cm-line': {
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          wordBreak: 'break-all',
+        },
       },
-      '&.cm-focused': {
-        outline: 'none',
-      },
-      '.cm-content': {
-        width: '100%',
-        padding: '1rem',
-      },
-      '.cm-line': {
-        whiteSpace: 'pre-wrap',
-        wordWrap: 'break-word',
-        wordBreak: 'break-all',
-      },
-    });
-    let startState = EditorState.create({
-      extensions: [markdown(), theme, placeholder(placeholderText)],
+      { dark: false },
+    );
+
+    const startState = EditorState.create({
+      extensions: [
+        minimalSetup,
+        markdown({
+          codeLanguages: languages,
+          base: markdownLanguage,
+        }),
+        theme,
+        placeholder(placeholderText),
+      ],
     });
 
     const view = new EditorView({
@@ -347,30 +336,30 @@ export const useEditor = ({
       state: startState,
     });
 
-    const editor = createEditorUtils(view as EditorView & ExtendEditor);
+    const cm = createEditorUtils(view as Editor);
 
     if (autoFocus) {
       setTimeout(() => {
-        editor.focus();
+        cm.focus();
       }, 10);
     }
 
-    editor.on('change', () => {
-      const newValue = editor.getValue();
+    cm.on('change', () => {
+      const newValue = cm.getValue();
       setValue(newValue);
     });
 
-    editor.on('focus', () => {
+    cm.on('focus', () => {
       onFocus?.();
     });
 
-    editor.on('blur', () => {
+    cm.on('blur', () => {
       onBlur?.();
     });
 
-    setEditor(editor);
+    setEditor(cm);
 
-    return editor;
+    return cm;
   };
 
   useEffect(() => {

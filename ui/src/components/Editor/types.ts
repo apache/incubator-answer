@@ -16,9 +16,54 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { EditorView, Command } from '@codemirror/view';
 
-import type { Editor } from 'codemirror';
+export interface Position {
+  ch: number;
+  line: number;
+  sticky?: string | undefined;
+}
+export interface ExtendEditor {
+  addKeyMap: (keyMap: Record<string, Command>) => void;
+  on: (
+    event:
+      | 'change'
+      | 'focus'
+      | 'blur'
+      | 'dragenter'
+      | 'dragover'
+      | 'drop'
+      | 'paste',
+    callback: (e?) => void,
+  ) => void;
+  getValue: () => string;
+  setValue: (value: string) => void;
+  off: (
+    event:
+      | 'change'
+      | 'focus'
+      | 'blur'
+      | 'dragenter'
+      | 'dragover'
+      | 'drop'
+      | 'paste',
+    callback: (e?) => void,
+  ) => void;
+  getSelection: () => string;
+  replaceSelection: (value: string) => void;
+  focus: () => void;
+  wrapText: (before: string, after?: string, defaultText?: string) => void;
+  replaceLines: (
+    replace: Parameters<Array<string>['map']>[0],
+    symbolLen?: number,
+  ) => void;
+  appendBlock: (content: string) => void;
+  getCursor: () => Position;
+  replaceRange: (value: string, from: Position, to: Position) => void;
+  setSelection: (anchor: Position, head?: Position) => void;
+}
 
+export type Editor = EditorView & ExtendEditor;
 export interface CodeMirrorEditor extends Editor {
   display: any;
 
