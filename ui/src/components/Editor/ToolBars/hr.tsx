@@ -28,8 +28,8 @@ const Hr = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'hr',
-    keyMap: ['Ctrl-R'],
-    tip: `${t('hr.text')} (Ctrl+R)`,
+    keyMap: ['Ctrl-r'],
+    tip: `${t('hr.text')} (Ctrl+r)`,
   };
   const handleClick = (ctx) => {
     context = ctx;

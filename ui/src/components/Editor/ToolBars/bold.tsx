@@ -28,8 +28,8 @@ const Bold = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'bold',
-    keyMap: ['Ctrl-B'],
-    tip: `${t('bold.text')} (Ctrl+B)`,
+    keyMap: ['Ctrl-b'],
+    tip: `${t('bold.text')} (Ctrl+b)`,
   };
   const DEFAULTTEXT = t('bold.text');
 
