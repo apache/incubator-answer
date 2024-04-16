@@ -83,7 +83,6 @@ export const useEditor = ({
     const theme = EditorView.theme(
       {
         '&': {
-          width: '100%',
           height: '100%',
         },
         '&.cm-focused': {
@@ -111,6 +110,7 @@ export const useEditor = ({
         }),
         theme,
         placeholder(placeholderText),
+        EditorView.lineWrapping,
       ],
     });
 
