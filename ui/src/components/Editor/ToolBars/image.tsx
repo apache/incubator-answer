@@ -112,7 +112,6 @@ const Image = ({ editorInstance }) => {
       return;
     }
 
-    // const startPos = editor.getCursor(''); codemirror 6
     const startPos = editor.getCursor();
 
     const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
