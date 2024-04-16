@@ -159,11 +159,21 @@ const createEditorUtils = (editor: Editor) => {
   editor.wrapText = (before: string, after = before, defaultText) => {
     const range = editor.state.selection.ranges[0];
     const selection = editor.state.sliceDoc(range.from, range.to);
-    if (selection) {
-      editor.replaceSelection(`${before}${selection}${after}`);
-    } else {
-      editor.replaceSelection(`${before}${defaultText}${after}`);
-    }
+    const text = `${before}${selection || defaultText}${after}`;
+
+    editor.dispatch({
+      changes: [
+        {
+          from: range.from,
+          to: range.to,
+          insert: text,
+        },
+      ],
+      selection: EditorSelection.range(
+        range.from + before.length,
+        range.to + before.length,
+      ),
+    });
   };
 
   editor.replaceLines = (
