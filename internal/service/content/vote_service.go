@@ -88,6 +88,9 @@ func (vs *VoteService) VoteUp(ctx context.Context, req *schema.VoteReq) (resp *s
 	if err != nil {
 		return nil, err
 	}
+	if objectInfo.IsDeleted() {
+		return nil, errors.BadRequest(reason.NewObjectAlreadyDeleted)
+	}
 	// make object id must be decoded
 	objectInfo.ObjectID = req.ObjectID
 
@@ -131,6 +134,9 @@ func (vs *VoteService) VoteDown(ctx context.Context, req *schema.VoteReq) (resp 
 	objectInfo, err := vs.objectService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
 		return nil, err
+	}
+	if objectInfo.IsDeleted() {
+		return nil, errors.BadRequest(reason.NewObjectAlreadyDeleted)
 	}
 	// make object id must be decoded
 	objectInfo.ObjectID = req.ObjectID

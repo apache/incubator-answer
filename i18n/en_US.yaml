@@ -139,6 +139,8 @@ backend:
     other: Password
   pass:
     other: Password
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Email and password do not match.
   error:
@@ -202,6 +204,8 @@ backend:
         other: The old password verification failed
       new_password_same_as_previous_setting:
         other: The new password is the same as the previous one.
+      already_deleted:
+        other: This post has been deleted.
     question:
       already_deleted:
         other: This post has been deleted.
