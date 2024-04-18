@@ -38,7 +38,7 @@ clean:
 
 install-ui-packages:
 	@corepack enable
-	@corepack prepare pnpm@latest --activate
+	@corepack prepare pnpm@8.9.2 --activate
 
 ui:
 	@cd ui && pnpm pre-install && pnpm build && cd -

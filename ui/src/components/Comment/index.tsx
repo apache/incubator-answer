@@ -74,7 +74,7 @@ const Comment = ({ objectId, mode, commentId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
 
   useEffect(() => {
-    if (pageIndex === 0 && commentId) {
+    if (pageIndex === 0 && commentId && comments.length !== 0) {
       setTimeout(() => {
         const el = document.getElementById(commentId);
         scrollToElementTop(el);
@@ -85,7 +85,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     return () => {
       updateCurrentReplyId('');
     };
-  }, []);
+  }, [comments]);
 
   useEffect(() => {
     if (!data) {
