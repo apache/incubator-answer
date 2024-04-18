@@ -36,6 +36,7 @@ const usePromptWithUnload = ({
   beforeUnload = true,
 }: PromptProps) => {
   const { t } = useTranslation('translation', { keyPrefix: 'prompt' });
+
   usePrompt({
     when,
     message: `${t('leave_page')} ${t('changes_not_save')}`,
