@@ -33,6 +33,9 @@
   .nav-link {
     color: var(--an-side-nav-link);
   }
+  .nav-link:focus-visible {
+    box-shadow: none;
+  }
   .nav-link:hover {
     color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-100);
