@@ -88,7 +88,7 @@ const Ask = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
-  const contentChangedRef = useRef(false);
+  const [blockState, setBlockState] = useState(false);
   const [focusType, setForceType] = useState('');
   const [hasDraft, setHasDraft] = useState(false);
   const resetForm = () => {
@@ -166,9 +166,9 @@ const Ask = () => {
           tags.value.map((v) => v.slug_name),
         )
       ) {
-        contentChangedRef.current = true;
+        setBlockState(true);
       } else {
-        contentChangedRef.current = false;
+        setBlockState(false);
       }
       return;
     }
@@ -189,15 +189,15 @@ const Ask = () => {
         },
         callback: () => setHasDraft(true),
       });
-      contentChangedRef.current = true;
+      setBlockState(true);
     } else {
       removeDraft();
-      contentChangedRef.current = false;
+      setBlockState(false);
     }
   }, [formData]);
 
   usePromptWithUnload({
-    when: contentChangedRef.current,
+    when: blockState,
   });
 
   const { data: revisions = [] } = useQueryRevisions(qid);
@@ -278,7 +278,6 @@ const Ask = () => {
   };
 
   const submitModifyQuestion = (params) => {
-    contentChangedRef.current = false;
     const ep = {
       ...params,
       id: qid,
@@ -306,7 +305,6 @@ const Ask = () => {
   };
 
   const submitQuestion = async (params) => {
-    contentChangedRef.current = false;
     const imgCode = saveCaptcha?.getCaptcha();
     if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
@@ -362,6 +360,7 @@ const Ask = () => {
 
     if (isEdit) {
       if (!editCaptcha) {
+        setBlockState(false);
         submitModifyQuestion(params);
         return;
       }
@@ -370,6 +369,7 @@ const Ask = () => {
       });
     } else {
       if (!saveCaptcha) {
+        setBlockState(false);
         submitQuestion(params);
         return;
       }
