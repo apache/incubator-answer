@@ -133,7 +133,7 @@ const localeDayjs = (langName) => {
 
 export const setupAppLanguage = async () => {
   const lang = getCurrentLang();
-  if (!i18next.getDataByLanguage(lang)) {
+  if (!i18next.getDataByLanguage(lang)?.translation) {
     await addI18nResource(lang);
   }
   localeDayjs(lang);
