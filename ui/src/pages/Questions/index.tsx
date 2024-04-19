@@ -53,7 +53,7 @@ const Questions: FC = () => {
     Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
   }
   const reqParams: Type.QueryQuestionsReq = {
-    page_size: 20,
+    page_size: 10,
     page: curPage,
     order: curOrder as Type.QuestionOrderBy,
   };
