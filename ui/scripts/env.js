@@ -12,10 +12,8 @@ const config = yaml.load(fs.readFileSync(configFilePath, 'utf8'));
 let envContent = 'TSC_COMPILE_ON_ERROR=true\nESLINT_NO_DEV_ERRORS=true\n';
 for (const key in config.ui) {
   const value = config.ui[key];
-  envContent += `${key.toUpperCase()}=${value}\n`;
+  envContent += `${key !== 'public_url' ? 'REACT_APP_' : ''}${key.toUpperCase()}=${value}\n`;
 }
 
 // Write .env file
 fs.writeFileSync(envFilePath, envContent);
-
-console.log(`Generated ${envFilePath}`);
