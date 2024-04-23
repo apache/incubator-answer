@@ -23,9 +23,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
+	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/repo/unique"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/log"
 
 	"github.com/apache/incubator-answer/internal/entity"
@@ -34,15 +36,14 @@ import (
 )
 
 type Mentor struct {
-	ctx          context.Context
-	engine       *xorm.Engine
-	uniqueIDRepo unique.UniqueIDRepo
-	userData     *InitNeedUserInputData
-	err          error
-	Done         bool
+	ctx      context.Context
+	engine   *xorm.Engine
+	userData *InitNeedUserInputData
+	err      error
+	Done     bool
 }
 
-func NewMentor(ctx context.Context, engine *xorm.Engine, uniqueIDRepo unique.UniqueIDRepo, data *InitNeedUserInputData) *Mentor {
+func NewMentor(ctx context.Context, engine *xorm.Engine, data *InitNeedUserInputData) *Mentor {
 	return &Mentor{ctx: ctx, engine: engine, userData: data}
 }
 
@@ -261,30 +262,101 @@ func (m *Mentor) initSiteInfoWrite() {
 }
 
 func (m *Mentor) initDefaultContent() {
-	tag := entity.Tag{
-		SlugName:     "support",
-		DisplayName:  "support",
-		OriginalText: "For general support questions.",
-		UserID:       "1",
+	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: m.engine})
+	now := time.Now()
+
+	tag_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Tag{}.TableName())
+	if err != nil {
+		m.err = err
+		return
 	}
 
-	tag.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, tag.TableName())
-	if m.err != nil {
+	q1_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	if err != nil {
+		m.err = err
 		return
+	}
+
+	a1_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	q2_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	a2_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	tag := entity.Tag{
+		ID:            tag_id,
+		SlugName:      "support",
+		DisplayName:   "support",
+		OriginalText:  "For general support questions.",
+		ParsedText:    "<p>For general support questions.</p>",
+		UserID:        "1",
+		QuestionCount: 1,
+		Status:        entity.TagStatusAvailable,
+	}
+
+	q1 := &entity.Question{
+		ID:               q1_id,
+		CreatedAt:        now,
+		UserID:           "1",
+		Title:            "What is a tag?",
+		OriginalText:     "When asking a question, we need to choose tags. What are tags and why should I use them?",
+		ParsedText:       "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
+		Pin:              entity.QuestionPin,
+		Show:             entity.QuestionShow,
+		Status:           entity.QuestionStatusAvailable,
+		AnswerCount:      1,
+		AcceptedAnswerID: a1_id,
+	}
+
+	a1 := &entity.Answer{
+		ID:           a1_id,
+		CreatedAt:    now,
+		QuestionID:   q1_id,
+		UserID:       "1",
+		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
+		ParsedText:   "<p>Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.</p>",
+		Status:       entity.AnswerStatusAvailable,
+		Accepted:     schema.AnswerAcceptedEnable,
+	}
+
+	q2 := &entity.Question{
+		ID:               q2_id,
+		CreatedAt:        now,
+		UserID:           "1",
+		Title:            "What is reputation and how do I earn them?",
+		OriginalText:     "I see that each user has reputation points, What is it and how do I earn them?",
+		ParsedText:       "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
+		Pin:              entity.QuestionPin,
+		Show:             entity.QuestionShow,
+		Status:           entity.QuestionStatusAvailable,
+		AnswerCount:      1,
+		AcceptedAnswerID: a2_id,
+	}
+
+	a2 := &entity.Answer{
+		ID:           a2_id,
+		CreatedAt:    now,
+		QuestionID:   q2_id,
+		UserID:       "1",
+		OriginalText: "Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.",
+		ParsedText:   "<p>Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.</p>",
+		Status:       entity.AnswerStatusAvailable,
+		Accepted:     schema.AnswerAcceptedEnable,
 	}
 
 	_, m.err = m.engine.Context(m.ctx).Insert(tag)
-	if m.err != nil {
-		return
-	}
-
-	var q1 = &entity.Question{
-		UserID:       "1",
-		Title:        "What is a tag?",
-		OriginalText: "When asking a question, we need to choose tags. What are tags and why should I use them?",
-	}
-
-	q1.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, q1.TableName())
 	if m.err != nil {
 		return
 	}
@@ -294,28 +366,36 @@ func (m *Mentor) initDefaultContent() {
 		return
 	}
 
-	var q1_tag_rel = &entity.TagRel{
-		ObjectID: q1.ID,
-		TagID:    tag.ID,
-	}
-
-	_, m.err = m.engine.Context(m.ctx).Insert(q1_tag_rel)
-	if m.err != nil {
-		return
-	}
-
-	var a1 = &entity.Answer{
-		QuestionID:   q1.ID,
-		UserID:       "1",
-		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
-	}
-
-	a1.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, a1.TableName())
-	if m.err != nil {
-		return
-	}
-
 	_, m.err = m.engine.Context(m.ctx).Insert(a1)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(entity.TagRel{
+		CreatedAt: now,
+		ObjectID:  q1.ID,
+		TagID:     tag.ID,
+		Status:    entity.TagRelStatusAvailable,
+	})
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(q2)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(a2)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(entity.TagRel{
+		ObjectID: q2.ID,
+		TagID:    tag.ID,
+		Status:   entity.TagRelStatusAvailable,
+	})
 	if m.err != nil {
 		return
 	}
