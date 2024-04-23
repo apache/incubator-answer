@@ -5,7 +5,7 @@
   "homepage": "/",
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "node ./scripts/env.js && react-app-rewired build",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --config ./.prettierrc.json",
     "pre-install": "node ./scripts/preinstall.js && pnpm install",
@@ -76,6 +76,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "humps": "^2.0.1",
     "husky": "^8.0.1",
+    "js-yaml": "^4.1.0",
     "lint-staged": "^13.2.3",
     "postcss": "^8.0.0",
     "prettier": "^3.1.0",

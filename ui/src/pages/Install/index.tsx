@@ -31,6 +31,7 @@ import {
 } from '@/services';
 import { Storage, handleFormError, scrollToDocTop } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
+import { BASE_ORIGIN } from '@/router/alias';
 
 import {
   FirstStep,
@@ -94,7 +95,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     site_url: {
-      value: window.location.origin,
+      value: BASE_ORIGIN,
       isInvalid: false,
       errorMsg: '',
     },

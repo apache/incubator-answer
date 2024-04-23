@@ -19,7 +19,7 @@
 
 import type { NavigateFunction } from 'react-router-dom';
 
-import { RouteAlias } from '@/router/alias';
+import { RouteAlias, REACT_BASE_PATH } from '@/router/alias';
 import Storage from '@/utils/storage';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { getLoginUrl } from '@/utils/userCenter';
@@ -133,10 +133,31 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
       handler = 'replace';
     }
     if (handler === 'href') {
+      if (
+        to.startsWith('/') &&
+        !to.startsWith('//') &&
+        !to.startsWith(REACT_BASE_PATH)
+      ) {
+        to = `${REACT_BASE_PATH}${to}`;
+      }
       window.location.href = to;
     } else if (handler === 'replace') {
+      if (
+        to.startsWith('/') &&
+        !to.startsWith('//') &&
+        !to.startsWith(REACT_BASE_PATH)
+      ) {
+        to = `${REACT_BASE_PATH}${to}`;
+      }
       window.location.replace(to);
     } else if (typeof handler === 'function') {
+      if (to === '/test') {
+        to = '/';
+      }
+
+      if (to !== '/test' && to.startsWith('/test')) {
+        to = to.replace('/test', '');
+      }
       handler(to, config.options);
     }
   }
