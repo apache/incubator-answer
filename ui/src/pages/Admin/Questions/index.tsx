@@ -91,10 +91,10 @@ const Questions: FC = () => {
           style={{ width: '12.25rem' }}
         />
       </div>
-      <Table>
+      <Table responsive>
         <thead>
           <tr>
-            <th>{t('post')}</th>
+            <th className="post-column">{t('post')}</th>
             <th style={{ width: '8%' }}>{t('votes')}</th>
             <th style={{ width: '8%' }}>{t('answers')}</th>
             <th style={{ width: '15%' }}>{t('created')}</th>
