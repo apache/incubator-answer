@@ -23,7 +23,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/log"
 
 	"github.com/apache/incubator-answer/internal/entity"
@@ -32,14 +34,15 @@ import (
 )
 
 type Mentor struct {
-	ctx      context.Context
-	engine   *xorm.Engine
-	userData *InitNeedUserInputData
-	err      error
-	Done     bool
+	ctx          context.Context
+	engine       *xorm.Engine
+	uniqueIDRepo unique.UniqueIDRepo
+	userData     *InitNeedUserInputData
+	err          error
+	Done         bool
 }
 
-func NewMentor(ctx context.Context, engine *xorm.Engine, data *InitNeedUserInputData) *Mentor {
+func NewMentor(ctx context.Context, engine *xorm.Engine, uniqueIDRepo unique.UniqueIDRepo, data *InitNeedUserInputData) *Mentor {
 	return &Mentor{ctx: ctx, engine: engine, userData: data}
 }
 
@@ -73,6 +76,7 @@ func (m *Mentor) InitDB() error {
 	m.do("init site info user config", m.initSiteInfoUsersConfig)
 	m.do("init site info privilege rank", m.initSiteInfoPrivilegeRank)
 	m.do("init site info write", m.initSiteInfoWrite)
+	m.do("init default content", m.initDefaultContent)
 	return m.err
 }
 
@@ -254,4 +258,65 @@ func (m *Mentor) initSiteInfoWrite() {
 		Content: string(writeDataBytes),
 		Status:  1,
 	})
+}
+
+func (m *Mentor) initDefaultContent() {
+	tag := entity.Tag{
+		SlugName:     "support",
+		DisplayName:  "support",
+		OriginalText: "For general support questions.",
+		UserID:       "1",
+	}
+
+	tag.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, tag.TableName())
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(tag)
+	if m.err != nil {
+		return
+	}
+
+	var q1 = &entity.Question{
+		UserID:       "1",
+		Title:        "What is a tag?",
+		OriginalText: "When asking a question, we need to choose tags. What are tags and why should I use them?",
+	}
+
+	q1.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, q1.TableName())
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(q1)
+	if m.err != nil {
+		return
+	}
+
+	var q1_tag_rel = &entity.TagRel{
+		ObjectID: q1.ID,
+		TagID:    tag.ID,
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(q1_tag_rel)
+	if m.err != nil {
+		return
+	}
+
+	var a1 = &entity.Answer{
+		QuestionID:   q1.ID,
+		UserID:       "1",
+		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
+	}
+
+	a1.ID, m.err = m.uniqueIDRepo.GenUniqueIDStr(m.ctx, a1.TableName())
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(a1)
+	if m.err != nil {
+		return
+	}
 }
