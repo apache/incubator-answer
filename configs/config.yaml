@@ -35,6 +35,6 @@ service_config:
   upload_path: "/data/uploads"
 ui:
   public_url: '/'
-  react_app_api_url: '/'
-  react_app_base_url: '/test'
+  api_url: '/'
+  base_url: ''
 
