@@ -265,38 +265,38 @@ func (m *Mentor) initDefaultContent() {
 	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: m.engine})
 	now := time.Now()
 
-	tag_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Tag{}.TableName())
+	tagId, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Tag{}.TableName())
 	if err != nil {
 		m.err = err
 		return
 	}
 
-	q1_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	q1Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
 	if err != nil {
 		m.err = err
 		return
 	}
 
-	a1_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	a1Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
 	if err != nil {
 		m.err = err
 		return
 	}
 
-	q2_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	q2Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
 	if err != nil {
 		m.err = err
 		return
 	}
 
-	a2_id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	a2Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
 	if err != nil {
 		m.err = err
 		return
 	}
 
 	tag := entity.Tag{
-		ID:            tag_id,
+		ID:            tagId,
 		SlugName:      "support",
 		DisplayName:   "support",
 		OriginalText:  "For general support questions.",
@@ -307,53 +307,47 @@ func (m *Mentor) initDefaultContent() {
 	}
 
 	q1 := &entity.Question{
-		ID:               q1_id,
-		CreatedAt:        now,
-		UserID:           "1",
-		Title:            "What is a tag?",
-		OriginalText:     "When asking a question, we need to choose tags. What are tags and why should I use them?",
-		ParsedText:       "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
-		Pin:              entity.QuestionPin,
-		Show:             entity.QuestionShow,
-		Status:           entity.QuestionStatusAvailable,
-		AnswerCount:      1,
-		AcceptedAnswerID: a1_id,
+		ID:           q1Id,
+		CreatedAt:    now,
+		UserID:       "1",
+		Title:        "What is a tag?",
+		OriginalText: "When asking a question, we need to choose tags. What are tags and why should I use them?",
+		ParsedText:   "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
+		Show:         entity.QuestionShow,
+		Status:       entity.QuestionStatusAvailable,
+		AnswerCount:  1,
 	}
 
 	a1 := &entity.Answer{
-		ID:           a1_id,
+		ID:           a1Id,
 		CreatedAt:    now,
-		QuestionID:   q1_id,
+		QuestionID:   q1Id,
 		UserID:       "1",
 		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
 		ParsedText:   "<p>Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.</p>",
 		Status:       entity.AnswerStatusAvailable,
-		Accepted:     schema.AnswerAcceptedEnable,
 	}
 
 	q2 := &entity.Question{
-		ID:               q2_id,
-		CreatedAt:        now,
-		UserID:           "1",
-		Title:            "What is reputation and how do I earn them?",
-		OriginalText:     "I see that each user has reputation points, What is it and how do I earn them?",
-		ParsedText:       "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
-		Pin:              entity.QuestionPin,
-		Show:             entity.QuestionShow,
-		Status:           entity.QuestionStatusAvailable,
-		AnswerCount:      1,
-		AcceptedAnswerID: a2_id,
+		ID:           q2Id,
+		CreatedAt:    now,
+		UserID:       "1",
+		Title:        "What is reputation and how do I earn them?",
+		OriginalText: "I see that each user has reputation points, What is it and how do I earn them?",
+		ParsedText:   "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
+		Show:         entity.QuestionShow,
+		Status:       entity.QuestionStatusAvailable,
+		AnswerCount:  1,
 	}
 
 	a2 := &entity.Answer{
-		ID:           a2_id,
+		ID:           a2Id,
 		CreatedAt:    now,
-		QuestionID:   q2_id,
+		QuestionID:   q2Id,
 		UserID:       "1",
 		OriginalText: "Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.",
 		ParsedText:   "<p>Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.</p>",
 		Status:       entity.AnswerStatusAvailable,
-		Accepted:     schema.AnswerAcceptedEnable,
 	}
 
 	_, m.err = m.engine.Context(m.ctx).Insert(tag)
@@ -372,10 +366,9 @@ func (m *Mentor) initDefaultContent() {
 	}
 
 	_, m.err = m.engine.Context(m.ctx).Insert(entity.TagRel{
-		CreatedAt: now,
-		ObjectID:  q1.ID,
-		TagID:     tag.ID,
-		Status:    entity.TagRelStatusAvailable,
+		ObjectID: q1.ID,
+		TagID:    tag.ID,
+		Status:   entity.TagRelStatusAvailable,
 	})
 	if m.err != nil {
 		return
