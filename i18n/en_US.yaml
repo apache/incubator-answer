@@ -1199,6 +1199,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Search Results
     keywords: Keywords
