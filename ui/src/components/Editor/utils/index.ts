@@ -127,7 +127,7 @@ export function htmlRender(el: HTMLElement | null) {
     div.appendChild(table);
   });
 
-  // add rel nofollow for link not inlcludes domain
+  // add rel nofollow for link not includes domain
   el.querySelectorAll('a').forEach((a) => {
     const base = window.location.origin;
     const targetUrl = new URL(a.href, base);
