@@ -79,7 +79,7 @@ const Questions: FC = () => {
           data={questionFilterItems}
           currentSort={curFilter}
           sortKey="status"
-          i18nKeyPrefix="btns"
+          i18nKeyPrefix=""
         />
 
         <Form.Control
