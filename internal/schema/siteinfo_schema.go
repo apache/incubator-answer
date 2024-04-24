@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"net/mail"
 	"net/url"
+	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -49,6 +50,10 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 		return
 	}
 	r.SiteUrl = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
+	if len(parsedUrl.Path) > 0 {
+		r.SiteUrl = r.SiteUrl + parsedUrl.Path
+		r.SiteUrl = strings.TrimSuffix(r.SiteUrl, "/")
+	}
 }
 
 // SiteInterfaceReq site interface request

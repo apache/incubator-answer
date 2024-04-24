@@ -40,7 +40,7 @@
                 <div class="mb-4 col-lg-3 col-md-4 col-sm-6 col-12">
                     <div class="h-100 card">
                         <div class="d-flex flex-column align-items-start card-body">
-                            <a href="/tags/{{.SlugName}}" class="badge-tag rounded-1 mb-3"><span
+                            <a href="{{$.baseURL}}/tags/{{.SlugName}}" class="badge-tag rounded-1 mb-3"><span
                                     class="">{{.SlugName}}</span></a>
                             <p class="small flex-fill text-break text-wrap text-truncate-4">{{formatLinkNofollow .ParsedText}}
                             </p>

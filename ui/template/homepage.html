@@ -23,12 +23,12 @@
                 <div class="justify-content-center row">
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div class="d-flex flex-column flex-md-row mb-4">
-                            <a href="/users/{{.userinfo.Username}}"><img
+                            <a href="{{$.baseURL}}/users/{{.userinfo.Username}}"><img
                                     src="{{.userinfo.Avatar}}"
                                     width="160px" height="160px" class="rounded" alt="" /></a>
                             <div class="ms-0 ms-md-4 mt-4 mt-md-0">
                                 <div class="d-flex align-items-center mb-2">
-                                    <a class="link-dark h3 mb-0" href="/users/{{.userinfo.Username}}">{{.userinfo.DisplayName}}</a>
+                                    <a class="link-dark h3 mb-0" href="{{$.baseURL}}/users/{{.userinfo.Username}}">{{.userinfo.DisplayName}}</a>
 
                                 </div>
                                 <div class="text-secondary mb-4">@{{.userinfo.Username}}</div>

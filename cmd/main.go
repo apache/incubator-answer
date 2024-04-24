@@ -72,7 +72,7 @@ func runApp() {
 		panic(err)
 	}
 	app, cleanup, err := initApplication(
-		c.Debug, c.Server, c.Data.Database, c.Data.Cache, c.I18n, c.Swaggerui, c.ServiceConfig, log.GetLogger())
+		c.Debug, c.Server, c.Data.Database, c.Data.Cache, c.I18n, c.Swaggerui, c.ServiceConfig, c.UI, log.GetLogger())
 	if err != nil {
 		panic(err)
 	}
