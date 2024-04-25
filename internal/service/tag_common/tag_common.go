@@ -321,10 +321,10 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 	if exist {
 		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
-	SlugName := strings.ReplaceAll(req.SlugName, " ", "-")
-	SlugName = strings.ToLower(SlugName)
+	slugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	slugName = strings.ToLower(slugName)
 	tagInfo := &entity.Tag{
-		SlugName:     SlugName,
+		SlugName:     slugName,
 		DisplayName:  req.DisplayName,
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
@@ -844,7 +844,10 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		return nil
 	}
 
-	tagInfo.SlugName = req.SlugName
+	//Adding equivalent slug formatting for tag update
+	slugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	slugName = strings.ToLower(slugName)
+	tagInfo.SlugName = slugName
 	tagInfo.DisplayName = req.DisplayName
 	tagInfo.OriginalText = req.OriginalText
 	tagInfo.ParsedText = req.ParsedText
