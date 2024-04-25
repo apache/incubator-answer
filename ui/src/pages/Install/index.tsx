@@ -29,7 +29,12 @@ import {
   installBaseInfo,
   checkConfigFileExists,
 } from '@/services';
-import { Storage, handleFormError, scrollToDocTop } from '@/utils';
+import {
+  Storage,
+  handleFormError,
+  scrollToDocTop,
+  scrollToElementTop,
+} from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 
 import {
@@ -201,6 +206,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         } else {
           handleErr(err);
         }

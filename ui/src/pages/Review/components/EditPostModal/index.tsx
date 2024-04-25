@@ -32,6 +32,7 @@ import {
   parseUserInfo,
   handleFormError,
   parseEditMentionUser,
+  scrollToElementTop,
 } from '@/utils';
 import type * as Type from '@/common/interface';
 
@@ -158,6 +159,15 @@ const Index: FC<Props> = ({
     setFormData({
       ...formData,
     });
+
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -202,6 +212,9 @@ const Index: FC<Props> = ({
           editCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

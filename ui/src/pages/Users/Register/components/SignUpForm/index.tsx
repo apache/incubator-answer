@@ -26,7 +26,7 @@ import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type { FormDataType, RegisterReqParams } from '@/common/interface';
 import { register } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { useLegalClick } from '@/behaviour/useLegalClick';
 
 interface Props {
@@ -84,6 +84,13 @@ const Index: React.FC<Props> = ({ callback }) => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
     return bol;
   };
 
@@ -116,6 +123,8 @@ const Index: React.FC<Props> = ({ callback }) => {
           emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

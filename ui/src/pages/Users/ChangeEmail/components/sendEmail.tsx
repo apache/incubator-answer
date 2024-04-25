@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import type { PasswordResetReq, FormDataType } from '@/common/interface';
 import { loggedUserInfoStore } from '@/stores';
 import { changeEmail } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 const Index: FC = () => {
@@ -89,6 +89,8 @@ const Index: FC = () => {
           emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

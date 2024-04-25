@@ -30,7 +30,13 @@ import {
   loginSettingStore,
   userCenterStore,
 } from '@/stores';
-import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
+import {
+  floppyNavigation,
+  guard,
+  handleFormError,
+  userCenter,
+  scrollToElementTop,
+} from '@/utils';
 import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { login, UcAgent } from '@/services';
 import { setupAppTheme } from '@/utils/localize';
@@ -96,6 +102,14 @@ const Index: React.FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -132,6 +146,8 @@ const Index: React.FC = () => {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
           passwordCaptcha?.handleCaptchaError?.(err.list);
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -221,7 +237,7 @@ const Index: React.FC = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId="password" className="mb-3">
+                <Form.Group controlId="pass" className="mb-3">
                   <div className="d-flex justify-content-between">
                     <Form.Label>{t('password.label')}</Form.Label>
                     <Link to="/users/account-recovery" tabIndex={2}>

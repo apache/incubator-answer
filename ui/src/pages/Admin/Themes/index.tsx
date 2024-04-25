@@ -24,7 +24,7 @@ import type * as Type from '@/common/interface';
 import { getThemeSetting, putThemeSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { themeSettingStore } from '@/stores';
 import { setupAppTheme } from '@/utils/localize';
 
@@ -135,6 +135,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
