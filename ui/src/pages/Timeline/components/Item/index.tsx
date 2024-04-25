@@ -70,7 +70,7 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
           <br />
           {data.cancelled_at > 0 && <FormatTime time={data.cancelled_at} />}
         </td>
-        <td>
+        <td className="text-nowrap">
           {(data.activity_type === 'rollback' ||
             data.activity_type === 'edited' ||
             data.activity_type === 'asked' ||
@@ -139,7 +139,6 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
         </td>
       </tr>
       <tr className={isOpen ? '' : 'd-none'}>
-        {/* <td /> */}
         <td colSpan={5} className="p-0 py-5">
           <Row className="justify-content-center">
             <Col xxl={8}>
