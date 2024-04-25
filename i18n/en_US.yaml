@@ -1819,6 +1819,9 @@ ui:
       level:
         label: Reputation required level
         text: Choose the reputation required for the privileges
+      msg:
+        should_be_number: the input should be number
+        number_larger_1 : number should be equal or larger than 1
 
   form:
     optional: (optional)
