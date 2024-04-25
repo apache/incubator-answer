@@ -50,6 +50,8 @@ const Index = ({ userName, onSendReply, onCancel, mode }) => {
     });
   };
 
+  console.log('userName:', pageUsers.getUsers());
+
   return (
     <div className="mb-2">
       <div className="small mb-2">
