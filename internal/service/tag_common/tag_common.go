@@ -837,16 +837,18 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 	if !exist {
 		return errors.BadRequest(reason.TagNotFound)
 	}
-	//If the content is the same, ignore it
-	if tagInfo.OriginalText == req.OriginalText &&
-		tagInfo.DisplayName == req.DisplayName &&
-		tagInfo.SlugName == req.SlugName {
-		return nil
-	}
 
 	//Adding equivalent slug formatting for tag update
 	slugName := strings.ReplaceAll(req.SlugName, " ", "-")
 	slugName = strings.ToLower(slugName)
+
+	//If the content is the same, ignore it
+	if tagInfo.OriginalText == req.OriginalText &&
+		tagInfo.DisplayName == req.DisplayName &&
+		tagInfo.SlugName == slugName {
+		return nil
+	}
+
 	tagInfo.SlugName = slugName
 	tagInfo.DisplayName = req.DisplayName
 	tagInfo.OriginalText = req.OriginalText
