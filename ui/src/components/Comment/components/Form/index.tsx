@@ -65,6 +65,9 @@ const Index = ({
       }
     });
   };
+
+  console.log('userName:', pageUsers.getUsers());
+
   return (
     <div
       className={classNames(

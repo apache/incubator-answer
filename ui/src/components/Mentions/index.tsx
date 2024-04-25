@@ -20,6 +20,7 @@
 import React, { useEffect, useRef, useState, FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
+import { useSearchUserStaff } from '@/services';
 import * as Types from '@/common/interface';
 
 interface IProps {
@@ -37,6 +38,19 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
   const [users, setUsers] = useState<Types.PageUser[]>([]);
   const [cursor, setCursor] = useState(0);
   const [isRequested, setRequestedState] = useState(false);
+  const { data: staffUserList = [] } = useSearchUserStaff(val);
+  const mapStaffUsers =
+    staffUserList
+      ?.map((item) => ({
+        displayName: item.display_name,
+        userName: item.username,
+      }))
+      ?.filter(
+        (item) =>
+          users.findIndex((user) => user.userName === item.userName) < 0,
+      ) || [];
+
+  console.log('staffUserList:', staffUserList);
 
   const searchUser = () => {
     const element = dropdownRef.current?.children[0];
@@ -57,6 +71,9 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
     if (str.substring(str.lastIndexOf(' '), selectionStart).indexOf('@') < 0) {
       return;
     }
+
+    console.log('str111111:', str);
+    console.log('str2222:', str.substring(1));
     setValue(str.substring(1));
 
     if (!str.substring(1)) {
@@ -103,7 +120,7 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
     setValue('');
   };
   const filterData = val
-    ? users.filter(
+    ? [...users, ...mapStaffUsers].filter(
         (item) =>
           item.displayName?.indexOf(val) === 0 ||
           item.userName?.indexOf(val) === 0,
