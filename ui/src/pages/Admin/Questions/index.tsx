@@ -94,7 +94,7 @@ const Questions: FC = () => {
       <Table responsive>
         <thead>
           <tr>
-            <th className="post-column">{t('post')}</th>
+            <th className="min-w-15">{t('post')}</th>
             <th style={{ width: '8%' }}>{t('votes')}</th>
             <th style={{ width: '8%' }}>{t('answers')}</th>
             <th style={{ width: '15%' }}>{t('created')}</th>

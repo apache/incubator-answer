@@ -96,7 +96,7 @@ const Answers: FC = () => {
       <Table responsive>
         <thead>
           <tr>
-            <th>{t('post')}</th>
+            <th className="min-w-15">{t('post')}</th>
             <th style={{ width: '11%' }}>{t('votes')}</th>
             <th style={{ width: '14%' }}>{t('created')}</th>
             <th style={{ width: '11%' }}>{t('status')}</th>
@@ -127,9 +127,7 @@ const Answers: FC = () => {
                       className="ms-2 text-success"
                     />
                   )}
-                  <div
-                    className="text-truncate-2 small"
-                    style={{ maxWidth: '30rem' }}>
+                  <div className="text-truncate-2 small max-w-30">
                     {escapeRemove(li.description)}
                   </div>
                 </td>
