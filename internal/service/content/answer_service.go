@@ -625,6 +625,11 @@ func (as *AnswerService) ShowFormat(ctx context.Context, data *entity.Answer) *s
 }
 
 func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionUserID, answerID, answerUserID string) {
+	// If the answer is updated by me, there is no notification for myself.
+	// equivalent behaviour as AnswerService.notificationAnswerTheQuestion
+	if questionUserID == answerUserID {
+		return
+	}
 	msg := &schema.NotificationMsg{
 		TriggerUserID:  answerUserID,
 		ReceiverUserID: questionUserID,
