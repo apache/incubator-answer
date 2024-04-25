@@ -29,7 +29,7 @@ import {
   AdminSettingsPrivilege,
   AdminSettingsPrivilegeReq,
 } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { ADMIN_PRIVILEGE_CUSTOM_LEVEL } from '@/common/constants';
 
 const Index: FC = () => {
@@ -83,10 +83,10 @@ const Index: FC = () => {
           validator: (value: string) => {
             const val = Number(value);
             if (Number.isNaN(val)) {
-              return 'the input should be number';
+              return t('msg.should_be_number');
             }
             if (val < 1) {
-              return 'number should be equal or larger than 1';
+              return t('msg.number_larger_1');
             }
             return true;
           },
@@ -148,6 +148,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

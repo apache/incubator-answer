@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { PasswordResetReq, FormDataType } from '@/common/interface';
 import { resetPassword } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 interface IProps {
@@ -62,6 +62,11 @@ const Index: FC<IProps> = ({ callback }) => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const ele = document.getElementById('email');
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -89,6 +94,8 @@ const Index: FC<IProps> = ({ callback }) => {
           emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

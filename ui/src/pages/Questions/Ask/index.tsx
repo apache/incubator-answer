@@ -40,7 +40,12 @@ import {
   getTagsBySlugName,
   saveQuestionWithAnswer,
 } from '@/services';
-import { handleFormError, SaveDraft, storageExpires } from '@/utils';
+import {
+  handleFormError,
+  SaveDraft,
+  storageExpires,
+  scrollToElementTop,
+} from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 import { useCaptchaPlugin } from '@/utils/pluginKit';
 
@@ -300,6 +305,8 @@ const Ask = () => {
           editCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -321,6 +328,8 @@ const Ask = () => {
           if (!(captchaErr && err.list.length === 1)) {
             const data = handleFormError(err, formData);
             setFormData({ ...data });
+            const ele = document.getElementById(err.list[0].error_field);
+            scrollToElementTop(ele);
           }
         }
       });
@@ -331,6 +340,8 @@ const Ask = () => {
           if (!(captchaErr && err.list.length === 1)) {
             const data = handleFormError(err, formData);
             setFormData({ ...data });
+            const ele = document.getElementById(err.list[0].error_field);
+            scrollToElementTop(ele);
           }
         }
       });
@@ -443,7 +454,7 @@ const Ask = () => {
               </Form.Control.Feedback>
               {bool && <SearchQuestion similarQuestions={similarQuestions} />}
             </Form.Group>
-            <Form.Group controlId="body">
+            <Form.Group controlId="content">
               <Form.Label>{t('form.fields.body.label')}</Form.Label>
               <Form.Control
                 defaultValue={formData.content.value}

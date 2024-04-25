@@ -26,7 +26,7 @@ import { useToast } from '@/hooks';
 import { siteInfoStore } from '@/stores';
 import { useGeneralSetting, updateGeneralSetting } from '@/services';
 import Pattern from '@/common/pattern';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const General: FC = () => {
   const { t } = useTranslation('translation', {
@@ -157,6 +157,8 @@ const General: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

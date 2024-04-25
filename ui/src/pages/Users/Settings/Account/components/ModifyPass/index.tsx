@@ -27,7 +27,7 @@ import { useToast } from '@/hooks';
 import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { loggedUserInfoStore } from '@/stores';
 
 const Index: FC = () => {
@@ -123,6 +123,14 @@ const Index: FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -154,6 +162,8 @@ const Index: FC = () => {
           infoCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -179,7 +189,7 @@ const Index: FC = () => {
       {showForm ? (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group
-            controlId="oldPass"
+            controlId="old_pass"
             className={classname('mb-3', user.have_password ? '' : 'd-none')}>
             <Form.Label>{t('current_pass.label')}</Form.Label>
             <Form.Control
@@ -203,7 +213,7 @@ const Index: FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="newPass" className="mb-3">
+          <Form.Group controlId="new_pass" className="mb-3">
             <Form.Label>{t('new_pass.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
@@ -225,7 +235,7 @@ const Index: FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="newPass2" className="mb-3">
+          <Form.Group controlId="pass2" className="mb-3">
             <Form.Label>{t('pass_confirm.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
