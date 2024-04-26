@@ -412,3 +412,19 @@ type UserUnsubscribeNotificationReq struct {
 	Code    string `validate:"required,gt=0,lte=500" json:"code"`
 	Content string `json:"-"`
 }
+
+// GetUserStaffReq get user staff request
+type GetUserStaffReq struct {
+	Username string `validate:"omitempty,gt=0,lte=500" form:"username"`
+	PageSize int    `validate:"omitempty,min=1" form:"page_size"`
+}
+
+// GetUserStaffResp get user staff response
+type GetUserStaffResp struct {
+	// username
+	Username string `json:"username"`
+	// display name
+	DisplayName string `json:"display_name"`
+	// avatar
+	Avatar string `json:"avatar"`
+}

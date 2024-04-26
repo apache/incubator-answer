@@ -145,6 +145,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
+	r.GET("/user/staff", a.userController.UserStaff)
 
 	// answer
 	r.GET("/answer/info", a.answerController.Get)

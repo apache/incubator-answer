@@ -644,6 +644,26 @@ func (uc *UserController) UserRanking(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// UserStaff get user staff
+// @Summary get user staff
+// @Description get user staff
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.GetUserStaffReq true "GetUserStaffReq"
+// @Success 200 {object} handler.RespBody{data=schema.GetUserStaffResp}
+// @Router /answer/api/v1/user/staff [get]
+func (uc *UserController) UserStaff(ctx *gin.Context) {
+	req := &schema.GetUserStaffReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	resp, err := uc.userService.GetUserStaff(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // UserUnsubscribeNotification unsubscribe notification
 // @Summary unsubscribe notification
 // @Description unsubscribe notification
