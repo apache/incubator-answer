@@ -81,9 +81,20 @@ module.exports = {
         },
         codemirror: {
           name: 'codemirror',
-          test: /[\/]node_modules[\/](codemirror)[\/]/,
+          test: /[\/]node_modules[\/](\@codemirror)[\/]/,
           priority: 9,
           reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
+          enforce: true,
+        },
+        lezer: {
+          name: 'lezer',
+          test: /[\/]node_modules[\/](\@lezer)[\/]/,
+          priority: 9,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
           enforce: true,
         },
         reactDom: {
