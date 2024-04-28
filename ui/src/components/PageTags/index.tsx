@@ -32,6 +32,7 @@ const Index: FC = () => {
   );
   const appVersion = siteInfoStore((_) => _.version);
   const hashVersion = siteInfoStore((_) => _.revision);
+  const siteName = siteInfoStore((_) => _.siteInfo).name;
   const setAppGenerator = () => {
     if (!appVersion) {
       return;
@@ -61,6 +62,11 @@ const Index: FC = () => {
       );
     }
   };
+  // properties used for social media tags
+  const openGraphType = 'website';
+  const twitterType = 'summary';
+  const { href } = window.location;
+  const { hostname } = new URL(href);
 
   useEffect(() => {
     setDocLang();
@@ -86,6 +92,25 @@ const Index: FC = () => {
       {doInsertCustomCSS && (
         <link rel="stylesheet" href={`${process.env.PUBLIC_URL}/custom.css`} />
       )}
+      {/* Social media meta share tags start here */}
+      <meta property="og:type" content={openGraphType} />
+      <meta property="og:title" name="twitter:title" content={pageTitle} />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:url" content={href} />
+      {description && <meta property="og:description" content={description} />}
+      <meta
+        property="og:image"
+        itemProp="image primaryImageOfPage"
+        content={square_icon || favicon || '/favicon.ico'}
+      />
+      <meta name="twitter:card" content={twitterType} />
+      <meta name="twitter:domain" content={hostname} />
+      {description && <meta name="twitter:description" content={description} />}
+      <meta
+        name="twitter:image"
+        content={square_icon || favicon || '/favicon.ico'}
+      />
+      {/* Social media meta share tags end here */}
     </Helmet>
   );
 };
