@@ -103,10 +103,10 @@ const Users: FC = () => {
           />
         </Stack>
       </div>
-      <Table>
+      <Table responsive>
         <thead>
           <tr>
-            <th>{t('name')}</th>
+            <th className="min-w-15">{t('name')}</th>
             <th style={{ width: '17%' }}>{t('version')}</th>
             <th style={{ width: '11%' }}>{t('status')}</th>
             {curFilter !== 'deleted' ? (
