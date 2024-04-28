@@ -98,7 +98,7 @@ func newAnswerBuilder(buildDir, outputPath string, plugins []string, originalAns
 	material := &buildingMaterial{originalAnswerInfo: originalAnswerInfo}
 	parentDir, _ := filepath.Abs(".")
 	if buildDir != "" {
-		material.tmpDir = buildDir
+		material.tmpDir = filepath.Join(parentDir, buildDir)
 	} else {
 		material.tmpDir, _ = os.MkdirTemp(parentDir, "answer_build")
 	}
@@ -148,7 +148,7 @@ func formatPlugins(plugins []string) (formatted []*pluginInfo) {
 
 // createMainGoFile creates main.go file in tmp dir that content is mainGoTpl
 func createMainGoFile(b *buildingMaterial) (err error) {
-	fmt.Printf("[build] tmp dir: %s\n", b.tmpDir)
+	fmt.Printf("[build] build dir: %s\n", b.tmpDir)
 	err = dir.CreateDirIfNotExist(b.tmpDir)
 	if err != nil {
 		return err
