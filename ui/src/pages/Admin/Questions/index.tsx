@@ -74,7 +74,7 @@ const Questions: FC = () => {
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
         <QueryGroup
           data={questionFilterItems}
           currentSort={curFilter}
@@ -89,6 +89,7 @@ const Questions: FC = () => {
           placeholder={t('filter.placeholder')}
           onChange={handleFilter}
           style={{ width: '12.25rem' }}
+          className="mt-3 mt-sm-0"
         />
       </div>
       <Table responsive>
