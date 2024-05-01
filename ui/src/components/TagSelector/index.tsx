@@ -40,6 +40,7 @@ interface IProps {
   maxTagLength?: number;
   showRequiredTag?: boolean;
   autoFocus?: boolean;
+  className?: string;
 }
 
 let timer;
@@ -52,6 +53,7 @@ const TagSelector: FC<IProps> = ({
   maxTagLength = 0,
   showRequiredTag = false,
   autoFocus = false,
+  className = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -341,6 +343,7 @@ const TagSelector: FC<IProps> = ({
         className={classNames(
           'tag-selector-wrap form-control position-relative p-0',
           focusState ? 'tag-selector-wrap--focus' : '',
+          className,
         )}
         onFocus={handleTagSelectorFocus}
         onKeyDown={handleKeyDown}>

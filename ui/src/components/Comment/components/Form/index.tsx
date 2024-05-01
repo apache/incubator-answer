@@ -83,6 +83,7 @@ const Index = ({
               size="sm"
               value={type === 'edit' ? parseEditMentionUser(value) : value}
               onChange={handleChange}
+              isInvalid={validationErrorMsg !== ''}
             />
           </Mentions>
           <div className="form-text">{t(`tip_${mode}`)}</div>
