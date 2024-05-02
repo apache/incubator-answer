@@ -17,37 +17,15 @@
  * under the License.
  */
 
-package controller
+package schema
 
-import "github.com/google/wire"
+type ReactionReq struct {
+	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
+	Emoji    string `validate:"required" form:"emoji" json:"emoji"`         // emoji
+	Type     string `validate:"required" form:"type" json:"type"`           // type
+	UserID   string `json:"-"`
+}
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
-	NewMetaController,
-)
+type ReactSummaryMeta map[string][]string
+
+type ReactionResp ReactSummaryMeta

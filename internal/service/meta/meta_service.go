@@ -21,10 +21,14 @@ package meta
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/segmentfault/pacman/errors"
+	"github.com/apache/incubator-answer/internal/schema"
+	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	myErrors "github.com/segmentfault/pacman/errors"
 )
 
 // MetaRepo meta repository
@@ -38,12 +42,14 @@ type MetaRepo interface {
 
 // MetaService user service
 type MetaService struct {
-	metaRepo MetaRepo
+	metaRepo   MetaRepo
+	userCommon *usercommon.UserCommon
 }
 
-func NewMetaService(metaRepo MetaRepo) *MetaService {
+func NewMetaService(metaRepo MetaRepo, userCommon *usercommon.UserCommon) *MetaService {
 	return &MetaService{
-		metaRepo: metaRepo,
+		metaRepo:   metaRepo,
+		userCommon: userCommon,
 	}
 }
 
@@ -79,7 +85,7 @@ func (ms *MetaService) GetMetaByObjectIdAndKey(ctx context.Context, objectID, ke
 		return
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.UnknownError)
+		return nil, myErrors.BadRequest(reason.MetaObjectNotFound)
 	}
 	return meta, nil
 }
@@ -91,4 +97,137 @@ func (ms *MetaService) GetMetaList(ctx context.Context, objID string) (metas []*
 		return nil, err
 	}
 	return metas, err
+}
+
+// GetReactionByObjectId get reaction
+func (ms *MetaService) GetReactionByObjectId(ctx context.Context, objectID string) (resp schema.ReactionResp, err error) {
+	reactionMeta, err := ms.GetMetaByObjectIdAndKey(ctx, objectID, entity.ObjectReactSummaryKey)
+
+	// if not exist, return nil
+	if err != nil {
+		var pacmanErr *myErrors.Error
+		if errors.As(err, &pacmanErr) && pacmanErr.Reason == reason.MetaObjectNotFound {
+			return nil, nil
+		} else {
+			return nil, err
+		}
+	}
+
+	var reaction schema.ReactSummaryMeta
+	err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
+	if err != nil {
+		return nil, err
+	}
+	return ms.convertToReactionResp(ctx, reaction)
+}
+
+// AddOrUpdateReaction add or update reaction
+func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.ReactionReq) (resp schema.ReactionResp, err error) {
+	// get reaction for this object
+	reactionMeta, err := ms.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
+
+	var reaction schema.ReactSummaryMeta
+	if err != nil {
+		var pacmanErr *myErrors.Error
+		if errors.As(err, &pacmanErr) && pacmanErr.Reason == reason.MetaObjectNotFound {
+			// create new reaction summary
+			reaction = schema.ReactSummaryMeta{}
+		} else {
+			return nil, err
+		}
+	} else {
+		// json unmarshal reactionMeta.Value to reaction
+		err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// update reaction
+	ms.updateReaction(req, reaction)
+
+	// write back to meta repo
+	reactSumBytes, err := json.Marshal(reaction)
+	if err != nil {
+		return nil, err
+	}
+
+	if reactionMeta == nil {
+		err = ms.AddMeta(ctx, req.ObjectID, entity.ObjectReactSummaryKey, string(reactSumBytes))
+	} else {
+		err = ms.UpdateMeta(ctx, reactionMeta.ID, entity.ObjectReactSummaryKey, string(reactSumBytes))
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err = ms.convertToReactionResp(ctx, reaction)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+// updateReaction update reaction
+func (ms *MetaService) updateReaction(req *schema.ReactionReq, reaction schema.ReactSummaryMeta) {
+	emojiUserIds, ok := reaction[req.Emoji]
+
+	if !ok {
+		emojiUserIds = make([]string, 0)
+	}
+
+	found := false
+	for _, item := range emojiUserIds {
+		if item == req.UserID {
+			found = true
+			break
+		}
+	}
+
+	removeItem := func(arr []string, target string) []string {
+		result := make([]string, 0, len(arr))
+
+		for _, item := range arr {
+			if item != target {
+				result = append(result, item)
+			}
+		}
+
+		return result
+	}
+
+	if req.Type == "activate" && !found {
+		emojiUserIds = append(emojiUserIds, req.UserID)
+	} else if req.Type == "deactivate" && found {
+		emojiUserIds = removeItem(emojiUserIds, req.UserID)
+	} else if req.Type == "toggle" {
+		if found {
+			emojiUserIds = removeItem(emojiUserIds, req.UserID)
+		} else {
+			emojiUserIds = append(emojiUserIds, req.UserID)
+		}
+	}
+
+	reaction[req.Emoji] = emojiUserIds
+}
+
+func (ms *MetaService) convertToReactionResp(ctx context.Context, reaction schema.ReactSummaryMeta) (schema.ReactionResp, error) {
+	resp := schema.ReactionResp{}
+	// traverse map and convert to user name
+	for emoji, userIds := range reaction {
+		userNames := make([]string, 0)
+		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, userIds)
+		if err != nil {
+			return nil, err
+		}
+		// get user name
+		for _, userBasicInfo := range userBasicInfos {
+			userNames = append(userNames, userBasicInfo.Username)
+		}
+		resp[emoji] = userNames
+	}
+
+	return resp, nil
 }

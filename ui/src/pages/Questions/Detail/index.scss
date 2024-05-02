@@ -16,15 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
-.answer-item {
-  border-top: 1px solid var(--an-answer-item-border-top);
+.answer-reaction-btn {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  border: 1px solid $gray-300;
+}
+
+#reaction-button-tooltip {
+  .tooltip-inner {
+    padding: 0.2rem;
+    background-color: $white;
+    border: 1px solid $gray-300;
+    .btn {
+      background-color: $white;
+      border: none;
+      &:hover {
+        background-color: $gray-400;
+      }
+    }
+  }
+
+  .tooltip-arrow {
+    overflow: hidden;
+    bottom: calc(-1 * $tooltip-arrow-height + 1px);
+    // width: calc($tooltip-arrow-width + 4px);
+    // height: calc($tooltip-arrow-height + 2px);
+    // box-sizing: content-box;
+    &::before {
+      border: 1px solid $gray-300;
+      width: 50%;
+      height: 100%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      // transform: rotate(-45deg);
+      box-sizing: content-box;
+      left: 50%;
+      bottom: 50%;
+      background-color: white;
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
   .questionDetailPage {
     h1.h3 {
-      font-size: calc(1.275rem + .3vw)!important;
+      font-size: calc(1.275rem + 0.3vw) !important;
     }
   }
 }

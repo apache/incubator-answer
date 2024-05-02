@@ -37,6 +37,7 @@ import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
+import Reactions from '../Reactions';
 
 interface Props {
   data: any;
@@ -211,6 +212,8 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
           />
         </div>
       </div>
+
+      <Reactions />
 
       <Comment
         objectId={data?.id}
