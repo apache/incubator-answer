@@ -31,7 +31,6 @@ const TextArea: FC<
   isInvalid,
   ...rest
 }) => {
-  console.log(isInvalid);
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const autoGrow = () => {
