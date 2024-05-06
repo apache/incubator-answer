@@ -1000,6 +1000,8 @@ ui:
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
         label: Ny e-postadress
+      new_email:
+        label: New email
         msg: New email cannot be empty.
       pass:
         label: Nuvarande lösenord
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Sökresultat
     keywords: Keywords
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Reputation required level
         text: Choose the reputation required for the privileges
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (optional)
     empty: cannot be empty
