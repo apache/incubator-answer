@@ -142,7 +142,7 @@ backend:
   error:
     common:
       invalid_url:
-        other: 不合法的 URL
+        other: 无效的 URL。
     password:
       space_invalid:
         other: 密码不得含有空格。
@@ -1777,6 +1777,9 @@ ui:
       level:
         label: 级别所需声望
         text: 选择特权所需的声望值
+      msg:
+        should_be_number: 输入必须是数字
+        number_larger_1: 数字应该大于等于 1
   form:
     optional: (选填)
     empty: 不能为空

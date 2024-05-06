@@ -999,8 +999,10 @@ ui:
       change_email_info: >-
         Enviamos um e-mail para esse endereço. Siga as instruções de confirmação.
       email:
-        label: E-mail
-        msg: E-mail não pode ser vazio.
+        label: Email
+      new_email:
+        label: New email
+        msg: New email cannot be empty.
       pass:
         label: Senha atual
         msg: Senha não pode ser vazio.
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Procurar Resultados
     keywords: Palavras-chave
@@ -1176,7 +1179,7 @@ ui:
       more: Mais
     tips:
       title: Dicas de Pesquisa Avançada
-      tag: "<1>[tag]</1> pesquisar dentro de um marcador"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>user:username</1> buscar por autor"
       answer: "<1>answers:0</1> perguntas não respondidas"
       score: "<1>score:3</1> postagens com mais de 3+ placares"
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Nível de reputação necessário
         text: Escolha a reputação necessária para os privilégios
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (opcional)
     empty: não pode ser vazio

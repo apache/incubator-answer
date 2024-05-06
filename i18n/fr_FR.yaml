@@ -999,8 +999,10 @@ ui:
       change_email_info: >-
         Nous vous avons envoyé un mail à cette adresse. Merci de suivre les instructions.
       email:
-        label: Nouvel e-mail
-        msg: L'email ne peut pas être vide.
+        label: Email
+      new_email:
+        label: New email
+        msg: New email cannot be empty.
       pass:
         label: Mot de passe actuel
         msg: Le mot de passe ne peut pas être vide.
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1176,7 +1179,7 @@ ui:
       more: Plus
     tips:
       title: Astuces de recherche avancée
-      tag: "<1>[tag]</1> recherche à l'aide d'un tag"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>utilisateur:username</1> recherche par auteur"
       answer: "<1>réponses:0</1> questions sans réponses"
       score: "<1>score:3</1> messages avec plus de 3 points"
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Niveau de réputation requis
         text: Choisissez la réputation requise pour les privilèges
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (optionnel)
     empty: ne peut pas être vide

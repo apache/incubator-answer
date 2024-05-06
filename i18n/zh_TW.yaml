@@ -29,9 +29,9 @@ backend:
     database_error:
       other: 資料庫錯誤。
     forbidden_error:
-      other: Forbidden.
+      other: 訪問被拒絕。
     duplicate_request_error:
-      other: Duplicate submission.
+      other: 提交重複。
   action:
     report:
       other: 舉報
@@ -42,11 +42,11 @@ backend:
     close:
       other: 關閉
     reopen:
-      other: Reopen
+      other: 再次開啟。
     forbidden_error:
-      other: Forbidden.
+      other: 訪問被拒絕。
     pin:
-      other: Pin
+      other: 置頂
     hide:
       other: Unlist
     unpin:
@@ -738,7 +738,7 @@ ui:
   dates:
     long_date: MM月DD日
     long_date_with_year: "YYYY年MM月DD日"
-    long_date_with_time: "YYYY年MM月DD日 HH:mm"
+    long_date_with_time: "YYYY 年 MM 月 DD 日 HH:mm"
     now: 剛剛
     x_seconds_ago: "{{count}} 秒前"
     x_minutes_ago: "{{count}} 分鐘前"
@@ -756,7 +756,7 @@ ui:
     btn_flag: 舉報
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: "{{count}}條剩餘評論"
+    show_more: "{{count}} 條剩餘評論"
     tip_question: >-
       通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
     tip_answer: >-
@@ -1162,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: 搜尋結果
     keywords: 關鍵詞
@@ -1659,7 +1660,7 @@ ui:
       restrict_answer:
         title: Restrict answer
         label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        text: "關閉此功能以允許使用者對同一問題撰寫多個答案，可能導致答案不集中。"
       recommend_tags:
         label: Recommend tags
         text: "請在上方輸入標籤固定連結，每行一個標籤。"
@@ -1776,6 +1777,9 @@ ui:
       level:
         label: Reputation required level
         text: Choose the reputation required for the privileges
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (選填)
     empty: 不能為空
