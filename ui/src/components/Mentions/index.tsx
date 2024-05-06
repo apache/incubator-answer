@@ -146,8 +146,6 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
     }
   };
 
-  console.log('keyCode11111', cursor);
-
   return (
     <Dropdown
       ref={dropdownRef}
