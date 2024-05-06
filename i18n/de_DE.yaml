@@ -78,10 +78,10 @@ backend:
         other: Level 1 (weniger Reputation für privates Team, Gruppen)
     level_2:
       description:
-        other: Level 2 (niedrige Reputation erforderlich für Start-Community)
+        other: Level 2 (niedrige Reputation für Startup-Community)
     level_3:
       description:
-        other: Level 3 (hohe Reputation, für ausgereifte Community)
+        other: Level 3 (hohe Reputation für eine reife Community)
     level_custom:
       description:
         other: Benutzerdefinierter Level
@@ -142,7 +142,7 @@ backend:
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: Ungültige URL.
     password:
       space_invalid:
         other: Passwort darf keine Leerzeichen enthalten.
@@ -204,7 +204,7 @@ backend:
       already_deleted:
         other: Dieser Beitrag wurde gelöscht.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Ihr Beitrag wartet auf Überprüfung. Er wird sichtbar sein, nachdem er genehmigt wurde.
       not_found:
         other: Frage nicht gefunden.
       cannot_deleted:
@@ -491,14 +491,14 @@ backend:
     accepted:
       other: akzeptiert
     edit:
-      other: edit
+      other: bearbeiten
   review:
     queued_post:
       other: Queued post
     flagged_post:
-      other: Flagged post
+      other: Beiträge gemeldet
     suggested_post_edit:
-      other: Suggested edits
+      other: Änderungsvorschläge
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -680,8 +680,8 @@ ui:
       empty: Kann nicht leer sein.
     msg:
       empty: Bitte wähle einen Grund aus.
-      not_a_url: URL format is incorrect.
-      url_not_match: URL origin does not match the current website.
+      not_a_url: URL hat ein falsches Format.
+      url_not_match: URL-Ursprung stimmt nicht mit der aktuellen Website überein.
   tag_modal:
     title: Neuen Tag erstellen
     form:
@@ -793,10 +793,10 @@ ui:
     no_desc: Der Tag hat keine Beschreibung.
     more: Mehr
   ask:
-    title: Frage hinzufügen
+    title: Frage stellen
     edit_title: Frage bearbeiten
     default_reason: Frage bearbeiten
-    default_first_reason: Frage hinzufügen
+    default_first_reason: Frage stellen
     similar_questions: Ähnliche Fragen
     form:
       fields:
@@ -1040,8 +1040,8 @@ ui:
     title: Verwandte Fragen
     answers: antworten
   invite_to_answer:
-    title: Menschen gefragt
-    desc: Wähle Leute aus, von denen du glaubst, dass sie die Antwort wissen könnten.
+    title: Frage jemanden
+    desc: Lade Leute ein, von denen du glaubst, dass sie die Antwort wissen könnten.
     invite: Zur Antwort einladen
     add: Personen hinzufügen
     search: Personen suchen
@@ -1051,7 +1051,7 @@ ui:
     asked: gefragt
     update: Geändert
     edit: bearbeitet
-    commented: commented
+    commented: kommentiert
     Views: Gesehen
     Follow: Folgen
     Following: Folgend
@@ -1069,7 +1069,7 @@ ui:
       title: Antworten
       score: Punkte
       newest: Neueste
-      oldest: Oldest
+      oldest: Älteste
       btn_accept: Akzeptieren
       btn_accepted: Akzeptiert
     write_answer:
@@ -1094,8 +1094,8 @@ ui:
       title: Diesen Beitrag erneut öffnen
       content: Bist du sicher, dass du wieder öffnen willst?
     list:
-      confirm_btn: List
-      title: List this post
+      confirm_btn: Liste
+      title: Diesen Beitrag auflisten
       content: Are you sure you want to list?
     unlist:
       confirm_btn: Unlist
@@ -1129,7 +1129,7 @@ ui:
     signup: Registrieren
     logout: Ausloggen
     verify: Überprüfen
-    add_question: Frage hinzufügen
+    add_question: Frage stellen
     approve: Genehmigen
     reject: Ablehnen
     skip: Überspringen
@@ -1162,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -1259,7 +1260,7 @@ ui:
     downvoted: negativ bewertet
     mod_short: MOD
     mod_long: Moderatoren
-    x_reputation: Ansehen
+    x_reputation: ansehen
     x_votes: Stimmen erhalten
     x_answers: Antworten
     x_questions: Fragen
@@ -1491,7 +1492,7 @@ ui:
       btn_submit: Senden
     users:
       title: Benutzer
-      name: Namen
+      name: Name
       email: E-Mail
       reputation: Ansehen
       created_at: Erstellt
@@ -1776,6 +1777,9 @@ ui:
       level:
         label: Benötigtes Reputations-Level
         text: Wähle die für die Privilegien erforderliche Reputation aus
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (optional)
     empty: kann nicht leer sein
@@ -1843,7 +1847,7 @@ ui:
     no_data: "Wir konnten nichts finden."
   users:
     title: Benutzer
-    users_with_the_most_reputation: Benutzer mit den höchsten Ansehenspunkten dieser Woche
+    users_with_the_most_reputation: Benutzer mit den höchsten Reputationspunkten dieser Woche
     users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
     staffs: Unsere Community Teammitglieder
     reputation: Ansehen
