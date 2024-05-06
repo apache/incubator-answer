@@ -23,6 +23,8 @@ import { Dropdown } from 'react-bootstrap';
 import { useSearchUserStaff } from '@/services';
 import * as Types from '@/common/interface';
 
+import './index.scss';
+
 interface IProps {
   children: React.ReactNode;
   pageUsers;
@@ -50,8 +52,6 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
           users.findIndex((user) => user.userName === item.userName) < 0,
       ) || [];
 
-  console.log('staffUserList:', staffUserList);
-
   const searchUser = () => {
     const element = dropdownRef.current?.children[0];
     const { value, selectionStart = 0 } = element as HTMLTextAreaElement;
@@ -71,9 +71,6 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
     if (str.substring(str.lastIndexOf(' '), selectionStart).indexOf('@') < 0) {
       return;
     }
-
-    console.log('str111111:', str);
-    console.log('str2222:', str.substring(1));
     setValue(str.substring(1));
 
     if (!str.substring(1)) {
@@ -147,6 +144,8 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
       setCursor(0);
     }
   };
+
+  console.log('keyCode11111', cursor);
 
   return (
     <Dropdown
