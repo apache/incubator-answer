@@ -1002,6 +1002,8 @@ ui:
         label: Email
       new_email:
         label: New email
+      new_email:
+        label: New email
         msg: New email cannot be empty.
       pass:
         label: Current password
