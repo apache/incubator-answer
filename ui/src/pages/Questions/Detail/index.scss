@@ -22,19 +22,30 @@
 .answer-reaction-btn {
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  border: 1px solid $gray-300;
+  color: $secondary;
+  &:hover {
+    background-color: $gray-400 !important;
+    color: $secondary;
+  }
+  &:active {
+    background-color: $gray-500 !important;
+    color: $secondary !important;
+  }
 }
 
 #reaction-button-tooltip {
   .tooltip-inner {
     padding: 0.2rem;
     background-color: $white;
-    border: 1px solid $gray-300;
+    border: 1px solid $gray-500;
     .btn {
       background-color: $white;
       border: none;
       &:hover {
-        background-color: $gray-400;
+        background-color: $gray-100;
+      }
+      &:active {
+        background-color: $gray-300;
       }
     }
   }
@@ -42,15 +53,11 @@
   .tooltip-arrow {
     overflow: hidden;
     bottom: calc(-1 * $tooltip-arrow-height + 1px);
-    // width: calc($tooltip-arrow-width + 4px);
-    // height: calc($tooltip-arrow-height + 2px);
-    // box-sizing: content-box;
     &::before {
-      border: 1px solid $gray-300;
+      border: 1px solid $gray-500;
       width: 50%;
       height: 100%;
       transform: translate(-50%, -50%) rotate(-45deg);
-      // transform: rotate(-45deg);
       box-sizing: content-box;
       left: 50%;
       bottom: 50%;

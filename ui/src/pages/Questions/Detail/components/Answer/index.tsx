@@ -36,7 +36,6 @@ import { scrollToElementTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 import { useRenderHtmlPlugin } from '@/utils/pluginKit';
-import Reactions from '../Reactions';
 
 interface Props {
   data: AnswerItem;
@@ -198,8 +197,6 @@ const Index: FC<Props> = ({
           />
         </div>
       </div>
-
-      <Reactions />
 
       <Comment
         objectId={data.id}

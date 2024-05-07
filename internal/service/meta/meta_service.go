@@ -122,7 +122,7 @@ func (ms *MetaService) GetReactionByObjectId(ctx context.Context, objectID strin
 }
 
 // AddOrUpdateReaction add or update reaction
-func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.ReactionReq) (resp schema.ReactionResp, err error) {
+func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.UpdateReactionReq) (resp schema.ReactionResp, err error) {
 	// get reaction for this object
 	reactionMeta, err := ms.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
 
@@ -171,7 +171,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Reac
 }
 
 // updateReaction update reaction
-func (ms *MetaService) updateReaction(req *schema.ReactionReq, reaction schema.ReactSummaryMeta) {
+func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactSummaryMeta) {
 	emojiUserIds, ok := reaction[req.Emoji]
 
 	if !ok {
@@ -215,14 +215,14 @@ func (ms *MetaService) updateReaction(req *schema.ReactionReq, reaction schema.R
 
 func (ms *MetaService) convertToReactionResp(ctx context.Context, reaction schema.ReactSummaryMeta) (schema.ReactionResp, error) {
 	resp := schema.ReactionResp{}
-	// traverse map and convert to user name
+	// traverse map and convert to username
 	for emoji, userIds := range reaction {
 		userNames := make([]string, 0)
 		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 		if err != nil {
 			return nil, err
 		}
-		// get user name
+		// get username
 		for _, userBasicInfo := range userBasicInfos {
 			userNames = append(userNames, userBasicInfo.Username)
 		}
