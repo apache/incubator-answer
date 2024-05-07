@@ -44,47 +44,45 @@ module.exports = {
       minChunks: 2,
       cacheGroups: {
         automaticNamePrefix: 'chunk',
-        components: {
-          test: /[\\/]components[\\/]/,
-          name: 'components',
+        mix1: {
+          test: (module, chunks) => {
+            return (
+              module.resource &&
+              (module.resource.includes('components') ||
+                /\/node_modules\/react-bootstrap\//.test(module.resource))
+            );
+          },
+          name: 'chunk-mix1',
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
           priority: 14,
           reuseExistingChunk: true,
           minChunks: process.env.NODE_ENV === 'production' ? 1 : 2,
           chunks: 'initial',
         },
-        mix1: {
-          name: 'chunk-mix1',
+        mix2: {
+          name: 'chunk-mix2',
           test: /[\/]node_modules[\/](i18next|lodash|marked|next-share)[\/]/,
+          filename: 'static/js/[name].[contenthash:8].chunk.js',
+          priority: 13,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          chunks: 'initial',
+        },
+        mix3: {
+          name: 'chunk-mix3',
+          test: /[\/]node_modules[\/](@remix-run|@restart|axios|diff)[\/]/,
           filename: 'static/js/[name].[contenthash:8].chunk.js',
           priority: 12,
           reuseExistingChunk: true,
           minChunks: 1,
           chunks: 'initial',
         },
-        mix2: {
-          name: 'chunk-mix2',
-          test: /[\/]node_modules[\/](@remix-run|@restart|axios|diff)[\/]/,
-          filename: 'static/js/[name].[contenthash:8].chunk.js',
-          priority: 11,
-          reuseExistingChunk: true,
-          minChunks: 1,
-          chunks: 'initial',
-        },
-        reactBootstrap: {
-          name: 'react-bootstrap',
-          test: /[\/]node_modules[\/](react-bootstrap)[\/]/,
-          filename: 'static/js/[name].[contenthash:8].chunk.js',
-          priority: 11,
-          minChunks: 1,
-          chunks: 'initial',
-          reuseExistingChunk: true,
-        },
         codemirror: {
           name: 'codemirror',
           test: /[\/]node_modules[\/](\@codemirror)[\/]/,
-          priority: 9,
+          priority: 10,
           reuseExistingChunk: true,
-          minChunks: 1,
+          minChunks: process.env.NODE_ENV === 'production' ? 1 : 2,
           chunks: 'initial',
           enforce: true,
         },
@@ -93,7 +91,7 @@ module.exports = {
           test: /[\/]node_modules[\/](\@lezer)[\/]/,
           priority: 9,
           reuseExistingChunk: true,
-          minChunks: 1,
+          minChunks: process.env.NODE_ENV === 'production' ? 1 : 2,
           chunks: 'initial',
           enforce: true,
         },
@@ -101,7 +99,7 @@ module.exports = {
           name: 'react-dom',
           test: /[\/]node_modules[\/](react-dom)[\/]/,
           filename: 'static/js/[name].[contenthash:8].chunk.js',
-          priority: 7,
+          priority: 8,
           reuseExistingChunk: true,
           chunks: 'all',
           enforce: true,
