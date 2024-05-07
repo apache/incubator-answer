@@ -36,6 +36,7 @@ type MetaRepo interface {
 	AddMeta(ctx context.Context, meta *entity.Meta) (err error)
 	RemoveMeta(ctx context.Context, id int) (err error)
 	UpdateMeta(ctx context.Context, meta *entity.Meta) (err error)
+	AddOrUpdateMetaByObjectIdAndKey(ctx context.Context, req *schema.UpdateReactionReq) (schema.ReactSummaryMeta, error)
 	GetMetaByObjectIdAndKey(ctx context.Context, objectId, key string) (meta *entity.Meta, exist bool, err error)
 	GetMetaList(ctx context.Context, meta *entity.Meta) (metas []*entity.Meta, err error)
 }
@@ -123,41 +124,7 @@ func (ms *MetaService) GetReactionByObjectId(ctx context.Context, objectID strin
 
 // AddOrUpdateReaction add or update reaction
 func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.UpdateReactionReq) (resp schema.ReactionResp, err error) {
-	// get reaction for this object
-	reactionMeta, err := ms.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
-
-	var reaction schema.ReactSummaryMeta
-	if err != nil {
-		var pacmanErr *myErrors.Error
-		if errors.As(err, &pacmanErr) && pacmanErr.Reason == reason.MetaObjectNotFound {
-			// create new reaction summary
-			reaction = schema.ReactSummaryMeta{}
-		} else {
-			return nil, err
-		}
-	} else {
-		// json unmarshal reactionMeta.Value to reaction
-		err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// update reaction
-	ms.updateReaction(req, reaction)
-
-	// write back to meta repo
-	reactSumBytes, err := json.Marshal(reaction)
-	if err != nil {
-		return nil, err
-	}
-
-	if reactionMeta == nil {
-		err = ms.AddMeta(ctx, req.ObjectID, entity.ObjectReactSummaryKey, string(reactSumBytes))
-	} else {
-		err = ms.UpdateMeta(ctx, reactionMeta.ID, entity.ObjectReactSummaryKey, string(reactSumBytes))
-	}
-
+	reaction, err := ms.metaRepo.AddOrUpdateMetaByObjectIdAndKey(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -168,49 +135,6 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 	}
 
 	return resp, nil
-}
-
-// updateReaction update reaction
-func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactSummaryMeta) {
-	emojiUserIds, ok := reaction[req.Emoji]
-
-	if !ok {
-		emojiUserIds = make([]string, 0)
-	}
-
-	found := false
-	for _, item := range emojiUserIds {
-		if item == req.UserID {
-			found = true
-			break
-		}
-	}
-
-	removeItem := func(arr []string, target string) []string {
-		result := make([]string, 0, len(arr))
-
-		for _, item := range arr {
-			if item != target {
-				result = append(result, item)
-			}
-		}
-
-		return result
-	}
-
-	if req.Type == "activate" && !found {
-		emojiUserIds = append(emojiUserIds, req.UserID)
-	} else if req.Type == "deactivate" && found {
-		emojiUserIds = removeItem(emojiUserIds, req.UserID)
-	} else if req.Type == "toggle" {
-		if found {
-			emojiUserIds = removeItem(emojiUserIds, req.UserID)
-		} else {
-			emojiUserIds = append(emojiUserIds, req.UserID)
-		}
-	}
-
-	reaction[req.Emoji] = emojiUserIds
 }
 
 func (ms *MetaService) convertToReactionResp(ctx context.Context, reaction schema.ReactSummaryMeta) (schema.ReactionResp, error) {
