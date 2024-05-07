@@ -36,7 +36,7 @@ const Index: FC<Props> = ({
   handleClickComment,
 }) => {
   const [reactions, setReactions] = useState<Record<string, string[]>>();
-  const { t } = useTranslation('translation', { keyPrefix: 'comment' });
+  const { t } = useTranslation('translation');
 
   useEffect(() => {
     queryReactions(objectId).then((res) => {
@@ -64,7 +64,7 @@ const Index: FC<Props> = ({
       }
     }
     if (names.length > 5) {
-      ret += ` and ${names.length - 5} more...`;
+      ret += t('reaction.tooltip', { count: names.length - 5 });
     }
     return ret;
   };
@@ -95,7 +95,7 @@ const Index: FC<Props> = ({
           size="sm"
           onClick={handleClickComment}>
           <Icon name="chat-text-fill" />
-          <span className="ms-1">{t('btn_add_comment')}</span>
+          <span className="ms-1">{t('comment.btn_add_comment')}</span>
         </Button>
       )}
 
@@ -120,7 +120,7 @@ const Index: FC<Props> = ({
               overlay={
                 <Tooltip>
                   <div className="text-start">
-                    <b>{emoji.name}</b> <br />{' '}
+                    <b>{t(`reaction.${emoji.name}`)}</b> <br />{' '}
                     {convertToTooltip(reactions[emoji.name])}
                   </div>
                 </Tooltip>

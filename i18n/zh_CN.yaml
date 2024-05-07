@@ -747,6 +747,11 @@ ui:
     day: 天
     hours: 小时
     days: 日
+  reaction:
+    heart: 爱心
+    smile: 笑脸
+    frown: 难过
+    tooltip: " 以及另外 {{count}} 个..."
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
