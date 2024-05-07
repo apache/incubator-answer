@@ -22,7 +22,7 @@ package schema
 type UpdateReactionReq struct {
 	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
 	Emoji    string `validate:"required" form:"emoji" json:"emoji"`         // emoji
-	Type     string `validate:"required" form:"type" json:"type"`           // type
+	Reaction string `validate:"required" form:"reaction" json:"reaction"`   // reaction
 	UserID   string `json:"-"`
 }
 

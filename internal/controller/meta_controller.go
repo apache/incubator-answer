@@ -67,9 +67,9 @@ func (mc *MetaController) AddOrUpdateReaction(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.UpdateReactionReq true "reaction"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/meta/reaction [put]
+// @Param object_id query string true "object_id"
+// @Success 200 {object} handler.RespBody{data=schema.ReactionResp}
+// @Router /answer/api/v1/meta/reaction [get]
 func (mc *MetaController) GetReaction(ctx *gin.Context) {
 	req := &schema.GetReactionReq{}
 	if handler.BindAndCheck(ctx, req) {
