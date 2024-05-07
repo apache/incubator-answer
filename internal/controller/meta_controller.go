@@ -46,16 +46,36 @@ func NewMetaController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.ReactionReq true "reaction"
+// @Param data body schema.UpdateReactionReq true "reaction"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/meta/reaction [put]
 func (mc *MetaController) AddOrUpdateReaction(ctx *gin.Context) {
-	req := &schema.ReactionReq{}
+	req := &schema.UpdateReactionReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := mc.metaService.AddOrUpdateReaction(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetReaction get reaction
+// @Summary get reaction
+// @Description get reaction for an object
+// @Tags Meta
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.UpdateReactionReq true "reaction"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/meta/reaction [put]
+func (mc *MetaController) GetReaction(ctx *gin.Context) {
+	req := &schema.GetReactionReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	resp, err := mc.metaService.GetReactionByObjectId(ctx, req.ObjectID)
 	handler.HandleResponse(ctx, err, resp)
 }

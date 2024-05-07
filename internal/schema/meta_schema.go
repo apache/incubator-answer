@@ -19,11 +19,15 @@
 
 package schema
 
-type ReactionReq struct {
+type UpdateReactionReq struct {
 	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
 	Emoji    string `validate:"required" form:"emoji" json:"emoji"`         // emoji
 	Type     string `validate:"required" form:"type" json:"type"`           // type
 	UserID   string `json:"-"`
+}
+
+type GetReactionReq struct {
+	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
 }
 
 type ReactSummaryMeta map[string][]string

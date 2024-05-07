@@ -184,6 +184,9 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
+
+	// reaction
+	r.GET("/meta/reaction", a.metaController.GetReaction)
 }
 
 func (a *AnswerAPIRouter) RegisterAuthUserWithAnyStatusAnswerAPIRouter(r *gin.RouterGroup) {
