@@ -88,7 +88,6 @@ func (mr *metaRepo) AddOrUpdateMetaByObjectIdAndKey(ctx context.Context, req *sc
 		// if not exist, create new one
 		if !exist {
 			reaction = schema.ReactSummaryMeta{}
-			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		} else {
 			err = json.Unmarshal([]byte(metaEntity.Value), &reaction)
 			if err != nil {

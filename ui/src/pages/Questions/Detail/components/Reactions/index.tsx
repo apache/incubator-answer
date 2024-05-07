@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components';
 import { queryReactions, updateReaction } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
+import { loggedUserInfoStore } from '@/stores';
 
 interface Props {
   objectId: string;
@@ -35,8 +36,9 @@ const Index: FC<Props> = ({
   showAddCommentBtn,
   handleClickComment,
 }) => {
-  const [reactions, setReactions] = useState<Record<string, string[]>>();
+  const [reactions, setReactions] = useState<Record<string, string[]>>({});
   const { t } = useTranslation('translation');
+  const { username = '' } = loggedUserInfoStore((state) => state.user);
 
   useEffect(() => {
     queryReactions(objectId).then((res) => {
@@ -48,7 +50,15 @@ const Index: FC<Props> = ({
     if (!tryNormalLogged(true)) {
       return;
     }
-    updateReaction({ ...params, type: 'toggle' }).then((res) => {
+    let reaction = 'activate';
+    if (
+      reactions &&
+      reactions[params.emoji] &&
+      reactions[params.emoji].includes(username)
+    ) {
+      reaction = 'deactivate';
+    }
+    updateReaction({ ...params, reaction }).then((res) => {
       setReactions(res);
     });
   };
