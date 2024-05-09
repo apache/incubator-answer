@@ -75,7 +75,8 @@ func (mc *MetaController) GetReaction(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	resp, err := mc.metaService.GetReactionByObjectId(ctx, req.ObjectID)
+	resp, err := mc.metaService.GetReactionByObjectId(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

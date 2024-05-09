@@ -81,7 +81,7 @@ func (ms *MetaCommonService) AddOrUpdateMetaByObjectIdAndKey(ctx context.Context
 func (ms *MetaCommonService) GetMetaByObjectIdAndKey(ctx context.Context, objectID, key string) (meta *entity.Meta, err error) {
 	meta, exist, err := ms.metaRepo.GetMetaByObjectIdAndKey(ctx, objectID, key)
 	if err != nil {
-		return
+		return nil, err
 	}
 	if !exist {
 		return nil, myErrors.BadRequest(reason.MetaObjectNotFound)

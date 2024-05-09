@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components';
 import { queryReactions, updateReaction } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
-import { loggedUserInfoStore } from '@/stores';
+import { ReactionItem } from '@/common/interface';
 
 interface Props {
   objectId: string;
@@ -36,9 +36,8 @@ const Index: FC<Props> = ({
   showAddCommentBtn,
   handleClickComment,
 }) => {
-  const [reactions, setReactions] = useState<Record<string, string[]>>();
+  const [reactions, setReactions] = useState<Record<string, ReactionItem>>();
   const { t } = useTranslation('translation');
-  const { username = '' } = loggedUserInfoStore((state) => state.user);
 
   useEffect(() => {
     queryReactions(objectId).then((res) => {
@@ -50,34 +49,34 @@ const Index: FC<Props> = ({
     if (!tryNormalLogged(true)) {
       return;
     }
-    let reaction = 'activate';
-    if (
-      reactions &&
-      reactions[params.emoji] &&
-      reactions[params.emoji].includes(username)
-    ) {
-      reaction = 'deactivate';
-    }
-    updateReaction({ ...params, reaction }).then((res) => {
+    updateReaction({
+      ...params,
+      reaction:
+        reactions &&
+        reactions[params.emoji] &&
+        reactions[params.emoji].is_active
+          ? 'deactivate'
+          : 'activate',
+    }).then((res) => {
       setReactions(res.reaction_summary);
     });
   };
 
-  const convertToTooltip = (names: string[]) => {
-    const n: number = Math.min(5, names.length);
-    let ret = '';
-    for (let i = 0; i < n; i += 1) {
-      if (i === n - 1) {
-        ret += names[i];
-      } else {
-        ret += `${names[i]}, `;
-      }
-    }
-    if (names.length > 5) {
-      ret += t('reaction.tooltip', { count: names.length - 5 });
-    }
-    return ret;
-  };
+  // const convertToTooltip = (names: string[]) => {
+  //   const n: number = Math.min(5, names.length);
+  //   let ret = '';
+  //   for (let i = 0; i < n; i += 1) {
+  //     if (i === n - 1) {
+  //       ret += names[i];
+  //     } else {
+  //       ret += `${names[i]}, `;
+  //     }
+  //   }
+  //   if (names.length > 5) {
+  //     ret += t('reaction.tooltip', { count: names.length - 5 });
+  //   }
+  //   return ret;
+  // };
 
   const renderTooltip = (props) => (
     <Tooltip id="reaction-button-tooltip" {...props} bsPrefix="tooltip">
@@ -120,7 +119,7 @@ const Index: FC<Props> = ({
 
       {reactions &&
         emojiMap.map((emoji) => {
-          if (!reactions[emoji.name] || reactions[emoji.name].length === 0) {
+          if (!reactions[emoji.name] || reactions[emoji.name].count === 0) {
             return null;
           }
           return (
@@ -131,7 +130,7 @@ const Index: FC<Props> = ({
                 <Tooltip>
                   <div className="text-start">
                     <b>{t(`reaction.${emoji.name}`)}</b> <br />{' '}
-                    {convertToTooltip(reactions[emoji.name])}
+                    {reactions[emoji.name].tooltip}
                   </div>
                 </Tooltip>
               }>
@@ -143,7 +142,7 @@ const Index: FC<Props> = ({
                   handleSubmit({ object_id: objectId, emoji: emoji.name })
                 }>
                 <Icon name={emoji.icon} className={emoji.className} />
-                <span className="ms-1">{reactions[emoji.name].length}</span>
+                <span className="ms-1">{reactions[emoji.name].count}</span>
               </Button>
             </OverlayTrigger>
           );
