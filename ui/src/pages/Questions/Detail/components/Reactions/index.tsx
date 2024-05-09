@@ -62,22 +62,6 @@ const Index: FC<Props> = ({
     });
   };
 
-  // const convertToTooltip = (names: string[]) => {
-  //   const n: number = Math.min(5, names.length);
-  //   let ret = '';
-  //   for (let i = 0; i < n; i += 1) {
-  //     if (i === n - 1) {
-  //       ret += names[i];
-  //     } else {
-  //       ret += `${names[i]}, `;
-  //     }
-  //   }
-  //   if (names.length > 5) {
-  //     ret += t('reaction.tooltip', { count: names.length - 5 });
-  //   }
-  //   return ret;
-  // };
-
   const renderTooltip = (props) => (
     <Tooltip id="reaction-button-tooltip" {...props} bsPrefix="tooltip">
       <div className="d-block d-md-flex flex-wrap m-0 p-0">
