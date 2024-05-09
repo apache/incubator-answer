@@ -200,26 +200,26 @@ func (ms *MetaService) convertToReactionResp(ctx context.Context, userId string,
 	// traverse map and convert to username
 	for emoji, userIds := range reaction {
 		resp.ReactionSummary[emoji] = &schema.ReactionItem{
-			Count:    len(userIds),
 			IsActive: isInArray(userIds, userId),
 		}
 		userNames := make([]string, 0)
 		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, userIds)
+		resp.ReactionSummary[emoji].Count = len(userBasicInfos)
 		if err != nil {
 			return resp, err
 		}
 		// get username
 		for _, userBasicInfo := range userBasicInfos {
-			if len(userNames) == 5 {
+			userNames = append(userNames, userBasicInfo.Username)
+			if len(userNames) == 5 && len(userBasicInfos) > 5 {
 				resp.ReactionSummary[emoji].Tooltip = translator.TrWithData(lang, constant.ReactionTooltipLabel, map[string]string{
-					"Count": strconv.Itoa(len(userIds) - 5),
+					"Count": strconv.Itoa(len(userBasicInfos) - 5),
 					"Names": strings.Join(userNames, ", "),
 				})
 				break
 			}
-			userNames = append(userNames, userBasicInfo.Username)
 		}
-		if len(userIds) <= 5 {
+		if len(userBasicInfos) <= 5 {
 			resp.ReactionSummary[emoji].Tooltip = strings.Join(userNames, ", ")
 		}
 	}
