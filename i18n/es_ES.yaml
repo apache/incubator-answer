@@ -1864,6 +1864,6 @@ ui:
     post_hide_list: Esta publicación ha sido ocultada de la lista.
     post_show_list: Esta publicación ha sido mostrada a la lista.
     post_reopen: Esta publicación ha sido reabierta.
-    post_list: This post has been listed.
-    post_unlist: This post has been unlisted.
-    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_list: Esta publicación ha sido listada.
+    post_unlist: Esta publicación ha sido retirado de la lista..
+    post_pending: Su publicación está pendiente de revisión. Esto es una vista previa, será visible después de que haya sido aprobado.
