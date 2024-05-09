@@ -93,7 +93,7 @@ export const updateReaction = (params) => {
 };
 
 export const queryReactions = (object_id: string) => {
-  return request.get<Record<string, string[]>>(
+  return request.get<Type.ReactionItems>(
     `/answer/api/v1/meta/reaction?object_id=${object_id}`,
   );
 };
