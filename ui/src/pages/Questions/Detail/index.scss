@@ -16,45 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
-.answer-reaction-btn {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  color: $secondary;
-  &:hover {
-    background-color: $gray-400 !important;
-    color: $secondary;
-  }
-  &:active {
-    background-color: $gray-500 !important;
-    color: $secondary !important;
-  }
-}
-
 #reaction-button-tooltip {
   .tooltip-inner {
     padding: 0.2rem;
-    background-color: $white;
-    border: 1px solid $gray-500;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
     .btn {
-      background-color: $white;
-      border: none;
+      background-color: var(--bs-body-bg);
+      border-color: transparent;
       &:hover {
-        background-color: $gray-100;
+        background-color: var(--bs-gray-100);
       }
       &:active {
-        background-color: $gray-300;
+        background-color: var(--bs-gray-200);
       }
     }
   }
 
   .tooltip-arrow {
     overflow: hidden;
-    bottom: calc(-1 * $tooltip-arrow-height + 1px);
+    bottom: calc(-0.4rem + 1px);
     &::before {
-      border: 1px solid $gray-500;
+      border: 1px solid var(--bs-gray-500);
       width: 50%;
       height: 100%;
       transform: translate(-50%, -50%) rotate(-45deg);

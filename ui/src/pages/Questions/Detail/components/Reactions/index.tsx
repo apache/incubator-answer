@@ -2,6 +2,8 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import classNames from 'classnames';
+
 import { Icon } from '@/components';
 import { queryReactions, updateReaction } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
@@ -81,10 +83,14 @@ const Index: FC<Props> = ({
   );
 
   return (
-    <div className="d-block d-md-flex flex-wrap mt-4 mb-3">
+    <div
+      className={classNames('d-block d-md-flex flex-wrap', {
+        'mb-3': !showAddCommentBtn,
+      })}>
       {showAddCommentBtn && (
         <Button
-          className="rounded-pill btn-no-border answer-reaction-btn bg-light"
+          className="rounded-pill me-2 link-secondary"
+          variant="light"
           size="sm"
           onClick={handleClickComment}>
           <Icon name="chat-text-fill" />
@@ -95,7 +101,8 @@ const Index: FC<Props> = ({
       <OverlayTrigger trigger="click" placement="top" overlay={renderTooltip}>
         <Button
           size="sm"
-          className="rounded-pill ms-2 answer-reaction-btn bg-light btn-no-border">
+          className="rounded-pill link-secondary"
+          variant="light">
           <Icon name="emoji-smile-fill" />
           <span className="ms-1">+</span>
         </Button>
@@ -119,14 +126,15 @@ const Index: FC<Props> = ({
                 </Tooltip>
               }>
               <Button
-                title="hahah"
-                className="rounded-pill ms-2 answer-reaction-btn bg-light btn-no-border"
+                title={emoji.name}
+                className="rounded-pill ms-2 link-secondary d-flex align-items-center"
+                variant="light"
                 size="sm"
                 onClick={() =>
                   handleSubmit({ object_id: objectId, emoji: emoji.name })
                 }>
                 <Icon name={emoji.icon} className={emoji.className} />
-                <span className="ms-1">{reactions[emoji.name].count}</span>
+                <span className="ms-1 lh-1">{reactions[emoji.name].count}</span>
               </Button>
             </OverlayTrigger>
           );
