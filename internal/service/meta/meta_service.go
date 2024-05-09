@@ -23,9 +23,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strconv"
+	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
@@ -54,26 +58,25 @@ func NewMetaService(metaCommonService *metacommon.MetaCommonService, userCommon 
 }
 
 // GetReactionByObjectId get reaction
-func (ms *MetaService) GetReactionByObjectId(ctx context.Context, objectID string) (resp *schema.ReactionResp, err error) {
-	resp = &schema.ReactionResp{}
-	reactionMeta, err := ms.metaCommonService.GetMetaByObjectIdAndKey(ctx, objectID, entity.ObjectReactSummaryKey)
+func (ms *MetaService) GetReactionByObjectId(ctx context.Context, req *schema.GetReactionReq) (resp *schema.ReactionResp, err error) {
+	reactionMeta, err := ms.metaCommonService.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
 
 	// if not exist, return nil
 	if err != nil {
 		var pacmanErr *myErrors.Error
 		if errors.As(err, &pacmanErr) && pacmanErr.Reason == reason.MetaObjectNotFound {
-			return resp, nil
+			return nil, nil
 		} else {
-			return resp, err
+			return nil, err
 		}
 	}
 
-	var reaction schema.ReactSummaryMeta
+	var reaction schema.ReactionSummaryMeta
 	err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
-	return ms.convertToReactionResp(ctx, reaction)
+	return ms.convertToReactionResp(ctx, req.UserID, reaction)
 }
 
 // AddOrUpdateReaction add or update reaction
@@ -104,11 +107,11 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 	}
 
 	// add or update
-	var reaction schema.ReactSummaryMeta
+	var reaction schema.ReactionSummaryMeta
 	err = ms.metaCommonService.AddOrUpdateMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey, func(meta *entity.Meta, exist bool) (*entity.Meta, error) {
 		// if not exist, create new one
 		if !exist {
-			reaction = schema.ReactSummaryMeta{}
+			reaction = schema.ReactionSummaryMeta{}
 		} else {
 			err = json.Unmarshal([]byte(meta.Value), &reaction)
 			if err != nil {
@@ -136,7 +139,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 		return nil, myErrors.InternalServer(reason.DatabaseError).WithError(err)
 	}
 
-	resp, err = ms.convertToReactionResp(ctx, reaction)
+	resp, err = ms.convertToReactionResp(ctx, req.UserID, reaction)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +148,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 }
 
 // updateReaction update reaction
-func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactSummaryMeta) {
+func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactionSummaryMeta) {
 	emojiUserIds, ok := reaction[req.Emoji]
 
 	if !ok {
@@ -181,12 +184,25 @@ func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction sc
 	reaction[req.Emoji] = emojiUserIds
 }
 
-func (ms *MetaService) convertToReactionResp(ctx context.Context, reaction schema.ReactSummaryMeta) (*schema.ReactionResp, error) {
+func (ms *MetaService) convertToReactionResp(ctx context.Context, userId string, reaction schema.ReactionSummaryMeta) (*schema.ReactionResp, error) {
+	lang := handler.GetLangByCtx(ctx)
 	resp := &schema.ReactionResp{
-		ReactionSummary: make(schema.ReactSummaryMeta),
+		ReactionSummary: make(map[string]*schema.ReactionItem),
+	}
+	isInArray := func(arr []string, target string) bool {
+		for _, str := range arr {
+			if str == target {
+				return true
+			}
+		}
+		return false
 	}
 	// traverse map and convert to username
 	for emoji, userIds := range reaction {
+		resp.ReactionSummary[emoji] = &schema.ReactionItem{
+			Count:    len(userIds),
+			IsActive: isInArray(userIds, userId),
+		}
 		userNames := make([]string, 0)
 		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 		if err != nil {
@@ -194,9 +210,18 @@ func (ms *MetaService) convertToReactionResp(ctx context.Context, reaction schem
 		}
 		// get username
 		for _, userBasicInfo := range userBasicInfos {
+			if len(userNames) == 5 {
+				resp.ReactionSummary[emoji].Tooltip = translator.TrWithData(lang, constant.ReactionTooltipLabel, map[string]string{
+					"Count": strconv.Itoa(len(userIds) - 5),
+					"Names": strings.Join(userNames, ", "),
+				})
+				break
+			}
 			userNames = append(userNames, userBasicInfo.Username)
 		}
-		resp.ReactionSummary[emoji] = userNames
+		if len(userIds) <= 5 {
+			resp.ReactionSummary[emoji].Tooltip = strings.Join(userNames, ", ")
+		}
 	}
 
 	return resp, nil

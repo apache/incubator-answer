@@ -724,5 +724,11 @@ export interface PutFlagReviewParams {
  * @description response for reaction
  */
 export interface ReactionItems {
-  reaction_summary: Record<string, string[]>;
+  reaction_summary: Record<string, ReactionItem>;
+}
+
+export interface ReactionItem {
+  count: number;
+  tooltip: string;
+  is_active: boolean;
 }

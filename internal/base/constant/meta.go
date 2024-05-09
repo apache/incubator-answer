@@ -17,28 +17,8 @@
  * under the License.
  */
 
-package schema
+package constant
 
-type UpdateReactionReq struct {
-	ObjectID string `validate:"required" json:"object_id"`
-	Emoji    string `validate:"required,oneof=heart smile frown" json:"emoji"`
-	Reaction string `validate:"required,oneof=activate deactivate" json:"reaction"`
-	UserID   string `json:"-"`
-}
-
-type GetReactionReq struct {
-	ObjectID string `validate:"required" form:"object_id"`
-	UserID   string `json:"-"`
-}
-
-type ReactionSummaryMeta map[string][]string
-
-type ReactionItem struct {
-	Count    int    `json:"count"`
-	Tooltip  string `json:"tooltip"`
-	IsActive bool   `json:"is_active"`
-}
-
-type ReactionResp struct {
-	ReactionSummary map[string]*ReactionItem `json:"reaction_summary"`
-}
+const (
+	ReactionTooltipLabel = "reaction.tooltip"
+)
