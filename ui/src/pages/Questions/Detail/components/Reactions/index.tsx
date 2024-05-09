@@ -36,13 +36,13 @@ const Index: FC<Props> = ({
   showAddCommentBtn,
   handleClickComment,
 }) => {
-  const [reactions, setReactions] = useState<Record<string, string[]>>({});
+  const [reactions, setReactions] = useState<Record<string, string[]>>();
   const { t } = useTranslation('translation');
   const { username = '' } = loggedUserInfoStore((state) => state.user);
 
   useEffect(() => {
     queryReactions(objectId).then((res) => {
-      setReactions(res);
+      setReactions(res.reaction_summary);
     });
   }, []);
 
@@ -59,7 +59,7 @@ const Index: FC<Props> = ({
       reaction = 'deactivate';
     }
     updateReaction({ ...params, reaction }).then((res) => {
-      setReactions(res);
+      setReactions(res.reaction_summary);
     });
   };
 

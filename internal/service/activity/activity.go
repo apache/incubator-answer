@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/apache/incubator-answer/internal/service/activity_common"
+	"github.com/apache/incubator-answer/internal/service/meta_common"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -33,7 +34,6 @@ import (
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/comment_common"
 	"github.com/apache/incubator-answer/internal/service/config"
-	"github.com/apache/incubator-answer/internal/service/meta"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/tag_common"
@@ -58,7 +58,7 @@ type ActivityService struct {
 	objectInfoService     *object_info.ObjService
 	commentCommonService  *comment_common.CommentCommonService
 	revisionService       *revision_common.RevisionService
-	metaService           *meta.MetaService
+	metaService           *metacommon.MetaCommonService
 	configService         *config.ConfigService
 }
 
@@ -71,7 +71,7 @@ func NewActivityService(
 	objectInfoService *object_info.ObjService,
 	commentCommonService *comment_common.CommentCommonService,
 	revisionService *revision_common.RevisionService,
-	metaService *meta.MetaService,
+	metaService *metacommon.MetaCommonService,
 	configService *config.ConfigService,
 ) *ActivityService {
 	return &ActivityService{

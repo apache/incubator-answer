@@ -21,13 +21,11 @@ package meta
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service/meta"
+	"github.com/apache/incubator-answer/internal/service/meta_common"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
 	"xorm.io/xorm"
@@ -39,7 +37,7 @@ type metaRepo struct {
 }
 
 // NewMetaRepo new repository
-func NewMetaRepo(data *data.Data) meta.MetaRepo {
+func NewMetaRepo(data *data.Data) metacommon.MetaRepo {
 	return &metaRepo{
 		data: data,
 	}
@@ -73,97 +71,32 @@ func (mr *metaRepo) UpdateMeta(ctx context.Context, meta *entity.Meta) (err erro
 }
 
 // AddOrUpdateMetaByObjectIdAndKey if exist record with same objectID and key, update it. Or create a new one
-func (mr *metaRepo) AddOrUpdateMetaByObjectIdAndKey(ctx context.Context, req *schema.UpdateReactionReq) (schema.ReactSummaryMeta, error) {
-	result, err := mr.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+func (mr *metaRepo) AddOrUpdateMetaByObjectIdAndKey(ctx context.Context, objectId, key string, f func(*entity.Meta, bool) (*entity.Meta, error)) error {
+	_, err := mr.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
 		session = session.Context(ctx)
 
 		// 1. acquire meta entity with target object id and key
 		metaEntity := &entity.Meta{}
-		exist, err := mr.data.DB.Context(ctx).Where(builder.Eq{"object_id": req.ObjectID}.And(builder.Eq{"`key`": entity.ObjectReactSummaryKey})).ForUpdate().Get(metaEntity)
-		if err != nil {
-			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		}
-
-		var reaction schema.ReactSummaryMeta
-		// if not exist, create new one
-		if !exist {
-			reaction = schema.ReactSummaryMeta{}
-		} else {
-			err = json.Unmarshal([]byte(metaEntity.Value), &reaction)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		// update reaction
-		mr.updateReaction(req, reaction)
-
-		// write back to meta repo
-		reactSumBytes, err := json.Marshal(reaction)
+		exist, err := session.Where(builder.Eq{"object_id": objectId}.And(builder.Eq{"`key`": key})).ForUpdate().Get(metaEntity)
 		if err != nil {
 			return nil, err
 		}
 
-		metaObj := &entity.Meta{
-			ObjectID: req.ObjectID,
-			Key:      entity.ObjectReactSummaryKey,
-			Value:    string(reactSumBytes),
+		meta, err := f(metaEntity, exist)
+		if err != nil {
+			return nil, err
 		}
+
+		// return entity.Meta
 		if exist {
-			_, err = session.Update(metaObj)
+			_, err = session.ID(metaEntity.ID).Update(meta)
 		} else {
-			_, err = session.Insert(metaObj)
+			_, err = session.Insert(meta)
 		}
 
-		return reaction, err
+		return nil, err
 	})
-
-	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err)
-	}
-
-	if ret, ok := result.(schema.ReactSummaryMeta); ok {
-		return ret, nil
-	} else {
-		return nil, errors.InternalServer(reason.UnknownError).WithMsg("Unable to cast to schema.ReactSummaryMeta.")
-	}
-}
-
-// updateReaction update reaction
-func (mr *metaRepo) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactSummaryMeta) {
-	emojiUserIds, ok := reaction[req.Emoji]
-
-	if !ok {
-		emojiUserIds = make([]string, 0)
-	}
-
-	found := false
-	for _, item := range emojiUserIds {
-		if item == req.UserID {
-			found = true
-			break
-		}
-	}
-
-	removeItem := func(arr []string, target string) []string {
-		result := make([]string, 0, len(arr))
-
-		for _, item := range arr {
-			if item != target {
-				result = append(result, item)
-			}
-		}
-
-		return result
-	}
-
-	if req.Reaction == "activate" && !found {
-		emojiUserIds = append(emojiUserIds, req.UserID)
-	} else if req.Reaction == "deactivate" && found {
-		emojiUserIds = removeItem(emojiUserIds, req.UserID)
-	}
-
-	reaction[req.Emoji] = emojiUserIds
+	return err
 }
 
 // GetMetaByObjectIdAndKey get meta one

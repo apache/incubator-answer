@@ -719,3 +719,10 @@ export interface PutFlagReviewParams {
   captcha_code?: any;
   captcha_id?: any;
 }
+
+/**
+ * @description response for reaction
+ */
+export interface ReactionItems {
+  reaction_summary: Record<string, string[]>;
+}

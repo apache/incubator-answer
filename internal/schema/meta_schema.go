@@ -20,16 +20,20 @@
 package schema
 
 type UpdateReactionReq struct {
-	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
-	Emoji    string `validate:"required" form:"emoji" json:"emoji"`         // emoji
-	Reaction string `validate:"required" form:"reaction" json:"reaction"`   // reaction
+	ObjectID string `validate:"required" json:"object_id"`
+	Emoji    string `validate:"required,oneof=heart smile frown" json:"emoji"`
+	Reaction string `validate:"required,oneof=activate deactivate" json:"reaction"`
 	UserID   string `json:"-"`
 }
 
 type GetReactionReq struct {
-	ObjectID string `validate:"required" form:"object_id" json:"object_id"` // object id
+	ObjectID string `validate:"required" form:"object_id"`
 }
 
 type ReactSummaryMeta map[string][]string
 
-type ReactionResp ReactSummaryMeta
+type ReactionResp struct {
+	// reaction summary is a map, key is emoji, value is username list
+	// such as {"heart": ["jack", "tom"], "smile": ["andy"], "frown": ["bob"]}
+	ReactionSummary ReactSummaryMeta `json:"reaction_summary"`
+}
