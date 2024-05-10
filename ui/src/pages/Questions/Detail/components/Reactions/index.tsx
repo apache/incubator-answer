@@ -39,6 +39,7 @@ const Index: FC<Props> = ({
   handleClickComment,
 }) => {
   const [reactions, setReactions] = useState<Record<string, ReactionItem>>();
+  const [reactIsActive, setReactIsActive] = useState<boolean>(false);
   const { t } = useTranslation('translation');
 
   useEffect(() => {
@@ -61,6 +62,7 @@ const Index: FC<Props> = ({
           : 'activate',
     }).then((res) => {
       setReactions(res.reaction_summary);
+      setReactIsActive(false);
     });
   };
 
@@ -98,10 +100,16 @@ const Index: FC<Props> = ({
         </Button>
       )}
 
-      <OverlayTrigger trigger="click" placement="top" overlay={renderTooltip}>
+      <OverlayTrigger
+        trigger="click"
+        placement="top"
+        overlay={renderTooltip}
+        show={reactIsActive}
+        onToggle={(show) => setReactIsActive(show)}>
         <Button
           size="sm"
-          className="rounded-pill link-secondary"
+          active={reactIsActive}
+          className="smile-btn rounded-pill link-secondary"
           variant="light">
           <Icon name="emoji-smile-fill" />
           <span className="ms-1">+</span>
