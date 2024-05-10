@@ -21,12 +21,15 @@
     padding: 0.2rem;
     background-color: var(--bs-body-bg);
     border: 1px solid var(--bs-border-color);
+
     .btn {
       background-color: var(--bs-body-bg);
       border-color: transparent;
+
       &:hover {
         background-color: var(--bs-gray-100);
       }
+
       &:active {
         background-color: var(--bs-gray-200);
       }
@@ -36,6 +39,7 @@
   .tooltip-arrow {
     overflow: hidden;
     bottom: calc(-0.4rem + 1px);
+
     &::before {
       border: 1px solid var(--bs-gray-500);
       width: 50%;
@@ -47,6 +51,18 @@
       background-color: white;
     }
   }
+}
+
+.smile-btn.active::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+  display: block;
+  cursor: default;
+  content: " ";
 }
 
 @media screen and (max-width: 768px) {
