@@ -40,7 +40,8 @@ interface IProps {
   maxTagLength?: number;
   showRequiredTag?: boolean;
   autoFocus?: boolean;
-  className?: string;
+  isInvalid?: boolean;
+  errMsg?: string;
 }
 
 let timer;
@@ -53,7 +54,8 @@ const TagSelector: FC<IProps> = ({
   maxTagLength = 0,
   showRequiredTag = false,
   autoFocus = false,
-  className = '',
+  isInvalid = false,
+  errMsg = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -343,7 +345,7 @@ const TagSelector: FC<IProps> = ({
         className={classNames(
           'tag-selector-wrap form-control position-relative p-0',
           focusState ? 'tag-selector-wrap--focus' : '',
-          className,
+          isInvalid ? 'is-invalid' : '',
         )}
         onFocus={handleTagSelectorFocus}
         onKeyDown={handleKeyDown}>
@@ -426,6 +428,7 @@ const TagSelector: FC<IProps> = ({
         </Dropdown.Menu>
       </div>
       {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
+      <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
     </div>
   );
 };

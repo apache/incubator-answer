@@ -456,15 +456,11 @@ const Ask = () => {
                 onChange={handleTagsChange}
                 showRequiredTag
                 maxTagLength={5}
-                className={classNames(
-                  'form-control p-0',
-                  formData.tags.isInvalid && 'is-invalid',
-                )}
+                isInvalid={formData.tags.isInvalid}
+                errMsg={formData.tags.errorMsg}
               />
-              <Form.Control.Feedback type="invalid">
-                {formData.tags.errorMsg}
-              </Form.Control.Feedback>
             </Form.Group>
+
             {isEdit && (
               <Form.Group controlId="edit_summary" className="my-3">
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
