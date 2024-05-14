@@ -259,7 +259,7 @@ func (as *ActivityService) GetObjectTimelineDetail(ctx context.Context, req *sch
 	return resp, nil
 }
 
-// GetObjectTimelineDetail get object detail
+// getOneObjectDetail get object detail
 func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID string) (
 	resp *schema.ObjectTimelineDetail, err error) {
 	resp = &schema.ObjectTimelineDetail{Tags: make([]*schema.ObjectTimelineTag, 0)}

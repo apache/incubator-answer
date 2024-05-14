@@ -25,7 +25,7 @@ import { FormDataType } from '@/common/interface';
 import { brandSetting, getBrandSetting } from '@/services';
 import { brandingStore } from '@/stores';
 import { useToast } from '@/hooks';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const uploadType = 'branding';
 const Index: FC = () => {
@@ -145,6 +145,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

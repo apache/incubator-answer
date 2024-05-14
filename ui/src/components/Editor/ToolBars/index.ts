@@ -18,7 +18,6 @@
  */
 
 import Table from './table';
-import Formula from './formula';
 import OL from './ol';
 import UL from './ul';
 import Indent from './indent';
@@ -36,7 +35,6 @@ import Chart from './chart';
 
 export {
   Table,
-  Formula,
   OL,
   UL,
   Indent,

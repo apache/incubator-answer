@@ -29,7 +29,7 @@ import { Editor, EditorRef } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
 import { createTag } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
 
 interface FormDataItem {
@@ -107,10 +107,12 @@ const Index = () => {
 
   const checkValidated = (): boolean => {
     let bol = true;
+    let errObjKey = '';
     const { displayName, slugName } = formData;
 
     if (!displayName.value) {
       bol = false;
+      errObjKey = 'display_name';
       formData.displayName = {
         value: '',
         isInvalid: true,
@@ -118,6 +120,7 @@ const Index = () => {
       };
     } else if (displayName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
       bol = false;
+      errObjKey = 'display_name';
       formData.displayName = {
         value: displayName.value,
         isInvalid: true,
@@ -133,6 +136,7 @@ const Index = () => {
 
     if (!slugName.value) {
       bol = false;
+      errObjKey = 'slug_name';
       formData.slugName = {
         value: '',
         isInvalid: true,
@@ -140,6 +144,7 @@ const Index = () => {
       };
     } else if (slugName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
       bol = false;
+      errObjKey = 'slug_name';
       formData.slugName = {
         value: slugName.value,
         isInvalid: true,
@@ -156,6 +161,12 @@ const Index = () => {
     setFormData({
       ...formData,
     });
+
+    if (!bol) {
+      const ele = document.getElementById(errObjKey);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -187,6 +198,8 @@ const Index = () => {
             { from: 'original_text', to: 'description' },
           ]);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

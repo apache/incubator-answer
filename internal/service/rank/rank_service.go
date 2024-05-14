@@ -242,7 +242,7 @@ func (rs *RankService) getUserPowerMapping(ctx context.Context, userID string) (
 	return powerMapping
 }
 
-// CheckRankPermission verify that the user meets the prestige criteria
+// checkUserRank verify that the user meets the prestige criteria
 func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRank int, action string) (
 	can bool, rank int) {
 	// get the amount of rank required for the current operation

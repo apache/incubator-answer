@@ -434,6 +434,9 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		return
 	}
 
+	req.UserAgent = ctx.GetHeader("User-Agent")
+	req.IP = ctx.ClientIP()
+
 	resp, err := qc.questionService.AddQuestion(ctx, req)
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)
@@ -526,6 +529,8 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		return
 	}
 
+	req.UserAgent = ctx.GetHeader("User-Agent")
+	req.IP = ctx.ClientIP()
 	resp, err := qc.questionService.AddQuestion(ctx, questionReq)
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)

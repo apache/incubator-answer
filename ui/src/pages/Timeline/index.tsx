@@ -31,6 +31,8 @@ import * as Type from '@/common/interface';
 
 import HistoryItem from './components/Item';
 
+import './index.scss';
+
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'timeline' });
   const { qid = '', aid = '', tid = '' } = useParams();
@@ -116,13 +118,13 @@ const Index: FC = () => {
           onChange={(e) => handleSwitch(e.target.checked)}
         />
       )}
-      <Table hover>
+      <Table hover responsive>
         <thead>
           <tr>
             <th style={{ width: '20%' }}>{t('datetime')}</th>
             <th style={{ width: '15%' }}>{t('type')}</th>
             <th style={{ width: '19%' }}>{t('by')}</th>
-            <th>{t('comment')}</th>
+            <th className="min-w-15">{t('comment')}</th>
           </tr>
         </thead>
         <tbody>

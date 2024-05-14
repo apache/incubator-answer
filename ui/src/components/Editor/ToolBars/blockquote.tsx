@@ -29,7 +29,7 @@ const BlockQuote = () => {
 
   const item = {
     label: 'blockquote',
-    keyMap: ['Ctrl-Q'],
+    keyMap: ['Ctrl-q'],
     tip: `${t('blockquote.text')} (Ctrl+Q)`,
   };
 

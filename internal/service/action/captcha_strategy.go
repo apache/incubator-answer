@@ -21,8 +21,10 @@ package action
 
 import (
 	"context"
-	"github.com/segmentfault/pacman/log"
 	"time"
+
+	"github.com/apache/incubator-answer/plugin"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/apache/incubator-answer/internal/entity"
 )
@@ -31,6 +33,10 @@ import (
 // true pass
 // false need captcha
 func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionType string) bool {
+	// If the captcha is not enabled, the verification is passed directly
+	if !plugin.CaptchaEnabled() {
+		return true
+	}
 	info, err := cs.captchaRepo.GetActionType(ctx, unit, actionType)
 	if err != nil {
 		log.Error(err)

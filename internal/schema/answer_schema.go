@@ -54,6 +54,8 @@ type AnswerAddReq struct {
 	CanRecover  bool   `json:"-"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
+	IP          string `json:"-"`
+	UserAgent   string `json:"-"`
 }
 
 func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err error) {

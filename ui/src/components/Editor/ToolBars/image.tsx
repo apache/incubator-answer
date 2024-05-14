@@ -21,11 +21,11 @@ import { useEffect, useState, memo } from 'react';
 import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type { Editor } from 'codemirror';
+import { EditorState, StateEffect } from '@codemirror/state';
 
 import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
-import { IEditorContext } from '../types';
+import { IEditorContext, Editor } from '../types';
 import { uploadImage } from '@/services';
 
 let context: IEditorContext;
@@ -37,7 +37,7 @@ const Image = ({ editorInstance }) => {
 
   const item = {
     label: 'image',
-    keyMap: ['Ctrl-G'],
+    keyMap: ['Ctrl-g'],
     tip: `${t('image.text')} (Ctrl+G)`,
   };
   const [currentTab, setCurrentTab] = useState('localImage');
@@ -94,16 +94,16 @@ const Image = ({ editorInstance }) => {
 
     return Promise.all(promises);
   };
-  function dragenter(_, e) {
+  function dragenter(e) {
     e.stopPropagation();
     e.preventDefault();
   }
 
-  function dragover(_, e) {
+  function dragover(e) {
     e.stopPropagation();
     e.preventDefault();
   }
-  const drop = async (_, e) => {
+  const drop = async (e) => {
     const fileList = e.dataTransfer.files;
 
     const bool = verifyImageSize(fileList);
@@ -112,7 +112,9 @@ const Image = ({ editorInstance }) => {
       return;
     }
 
+    // const startPos = editor.getCursor(''); codemirror 6
     const startPos = editor.getCursor();
+
     const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
 
     editor.replaceSelection(loadingText);
@@ -136,26 +138,30 @@ const Image = ({ editorInstance }) => {
     }
   };
 
-  const paste = async (_, event) => {
+  const paste = async (event) => {
     const clipboard = event.clipboardData;
 
     const bool = verifyImageSize(clipboard.files);
 
     if (bool) {
       event.preventDefault();
-      editor.setOption('readOnly', true);
-      const startPos = editor.getCursor('');
+      const startPos = editor.getCursor();
       const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
 
       editor.replaceSelection(loadingText);
+      editor.dispatch({
+        effects: StateEffect.appendConfig.of([EditorState.readOnly.of(true)]),
+      });
       const urls = await upload(clipboard.files);
       const text = urls.map(({ name, url }) => {
         return `![${name}](${url})`;
       });
 
       editor.replaceRange(text.join('\n'), startPos, endPos);
+      editor.dispatch({
+        effects: StateEffect.appendConfig.of([EditorState.readOnly.of(false)]),
+      });
 
-      editor.setOption('readOnly', false);
       return;
     }
 

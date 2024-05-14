@@ -22,6 +22,7 @@ package siteinfo_common
 import (
 	"context"
 	"encoding/json"
+	"html"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/entity"
@@ -70,6 +71,7 @@ func (s *siteInfoCommonService) GetSiteGeneral(ctx context.Context) (resp *schem
 	if err = s.GetSiteInfoByType(ctx, constant.SiteTypeGeneral, resp); err != nil {
 		return nil, err
 	}
+	resp.Name = html.UnescapeString(resp.Name)
 	return resp, nil
 }
 
