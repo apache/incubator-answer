@@ -486,7 +486,7 @@ const Ask = () => {
                 errMsg={formData.tags.errorMsg}
               />
             </Form.Group>
-            
+
             {isEdit && (
               <Form.Group controlId="edit_summary" className="my-3">
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
