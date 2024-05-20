@@ -74,7 +74,7 @@ type EmailConfig struct {
 	FromName           string `json:"from_name"`
 	SMTPHost           string `json:"smtp_host"`
 	SMTPPort           int    `json:"smtp_port"`
-	Encryption         string `json:"encryption"` // "" SSL
+	Encryption         string `json:"encryption"` // "" SSL TLS
 	SMTPUsername       string `json:"smtp_username"`
 	SMTPPassword       string `json:"smtp_password"`
 	SMTPAuthentication bool   `json:"smtp_authentication"`
@@ -82,6 +82,10 @@ type EmailConfig struct {
 
 func (e *EmailConfig) IsSSL() bool {
 	return e.Encryption == "SSL"
+}
+
+func (e *EmailConfig) IsTLS() bool {
+	return e.Encryption == "TLS"
 }
 
 // SaveCode save code
@@ -134,6 +138,9 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body str
 	d := gomail.NewDialer(ec.SMTPHost, ec.SMTPPort, ec.SMTPUsername, ec.SMTPPassword)
 	if ec.IsSSL() {
 		d.SSL = true
+	}
+	if ec.IsTLS() {
+		d.SSL = false
 	}
 	if len(os.Getenv("SKIP_SMTP_TLS_VERIFY")) > 0 {
 		d.TLSConfig = &tls.Config{ServerName: d.Host, InsecureSkipVerify: true}
