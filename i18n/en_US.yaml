@@ -1656,6 +1656,7 @@ ui:
         msg: Encryption cannot be empty.
         text: For most servers SSL is the recommended option.
         ssl: SSL
+        tls: TLS
         none: None
       smtp_port:
         label: SMTP port

@@ -1610,6 +1610,7 @@ ui:
         msg: 不能为空
         text: 对于大多数服务器而言，SSL 是推荐开启的。
         ssl: SSL
+        tls: TLS
         none: 无加密
       smtp_port:
         label: SMTP 端口
