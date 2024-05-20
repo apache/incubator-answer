@@ -6208,41 +6208,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/register/captcha": {
-            "get": {
-                "description": "UserRegisterCaptcha",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "UserRegisterCaptcha",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/schema.UserLoginResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/register/email": {
             "post": {
                 "description": "UserRegisterByEmail",
@@ -6280,6 +6245,57 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/schema.UserLoginResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/staff": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user staff",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user staff",
+                "parameters": [
+                    {
+                        "description": "GetUserStaffReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.GetUserStaffReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserStaffResp"
                                         }
                                     }
                                 }
@@ -6927,7 +6943,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "mention_username_list": {
@@ -7985,7 +8000,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL",
+                    "description": "\"\" SSL TLS",
                     "type": "string"
                 },
                 "from_email": {
@@ -8329,6 +8344,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserStaffReq": {
+            "type": "object",
+            "properties": {
+                "page_size": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "schema.GetUserStaffResp": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "avatar",
+                    "type": "string"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
                     "type": "string"
                 }
             }
@@ -8869,7 +8914,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "comment_id": {
@@ -9882,10 +9926,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL",
+                    "description": "\"\" SSL TLS",
                     "type": "string",
                     "enum": [
-                        "SSL"
+                        "SSL",
+                        "TLS"
                     ]
                 },
                 "from_email": {
@@ -10117,12 +10162,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "captcha_id": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "e_mail": {
                     "type": "string",
@@ -10287,12 +10330,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "captcha_id": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "old_pass": {
                     "type": "string",
@@ -10440,15 +10481,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "is_cancel": {
-                    "description": "is cancel",
                     "type": "boolean"
                 },
                 "object_id": {
-                    "description": "id",
                     "type": "string"
                 }
             }
