@@ -26,7 +26,8 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { handleFormError, scrollToDocTop } from '@/utils';
-import { usePageTags, usePromptWithUnload, useCaptchaModal } from '@/hooks';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
+import { useCaptchaPlugin, useRenderHtmlPlugin } from '@/utils/pluginKit';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon, htmlRender } from '@/components';
 import type * as Type from '@/common/interface';
@@ -35,7 +36,6 @@ import {
   modifyAnswer,
   useQueryRevisions,
 } from '@/services';
-import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 
 import './index.scss';
 
@@ -71,9 +71,9 @@ const Index = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
-  const editCaptcha = useCaptchaModal('edit');
+  const editCaptcha = useCaptchaPlugin('edit');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (data?.info?.content) {
       setFormData({
         ...formData,
@@ -153,6 +153,39 @@ const Index = () => {
     return bol;
   };
 
+  const submitEditAnswer = () => {
+    const params: Type.AnswerParams = {
+      content: formData.content.value,
+      html: editorRef.current.getHtml(),
+      question_id: qid,
+      id: aid,
+      edit_summary: formData.description.value,
+    };
+    editCaptcha?.resolveCaptchaReq(params);
+
+    modifyAnswer(params)
+      .then(async (res) => {
+        await editCaptcha?.close();
+        navigate(
+          pathFactory.answerLanding({
+            questionId: qid,
+            slugTitle: data?.question?.url_title,
+            answerId: aid,
+          }),
+          {
+            state: { isReview: res?.wait_for_review },
+          },
+        );
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          editCaptcha?.handleCaptchaError(ex.list);
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
+      });
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setContentChanged(false);
 
@@ -163,38 +196,11 @@ const Index = () => {
       return;
     }
 
-    editCaptcha.check(() => {
-      const params: Type.AnswerParams = {
-        content: formData.content.value,
-        html: editorRef.current.getHtml(),
-        question_id: qid,
-        id: aid,
-        edit_summary: formData.description.value,
-      };
-      editCaptcha.resolveCaptchaReq(params);
-
-      modifyAnswer(params)
-        .then(async (res) => {
-          await editCaptcha.close();
-          navigate(
-            pathFactory.answerLanding({
-              questionId: qid,
-              slugTitle: data?.question?.url_title,
-              answerId: aid,
-            }),
-            {
-              state: { isReview: res?.wait_for_review },
-            },
-          );
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            editCaptcha.handleCaptchaError(ex.list);
-            const stateData = handleFormError(ex, formData);
-            setFormData({ ...stateData });
-          }
-        });
-    });
+    if (!editCaptcha) {
+      submitEditAnswer();
+      return;
+    }
+    editCaptcha.check(() => submitEditAnswer());
   };
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
@@ -227,7 +233,7 @@ const Index = () => {
           <div className="question-content-wrap">
             <div
               ref={questionContentRef}
-              className="content position-absolute top-0 w-100 bg-white"
+              className="content position-absolute top-0 w-100"
               dangerouslySetInnerHTML={{ __html: data?.question.html }}
             />
             <div
@@ -297,6 +303,7 @@ const Index = () => {
                 defaultValue={formData.description.value}
                 isInvalid={formData.description.isInvalid}
                 placeholder={t('form.fields.edit_summary.placeholder')}
+                contentEditable
               />
               <Form.Control.Feedback type="invalid">
                 {formData.description.errorMsg}

@@ -56,7 +56,7 @@ type User struct {
 	Status         int       `xorm:"not null default 1 INT(11) status"`
 	AuthorityGroup int       `xorm:"not null default 1 INT(11) authority_group"`
 	DisplayName    string    `xorm:"not null default '' VARCHAR(30) display_name"`
-	Avatar         string    `xorm:"not null default '' VARCHAR(255) avatar"`
+	Avatar         string    `xorm:"not null default '' VARCHAR(1024) avatar"`
 	Mobile         string    `xorm:"not null VARCHAR(20) mobile"`
 	Bio            string    `xorm:"not null TEXT bio"`
 	BioHTML        string    `xorm:"not null TEXT bio_html"`
@@ -65,6 +65,7 @@ type User struct {
 	IPInfo         string    `xorm:"not null default '' VARCHAR(255) ip_info"`
 	IsAdmin        bool      `xorm:"not null default false BOOL is_admin"`
 	Language       string    `xorm:"not null default '' VARCHAR(100) language"`
+	ColorScheme    string    `xorm:"not null default '' VARCHAR(100) color_scheme"`
 }
 
 // TableName user table name

@@ -28,6 +28,9 @@ export const DRAFT_QUESTION_STORAGE_KEY = '_a_dq_';
 export const DRAFT_ANSWER_STORAGE_KEY = '_a_da_';
 export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
 export const QUESTIONS_ORDER_STORAGE_KEY = '_a_qok_';
+export const DEFAULT_THEME = 'system';
+export const ADMIN_PRIVILEGE_CUSTOM_LEVEL = 99;
+export const SKELETON_SHOW_TIME = 1000;
 
 export const USER_AGENT_NAMES = {
   SegmentFault: 'SegmentFault',
@@ -52,6 +55,11 @@ export const ADMIN_LIST_STATUS = {
     variant: 'text-bg-danger',
     name: 'deleted',
   },
+  // pending
+  11: {
+    variant: 'text-bg-warning',
+    name: 'pending',
+  },
   normal: {
     variant: 'text-bg-success',
     name: 'normal',
@@ -63,6 +71,14 @@ export const ADMIN_LIST_STATUS = {
   deleted: {
     variant: 'text-bg-danger',
     name: 'deleted',
+  },
+  pending: {
+    variant: 'text-bg-warning',
+    name: 'pending',
+  },
+  unlisted: {
+    variant: 'text-bg-secondary',
+    name: 'unlisted',
   },
 };
 
@@ -77,10 +93,6 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'users',
-  },
-  {
-    name: 'flags',
-    // badgeContent: 5,
   },
   {
     name: 'customize',
@@ -634,3 +646,5 @@ export const SYSTEM_AVATAR_OPTIONS = [
     value: 'gravatar',
   },
 ];
+
+export const TAG_SLUG_NAME_MAX_LENGTH = 35;

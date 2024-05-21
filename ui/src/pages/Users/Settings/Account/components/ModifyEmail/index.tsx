@@ -22,9 +22,10 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { useToast, useCaptchaModal } from '@/hooks';
+import { useToast } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { getLoggedUserInfo, changeEmail } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -45,7 +46,7 @@ const Index: FC = () => {
   });
   const [userInfo, setUserInfo] = useState<Type.UserInfoRes>();
   const toast = useToast();
-  const emailCaptcha = useCaptchaModal('edit_userinfo');
+  const emailCaptcha = useCaptchaPlugin('edit_userinfo');
 
   useEffect(() => {
     getLoggedUserInfo().then((resp) => {
@@ -66,7 +67,7 @@ const Index: FC = () => {
       formData.e_mail = {
         value: '',
         isInvalid: true,
-        errorMsg: t('email.msg'),
+        errorMsg: t('new_email.msg'),
       };
     }
 
@@ -81,6 +82,13 @@ const Index: FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
     return bol;
   };
 
@@ -108,14 +116,14 @@ const Index: FC = () => {
       pass: formData.pass.value,
     };
 
-    const imgCode = emailCaptcha.getCaptcha();
-    if (imgCode.verify) {
+    const imgCode = emailCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
     changeEmail(params)
       .then(async () => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         setStep(1);
         toast.onShow({
           msg: t('change_email_info'),
@@ -125,9 +133,11 @@ const Index: FC = () => {
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -138,7 +148,10 @@ const Index: FC = () => {
     if (!checkValidated()) {
       return;
     }
-
+    if (!emailCaptcha) {
+      postEmail();
+      return;
+    }
     emailCaptcha.check(() => {
       postEmail();
     });
@@ -171,7 +184,7 @@ const Index: FC = () => {
       )}
       {step === 2 && (
         <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group controlId="currentPass" className="mb-3">
+          <Form.Group controlId="pass" className="mb-3">
             <Form.Label>{t('pass.label')}</Form.Label>
             <Form.Control
               autoComplete="new-password"
@@ -193,8 +206,8 @@ const Index: FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="newEmail" className="mb-3">
-            <Form.Label>{t('email.label')}</Form.Label>
+          <Form.Group controlId="e_mail" className="mb-3">
+            <Form.Label>{t('new_email.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
               required

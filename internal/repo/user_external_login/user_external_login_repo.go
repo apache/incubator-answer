@@ -72,6 +72,17 @@ func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, provider, 
 	return
 }
 
+// GetByUserID get by user ID
+func (ur *userExternalLoginRepo) GetByUserID(ctx context.Context, provider, userID string) (
+	userInfo *entity.UserExternalLogin, exist bool, err error) {
+	userInfo = &entity.UserExternalLogin{}
+	exist, err = ur.data.DB.Context(ctx).Where("user_id = ?", userID).Where("provider = ?", provider).Get(userInfo)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetUserExternalLoginList get by external ID
 func (ur *userExternalLoginRepo) GetUserExternalLoginList(ctx context.Context, userID string) (
 	resp []*entity.UserExternalLogin, err error) {

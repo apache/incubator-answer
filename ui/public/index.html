@@ -19,7 +19,7 @@
 
 -->
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -89,6 +89,10 @@
     </div>
   </body>
   <script>
+    // disable react devtools
+    if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+      window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {};
+    }
     /**
      * @description: Prompt that the browser version is too low
     */

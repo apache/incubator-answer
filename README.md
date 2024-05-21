@@ -23,29 +23,37 @@ To learn more about the project, visit [answer.apache.org](https://answer.apache
 ### Running with docker
 
 ```bash
-docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
+docker run -d -p 9080:80 -v answer-data:/data --name answer apache/answer:1.3.1
 ```
 
-For more information, see [Installation](https://answer.apache.org/docs/installation)
+For more information, see [Installation](https://answer.apache.org/docs/installation).
 
 ### Plugins
 
-Answer provides a plugin system for developers to create custom plugins and expand Answer’s features. You can find the [plugin documentation here](https://answer.apache.org/docs/development/extending/).
+Answer provides a plugin system for developers to create custom plugins and expand Answer’s features. You can find the [plugin documentation here](https://answer.apache.org/community/plugins).
 
 We value your feedback and suggestions to improve our documentation. If you have any comments or questions, please feel free to contact us. We’re excited to see what you can create using our plugin system!
 
-You can also check out the [plugins here](https://github.com/apache/incubator-answer-plugins).
+You can also check out the [plugins here](https://answer.apache.org/plugins).
 
 ## Building from Source
 
 ### Prerequisites
+
 - Golang >= 1.18
 - Node.js >= 16.17
 - pnpm >= 8
+- mockgen >= 1.6.0
+- wire >= 0.5.0
 
 ### Build
+
 ```bash
+# install wire and mockgen for building
+$ make generate
+# install frontend dependencies and build
 $ make ui
+# install backend dependencies and build
 $ make build
 ```
 
@@ -53,7 +61,7 @@ $ make build
 
 Contributions are always welcome!
 
-See [CONTRIBUTING](https://answer.apache.org/docs/development/contributing/) for ways to get started.
+See [CONTRIBUTING](https://answer.apache.org/community/contributing) for ways to get started.
 
 ## License
 

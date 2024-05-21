@@ -21,9 +21,10 @@ package usercommon
 
 import (
 	"context"
+	"strings"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/pkg/converter"
-	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -48,7 +49,7 @@ type UserRepo interface {
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
 	UpdateEmail(ctx context.Context, userID, email string) error
-	UpdateLanguage(ctx context.Context, userID, language string) error
+	UpdateUserInterface(ctx context.Context, userID, language, colorSchema string) (err error)
 	UpdatePass(ctx context.Context, userID, pass string) error
 	UpdateInfo(ctx context.Context, userInfo *entity.User) (err error)
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
@@ -57,7 +58,7 @@ type UserRepo interface {
 	GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
 	GetUserCount(ctx context.Context) (count int64, err error)
-	SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error)
+	SearchUserListByName(ctx context.Context, name string, limit int, onlyStaff bool) (userList []*entity.User, err error)
 }
 
 // UserCommon user service
@@ -153,6 +154,7 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.DisplayName = userInfo.DisplayName
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
+	userBasicInfo.Language = userInfo.Language
 	userBasicInfo.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
 	if userBasicInfo.Status == constant.UserDeleted {
 		userBasicInfo.Avatar = ""

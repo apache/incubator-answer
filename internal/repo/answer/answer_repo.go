@@ -21,8 +21,6 @@ package answer
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/plugin"
-	"github.com/segmentfault/pacman/log"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -37,7 +35,9 @@ import (
 	"github.com/apache/incubator-answer/internal/service/rank"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/apache/incubator-answer/pkg/uid"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // answerRepo answer repository
@@ -183,10 +183,10 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	return
 }
 
-// GetQuestionCount
+// GetAnswerCount count answer
 func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err error) {
-	list := make([]*entity.Answer, 0)
-	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).FindAndCount(&list)
+	var resp = new(entity.Answer)
+	count, err = ar.data.DB.Context(ctx).Where("status = ?", entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -272,8 +272,8 @@ func (ar *answerRepo) GetByID(ctx context.Context, answerID string) (*entity.Ans
 
 func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID string) (int64, error) {
 	questionID = uid.DeShortID(questionID)
-	rows := make([]*entity.Answer, 0)
-	count, err := ar.data.DB.Context(ctx).Where("question_id =? and  status = ?", questionID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	var resp = new(entity.Answer)
+	count, err := ar.data.DB.Context(ctx).Where("question_id =? and  status = ?", questionID, entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -281,26 +281,30 @@ func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID strin
 }
 
 func (ar *answerRepo) GetCountByUserID(ctx context.Context, userID string) (int64, error) {
-	rows := make([]*entity.Answer, 0)
-	count, err := ar.data.DB.Context(ctx).Where(" user_id = ?  and  status = ?", userID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	var resp = new(entity.Answer)
+	count, err := ar.data.DB.Context(ctx).Where(" user_id = ?  and  status = ?", userID, entity.AnswerStatusAvailable).Count(resp)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return count, nil
 }
 
-func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
+func (ar *answerRepo) GetIDsByUserIDAndQuestionID(ctx context.Context, userID string, questionID string) ([]string, error) {
 	questionID = uid.DeShortID(questionID)
-	var resp entity.Answer
-	has, err := ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).Get(&resp)
+	var ids []string
+	resp := make([]string, 0)
+	err := ar.data.DB.Context(ctx).Table(entity.Answer{}.TableName()).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).OrderBy("created_at ASC").Cols("id").Find(&ids)
 	if err != nil {
-		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return resp, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if handler.GetEnableShortID(ctx) {
-		resp.ID = uid.EnShortID(resp.ID)
-		resp.QuestionID = uid.EnShortID(resp.QuestionID)
+		for _, id := range ids {
+			resp = append(resp, uid.EnShortID(id))
+		}
+	} else {
+		resp = ids
 	}
-	return &resp, has, nil
+	return resp, nil
 }
 
 // SearchList
@@ -332,6 +336,8 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	switch search.Order {
 	case entity.AnswerSearchOrderByTime:
 		session = session.OrderBy("created_at desc")
+	case entity.AnswerSearchOrderByTimeAsc:
+		session = session.OrderBy("created_at asc")
 	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
 	default:
@@ -357,6 +363,42 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		}
 	}
 	return rows, count, nil
+}
+
+// GetPersonalAnswerPage personal answer page
+func (ar *answerRepo) GetPersonalAnswerPage(ctx context.Context, req *entity.PersonalAnswerPageQueryCond) (
+	resp []*entity.Answer, total int64, err error) {
+	cond := &entity.Answer{
+		UserID: req.UserID,
+	}
+	session := ar.data.DB.Context(ctx)
+	switch req.Order {
+	case entity.AnswerSearchOrderByTime:
+		session = session.OrderBy("created_at desc")
+	case entity.AnswerSearchOrderByTimeAsc:
+		session = session.OrderBy("created_at asc")
+	case entity.AnswerSearchOrderByVote:
+		session = session.OrderBy("vote_count desc")
+	default:
+		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
+	}
+	if req.ShowPending {
+		session = session.And("status != ?", entity.AnswerStatusDeleted)
+	} else {
+		session = session.And("status = ?", entity.AnswerStatusAvailable)
+	}
+	resp = make([]*entity.Answer, 0)
+	total, err = pager.Help(req.Page, req.PageSize, &resp, cond, session)
+	if err != nil {
+		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range resp {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
+	}
+	return resp, total, nil
 }
 
 func (ar *answerRepo) AdminSearchList(ctx context.Context, req *schema.AdminAnswerPageReq) (
@@ -412,7 +454,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 
 	// get question
 	var (
-		question *entity.Question
+		question = new(entity.Question)
 	)
 	exist, err = ar.data.DB.Context(ctx).Where("id = ?", answer.QuestionID).Get(&question)
 	if err != nil {

@@ -26,6 +26,7 @@ import Upload from './Upload';
 import Textarea from './Textarea';
 import Input from './Input';
 import Button from './Button';
+import InputGroup from './InputGroup';
 
 export {
   Legend,
@@ -37,4 +38,5 @@ export {
   Textarea,
   Input,
   Button,
+  InputGroup,
 };

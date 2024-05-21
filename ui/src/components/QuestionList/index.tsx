@@ -36,6 +36,7 @@ import {
   Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
+import { useSkeletonControl } from '@/hooks';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'active',
@@ -59,11 +60,13 @@ const QuestionList: FC<Props> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const [urlSearchParams] = useSearchParams();
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
   const curOrder =
     order || urlSearchParams.get('order') || QUESTION_ORDER_KEYS[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
   const count = data?.count || 0;
+
   return (
     <div>
       <div className="mb-3 d-flex flex-wrap justify-content-between">
@@ -80,7 +83,7 @@ const QuestionList: FC<Props> = ({
         />
       </div>
       <ListGroup className="rounded-0">
-        {isLoading ? (
+        {isSkeletonShow ? (
           <QuestionListLoader />
         ) : (
           data?.list?.map((li) => {
@@ -103,8 +106,8 @@ const QuestionList: FC<Props> = ({
                     {li.status === 2 ? ` [${t('closed')}]` : ''}
                   </NavLink>
                 </h5>
-                <div className="d-flex flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
-                  <div className="d-flex">
+                <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
+                  <div className="d-flex flex-wrap me-0 me-md-3">
                     <BaseUserCard
                       data={li.operator}
                       showAvatar={false}
@@ -113,7 +116,7 @@ const QuestionList: FC<Props> = ({
                     •
                     <FormatTime
                       time={li.operated_at}
-                      className="text-secondary ms-1"
+                      className="text-secondary ms-1 flex-shrink-0"
                       preFix={t(li.operation_type)}
                     />
                   </div>
@@ -124,7 +127,7 @@ const QuestionList: FC<Props> = ({
                       views: li.view_count,
                     }}
                     isAccepted={li.accepted_answer_id >= 1}
-                    className="ms-0 ms-md-3 mt-2 mt-md-0"
+                    className="mt-2 mt-md-0"
                   />
                 </div>
                 <div className="question-tags m-n1">

@@ -50,42 +50,39 @@ func NewCollectionRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) collec
 
 // AddCollection add collection
 func (cr *collectionRepo) AddCollection(ctx context.Context, collection *entity.Collection) (err error) {
-	needAdd := false
+	collection.ID, err = cr.uniqueIDRepo.GenUniqueIDStr(ctx, collection.TableName())
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
 	_, err = cr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
-		var has bool
-		dbcollection := &entity.Collection{}
-		result = nil
-		has, err = session.Where("user_id = ? and object_id = ?", collection.UserID, collection.ObjectID).Get(dbcollection)
+		old := &entity.Collection{
+			UserID:   collection.UserID,
+			ObjectID: collection.ObjectID,
+		}
+		exist, err := session.ForUpdate().Get(old)
 		if err != nil {
-			return
+			return nil, err
 		}
-		if has {
-			return
+		if exist {
+			return nil, nil
 		}
-		needAdd = true
+		_, err = session.Insert(collection)
+		if err != nil {
+			return nil, err
+		}
 		return
 	})
 	if err != nil {
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if needAdd {
-		id, err := cr.uniqueIDRepo.GenUniqueIDStr(ctx, collection.TableName())
-		if err == nil {
-			collection.ID = id
-			_, err = cr.data.DB.Context(ctx).Insert(collection)
-			if err != nil {
-				return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-			}
-		}
-	}
-
-	return err
+	return nil
 }
 
 // RemoveCollection delete collection
 func (cr *collectionRepo) RemoveCollection(ctx context.Context, id string) (err error) {
-	_, err = cr.data.DB.Context(ctx).Where("id =?", id).Delete(&entity.Collection{})
+	_, err = cr.data.DB.Context(ctx).Where("id = ?", id).Delete(&entity.Collection{})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

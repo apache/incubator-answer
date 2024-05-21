@@ -31,6 +31,8 @@ import * as Type from '@/common/interface';
 
 import HistoryItem from './components/Item';
 
+import './index.scss';
+
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'timeline' });
   const { qid = '', aid = '', tid = '' } = useParams();
@@ -86,8 +88,9 @@ const Index: FC = () => {
 
   if (timelineData?.object_info.object_type === 'tag') {
     linkUrl = `/tags/${
-      timelineData?.object_info.main_tag_slug_name ||
-      timelineData?.object_info.title
+      timelineData?.object_info.main_tag_slug_name
+        ? encodeURIComponent(timelineData?.object_info.main_tag_slug_name)
+        : encodeURIComponent(timelineData?.object_info.title)
     }`;
     pageTitle = `${t('title_for_tag')} '${timelineData?.object_info.title}'`;
   }
@@ -115,13 +118,13 @@ const Index: FC = () => {
           onChange={(e) => handleSwitch(e.target.checked)}
         />
       )}
-      <Table hover>
+      <Table hover responsive>
         <thead>
           <tr>
             <th style={{ width: '20%' }}>{t('datetime')}</th>
             <th style={{ width: '15%' }}>{t('type')}</th>
             <th style={{ width: '19%' }}>{t('by')}</th>
-            <th>{t('comment')}</th>
+            <th className="min-w-15">{t('comment')}</th>
           </tr>
         </thead>
         <tbody>

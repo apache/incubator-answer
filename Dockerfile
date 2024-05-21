@@ -34,7 +34,7 @@ ARG CGO_EXTRA_CFLAGS
 
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
-RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm@latest \
+RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm@8.9.2 \
     && make clean build
 
 RUN chmod 755 answer
@@ -47,7 +47,9 @@ RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
 FROM alpine
 LABEL maintainer="linkinstar@apache.org"
 
-ENV TZ "Asia/Shanghai"
+ARG TIMEZONE
+ENV TIMEZONE=${TIMEZONE:-"Asia/Shanghai"}
+
 RUN apk update \
     && apk --no-cache add \
         bash \
@@ -58,7 +60,9 @@ RUN apk update \
         openssh \
         sqlite \
         gnupg \
-    && echo "Asia/Shanghai" > /etc/timezone
+        tzdata \
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && echo "${TIMEZONE}" > /etc/timezone
 
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
 COPY --from=golang-builder /data /data

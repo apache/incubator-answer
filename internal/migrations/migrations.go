@@ -93,6 +93,9 @@ var migrations = []Migration{
 	NewMigration("v1.1.2", "add notification config", addNoticeConfig, true),
 	NewMigration("v1.1.3", "set default user notification config", setDefaultUserNotificationConfig, false),
 	NewMigration("v1.2.0", "add recover answer permission", addRecoverPermission, true),
+	NewMigration("v1.2.1", "add password login control", addPasswordLoginControl, true),
+	NewMigration("v1.2.5", "add notification plugin and theme config", addNotificationPluginAndThemeConfig, true),
+	NewMigration("v1.3.0", "add review", addReview, false),
 }
 
 func GetMigrations() []Migration {
@@ -129,7 +132,7 @@ func ExpectedVersion() int64 {
 func Migrate(debug bool, dbConf *data.Database, cacheConf *data.CacheConf, upgradeToSpecificVersion string) error {
 	cache, cacheCleanup, err := data.NewCache(cacheConf)
 	if err != nil {
-		fmt.Println("new check failed:", err.Error())
+		fmt.Println("new cache failed:", err.Error())
 	}
 	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {

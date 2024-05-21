@@ -52,13 +52,13 @@ const Statistics: FC<IProps> = ({ data }) => {
             <strong>{data.vote_count}</strong>
           </Col>
           <Col xs={6}>
-            <span className="text-secondary me-1">{t('active_users')}</span>
+            <span className="text-secondary me-1">{t('users')}</span>
             <strong>{data.user_count}</strong>
           </Col>
           <Col xs={6}>
-            <span className="text-secondary me-1">{t('flags')}</span>
+            <span className="text-secondary me-1">{t('reviews')}</span>
             <strong>
-              <Link to="/admin/flags" className="ms-2">
+              <Link to="/review" className="ms-2">
                 {data.report_count}
               </Link>
             </strong>

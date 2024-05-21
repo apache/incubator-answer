@@ -27,9 +27,11 @@ import classNames from 'classnames';
 import { Avatar } from '@/components';
 import { getInviteUser, putInviteUser } from '@/services';
 import type * as Type from '@/common/interface';
-import { useCaptchaModal } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 import PeopleDropdown from './PeopleDropdown';
+
+import './index.scss';
 
 interface Props {
   questionId: string;
@@ -39,10 +41,10 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'invite_to_answer',
   });
-  const MAX_ASK_NUMBER = 5;
+
   const [editing, setEditing] = useState(false);
-  const [users, setUsers] = useState<Type.UserInfoBase[]>();
-  const iaCaptcha = useCaptchaModal('invitation_answer');
+  const [users, setUsers] = useState<Type.UserInfoBase[]>([]);
+  const iaCaptcha = useCaptchaPlugin('invitation_answer');
 
   const initInviteUsers = () => {
     if (!questionId) {
@@ -60,53 +62,53 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   };
 
   const updateInviteUsers = (user: Type.UserInfoBase) => {
-    let userList = [user];
-    if (users?.length) {
-      userList = [...users, user];
+    const userID = users?.find((_) => _.id === user.id);
+    let userList: any = [...(users || [])];
+    if (userID) {
+      userList = userList?.filter((_) => {
+        return _.id !== user.id;
+      });
+    } else {
+      userList.push(user);
     }
     setUsers(userList);
   };
 
-  const removeInviteUser = (user: Type.UserInfoBase) => {
-    const inviteUsers = users!.filter((_) => {
-      return _.username !== user.username;
+  const submitInviteUser = () => {
+    const names = users.map((_) => {
+      return _.username;
     });
-    setUsers(inviteUsers);
+    const imgCode: Type.ImgCodeReq = {};
+    iaCaptcha?.resolveCaptchaReq(imgCode);
+    putInviteUser(questionId, names, imgCode)
+      .then(async () => {
+        await iaCaptcha?.close();
+        setEditing(false);
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          iaCaptcha?.handleCaptchaError(ex.list);
+        }
+      });
   };
 
   const saveInviteUsers = () => {
     if (!users) {
       return;
     }
-    const names = users.map((_) => {
-      return _.username;
-    });
-    iaCaptcha.check(() => {
-      const imgCode: Type.ImgCodeReq = {};
-      iaCaptcha.resolveCaptchaReq(imgCode);
-      putInviteUser(questionId, names, imgCode)
-        .then(async () => {
-          await iaCaptcha.close();
-          setEditing(false);
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            iaCaptcha.handleCaptchaError(ex.list);
-          }
-          console.log('ex: ', ex);
-        });
-    });
+
+    if (!iaCaptcha) {
+      submitInviteUser();
+      return;
+    }
+
+    iaCaptcha.check(() => submitInviteUser());
   };
 
   useEffect(() => {
     initInviteUsers();
   }, [questionId]);
 
-  const showAddButton = editing && (!users || users.length < MAX_ASK_NUMBER);
-  const showInviteFeat = !editing && users?.length === 0;
-  const showInviteButton = showInviteFeat && !readOnly;
-  const showEditButton = !readOnly && !editing && users?.length;
-  const showSaveButton = !readOnly && editing;
   const showEmpty = readOnly && users?.length === 0;
 
   if (showEmpty) {
@@ -114,53 +116,21 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   }
 
   return (
-    <Card className="mt-4">
+    <Card className="invite-answer-card position-relative border-0 mb-4">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('title')}
-        {showSaveButton ? (
-          <Button onClick={saveInviteUsers} variant="link" className="p-0">
-            {t('save', { keyPrefix: 'btns' })}
-          </Button>
-        ) : null}
-        {showEditButton ? (
+        {!readOnly && (
           <Button
             onClick={() => setEditing(true)}
             variant="link"
             className="p-0">
             {t('edit', { keyPrefix: 'btns' })}
           </Button>
-        ) : null}
+        )}
       </Card.Header>
-      <Card.Body>
-        <div
-          className={classNames(
-            'd-flex align-items-center flex-wrap',
-            editing ? 'm-n1' : ' mx-n2 my-n1',
-          )}>
+      <Card.Body className={classNames('position-relative')}>
+        <div className={classNames('d-flex align-items-center flex-wrap m-n1')}>
           {users?.map((user) => {
-            if (editing) {
-              return (
-                <Button
-                  key={user.username}
-                  className="m-1 d-inline-flex flex-nowrap"
-                  size="sm"
-                  variant="outline-secondary">
-                  <Avatar
-                    avatar={user.avatar}
-                    size="20"
-                    className="rounded-1"
-                    alt={user.display_name}
-                  />
-                  <span className="text-break ms-2">{user.display_name}</span>
-                  {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-                  <span
-                    className="px-1 me-n1"
-                    onClick={() => removeInviteUser(user)}>
-                    ×
-                  </span>
-                </Button>
-              );
-            }
             return (
               <Link
                 key={user.username}
@@ -176,27 +146,19 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
               </Link>
             );
           })}
-          <PeopleDropdown
-            visible={showAddButton}
-            selectedPeople={users}
-            onSelect={updateInviteUsers}
-          />
-        </div>
-        {showInviteFeat ? (
-          <>
+          {users?.length === 0 ? (
             <div className="text-muted">{t('desc')}</div>
-            {showInviteButton ? (
-              <Button
-                size="sm"
-                variant="outline-primary"
-                className="mt-3"
-                onClick={() => setEditing(true)}>
-                {t('invite')}
-              </Button>
-            ) : null}
-          </>
-        ) : null}
+          ) : null}
+        </div>
       </Card.Body>
+      {editing && (
+        <PeopleDropdown
+          visible={editing}
+          selectedPeople={users}
+          onSelect={updateInviteUsers}
+          saveInviteUsers={saveInviteUsers}
+        />
+      )}
     </Card>
   );
 };

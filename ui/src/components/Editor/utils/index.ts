@@ -19,84 +19,15 @@
 
 import { useEffect, useState } from 'react';
 
-import type { Editor, Position } from 'codemirror';
-import type CodeMirror from 'codemirror';
-import 'codemirror/lib/codemirror.css';
+import { minimalSetup } from 'codemirror';
+import { EditorState } from '@codemirror/state';
+import { EditorView, placeholder } from '@codemirror/view';
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { languages } from '@codemirror/language-data';
 
-export function createEditorUtils(
-  codemirror: typeof CodeMirror,
-  editor: Editor,
-) {
-  editor.wrapText = (before: string, after = before, defaultText) => {
-    const range = editor.somethingSelected()
-      ? editor.listSelections()[0]
-      : editor.findWordAt(editor.getCursor());
+import { Editor } from '../types';
 
-    const from = range.from();
-    const to = range.to();
-    const text = editor.getRange(from, to) || defaultText;
-    const fromBefore = codemirror.Pos(from.line, from.ch - before.length);
-    const toAfter = codemirror.Pos(to.line, to.ch + after.length);
-
-    if (
-      editor.getRange(fromBefore, from) === before &&
-      editor.getRange(to, toAfter) === after
-    ) {
-      editor.replaceRange(text, fromBefore, toAfter);
-      editor.setSelection(
-        fromBefore,
-        codemirror.Pos(fromBefore.line, fromBefore.ch + text.length),
-      );
-    } else {
-      editor.replaceRange(before + text + after, from, to);
-      const cursor = editor.getCursor();
-
-      editor.setSelection(
-        codemirror.Pos(cursor.line, cursor.ch - after.length - text.length),
-        codemirror.Pos(cursor.line, cursor.ch - after.length),
-      );
-    }
-  };
-  editor.replaceLines = (
-    replace: Parameters<Array<string>['map']>[0],
-    symbolLen = 0,
-  ) => {
-    const [selection] = editor.listSelections();
-
-    const range = [
-      codemirror.Pos(selection.from().line, 0),
-      codemirror.Pos(selection.to().line),
-    ] as const;
-    const lines = editor.getRange(...range).split('\n');
-
-    editor.replaceRange(lines.map(replace).join('\n'), ...range);
-    const newRange = range;
-
-    if (symbolLen > 0) {
-      newRange[0].ch = symbolLen;
-    }
-    editor.setSelection(...newRange);
-  };
-  editor.appendBlock = (content: string): Position => {
-    const cursor = editor.getCursor();
-
-    let emptyLine = -1;
-
-    for (let i = cursor.line; i < editor.lineCount(); i += 1) {
-      if (!editor.getLine(i).trim()) {
-        emptyLine = i;
-        break;
-      }
-    }
-    if (emptyLine === -1) {
-      editor.replaceRange('\n', codemirror.Pos(editor.lineCount()));
-      emptyLine = editor.lineCount();
-    }
-
-    editor.replaceRange(`\n${content}`, codemirror.Pos(emptyLine));
-    return codemirror.Pos(emptyLine + 1, 0);
-  };
-}
+import createEditorUtils from './extension';
 
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
@@ -127,7 +58,7 @@ export function htmlRender(el: HTMLElement | null) {
     div.appendChild(table);
   });
 
-  // add rel nofollow for link not inlcludes domain
+  // add rel nofollow for link not includes domain
   el.querySelectorAll('a').forEach((a) => {
     const base = window.location.origin;
     const targetUrl = new URL(a.href, base);
@@ -140,73 +71,77 @@ export function htmlRender(el: HTMLElement | null) {
 
 export const useEditor = ({
   editorRef,
-  placeholder,
+  placeholder: placeholderText,
   autoFocus,
   onChange,
   onFocus,
   onBlur,
 }) => {
-  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
   const [value, setValue] = useState<string>('');
-
-  const onEnter = (cm) => {
-    const cursor = cm.getCursor();
-    const text = cm.getLine(cursor.line);
-    const doc = cm.getDoc();
-
-    const olRegexData = text.match(/^(\s{0,})(\d+)\.\s/);
-    const ulRegexData = text.match(/^(\s{0,})(-|\*)\s/);
-    const blockquoteData = text.match(/^>\s+?/g);
-
-    if (olRegexData && text !== olRegexData[0]) {
-      const num = olRegexData[2];
-
-      doc.replaceSelection(`\n${olRegexData[1]}${Number(num) + 1}. `);
-    } else if (ulRegexData && text !== ulRegexData[0]) {
-      doc.replaceSelection(`\n${ulRegexData[1]}${ulRegexData[2]} `);
-    } else if (blockquoteData && text !== blockquoteData[0]) {
-      doc.replaceSelection(`\n> `);
-    } else if (
-      text.trim() === '>' ||
-      text.trim().match(/^\d{1,}\.$/) ||
-      text.trim().match(/^(\*|-)$/)
-    ) {
-      doc.replaceRange(`\n`, { ...cursor, ch: 0 }, cursor);
-    } else {
-      doc.replaceSelection(`\n`);
-    }
-  };
-
   const init = async () => {
-    const { default: codeMirror } = await import('codemirror');
-    await import('codemirror/mode/markdown/markdown');
-    await import('codemirror/addon/display/placeholder');
+    const theme = EditorView.theme(
+      {
+        '&': {
+          height: '100%',
+        },
+        '&.cm-focused': {
+          outline: 'none',
+        },
+        '.cm-content': {
+          width: '100%',
+          padding: '1rem',
+        },
+        '.cm-line': {
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          wordBreak: 'break-all',
+        },
+      },
+      { dark: false },
+    );
 
-    const cm = codeMirror(editorRef?.current, {
-      mode: 'markdown',
-      lineWrapping: true,
-      placeholder,
-      focus: autoFocus,
+    const startState = EditorState.create({
+      extensions: [
+        minimalSetup,
+        markdown({
+          codeLanguages: languages,
+          base: markdownLanguage,
+        }),
+        theme,
+        placeholder(placeholderText),
+        EditorView.lineWrapping,
+      ],
     });
 
-    setEditor(cm);
-    createEditorUtils(codeMirror, cm);
+    const view = new EditorView({
+      parent: editorRef.current,
+      state: startState,
+    });
 
-    cm.on('change', (e) => {
-      const newValue = e.getValue();
+    const cm = createEditorUtils(view as Editor);
+
+    if (autoFocus) {
+      setTimeout(() => {
+        cm.focus();
+      }, 10);
+    }
+
+    cm.on('change', () => {
+      const newValue = cm.getValue();
       setValue(newValue);
     });
 
     cm.on('focus', () => {
       onFocus?.();
     });
+
     cm.on('blur', () => {
       onBlur?.();
     });
-    cm.setSize('100%', '100%');
-    cm.addKeyMap({
-      Enter: onEnter,
-    });
+
+    setEditor(cm);
+
     return cm;
   };
 
@@ -215,11 +150,10 @@ export const useEditor = ({
   }, [value]);
 
   useEffect(() => {
-    if (!(editorRef.current instanceof HTMLElement)) {
+    if (!(editorRef.current instanceof HTMLElement) || editor) {
       return;
     }
     init();
-  }, [editorRef]);
-
+  }, [editor]);
   return editor;
 };

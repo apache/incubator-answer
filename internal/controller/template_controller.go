@@ -31,6 +31,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
 	templaterender "github.com/apache/incubator-answer/internal/controller/template_render"
+	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/apache/incubator-answer/pkg/checker"
@@ -46,7 +47,7 @@ import (
 var SiteUrl = ""
 
 type TemplateController struct {
-	scriptPath               string
+	scriptPath               []string
 	cssPath                  string
 	templateRenderController *templaterender.TemplateRenderController
 	siteInfoService          siteinfo_common.SiteInfoCommonService
@@ -65,18 +66,21 @@ func NewTemplateController(
 		siteInfoService:          siteInfoService,
 	}
 }
-func GetStyle() (script, css string) {
+func GetStyle() (script []string, css string) {
 	file, err := ui.Build.ReadFile("build/index.html")
 	if err != nil {
 		return
 	}
-	scriptRegexp := regexp.MustCompile(`<script defer="defer" src="(.*)"></script>`)
-	scriptData := scriptRegexp.FindStringSubmatch(string(file))
+	scriptRegexp := regexp.MustCompile(`<script defer="defer" src="([^"]*)"></script>`)
+	scriptData := scriptRegexp.FindAllStringSubmatch(string(file), -1)
+	for _, s := range scriptData {
+		if len(s) == 2 {
+			script = append(script, s[1])
+		}
+	}
+
 	cssRegexp := regexp.MustCompile(`<link href="(.*)" rel="stylesheet">`)
 	cssListData := cssRegexp.FindStringSubmatch(string(file))
-	if len(scriptData) == 2 {
-		script = scriptData[1]
-	}
 	if len(cssListData) == 2 {
 		css = cssListData[1]
 	}
@@ -214,6 +218,11 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 		}
 	}
 
+	if _, err := tc.templateRenderController.AnswerDetail(ctx, answerID); err != nil {
+		answerID = ""
+		titleIsAnswerID = false
+	}
+
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, questionID)
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID || siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {
@@ -318,7 +327,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		return
 	}
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
-	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID || siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDByShortID {
 		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	}
 	jsonLD := &schema.QAPageJsonLD{}
@@ -376,6 +385,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		"detail":   detail,
 		"answers":  answers,
 		"comments": comments,
+		"noindex":  detail.Show == entity.QuestionHide,
 	})
 }
 

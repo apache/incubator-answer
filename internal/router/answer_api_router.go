@@ -40,7 +40,6 @@ type AnswerAPIRouter struct {
 	searchController        *controller.SearchController
 	revisionController      *controller.RevisionController
 	rankController          *controller.RankController
-	adminReportController   *controller_admin.ReportController
 	adminUserController     *controller_admin.UserAdminController
 	reasonController        *controller.ReasonController
 	themeController         *controller_admin.ThemeController
@@ -53,6 +52,8 @@ type AnswerAPIRouter struct {
 	roleController          *controller_admin.RoleController
 	pluginController        *controller_admin.PluginController
 	permissionController    *controller.PermissionController
+	userPluginController    *controller.UserPluginController
+	reviewController        *controller.ReviewController
 }
 
 func NewAnswerAPIRouter(
@@ -69,7 +70,6 @@ func NewAnswerAPIRouter(
 	searchController *controller.SearchController,
 	revisionController *controller.RevisionController,
 	rankController *controller.RankController,
-	adminReportController *controller_admin.ReportController,
 	adminUserController *controller_admin.UserAdminController,
 	reasonController *controller.ReasonController,
 	themeController *controller_admin.ThemeController,
@@ -82,6 +82,8 @@ func NewAnswerAPIRouter(
 	roleController *controller_admin.RoleController,
 	pluginController *controller_admin.PluginController,
 	permissionController *controller.PermissionController,
+	userPluginController *controller.UserPluginController,
+	reviewController *controller.ReviewController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -97,7 +99,6 @@ func NewAnswerAPIRouter(
 		searchController:        searchController,
 		revisionController:      revisionController,
 		rankController:          rankController,
-		adminReportController:   adminReportController,
 		adminUserController:     adminUserController,
 		reasonController:        reasonController,
 		themeController:         themeController,
@@ -110,6 +111,8 @@ func NewAnswerAPIRouter(
 		roleController:          roleController,
 		pluginController:        pluginController,
 		permissionController:    permissionController,
+		userPluginController:    userPluginController,
+		reviewController:        reviewController,
 	}
 }
 
@@ -128,7 +131,6 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 	routerGroup := r.Group("", middleware.BanAPIForUserCenter)
 	routerGroup.POST("/user/login/email", a.userController.UserEmailLogin)
 	routerGroup.POST("/user/register/email", a.userController.UserRegisterByEmail)
-	routerGroup.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
 	routerGroup.POST("/user/email/verification", a.userController.UserVerifyEmail)
 	routerGroup.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
@@ -141,11 +143,9 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
-	r.GET("/user/logout", a.userController.UserLogout)
-	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
-	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
+	r.GET("/user/staff", a.userController.UserStaff)
 
 	// answer
 	r.GET("/answer/info", a.answerController.Get)
@@ -183,11 +183,18 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 }
 
+func (a *AnswerAPIRouter) RegisterAuthUserWithAnyStatusAnswerAPIRouter(r *gin.RouterGroup) {
+	r.GET("/user/logout", a.userController.UserLogout)
+	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
+}
+
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// revisions
 	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
 	r.PUT("/revisions/audit", a.revisionController.RevisionAudit)
 	r.GET("/revisions/edit/check", a.revisionController.CheckCanUpdateRevision)
+	r.GET("/reviewing/type", a.revisionController.GetReviewingType)
 
 	// comment
 	r.POST("/comment", a.commentController.AddComment)
@@ -196,6 +203,12 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// report
 	r.POST("/report", a.reportController.AddReport)
+	r.GET("/report/unreviewed/post", a.reportController.GetUnreviewedReportPostPage)
+	r.PUT("/report/review", a.reportController.ReviewReport)
+
+	// review
+	r.GET("/review/pending/post/page", a.reviewController.GetUnreviewedPostPage)
+	r.PUT("/review/pending/post", a.reviewController.UpdateReview)
 
 	// vote
 	r.POST("/vote/up", a.voteController.VoteUp)
@@ -268,6 +281,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
 	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
 
+	// plugin
+	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
+	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
+	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
@@ -275,10 +292,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question/status", a.questionController.AdminUpdateQuestionStatus)
 	r.GET("/answer/page", a.questionController.AdminAnswerPage)
 	r.PUT("/answer/status", a.answerController.AdminUpdateAnswerStatus)
-
-	// report
-	r.GET("/reports/page", a.adminReportController.ListReportPage)
-	r.PUT("/report", a.adminReportController.Handle)
 
 	// user
 	r.GET("/users/page", a.adminUserController.GetUserPage)

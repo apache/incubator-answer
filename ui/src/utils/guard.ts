@@ -29,6 +29,7 @@ import {
   seoSettingStore,
   loginToContinueStore,
   pageTagStore,
+  writeSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import {
@@ -37,7 +38,7 @@ import {
 } from '@/common/constants';
 import Storage from '@/utils/storage';
 
-import { setupAppLanguage, setupAppTimeZone } from './localize';
+import { setupAppLanguage, setupAppTimeZone, setupAppTheme } from './localize';
 import { floppyNavigation, NavigateConfig } from './floppyNavigation';
 import { pullUcAgent, getSignUpUrl } from './userCenter';
 
@@ -143,10 +144,9 @@ export const pullLoggedUser = async (isInitPull = false) => {
   pluTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo({
     passingError: true,
-  }).catch((ex) => {
+  }).catch(() => {
     pluTimestamp = 0;
     loggedUserInfoStore.getState().clear(false);
-    console.error(ex);
   });
   if (loggedUserInfo) {
     loggedUserInfoStore.getState().update(loggedUserInfo);
@@ -159,6 +159,16 @@ export const logged = () => {
   if (!us.isLogged) {
     gr.ok = false;
     gr.redirect = RouteAlias.login;
+  }
+  return gr;
+};
+
+export const loggedRedirectHome = () => {
+  const gr: TGuardResult = { ok: true };
+  const us = deriveLoginState();
+  if (!us.isLogged) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
   }
   return gr;
 };
@@ -398,7 +408,28 @@ export const initAppSettingsStore = async () => {
     customizeStore.getState().update(appSettings.custom_css_html);
     themeSettingStore.getState().update(appSettings.theme);
     seoSettingStore.getState().update(appSettings.site_seo);
+    writeSettingStore
+      .getState()
+      .update({ restrict_answer: appSettings.site_write.restrict_answer });
   }
+};
+
+export const googleSnapshotRedirect = () => {
+  const gr: TGuardResult = { ok: true };
+  const searchStr = new URLSearchParams(window.location.search)?.get('q') || '';
+  if (window.location.host !== 'webcache.googleusercontent.com') {
+    return gr;
+  }
+  if (searchStr.indexOf('cache:') === 0 && searchStr.includes(':http')) {
+    const redirectUrl = `http${searchStr.split(':http')[1]}`;
+    const pathname = redirectUrl.replace(new URL(redirectUrl).origin, '');
+
+    gr.ok = false;
+    gr.redirect = pathname || '/';
+    return gr;
+  }
+
+  return gr;
 };
 
 let appInitialized = false;
@@ -420,6 +451,7 @@ export const setupApp = async () => {
   await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
+  setupAppTheme();
   /**
    * WARN:
    * Initialization must be completed after all initialization actions,

@@ -20,30 +20,53 @@
 package schema
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/validator"
 	"github.com/apache/incubator-answer/plugin"
-	"regexp"
-	"strings"
 )
 
 type SearchDTO struct {
-	UserID      string // UserID current login user ID
-	Query       string `validate:"required,gte=1,lte=60" json:"q" form:"q"`                   // Query the query string
-	Page        int    `validate:"omitempty,min=1" form:"page,default=1" json:"page"`         //Query number of pages
-	Size        int    `validate:"omitempty,min=1,max=50" form:"size,default=30" json:"size"` //Search page size
-	Order       string `validate:"required,oneof=newest active score relevance" form:"order,default=relevance" json:"order" enums:"newest,active,score,relevance"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
-	CaptchaCode string `json:"captcha_code"`
+	Query       string `validate:"required,gte=1,lte=60" form:"q"`
+	Page        int    `validate:"omitempty,min=1" form:"page,default=1"`
+	Size        int    `validate:"omitempty,min=1,max=50" form:"size,default=30"`
+	Order       string `validate:"required,oneof=newest active score relevance" form:"order,default=relevance" enums:"newest,active,score,relevance"`
+	CaptchaID   string `form:"captcha_id"`
+	CaptchaCode string `form:"captcha_code"`
+	UserID      string `json:"-"`
 }
 
 func (s *SearchDTO) Check() (errField []*validator.FormErrorField, err error) {
 	// Replace special characters.
 	// Special characters will cause the search abnormal, such as search for "#" will get nearly all the content that Markdown format.
-	s.Query = regexp.MustCompile(`[+#.<>\-_()*]`).ReplaceAllString(s.Query, " ")
-	s.Query = regexp.MustCompile(`\s+`).ReplaceAllString(s.Query, " ")
-	s.Query = strings.TrimSpace(s.Query)
+	replacedContent, patterns := ReplaceSearchContent(s.Query)
+	s.Query = strings.Join(append(patterns, replacedContent), " ")
+
 	return nil, nil
+}
+
+func ReplaceSearchContent(content string) (string, []string) {
+	// Define the regular expressions for key:value pairs and [tag]
+	keyValueRegex := regexp.MustCompile(`\w+:\S+`)
+	tagRegex := regexp.MustCompile(`\[\w+\]`)
+	// Define the pattern for characters to replace
+	replaceCharsPattern := regexp.MustCompile(`[+#.<>\-_()*]`)
+
+	// Extract key:value pairs
+	keyValues := keyValueRegex.FindAllString(content, -1)
+	// Extract [tag]
+	tags := tagRegex.FindAllString(content, -1)
+
+	// Replace key:value pairs and [tag] with empty string
+	contentWithoutPatterns := keyValueRegex.ReplaceAllString(content, "")
+	contentWithoutPatterns = tagRegex.ReplaceAllString(contentWithoutPatterns, "")
+
+	// Replace characters with pattern [+#.<>_()*] with space
+	replacedContent := replaceCharsPattern.ReplaceAllString(contentWithoutPatterns, " ")
+
+	return strings.TrimSpace(replacedContent), append(keyValues, tags...)
 }
 
 type SearchCondition struct {
@@ -64,7 +87,7 @@ type SearchCondition struct {
 	// only show this question's answer
 	QuestionID string
 	// search query tags
-	Tags []string
+	Tags [][]string
 	// search query keywords
 	Words []string
 }
@@ -115,6 +138,7 @@ type SearchObject struct {
 	ID              string `json:"id"`
 	QuestionID      string `json:"question_id"`
 	Title           string `json:"title"`
+	UrlTitle        string `json:"url_title"`
 	Excerpt         string `json:"excerpt"`
 	CreatedAtParsed int64  `json:"created_at"`
 	VoteCount       int    `json:"vote_count"`

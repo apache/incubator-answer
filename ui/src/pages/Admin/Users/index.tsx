@@ -92,8 +92,8 @@ const Users: FC = () => {
     ...(curFilter === 'all'
       ? {}
       : curFilter === 'staff'
-      ? { staff: true }
-      : { status: curFilter }),
+        ? { staff: true }
+        : { status: curFilter }),
   });
 
   const userModal = useUserModal({
@@ -165,7 +165,7 @@ const Users: FC = () => {
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
         <Stack direction="horizontal" gap={3}>
           <QueryGroup
             data={UserFilterKeys}
@@ -190,14 +190,17 @@ const Users: FC = () => {
           onChange={handleFilter}
           placeholder={t('filter.placeholder')}
           style={{ width: '12.25rem' }}
+          className="mt-3 mt-sm-0"
         />
       </div>
-      <Table>
+      <Table responsive>
         <thead>
           <tr>
             <th>{t('name')}</th>
             <th style={{ width: '12%' }}>{t('reputation')}</th>
-            <th style={{ width: '20%' }}>{t('email')}</th>
+            <th style={{ width: '20%' }} className="min-w-15">
+              {t('email')}
+            </th>
             <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
             </th>

@@ -20,12 +20,12 @@
 import { seoSettingStore } from '@/stores';
 
 const tagLanding = (slugName: string) => {
-  const r = slugName ? `/tags/${slugName}` : '/tags';
+  const r = slugName ? `/tags/${encodeURIComponent(slugName)}` : '/tags';
   return r;
 };
 
 const tagInfo = (slugName: string) => {
-  const r = slugName ? `/tags/${slugName}/info` : '/tags';
+  const r = slugName ? `/tags/${encodeURIComponent(slugName)}/info` : '/tags';
   return r;
 };
 
@@ -34,14 +34,14 @@ const tagEdit = (tagId: string) => {
   return r;
 };
 
-const questionLanding = (questionId: string, slugTitle: string = '') => {
+const questionLanding = (questionId: string = '', slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
   if (!questionId) {
     return slugTitle ? `/questions/null/${slugTitle}` : '/questions/null';
   }
   // @ts-ignore
   if (/[13]/.test(seo.permalink) && slugTitle) {
-    return `/questions/${questionId}/${slugTitle}`;
+    return `/questions/${questionId}/${encodeURIComponent(slugTitle)}`;
   }
 
   return `/questions/${questionId}`;

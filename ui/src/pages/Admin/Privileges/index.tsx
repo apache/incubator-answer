@@ -27,8 +27,10 @@ import {
   getPrivilegeSetting,
   putPrivilegeSetting,
   AdminSettingsPrivilege,
+  AdminSettingsPrivilegeReq,
 } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
+import { ADMIN_PRIVILEGE_CUSTOM_LEVEL } from '@/common/constants';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -47,8 +49,8 @@ const Index: FC = () => {
   });
   const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
 
-  const setFormConfig = (selectedLevel: number = 1) => {
-    selectedLevel = Number(selectedLevel);
+  const setFormConfig = (state: FormDataType) => {
+    const selectedLevel = Number(state.level.value);
     const levelOptions = privilege?.options;
     const curLevel = levelOptions?.find((li) => {
       return li.level === selectedLevel;
@@ -77,7 +79,17 @@ const Index: FC = () => {
       };
       uiState[li.key] = {
         'ui:options': {
-          readOnly: true,
+          readOnly: curLevel.level !== ADMIN_PRIVILEGE_CUSTOM_LEVEL,
+          validator: (value: string) => {
+            const val = Number(value);
+            if (Number.isNaN(val)) {
+              return t('msg.should_be_number');
+            }
+            if (val < 1) {
+              return t('msg.number_larger_1');
+            }
+            return true;
+          },
         },
       };
     });
@@ -101,18 +113,43 @@ const Index: FC = () => {
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
-    const lv = Number(formData.level.value);
-    putPrivilegeSetting(lv)
+
+    const reqParams: AdminSettingsPrivilegeReq = {
+      level: Number(formData.level.value),
+      custom_privileges: [],
+    };
+
+    if (reqParams.level === ADMIN_PRIVILEGE_CUSTOM_LEVEL) {
+      // construct custom level request data
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === 'level') {
+          return;
+        }
+        reqParams.custom_privileges?.push({
+          key,
+          value: Number(value.value),
+        });
+      });
+    }
+
+    putPrivilegeSetting(reqParams)
       .then(() => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        if (reqParams.level === ADMIN_PRIVILEGE_CUSTOM_LEVEL) {
+          getPrivilegeSetting().then((resp) => {
+            setPrivilege(resp);
+          });
+        }
       })
       .catch((err) => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -121,7 +158,13 @@ const Index: FC = () => {
     if (!privilege) {
       return;
     }
-    setFormConfig(privilege.selected_level);
+    setFormConfig({
+      level: {
+        value: privilege.selected_level,
+        isInvalid: false,
+        errorMsg: '',
+      },
+    });
   }, [privilege]);
   useEffect(() => {
     getPrivilegeSetting().then((resp) => {
@@ -129,7 +172,15 @@ const Index: FC = () => {
     });
   }, []);
   const handleOnChange = (state) => {
-    setFormConfig(state.level.value);
+    // if updated values in Custom form
+    if (
+      state.level.value === ADMIN_PRIVILEGE_CUSTOM_LEVEL &&
+      formData?.level?.value === state.level.value
+    ) {
+      setFormData(state);
+    } else {
+      setFormConfig(state);
+    }
   };
 
   return (

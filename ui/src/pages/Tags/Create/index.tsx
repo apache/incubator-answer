@@ -29,7 +29,8 @@ import { Editor, EditorRef } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
 import { createTag } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
+import { TAG_SLUG_NAME_MAX_LENGTH } from '@/common/constants';
 
 interface FormDataItem {
   displayName: Type.FormValue<string>;
@@ -104,10 +105,80 @@ const Index = () => {
       description: { ...formData.description, value, isInvalid: false },
     });
 
+  const checkValidated = (): boolean => {
+    let bol = true;
+    let errObjKey = '';
+    const { displayName, slugName } = formData;
+
+    if (!displayName.value) {
+      bol = false;
+      errObjKey = 'display_name';
+      formData.displayName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.empty'),
+      };
+    } else if (displayName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      errObjKey = 'display_name';
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.range'),
+      };
+    } else {
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    if (!slugName.value) {
+      bol = false;
+      errObjKey = 'slug_name';
+      formData.slugName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.empty'),
+      };
+    } else if (slugName.value.length > TAG_SLUG_NAME_MAX_LENGTH) {
+      bol = false;
+      errObjKey = 'slug_name';
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.range'),
+      };
+    } else {
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    setFormData({
+      ...formData,
+    });
+
+    if (!bol) {
+      const ele = document.getElementById(errObjKey);
+      scrollToElementTop(ele);
+    }
+
+    return bol;
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setContentChanged(false);
+
+    if (!checkValidated()) {
+      return;
+    }
+
     const params = {
       display_name: formData.displayName.value,
       slug_name: formData.slugName.value,
@@ -115,7 +186,7 @@ const Index = () => {
     };
     createTag(params)
       .then((res) => {
-        navigate(`/tags/${res.slug_name}/info`, {
+        navigate(`/tags/${encodeURIComponent(res.slug_name)}/info`, {
           replace: true,
         });
       })
@@ -127,6 +198,8 @@ const Index = () => {
             { from: 'original_text', to: 'description' },
           ]);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

@@ -24,7 +24,7 @@ import type * as Type from '@/common/interface';
 import { getSeoSetting, putSeoSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { seoSettingStore } from '@/stores';
 
 const Index: FC = () => {
@@ -90,6 +90,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

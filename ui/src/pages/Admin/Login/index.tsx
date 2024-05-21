@@ -24,7 +24,7 @@ import type * as Type from '@/common/interface';
 import { getLoginSetting, putLoginSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { loginSettingStore } from '@/stores';
 
 const Index: FC = () => {
@@ -39,12 +39,18 @@ const Index: FC = () => {
         type: 'boolean',
         title: t('membership.title'),
         description: t('membership.text'),
-        default: false,
+        default: true,
       },
       allow_email_registrations: {
         type: 'boolean',
         title: t('email_registration.title'),
         description: t('email_registration.text'),
+        default: true,
+      },
+      allow_password_login: {
+        type: 'boolean',
+        title: t('password_login.title'),
+        description: t('password_login.text'),
         default: true,
       },
       allow_email_domains: {
@@ -71,6 +77,12 @@ const Index: FC = () => {
       'ui:widget': 'switch',
       'ui:options': {
         label: t('email_registration.label'),
+      },
+    },
+    allow_password_login: {
+      'ui:widget': 'switch',
+      'ui:options': {
+        label: t('password_login.label'),
       },
     },
     allow_email_domains: {
@@ -105,6 +117,7 @@ const Index: FC = () => {
       allow_email_registrations: formData.allow_email_registrations.value,
       allow_email_domains: allowedEmailDomains,
       login_required: formData.login_required.value,
+      allow_password_login: formData.allow_password_login.value,
     };
 
     putLoginSetting(reqParams)
@@ -119,6 +132,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -137,6 +152,7 @@ const Index: FC = () => {
             setting.allow_email_domains.join('\n');
         }
         formMeta.login_required.value = setting.login_required;
+        formMeta.allow_password_login.value = setting.allow_password_login;
         setFormData({ ...formMeta });
       }
     });

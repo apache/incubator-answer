@@ -206,7 +206,7 @@ func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objec
 		if err != nil {
 			log.Error(err)
 		} else {
-			return revision.Log
+			return converter.Markdown2HTML(revision.Log)
 		}
 		return
 	}
@@ -218,7 +218,7 @@ func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objec
 		} else {
 			closeMsg := &schema.CloseQuestionMeta{}
 			if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err == nil {
-				return closeMsg.CloseMsg
+				return converter.Markdown2HTML(closeMsg.CloseMsg)
 			}
 		}
 	}
@@ -259,7 +259,7 @@ func (as *ActivityService) GetObjectTimelineDetail(ctx context.Context, req *sch
 	return resp, nil
 }
 
-// GetObjectTimelineDetail get object detail
+// getOneObjectDetail get object detail
 func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID string) (
 	resp *schema.ObjectTimelineDetail, err error) {
 	resp = &schema.ObjectTimelineDetail{Tags: make([]*schema.ObjectTimelineTag, 0)}

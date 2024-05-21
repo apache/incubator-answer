@@ -28,6 +28,7 @@ import brandingStore from './branding';
 import pageTagStore from './pageTags';
 import customizeStore from './customize';
 import themeSettingStore from './themeSetting';
+import writeSettingStore from './writeSetting';
 import loginToContinueStore from './loginToContinue';
 import errorCodeStore from './errorCode';
 import sideNavStore from './sideNav';
@@ -49,4 +50,5 @@ export {
   userCenterStore,
   sideNavStore,
   commentReplyStore,
+  writeSettingStore,
 };

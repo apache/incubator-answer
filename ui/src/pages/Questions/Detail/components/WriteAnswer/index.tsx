@@ -20,16 +20,19 @@
 import { memo, useState, FC, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { usePromptWithUnload, useCaptchaModal } from '@/hooks';
+import { usePromptWithUnload } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType, PostAnswerReq } from '@/common/interface';
 import { postAnswer } from '@/services';
 import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
+import { writeSettingStore } from '@/stores';
 
 interface Props {
   visible?: boolean;
@@ -38,6 +41,7 @@ interface Props {
     qid: string;
     answered?: boolean;
     loggedUserRank: number;
+    first_answer_id?: string;
   };
   callback?: (obj) => void;
 }
@@ -60,7 +64,9 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [editorFocusState, setEditorFocusState] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
   const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
-  const aCaptcha = useCaptchaModal('answer');
+  const aCaptcha = useCaptchaPlugin('answer');
+  const writeInfo = writeSettingStore((state) => state.write);
+  const [editorCanSave, setEditorCanSave] = useState(false);
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
@@ -76,6 +82,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   useEffect(() => {
     const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
     if (draft?.questionId === data.qid && draft?.content) {
+      setShowEditor(true);
       setFormData({
         content: {
           value: draft.content,
@@ -83,9 +90,11 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
           errorMsg: '',
         },
       });
-      setShowEditor(true);
       setHasDraft(true);
     }
+    setTimeout(() => {
+      setEditorCanSave(true);
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -148,6 +157,40 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     }
   };
 
+  const submitAnswer = () => {
+    const params: PostAnswerReq = {
+      question_id: data?.qid,
+      content: formData.content.value,
+      html: marked.parse(formData.content.value),
+    };
+    const imgCode = aCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
+      params.captcha_code = imgCode.captcha_code;
+      params.captcha_id = imgCode.captcha_id;
+    }
+    postAnswer(params)
+      .then(async (res) => {
+        await aCaptcha?.close();
+        setShowEditor(false);
+        setFormData({
+          content: {
+            value: '',
+            isInvalid: false,
+            errorMsg: '',
+          },
+        });
+        removeDraft();
+        callback?.(res.info);
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          aCaptcha?.handleCaptchaError(ex.list);
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
+      });
+  };
+
   const handleSubmit = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
@@ -155,46 +198,18 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     if (!checkValidated()) {
       return;
     }
-
-    aCaptcha.check(() => {
-      const params: PostAnswerReq = {
-        question_id: data?.qid,
-        content: formData.content.value,
-        html: marked.parse(formData.content.value),
-      };
-      const imgCode = aCaptcha.getCaptcha();
-      if (imgCode.verify) {
-        params.captcha_code = imgCode.captcha_code;
-        params.captcha_id = imgCode.captcha_id;
-      }
-      postAnswer(params)
-        .then(async (res) => {
-          await aCaptcha.close();
-          setShowEditor(false);
-          setFormData({
-            content: {
-              value: '',
-              isInvalid: false,
-              errorMsg: '',
-            },
-          });
-          removeDraft();
-          callback?.(res.info);
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            aCaptcha.handleCaptchaError(ex.list);
-            const stateData = handleFormError(ex, formData);
-            setFormData({ ...stateData });
-          }
-        });
-    });
+    if (!aCaptcha) {
+      submitAnswer();
+      return;
+    }
+    aCaptcha.check(() => submitAnswer());
   };
 
   const clickBtn = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
     }
+
     if (data?.answered && !showEditor) {
       Modal.confirm({
         title: t('confirm_title'),
@@ -223,6 +238,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     setShowEditor(true);
     setEditorFocusState(true);
   };
+
   return (
     <Form noValidate className="mt-4">
       {(!data.answered || showEditor) && (
@@ -254,13 +270,15 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 value={formData.content.value}
                 autoFocus={editorFocusState}
                 onChange={(val) => {
-                  setFormData({
-                    content: {
-                      value: val,
-                      isInvalid: false,
-                      errorMsg: '',
-                    },
-                  });
+                  if (editorCanSave) {
+                    setFormData({
+                      content: {
+                        value: val,
+                        isInvalid: false,
+                        errorMsg: '',
+                      },
+                    });
+                  }
                 }}
                 onFocus={() => {
                   setFocusType('answer');
@@ -306,10 +324,22 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
       )}
 
       {data.answered && !showEditor ? (
-        <Button onClick={clickBtn}>{t('add_another_answer')}</Button>
+        // the 0th answer is the oldest one
+        <Link
+          to={`/posts/${data.qid}/${data.first_answer_id}/edit`}
+          className="btn btn-primary">
+          {t('edit_answer')}
+        </Link>
       ) : (
         <Button onClick={clickBtn}>{t('btn_name')}</Button>
       )}
+
+      {data.answered && !showEditor && !writeInfo.restrict_answer && (
+        <Button onClick={clickBtn} className="ms-2 " variant="outline-primary">
+          {t('add_another_answer')}
+        </Button>
+      )}
+
       {hasDraft && (
         <Button variant="link" className="ms-2" onClick={deleteDraft}>
           {t('discard_draft', { keyPrefix: 'btns' })}

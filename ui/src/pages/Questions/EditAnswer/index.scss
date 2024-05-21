@@ -27,6 +27,10 @@
       height: calc(100% - 12px);
       overflow-y: scroll;
       z-index: 1;
+      background: var(--an-white);
+    }
+    img {
+      max-width: 100%;
     }
     .scroll-bar {
       height: 12px;
@@ -45,6 +49,9 @@
       resize: vertical;
       transform: scale(110, 1);
       height: 100%;
+    }
+    .resize-bottom::-webkit-resizer {
+      border: none;
     }
     .resize-bottom + .line {
       left: 0;

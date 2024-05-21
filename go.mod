@@ -1,3 +1,20 @@
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 module github.com/apache/incubator-answer
 
 go 1.18
@@ -24,7 +41,6 @@ require (
 	github.com/jinzhu/now v1.1.5
 	github.com/lib/pq v1.10.7
 	github.com/microcosm-cc/bluemonday v1.0.21
-	github.com/mojocn/base64Captcha v1.3.5
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/scottleedavis/go-exif-remove v0.0.0-20230314195146-7e059d593405
@@ -41,9 +57,9 @@ require (
 	github.com/swaggo/swag v1.16.1
 	github.com/tidwall/gjson v1.14.4
 	github.com/yuin/goldmark v1.4.13
-	golang.org/x/crypto v0.13.0
-	golang.org/x/image v0.1.0
-	golang.org/x/net v0.15.0
+	golang.org/x/crypto v0.21.0
+	golang.org/x/image v0.13.0
+	golang.org/x/net v0.21.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.24.0
@@ -82,7 +98,6 @@ require (
 	github.com/go-openapi/spec v0.20.9 // indirect
 	github.com/go-openapi/swag v0.22.4 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/geo v0.0.0-20190812012225-f41920e961ce // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
@@ -133,8 +148,8 @@ require (
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/sys v0.12.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

@@ -26,7 +26,7 @@ import type * as Type from '@/common/interface';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { getLegalSetting, putLegalSetting } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Legal: FC = () => {
   const { t } = useTranslation('translation', {
@@ -90,6 +90,8 @@ const Legal: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

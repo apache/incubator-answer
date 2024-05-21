@@ -24,8 +24,9 @@ import type * as Type from '@/common/interface';
 import { getThemeSetting, putThemeSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import { themeSettingStore } from '@/stores';
+import { setupAppTheme } from '@/utils/localize';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -44,10 +45,20 @@ const Index: FC = () => {
         enumNames: themeSetting?.theme_options?.map((_) => _.label),
         default: themeSetting?.theme_options?.[0]?.value,
       },
+      color_scheme: {
+        type: 'string',
+        title: t('color_scheme.label'),
+        enum: ['system', 'light', 'dark'],
+        enumNames: [
+          t('system_setting', { keyPrefix: 'btns' }),
+          t('light', { keyPrefix: 'btns' }),
+          t('dark', { keyPrefix: 'btns' }),
+        ],
+        default: themeSetting?.color_scheme,
+      },
       navbar_style: {
         type: 'string',
         title: t('navbar_style.label'),
-        description: t('navbar_style.text'),
         enum: ['colored', 'light'],
         enumNames: ['Colored', 'Light'],
         default: 'colored',
@@ -64,23 +75,45 @@ const Index: FC = () => {
     themes: {
       'ui:widget': 'select',
     },
+    color_scheme: {
+      'ui:widget': 'select',
+    },
     navbar_style: {
       'ui:widget': 'select',
     },
     primary_color: {
+      'ui:widget': 'input_group',
       'ui:options': {
         inputType: 'color',
+        suffixBtnOptions: {
+          text: '',
+          variant: 'outline-secondary',
+          iconName: 'arrow-counterclockwise',
+          actionType: 'click',
+          title: t('reset', { keyPrefix: 'btns' }),
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          clickCallback: () => resetPrimaryScheme(),
+        },
       },
     },
   };
+
   const [formData, setFormData] = useState(initFormData(schema));
   const { update: updateThemeSetting } = themeSettingStore((_) => _);
+
+  const resetPrimaryScheme = () => {
+    const formMeta = { ...formData };
+    formMeta.primary_color.value = '#0033FF';
+    setFormData({ ...formMeta });
+  };
+
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
     const themeName = formData.themes.value;
     const reqParams: Type.AdminSettingsTheme = {
       theme: themeName,
+      color_scheme: formData.color_scheme.value,
       theme_config: {
         [themeName]: {
           navbar_style: formData.navbar_style.value,
@@ -96,11 +129,14 @@ const Index: FC = () => {
           variant: 'success',
         });
         updateThemeSetting(reqParams);
+        setupAppTheme();
       })
       .catch((err) => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -115,6 +151,7 @@ const Index: FC = () => {
         formMeta.themes.value = themeName;
         formMeta.navbar_style.value = themeConfig?.navbar_style;
         formMeta.primary_color.value = themeConfig?.primary_color;
+        formData.color_scheme.value = setting?.color_scheme || 'system';
         setFormData({ ...formMeta });
       }
     });

@@ -22,7 +22,7 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { usePageTags, useCaptchaModal } from '@/hooks';
+import { usePageTags } from '@/hooks';
 import type { LoginReqParams, FormDataType } from '@/common/interface';
 import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import {
@@ -30,8 +30,16 @@ import {
   loginSettingStore,
   userCenterStore,
 } from '@/stores';
-import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
+import {
+  floppyNavigation,
+  guard,
+  handleFormError,
+  userCenter,
+  scrollToElementTop,
+} from '@/utils';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { login, UcAgent } from '@/services';
+import { setupAppTheme } from '@/utils/localize';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -45,7 +53,8 @@ const Index: React.FC = () => {
     ucAgentInfo = ucAgent.agent_info;
   }
   const canOriginalLogin =
-    !ucAgentInfo || ucAgentInfo.enabled_original_user_system;
+    (!ucAgentInfo || ucAgentInfo.enabled_original_user_system) &&
+    loginSetting.allow_password_login;
 
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -66,7 +75,7 @@ const Index: React.FC = () => {
     setFormData({ ...formData, ...params });
   };
 
-  const passwordCaptcha = useCaptchaModal('password');
+  const passwordCaptcha = useCaptchaPlugin('password');
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -93,6 +102,14 @@ const Index: React.FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -105,7 +122,7 @@ const Index: React.FC = () => {
       pass: formData.pass.value,
     };
 
-    const captcha = passwordCaptcha.getCaptcha();
+    const captcha = passwordCaptcha?.getCaptcha();
     if (captcha?.verify) {
       params.captcha_code = captcha.captcha_code;
       params.captcha_id = captcha.captcha_id;
@@ -113,8 +130,9 @@ const Index: React.FC = () => {
 
     login(params)
       .then(async (res) => {
-        await passwordCaptcha.close();
+        await passwordCaptcha?.close?.();
         updateUser(res);
+        setupAppTheme();
         const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
           // inactive
@@ -127,7 +145,9 @@ const Index: React.FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
-          passwordCaptcha.handleCaptchaError(err.list);
+          passwordCaptcha?.handleCaptchaError?.(err.list);
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -140,7 +160,12 @@ const Index: React.FC = () => {
       return;
     }
 
-    passwordCaptcha.check(() => {
+    if (!passwordCaptcha) {
+      handleLogin();
+      return;
+    }
+
+    passwordCaptcha?.check?.(() => {
       handleLogin();
     });
   };
@@ -162,6 +187,17 @@ const Index: React.FC = () => {
       <WelcomeTitle />
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
+          <PluginRender
+            type="captcha"
+            slug_name="captcha_basic"
+            className="mb-5"
+          />
+
+          <PluginRender
+            type="captcha"
+            slug_name="captcha_google_v2"
+            className="mb-5"
+          />
           {ucAgentInfo ? (
             <PluginRender
               type="connector"
@@ -201,7 +237,7 @@ const Index: React.FC = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId="password" className="mb-3">
+                <Form.Group controlId="pass" className="mb-3">
                   <div className="d-flex justify-content-between">
                     <Form.Label>{t('password.label')}</Form.Label>
                     <Link to="/users/account-recovery" tabIndex={2}>

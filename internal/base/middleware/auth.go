@@ -89,9 +89,17 @@ func (am *AuthUserMiddleware) EjectUserBySiteInfo() gin.HandlerFunc {
 			return
 		}
 
-		_, isLogin := ctx.Get(ctxUUIDKey)
-		if !isLogin {
+		// If site in private mode, user must login.
+		userInfo := GetUserInfoFromContext(ctx)
+		if userInfo == nil {
 			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		// If user is not active, eject user.
+		if userInfo.EmailStatus != entity.EmailStatusAvailable {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.EmailNeedToBeVerified),
+				&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeInactive})
 			ctx.Abort()
 			return
 		}
@@ -99,8 +107,33 @@ func (am *AuthUserMiddleware) EjectUserBySiteInfo() gin.HandlerFunc {
 	}
 }
 
-// MustAuth auth user info. If the user does not log in, an unauthenticated error is displayed
-func (am *AuthUserMiddleware) MustAuth() gin.HandlerFunc {
+// MustAuthWithoutAccountAvailable auth user info, any login user can access though user is not active.
+func (am *AuthUserMiddleware) MustAuthWithoutAccountAvailable() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		token := ExtractToken(ctx)
+		if len(token) == 0 {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		userInfo, err := am.authService.GetUserCacheInfo(ctx, token)
+		if err != nil || userInfo == nil {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		if userInfo.UserStatus == entity.UserStatusDeleted {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		ctx.Set(ctxUUIDKey, userInfo)
+		ctx.Next()
+	}
+}
+
+// MustAuthAndAccountAvailable auth user info and check user status, only allow active user access.
+func (am *AuthUserMiddleware) MustAuthAndAccountAvailable() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ExtractToken(ctx)
 		if len(token) == 0 {

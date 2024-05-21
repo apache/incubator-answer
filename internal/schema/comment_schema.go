@@ -38,6 +38,9 @@ type AddCommentReq struct {
 	ParsedText string `json:"-"`
 	// @ user id list
 	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
+	CaptchaID           string   `json:"captcha_id"`
+	CaptchaCode         string   `json:"captcha_code"`
+
 	// user id
 	UserID string `json:"-"`
 	// whether user can add it
@@ -45,9 +48,7 @@ type AddCommentReq struct {
 	// whether user can edit it
 	CanEdit bool `json:"-"`
 	// whether user can delete it
-	CanDelete   bool   `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
-	CaptchaCode string `json:"captcha_code"`
+	CanDelete bool `json:"-"`
 }
 
 func (req *AddCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -61,7 +62,7 @@ type RemoveCommentReq struct {
 	CommentID string `validate:"required" json:"comment_id"`
 	// user id
 	UserID      string `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
 
@@ -130,7 +131,7 @@ type GetCommentWithPageReq struct {
 	// comment id
 	CommentID string `validate:"omitempty" form:"comment_id"`
 	// query condition
-	QueryCond string `validate:"omitempty,oneof=vote" form:"query_cond"`
+	QueryCond string `validate:"omitempty,oneof=vote created_at" form:"query_cond"`
 	// user id
 	UserID string `json:"-"`
 	// whether user can edit it

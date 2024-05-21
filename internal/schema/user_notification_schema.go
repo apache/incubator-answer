@@ -38,41 +38,13 @@ func NewNotificationChannelsFormJson(jsonStr string) NotificationChannels {
 	return list
 }
 
-func (n *NotificationChannels) Format(sequences []constant.NotificationChannelKey) {
-	if n == nil {
-		*n = make([]*NotificationChannelConfig, 0)
-		return
+func NewNotificationChannelConfigFormJson(jsonStr string) NotificationChannelConfig {
+	var list NotificationChannels
+	_ = json.Unmarshal([]byte(jsonStr), &list)
+	if len(list) > 0 {
+		return *list[0]
 	}
-	mapping := make(map[constant.NotificationChannelKey]*NotificationChannelConfig)
-	for _, item := range *n {
-		mapping[item.Key] = &NotificationChannelConfig{
-			Key:    item.Key,
-			Enable: item.Enable,
-		}
-	}
-	newList := make([]*NotificationChannelConfig, 0)
-	for _, ch := range sequences {
-		if c, ok := mapping[ch]; ok {
-			newList = append(newList, c)
-		} else {
-			newList = append(newList, &NotificationChannelConfig{
-				Key: ch,
-			})
-		}
-	}
-	*n = newList
-}
-
-func (n *NotificationChannels) CheckEnable(ch constant.NotificationChannelKey) bool {
-	if n == nil {
-		return false
-	}
-	for _, item := range *n {
-		if item.Key == ch {
-			return item.Enable
-		}
-	}
-	return false
+	return NotificationChannelConfig{}
 }
 
 func (n *NotificationChannels) ToJsonString() string {
@@ -81,62 +53,39 @@ func (n *NotificationChannels) ToJsonString() string {
 }
 
 type NotificationConfig struct {
-	Inbox                          NotificationChannels `json:"inbox"`
-	AllNewQuestion                 NotificationChannels `json:"all_new_question"`
-	AllNewQuestionForFollowingTags NotificationChannels `json:"all_new_question_for_following_tags"`
-}
-
-func (n *NotificationConfig) ToJsonString() string {
-	data, _ := json.Marshal(n)
-	return string(data)
+	Inbox                          NotificationChannelConfig `json:"inbox"`
+	AllNewQuestion                 NotificationChannelConfig `json:"all_new_question"`
+	AllNewQuestionForFollowingTags NotificationChannelConfig `json:"all_new_question_for_following_tags"`
 }
 
 func NewNotificationConfig(configs []*entity.UserNotificationConfig) NotificationConfig {
 	nc := NotificationConfig{}
-	nc.Inbox = make([]*NotificationChannelConfig, 0)
-	nc.AllNewQuestion = make([]*NotificationChannelConfig, 0)
-	nc.AllNewQuestionForFollowingTags = make([]*NotificationChannelConfig, 0)
 	for _, item := range configs {
 		switch item.Source {
 		case string(constant.InboxSource):
-			nc.Inbox = NewNotificationChannelsFormJson(item.Channels)
+			nc.Inbox = NewNotificationChannelConfigFormJson(item.Channels)
 		case string(constant.AllNewQuestionSource):
-			nc.AllNewQuestion = NewNotificationChannelsFormJson(item.Channels)
+			nc.AllNewQuestion = NewNotificationChannelConfigFormJson(item.Channels)
 		case string(constant.AllNewQuestionForFollowingTagsSource):
-			nc.AllNewQuestionForFollowingTags = NewNotificationChannelsFormJson(item.Channels)
+			nc.AllNewQuestionForFollowingTags = NewNotificationChannelConfigFormJson(item.Channels)
 		}
 	}
 	return nc
 }
 
-func (n *NotificationConfig) FromJsonString(data string) {
-	if len(data) > 0 {
-		_ = json.Unmarshal([]byte(data), n)
-		return
-	}
-	n.Inbox = make([]*NotificationChannelConfig, 0)
-	n.AllNewQuestion = make([]*NotificationChannelConfig, 0)
-	n.AllNewQuestionForFollowingTags = make([]*NotificationChannelConfig, 0)
-	return
-}
-
 func (n *NotificationConfig) Format() {
-	n.Inbox.Format([]constant.NotificationChannelKey{constant.EmailChannel})
-	n.AllNewQuestion.Format([]constant.NotificationChannelKey{constant.EmailChannel})
-	n.AllNewQuestionForFollowingTags.Format([]constant.NotificationChannelKey{constant.EmailChannel})
-}
-
-func (n *NotificationConfig) CheckEnable(
-	source constant.NotificationSource, channel constant.NotificationChannelKey) bool {
-	switch source {
-	case constant.InboxSource:
-		return n.Inbox.CheckEnable(channel)
-	case constant.AllNewQuestionSource:
-		return n.AllNewQuestion.CheckEnable(channel)
-	case constant.AllNewQuestionForFollowingTagsSource:
-		return n.AllNewQuestionForFollowingTags.CheckEnable(channel)
+	if n.Inbox.Key == "" {
+		n.Inbox.Key = constant.EmailChannel
+		n.Inbox.Enable = false
 	}
-	return false
+	if n.AllNewQuestion.Key == "" {
+		n.AllNewQuestion.Key = constant.EmailChannel
+		n.AllNewQuestion.Enable = false
+	}
+	if n.AllNewQuestionForFollowingTags.Key == "" {
+		n.AllNewQuestionForFollowingTags.Key = constant.EmailChannel
+		n.AllNewQuestionForFollowingTags.Enable = false
+	}
 }
 
 // UpdateUserNotificationConfigReq update user notification config request

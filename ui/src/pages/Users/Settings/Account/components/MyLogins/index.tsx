@@ -79,7 +79,7 @@ const Index = () => {
                 onClick={(e) => deleteLogins(e, item)}>
                 <span
                   dangerouslySetInnerHTML={{
-                    __html: base64ToSvg(item.icon),
+                    __html: base64ToSvg(item.icon, 'btnSvg me-2'),
                   }}
                 />
                 <span>

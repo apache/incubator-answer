@@ -26,7 +26,7 @@ const AnswerLinks = () => {
   return (
     <Card className="mb-4">
       <Card.Body>
-        <h6 className="mb-3">{t('answer_links')}</h6>
+        <h6 className="mb-3">{t('links')}</h6>
         <Row>
           <Col xs={6}>
             <a
@@ -37,8 +37,40 @@ const AnswerLinks = () => {
             </a>
           </Col>
           <Col xs={6}>
-            <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
+            <a
+              href="https://answer.apache.org/plugins"
+              target="_blank"
+              rel="noreferrer">
+              {t('plugins')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://answer.apache.org/community/support"
+              target="_blank"
+              rel="noreferrer">
               {t('support')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
+              {t('forum')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://answer.apache.org/blog"
+              target="_blank"
+              rel="noreferrer">
+              {t('blog')}
+            </a>
+          </Col>
+          <Col xs={6}>
+            <a
+              href="https://github.com/apache/incubator-answer"
+              target="_blank"
+              rel="noreferrer">
+              {t('github')}
             </a>
           </Col>
         </Row>

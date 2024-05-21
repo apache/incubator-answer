@@ -183,8 +183,9 @@ export interface BaseUIOptions {
   empty?: string;
   // Will be appended to the className of the form component itself
   className?: classnames.Argument;
+  class_name?: classnames.Argument;
   // The className that will be attached to a form field container
-  fieldClassName?: classnames.Argument;
+  field_class_name?: classnames.Argument;
   // Make a form component render into simplified mode
   readOnly?: boolean;
   simplify?: boolean;

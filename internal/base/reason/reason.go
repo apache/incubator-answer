@@ -45,10 +45,12 @@ const (
 	QuestionCannotClose              = "error.question.cannot_close"
 	QuestionCannotUpdate             = "error.question.cannot_update"
 	QuestionAlreadyDeleted           = "error.question.already_deleted"
+	QuestionUnderReview              = "error.question.under_review"
 	AnswerNotFound                   = "error.answer.not_found"
 	AnswerCannotDeleted              = "error.answer.cannot_deleted"
 	AnswerCannotUpdate               = "error.answer.cannot_update"
 	AnswerCannotAddByClosedQuestion  = "error.answer.question_closed_cannot_add"
+	AnswerRestrictAnswer             = "error.answer.restrict_answer"
 	CommentEditWithoutPermission     = "error.comment.edit_without_permission"
 	DisallowVote                     = "error.object.disallow_vote"
 	DisallowFollow                   = "error.object.disallow_follow"
@@ -92,14 +94,15 @@ const (
 	UserCannotUpdateYourRole         = "error.user.cannot_update_your_role"
 	TagCannotSetSynonymAsItself      = "error.tag.cannot_set_synonym_as_itself"
 	NotAllowedRegistration           = "error.user.not_allowed_registration"
+	NotAllowedLoginViaPassword       = "error.user.not_allowed_login_via_password"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
 	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
 	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 	UserAccessDenied                 = "error.user.access_denied"
 	UserPageAccessDenied             = "error.user.page_access_denied"
-
-	AddBulkUsersFormatError = "error.user.add_bulk_users_format_error"
-	AddBulkUsersAmountError = "error.user.add_bulk_users_amount_error"
+	AddBulkUsersFormatError          = "error.user.add_bulk_users_format_error"
+	AddBulkUsersAmountError          = "error.user.add_bulk_users_amount_error"
+	InvalidURLError                  = "error.common.invalid_url"
 )
 
 // user external login reasons

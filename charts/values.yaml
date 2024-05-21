@@ -22,7 +22,7 @@
 replicaCount: 1
 
 image:
-  repository: answerdev/answer
+  repository: apache/answer
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -35,7 +35,7 @@ env:
     # [DEBUG INFO WARN ERROR]
     value: "INFO"
   # uncomment the below values to use AUTO_INSTALL and not have to go through the setup process.
-  # Once used to do the initial setup, these variables wont be used moving forward.
+  # Once used to do the initial setup, these variables won't be used moving forward.
   # You must at a minimum comment AUTO_INSTALL after initial setup to prevent an error about the database already being initiated.
   # - name: AUTO_INSTALL
   #   value: "true"

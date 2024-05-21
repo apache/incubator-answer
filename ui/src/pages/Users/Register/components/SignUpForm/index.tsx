@@ -17,16 +17,17 @@
  * under the License.
  */
 
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useCaptchaModal } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import type { FormDataType, RegisterReqParams } from '@/common/interface';
-import { register, useLegalTos, useLegalPrivacy } from '@/services';
+import { register } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
+import { useLegalClick } from '@/behaviour/useLegalClick';
 
 interface Props {
   callback: () => void;
@@ -53,7 +54,7 @@ const Index: React.FC<Props> = ({ callback }) => {
   });
 
   const updateUser = userStore((state) => state.update);
-  const emailCaptcha = useCaptchaModal('email');
+  const emailCaptcha = useCaptchaPlugin('email');
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -83,29 +84,17 @@ const Index: React.FC<Props> = ({ callback }) => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
     return bol;
   };
 
-  const { data: tos } = useLegalTos();
-  const { data: privacy } = useLegalPrivacy();
-  const argumentClick = (evt: MouseEvent, type: 'tos' | 'privacy') => {
-    evt.stopPropagation();
-    const contentText =
-      type === 'tos'
-        ? tos?.terms_of_service_original_text
-        : privacy?.privacy_policy_original_text;
-    let matchUrl: URL | undefined;
-    try {
-      if (contentText) {
-        matchUrl = new URL(contentText);
-      }
-      // eslint-disable-next-line no-empty
-    } catch (ex) {}
-    if (matchUrl) {
-      evt.preventDefault();
-      window.open(matchUrl.toString());
-    }
-  };
+  const legalClick = useLegalClick();
 
   const handleRegister = (event?: any) => {
     if (event) {
@@ -117,7 +106,7 @@ const Index: React.FC<Props> = ({ callback }) => {
       pass: formData.pass.value,
     };
 
-    const captcha = emailCaptcha.getCaptcha();
+    const captcha = emailCaptcha?.getCaptcha();
     if (captcha?.verify) {
       reqParams.captcha_code = captcha.captcha_code;
       reqParams.captcha_id = captcha.captcha_id;
@@ -125,15 +114,17 @@ const Index: React.FC<Props> = ({ callback }) => {
 
     register(reqParams)
       .then(async (res) => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         updateUser(res);
         callback();
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -142,6 +133,10 @@ const Index: React.FC<Props> = ({ callback }) => {
     event.preventDefault();
     event.stopPropagation();
     if (!checkValidated()) {
+      return;
+    }
+    if (!emailCaptcha) {
+      handleRegister();
       return;
     }
     emailCaptcha.check(() => {
@@ -232,7 +227,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           <Link
             to="/privacy"
             onClick={(evt) => {
-              argumentClick(evt, 'privacy');
+              legalClick(evt, 'privacy');
             }}
             target="_blank">
             privacy policy
@@ -241,7 +236,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           <Link
             to="/tos"
             onClick={(evt) => {
-              argumentClick(evt, 'tos');
+              legalClick(evt, 'tos');
             }}
             target="_blank">
             terms of service

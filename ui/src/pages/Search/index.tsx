@@ -22,7 +22,8 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import { usePageTags, useCaptchaModal } from '@/hooks';
+import { usePageTags, useSkeletonControl } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { Pagination } from '@/components';
 import { getSearchResult } from '@/services';
 import type { SearchParams, SearchRes } from '@/common/interface';
@@ -43,6 +44,7 @@ const Index = () => {
   const q = searchParams.get('q') || '';
   const order = searchParams.get('order') || 'active';
   const [isLoading, setIsLoading] = useState(false);
+  const { isSkeletonShow } = useSkeletonControl(isLoading);
   const [data, setData] = useState<SearchRes>({
     count: 0,
     list: [],
@@ -50,7 +52,7 @@ const Index = () => {
   });
   const { count = 0, list = [], extra = null } = data || {};
 
-  const searchCaptcha = useCaptchaModal('search');
+  const searchCaptcha = useCaptchaPlugin('search');
 
   const doSearch = () => {
     setIsLoading(true);
@@ -61,7 +63,7 @@ const Index = () => {
       size: 20,
     };
 
-    const captcha = searchCaptcha.getCaptcha();
+    const captcha = searchCaptcha?.getCaptcha();
     if (captcha?.verify) {
       params.captcha_id = captcha.captcha_id;
       params.captcha_code = captcha.captcha_code;
@@ -69,12 +71,12 @@ const Index = () => {
 
     getSearchResult(params)
       .then(async (resp) => {
-        await searchCaptcha.close();
+        await searchCaptcha?.close();
         setData(resp);
       })
       .catch((err) => {
         if (err.isError) {
-          searchCaptcha.handleCaptchaError(err.list);
+          searchCaptcha?.handleCaptchaError(err.list);
         }
       })
       .finally(() => {
@@ -83,6 +85,10 @@ const Index = () => {
   };
 
   useEffect(() => {
+    if (!searchCaptcha) {
+      doSearch();
+      return;
+    }
     searchCaptcha.check(() => {
       doSearch();
     });
@@ -102,7 +108,7 @@ const Index = () => {
         <Head data={extra} />
         <SearchHead sort={order} count={count} />
         <ListGroup className="rounded-0 mb-5">
-          {isLoading ? (
+          {isSkeletonShow ? (
             <ListLoader />
           ) : (
             list?.map((item) => {

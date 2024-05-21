@@ -60,6 +60,7 @@ type TagRepo interface {
 	MustGetTagByNameOrID(ctx context.Context, tagID, slugName string) (tag *entity.Tag, exist bool, err error)
 	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
 	GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error)
+	GetIDsByMainTagId(ctx context.Context, mainTagID string) (tagIDs []string, err error)
 	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
 }
 
@@ -320,10 +321,10 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 	if exist {
 		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
-	SlugName := strings.ReplaceAll(req.SlugName, " ", "-")
-	SlugName = strings.ToLower(SlugName)
+	slugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	slugName = strings.ToLower(slugName)
 	tagInfo := &entity.Tag{
-		SlugName:     SlugName,
+		SlugName:     slugName,
 		DisplayName:  req.DisplayName,
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
@@ -364,6 +365,12 @@ func (ts *TagCommonService) GetTagByID(ctx context.Context, tagID string) (tag *
 	return
 }
 
+// GetTagIDsByMainTagID get object tag
+func (ts *TagCommonService) GetTagIDsByMainTagID(ctx context.Context, tagID string) (tagIDs []string, err error) {
+	tagIDs, err = ts.tagRepo.GetIDsByMainTagId(ctx, tagID)
+	return
+}
+
 // GetTagBySlugName get object tag
 func (ts *TagCommonService) GetTagBySlugName(ctx context.Context, slugName string) (tag *entity.Tag, exist bool, err error) {
 	tag, exist, err = ts.tagCommonRepo.GetTagBySlugName(ctx, slugName)
@@ -396,11 +403,11 @@ func (ts *TagCommonService) GetTagPage(ctx context.Context, page, pageSize int, 
 }
 
 func (ts *TagCommonService) GetObjectEntityTag(ctx context.Context, objectId string) (objTags []*entity.Tag, err error) {
-	tagIDList := make([]string, 0)
 	tagList, err := ts.tagRelRepo.GetObjectTagRelList(ctx, objectId)
 	if err != nil {
 		return nil, err
 	}
+	tagIDList := make([]string, 0)
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
@@ -830,14 +837,19 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 	if !exist {
 		return errors.BadRequest(reason.TagNotFound)
 	}
+
+	//Adding equivalent slug formatting for tag update
+	slugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	slugName = strings.ToLower(slugName)
+
 	//If the content is the same, ignore it
 	if tagInfo.OriginalText == req.OriginalText &&
 		tagInfo.DisplayName == req.DisplayName &&
-		tagInfo.SlugName == req.SlugName {
+		tagInfo.SlugName == slugName {
 		return nil
 	}
 
-	tagInfo.SlugName = req.SlugName
+	tagInfo.SlugName = slugName
 	tagInfo.DisplayName = req.DisplayName
 	tagInfo.OriginalText = req.OriginalText
 	tagInfo.ParsedText = req.ParsedText

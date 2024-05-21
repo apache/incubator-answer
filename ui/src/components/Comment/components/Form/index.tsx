@@ -25,6 +25,7 @@ import classNames from 'classnames';
 
 import { TextArea, Mentions } from '@/components';
 import { usePageUsers, usePromptWithUnload } from '@/hooks';
+import { parseEditMentionUser } from '@/utils';
 
 const Index = ({
   className = '',
@@ -64,6 +65,7 @@ const Index = ({
       }
     });
   };
+
   return (
     <div
       className={classNames(
@@ -78,7 +80,11 @@ const Index = ({
           <Mentions
             pageUsers={pageUsers.getUsers()}
             onSelected={handleSelected}>
-            <TextArea size="sm" value={value} onChange={handleChange} />
+            <TextArea
+              size="sm"
+              value={type === 'edit' ? parseEditMentionUser(value) : value}
+              onChange={handleChange}
+            />
           </Mentions>
           <div className="form-text">{t(`tip_${mode}`)}</div>
         </div>
