@@ -26,7 +26,7 @@ import type { ImgCodeReq, FormDataType } from '@/common/interface';
 import { loggedUserInfoStore } from '@/stores';
 import { resendEmail } from '@/services';
 import { handleFormError } from '@/utils';
-import { useCaptchaModal } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 interface IProps {
   visible?: boolean;
@@ -44,12 +44,12 @@ const Index: React.FC<IProps> = () => {
     },
   });
 
-  const emailCaptcha = useCaptchaModal('email');
+  const emailCaptcha = useCaptchaPlugin('email');
 
   const submit = () => {
     let req: ImgCodeReq = {};
-    const imgCode = emailCaptcha.getCaptcha();
-    if (imgCode.verify) {
+    const imgCode = emailCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
       req = {
         captcha_code: imgCode.captcha_code,
         captcha_id: imgCode.captcha_id,
@@ -57,12 +57,12 @@ const Index: React.FC<IProps> = () => {
     }
     resendEmail(req)
       .then(async () => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         setSuccess(true);
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
         }
@@ -71,6 +71,10 @@ const Index: React.FC<IProps> = () => {
 
   const onSentEmail = (evt) => {
     evt.preventDefault();
+    if (!emailCaptcha) {
+      submit();
+      return;
+    }
     emailCaptcha.check(() => {
       submit();
     });

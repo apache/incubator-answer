@@ -246,12 +246,16 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	return count, nil
 }
 
-func (ur *userRepo) SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error) {
+func (ur *userRepo) SearchUserListByName(ctx context.Context, name string, limit int,
+	onlyStaff bool) (userList []*entity.User, err error) {
 	userList = make([]*entity.User, 0)
 	session := ur.data.DB.Context(ctx)
+	if onlyStaff {
+		session.Join("INNER", "user_role_rel", "`user`.id = `user_role_rel`.user_id AND `user_role_rel`.role_id > 1")
+	}
 	session.Where("status = ?", entity.UserStatusAvailable)
 	session.Where("username LIKE ? OR display_name LIKE ?", strings.ToLower(name)+"%", name+"%")
-	session.OrderBy("username ASC, id DESC")
+	session.OrderBy("username ASC, `user`.id DESC")
 	session.Limit(limit)
 	err = session.Find(&userList)
 	if err != nil {

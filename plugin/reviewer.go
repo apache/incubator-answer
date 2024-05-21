@@ -39,6 +39,10 @@ type ReviewContent struct {
 	// Review Language, the site language. e.g. en_US
 	// The plugin may reply the review result according to the language
 	Language string
+	// The user agent of the request web browser
+	UserAgent string
+	// The IP address of the request
+	IP string
 }
 
 type ReviewContentAuthor struct {
@@ -52,10 +56,20 @@ type ReviewContentAuthor struct {
 	Role int
 }
 
+type ReviewStatus string
+
+const (
+	ReviewStatusApproved       ReviewStatus = "approved"
+	ReviewStatusDeleteDirectly ReviewStatus = "delete_directly"
+	ReviewStatusNeedReview     ReviewStatus = "need_review"
+)
+
 // ReviewResult is a struct that contains the result of a review
 type ReviewResult struct {
 	// If the review is approved
 	Approved bool
+	// The status of the review
+	ReviewStatus ReviewStatus
 	// The reason for the result
 	Reason string
 }

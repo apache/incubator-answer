@@ -39,7 +39,7 @@ import {
   loadLanguageOptions,
   setupAppTimeZone,
 } from '@/utils/localize';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
@@ -141,6 +141,8 @@ const Interface: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

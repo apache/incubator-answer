@@ -21,14 +21,11 @@ package action
 
 import (
 	"context"
-	"image/color"
-	"strings"
 
-	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/mojocn/base64Captcha"
-	"github.com/segmentfault/pacman/errors"
+	"github.com/apache/incubator-answer/pkg/token"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -84,49 +81,29 @@ func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRe
 	}
 	verificationResult := cs.ValidationStrategy(ctx, unit, req.Action)
 	if !verificationResult {
-		resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
 		resp.Verify = true
+		resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
+		if err != nil {
+			log.Errorf("GenerateCaptcha error: %v", err)
+		}
 	}
 	return
-}
-
-func (cs *CaptchaService) UserRegisterCaptcha(ctx context.Context) (resp *schema.ActionRecordResp, err error) {
-	resp = &schema.ActionRecordResp{}
-	resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
-	resp.Verify = true
-	return
-}
-
-func (cs *CaptchaService) UserRegisterVerifyCaptcha(
-	ctx context.Context, id string, VerifyValue string,
-) bool {
-	if id == "" || VerifyValue == "" {
-		return false
-	}
-	pass, err := cs.VerifyCaptcha(ctx, id, VerifyValue)
-	if err != nil {
-		return false
-	}
-	return pass
 }
 
 // ActionRecordVerifyCaptcha
 // Verify that you need to enter a CAPTCHA, and that the CAPTCHA is correct
 func (cs *CaptchaService) ActionRecordVerifyCaptcha(
-	ctx context.Context, actionType string, unit string, id string, VerifyValue string,
+	ctx context.Context, actionType string, unit string, captchaID string, captchaCode string,
 ) bool {
 	verificationResult := cs.ValidationStrategy(ctx, unit, actionType)
-	if !verificationResult {
-		if id == "" || VerifyValue == "" {
-			return false
-		}
-		pass, err := cs.VerifyCaptcha(ctx, id, VerifyValue)
-		if err != nil {
-			return false
-		}
-		return pass
+	if verificationResult {
+		return true
 	}
-	return true
+	pass, err := cs.VerifyCaptcha(ctx, captchaID, captchaCode)
+	if err != nil {
+		return false
+	}
+	return pass
 }
 
 func (cs *CaptchaService) ActionRecordAdd(ctx context.Context, actionType string, unit string) (int, error) {
@@ -155,43 +132,32 @@ func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string
 
 // GenerateCaptcha generate captcha
 func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase64 string, err error) {
-	driverString := base64Captcha.DriverString{
-		Height:          60,
-		Width:           200,
-		NoiseCount:      0,
-		ShowLineOptions: 2 | 4,
-		Length:          4,
-		Source:          "1234567890qwertyuioplkjhgfdsazxcvbnm",
-		BgColor:         &color.RGBA{R: 211, G: 211, B: 211, A: 0},
-		Fonts:           []string{"wqy-microhei.ttc"},
-	}
-	driver := driverString.ConvertFonts()
-
-	id, content, answer := driver.GenerateIdQuestionAnswer()
-	item, err := driver.DrawCaptcha(content)
-	if err != nil {
-		return "", "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
-	}
-	err = cs.captchaRepo.SetCaptcha(ctx, id, answer)
-	if err != nil {
-		return "", "", err
+	realCaptcha := ""
+	key = token.GenerateToken()
+	_ = plugin.CallCaptcha(func(fn plugin.Captcha) error {
+		if captcha, code := fn.Create(); len(code) > 0 {
+			captchaBase64 = captcha
+			realCaptcha = code
+		}
+		return nil
+	})
+	if len(realCaptcha) == 0 {
+		return key, captchaBase64, nil
 	}
 
-	captchaBase64 = item.EncodeB64string()
-	return id, captchaBase64, nil
+	err = cs.captchaRepo.SetCaptcha(ctx, key, realCaptcha)
+	return key, captchaBase64, err
 }
 
 // VerifyCaptcha generate captcha
 func (cs *CaptchaService) VerifyCaptcha(ctx context.Context, key, captcha string) (isCorrect bool, err error) {
-	realCaptcha, err := cs.captchaRepo.GetCaptcha(ctx, key)
-	if err != nil {
-		log.Error("VerifyCaptcha GetCaptcha Error", err.Error())
-		return false, nil
-	}
-	err = cs.captchaRepo.DelCaptcha(ctx, key)
-	if err != nil {
-		log.Error("VerifyCaptcha DelCaptcha Error", err.Error())
-		return false, nil
-	}
-	return strings.TrimSpace(captcha) == realCaptcha, nil
+	realCaptcha, _ := cs.captchaRepo.GetCaptcha(ctx, key)
+
+	_ = plugin.CallCaptcha(func(fn plugin.Captcha) error {
+		isCorrect = fn.Verify(realCaptcha, captcha)
+		return nil
+	})
+
+	_ = cs.captchaRepo.DelCaptcha(ctx, key)
+	return isCorrect, nil
 }

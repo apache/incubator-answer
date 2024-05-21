@@ -29,7 +29,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { oAuthBindEmail, getLoggedUserInfo } from '@/services';
 import Storage from '@/utils/storage';
 import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -70,6 +70,11 @@ const Index: FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const ele = document.getElementById('email');
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -142,6 +147,8 @@ const Index: FC = () => {
           if (err.isError) {
             const data = handleFormError(err, formData);
             setFormData({ ...data });
+            const ele = document.getElementById(err.list[0].error_field);
+            scrollToElementTop(ele);
           }
         });
     }

@@ -142,7 +142,7 @@ backend:
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: Неверная URL.
     password:
       space_invalid:
         other: Пароль не должен содержать пробелы.
@@ -204,7 +204,7 @@ backend:
       already_deleted:
         other: Этот пост был удалён.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Ваш пост ожидает проверки. Он станет видимым после одобрения.
       not_found:
         other: Вопрос не найден.
       cannot_deleted:
@@ -491,18 +491,18 @@ backend:
     accepted:
       other: принято
     edit:
-      other: edit
+      other: редактировать
   review:
     queued_post:
       other: Queued post
     flagged_post:
       other: Flagged post
     suggested_post_edit:
-      other: Suggested edits
+      other: Предложенные исправления
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: Как отформатировать
+    title: 'Форматирование:'
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">создание ссылок: </p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">пробел между абзацами</p></li><li><p class="mb-2"><em>_italic_</em> или **<strong>bold</strong>**</p></li><li><p class="mb-2">отступ для кода - 4 пробела</p></li><li><p class="mb-2">тег  <code>&gt;</code> для цитаты в начале строки</p></li><li><p class="mb-2">обратные кавычки для строки кода <code>`like _this_`</code></p></li><li><p class="mb-2">тройные обратные кавычки для блоков кода <code>`</code></p><pre class="mb-0"><code>```<br/>тут код<br/>```</code></pre></li></ul>
   pagination:
@@ -680,8 +680,8 @@ ui:
       empty: Не может быть пустым.
     msg:
       empty: Пожалуйста, выбери причину.
-      not_a_url: URL format is incorrect.
-      url_not_match: URL origin does not match the current website.
+      not_a_url: Недопустимый формат URL.
+      url_not_match: URL адрес не соответствует текущему веб-сайту.
   tag_modal:
     title: Новый тег
     form:
@@ -785,7 +785,7 @@ ui:
     sort_buttons:
       popular: Популярное
       name: Имя
-      newest: Самые новые
+      newest: Последние
     button_follow: Подписаться
     button_following: Подписки
     tag_label: вопросы
@@ -809,9 +809,9 @@ ui:
             empty: Заголовок не может быть пустым.
             range: Заголовок должен быть меньше 150 символов
         body:
-          label: Тело вопроса
+          label: 'Вопрос:'
           msg:
-            empty: Тело вопроса не может быть пустым.
+            empty: Вопрос не может быть пустым.
         tags:
           label: Теги
           msg:
@@ -824,7 +824,7 @@ ui:
           label: Изменить краткое описание
           placeholder: >-
             Кратко опишите вносимые изменения (исправлена орфография, исправлена грамматика, улучшено форматирование)
-    btn_post_question: Задайте свой вопрос
+    btn_post_question: Задать вопрос
     btn_save_edits: Сохранить изменения
     answer_question: Ответить на свой собственный вопрос
     post_question&answer: Опубликуйте свой вопрос и ответ
@@ -832,7 +832,7 @@ ui:
     add_btn: Тег
     create_btn: новый тег
     search_tag: Поиск тега
-    hint: "Опишите, о чем ваш вопрос, требуется хотя бы один тег."
+    hint: "Добавьте хотя бы один тег."
     no_result: Нет соответствующих тэгов
     tag_required_text: Обязательный тег (хотя бы один)
   header:
@@ -999,8 +999,10 @@ ui:
       change_email_info: >-
         Мы отправили электронное письмо на этот адрес. Пожалуйста, следуйте инструкциям из письма.
       email:
-        label: Новый email-адрес
-        msg: Новый email не может быть пустым.
+        label: Email
+      new_email:
+        label: New email
+        msg: New email cannot be empty.
       pass:
         label: Текущий пароль
         msg: Пароль не может быть пустым.
@@ -1066,7 +1068,7 @@ ui:
     answers:
       title: Ответы
       score: Оценка
-      newest: Самые новые
+      newest: Последние
       oldest: Oldest
       btn_accept: Принять
       btn_accepted: Принято
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Результаты поиска
     keywords: Ключевые слова
@@ -1170,13 +1173,13 @@ ui:
     more: Ещё
     sort_btns:
       relevance: По релевантности
-      newest: Самые новые
+      newest: Последние
       active: Активные
       score: Оценки
       more: Больше
     tips:
       title: Советы по расширенному поиску
-      tag: "<1>[тег]</1> поиск по тегу"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>user:username</1> поиск по автору"
       answer: "<1>ответов:0</1> вопросы без ответов"
       score: "<1>score:3</1> записи с рейтингом 3+"
@@ -1217,8 +1220,8 @@ ui:
     x_answers: "{{ count }} ответов"
     questions: Вопросы
     answers: Ответы
-    newest: Самые новые
-    active: Активный
+    newest: Последние
+    active: Активные
     frequent: Популярные
     score: Оценка
     unanswered: Без ответа
@@ -1238,7 +1241,7 @@ ui:
     reputation: Репутация
     comments: Комментарии
     votes: Голоса
-    newest: Самые новые
+    newest: Последние
     score: Оценки
     edit_profile: Редактировать профиль
     visited_x_days: "Посещено {{ count }} дней"
@@ -1405,9 +1408,9 @@ ui:
       comments: "Комментарии:"
       votes: "Голоса:"
       users: "Пользователи:"
-      flags: "Флаги:"
+      flags: "Жалобы:"
       reviews: "Reviews:"
-      site_health: Site health
+      site_health: Здоровье сайта
       version: "Версия:"
       https: "HTTPS:"
       upload_folder: "Каталог загрузки:"
@@ -1422,12 +1425,12 @@ ui:
       database_size: "Размер базы данных:"
       storage_used: "Использовано хранилища: "
       uptime: "Время работы:"
-      links: Links
+      links: Ссылки
       plugins: Плагины
       github: GitHub
       blog: Блог
       contact: Контакты
-      forum: Forum
+      forum: Форум
       documents: Документы
       feedback: Обратная связь
       support: Поддержка
@@ -1502,7 +1505,7 @@ ui:
       all: Все
       staff: Сотрудники
       more: Ещё
-      inactive: Неактивный
+      inactive: Неактивные
       suspended: Заблокированные
       deleted: Удаленные
       normal: Обычный
@@ -1538,7 +1541,7 @@ ui:
       status: Статус
       action: Действие
       change: Изменить
-      pending: Pending
+      pending: Ожидают
       filter:
         placeholder: "Фильтровать по заголовку, question:id"
     answers:
@@ -1576,8 +1579,8 @@ ui:
         validate: Контактный адрес электронной почты не может быть пустым.
         text: Адрес электронной почты контактного лица, ответственного за данный сайт.
       check_update:
-        label: Software updates
-        text: Automatically check for updates
+        label: Обновления программного обеспечения
+        text: Автоматически проверять наличие обновлений
     interface:
       page_title: Интерфейс
       language:
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Необходимый уровень репутации
         text: Выберите количество репутации, необходимое для получения привилегий
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (опционально)
     empty: не может быть пустым
@@ -1796,13 +1802,13 @@ ui:
     approve_flag_tip: Do you approve this flag?
     approve_post_tip: Do you approve this post?
     approve_user_tip: Do you approve this user?
-    suggest_edits: Suggested edits
+    suggest_edits: Предложенные исправления
     flag_post: Flag post
     flag_user: Flag user
     queued_post: Queued post
     queued_user: Queued user
     filter_label: Type
-    reputation: reputation
+    reputation: репутация
     flag_post_type: Flagged this post as {{ type }}.
     flag_user_type: Flagged this user as {{ type }}.
     edit_post: Edit post

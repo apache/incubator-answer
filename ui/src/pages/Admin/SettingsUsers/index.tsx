@@ -29,7 +29,7 @@ import {
   putUsersSetting,
   AdminSettingsUsers,
 } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 import * as Type from '@/common/interface';
 import { siteInfoStore } from '@/stores';
 
@@ -168,6 +168,8 @@ const Index: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

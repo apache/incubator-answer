@@ -27,15 +27,18 @@ import (
 type PluginAPIRouter struct {
 	connectorController  *controller.ConnectorController
 	userCenterController *controller.UserCenterController
+	captchaController    *controller.CaptchaController
 }
 
 func NewPluginAPIRouter(
 	connectorController *controller.ConnectorController,
 	userCenterController *controller.UserCenterController,
+	captchaController *controller.CaptchaController,
 ) *PluginAPIRouter {
 	return &PluginAPIRouter{
 		connectorController:  connectorController,
 		userCenterController: userCenterController,
+		captchaController:    captchaController,
 	}
 }
 
@@ -54,6 +57,9 @@ func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	r.GET(controller.UserCenterSignUpRedirectRouter, pr.userCenterController.UserCenterSignUpRedirect)
 	r.GET("/user-center/login/callback", pr.userCenterController.UserCenterLoginCallback)
 	r.GET("/user-center/sign-up/callback", pr.userCenterController.UserCenterSignUpCallback)
+
+	// captcha plugin
+	r.GET("/captcha/config", pr.captchaController.GetCaptchaConfig)
 }
 
 func (pr *PluginAPIRouter) RegisterAuthUserConnectorRouter(r *gin.RouterGroup) {

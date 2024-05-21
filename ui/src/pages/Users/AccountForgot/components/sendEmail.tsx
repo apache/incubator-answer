@@ -23,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { PasswordResetReq, FormDataType } from '@/common/interface';
 import { resetPassword } from '@/services';
-import { handleFormError } from '@/utils';
-import { useCaptchaModal } from '@/hooks';
+import { handleFormError, scrollToElementTop } from '@/utils';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 interface IProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -42,7 +42,7 @@ const Index: FC<IProps> = ({ callback }) => {
     },
   });
 
-  const emailCaptcha = useCaptchaModal('email');
+  const emailCaptcha = useCaptchaPlugin('email');
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -62,6 +62,11 @@ const Index: FC<IProps> = ({ callback }) => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const ele = document.getElementById('email');
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
@@ -73,22 +78,24 @@ const Index: FC<IProps> = ({ callback }) => {
       e_mail: formData.e_mail.value,
     };
 
-    const captcha = emailCaptcha.getCaptcha();
-    if (captcha.verify) {
+    const captcha = emailCaptcha?.getCaptcha();
+    if (captcha?.verify) {
       params.captcha_code = captcha.captcha_code;
       params.captcha_id = captcha.captcha_id;
     }
 
     resetPassword(params)
       .then(async () => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         callback?.(2, formData.e_mail.value);
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -98,6 +105,11 @@ const Index: FC<IProps> = ({ callback }) => {
     event.stopPropagation();
 
     if (!checkValidated()) {
+      return;
+    }
+
+    if (!emailCaptcha) {
+      sendEmail();
       return;
     }
 

@@ -21,6 +21,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"sync"
 
 	"github.com/segmentfault/pacman/i18n"
 
@@ -93,6 +94,10 @@ func Register(p Base) {
 	if _, ok := p.(Reviewer); ok {
 		registerReviewer(p.(Reviewer))
 	}
+
+	if _, ok := p.(Captcha); ok {
+		registerCaptcha(p.(Captcha))
+	}
 }
 
 type Stack[T Base] struct {
@@ -138,11 +143,21 @@ func MakePlugin[T Base](super bool) (CallFn[T], RegisterFn[T]) {
 }
 
 type statusManager struct {
+	lock   sync.Mutex
 	status map[string]bool
 }
 
 func (m *statusManager) Enable(name string, enabled bool) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if !enabled {
+		m.status[name] = enabled
+		return
+	}
 	m.status[name] = enabled
+	for _, slugName := range coordinatedCaptchaPlugins(name) {
+		m.status[slugName] = false
+	}
 }
 
 func (m *statusManager) IsEnabled(name string) bool {

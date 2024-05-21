@@ -491,12 +491,12 @@ backend:
     accepted:
       other: acceptat
     edit:
-      other: edit
+      other: editează
   review:
     queued_post:
-      other: Queued post
+      other: Posturi în așteptare
     flagged_post:
-      other: Flagged post
+      other: Postare marcată
     suggested_post_edit:
       other: Suggested edits
 # The following fields are used for interface presentation(Front-end)
@@ -999,8 +999,10 @@ ui:
       change_email_info: >-
         Am trimis un e-mail la acea adresă. Vă rugăm să urmați instrucțiunile de confirmare.
       email:
-        label: E-mail nou
-        msg: Câmpul e-mail nu poate fi gol.
+        label: Email
+      new_email:
+        label: New email
+        msg: New email cannot be empty.
       pass:
         label: Parolă actuală
         msg: Parola nu poate fi goală.
@@ -1067,7 +1069,7 @@ ui:
       title: Răspunsuri
       score: Scor
       newest: Cele mai noi
-      oldest: Oldest
+      oldest: Cel mai vechi
       btn_accept: Acceptă
       btn_accepted: Acceptă
     write_answer:
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Rezultatele căutării
     keywords: Cuvinte cheie
@@ -1176,7 +1179,7 @@ ui:
       more: Mai mult
     tips:
       title: Sfaturi de căutare avansate
-      tag: "<1>[tag]</1> caută fără o etichetă"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>utilizator:username</1> căutare de către autor"
       answer: "<1>răspunsuri:0</1> întrebări fără răspuns"
       score: "<1>scor:3</1> postări cu un scor de 3+"
@@ -1538,7 +1541,7 @@ ui:
       status: Stare
       action: Actiune
       change: Schimbare
-      pending: Pending
+      pending: În așteptare
       filter:
         placeholder: "Filtrează după titlu, întrebare: id"
     answers:
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Nivel necesar de reputație
         text: Alegeți reputația necesară pentru privilegii
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (opțional)
     empty: nu poate fi lăsat necompletat
@@ -1801,12 +1807,12 @@ ui:
     flag_user: Flag user
     queued_post: Queued post
     queued_user: Queued user
-    filter_label: Type
+    filter_label: Tip
     reputation: reputation
-    flag_post_type: Flagged this post as {{ type }}.
+    flag_post_type: Acest post a fost marcat de {{ type }}.
     flag_user_type: Flagged this user as {{ type }}.
-    edit_post: Edit post
-    list_post: List post
+    edit_post: Editează postarea
+    list_post: Listează postarea
     unlist_post: Unlist post
   timeline:
     undeleted: restabilește

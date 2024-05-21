@@ -509,19 +509,6 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 
 }
 
-// UserRegisterCaptcha godoc
-// @Summary UserRegisterCaptcha
-// @Description UserRegisterCaptcha
-// @Tags User
-// @Accept json
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
-// @Router /answer/api/v1/user/register/captcha [get]
-func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
-	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // GetUserNotificationConfig get user's notification config
 // @Summary get user's notification config
 // @Description get user's notification config
@@ -654,6 +641,26 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 // @Router /answer/api/v1/user/ranking [get]
 func (uc *UserController) UserRanking(ctx *gin.Context) {
 	resp, err := uc.userService.UserRanking(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UserStaff get user staff
+// @Summary get user staff
+// @Description get user staff
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.GetUserStaffReq true "GetUserStaffReq"
+// @Success 200 {object} handler.RespBody{data=schema.GetUserStaffResp}
+// @Router /answer/api/v1/user/staff [get]
+func (uc *UserController) UserStaff(ctx *gin.Context) {
+	req := &schema.GetUserStaffReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	resp, err := uc.userService.GetUserStaff(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
 

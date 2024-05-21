@@ -17,25 +17,11 @@
  * under the License.
  */
 
-.admin-container {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
+export type PluginType = 'connector' | 'search' | 'editor' | 'captcha';
 
-.min-w-15 {
-  min-width: 15rem;
-}
-
-.max-w-30 {
-  max-width: 30rem;
-}
-
-@media screen and (max-width: 768px) {
-  .max-w-30 {
-    max-width: 15rem;
-  }
-}
-
-.table tr th {
-  white-space: nowrap;
+export interface PluginInfo {
+  slug_name: string;
+  type: PluginType;
+  name?: string;
+  description?: string;
 }

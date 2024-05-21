@@ -741,6 +741,24 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 	return us.warpStatRankingResp(userInfoMapping, rankStat, voteStat, userRoleRels), nil
 }
 
+// GetUserStaff get user staff
+func (us *UserService) GetUserStaff(ctx context.Context, req *schema.GetUserStaffReq) (
+	resp []*schema.GetUserStaffResp, err error) {
+	userList, err := us.userRepo.SearchUserListByName(ctx, req.Username, req.PageSize, true)
+	if err != nil {
+		return nil, err
+	}
+	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, userList)
+	for _, u := range userList {
+		resp = append(resp, &schema.GetUserStaffResp{
+			Username:    u.Username,
+			DisplayName: u.DisplayName,
+			Avatar:      avatarMapping[u.ID].GetURL(),
+		})
+	}
+	return resp, nil
+}
+
 // UserUnsubscribeNotification user unsubscribe email notification
 func (us *UserService) UserUnsubscribeNotification(
 	ctx context.Context, req *schema.UserUnsubscribeNotificationReq) (err error) {
@@ -858,7 +876,7 @@ func (us *UserService) SearchUserListByName(ctx context.Context, req *schema.Get
 	if len(req.Username) == 0 {
 		return resp, nil
 	}
-	userList, err := us.userRepo.SearchUserListByName(ctx, req.Username, 5)
+	userList, err := us.userRepo.SearchUserListByName(ctx, req.Username, 5, false)
 	if err != nil {
 		return resp, err
 	}

@@ -21,7 +21,7 @@ import { initReactI18next } from 'react-i18next';
 
 import i18next from 'i18next';
 import en_US from '@i18n/en_US.yaml';
-import zh_CN from '@i18n/zh_CN.yaml';
+// import zh_CN from '@i18n/zh_CN.yaml';
 
 import { DEFAULT_LANG, LANG_RESOURCE_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
@@ -34,9 +34,9 @@ const initResources = {
   en_US: {
     translation: en_US.ui,
   },
-  zh_CN: {
-    translation: zh_CN.ui,
-  },
+  // zh_CN: {
+  //   translation: zh_CN.ui,
+  // },
 };
 
 const storageLang = Storage.get(LANG_RESOURCE_STORAGE_KEY);
@@ -44,8 +44,7 @@ if (
   storageLang &&
   storageLang.resources &&
   storageLang.lng &&
-  storageLang.lng !== 'en_US' &&
-  storageLang.lng !== 'zh_CN'
+  storageLang.lng !== 'en_US'
 ) {
   initResources[storageLang.lng] = {
     translation: storageLang.resources,

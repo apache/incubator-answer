@@ -24,13 +24,15 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { putFlagReviewAction } from '@/services';
-import { useCaptchaModal, usePageUsers } from '@/hooks';
+import { usePageUsers } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 import { Editor, TagSelector, Mentions, TextArea } from '@/components';
 import {
   // matchedUsers,
   parseUserInfo,
   handleFormError,
   parseEditMentionUser,
+  scrollToElementTop,
 } from '@/utils';
 import type * as Type from '@/common/interface';
 
@@ -89,7 +91,7 @@ const Index: FC<Props> = ({
   const [loaded, setLoaded] = useState(false);
   const pageUsers = usePageUsers();
 
-  const editCaptcha = useCaptchaModal('edit');
+  const editCaptcha = useCaptchaPlugin('edit');
 
   const onClose = (bol) => {
     if (bol) {
@@ -157,17 +159,19 @@ const Index: FC<Props> = ({
     setFormData({
       ...formData,
     });
+
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
+
     return bol;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!checkValidated()) {
-      return;
-    }
-
+  const submitFlagReviewAction = () => {
     const params: Type.PutFlagReviewParams = {
       title: formData.title.value,
       content: formData.content.value,
@@ -191,28 +195,44 @@ const Index: FC<Props> = ({
       delete params.title;
       delete params.tags;
     }
-
-    editCaptcha.check(() => {
-      if (objectType === 'question') {
-        const imgCode = editCaptcha.getCaptcha();
-        if (imgCode.verify) {
-          params.captcha_code = imgCode.captcha_code;
-          params.captcha_id = imgCode.captcha_id;
-        }
+    if (objectType === 'question') {
+      const imgCode = editCaptcha?.getCaptcha();
+      if (imgCode?.verify) {
+        params.captcha_code = imgCode.captcha_code;
+        params.captcha_id = imgCode.captcha_id;
       }
-      putFlagReviewAction(params)
-        .then(async () => {
-          await editCaptcha.close();
-          onClose(true);
-        })
-        .catch((err) => {
-          if (err.isError) {
-            editCaptcha.handleCaptchaError(err.list);
-            const data = handleFormError(err, formData);
-            setFormData({ ...data });
-          }
-        });
-    });
+    }
+    putFlagReviewAction(params)
+      .then(async () => {
+        await editCaptcha?.close();
+        onClose(true);
+      })
+      .catch((err) => {
+        if (err.isError) {
+          editCaptcha?.handleCaptchaError(err.list);
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
+
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
+        }
+      });
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!checkValidated()) {
+      return;
+    }
+
+    if (!editCaptcha) {
+      submitFlagReviewAction();
+      return;
+    }
+
+    editCaptcha.check(() => submitFlagReviewAction());
   };
 
   const handleSelected = (val) => {

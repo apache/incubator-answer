@@ -21,9 +21,10 @@ package usercommon
 
 import (
 	"context"
+	"strings"
+
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/pkg/converter"
-	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -57,7 +58,7 @@ type UserRepo interface {
 	GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
 	GetUserCount(ctx context.Context) (count int64, err error)
-	SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error)
+	SearchUserListByName(ctx context.Context, name string, limit int, onlyStaff bool) (userList []*entity.User, err error)
 }
 
 // UserCommon user service

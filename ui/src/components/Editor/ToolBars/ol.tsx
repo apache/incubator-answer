@@ -28,8 +28,8 @@ const OL = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'orderedList',
-    keyMap: ['Ctrl-O'],
-    tip: `${t('ordered_list.text')} (Ctrl+O)`,
+    keyMap: ['Ctrl-o'],
+    tip: `${t('ordered_list.text')} (Ctrl+o)`,
   };
 
   const handleClick = (ctx) => {
