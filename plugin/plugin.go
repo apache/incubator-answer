@@ -93,6 +93,10 @@ func Register(p Base) {
 	if _, ok := p.(Reviewer); ok {
 		registerReviewer(p.(Reviewer))
 	}
+
+	if _, ok := p.(Embed); ok {
+		registerEmbed(p.(Embed))
+	}
 }
 
 type Stack[T Base] struct {

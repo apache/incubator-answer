@@ -20,6 +20,7 @@
 package main
 
 import (
+	_ "github.com/apache/incubator-answer-plugins/reviewer-basic"
 	answercmd "github.com/apache/incubator-answer/cmd"
 )
 
