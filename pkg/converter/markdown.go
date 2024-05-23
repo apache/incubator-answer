@@ -21,6 +21,7 @@ package converter
 
 import (
 	"bytes"
+	"regexp"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/microcosm-cc/bluemonday"
@@ -58,6 +59,7 @@ func Markdown2HTML(source string) string {
 	filter.RequireParseableURLs(false)
 	filter.RequireNoFollowOnFullyQualifiedLinks(false)
 	filter.AllowElements("kbd")
+	filter.AllowAttrs("title").Matching(regexp.MustCompile(`^[\p{L}\p{N}\s\-_',\[\]!\./\\\(\)]*$|^@embed?$`)).Globally()
 	html = filter.Sanitize(html)
 	return html
 }

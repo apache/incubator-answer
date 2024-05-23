@@ -23,6 +23,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
+
+	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/repo/unique"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/segmentfault/pacman/log"
 
@@ -73,6 +77,7 @@ func (m *Mentor) InitDB() error {
 	m.do("init site info user config", m.initSiteInfoUsersConfig)
 	m.do("init site info privilege rank", m.initSiteInfoPrivilegeRank)
 	m.do("init site info write", m.initSiteInfoWrite)
+	m.do("init default content", m.initDefaultContent)
 	return m.err
 }
 
@@ -254,4 +259,137 @@ func (m *Mentor) initSiteInfoWrite() {
 		Content: string(writeDataBytes),
 		Status:  1,
 	})
+}
+
+func (m *Mentor) initDefaultContent() {
+	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: m.engine})
+	now := time.Now()
+
+	tagId, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Tag{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	q1Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	a1Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	q2Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Question{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	a2Id, err := uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Answer{}.TableName())
+	if err != nil {
+		m.err = err
+		return
+	}
+
+	tag := entity.Tag{
+		ID:            tagId,
+		SlugName:      "support",
+		DisplayName:   "support",
+		OriginalText:  "For general support questions.",
+		ParsedText:    "<p>For general support questions.</p>",
+		UserID:        "1",
+		QuestionCount: 1,
+		Status:        entity.TagStatusAvailable,
+	}
+
+	q1 := &entity.Question{
+		ID:           q1Id,
+		CreatedAt:    now,
+		UserID:       "1",
+		Title:        "What is a tag?",
+		OriginalText: "When asking a question, we need to choose tags. What are tags and why should I use them?",
+		ParsedText:   "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
+		Show:         entity.QuestionShow,
+		Status:       entity.QuestionStatusAvailable,
+		AnswerCount:  1,
+	}
+
+	a1 := &entity.Answer{
+		ID:           a1Id,
+		CreatedAt:    now,
+		QuestionID:   q1Id,
+		UserID:       "1",
+		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
+		ParsedText:   "<p>Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.</p>",
+		Status:       entity.AnswerStatusAvailable,
+	}
+
+	q2 := &entity.Question{
+		ID:           q2Id,
+		CreatedAt:    now,
+		UserID:       "1",
+		Title:        "What is reputation and how do I earn them?",
+		OriginalText: "I see that each user has reputation points, What is it and how do I earn them?",
+		ParsedText:   "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
+		Show:         entity.QuestionShow,
+		Status:       entity.QuestionStatusAvailable,
+		AnswerCount:  1,
+	}
+
+	a2 := &entity.Answer{
+		ID:           a2Id,
+		CreatedAt:    now,
+		QuestionID:   q2Id,
+		UserID:       "1",
+		OriginalText: "Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.",
+		ParsedText:   "<p>Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.</p>",
+		Status:       entity.AnswerStatusAvailable,
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(tag)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(q1)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(a1)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(entity.TagRel{
+		ObjectID: q1.ID,
+		TagID:    tag.ID,
+		Status:   entity.TagRelStatusAvailable,
+	})
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(q2)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(a2)
+	if m.err != nil {
+		return
+	}
+
+	_, m.err = m.engine.Context(m.ctx).Insert(entity.TagRel{
+		ObjectID: q2.ID,
+		TagID:    tag.ID,
+		Status:   entity.TagRelStatusAvailable,
+	})
+	if m.err != nil {
+		return
+	}
 }

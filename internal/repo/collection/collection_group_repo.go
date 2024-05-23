@@ -21,7 +21,6 @@ package collection
 
 import (
 	"context"
-	"xorm.io/xorm"
 
 	"github.com/apache/incubator-answer/internal/service/collection"
 	"xorm.io/xorm"

@@ -25,8 +25,8 @@ import { useNavigate } from 'react-router-dom';
 import type { PasswordResetReq, FormDataType } from '@/common/interface';
 import { loggedUserInfoStore } from '@/stores';
 import { changeEmail } from '@/services';
-import { handleFormError } from '@/utils';
-import { useCaptchaModal } from '@/hooks';
+import { handleFormError, scrollToElementTop } from '@/utils';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'change_email' });
@@ -41,7 +41,7 @@ const Index: FC = () => {
   const navigate = useNavigate();
   const { user: userInfo, update: updateUser } = loggedUserInfoStore();
 
-  const emailCaptcha = useCaptchaModal('email');
+  const emailCaptcha = useCaptchaPlugin('email');
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -71,24 +71,26 @@ const Index: FC = () => {
     const params: PasswordResetReq = {
       e_mail: formData.e_mail.value,
     };
-    const imgCode = emailCaptcha.getCaptcha();
-    if (imgCode.verify) {
+    const imgCode = emailCaptcha?.getCaptcha();
+    if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
 
     changeEmail(params)
       .then(async () => {
-        await emailCaptcha.close();
+        await emailCaptcha?.close();
         userInfo.e_mail = formData.e_mail.value;
         updateUser(userInfo);
         navigate('/users/login', { replace: true });
       })
       .catch((err) => {
         if (err.isError) {
-          emailCaptcha.handleCaptchaError(err.list);
+          emailCaptcha?.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -99,7 +101,10 @@ const Index: FC = () => {
     if (!checkValidated()) {
       return;
     }
-
+    if (!emailCaptcha) {
+      sendEmail();
+      return;
+    }
     emailCaptcha.check(() => {
       sendEmail();
     });

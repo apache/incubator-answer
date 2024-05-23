@@ -241,12 +241,9 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	if as.reviewService.AddAnswerReview(ctx, insertData) {
-		if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, entity.AnswerStatusAvailable); err != nil {
-			return "", err
-		} else {
-			insertData.Status = entity.AnswerStatusAvailable
-		}
+	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData, req.IP, req.UserAgent)
+	if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, insertData.Status); err != nil {
+		return "", err
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
@@ -510,6 +507,18 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
+func (as *AnswerService) GetDetail(ctx context.Context, answerID string) (*schema.AnswerInfo, error) {
+	answerInfo, has, err := as.answerRepo.GetByID(ctx, answerID)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, errors.BadRequest(reason.AnswerNotFound)
+	}
+	info := as.ShowFormat(ctx, answerInfo)
+	return info, nil
+}
+
 func (as *AnswerService) GetCountByUserIDQuestionID(ctx context.Context, userId string, questionId string) (ids []string, err error) {
 	return as.answerRepo.GetIDsByUserIDAndQuestionID(ctx, userId, questionId)
 }
@@ -625,6 +634,11 @@ func (as *AnswerService) ShowFormat(ctx context.Context, data *entity.Answer) *s
 }
 
 func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionUserID, answerID, answerUserID string) {
+	// If the answer is updated by me, there is no notification for myself.
+	// equivalent behaviour as AnswerService.notificationAnswerTheQuestion
+	if questionUserID == answerUserID {
+		return
+	}
 	msg := &schema.NotificationMsg{
 		TriggerUserID:  answerUserID,
 		ReceiverUserID: questionUserID,

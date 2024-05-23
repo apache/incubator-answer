@@ -164,7 +164,6 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       mention_username_list:
         description: '@ user id list'
@@ -650,6 +649,13 @@ definitions:
         type: string
       website:
         description: website
+        type: string
+    type: object
+  schema.GetEmbedOptionResp:
+    properties:
+      enable:
+        type: boolean
+      platform:
         type: string
     type: object
   schema.GetFollowingTagsResp:
@@ -1152,6 +1158,27 @@ definitions:
       slug_name:
         type: string
     type: object
+  schema.GetUserStaffReq:
+    properties:
+      page_size:
+        minimum: 1
+        type: integer
+      username:
+        maxLength: 500
+        type: string
+    type: object
+  schema.GetUserStaffResp:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      display_name:
+        description: display name
+        type: string
+      username:
+        description: username
+        type: string
+    type: object
   schema.GetVoteWithPageResp:
     properties:
       answer_id:
@@ -1524,7 +1551,6 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       comment_id:
         description: comment id
@@ -2380,10 +2406,8 @@ definitions:
   schema.UserChangeEmailSendCodeReq:
     properties:
       captcha_code:
-        maxLength: 500
         type: string
       captcha_id:
-        maxLength: 500
         type: string
       e_mail:
         maxLength: 500
@@ -2504,10 +2528,8 @@ definitions:
   schema.UserModifyPasswordReq:
     properties:
       captcha_code:
-        maxLength: 500
         type: string
       captcha_id:
-        maxLength: 500
         type: string
       old_pass:
         maxLength: 32
@@ -2611,13 +2633,10 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       is_cancel:
-        description: is cancel
         type: boolean
       object_id:
-        description: id
         type: string
     required:
     - object_id
@@ -4222,6 +4241,28 @@ paths:
       summary: unbind external user login
       tags:
       - PluginConnector
+  /answer/api/v1/embed/config:
+    get:
+      consumes:
+      - application/json
+      description: GetEmbedConfig
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetEmbedOptionResp'
+                  type: array
+              type: object
+      summary: GetEmbedConfig
+      tags:
+      - PluginEmbed
   /answer/api/v1/file:
     post:
       consumes:
@@ -6373,26 +6414,6 @@ paths:
       summary: get user ranking
       tags:
       - User
-  /answer/api/v1/user/register/captcha:
-    get:
-      consumes:
-      - application/json
-      description: UserRegisterCaptcha
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.UserLoginResp'
-              type: object
-      summary: UserRegisterCaptcha
-      tags:
-      - User
   /answer/api/v1/user/register/email:
     post:
       consumes:
@@ -6418,6 +6439,35 @@ paths:
                   $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserRegisterByEmail
+      tags:
+      - User
+  /answer/api/v1/user/staff:
+    get:
+      consumes:
+      - application/json
+      description: get user staff
+      parameters:
+      - description: GetUserStaffReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.GetUserStaffReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserStaffResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user staff
       tags:
       - User
   /answer/api/v1/vote/down:

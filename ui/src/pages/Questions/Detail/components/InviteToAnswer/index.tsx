@@ -27,7 +27,7 @@ import classNames from 'classnames';
 import { Avatar } from '@/components';
 import { getInviteUser, putInviteUser } from '@/services';
 import type * as Type from '@/common/interface';
-import { useCaptchaModal } from '@/hooks';
+import { useCaptchaPlugin } from '@/utils/pluginKit';
 
 import PeopleDropdown from './PeopleDropdown';
 
@@ -44,7 +44,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
 
   const [editing, setEditing] = useState(false);
   const [users, setUsers] = useState<Type.UserInfoBase[]>([]);
-  const iaCaptcha = useCaptchaModal('invitation_answer');
+  const iaCaptcha = useCaptchaPlugin('invitation_answer');
 
   const initInviteUsers = () => {
     if (!questionId) {
@@ -74,28 +74,35 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
     setUsers(userList);
   };
 
+  const submitInviteUser = () => {
+    const names = users.map((_) => {
+      return _.username;
+    });
+    const imgCode: Type.ImgCodeReq = {};
+    iaCaptcha?.resolveCaptchaReq(imgCode);
+    putInviteUser(questionId, names, imgCode)
+      .then(async () => {
+        await iaCaptcha?.close();
+        setEditing(false);
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          iaCaptcha?.handleCaptchaError(ex.list);
+        }
+      });
+  };
+
   const saveInviteUsers = () => {
     if (!users) {
       return;
     }
-    const names = users.map((_) => {
-      return _.username;
-    });
-    iaCaptcha.check(() => {
-      const imgCode: Type.ImgCodeReq = {};
-      iaCaptcha.resolveCaptchaReq(imgCode);
-      putInviteUser(questionId, names, imgCode)
-        .then(async () => {
-          await iaCaptcha.close();
-          setEditing(false);
-        })
-        .catch((ex) => {
-          if (ex.isError) {
-            iaCaptcha.handleCaptchaError(ex.list);
-          }
-          console.error('putInviteUser error: ', ex);
-        });
-    });
+
+    if (!iaCaptcha) {
+      submitInviteUser();
+      return;
+    }
+
+    iaCaptcha.check(() => submitInviteUser());
   };
 
   useEffect(() => {

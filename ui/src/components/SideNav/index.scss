@@ -33,6 +33,9 @@
   .nav-link {
     color: var(--an-side-nav-link);
   }
+  .nav-link:focus-visible {
+    box-shadow: none;
+  }
   .nav-link:hover {
     color: var(--an-side-nav-link-hover-color);
     background-color: var(--bs-gray-100);
@@ -48,7 +51,6 @@
     width: 1px;
     height: 100%;
     background-color: var(--bs-border-color);
-    min-height: calc(100vh - 62px - 74px);
   }
 }
 

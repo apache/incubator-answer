@@ -26,7 +26,7 @@ import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore } from '@/stores';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'password_reset' });
@@ -101,6 +101,13 @@ const Index: React.FC = () => {
     setFormData({
       ...formData,
     });
+    if (!bol) {
+      const errObj = Object.keys(formData).filter(
+        (key) => formData[key].isInvalid,
+      );
+      const ele = document.getElementById(errObj[0]);
+      scrollToElementTop(ele);
+    }
     return bol;
   };
 
@@ -128,6 +135,8 @@ const Index: React.FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };
@@ -140,7 +149,7 @@ const Index: React.FC = () => {
       {step === 1 && (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           <Form noValidate onSubmit={handleSubmit} autoComplete="off">
-            <Form.Group controlId="email" className="mb-3">
+            <Form.Group controlId="pass" className="mb-3">
               <Form.Label>{t('password.label')}</Form.Label>
               <Form.Control
                 autoComplete="off"
@@ -162,7 +171,7 @@ const Index: React.FC = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="password" className="mb-3">
+            <Form.Group controlId="passSecond" className="mb-3">
               <Form.Label>{t('password_confirm.label')}</Form.Label>
               <Form.Control
                 autoComplete="off"

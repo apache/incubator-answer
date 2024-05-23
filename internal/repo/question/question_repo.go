@@ -26,7 +26,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-	"xorm.io/xorm"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"

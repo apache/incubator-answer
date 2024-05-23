@@ -25,7 +25,7 @@ import { useToast } from '@/hooks';
 import { useSmtpSetting, updateSmtpSetting } from '@/services';
 import pattern from '@/common/pattern';
 import { SchemaForm, JSONSchema, UISchema, initFormData } from '@/components';
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToElementTop } from '@/utils';
 
 const Smtp: FC = () => {
   const { t } = useTranslation('translation', {
@@ -182,6 +182,8 @@ const Smtp: FC = () => {
         if (err.isError) {
           const data = handleFormError(err, formData);
           setFormData({ ...data });
+          const ele = document.getElementById(err.list[0].error_field);
+          scrollToElementTop(ele);
         }
       });
   };

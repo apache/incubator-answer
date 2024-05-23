@@ -96,3 +96,10 @@ export const useUserPermission = (
     >
   >([apiUrl, { params: { action } }], request.instance.get);
 };
+
+export const useSearchUserStaff = (name: string) => {
+  const apiUrl = name
+    ? `/answer/api/v1/user/staff?username=${name}&page_size=10`
+    : null;
+  return useSWR<Type.User[]>(apiUrl, request.instance.get);
+};

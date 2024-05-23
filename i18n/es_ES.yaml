@@ -999,6 +999,8 @@ ui:
       change_email_info: >-
         Te hemos enviado un email a esa dirección. Por favor sigue las instrucciones de confirmación.
       email:
+        label: Correo
+      new_email:
         label: Nuevo correo
         msg: El nuevo correo no puede estar vacío.
       pass:
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Resultados de la búsqueda
     keywords: Palabras claves
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Nivel de reputación requerido
         text: Elegir reputación requerida para los privilegios
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (opcional)
     empty: no puede estar en blanco

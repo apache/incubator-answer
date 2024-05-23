@@ -1000,7 +1000,9 @@ ui:
         Ми надіслали електронний лист на цю адресу. Будь ласка, дотримуйтесь інструкцій для підтвердження.
       email:
         label: Нова електронна пошта
-        msg: Комірка нової електронної пошти не може бути порожньою.
+      new_email:
+        label: New email
+        msg: New email cannot be empty.
       pass:
         label: Поточний пароль
         msg: Комірка паролю не може бути порожньою.
@@ -1160,6 +1162,7 @@ ui:
     closed: Closed
     deleted: Deleted
     pending: Pending
+    more: More
   search:
     title: Результати пошуку
     keywords: Ключові слова
@@ -1176,7 +1179,7 @@ ui:
       more: More
     tips:
       title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
+      tag: "<1>[tag]</1> search with a tag"
       user: "<1>user:username</1> search by author"
       answer: "<1>answers:0</1> unanswered questions"
       score: "<1>score:3</1> posts with a 3+ score"
@@ -1774,6 +1777,9 @@ ui:
       level:
         label: Reputation required level
         text: Choose the reputation required for the privileges
+      msg:
+        should_be_number: the input should be number
+        number_larger_1: number should be equal or larger than 1
   form:
     optional: (optional)
     empty: cannot be empty
