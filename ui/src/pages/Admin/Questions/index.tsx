@@ -92,7 +92,7 @@ const Questions: FC = () => {
           className="mt-3 mt-sm-0"
         />
       </div>
-      <Table responsive>
+      <Table responsive="md">
         <thead>
           <tr>
             <th className="min-w-15">{t('post')}</th>

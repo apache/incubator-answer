@@ -160,7 +160,7 @@ const UserOperation = ({
         <Dropdown.Toggle variant="link" className="no-toggle p-0">
           <Icon name="three-dots-vertical" title={t('action')} />
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu align="end">
           {showActionPassword ? (
             <Dropdown.Item onClick={() => handleAction('password')}>
               {t('set_new_password')}

@@ -103,7 +103,7 @@ const Users: FC = () => {
           />
         </Stack>
       </div>
-      <Table responsive>
+      <Table responsive="md">
         <thead>
           <tr>
             <th className="min-w-15">{t('name')}</th>

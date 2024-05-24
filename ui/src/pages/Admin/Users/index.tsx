@@ -193,7 +193,7 @@ const Users: FC = () => {
           className="mt-3 mt-sm-0"
         />
       </div>
-      <Table responsive>
+      <Table responsive="md">
         <thead>
           <tr>
             <th>{t('name')}</th>

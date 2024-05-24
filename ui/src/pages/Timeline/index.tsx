@@ -118,7 +118,7 @@ const Index: FC = () => {
           onChange={(e) => handleSwitch(e.target.checked)}
         />
       )}
-      <Table hover responsive>
+      <Table hover responsive="md">
         <thead>
           <tr>
             <th style={{ width: '20%' }}>{t('datetime')}</th>
