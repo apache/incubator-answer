@@ -19,7 +19,7 @@
 
 import { FC } from 'react';
 import { Form, Table, Stack } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -111,8 +111,8 @@ const Answers: FC = () => {
             return (
               <tr key={li.id}>
                 <td>
-                  <a
-                    href={pathFactory.answerLanding({
+                  <Link
+                    to={pathFactory.answerLanding({
                       questionId: li.question_id,
                       slugTitle: li.question_info.url_title,
                       answerId: li.id,
@@ -121,7 +121,7 @@ const Answers: FC = () => {
                     className="text-break text-wrap"
                     rel="noreferrer">
                     {li.question_info.title}
-                  </a>
+                  </Link>
                   {li.accepted === 2 && (
                     <Icon
                       name="check-circle-fill"

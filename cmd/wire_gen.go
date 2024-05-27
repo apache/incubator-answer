@@ -113,7 +113,7 @@ import (
 // Injectors from wire.go:
 
 // initApplication init application.
-func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database, cacheConf *data.CacheConf, i18nConf *translator.I18n, swaggerConf *router.SwaggerConfig, serviceConf *service_config.ServiceConfig, logConf log.Logger) (*pacman.Application, func(), error) {
+func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database, cacheConf *data.CacheConf, i18nConf *translator.I18n, swaggerConf *router.SwaggerConfig, serviceConf *service_config.ServiceConfig, uiConf *server.UI, logConf log.Logger) (*pacman.Application, func(), error) {
 	staticRouter := router.NewStaticRouter(serviceConf)
 	i18nTranslator, err := translator.NewTranslator(i18nConf)
 	if err != nil {
@@ -267,7 +267,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userCenterController := controller.NewUserCenterController(userCenterLoginService, siteInfoCommonService)
 	captchaController := controller.NewCaptchaController()
 	pluginAPIRouter := router.NewPluginAPIRouter(connectorController, userCenterController, captchaController)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, shortIDMiddleware, templateRouter, pluginAPIRouter)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, shortIDMiddleware, templateRouter, pluginAPIRouter, uiConf)
 	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService, questionService)
 	application := newApplication(serverConf, ginEngine, scheduledTaskManager)
 	return application, func() {

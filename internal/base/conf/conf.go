@@ -42,6 +42,7 @@ type AllConfig struct {
 	I18n          *translator.I18n              `json:"i18n" mapstructure:"i18n" yaml:"i18n"`
 	ServiceConfig *service_config.ServiceConfig `json:"service_config" mapstructure:"service_config" yaml:"service_config"`
 	Swaggerui     *router.SwaggerConfig         `json:"swaggerui" mapstructure:"swaggerui" yaml:"swaggerui"`
+	UI            *server.UI                    `json:"ui" mapstructure:"ui" yaml:"ui"`
 }
 
 type PathIgnore struct {

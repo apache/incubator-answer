@@ -23,3 +23,8 @@ package server
 type HTTP struct {
 	Addr string `json:"addr" mapstructure:"addr"`
 }
+
+// UI ui config
+type UI struct {
+	BaseURL string `json:"base_url" mapstructure:"base_url" yaml:"base_url"`
+}
