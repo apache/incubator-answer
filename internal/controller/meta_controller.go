@@ -24,6 +24,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/meta"
+	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 )
 
@@ -54,6 +55,7 @@ func (mc *MetaController) AddOrUpdateReaction(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := mc.metaService.AddOrUpdateReaction(ctx, req)
@@ -75,6 +77,7 @@ func (mc *MetaController) GetReaction(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := mc.metaService.GetReactionByObjectId(ctx, req)
