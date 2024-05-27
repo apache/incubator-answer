@@ -21,7 +21,6 @@ import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { REACT_BASE_PATH } from '@/router/alias';
 import Progress from '../Progress';
 
 interface Props {
@@ -38,18 +37,15 @@ const Index: FC<Props> = ({ visible, siteUrl = '' }) => {
       <p>
         <Trans i18nKey="install.ready_description">
           If you ever feel like changing more settings, visit
-          <a href={`${siteUrl}${REACT_BASE_PATH}/users/login`}>
-            {' '}
-            admin section
-          </a>
-          ; find it in the site menu.
+          <a href={`${siteUrl}/users/login`}> admin section</a>; find it in the
+          site menu.
         </Trans>
       </p>
       <p>{t('good_luck')}</p>
 
       <div className="d-flex align-items-center justify-content-between">
         <Progress step={5} />
-        <Button href={`${siteUrl}${REACT_BASE_PATH}`}>{t('done')}</Button>
+        <Button href={siteUrl}>{t('done')}</Button>
       </div>
     </div>
   );

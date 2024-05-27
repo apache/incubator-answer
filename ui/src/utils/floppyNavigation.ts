@@ -75,7 +75,7 @@ const storageLoginRedirect = () => {
   const { pathname } = window.location;
   if (pathname !== RouteAlias.login && pathname !== RouteAlias.signUp) {
     const loc = window.location;
-    const redirectUrl = loc.href.replace(loc.origin, '');
+    const redirectUrl = loc.href.replace(`${loc.origin}${REACT_BASE_PATH}`, '');
     Storage.set(REDIRECT_PATH_STORAGE_KEY, redirectUrl);
   }
 };
