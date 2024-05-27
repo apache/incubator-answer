@@ -1401,7 +1401,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到 Answer 后台管理！
+      welcome: 欢迎来到 {{site_name}} 后台管理！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
