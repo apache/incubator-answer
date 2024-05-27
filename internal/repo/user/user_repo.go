@@ -291,10 +291,6 @@ func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, o
 		return errors.BadRequest(reason.UserNotFound).WithError(err).WithStack()
 	}
 
-	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
-	if original.Username != userCenterBasicUserInfo.Username {
-		log.Warnf("user %s username is inconsistent with user center", original.ID)
-	}
 	decorateByUserCenterUser(original, userCenterBasicUserInfo)
 	return nil
 }
