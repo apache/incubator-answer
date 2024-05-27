@@ -19,1851 +19,1846 @@
 backend:
   base:
     success:
-      other: Success.
+      other: 성공.
     unknown:
-      other: Unknown error.
+      other: 알 수 없는 오류.
     request_format_error:
-      other: Request format is not valid.
+      other: 요청 형식이 잘못되었습니다.
     unauthorized_error:
-      other: Unauthorized.
+      other: 권한이 없습니다.
     database_error:
-      other: Data server error.
+      other: 데이터 서버 오류.
     forbidden_error:
-      other: Forbidden.
+      other: 접근 금지.
     duplicate_request_error:
-      other: Duplicate submission.
+      other: 중복된 제출입니다.
   action:
     report:
       other: Flag
     edit:
-      other: Edit
+      other: 편집
     delete:
-      other: Delete
+      other: 삭제
     close:
-      other: Close
+      other: 닫기
     reopen:
-      other: Reopen
+      other: 다시 열기
     forbidden_error:
-      other: Forbidden.
+      other: 접근 금지.
     pin:
-      other: Pin
+      other: 핀
     hide:
-      other: Unlist
+      other: 리스트 제거
     unpin:
-      other: Unpin
+      other: 핀 제거
     show:
-      other: List
+      other: 리스트
     invite_someone_to_answer:
-      other: Edit
+      other: 편집
     undelete:
-      other: Undelete
+      other: 삭제 취소
   role:
     name:
       user:
-        other: User
+        other: 유저
       admin:
-        other: Admin
+        other: 관리자
       moderator:
-        other: Moderator
+        other: 중재자
     description:
       user:
-        other: Default with no special access.
+        other: 특별한 접근 권한이 없는 기본 사용자입니다.
       admin:
-        other: Have the full power to access the site.
+        other: 사이트에 대한 모든 권한을 가집니다.
       moderator:
-        other: Has access to all posts except admin settings.
-  privilege:
+        other: 관리자 설정을 제외한 모든 게시물에 접근할 수 있습니다.
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: 레벨 1 (비공개 팀, 그룹에 적은 평판 필요)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: 레벨 2 (스타트업 커뮤니티에 낮은 평판 필요)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: 레벨 3 (성숙한 커뮤니티에 높은 평판 필요)
     level_custom:
       description:
-        other: Custom Level
+        other: 커스텀 레벨
     rank_question_add_label:
-      other: Ask question
+      other: 질문하기
     rank_answer_add_label:
-      other: Write answer
+      other: 답변하기
     rank_comment_add_label:
-      other: Write comment
+      other: 댓글 작성하기
     rank_report_add_label:
-      other: Flag
+      other: 게시물 플래그
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: 댓글 추천
     rank_link_url_limit_label:
-      other: Post more than 2 links at a time
+      other: 한번에 2개 이상의 링크를 게시하세요
     rank_question_vote_up_label:
-      other: Upvote question
+      other: 질문 추천
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: 답변 추천
     rank_question_vote_down_label:
-      other: Downvote question
+      other: 질문 비추천
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: 답변 비추천
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: 답변할 사람 초대
     rank_tag_add_label:
-      other: Create new tag
+      other: 새 태그 만들기
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: 태그 설명 편집 (검토 필요)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: 다른 사람의 질문 편집 (검토 필요)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: 다른 사람의 답변 편집 (검토 필요)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: 검토 없이 다른 사람의 질문 편집
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: 검토 없이 다른 사람의 답변 편집
     rank_question_audit_label:
-      other: Review question edits
+      other: 질문 편집 검토하기
     rank_answer_audit_label:
-      other: Review answer edits
+      other: 답변 편집 검토하기
     rank_tag_audit_label:
-      other: Review tag edits
+      other: 태그 편집 검토하기
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: 검토 없이 태그 설명 편집
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: 태그 동의어 관리
   email:
-    other: Email
+    other: 이메일
   e_mail:
-    other: Email
+    other: 이메일
   password:
-    other: Password
+    other: 비밀번호
   pass:
-    other: Password
+    other: 비밀번호
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: 이메일과 비밀번호가 일치하지 않습니다.
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: 잘못된 URL 입니다.
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: 암호에는 공백을 포함할 수 없습니다.
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: 암호를 변경할 수 없습니다.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: 상태를 변경할 수 없습니다.
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: 이메일과 비밀번호가 일치하지 않습니다.
     answer:
       not_found:
-        other: Answer do not found.
+        other: 답변을 찾을 수 없습니다.
       cannot_deleted:
-        other: No permission to delete.
+        other: 삭제 권한이 없습니다.
       cannot_update:
-        other: No permission to update.
+        other: 편집 권한이 없습니다.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: 질문이 닫혔으며, 추가할 수 없습니다.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: 편집이 가능하지 않은 댓글입니다.
       not_found:
-        other: Comment not found.
+        other: 댓글을 찾을 수 없습니다.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: 수정 허용 시간을 초과했습니다.
     email:
       duplicate:
-        other: Email already exists.
+        other: 이미 존재하는 이메일입니다.
       need_to_be_verified:
-        other: Email should be verified.
+        other: 이메일을 확인해주세요.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: URL이 만료되었습니다. 이메일을 다시 보내주세요.
       illegal_email_domain_error:
-        other: Email is not allowed from that email domain. Please use another one.
+        other: 해당 도메인을 사용할 수 없습니다. 다른 전자 메일을 사용하십시오.
     lang:
       not_found:
-        other: Language file not found.
-    object:
-      captcha_verification_failed:
-        other: Captcha wrong.
+        other: 언어 파일을 찾을 수 없습니다.
+object:
+  captcha_verification_failed:
+    other: 잘못된 Captcha입니다.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: 팔로우할 수 없습니다.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: 추천할 수 없습니다.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: 자신의 게시물에는 추천할 수 없습니다.
       not_found:
-        other: Object not found.
+        other: 오브젝트를 찾을 수 없습니다.
       verification_failed:
-        other: Verification failed.
+        other: 확인 실패.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: 이메일과 비밀번호가 일치하지 않습니다.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: 이전 암호 확인에 실패했습니다
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: 새 비밀번호는 이전 비밀번호와 다르게 입력해주세요.
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: 삭제된 게시물입니다.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: 검토를 기다리고 있습니다. 승인된 후에 볼 수 있습니다.
       not_found:
-        other: Question not found.
+        other: 질문을 찾을 수 없습니다.
       cannot_deleted:
-        other: No permission to delete.
+        other: 삭제 권한이 없습니다.
       cannot_close:
-        other: No permission to close.
+        other: 닫을 권한이 없습니다.
       cannot_update:
-        other: No permission to update.
+        other: 업데이트 권한이 없습니다.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: 등급이 조건을 충족하지 못합니다.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+        other: 피드백 감사합니다. 투표를 하려면 최소 {{.Rank}} 평판이 필요합니다.
       no_enough_rank_to_operate:
-        other: You need at least {{.Rank}} reputation to do this.
+        other: 이 작업을 하려면 최소 {{.Rank}} 평판이 필요합니다.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: 신고 처리에 실패했습니다.
       not_found:
-        other: Report not found.
+        other: 신고를 찾을 수 없습니다.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: 이미 존재하는 태그입니다.
       not_found:
-        other: Tag not found.
+        other: 태그를 찾을 수 없습니다.
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: 추천 태그가 존재하지 않습니다.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: 하나 이상의 태그를 입력해주세요.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: 동일한 태그를 포함하지 않아야 합니다.
       cannot_update:
-        other: No permission to update.
+        other: 업데이트 권한이 없습니다.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: 사용 중인 태그는 삭제할 수 없습니다.
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: 현재 태그의 동의어로 자기 자신을 설정할 수 없습니다.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
-    theme:
+        other: 발신자 이름은 이메일 주소가 될 수 없습니다.
       not_found:
-        other: Theme not found.
+        other: 테마를 찾을 수 없습니다.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: 검토 대기열에 있기 때문에 현재 편집할 수 없습니다.
       no_permission:
-        other: No permission to revise.
+        other: 수정권한이 없습니다.
     user:
       external_login_missing_user_id:
-        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
+        other: 서드파티 플랫폼에서 고유 사용자 ID를 제공하지 않아 로그인할 수 없습니다. 웹사이트 관리자에게 문의하세요.
       external_login_unbinding_forbidden:
-        other: Please set a login password for your account before you remove this login.
+        other: 이 로그인을 제거하기 전에 계정에 로그인 비밀번호를 설정하세요.
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: 이메일과 비밀번호가 일치하지 않습니다.
       not_found:
-        other: User not found.
+        other: 유저를 찾을 수 없습니다.
       suspended:
-        other: User has been suspended.
+        other: 사용자가 정지되었습니다.
       username_invalid:
-        other: Username is invalid.
+        other: 유효하지 않은 이름입니다.
       username_duplicate:
-        other: Username is already in use.
+        other: 이미 사용중인 이름입니다.
       set_avatar:
-        other: Avatar set failed.
+        other: 아바타 설정에 실패했습니다.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: 수정할 수 없습니다.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: 현재 사이트는 등록할 수 없습니다.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: 현재 사이트는 비밀번호를 통해 로그인할 수 없습니다.
       access_denied:
-        other: Access denied
+        other: 접근이 거부당했습니다.
       page_access_denied:
-        other: You do not have access to this page.
+        other: 이 페이지에 대한 액세스 권한이 없습니다.
       add_bulk_users_format_error:
-        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+        other: "줄 {{.Line}}의 '{{.Content}}' 근처 {{.Field}} 형식 오류입니다. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "한 번에 추가할 수 있는 사용자 수는 1-{{.MaxAmount}} 범위 내에 있어야 합니다."
     config:
       read_config_failed:
-        other: Read config failed
+        other: 컨피그파일 읽기를 실패했습니다
     database:
       connection_failed:
-        other: Database connection failed
+        other: 데이터베이스 연결을 실패했습니다
       create_table_failed:
-        other: Create table failed
+        other: 테이블 생성을 실패했습니다
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: config.yaml 파일을 생성할 수 없습니다.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: 지원하지 않는 파일 포맷입니다.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: 사이트 설정을 찾을 수 없습니다.
   reason:
     spam:
       name:
-        other: spam
+        other: 스팸
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: 이 게시물은 광고로 인식되었습니다. 현재 주제와 관련이 없습니다.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: 폭언 또는 무례한 언행입니다.
       desc:
-        other: A reasonable person would find this content inappropriate for respectful discourse.
+        other: 대화에 부적절한 내용입니다.
     a_duplicate:
       name:
-        other: a duplicate
+        other: 중복
       desc:
-        other: This question has been asked before and already has an answer.
+        other: 이 질문은 이전에 질문한 적이 있으며 이미 답변이 있습니다.
       placeholder:
-        other: Enter the existing question link
+        other: 이미 존재하는 질문입니다
     not_a_answer:
       name:
-        other: not an answer
+        other: 적절한 답변이 아닙니다.
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+        other: 질문에 적절한 대답이 아닙니다. 편집, 댓글, 다른 질문, 또는 완전히 삭제된 것이어야 합니다.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: 더 이상 필요하지 않습니다.
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: 이 의견은 구식이거나 대화 중이거나 이 게시물과 관련이 없습니다.
     something:
       name:
-        other: something else
+        other: 다른 것.
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: 이 게시물은 위에 나열되지 않은 다른 이유로 직원의 주의가 필요합니다.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: 귀하가 우려하는 사항을 구체적으로 알려주세요.
     community_specific:
       name:
-        other: a community-specific reason
+        other: 커뮤니티별 특정 이유
       desc:
-        other: This question doesn't meet a community guideline.
+        other: 이 질문은 커뮤니티 가이드라인에 부합하지 않습니다.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: 세부사항 또는 명확성이 필요합니다.
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: 이 질문은 현재 하나에 여러 개의 질문이 포함되어 있습니다. 하나의 문제에만 초점을 맞추어야 합니다.
     looks_ok:
       name:
-        other: looks OK
+        other: 괜찮아 보입니다.
       desc:
-        other: This post is good as-is and not low quality.
+        other: 이 게시물은 있는 그대로이며 품질이 낮지 않습니다.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: 편집이 필요하고, 제가 했습니다.
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: 이 게시물에 대한 문제를 직접 개선하고 수정합니다.
     needs_close:
       name:
-        other: needs close
+        other: 닫혀야 함
       desc:
-        other: A closed question can't answer, but still can edit, vote and comment.
+        other: 닫힌 질문은 대답할 수 없지만 편집, 투표 및 댓글 작성을 할 수 있습니다.
     needs_delete:
       name:
-        other: needs delete
+        other: 삭제해야 함
       desc:
-        other: This post will be deleted.
+        other: 이 게시물은 삭제되었습니다.
   question:
     close:
       duplicate:
         name:
-          other: spam
+          other: 스팸
         desc:
-          other: This question has been asked before and already has an answer.
+          other: 이 질문은 이전에 질문한 적이 있으며 이미 답변이 있습니다.
       guideline:
         name:
-          other: a community-specific reason
+          other: 커뮤니티 특정 이유
         desc:
-          other: This question doesn't meet a community guideline.
+          other: 이 질문은 커뮤니티 가이드라인에 부합하지 않습니다.
       multiple:
         name:
-          other: needs details or clarity
+          other: 세부사항 또는 명확성이 필요합니다.
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: 이 질문은 현재 하나에 여러 개의 질문이 포함되어 있습니다. 하나의 문제에만 초점을 맞추어야 합니다.
       other:
         name:
-          other: something else
+          other: 다른 이유
         desc:
-          other: This post requires another reason not listed above.
+          other: 이 게시물에는 위에 나열되지 않은 다른 이유가 필요합니다.
     operation_type:
       asked:
-        other: asked
+        other: 질문됨
       answered:
-        other: answered
+        other: 답변됨
       modified:
-        other: modified
+        other: 수정됨
     deleted_title:
-      other: Deleted question
+      other: 이미 삭제된 게시물입니다.
   notification:
     action:
       update_question:
-        other: updated question
+        other: 수정된 질문
       answer_the_question:
-        other: answered question
+        other: 대답한 질문
       update_answer:
-        other: updated answer
+        other: 수정된 대답
       accept_answer:
-        other: accepted answer
+        other: 채택된 답변
       comment_question:
-        other: commented question
+        other: 질문에 댓글 달림
       comment_answer:
-        other: commented answer
+        other: 답변에 댓글 달림
       reply_to_you:
-        other: replied to you
+        other: 당신에게 답변함
       mention_you:
-        other: mentioned you
+        other: 당신을 언급함
       your_question_is_closed:
-        other: Your question has been closed
+        other: 당신의 질문이 닫혔습니다
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: 당신의 질문이 삭제되었습니다
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: 당신의 답변이 삭제되었습니다
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: 당신의 댓글이 삭제되었습니다
       up_voted_question:
-        other: upvoted question
+        other: 질문에 추천함
       down_voted_question:
-        other: downvoted question
+        other: 질문에 비추천함
       up_voted_answer:
-        other: upvoted answer
+        other: 답변에 추천함
       down_voted_answer:
-        other: downvoted answer
+        other: 답변에 비추천함
       up_voted_comment:
-        other: upvoted comment
+        other: 댓글에 추천함
       invited_you_to_answer:
-        other: invited you to answer
-  email_tpl:
-    change_email:
-      title:
-        other: "[{{.SiteName}}] Confirm your new email address"
-      body:
-        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
-    new_answer:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
-      body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
-    invited_you_to_answer:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
-      body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
-    new_comment:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
-      body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
-    new_question:
-      title:
-        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
-      body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
-    pass_reset:
-      title:
-        other: "[{{.SiteName }}] Password reset"
-      body:
-        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
-    register:
-      title:
-        other: "[{{.SiteName}}] Confirm your new account"
-      body:
-        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
-    test:
-      title:
-        other: "[{{.SiteName}}] Test Email"
-      body:
-        other: "This is a test email."
+        other: 답변에 초대함
+  change_email:
+    title:
+      other: "[{{.SiteName}}] 새 이메일 주소 확인"
+    body:
+      other: "{{.SiteName}}에서 새 이메일 주소를 확인하세요. 다음 링크를 클릭하여 확인하세요:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n이 변경을 요청하지 않았다면 이 이메일을 무시해 주세요.\n"
+  new_answer:
+    title:
+      other: "[{{.SiteName}}] {{.DisplayName}} 님이 답변을 작성했습니다"
+    body:
+      other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 답변을 작성했습니다:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+  invited_you_to_answer:
+    title:
+      other: "[{{.SiteName}}] {{.DisplayName}} 님이 답변을 요청했습니다"
+    body:
+      other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 답변을 요청했습니다:<br>\n<blockquote>아마 당신이 답을 알고 있을 것입니다.</blockquote><br>\n<a href='{{.InviteUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+  new_comment:
+    title:
+      other: "[{{.SiteName}}] {{.DisplayName}} 님이 당신의 게시물에 댓글을 남겼습니다"
+    body:
+      other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 당신의 게시물에 댓글을 남겼습니다:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+  new_question:
+    title:
+      other: "[{{.SiteName}}] 새 질문: {{.QuestionTitle}}"
+    body:
+      other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+  pass_reset:
+    title:
+      other: "[{{.SiteName }}] 비밀번호 재설정"
+    body:
+      other: "{{.SiteName}}에서 비밀번호 재설정 요청이 있었습니다.<br><br>\n\n만약 이 요청이 여러분이 하지 않았다면, 이 이메일을 무시하셔도 됩니다.<br><br>\n\n새 비밀번호를 설정하려면 다음 링크를 클릭하세요:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+  register:
+    title:
+      other: "[{{.SiteName}}] 새 계정 확인"
+    body:
+      other: "{{.SiteName}}에 오신 것을 환영합니다!<br><br>\n\n다음 링크를 클릭하여 계정을 확인하고 활성화하세요:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n위 링크가 클릭이 되지 않을 경우, 웹 브라우저 주소창에 복사하여 붙여넣어 보세요.\n"
+  test:
+    title:
+      other: "[{{.SiteName}}] 테스트 이메일"
+    body:
+      other: "이것은 테스트용 이메일입니다."
   action_activity_type:
     upvote:
-      other: upvote
+      other: 추천
     upvoted:
-      other: upvoted
+      other: 추천함
     downvote:
-      other: downvote
+      other: 비추천
     downvoted:
-      other: downvoted
+      other: 비추천함
     accept:
-      other: accept
+      other: 채택
     accepted:
-      other: accepted
+      other: 채택됨
     edit:
-      other: edit
+      other: 수정
   review:
     queued_post:
-      other: Queued post
+      other: 대기 중인 게시물
     flagged_post:
-      other: Flagged post
+      other: 신고된 게시물
     suggested_post_edit:
-      other: Suggested edits
+      other: 건의된 수정
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: 포맷 방법
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
-  pagination:
-    prev: Prev
-    next: Next
-  page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
-    oauth_callback: Processing
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
-    http_403: HTTP Error 403
-    logout: Log Out
-  notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    new_alerts: New alerts
-    all_read: Mark all as read
-    show_more: Show more
-    someone: Someone
-    inbox_type:
-      all: All
-      posts: Posts
-      invites: Invites
-      votes: Votes
-  suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
-    contact_us: Contact us
-  editor:
-    blockquote:
-      text: Blockquote
-    bold:
-      text: Strong
-    chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+    pagination:
+      prev: 이전
+      next: 다음
+    page_title:
+      question: 질문
+      questions: 질문들
+      tag: 태그
+      tags: 태그들
+      tag_wiki: 태그 위키
+      create_tag: 태그 생성
+      edit_tag: 태그 수정
+      ask_a_question: 질문 추가
+      edit_question: 질문 수정
+      edit_answer: 답변 수정
+      search: 검색
+      posts_containing: 포함된 게시물
+      settings: 설정
+      notifications: 알림
+      login: 로그인
+      sign_up: 회원 가입
+      account_recovery: 계정 복구
+      account_activation: 계정 활성화
+      confirm_email: 이메일 확인
+      account_suspended: 계정 정지
+      admin: 관리자
+      change_email: 이메일 수정
+      install: 설치 답변
+      upgrade: 업그레이드 답변
+      maintenance: 웹사이트 유지보수
+      users: 사용자
+      oauth_callback: 처리 중
+      http_404: HTTP 오류 404
+      http_50X: HTTP 오류 500
+      http_403: HTTP 오류 403
+      logout: 로그아웃
+    notifications:
+      title: 알림
+      inbox: 받은 편지함
+      achievement: 업적
+      new_alerts: 새로운 알림
+      all_read: 모두 읽음 처리
+      show_more: 더 보기
+      someone: 누군가
+      inbox_type:
+        all: 전체
+        posts: 게시물
+        invites: 초대
+        votes: 투표
+    suspended:
+      title: 계정이 정지되었습니다
+      until_time: "당신의 계정은 {{ time }}까지 정지되었습니다."
+      forever: 이 사용자는 영구 정지되었습니다.
+      end: 커뮤니티 가이드라인을 준수하지 않았습니다.
+      contact_us: 문의하기
+    editor:
+      blockquote:
+        text: 인용구
+      bold:
+        text: 강조
+      chart:
+        text: 차트
+        flow_chart: 플로우 차트
+        sequence_diagram: 시퀀스 다이어그램
+        class_diagram: 클래스 다이어그램
+        state_diagram: 상태 다이어그램
+        entity_relationship_diagram: 엔터티 관계 다이어그램
+        user_defined_diagram: 사용자 정의 다이어그램
+        gantt_chart: 간트 차트
+        pie_chart: 파이 차트
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: 코드 예시
+      add_code: 코드 예시 추가
       form:
         fields:
           code:
-            label: Code
+            label: 코드
             msg:
-              empty: Code cannot be empty.
+              empty: 코드를 입력하세요.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: 언어
+            placeholder: 자동 감지
+      btn_cancel: 취소
+      btn_confirm: 추가
     formula:
-      text: Formula
+      text: 수식
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: 인라인 수식
+        block: 블록 수식
     heading:
-      text: Heading
+      text: 제목
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: 제목 1
+        h2: 제목 2
+        h3: 제목 3
+        h4: 제목 4
+        h5: 제목 5
+        h6: 제목 6
     help:
-      text: Help
+      text: 도움말
     hr:
-      text: Horizontal rule
+      text: 수평선
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: 이미지
+      add_image: 이미지 추가
+      tab_image: 이미지 업로드
       form_image:
         fields:
           file:
-            label: Image file
-            btn: Select image
+            label: 이미지 파일
+            btn: 이미지 선택
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              empty: 파일을 선택하세요.
+              only_image: 이미지 파일만 허용됩니다.
+              max_size: 파일 크기는 4MB를 초과할 수 없습니다.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: 설명
+      tab_url: 이미지 URL
       form_url:
         fields:
           url:
-            label: Image URL
+            label: 이미지 URL
             msg:
-              empty: Image URL cannot be empty.
+              empty: 이미지 URL을 입력하세요.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: 설명
+      btn_cancel: 취소
+      btn_confirm: 추가
+      uploading: 업로드 중
     indent:
-      text: Indent
+      text: 들여쓰기
     outdent:
-      text: Outdent
+      text: 내어쓰기
     italic:
-      text: Emphasis
+      text: 이탤릭체
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: 링크
+      add_link: 링크 추가
       form:
         fields:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: URL을 입력하세요.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: 설명
+      btn_cancel: 취소
+      btn_confirm: 추가
     ordered_list:
-      text: Numbered list
+      text: 번호 매긴 목록
     unordered_list:
-      text: Bulleted list
+      text: 글머리 기호 목록
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: 표
+      heading: 제목
+      cell: 셀
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
-    remark:
-      empty: Cannot be empty.
-    msg:
-      empty: Please select a reason.
-  report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
-    remark:
-      empty: Cannot be empty.
-    msg:
-      empty: Please select a reason.
-      not_a_url: URL format is incorrect.
-      url_not_match: URL origin does not match the current website.
-  tag_modal:
-    title: Create new tag
-    form:
-      fields:
-        display_name:
-          label: Display name
-          msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
-        slug_name:
-          label: URL slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
-          msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
-        desc:
-          label: Description
-        revision:
-          label: Revision
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_cancel: Cancel
-    btn_submit: Submit
-    btn_post: Post new tag
+  title: 이 게시물을 다음과 같은 이유로 닫습니다...
+  btn_cancel: 취소
+  btn_submit: 제출
+  remark:
+    empty: 비어 있을 수 없습니다.
+  msg:
+    empty: 이유를 선택해 주세요.
+report_modal:
+  flag_title: 이 게시물을 신고합니다...
+  close_title: 이 게시물을 다음과 같은 이유로 닫습니다...
+  review_question_title: 질문 검토
+  review_answer_title: 답변 검토
+  review_comment_title: 댓글 검토
+  btn_cancel: 취소
+  btn_submit: 제출
+  remark:
+    empty: 비어 있을 수 없습니다.
+  msg:
+    empty: 이유를 선택해 주세요.
+    not_a_url: URL 형식이 올바르지 않습니다.
+    url_not_match: URL 원본이 현재 웹사이트와 일치하지 않습니다.
+tag_modal:
+  title: 새로운 태그 생성
+  form:
+    fields:
+      display_name:
+        label: 표시 이름
+        msg:
+          empty: 표시 이름을 입력하세요.
+          range: 표시 이름은 최대 35자까지 입력 가능합니다.
+      slug_name:
+        label: URL 슬러그
+        desc: '"a-z", "0-9", "+ # - ." 문자 집합을 사용해야 합니다.'
+        msg:
+          empty: URL 슬러그를 입력하세요.
+          range: URL 슬러그는 최대 35자까지 입력 가능합니다.
+          character: 허용되지 않은 문자 집합이 포함되어 있습니다.'
+  desc:
+    label: 설명
+  revision:
+    label: 개정
+  edit_summary:
+    label: 편집 요약
+    placeholder: >-
+      수정 사항을 간략히 설명하세요 (철자 수정, 문법 수정, 서식 개선 등)
+  btn_cancel: 취소
+  btn_submit: 제출
+  btn_post: 새 태그 게시
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: 생성됨
+    edited_at: 편집됨
+    history: 히스토리
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: 동의어
+      text: 다음 태그가 다음으로 다시 매핑됩니다
+      empty: 동의어가 없습니다.
+      btn_add: 동의어 추가
+      btn_edit: 편집
+      btn_save: 저장
+    synonyms_text: 다음 태그가 다음으로 다시 매핑됩니다
     delete:
-      title: Delete this tag
+      title: 이 태그 삭제
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>게시물이 있는 태그는 <strong>삭제할 수 없습니다</strong>.</p> <p>먼저 해당 게시물에서 이 태그를 제거하세요.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
-      close: Close
-  edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
-    default_first_reason: Add tag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-  dates:
-    long_date: MMM D
-    long_date_with_year: "MMM D, YYYY"
-    long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
-    hours: hours
-    days: days
-  comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
-    btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: "{{count}} more comments"
-    tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
-    tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
-  edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
-    default_first_reason: Add answer
+        <p>동의어가 있는 태그는 <strong>삭제할 수 없습니다</strong>.</p> <p>먼저 이 태그의 동의어를 제거하세요.</p>
+      tip: 정말로 삭제하시겠습니까?
+      close: 닫기
+    edit_tag:
+      title: 태그 수정
+      default_reason: 태그 수정
+      default_first_reason: 태그 추가
+      btn_save_edits: 수정 저장
+      btn_cancel: 취소
+    dates:
+      long_date: MMM D
+      long_date_with_year: "MMM D, YYYY"
+      long_date_with_time: "YYYY년 MMM D일 HH:mm"
+      now: 방금 전
+      x_seconds_ago: "{{count}}초 전"
+      x_minutes_ago: "{{count}}분 전"
+      x_hours_ago: "{{count}}시간 전"
+      hour: 시간
+      day: 일
+      hours: 시간
+      days: 일
+    comment:
+      btn_add_comment: 댓글 추가
+      reply_to: 답글 달기
+      btn_reply: 답글
+      btn_edit: 수정
+      btn_delete: 삭제
+      btn_flag: 신고
+      btn_save_edits: 수정 저장
+      btn_cancel: 취소
+      show_more: "{{count}}개의 댓글 더 보기"
+      tip_question: >-
+        더 많은 정보를 요청하거나 개선을 제안하기 위해 댓글을 사용하세요. 댓글에서 질문에 답변하지는 마세요.
+      tip_answer: >-
+        다른 사용자에게 답변하거나 변경 사항을 알릴 때 댓글을 사용하세요. 새로운 정보를 추가하는 경우에는 게시물을 수정하세요.
+      tip_vote: 게시물에 유용한 정보를 추가합니다.
+    edit_answer:
+      title: 답변 수정
+      default_reason: 답변 수정
+      default_first_reason: 답변 추가
+      form:
+        fields:
+          revision:
+            label: 개정
+          answer:
+            label: 답변
+            feedback:
+              characters: 내용은 최소 6자 이상이어야 합니다.
+          edit_summary:
+            label: 편집 요약
+            placeholder: >-
+              수정 사항을 간략히 설명하세요 (철자 수정, 문법 수정, 서식 개선 등)
+      btn_save_edits: 수정 저장
+      btn_cancel: 취소
+    tags:
+      title: 태그
+      sort_buttons:
+        popular: 인기순
+        name: 이름
+        newest: 최신순
+      button_follow: 팔로우
+      button_following: 팔로잉 중
+      tag_label: 질문
+      search_placeholder: 태그 이름으로 필터링
+      no_desc: 이 태그에는 설명이 없습니다.
+      more: 더 보기
+    ask:
+      title: 질문 추가
+      edit_title: 질문 수정
+      default_reason: 질문 수정
+      default_first_reason: 질문 추가
+      similar_questions: 유사한 질문
     form:
       fields:
         revision:
-          label: Revision
-        answer:
-          label: Answer
-          feedback:
-            characters: content must be at least 6 characters in length.
-        edit_summary:
-          label: Edit summary
-          placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-  tags:
-    title: Tags
-    sort_buttons:
-      popular: Popular
-      name: Name
-      newest: Newest
-    button_follow: Follow
-    button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
-  ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    default_first_reason: Add question
-    similar_questions: Similar questions
-    form:
-      fields:
-        revision:
-          label: Revision
+          label: 개정
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: 제목
+          placeholder: 구체적이고 다른 사람에게 질문하는 것처럼 생각해 보세요
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: 제목을 입력하세요.
+            range: 제목은 최대 150자까지 입력 가능합니다.
         body:
-          label: Body
+          label: 본문
           msg:
-            empty: Body cannot be empty.
+            empty: 본문을 입력하세요.
         tags:
-          label: Tags
+          label: 태그
           msg:
-            empty: Tags cannot be empty.
+            empty: 태그를 입력하세요.
         answer:
-          label: Answer
+          label: 답변
           msg:
-            empty: Answer cannot be empty.
+            empty: 답변을 입력하세요.
         edit_summary:
-          label: Edit summary
+          label: 편집 요약
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
-    post_question&answer: Post your question and answer
-  tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
-    hint: "Describe what your question is about, at least one tag is required."
-    no_result: No tags matched
-    tag_required_text: Required tag (at least one)
-  header:
-    nav:
-      question: Questions
-      tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
-      admin: Admin
-      review: Review
-      bookmark: Bookmarks
-      moderation: Moderation
+            수정 사항을 간략히 설명하세요 (철자 수정, 문법 수정, 서식 개선 등)
+    btn_post_question: 질문 올리기
+    btn_save_edits: 수정 저장
+    answer_question: 질문에 대한 답변 작성
+    post_question&answer: 질문과 답변 올리기
+    tag_selector:
+      add_btn: 태그 추가
+      create_btn: 새 태그 생성
+      search_tag: 태그 검색
+      hint: "질문의 주제를 설명하세요. 적어도 하나의 태그가 필요합니다."
+      no_result: 일치하는 태그가 없습니다.
+      tag_required_text: 필수 태그 (적어도 하나)
+    header:
+      nav:
+        question: 질문
+        tag: 태그
+        user: 사용자
+        profile: 프로필
+        setting: 설정
+        logout: 로그아웃
+        admin: 관리자
+        review: 리뷰
+        bookmark: 즐겨찾기
+        moderation: 운영
     search:
-      placeholder: Search
-  footer:
-    build_on: >-
-      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
-  upload_img:
-    name: Change
-    loading: loading...
-  pic_auth_code:
-    title: Captcha
-    placeholder: Type the text above
-    msg:
-      empty: Captcha cannot be empty.
+      placeholder: 검색
+    footer:
+      build_on: >-
+        Powered by <1> Apache Answer </1> - Q&A 커뮤니티를 지원하는 오픈 소스 소프트웨어입니다.<br />Made with love © {{cc}}.
+    upload_img:
+      name: 변경
+      loading: 로딩 중...
+    pic_auth_code:
+      title: 캡차
+      placeholder: 위의 텍스트를 입력하세요
+      msg:
+        empty: 캡차를 입력하세요.
   inactive:
     first: >-
-      You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.
-    info: "If it doesn't arrive, check your spam folder."
+      거의 다 되었습니다! <bold>{{mail}}</bold>로 활성화 메일을 보냈습니다. 계정을 활성화하려면 메일 안의 지침을 따르세요.
+    info: "스팸 메일함도 확인해 주세요."
     another: >-
-      We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
-    change_btn_name: Change email
+      <bold>{{mail}}</bold>로 또 다른 활성화 이메일을 보냈습니다. 메일이 도착하는 데 몇 분 정도 걸릴 수 있으니 스팸 메일함도 확인해 주세요.
+    btn_name: 활성화 이메일 재전송
+    change_btn_name: 이메일 변경
     msg:
-      empty: Cannot be empty.
+      empty: 비어 있을 수 없습니다.
     resend_email:
-      url_label: Are you sure you want to resend the activation email?
-      url_text: You can also give the activation link above to the user.
+      url_label: 활성화 이메일을 재전송하시겠습니까?
+      url_text: 위의 활성화 링크를 사용자에게 제공할 수도 있습니다.
   login:
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
-    info_login: Already have an account? <1>Log in</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    login_to_continue: 계속하려면 로그인하세요
+    info_sign: 계정이 없으신가요? <1>가입하기</1>
+    info_login: 이미 계정이 있으신가요? <1>로그인하기</1>
+    agreements: 가입하면 <1>개인정보 보호 정책</1>과 <3>이용 약관</3>에 동의하게 됩니다.
+    forgot_pass: 비밀번호를 잊으셨나요?
     name:
-      label: Name
+      label: 이름
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        empty: 이름을 입력하세요.
+        range: 이름은 최대 30자까지 입력 가능합니다.
+        character: '문자 집합 "a-z", "0-9", " - . _"를 사용해야 합니다'
     email:
-      label: Email
+      label: 이메일
       msg:
-        empty: Email cannot be empty.
+        empty: 이메일을 입력하세요.
     password:
-      label: Password
+      label: 비밀번호
       msg:
-        empty: Password cannot be empty.
-        different: The passwords entered on both sides are inconsistent
+        empty: 비밀번호를 입력하세요.
+        different: 입력된 비밀번호가 일치하지 않습니다.
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: 비밀번호를 잊으셨나요?
+    btn_name: 비밀번호 재설정 이메일 보내기
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      <strong>{{mail}}</strong>에 해당하는 계정이 있다면 곧 비밀번호 재설정 방법을 안내하는 이메일을 받으실 수 있습니다.
     email:
-      label: Email
+      label: 이메일
       msg:
-        empty: Email cannot be empty.
+        empty: 이메일을 입력하세요.
   change_email:
-    btn_cancel: Cancel
-    btn_update: Update email address
+    btn_cancel: 취소
+    btn_update: 이메일 주소 업데이트
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      <strong>{{mail}}</strong>에 해당하는 계정이 있다면 곧 이메일 주소 변경 방법을 안내하는 이메일을 받으실 수 있습니다.
     email:
-      label: New email
+      label: 새 이메일
       msg:
-        empty: Email cannot be empty.
+        empty: 이메일을 입력하세요.
   oauth:
-    connect: Connect with {{ auth_name }}
-    remove: Remove {{ auth_name }}
+    connect: {{ auth_name }}로 연결
+    remove: {{ auth_name }} 연결 해제
   oauth_bind_email:
-    subtitle: Add a recovery email to your account.
-    btn_update: Update email address
+    subtitle: 계정에 복구 이메일 추가
+    btn_update: 이메일 주소 업데이트
     email:
-      label: Email
+      label: 이메일
       msg:
-        empty: Email cannot be empty.
-    modal_title: Email already existes.
-    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
-    modal_cancel: Change email
-    modal_confirm: Connect to the existing account
+        empty: 이메일을 입력하세요.
+    modal_title: 이미 등록된 이메일
+    modal_content: 이 이메일 주소는 이미 등록되어 있습니다. 기존 계정에 연결하시겠습니까?
+    modal_cancel: 이메일 변경
+    modal_confirm: 기존 계정에 연결하기
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: 비밀번호 재설정
+    btn_name: 비밀번호 재설정
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      비밀번호가 성공적으로 변경되었습니다. 로그인 페이지로 이동합니다.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
-    to_login: Continue to log in page
+      죄송합니다. 이 비밀번호 재설정 링크는 더 이상 유효하지 않습니다. 이미 비밀번호를 재설정하셨을 수 있습니다.
+    to_login: 로그인 페이지로 이동
     password:
-      label: Password
+      label: 비밀번호
       msg:
-        empty: Password cannot be empty.
-        length: The length needs to be between 8 and 32
-        different: The passwords entered on both sides are inconsistent
+        empty: 비밀번호를 입력하세요.
+        length: 비밀번호는 8자에서 32자 사이여야 합니다.
+        different: 입력한 비밀번호가 일치하지 않습니다.
     password_confirm:
-      label: Confirm new password
+      label: 새 비밀번호 확인
   settings:
-    page_title: Settings
-    goto_modify: Go to modify
+    page_title: 설정
+    goto_modify: 수정으로 이동
     nav:
-      profile: Profile
-      notification: Notifications
-      account: Account
-      interface: Interface
+      profile: 프로필
+      notification: 알림
+      account: 계정
+      interface: 인터페이스
     profile:
-      heading: Profile
-      btn_name: Save
+      heading: 프로필
+      btn_name: 저장
       display_name:
-        label: Display name
-        msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters.
+        label: 표시 이름
+        msg: 표시 이름을 입력하세요.
+        msg_range: 표시 이름은 최대 30자까지 가능합니다.
       username:
-        label: Username
-        caption: People can mention you as "@username".
-        msg: Username cannot be empty.
-        msg_range: Username up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        label: 사용자 이름
+        caption: 다른 사용자가 "@사용자이름"으로 멘션할 수 있습니다.
+        msg: 사용자 이름을 입력하세요.
+        msg_range: 사용자 이름은 최대 30자까지 가능합니다.
+        character: '문자 집합 "a-z", "0-9", " - . _"을 사용해야 합니다.'
       avatar:
-        label: Profile image
+        label: 프로필 이미지
         gravatar: Gravatar
-        gravatar_text: You can change image on
-        custom: Custom
-        custom_text: You can upload your image.
-        default: System
-        msg: Please upload an avatar
+        gravatar_text: Gravatar에서 이미지를 변경할 수 있습니다.
+        custom: 사용자 정의
+        custom_text: 사용자 이미지를 업로드할 수 있습니다.
+        default: 시스템 기본 이미지
+        msg: 프로필 이미지를 업로드하세요.
       bio:
-        label: About me
+        label: 자기 소개
       website:
-        label: Website
+        label: 웹사이트
         placeholder: "https://example.com"
-        msg: Website incorrect format
+        msg: 웹사이트 형식이 올바르지 않습니다.
       location:
-        label: Location
-        placeholder: "City, Country"
-    notification:
-      heading: Email Notifications
-      turn_on: Turn on
-      inbox:
-        label: Inbox notifications
-        description: Answers to your questions, comments, invites, and more.
-      all_new_question:
-        label: All new questions
-        description: Get notified of all new questions. Up to 50 questions per week.
-      all_new_question_for_following_tags:
-        label: All new questions for following tags
-        description: Get notified of new questions for following tags.
+        label: 위치
+        placeholder: "도시, 국가"
+  notification:
+    heading: 이메일 알림
+    turn_on: 켜기
+    inbox:
+      label: 받은 편지함 알림
+      description: 질문에 대한 답변, 댓글, 초대 등을 받습니다.
+    all_new_question:
+      label: 모든 새 질문
+      description: 모든 새 질문에 대해 알림을 받습니다. 주당 최대 50개의 질문까지.
+    all_new_question_for_following_tags:
+      label: 팔로우 태그의 모든 새 질문
+      description: 팔로우하는 태그의 새로운 질문에 대해 알림을 받습니다.
     account:
-      heading: Account
-      change_email_btn: Change email
-      change_pass_btn: Change password
+      heading: 계정
+      change_email_btn: 이메일 변경
+      change_pass_btn: 비밀번호 변경
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation instructions.
+        해당 주소로 이메일을 보냈습니다. 확인 지침을 따라주세요.
       email:
-        label: Email
+        label: 이메일
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: 새 이메일
+        msg: 새 이메일을 입력하세요.
       pass:
-        label: Current password
-        msg: Password cannot be empty.
-      password_title: Password
+        label: 현재 비밀번호
+        msg: 비밀번호를 입력하세요.
+      password_title: 비밀번호
       current_pass:
-        label: Current password
+        label: 현재 비밀번호
         msg:
-          empty: Current password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: 현재 비밀번호를 입력하세요.
+          length: 비밀번호는 8자에서 32자 사이여야 합니다.
+          different: 입력한 두 비밀번호가 일치하지 않습니다.
       new_pass:
-        label: New password
+        label: 새 비밀번호
       pass_confirm:
-        label: Confirm new password
+        label: 새 비밀번호 확인
     interface:
-      heading: Interface
+      heading: 인터페이스
       lang:
-        label: Interface language
-        text: User interface language. It will change when you refresh the page.
+        label: 인터페이스 언어
+        text: 사용자 인터페이스 언어입니다. 페이지를 새로고침하면 변경됩니다.
     my_logins:
-      title: My logins
-      label: Log in or sign up on this site using these accounts.
-      modal_title: Remove login
-      modal_content: Are you sure you want to remove this login from your account?
-      modal_confirm_btn: Remove
-      remove_success: Removed successfully
+      title: 내 로그인 정보
+      label: 이 사이트에서 이 계정으로 로그인하거나 가입하세요.
+      modal_title: 로그인 제거
+      modal_content: 이 계정에서 이 로그인을 제거하시겠습니까?
+      modal_confirm_btn: 제거
+      remove_success: 제거되었습니다.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
-    sent_success: Sent successfully
+    update: 업데이트 성공
+    update_password: 비밀번호가 성공적으로 변경되었습니다.
+    flag_success: 신고 감사합니다.
+    forbidden_operate_self: 자신에 대한 작업은 금지되어 있습니다.
+    review: 검토 후에 귀하의 수정 사항이 표시됩니다.
+    sent_success: 전송 성공
   related_question:
-    title: Related Questions
-    answers: answers
+    title: 관련 질문
+    answers: 답변
   invite_to_answer:
-    title: People Asked
-    desc: Select people who you think might know the answer.
-    invite: Invite to answer
-    add: Add people
-    search: Search people
+    title: 질문자 초대
+    desc: 답변을 알고 있을 것으로 생각되는 사람을 선택하세요.
+    invite: 답변 초대
+    add: 사람 추가
+    search: 사람 검색
   question_detail:
-    action: Action
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    commented: commented
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    follow_tip: Follow this question to receive notifications
-    answered: answered
-    closed_in: Closed in
-    show_exist: Show existing question.
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    question_bookmark: Bookmark this question
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    action: 동작
+    asked: 질문 작성
+    update: 수정됨
+    edit: 편집됨
+    commented: 댓글 작성
+    Views: 조회수
+    Follow: 팔로우
+    Following: 팔로잉 중
+    follow_tip: 이 질문을 팔로우하여 알림을 받으세요.
+    answered: 답변 작성
+    closed_in: 답변 종료
+    show_exist: 기존 질문 표시
+    useful: 유용함
+    question_useful: 유용하고 명확함
+    question_un_useful: 불명확하거나 유용하지 않음
+    question_bookmark: 이 질문 즐겨찾기
+    answer_useful: 유용함
+    answer_un_useful: 유용하지 않음
     answers:
-      title: Answers
-      score: Score
-      newest: Newest
-      oldest: Oldest
-      btn_accept: Accept
-      btn_accepted: Accepted
+      title: 답변
+      score: 점수
+      newest: 최신순
+      oldest: 오래된 순
+      btn_accept: 채택
+      btn_accepted: 채택됨
     write_answer:
-      title: Your Answer
-      edit_answer: Edit my existing answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
-      confirm_title: Continue to answer
-      continue: Continue
+      title: 당신의 답변
+      edit_answer: 내 답변 편집하기
+      btn_name: 답변 게시하기
+      add_another_answer: 다른 답변 추가
+      confirm_title: 답변 계속하기
+      continue: 계속
       confirm_info: >-
-        <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
-      empty: Answer cannot be empty.
-      characters: content must be at least 6 characters in length.
+        <p>다른 답변을 추가하시겠습니까?</p><p>대신 기존 답변을 향상시키고 개선할 수 있는 수정 링크를 사용할 수 있습니다.</p>
+      empty: 답변을 입력해주세요.
+      characters: 내용은 최소 6자 이상이어야 합니다.
       tips:
-        header_1: Thanks for your answer
-        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
-        li1_2: Back up any statements you make with references or personal experience.
-        header_2: But <strong>avoid</strong> ...
-        li2_1: Asking for help, seeking clarification, or responding to other answers.
+        header_1: 답변해 주셔서 감사합니다
+        li1_1: <strong>질문에 답변</strong>을 제공하세요. 세부 사항을 설명하고 연구 결과를 공유하세요.
+        li1_2: 발언을 뒷받침하는 자료나 개인적인 경험을 통해 주장을 뒷받침하세요.
+        header_2: 하지만 <strong>피해야 할 것들</strong> ...
+        li2_1: 도움을 요청하거나 해명을 구하거나 다른 답변에 응답하는 것.
     reopen:
-      confirm_btn: Reopen
-      title: Reopen this post
-      content: Are you sure you want to reopen?
+      confirm_btn: 다시 열기
+      title: 이 게시물 다시 열기
+      content: 정말 다시 열기를 원하시나요?
     list:
-      confirm_btn: List
-      title: List this post
-      content: Are you sure you want to list?
+      confirm_btn: 목록
+      title: 이 게시물 목록에 추가하기
+      content: 정말 목록에 추가하시겠습니까?
     unlist:
-      confirm_btn: Unlist
-      title: Unlist this post
-      content: Are you sure you want to unlist?
+      confirm_btn: 목록 해제
+      title: 이 게시물 목록에서 제외하기
+      content: 정말 목록에서 제외하시겠습니까?
     pin:
-      title: Pin this post
-      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
-      confirm_btn: Pin
+      title: 이 게시물 고정하기
+      content: 글로벌로 고정하시겠습니까? 이 게시물은 모든 게시물 목록 상단에 표시됩니다.
+      confirm_btn: 고정하기
   delete:
-    title: Delete this post
+    title: 이 게시물 삭제하기
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      <p><strong>답변이 있는 질문을 삭제하는 것은 권장하지 않습니다</strong> 이는 이 지식을 필요로 하는 사용자에게 정보를 제공하지 못하게 될 수 있습니다. </p><p>답변이 있는 질문을 반복적으로 삭제하는 경우 질문 권한이 차단될 수 있습니다. 정말 삭제하시겠습니까?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
-    other: Are you sure you wish to delete?
-    tip_answer_deleted: This answer has been deleted
-    undelete_title: Undelete this post
-    undelete_desc: Are you sure you wish to undelete?
+      <p><strong>채택된 답변을 삭제하는 것은 권장하지 않습니다</strong> 이는 이 지식을 필요로 하는 사용자에게 정보를 제공하지 못하게 될 수 있습니다. </p><p>채택된 답변을 반복적으로 삭제하는 경우 답변 권한이 차단될 수 있습니다. 정말 삭제하시겠습니까?
+    other: 정말 삭제하시겠습니까?
+    tip_answer_deleted: 이 답변은 삭제되었습니다.
+    undelete_title: 이 게시물 복구하기
+    undelete_desc: 정말 복구하시겠습니까?
   btns:
-    confirm: Confirm
-    cancel: Cancel
-    edit: Edit
-    save: Save
-    delete: Delete
-    undelete: Undelete
-    list: List
-    unlist: Unlist
-    unlisted: Unlisted
-    login: Log in
-    signup: Sign up
-    logout: Log out
-    verify: Verify
-    add_question: Add question
-    approve: Approve
-    reject: Reject
-    skip: Skip
-    discard_draft: Discard draft
-    pinned: Pinned
-    all: All
-    question: Question
-    answer: Answer
-    comment: Comment
-    refresh: Refresh
-    resend: Resend
-    deactivate: Deactivate
-    active: Active
-    suspend: Suspend
-    unsuspend: Unsuspend
-    close: Close
-    reopen: Reopen
-    ok: OK
-    light: Light
-    dark: Dark
-    system_setting: System setting
-    default: Default
-    reset: Reset
-    tag: Tag
-    post_lowercase: post
-    filter: Filter
-    ignore: Ignore
-    submit: Submit
-    normal: Normal
-    closed: Closed
-    deleted: Deleted
-    pending: Pending
-    more: More
-  search:
-    title: Search Results
-    keywords: Keywords
-    options: Options
-    follow: Follow
-    following: Following
-    counts: "{{count}} Results"
-    more: More
-    sort_btns:
-      relevance: Relevance
-      newest: Newest
-      active: Active
-      score: Score
-      more: More
-    tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search with a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
-      is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
-  share:
-    name: Share
-    copy: Copy link
-    via: Share post via...
-    copied: Copied
-    facebook: Share to Facebook
-    twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post.
-  modal_confirm:
-    title: Error...
-  account_result:
-    success: Your new account is confirmed; you will be redirected to the home page.
-    link: Continue to homepage
-    invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
-    confirm_new_email: Your email has been updated.
-    confirm_new_email_invalid: >-
-      Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
-  unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
-    link: Change settings
+    confirm: 확인
+    cancel: 취소
+    edit: 편집
+    save: 저장
+    delete: 삭제
+    undelete: 복구
+    list: 목록
+    unlist: 목록 해제
+    unlisted: 목록에서 해제됨
+    login: 로그인
+    signup: 가입하기
+    logout: 로그아웃
+    verify: 확인
+    add_question: 질문 추가
+    approve: 승인
+    reject: 거부
+    skip: 건너뛰기
+    discard_draft: 임시 저장 삭제
+    pinned: 고정됨
+    all: 모두
+    question: 질문
+    answer: 답변
+    comment: 댓글
+    refresh: 새로 고침
+    resend: 재전송
+    deactivate: 비활성화
+    active: 활성화
+    suspend: 정지
+    unsuspend: 정지 해제
+    close: 닫기
+    reopen: 다시 열기
+    ok: 확인
+    light: 밝게
+    dark: 어둡게
+    system_setting: 시스템 설정
+    default: 기본
+    reset: 재설정
+    tag: 태그
+    post_lowercase: 게시물
+    filter: 필터
+    ignore: 무시
+    submit: 제출
+    normal: 일반
+    closed: 닫힘
+    deleted: 삭제됨
+    pending: 보류 중
+    more: 더 보기
+    search:
+      title: 검색 결과
+      keywords: 키워드
+      options: 옵션
+      follow: 팔로우
+      following: 팔로잉 중
+      counts: "{{count}} 개의 결과"
+      more: 더 보기
+      sort_btns:
+        relevance: 관련성
+        newest: 최신순
+        active: 활성순
+        score: 평점순
+        more: 더 보기
+      tips:
+        title: 고급 검색 팁
+        tag: "<1>[태그]</1> 태그로 검색"
+        user: "<1>user:사용자명</1> 작성자로 검색"
+        answer: "<1>answers:0</1> 답변이 없는 질문"
+        score: "<1>score:3</1> 평점이 3 이상인 글"
+        question: "<1>is:question</1> 질문만 검색"
+        is_answer: "<1>is:answer</1> 답변만 검색"
+      empty: 아무것도 찾지 못했습니다. <br /> 다른 키워드를 사용하거나 덜 구체적인 검색을 시도하세요.
+    share:
+      name: 공유
+      copy: 링크 복사
+      via: 포스트 공유하기...
+      copied: 복사됨
+      facebook: Facebook에 공유
+      twitter: Twitter에 공유
+    cannot_vote_for_self: 자신의 글에 투표할 수 없습니다.
+    modal_confirm:
+      title: 오류...
+    account_result:
+      success: 새 계정이 확인되었습니다. 홈페이지로 이동합니다.
+      link: 홈페이지로 이동
+      invalid: 죄송합니다, 이 계정 확인 링크는 더 이상 유효하지 않습니다. 이미 계정이 활성화된 상태일 수 있습니다.
+      confirm_new_email: 이메일이 업데이트되었습니다.
+      confirm_new_email_invalid: 죄송합니다, 이 확인 링크는 더 이상 유효하지 않습니다. 이미 이메일이 변경된 상태일 수 있습니다.
+    unsubscribe:
+      page_title: 구독 해지
+      success_title: 구독 해지 완료
+      success_desc: 이 구독자 목록에서 성공적으로 제거되었으며, 더 이상 우리로부터 어떠한 이메일도 받지 않게 됩니다.
+      link: 설정 변경하기
   question:
-    following_tags: Following Tags
-    edit: Edit
-    save: Save
-    follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
-    x_questions: "{{ count }} Questions"
-    x_answers: "{{ count }} answers"
-    questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    following_tags: 팔로우 태그
+    edit: 수정
+    save: 저장
+    follow_tag_tip: 질문 목록을 관리하기 위해 태그를 팔로우하세요.
+    hot_questions: 인기 질문
+    all_questions: 모든 질문
+    x_questions: "{{ count }} 개의 질문"
+    x_answers: "{{ count }} 개의 답변"
+    questions: 질문
+    answers: 답변
+    newest: 최신순
+    active: 활성순
+    frequent: 자주 본 질문
+    score: 평점순
+    unanswered: 답변이 없는 질문
+    modified: 수정됨
+    answered: 답변됨
+    asked: 질문됨
+    closed: 닫힘
+    follow_a_tag: 태그 팔로우하기
+    more: 더 보기
   personal:
-    overview: Overview
-    answers: Answers
-    answer: answer
-    questions: Questions
-    question: question
-    bookmarks: Bookmarks
-    reputation: Reputation
-    comments: Comments
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit profile
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
-    about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
-    answered: answered
-    asked: asked
-    downvoted: downvoted
+    overview: 개요
+    answers: 답변
+    answer: 답변
+    questions: 질문
+    question: 질문
+    bookmarks: 즐겨찾기
+    reputation: 평판
+    comments: 댓글
+    votes: 투표
+    newest: 최신순
+    score: 평점순
+    edit_profile: 프로필 수정
+    visited_x_days: "{{ count }} 일 방문함"
+    viewed: 조회됨
+    joined: 가입일
+    last_login: 최근 접속
+    about_me: 자기 소개
+    about_me_empty: "// 안녕하세요, 세상아 !"
+    top_answers: 최고 답변
+    top_questions: 최고 질문
+    stats: 통계
+    list_empty: 게시물을 찾을 수 없습니다.<br />다른 탭을 선택하실 수 있습니다.
+    accepted: 채택됨
+    answered: 답변됨
+    asked: 질문됨
+    downvoted: 다운투표됨
     mod_short: MOD
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    mod_long: 관리자
+    x_reputation: 평판
+    x_votes: 받은 투표
+    x_answers: 답변
+    x_questions: 질문
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can't create the config.yaml file.
+    title: 설치
+    next: 다음
+    done: 완료
+    config_yaml_error: config.yaml 파일을 생성할 수 없습니다.
     lang:
-      label: Please choose a language
+      label: 언어 선택
     db_type:
-      label: Database engine
+      label: 데이터베이스 엔진
     db_username:
-      label: Username
+      label: 사용자 이름
       placeholder: root
-      msg: Username cannot be empty.
+      msg: 사용자 이름은 비워둘 수 없습니다.
     db_password:
-      label: Password
+      label: 비밀번호
       placeholder: root
-      msg: Password cannot be empty.
+      msg: 비밀번호는 비워둘 수 없습니다.
     db_host:
-      label: Database host
+      label: 데이터베이스 호스트
       placeholder: "db:3306"
-      msg: Database host cannot be empty.
+      msg: 데이터베이스 호스트는 비워둘 수 없습니다.
     db_name:
-      label: Database name
+      label: 데이터베이스 이름
       placeholder: answer
-      msg: Database name cannot be empty.
+      msg: 데이터베이스 이름은 비워둘 수 없습니다.
     db_file:
-      label: Database file
+      label: 데이터베이스 파일
       placeholder: /data/answer.db
-      msg: Database file cannot be empty.
+      msg: 데이터베이스 파일은 비워둘 수 없습니다.
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: config.yaml 파일 생성
+      label: config.yaml 파일이 생성되었습니다.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: After you've done that, click "Next" button.
-    site_information: Site Information
-    admin_account: Admin Account
+        config.yaml 파일을 <1>/var/wwww/xxx/</1> 디렉터리에 수동으로 생성하고 아래 텍스트를 붙여넣을 수 있습니다.
+      info: 위 작업을 완료한 후 "다음" 버튼을 클릭하세요.
+    site_information: 사이트 정보
+    admin_account: 관리자 계정
     site_name:
-      label: Site name
-      msg: Site name cannot be empty.
-      msg_max_length: Site name must be at maximum 30 characters in length.
+      label: 사이트 이름
+      msg: 사이트 이름을 입력하세요.
+      msg_max_length: 사이트 이름은 최대 30자여야 합니다.
     site_url:
-      label: Site URL
-      text: The address of your site.
+      label: 사이트 URL
+      text: 사이트의 주소입니다.
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
-        max_length: Site URL must be at maximum 512 characters in length.
+        empty: 사이트 URL을 입력하세요.
+        incorrect: 올바른 형식의 사이트 URL을 입력하세요.
+        max_length: 사이트 URL은 최대 512자여야 합니다.
     contact_email:
-      label: Contact email
-      text: Email address of key contact responsible for this site.
+      label: 연락처 이메일
+      text: 이 사이트에 책임을 지는 주요 연락 이메일 주소입니다.
       msg:
-        empty: Contact email cannot be empty.
-        incorrect: Contact email incorrect format.
+        empty: 연락처 이메일을 입력하세요.
+        incorrect: 올바른 형식의 연락처 이메일을 입력하세요.
     login_required:
-      label: Private
-      switch: Login required
-      text: Only logged in users can access this community.
+      label: 비공개
+      switch: 로그인 필요
+      text: 로그인한 사용자만 이 커뮤니티에 접근할 수 있습니다.
     admin_name:
-      label: Name
-      msg: Name cannot be empty.
-      character: 'Must use the character set "a-z", "0-9", " - . _"'
-      msg_max_length: Name must be at maximum 30 characters in length.
+      label: 이름
+      msg: 이름을 입력하세요.
+      character: '문자 집합 "a-z", "0-9", " - . _"을 사용해야 합니다.'
+      msg_max_length: 이름은 최대 30자여야 합니다.
     admin_password:
-      label: Password
-      text: >-
-        You will need this password to log in. Please store it in a secure location.
-      msg: Password cannot be empty.
-      msg_min_length: Password must be at least 8 characters in length.
-      msg_max_length: Password must be at maximum 32 characters in length.
+      label: 비밀번호
+      text: 로그인에 필요한 비밀번호입니다. 안전한 위치에 보관하세요.
+      msg: 비밀번호를 입력하세요.
+      msg_min_length: 비밀번호는 최소 8자여야 합니다.
+      msg_max_length: 비밀번호는 최대 32자여야 합니다.
     admin_email:
-      label: Email
-      text: You will need this email to log in.
+      label: 이메일
+      text: 로그인에 필요한 이메일입니다.
       msg:
-        empty: Email cannot be empty.
-        incorrect: Email incorrect format.
-    ready_title: Your site is ready
+        empty: 이메일을 입력하세요.
+        incorrect: 올바른 형식의 이메일을 입력하세요.
+    ready_title: 준비 완료!
     ready_desc: >-
-      If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
-    good_luck: "Have fun, and good luck!"
-    warn_title: Warning
+      추가 설정을 원하시면 <1>관리자 섹션</1>에서 찾아보세요; 사이트 메뉴에서 확인할 수 있습니다.
+    good_luck: 재미있고 행운을 빕니다!
+    warn_title: 경고
     warn_desc: >-
-      The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
-    install_now: You may try <1>installing now</1>.
-    installed: Already installed
+      파일 <1>config.yaml</1>이 이미 존재합니다. 이 파일의 구성 항목 중 재설정이 필요하면 먼저 삭제하세요.
+    install_now: <1>지금 설치해보세요</1>.
+    installed: 이미 설치됨
     installed_desc: >-
-      You appear to have already installed. To reinstall please clear your old database tables first.
-    db_failed: Database connection failed
+      이미 설치된 것으로 보입니다. 재설치하려면 먼저 이전 데이터베이스 테이블을 삭제하세요.
+    db_failed: 데이터베이스 연결 실패
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
+      <1>config.yaml</1> 파일에 있는 데이터베이스 정보가 올바르지 않거나 데이터베이스 서버와 연결할 수 없습니다. 호스트의 데이터베이스 서버가 다운된 경우입니다.
   counts:
-    views: views
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    views: 조회수
+    votes: 투표
+    answers: 답변
+    accepted: 채택됨
   page_error:
-    http_error: HTTP Error {{ code }}
-    desc_403: You don't have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
-    desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    http_error: HTTP 오류 {{ code }}
+    desc_403: 이 페이지에 접근할 권한이 없습니다.
+    desc_404: 죄송합니다. 이 페이지는 존재하지 않습니다.
+    desc_50X: 서버에서 오류가 발생하여 요청을 완료할 수 없습니다.
+    back_home: 홈페이지로 돌아가기
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "저희는 현재 유지보수 중입니다. 곧 돌아오겠습니다."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
-    flags: Flags
-    settings: Settings
-    general: General
-    interface: Interface
+    dashboard: 대시보드
+    contents: 콘텐츠
+    questions: 질문
+    answers: 답변
+    users: 사용자
+    flags: 플래그
+    settings: 설정
+    general: 일반
+    interface: 인터페이스
     smtp: SMTP
-    branding: Branding
-    legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
+    branding: 브랜딩
+    legal: 법적 사항
+    write: 글 작성
+    tos: 이용 약관
+    privacy: 개인정보 보호
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: 사용자 정의
+    themes: 테마
     css_html: CSS/HTML
-    login: Login
-    privileges: Privileges
-    plugins: Plugins
-    installed_plugins: Installed Plugins
-  website_welcome: Welcome to {{site_name}}
+    login: 로그인
+    privileges: 권한
+    plugins: 플러그인
+    installed_plugins: 설치된 플러그인
+  website_welcome: {{site_name}}에 오신 것을 환영합니다
   user_center:
-    login: Login
-    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
-    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    login: 로그인
+    qrcode_login_tip: {{ agentName }}을(를) 사용하여 QR 코드를 스캔하고 로그인하세요.
+    login_failed_email_tip: 로그인 실패, 다시 시도하기 전에 이 앱이 이메일 정보에 접근할 수 있도록 허용하세요.
   admin:
     admin_header:
-      title: Admin
+      title: 관리자
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Admin!
-      site_statistics: Site statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      users: "Users:"
-      flags: "Flags:"
-      reviews: "Reviews:"
-      site_health: Site health
-      version: "Version:"
+      title: 대시보드
+      welcome: Answer 관리자 페이지에 오신 것을 환영합니다!
+      site_statistics: 사이트 통계
+      questions: "질문:"
+      answers: "답변:"
+      comments: "댓글:"
+      votes: "투표:"
+      users: "사용자:"
+      flags: "플래그:"
+      reviews: "리뷰:"
+      site_health: 사이트 상태
+      version: "버전:"
       https: "HTTPS:"
-      upload_folder: "Upload folder:"
-      run_mode: "Running mode:"
-      private: Private
-      public: Public
+      upload_folder: "업로드 폴더:"
+      run_mode: "실행 모드:"
+      private: 비공개
+      public: 공개
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System info
-      go_version: "Go version:"
-      database: "Database:"
-      database_size: "Database size:"
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      links: Links
-      plugins: Plugins
+      timezone: "시간대:"
+      system_info: 시스템 정보
+      go_version: "Go 버전:"
+      database: "데이터베이스:"
+      database_size: "데이터베이스 크기:"
+      storage_used: "사용 중인 저장 공간:"
+      uptime: "가동 시간:"
+      links: 링크
+      plugins: 플러그인
       github: GitHub
-      blog: Blog
-      contact: Contact
-      forum: Forum
-      documents: Documents
-      feedback: Feedback
-      support: Support
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
-      writable: Writable
-      not_writable: Not writable
+      blog: 블로그
+      contact: 연락처
+      forum: 포럼
+      documents: 문서
+      feedback: 피드백
+      support: 지원
+      review: 검토
+      config: 설정
+      update_to: 업데이트
+      latest: 최신 버전
+      check_failed: 확인 실패
+      "yes": "예"
+      "no": "아니요"
+      not_allowed: 허용되지 않음
+      allowed: 허용됨
+      enabled: 활성화됨
+      disabled: 비활성화됨
+      writable: 쓰기 가능
+      not_writable: 쓰기 불가능
     flags:
-      title: Flags
-      pending: Pending
-      completed: Completed
-      flagged: Flagged
-      flagged_type: Flagged {{ type }}
-      created: Created
-      action: Action
-      review: Review
+      title: 신고
+      pending: 처리 대기 중
+      completed: 완료됨
+      flagged: 신고됨
+      flagged_type: {{ type }}로 신고됨
+      created: 생성됨
+      action: 동작
+      review: 검토
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: 사용자 역할 변경
+      btn_cancel: 취소
+      btn_submit: 제출
     new_password_modal:
-      title: Set new password
+      title: 새 비밀번호 설정
       form:
         fields:
           password:
-            label: Password
-            text: The user will be logged out and need to login again.
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            label: 비밀번호
+            text: 사용자가 로그아웃되고 다시 로그인해야 합니다.
+            msg: 비밀번호는 8-32자여야 합니다.
+      btn_cancel: 취소
+      btn_submit: 제출
     user_modal:
-      title: Add new user
+      title: 새 사용자 추가
       form:
         fields:
           users:
-            label: Bulk add user
-            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
-            text: Separate “name, email, password” with commas. One user per line.
-            msg: "Please enter the user's email, one per line."
+            label: 대량 사용자 추가
+            placeholder: "홍길동, hong@example.com, BUSYopr2\n김철수, kim@example.com, fpDntV8q"
+            text: 쉼표로 구분하여 “이름, 이메일, 비밀번호”를 입력하세요. 한 줄에 한 명의 사용자.
+            msg: 사용자의 이메일을 입력하세요. 한 줄에 한 명씩 입력하세요.
           display_name:
-            label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            label: 표시 이름
+            msg: 표시 이름은 4-30자여야 합니다.
           email:
-            label: Email
-            msg: Email is not valid.
+            label: 이메일
+            msg: 이메일이 유효하지 않습니다.
           password:
-            label: Password
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            label: 비밀번호
+            msg: 비밀번호는 8-32자여야 합니다.
+      btn_cancel: 취소
+      btn_submit: 제출
     users:
-      title: Users
-      name: Name
-      email: Email
-      reputation: Reputation
-      created_at: Created Time
-      delete_at: Deleted Time
-      suspend_at: Suspended Time
-      status: Status
-      role: Role
-      action: Action
-      change: Change
-      all: All
-      staff: Staff
-      more: More
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
-      normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      title: 사용자
+      name: 이름
+      email: 이메일
+      reputation: 평판
+      created_at: 생성 시간
+      delete_at: 삭제된 시간
+      suspend_at: 정지된 시간
+      status: 상태
+      role: 역할
+      action: 동작
+      change: 변경
+      all: 전체
+      staff: 스탭
+      more: 더 보기
+      inactive: 비활성화됨
+      suspended: 정지됨
+      deleted: 삭제됨
+      normal: 일반
+      Moderator: 관리자
+      Admin: 관리자
+      User: 사용자
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "이름 또는 사용자 ID로 필터링"
+      set_new_password: 새 비밀번호 설정
+      change_status: 상태 변경
+      change_role: 역할 변경
+      show_logs: 로그 표시
+      add_user: 사용자 추가
       deactivate_user:
-        title: Deactivate user
-        content: An inactive user must re-validate their email.
+        title: 사용자 비활성화
+        content: 비활성화된 사용자는 이메일을 다시 확인해야 합니다.
       delete_user:
-        title: Delete this user
-        content: Are you sure you want to delete this user? This is permanent!
-        remove: Remove their content
-        label: Remove all questions, answers, comments, etc.
-        text: Don’t check this if you wish to only delete the user’s account.
+        title: 이 사용자 삭제
+        content: 정말로 이 사용자를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!
+        remove: 사용자의 모든 질문, 답변, 댓글 등을 삭제합니다.
+        label: 사용자의 계정만 삭제하려면 이 옵션을 선택하지 마세요.
       suspend_user:
-        title: Suspend this user
-        content: A suspended user can't log in.
+        title: 이 사용자 정지
+        content: 정지된 사용자는 로그인할 수 없습니다.
     questions:
-      page_title: Questions
-      unlisted: Unlisted
-      post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
-      status: Status
-      action: Action
-      change: Change
-      pending: Pending
+      page_title: 질문
+      unlisted: 비공개
+      post: 게시물
+      votes: 투표
+      answers: 답변
+      created: 생성됨
+      status: 상태
+      action: 동작
+      change: 변경
+      pending: 대기 중
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "제목 또는 질문 ID로 필터링"
     answers:
-      page_title: Answers
-      post: Post
-      votes: Votes
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      page_title: 답변
+      post: 게시물
+      votes: 투표
+      created: 생성됨
+      status: 상태
+      action: 동작
+      change: 변경
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "제목 또는 답변 ID로 필터링"
     general:
-      page_title: General
+      page_title: 일반
       name:
-        label: Site name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: 사이트 이름
+        msg: 사이트 이름을 입력하세요.
+        text: "사이트 이름, 타이틀 태그에 사용됩니다."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: 사이트 URL
+        msg: 사이트 URL을 입력하세요.
+        validate: 유효한 URL을 입력하세요.
+        text: "사이트 주소입니다."
       short_desc:
-        label: Short site description
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: 짧은 사이트 설명
+        msg: 짧은 사이트 설명을 입력하세요.
+        text: "홈페이지에서 사용되는 짧은 설명입니다."
       desc:
-        label: Site description
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
+        label: 사이트 설명
+        msg: 사이트 설명을 입력하세요.
+        text: "메타 설명 태그에 사용되는 한 문장 설명입니다."
       contact_email:
-        label: Contact email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: 연락처 이메일
+        msg: 연락처 이메일을 입력하세요.
+        validate: 유효한 이메일 주소를 입력하세요.
+        text: 사이트를 책임지는 주요 연락처 이메일 주소입니다.
       check_update:
-        label: Software updates
-        text: Automatically check for updates
+        label: 소프트웨어 업데이트
+        text: 소프트웨어 업데이트 자동 확인
     interface:
-      page_title: Interface
+      page_title: 인터페이스
       language:
-        label: Interface language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: 인터페이스 언어
+        msg: 인터페이스 언어를 선택하세요.
+        text: 페이지를 새로고침하면 언어가 변경됩니다.
       time_zone:
-        label: Timezone
-        msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        label: 시간대
+        msg: 시간대를 선택하세요.
+        text: 본인과 같은 시간대의 도시를 선택하세요.
     smtp:
       page_title: SMTP
       from_email:
-        label: From email
-        msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        label: 발신 이메일
+        msg: 발신 이메일을 입력하세요.
+        text: 이메일 발신 주소입니다.
       from_name:
-        label: From name
-        msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        label: 발신자 이름
+        msg: 발신자 이름을 입력하세요.
+        text: 이메일 발신 시 사용될 이름입니다.
       smtp_host:
-        label: SMTP host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: SMTP 호스트
+        msg: SMTP 호스트를 입력하세요.
+        text: 메일 서버 주소입니다.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: 암호화
+        msg: 암호화 방식을 선택하세요.
+        text: 대부분의 서버에서 SSL을 권장합니다.
         ssl: SSL
-        none: None
+        none: 없음
       smtp_port:
-        label: SMTP port
-        msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        label: SMTP 포트
+        msg: SMTP 포트는 1에서 65535 사이의 숫자여야 합니다.
+        text: 메일 서버의 포트 번호입니다.
       smtp_username:
-        label: SMTP username
-        msg: SMTP username cannot be empty.
+        label: SMTP 사용자 이름
+        msg: SMTP 사용자 이름을 입력하세요.
       smtp_password:
-        label: SMTP password
-        msg: SMTP password cannot be empty.
+        label: SMTP 비밀번호
+        msg: SMTP 비밀번호를 입력하세요.
       test_email_recipient:
-        label: Test email recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: 테스트 이메일 수신자
+        text: 테스트 이메일을 받을 이메일 주소를 입력하세요.
+        msg: 테스트 이메일 수신자가 유효하지 않습니다.
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        label: 인증 사용
+        title: SMTP 인증
+        msg: SMTP 인증을 선택하세요.
+        "yes": 예
+        "no": 아니오
     branding:
-      page_title: Branding
+      page_title: 브랜딩
       logo:
-        label: Logo
-        msg: Logo cannot be empty.
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+        label: 로고
+        msg: 로고를 입력하세요.
+        text: 사이트 좌측 상단에 표시될 로고 이미지입니다. 넓은 직사각형 이미지로, 높이는 56 이상이어야 하며 가로 세로 비율은 3:1 이상이어야 합니다. 비워 둘 경우 사이트 제목 텍스트가 표시됩니다.
       mobile_logo:
-        label: Mobile logo
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        label: 모바일 로고
+        text: 사이트의 모바일 버전에서 사용할 로고 이미지입니다. 넓은 직사각형 이미지로, 높이는 56 이상이어야 합니다. 비워 둘 경우 "로고" 설정에서 이미지가 사용됩니다.
       square_icon:
-        label: Square icon
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        label: 정사각형 아이콘
+        msg: 정사각형 아이콘을 입력하세요.
+        text: 메타데이터 아이콘의 기본 이미지로 사용됩니다. 이상적으로는 512x512보다 큰 이미지여야 합니다.
       favicon:
-        label: Favicon
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        label: 파비콘
+        text: 사이트의 파비콘 이미지입니다. CDN에서 정상적으로 작동하려면 png 형식이어야 하며, 크기는 32x32로 조정됩니다. 비워 둘 경우 "정사각형 아이콘"이 사용됩니다.
     legal:
-      page_title: Legal
+      page_title: 법적 고지
       terms_of_service:
-        label: Terms of service
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: 서비스 이용 약관
+        text: "여기에 서비스 이용 약관 내용을 추가할 수 있습니다. 이미 다른 곳에 문서가 호스팅되어 있다면 전체 URL을 여기에 제공하세요."
       privacy_policy:
-        label: Privacy policy
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: 개인정보 보호 정책
+        text: "여기에 개인정보 보호 정책 내용을 추가할 수 있습니다. 이미 다른 곳에 문서가 호스팅되어 있다면 전체 URL을 여기에 제공하세요."
     write:
-      page_title: Write
+      page_title: 작성
       restrict_answer:
-        title: Restrict answer
-        label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        title: 답변 제한
+        label: 각 사용자는 각 질문에 대해 단 하나의 답변만 작성할 수 있습니다.
+        text: "기존 답변을 개선하고 향상시키기 위해 편집 링크를 사용할 수 있습니다."
       recommend_tags:
-        label: Recommend tags
-        text: "Please input tag slug above, one tag per line."
+        label: 추천 태그
+        text: "태그 슬러그를 입력하세요. 한 줄에 하나의 태그를 입력하세요."
       required_tag:
-        title: Required tag
-        label: Set recommend tag as required
-        text: "Every new question must have at least one recommend tag."
+        title: 필수 태그
+        label: 추천 태그를 필수로 설정합니다.
+        text: "모든 새로운 질문은 최소한 하나의 추천 태그가 있어야 합니다."
       reserved_tags:
-        label: Reserved tags
-        text: "Reserved tags can only be added to a post by moderator."
+        label: 예약된 태그
+        text: "예약된 태그는 관리자만이 게시물에 추가할 수 있습니다."
     seo:
       page_title: SEO
       permalink:
-        label: Permalink
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        label: 영구 링크
+        text: 사용자 정의 URL 구조는 링크의 사용성과 미래 호환성을 향상시킬 수 있습니다.
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: 이 설정은 사이트 설정과 관련된 내용을 영구적으로 덮어씁니다.
+
     themes:
-      page_title: Themes
+      page_title: 테마
       themes:
-        label: Themes
-        text: Select an existing theme.
+        label: 테마
+        text: 기존 테마를 선택하세요.
       color_scheme:
-        label: Color scheme
+        label: 색상 스키마
       navbar_style:
-        label: Navbar style
+        label: 네비게이션 바 스타일
       primary_color:
-        label: Primary color
-        text: Modify the colors used by your themes
+        label: 주요 색상
+        text: 테마에서 사용할 색상을 수정합니다.
+
     css_and_html:
-      page_title: CSS and HTML
+      page_title: CSS 및 HTML
       custom_css:
-        label: Custom CSS
+        label: 사용자 정의 CSS
         text: >
-
+          사용자 정의 CSS 코드를 입력하세요.
       head:
-        label: Head
+        label: 헤드
         text: >
-
+          헤드 부분에 추가할 HTML 코드를 입력하세요.
       header:
-        label: Header
+        label: 헤더
         text: >
-
+          헤더 부분에 추가할 HTML 코드를 입력하세요.
       footer:
-        label: Footer
-        text: This will insert before &lt;/body>.
+        label: 푸터
+        text: 본문의 바로 앞에 삽입됩니다.
       sidebar:
-        label: Sidebar
-        text: This will insert in sidebar.
+        label: 사이드바
+        text: 사이드바에 삽입됩니다.
     login:
-      page_title: Login
+      page_title: 로그인
       membership:
-        title: Membership
-        label: Allow new registrations
-        text: Turn off to prevent anyone from creating a new account.
+        title: 멤버십
+        label: 신규 등록 허용
+        text: 계정을 생성할 수 있는 사람을 제한하려면 끄세요.
       email_registration:
-        title: Email registration
-        label: Allow email registration
-        text: Turn off to prevent anyone creating new account through email.
+        title: 이메일 등록
+        label: 이메일 등록 허용
+        text: 이메일을 통한 새 계정 생성을 막으려면 끄세요.
       allowed_email_domains:
-        title: Allowed email domains
-        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
+        title: 허용된 이메일 도메인
+        text: 사용자가 계정을 등록할 때 필수적으로 사용해야 하는 이메일 도메인입니다. 한 줄에 하나의 도메인을 입력하세요. 비어 있으면 무시됩니다.
       private:
-        title: Private
-        label: Login required
-        text: Only logged in users can access this community.
+        title: 비공개
+        label: 로그인 필수
+        text: 로그인한 사용자만이 이 커뮤니티에 접근할 수 있습니다.
       password_login:
-        title: Password login
-        label: Allow email and password login
-        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
+        title: 비밀번호 로그인
+        label: 이메일과 비밀번호 로그인 허용
+        text: "경고: 끄면 다른 로그인 방법을 설정하지 않았다면 로그인할 수 없을 수 있습니다."
+
     installed_plugins:
-      title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      title: 설치된 플러그인
+      plugin_link: 플러그인은 Answer의 기능을 확장하고 확장합니다. <1>Answer 플러그인 저장소</1>에서 플러그인을 찾아보세요.
       filter:
-        all: All
-        active: Active
-        inactive: Inactive
-        outdated: Outdated
+        all: 전체
+        active: 활성화됨
+        inactive: 비활성화됨
+        outdated: 오래된 상태
       plugins:
-        label: Plugins
-        text: Select an existing plugin.
-      name: Name
-      version: Version
-      status: Status
-      action: Action
-      deactivate: Deactivate
-      activate: Activate
-      settings: Settings
+        label: 플러그인
+        text: 기존 플러그인을 선택하세요.
+      name: 이름
+      version: 버전
+      status: 상태
+      action: 작업
+      deactivate: 비활성화
+      activate: 활성화
+      settings: 설정
     settings_users:
-      title: Users
+      title: 사용자
       avatar:
-        label: Default avatar
-        text: For users without a custom avatar of their own.
+        label: 기본 아바타
+        text: 사용자가 자신의 사용자 정의 아바타를 가지지 않았을 때 표시됩니다.
       gravatar_base_url:
-        label: Gravatar base URL
-        text: URL of the Gravatar provider's API base. Ignored when empty.
+        label: Gravatar 기본 URL
+        text: Gravatar 공급자의 API 기본 URL입니다. 비어 있으면 무시됩니다.
       profile_editable:
-        title: Profile editable
+        title: 프로필 편집 가능
       allow_update_display_name:
-        label: Allow users to change their display name
+        label: 사용자가 표시 이름을 변경할 수 있도록 허용
       allow_update_username:
-        label: Allow users to change their username
+        label: 사용자가 사용자 이름을 변경할 수 있도록 허용
       allow_update_avatar:
-        label: Allow users to change their profile image
+        label: 사용자가 프로필 이미지를 변경할 수 있도록 허용
       allow_update_bio:
-        label: Allow users to change their about me
+        label: 사용자가 자기 소개를 변경할 수 있도록 허용
       allow_update_website:
-        label: Allow users to change their website
+        label: 사용자가 웹사이트를 변경할 수 있도록 허용
       allow_update_location:
-        label: Allow users to change their location
+        label: 사용자가 위치 정보를 변경할 수 있도록 허용
     privilege:
-      title: Privileges
+      title: 권한
       level:
-        label: Reputation required level
-        text: Choose the reputation required for the privileges
+        label: 권한에 필요한 평판 레벨
+        text: 권한에 필요한 평판 레벨을 선택하세요.
       msg:
-        should_be_number: the input should be number
-        number_larger_1: number should be equal or larger than 1
+        should_be_number: 입력값은 숫자여야 합니다.
+        number_larger_1: 숫자는 1 이상이어야 합니다.
   form:
-    optional: (optional)
-    empty: cannot be empty
-    invalid: is invalid
-    btn_submit: Save
-    not_found_props: "Required property {{ key }} not found."
-    select: Select
+    optional: (선택 사항)
+    empty: 비어 있을 수 없습니다
+    invalid: 유효하지 않습니다
+    btn_submit: 저장
+    not_found_props: "필수 속성 {{ key }}을(를) 찾을 수 없습니다."
+    select: 선택
   page_review:
-    review: Review
-    proposed: proposed
-    question_edit: Question edit
-    answer_edit: Answer edit
-    tag_edit: Tag edit
-    edit_summary: Edit summary
-    edit_question: Edit question
-    edit_answer: Edit answer
-    edit_tag: Edit tag
-    empty: No review tasks left.
-    approve_revision_tip: Do you approve this revision?
-    approve_flag_tip: Do you approve this flag?
-    approve_post_tip: Do you approve this post?
-    approve_user_tip: Do you approve this user?
-    suggest_edits: Suggested edits
-    flag_post: Flag post
-    flag_user: Flag user
-    queued_post: Queued post
-    queued_user: Queued user
-    filter_label: Type
-    reputation: reputation
-    flag_post_type: Flagged this post as {{ type }}.
-    flag_user_type: Flagged this user as {{ type }}.
-    edit_post: Edit post
-    list_post: List post
-    unlist_post: Unlist post
+    review: 리뷰
+    proposed: 제안된
+    question_edit: 질문 편집
+    answer_edit: 답변 편집
+    tag_edit: 태그 편집
+    edit_summary: 편집 요약
+    edit_question: 질문 편집
+    edit_answer: 답변 편집
+    edit_tag: 태그 편집
+    empty: 남은 리뷰 작업이 없습니다.
+    approve_revision_tip: 이 리비전을 승인하시겠습니까?
+    approve_flag_tip: 이 플래그를 승인하시겠습니까?
+    approve_post_tip: 이 게시물을 승인하시겠습니까?
+    approve_user_tip: 이 사용자를 승인하시겠습니까?
+    suggest_edits: 제안된 편집
+    flag_post: 게시물 플래그
+    flag_user: 사용자 플래그
+    queued_post: 대기 중인 게시물
+    queued_user: 대기 중인 사용자
+    filter_label: 유형
+    reputation: 평판
+    flag_post_type: 이 게시물을 {{ type }}로 플래그 처리했습니다.
+    flag_user_type: 이 사용자를 {{ type }}로 플래그 처리했습니다.
+    edit_post: 게시물 편집
+    list_post: 게시물 목록
+    unlist_post: 게시물 비공개
   timeline:
-    undeleted: undeleted
-    deleted: deleted
-    downvote: downvote
-    upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
-    pin: pinned
-    unpin: unpinned
-    show: listed
-    hide: unlisted
-    title: "History for"
-    tag_title: "Timeline for"
-    show_votes: "Show votes"
-    n_or_a: N/A
-    title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
-    title_for_tag: "Timeline for tag"
-    datetime: Datetime
-    type: Type
-    by: By
-    comment: Comment
-    no_data: "We couldn't find anything."
+    undeleted: 복구됨
+    deleted: 삭제됨
+    downvote: 다운보트
+    upvote: 업보트
+    accept: 채택됨
+    cancelled: 취소됨
+    commented: 댓글 작성됨
+    rollback: 롤백
+    edited: 편집됨
+    answered: 답변됨
+    asked: 질문됨
+    closed: 닫힘
+    reopened: 다시 열림
+    created: 생성됨
+    pin: 고정됨
+    unpin: 고정 해제됨
+    show: 공개됨
+    hide: 비공개됨
+    title: "다음을 위한 히스토리"
+    tag_title: "태그에 대한 타임라인"
+    show_votes: "투표 보기"
+    n_or_a: 없음
+    title_for_question: "질문에 대한 타임라인"
+    title_for_answer: "{{ author }}가 {{ title }}에 대한 답변에 대한 타임라인"
+    title_for_tag: "태그에 대한 타임라인"
+    datetime: 날짜 및 시간
+    type: 유형
+    by: 작성자
+    comment: 코멘트
+    no_data: "아무 데이터도 찾을 수 없습니다."
   users:
-    title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores this week
-    users_with_the_most_vote: Users who voted the most this week
-    staffs: Our community staff
-    reputation: reputation
-    votes: votes
+    title: 사용자
+    users_with_the_most_reputation: 이번 주 평판이 가장 높은 사용자들
+    users_with_the_most_vote: 이번 주 투표를 가장 많이 한 사용자들
+    staffs: 우리 커뮤니티 스태프
+    reputation: 평판
+    votes: 투표
   prompt:
-    leave_page: Are you sure you want to leave the page?
-    changes_not_save: Your changes may not be saved.
+    leave_page: 페이지를 떠나시겠습니까?
+    changes_not_save: 변경 사항이 저장되지 않을 수 있습니다.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: 초안을 삭제하시겠습니까?
   messages:
-    post_deleted: This post has been deleted.
-    post_pin: This post has been pinned.
-    post_unpin: This post has been unpinned.
-    post_hide_list: This post has been hidden from list.
-    post_show_list: This post has been shown to list.
-    post_reopen: This post has been reopened.
-    post_list: This post has been listed.
-    post_unlist: This post has been unlisted.
-    post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_deleted: 이 게시물은 삭제되었습니다.
+    post_pin: 이 게시물이 고정되었습니다.
+    post_unpin: 이 게시물의 고정이 해제되었습니다.
+    post_hide_list: 이 게시물이 목록에서 숨겨졌습니다.
+    post_show_list: 이 게시물이 목록에 표시되었습니다.
+    post_reopen: 이 게시물이 다시 열렸습니다.
+    post_list: 이 게시물이 목록에 등록되었습니다.
+    post_unlist: 이 게시물이 목록에서 등록 해제되었습니다.
+    post_pending: 회원님의 게시물이 검토를 기다리고 있습니다. 미리보기입니다. 승인 후에 공개됩니다.
