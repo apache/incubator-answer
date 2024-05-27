@@ -228,6 +228,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			ObjectCreatorUserID: answerInfo.UserID,
 			QuestionID:          answerInfo.QuestionID,
 			QuestionStatus:      questionInfo.Status,
+			AnswerStatus:        answerInfo.Status,
 			AnswerID:            answerInfo.ID,
 			ObjectType:          objectType,
 			Title:               questionInfo.Title,    // this should be question title
@@ -247,6 +248,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			ObjectType:          objectType,
 			Content:             commentInfo.ParsedText, // todo trim
 			CommentID:           commentInfo.ID,
+			CommentStatus:       commentInfo.Status,
 		}
 		if len(commentInfo.QuestionID) > 0 {
 			questionInfo, exist, err := os.questionRepo.GetQuestion(ctx, commentInfo.QuestionID)

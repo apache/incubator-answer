@@ -91,6 +91,9 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 	if err != nil {
 		return err
 	}
+	if objInfo.IsDeleted() {
+		return errors.BadRequest(reason.NewObjectAlreadyDeleted)
+	}
 
 	cf, err := rs.configService.GetConfigByID(ctx, req.ReportType)
 	if err != nil || cf == nil {

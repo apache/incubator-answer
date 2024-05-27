@@ -58,6 +58,7 @@ const (
 	CaptchaVerificationFailed        = "error.object.captcha_verification_failed"
 	OldPasswordVerificationFailed    = "error.object.old_password_verification_failed"
 	NewPasswordSameAsPreviousSetting = "error.object.new_password_same_as_previous_setting"
+	NewObjectAlreadyDeleted          = "error.object.already_deleted"
 	UserNotFound                     = "error.user.not_found"
 	UsernameInvalid                  = "error.user.username_invalid"
 	UsernameDuplicate                = "error.user.username_duplicate"
