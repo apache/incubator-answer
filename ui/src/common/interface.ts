@@ -719,3 +719,16 @@ export interface PutFlagReviewParams {
   captcha_code?: any;
   captcha_id?: any;
 }
+
+/**
+ * @description response for reaction
+ */
+export interface ReactionItems {
+  reaction_summary: Record<string, ReactionItem>;
+}
+
+export interface ReactionItem {
+  count: number;
+  tooltip: string;
+  is_active: boolean;
+}

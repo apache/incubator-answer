@@ -26,6 +26,7 @@ const (
 	QuestionCloseReasonKey = "question.close.reason"
 	AnswerEditSummaryKey   = "answer.edit.summary"
 	TagEditSummaryKey      = "tag.edit.summary"
+	ObjectReactSummaryKey  = "object.react.summary"
 )
 
 // Meta meta

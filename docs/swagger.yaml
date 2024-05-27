@@ -1,20 +1,3 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -181,7 +164,6 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       mention_username_list:
         description: '@ user id list'
@@ -930,7 +912,7 @@ definitions:
   schema.GetSMTPConfigResp:
     properties:
       encryption:
-        description: '"" SSL'
+        description: '"" SSL TLS'
         type: string
       from_email:
         type: string
@@ -1167,6 +1149,27 @@ definitions:
       name:
         type: string
       slug_name:
+        type: string
+    type: object
+  schema.GetUserStaffReq:
+    properties:
+      page_size:
+        minimum: 1
+        type: integer
+      username:
+        maxLength: 500
+        type: string
+    type: object
+  schema.GetUserStaffResp:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      display_name:
+        description: display name
+        type: string
+      username:
+        description: username
         type: string
     type: object
   schema.GetVoteWithPageResp:
@@ -1541,7 +1544,6 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       comment_id:
         description: comment id
@@ -2234,9 +2236,10 @@ definitions:
   schema.UpdateSMTPConfigReq:
     properties:
       encryption:
-        description: '"" SSL'
+        description: '"" SSL TLS'
         enum:
         - SSL
+        - TLS
         type: string
       from_email:
         maxLength: 256
@@ -2397,10 +2400,8 @@ definitions:
   schema.UserChangeEmailSendCodeReq:
     properties:
       captcha_code:
-        maxLength: 500
         type: string
       captcha_id:
-        maxLength: 500
         type: string
       e_mail:
         maxLength: 500
@@ -2521,10 +2522,8 @@ definitions:
   schema.UserModifyPasswordReq:
     properties:
       captcha_code:
-        maxLength: 500
         type: string
       captcha_id:
-        maxLength: 500
         type: string
       old_pass:
         maxLength: 32
@@ -2628,13 +2627,10 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       is_cancel:
-        description: is cancel
         type: boolean
       object_id:
-        description: id
         type: string
     required:
     - object_id
@@ -6390,26 +6386,6 @@ paths:
       summary: get user ranking
       tags:
       - User
-  /answer/api/v1/user/register/captcha:
-    get:
-      consumes:
-      - application/json
-      description: UserRegisterCaptcha
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.UserLoginResp'
-              type: object
-      summary: UserRegisterCaptcha
-      tags:
-      - User
   /answer/api/v1/user/register/email:
     post:
       consumes:
@@ -6435,6 +6411,35 @@ paths:
                   $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserRegisterByEmail
+      tags:
+      - User
+  /answer/api/v1/user/staff:
+    get:
+      consumes:
+      - application/json
+      description: get user staff
+      parameters:
+      - description: GetUserStaffReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.GetUserStaffReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserStaffResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user staff
       tags:
       - User
   /answer/api/v1/vote/down:

@@ -94,10 +94,14 @@ type pluginInfo struct {
 	Version string
 }
 
-func newAnswerBuilder(outputPath string, plugins []string, originalAnswerInfo OriginalAnswerInfo) *answerBuilder {
+func newAnswerBuilder(buildDir, outputPath string, plugins []string, originalAnswerInfo OriginalAnswerInfo) *answerBuilder {
 	material := &buildingMaterial{originalAnswerInfo: originalAnswerInfo}
 	parentDir, _ := filepath.Abs(".")
-	material.tmpDir, _ = os.MkdirTemp(parentDir, "answer_build")
+	if buildDir != "" {
+		material.tmpDir = filepath.Join(parentDir, buildDir)
+	} else {
+		material.tmpDir, _ = os.MkdirTemp(parentDir, "answer_build")
+	}
 	if len(outputPath) == 0 {
 		outputPath = filepath.Join(parentDir, "new_answer")
 	}
@@ -117,8 +121,8 @@ func (a *answerBuilder) DoTask(task func(b *buildingMaterial) error) {
 }
 
 // BuildNewAnswer builds a new answer with specified plugins
-func BuildNewAnswer(outputPath string, plugins []string, originalAnswerInfo OriginalAnswerInfo) (err error) {
-	builder := newAnswerBuilder(outputPath, plugins, originalAnswerInfo)
+func BuildNewAnswer(buildDir, outputPath string, plugins []string, originalAnswerInfo OriginalAnswerInfo) (err error) {
+	builder := newAnswerBuilder(buildDir, outputPath, plugins, originalAnswerInfo)
 	builder.DoTask(createMainGoFile)
 	builder.DoTask(downloadGoModFile)
 	builder.DoTask(copyUIFiles)
@@ -144,7 +148,7 @@ func formatPlugins(plugins []string) (formatted []*pluginInfo) {
 
 // createMainGoFile creates main.go file in tmp dir that content is mainGoTpl
 func createMainGoFile(b *buildingMaterial) (err error) {
-	fmt.Printf("[build] tmp dir: %s\n", b.tmpDir)
+	fmt.Printf("[build] build dir: %s\n", b.tmpDir)
 	err = dir.CreateDirIfNotExist(b.tmpDir)
 	if err != nil {
 		return err

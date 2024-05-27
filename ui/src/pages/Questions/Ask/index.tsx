@@ -283,6 +283,7 @@ const Ask = () => {
   };
 
   const submitModifyQuestion = (params) => {
+    setBlockState(false);
     const ep = {
       ...params,
       id: qid,
@@ -312,6 +313,7 @@ const Ask = () => {
   };
 
   const submitQuestion = async (params) => {
+    setBlockState(false);
     const imgCode = saveCaptcha?.getCaptcha();
     if (imgCode?.verify) {
       params.captcha_code = imgCode.captcha_code;
@@ -371,16 +373,12 @@ const Ask = () => {
 
     if (isEdit) {
       if (!editCaptcha) {
-        setBlockState(false);
         submitModifyQuestion(params);
         return;
       }
-      editCaptcha.check(() => {
-        submitModifyQuestion(params);
-      });
+      editCaptcha.check(() => submitModifyQuestion(params));
     } else {
       if (!saveCaptcha) {
-        setBlockState(false);
         submitQuestion(params);
         return;
       }

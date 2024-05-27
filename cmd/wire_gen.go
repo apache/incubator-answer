@@ -81,6 +81,7 @@ import (
 	export2 "github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/follow"
 	meta2 "github.com/apache/incubator-answer/internal/service/meta"
+	"github.com/apache/incubator-answer/internal/service/meta_common"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/notification"
 	"github.com/apache/incubator-answer/internal/service/notification_common"
@@ -169,8 +170,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	collectionCommon := collectioncommon.NewCollectionCommon(collectionRepo)
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)
 	metaRepo := meta.NewMetaRepo(dataData)
-	metaService := meta2.NewMetaService(metaRepo)
-	questionCommon := questioncommon.NewQuestionCommon(questionRepo, answerRepo, voteRepo, followRepo, tagCommonService, userCommon, collectionCommon, answerCommon, metaService, configService, activityQueueService, revisionRepo, dataData)
+	metaCommonService := metacommon.NewMetaCommonService(metaRepo)
+	questionCommon := questioncommon.NewQuestionCommon(questionRepo, answerRepo, voteRepo, followRepo, tagCommonService, userCommon, collectionCommon, answerCommon, metaCommonService, configService, activityQueueService, revisionRepo, dataData)
 	userService := content.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService, userNotificationConfigRepo, userNotificationConfigService, questionCommon)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
@@ -193,7 +194,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	externalNotificationService := notification.NewExternalNotificationService(dataData, userNotificationConfigRepo, followRepo, emailService, userRepo, externalNotificationQueueService, userExternalLoginRepo, siteInfoCommonService)
 	reviewRepo := review.NewReviewRepo(dataData)
 	reviewService := review2.NewReviewService(reviewRepo, objService, userCommon, userRepo, questionRepo, answerRepo, userRoleRelService, externalNotificationQueueService, tagCommonService, notificationQueueService, siteInfoCommonService)
-	questionService := content.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, userRoleRelService, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService, reviewService, configService)
+	questionService := content.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, userRoleRelService, revisionService, metaCommonService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService, reviewService, configService)
 	answerService := content.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService, reviewService)
 	reportHandle := report_handle.NewReportHandle(questionService, answerService, commentService)
 	reportService := report2.NewReportService(reportRepo, objService, userCommon, answerRepo, questionRepo, commentCommonRepo, reportHandle, configService)
@@ -240,7 +241,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityActivityRepo := activity.NewActivityRepo(dataData, configService)
 	activityCommon := activity_common2.NewActivityCommon(activityRepo, activityQueueService)
 	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
-	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService, configService)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaCommonService, configService)
 	activityController := controller.NewActivityController(activityService)
 	roleController := controller_admin.NewRoleController(roleService)
 	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
@@ -250,7 +251,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	permissionController := controller.NewPermissionController(rankService)
 	userPluginController := controller.NewUserPluginController(pluginCommonService)
 	reviewController := controller.NewReviewController(reviewService, rankService, captchaService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController)
+	metaService := meta2.NewMetaService(metaCommonService, userCommon, answerRepo, questionRepo)
+	metaController := controller.NewMetaController(metaService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController, metaController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(controllerSiteInfoController, siteInfoCommonService)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)

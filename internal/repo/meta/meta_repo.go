@@ -25,9 +25,10 @@ import (
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/service/meta"
+	"github.com/apache/incubator-answer/internal/service/meta_common"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
+	"xorm.io/xorm"
 )
 
 // metaRepo meta repository
@@ -36,7 +37,7 @@ type metaRepo struct {
 }
 
 // NewMetaRepo new repository
-func NewMetaRepo(data *data.Data) meta.MetaRepo {
+func NewMetaRepo(data *data.Data) metacommon.MetaRepo {
 	return &metaRepo{
 		data: data,
 	}
@@ -67,6 +68,35 @@ func (mr *metaRepo) UpdateMeta(ctx context.Context, meta *entity.Meta) (err erro
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+// AddOrUpdateMetaByObjectIdAndKey if exist record with same objectID and key, update it. Or create a new one
+func (mr *metaRepo) AddOrUpdateMetaByObjectIdAndKey(ctx context.Context, objectId, key string, f func(*entity.Meta, bool) (*entity.Meta, error)) error {
+	_, err := mr.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+		session = session.Context(ctx)
+
+		// 1. acquire meta entity with target object id and key
+		metaEntity := &entity.Meta{}
+		exist, err := session.Where(builder.Eq{"object_id": objectId}.And(builder.Eq{"`key`": key})).ForUpdate().Get(metaEntity)
+		if err != nil {
+			return nil, err
+		}
+
+		meta, err := f(metaEntity, exist)
+		if err != nil {
+			return nil, err
+		}
+
+		// return entity.Meta
+		if exist {
+			_, err = session.ID(metaEntity.ID).Update(meta)
+		} else {
+			_, err = session.Insert(meta)
+		}
+
+		return nil, err
+	})
+	return err
 }
 
 // GetMetaByObjectIdAndKey get meta one

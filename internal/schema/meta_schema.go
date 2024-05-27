@@ -17,37 +17,28 @@
  * under the License.
  */
 
-package controller
+package schema
 
-import "github.com/google/wire"
+type UpdateReactionReq struct {
+	ObjectID string `validate:"required" json:"object_id"`
+	Emoji    string `validate:"required,oneof=heart smile frown" json:"emoji"`
+	Reaction string `validate:"required,oneof=activate deactivate" json:"reaction"`
+	UserID   string `json:"-"`
+}
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
-	NewMetaController,
-)
+type GetReactionReq struct {
+	ObjectID string `validate:"required" form:"object_id"`
+	UserID   string `json:"-"`
+}
+
+type ReactionSummaryMeta map[string][]string
+
+type ReactionItem struct {
+	Count    int    `json:"count"`
+	Tooltip  string `json:"tooltip"`
+	IsActive bool   `json:"is_active"`
+}
+
+type ReactionResp struct {
+	ReactionSummary map[string]*ReactionItem `json:"reaction_summary"`
+}

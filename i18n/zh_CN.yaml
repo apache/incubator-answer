@@ -200,6 +200,9 @@ backend:
         other: 旧密码验证失败。
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
+    meta:
+      object_not_found:
+        other: Meta 对象未找到
     question:
       already_deleted:
         other: 该帖子已被删除。
@@ -499,6 +502,9 @@ backend:
       other: 举报的帖子
     suggested_post_edit:
       other: 建议的编辑
+  reaction:
+    tooltip:
+      other: "{{ .Names }} 以及另外 {{ .Count }} 个..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +753,10 @@ ui:
     day: 天
     hours: 小时
     days: 日
+  reaction:
+    heart: 爱心
+    smile: 笑脸
+    frown: 难过
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -1610,6 +1620,7 @@ ui:
         msg: 不能为空
         text: 对于大多数服务器而言，SSL 是推荐开启的。
         ssl: SSL
+        tls: TLS
         none: 无加密
       smtp_port:
         label: SMTP 端口
@@ -1792,7 +1803,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: '标签管理: 编辑标签'
+    tag_edit: "标签管理: 编辑标签"
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1821,7 +1832,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: '评论:'
+    commented: "评论:"
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于
