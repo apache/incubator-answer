@@ -1462,7 +1462,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to {{site_name}} Admin!
       site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
