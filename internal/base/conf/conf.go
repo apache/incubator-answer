@@ -60,6 +60,13 @@ type Data struct {
 	Cache    *data.CacheConf `json:"cache" mapstructure:"cache" yaml:"cache"`
 }
 
+// SetDefault set default config
+func (c *AllConfig) SetDefault() {
+	if c.UI == nil {
+		c.UI = &server.UI{}
+	}
+}
+
 // ReadConfig read config
 func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 	if len(configFilePath) == 0 {
@@ -73,6 +80,7 @@ func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 	if err = config.Parse(&c); err != nil {
 		return nil, err
 	}
+	c.SetDefault()
 	return c, nil
 }
 
