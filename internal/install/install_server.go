@@ -25,9 +25,12 @@ import (
 	"io/fs"
 	"net/http"
 
+	"github.com/apache/incubator-answer/configs"
+	"github.com/apache/incubator-answer/internal/base/conf"
 	"github.com/apache/incubator-answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
+	"gopkg.in/yaml.v3"
 )
 
 const UIStaticPath = "build/static"
@@ -47,15 +50,20 @@ func (r *_resource) Open(name string) (fs.File, error) {
 func NewInstallHTTPServer() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
+
+	c := &conf.AllConfig{}
+	_ = yaml.Unmarshal(configs.Config, c)
+
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
-	r.StaticFS("/static", http.FS(&_resource{
+	r.StaticFS(c.UI.BaseURL+"/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
+	// read default config file and extract ui config
 	installApi := r.Group("")
-	installApi.GET("/", CheckConfigFileAndRedirectToInstallPage)
-	installApi.GET("/install", WebPage)
-	installApi.GET("/50x", WebPage)
+	installApi.GET(c.UI.BaseURL+"/", CheckConfigFileAndRedirectToInstallPage)
+	installApi.GET(c.UI.BaseURL+"/install", WebPage)
+	installApi.GET(c.UI.BaseURL+"/50x", WebPage)
 	installApi.GET("/installation/language/options", LangOptions)
 	installApi.POST("/installation/db/check", CheckDatabase)
 	installApi.POST("/installation/config-file/check", CheckConfigFile)

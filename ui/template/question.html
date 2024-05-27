@@ -33,11 +33,11 @@
           <div class="border-bottom pt-3 pb-2 px-0 list-group-item">
             <h5 class="text-wrap text-break">
               {{if $.useTitle }}
-              <a class="link-dark" href="/questions/{{.ID}}/{{urlTitle .Title}}"
+              <a class="link-dark" href="{{$.baseURL}}/questions/{{.ID}}/{{urlTitle .Title}}"
                 >{{.Title}}</a
               >
               {{else}}
-              <a class="link-dark" href="/questions/{{.ID}}">{{.Title}}</a>
+              <a class="link-dark" href="{{$.baseURL}}/questions/{{.ID}}">{{.Title}}</a>
               {{end}}
             </h5>
             <div
@@ -45,7 +45,7 @@
             >
               <div class="d-flex">
                 <div class="text-secondary me-1">
-                  <a href="/users/{{.Operator.Username}}"
+                  <a href="{{$.baseURL}}/users/{{.Operator.Username}}"
                     ><span class="me-1 text-break"
                       >{{.Operator.DisplayName}}</span
                     ></a
@@ -79,7 +79,7 @@
             <div class="question-tags mx-n1 mt-2">
               {{range .Tags }}
               <a
-                href="/tags/{{.SlugName}}"
+                href="{{$.baseURL}}/tags/{{.SlugName}}"
                 class="badge-tag rounded-1 {{if .Reserved}}badge-tag-reserved{{end}} {{if .Recommend}}badge-tag-required{{end}} m-1"
               >
                 <span class="">{{.SlugName}}</span>

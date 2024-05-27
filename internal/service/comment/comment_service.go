@@ -122,10 +122,12 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	_ = copier.Copy(comment, req)
 	comment.Status = entity.CommentStatusAvailable
 
-	// add question id
 	objInfo, err := cs.objectInfoService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
 		return nil, err
+	}
+	if objInfo.IsDeleted() {
+		return nil, errors.BadRequest(reason.NewObjectAlreadyDeleted)
 	}
 	objInfo.ObjectID = uid.DeShortID(objInfo.ObjectID)
 	objInfo.QuestionID = uid.DeShortID(objInfo.QuestionID)

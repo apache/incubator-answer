@@ -110,13 +110,13 @@ const Questions: FC = () => {
             return (
               <tr key={li.id}>
                 <td>
-                  <a
-                    href={pathFactory.questionLanding(li.id, li.url_title)}
+                  <Link
+                    to={pathFactory.questionLanding(li.id, li.url_title)}
                     target="_blank"
                     className="text-break text-wrap"
                     rel="noreferrer">
                     {li.title}
-                  </a>
+                  </Link>
                   {li.accepted_answer_id > 0 && (
                     <Icon
                       name="check-circle-fill"

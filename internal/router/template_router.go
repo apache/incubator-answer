@@ -50,17 +50,17 @@ func NewTemplateRouter(
 }
 
 // RegisterTemplateRouter template router
-func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
-	r.GET("/sitemap.xml", a.templateController.Sitemap)
-	r.GET("/sitemap/:page", a.templateController.SitemapPage)
+func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup, baseURLPath string) {
+	seoNoAuth := r.Group(baseURLPath)
+	seoNoAuth.GET("/sitemap.xml", a.templateController.Sitemap)
+	seoNoAuth.GET("/sitemap/:page", a.templateController.SitemapPage)
 
-	r.GET("/robots.txt", a.siteInfoController.GetRobots)
-	r.GET("/custom.css", a.siteInfoController.GetCss)
+	seoNoAuth.GET("/robots.txt", a.siteInfoController.GetRobots)
+	seoNoAuth.GET("/custom.css", a.siteInfoController.GetCss)
 
-	r.GET("/404", a.templateController.Page404)
+	seoNoAuth.GET("/404", a.templateController.Page404)
 
-	//todo add middleware
-	seo := r.Group("")
+	seo := r.Group(baseURLPath)
 	seo.Use(a.authUserMiddleware.CheckPrivateMode())
 	seo.GET("/", a.templateController.Index)
 	seo.GET("/questions", a.templateController.QuestionList)
