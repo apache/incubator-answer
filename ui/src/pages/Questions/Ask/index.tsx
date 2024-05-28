@@ -446,25 +446,21 @@ const Ask = () => {
                 autoFocus
                 contentEditable
               />
-
               <Form.Control.Feedback type="invalid">
                 {formData.title.errorMsg}
               </Form.Control.Feedback>
               {bool && <SearchQuestion similarQuestions={similarQuestions} />}
             </Form.Group>
+
             <Form.Group controlId="content">
               <Form.Label>{t('form.fields.body.label')}</Form.Label>
-              <Form.Control
-                defaultValue={formData.content.value}
-                isInvalid={formData.content.isInvalid}
-                hidden
-              />
               <Editor
                 value={formData.content.value}
                 onChange={handleContentChange}
                 className={classNames(
                   'form-control p-0',
                   focusType === 'content' && 'focus',
+                  formData.content.isInvalid && 'is-invalid',
                 )}
                 onFocus={() => {
                   setForceType('content');
@@ -478,23 +474,19 @@ const Ask = () => {
                 {formData.content.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
+
             <Form.Group controlId="tags" className="my-3">
               <Form.Label>{t('form.fields.tags.label')}</Form.Label>
-              <Form.Control
-                defaultValue={JSON.stringify(formData.tags.value)}
-                isInvalid={formData.tags.isInvalid}
-                hidden
-              />
               <TagSelector
                 value={formData.tags.value}
                 onChange={handleTagsChange}
                 showRequiredTag
                 maxTagLength={5}
+                isInvalid={formData.tags.isInvalid}
+                errMsg={formData.tags.errorMsg}
               />
-              <Form.Control.Feedback type="invalid">
-                {formData.tags.errorMsg}
-              </Form.Control.Feedback>
             </Form.Group>
+
             {isEdit && (
               <Form.Group controlId="edit_summary" className="my-3">
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>

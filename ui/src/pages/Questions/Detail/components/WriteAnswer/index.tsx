@@ -266,6 +266,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 className={classNames(
                   'form-control p-0',
                   focusType === 'answer' && 'focus',
+                  formData.content.isInvalid && 'is-invalid',
                 )}
                 value={formData.content.value}
                 autoFocus={editorFocusState}
