@@ -64,7 +64,12 @@ const Index = ({ userName, onSendReply, onCancel, mode }) => {
             <Mentions
               pageUsers={pageUsers.getUsers()}
               onSelected={handleSelected}>
-              <TextArea size="sm" value={value} onChange={handleChange} />
+              <TextArea
+                size="sm"
+                value={value}
+                onChange={handleChange}
+                isInvalid={validationErrorMsg !== ''}
+              />
             </Mentions>
             <div className="form-text">{t(`tip_${mode}`)}</div>
           </div>
