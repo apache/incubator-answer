@@ -1745,7 +1745,7 @@ ui:
         text: "警告：如果您未配置过其他登录方式，关闭密码登录后您则可能无法登录。"
     installed_plugins:
       title: 已安装插件
-      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
+      plugin_link: 插件扩展功能。您可以在<1>插件仓库</1>中找到插件。
       filter:
         all: 全部
         active: 已启用

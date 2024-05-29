@@ -1734,7 +1734,7 @@ ui:
         text: "OSTRZEŻENIE: Jeśli wyłączone, już się nie zalogujesz, jeśli wcześniej nie skonfigurowałeś innej metody logowania."
     installed_plugins:
       title: Zainstalowane wtyczki
-      plugin_link: Wtyczki ulepszają i rozszerzają funkcjonalność Answer. Wtyczki można znaleźć w <1>Repozytorium Wtyczek</1>.
+      plugin_link: Wtyczki rozszerzają i rozszerzają funkcjonalność. Wtyczki możesz znaleźć w <1>Repozytorium wtyczek</1>.
       filter:
         all: Wszystkie
         active: Aktywne

@@ -1734,7 +1734,7 @@ ui:
         text: "WARNUNG: Wenn du diese Option abschaltest, kannst du dich möglicherweise nicht mehr anmelden, wenn du zuvor keine andere Anmeldemethode konfiguriert hast."
     installed_plugins:
       title: Installierte Plugins
-      plugin_link: Plugins erweitern und ergänzen die Funktionalität von Answer. Du kannst Plugins im <1>Answer Plugin Repository</1> finden.
+      plugin_link: Plugins erweitern und ergänzen die Funktionalität. Du kannst Plugins im <1>Plugin Repository</1> finden.
       filter:
         all: Alle
         active: Aktiv
