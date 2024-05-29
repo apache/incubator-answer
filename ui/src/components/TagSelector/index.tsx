@@ -328,13 +328,19 @@ const TagSelector: FC<IProps> = ({
   useEffect(() => {
     // set width of tag Form.Control
     const ele = document.querySelector('.a-input-width') as HTMLElement;
+    const elePlaceholder = document.querySelector(
+      '.a-placeholder-width',
+    ) as HTMLElement;
     if (ele.offsetWidth > 60) {
       inputRef.current?.setAttribute(
         'style',
         `width:${ele.offsetWidth + 16}px`,
       );
     } else {
-      inputRef.current?.setAttribute('style', 'width: 60px');
+      inputRef.current?.setAttribute(
+        'style',
+        `width: ${elePlaceholder.offsetWidth + 7}px`,
+      );
     }
   }, [searchValue]);
 
@@ -392,6 +398,7 @@ const TagSelector: FC<IProps> = ({
               />
             )}
             <span className="a-input-width">{searchValue}</span>
+            <span className="a-placeholder-width">{t('add_btn')}</span>
           </div>
         </div>
         <Dropdown.Menu id="a-dropdown-menu" className="w-100" show={showMenu}>

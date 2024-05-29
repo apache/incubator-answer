@@ -61,6 +61,14 @@
     white-space: nowrap;
   }
 
+  .a-placeholder-width {
+    display: inline-block;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    max-width: calc(100% - 40px);
+  }
+
 }
 
 .tag-selector-wrap--focus {
