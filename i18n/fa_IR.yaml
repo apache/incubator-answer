@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: ایمیل نمی تواند خالی باشد.
         incorrect: فرمت ایمیل نادرست است.
-    ready_title: Answer شما آماده است!
+    ready_title: موقعك جاهز
     ready_desc: >-
       اگر به تغییر بیشتر تنظیمات نیاز دارید،‌به <1> قسمت ادمین </1> مراجعه کنید،‌میتوانید این گزینه را در منو سایت مشاهده کنید.
     good_luck: "خوش بگذره و موفق باشید!"
@@ -1401,7 +1401,7 @@ ui:
       title: ادمین
     dashboard:
       title: داشبرد
-      welcome: به پاسخ مدیر خوش آمدید!
+      welcome: به مدیر خوش آمدید!
       site_statistics: Site statistics
       questions: "سوالات:"
       answers: "جواب ها:"

@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: E-mail nemôže byť prázdny.
         incorrect: Nesprávny formát e-mailu
-    ready_title: Your Answer is ready!
+    ready_title: Your site is ready
     ready_desc: >-
       Ak niekedy budete chcieť zmeniť viac nastavení, navštívte stránku <1>admin section</1>; Nájdete ju v ponuke stránok.
     good_luck: "„Bavte sa a veľa šťastia!“"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrátor
     dashboard:
       title: Nástenka
-      welcome: Vitajte v Administrátorovi odpovedí!
+      welcome: Vitajte v Administrátorovi!
       site_statistics: Site statistics
       questions: "Otázky:"
       answers: "Odpovede:"

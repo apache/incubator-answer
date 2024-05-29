@@ -966,7 +966,7 @@ ui:
       avatar:
         label: Immagine del profilo
         gravatar: Gravatar
-        gravatar_text: Puoi cambiare l'immagine 
+        gravatar_text: Puoi cambiare l'immagine
         custom: Personalizzato
         custom_text: Puoi caricare la tua immagine.
         default: Sistema
@@ -1076,7 +1076,7 @@ ui:
       title: La tua risposta
       edit_answer: Modifica la mia risposta attuale
       btn_name: Pubblica la tua risposta
-      add_another_answer: Aggiungi un'altra risposta 
+      add_another_answer: Aggiungi un'altra risposta
       confirm_title: Continua a rispondere
       continue: Continua
       confirm_info: >-
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: Il campo email non può essere vuoto.
         incorrect: Formato dell'email errato.
-    ready_title: La tua risposta è pronta!
+    ready_title: Il tuo sito è pronto
     ready_desc: >-
       Se vuoi cambiare più impostazioni, visita la sezione <1>admin</1> che si trova nel menu del sito.
     good_luck: "Divertiti e buona fortuna!"
@@ -1401,7 +1401,7 @@ ui:
       title: Amministratore
     dashboard:
       title: Pannello di controllo
-      welcome: "\nBenvenuto nell'amministratore di risposta!"
+      welcome: "\nBenvenuto nell'amministratore di!"
       site_statistics: Statistiche del sito
       questions: "Domande:"
       answers: "Risposte:"
@@ -1775,7 +1775,7 @@ ui:
     privilege:
       title: Privilegi
       level:
-        label: Livello di reputazione richiesto 
+        label: Livello di reputazione richiesto
         text: Scegli la reputazione richiesta per i privilegi
       msg:
         should_be_number: the input should be number

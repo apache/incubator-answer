@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: E-Mail darf nicht leer sein.
         incorrect: E-Mail falsches Format.
-    ready_title: Dein Answer ist fertig!
+    ready_title: Dein site ist fertig!
     ready_desc: >-
       Wenn du noch mehr Einstellungen ändern möchtest, besuche den <1>Admin-Bereich</1>; du findest ihn im Seitenmenü.
     good_luck: "Viel Spaß und viel Glück!"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrator
     dashboard:
       title: Dashboard
-      welcome: Willkommen beim Answer-Admin!
+      welcome: Willkommen beim Admin!
       site_statistics: Website-Statistiken
       questions: "Fragen:"
       answers: "Antworten:"

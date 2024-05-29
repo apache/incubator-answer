@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: 郵箱不能為空。
         incorrect: 郵箱格式不正確。
-    ready_title: Your Answer is ready!
+    ready_title: Your site is ready
     ready_desc: >-
       如果你想改變更多的設定，請瀏覽<1>管理員部分</1>；在網站選單中找到它。
     good_luck: "玩得愉快，祝您好運！"
@@ -1401,7 +1401,7 @@ ui:
       title: 後台管理
     dashboard:
       title: 後台管理
-      welcome: 歡迎來到 Answer 後台管理！
+      welcome: 歡迎來到後台管理！
       site_statistics: Site statistics
       questions: "問題:"
       answers: "回答:"

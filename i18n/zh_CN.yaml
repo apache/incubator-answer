@@ -1350,7 +1350,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的 Answer 已经准备好了!
+    ready_title: 你的网站已经准备好了
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1411,7 +1411,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到 {{site_name}} 后台管理！
+      welcome: 欢迎来到后台管理！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"

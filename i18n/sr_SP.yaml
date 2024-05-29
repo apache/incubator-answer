@@ -966,7 +966,7 @@ ui:
       msg:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
-    ready_title: Your Answer is Ready!
+    ready_title: Your site is ready
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Have fun, and good luck!"
@@ -1019,7 +1019,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site Statistics
       questions: "Questions:"
       answers: "Answers:"
