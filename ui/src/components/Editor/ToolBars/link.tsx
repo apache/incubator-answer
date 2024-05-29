@@ -28,7 +28,7 @@ let context: IEditorContext;
 const Link = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
-    label: 'link',
+    label: 'link-45deg',
     keyMap: ['Ctrl-l'],
     tip: `${t('link.text')} (Ctrl+l)`,
   };

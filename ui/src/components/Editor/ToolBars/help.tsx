@@ -26,7 +26,7 @@ const Help = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const item = {
-    label: 'help',
+    label: 'question-circle-fill',
     tip: t('help.text'),
   };
   const handleClick = () => {

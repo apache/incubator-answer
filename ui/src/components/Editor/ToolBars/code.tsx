@@ -155,7 +155,7 @@ const Code = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const item = {
-    label: 'code',
+    label: 'code-slash',
     keyMap: ['Ctrl-k'],
     tip: `${t('code.text')} (Ctrl+k)`,
   };
