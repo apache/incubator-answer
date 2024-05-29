@@ -43,7 +43,7 @@ const Dashboard: FC = () => {
   return (
     <>
       <h3 className="text-capitalize">{t('title')}</h3>
-      <p className="mt-4">{t('welcome', { site_name: siteName })}</p>
+      <p className="mt-4">{t('welcome')}</p>
       <Row>
         <Col lg={6}>
           <Statistics data={data.info} />
