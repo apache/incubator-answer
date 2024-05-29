@@ -1153,7 +1153,7 @@ ui:
     resend: 重新发送
     deactivate: 取消激活
     active: 激活
-    suspend: 已封禁
+    suspend: 封禁
     unsuspend: 解禁
     close: 关闭
     reopen: 重新打开
