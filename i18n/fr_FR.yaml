@@ -1734,7 +1734,7 @@ ui:
         text: "AVERTISSEMENT : Si cette option est désactivée, vous ne pourrez peut-être pas vous connecter si vous n'avez pas configuré une autre méthode de connexion."
     installed_plugins:
       title: Extensions installées
-      plugin_link: Les plugins étendent les fonctionnalités d'Answer. Vous pouvez trouver des plugins dans le dépôt <1>Answer Plugin Repositor</1>.
+      plugin_link: Les plugins étendent les fonctionnalités. Vous pouvez trouver des plugins dans le dépôt <1>Plugin Repositor</1>.
       filter:
         all: Tous
         active: Actif

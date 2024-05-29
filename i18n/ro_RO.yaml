@@ -1734,7 +1734,7 @@ ui:
         text: "AVERTISMENT: Dacă opriți, este posibil să nu vă puteți conecta dacă nu ați configurat anterior o altă metodă de autentificare."
     installed_plugins:
       title: Extensii instalate
-      plugin_link: Plugin-urile extind funcţionalitatea Answer. Este posibil să găsiţi plugin-uri în <1>Repository-ul Answer</1>.
+      plugin_link: Plugin-urile extind funcţionalitatea. Este posibil să găsiţi plugin-uri în <1>Repository-ul</1>.
       filter:
         all: Toate
         active: Activ

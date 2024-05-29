@@ -1734,7 +1734,7 @@ ui:
         text: "ATTENZIONE: Se disattivi, potresti non essere in grado di accedere se non hai precedentemente configurato un altro metodo di login."
     installed_plugins:
       title: Plugin installati
-      plugin_link: I plugin estendono ed espandono le funzionalità di Answer. Potresti trovare plug-in nel <1>Repository dei plug-in di risposta</1>.
+      plugin_link: I plugin estendono ed espandono le funzionalità. Potresti trovare plug-in nel <1>Repository plug-in</1>.
       filter:
         all: Tutto
         active: Attivo
