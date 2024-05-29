@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: Câmpul e-mail nu poate fi gol.
         incorrect: Campul e-mail are formatul incorect.
-    ready_title: Răspunsul tău este gata!
+    ready_title: Site-ul dvs. este gata
     ready_desc: >-
       Dacă te simți vreodată ca și cum ai schimba mai multe setări, vizitează <1>secțiunea de administrare </1>; găsește-o în meniul site-ului.
     good_luck: "Distracție plăcută și noroc!"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panou de control
-      welcome: Bine ai venit la Answer Admin!
+      welcome: Bine ai venit la Admin!
       site_statistics: Statisticile site-ului
       questions: "Întrebări:"
       answers: "Răspunsuri:"

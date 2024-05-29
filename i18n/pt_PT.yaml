@@ -1401,7 +1401,7 @@ ui:
       title: Administrador
     dashboard:
       title: Painel
-      welcome: Bem vindo ao Answer Administrador!
+      welcome: Bem vindo ao Administrador!
       site_statistics: Site statistics
       questions: "Perguntas:"
       answers: "Respostas:"

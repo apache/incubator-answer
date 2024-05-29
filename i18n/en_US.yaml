@@ -1397,7 +1397,7 @@ ui:
       msg:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
-    ready_title: Your Answer is ready!
+    ready_title: Your site is ready
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>;
       find it in the site menu.
@@ -1462,7 +1462,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to {{site_name}} Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
@@ -1793,7 +1793,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: All
         active: Active

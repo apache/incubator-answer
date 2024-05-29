@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: El correo electrónico no puede estar vacío.
         incorrect: Correo electrónico con formato incorrecto.
-    ready_title: Tu Respuesta está lista!
+    ready_title: Tu sitio está listo
     ready_desc: >-
       Si alguna vez desea cambiar más configuraciones, visite la <1>sección de administración</1>; encuéntrelo en el menú del sitio.
     good_luck: "¡Diviértete y buena suerte!"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrador
     dashboard:
       title: Panel
-      welcome: '¡Bienvenido a Answer Admin!'
+      welcome: '¡Bienvenido a Admin!'
       site_statistics: Estadísticas del sitio
       questions: "Preguntas:"
       answers: "Respuestas:"

@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: L'email ne peut pas être vide.
         incorrect: Le format de l'email est incorrect.
-    ready_title: Votre réponse est prête !
+    ready_title: Votre site est prêt
     ready_desc: >-
       Si vous avez envie de changer plus de paramètres, visitez la <1>section admin</1>; retrouvez la dans le menu du site.
     good_luck: "Amusez-vous et bonne chance !"
@@ -1401,7 +1401,7 @@ ui:
       title: Admin
     dashboard:
       title: Tableau de bord
-      welcome: Bienvenue sur l'admin d'Answer!
+      welcome: Bienvenue sur l'admin!
       site_statistics: Statistiques du site
       questions: "Questions :"
       answers: "Réponses :"

@@ -48,7 +48,7 @@ import {
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(6);
   const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
@@ -331,7 +331,7 @@ const Index: FC = () => {
                           components={{ 1: <code /> }}
                         />{' '}
                         <Trans i18nKey="install.install_now">
-                          You may try{' '}
+                          You may try
                           <a href="###" onClick={(e) => handleInstallNow(e)}>
                             installing now
                           </a>
