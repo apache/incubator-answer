@@ -1265,7 +1265,7 @@ ui:
     x_answers: jawaban
     x_questions: pertanyaan
   install:
-    title: Jawaban
+    title: Instalasi
     next: Selanjutnya
     done: Selesai
     config_yaml_error: Can't create the config.yaml file.

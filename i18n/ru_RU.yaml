@@ -1265,7 +1265,7 @@ ui:
     x_answers: ответы
     x_questions: вопросы
   install:
-    title: Ответ
+    title: монтаж
     next: Следующий
     done: Готово
     config_yaml_error: Не удается создать файл config.yaml.

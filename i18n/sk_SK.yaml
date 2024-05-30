@@ -1265,7 +1265,7 @@ ui:
     x_answers: odpovede
     x_questions: otázky
   install:
-    title: Odpoveď
+    title: Inštalácia
     next: Ďalšie
     done: Hotový
     config_yaml_error: Nie je možné vytvoriť súbor config.yaml.

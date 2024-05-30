@@ -1265,7 +1265,7 @@ ui:
     x_answers: 回答
     x_questions: 質問
   install:
-    title: 回答
+    title: インストール
     next: 次へ
     done: 完了
     config_yaml_error: Can't create the config.yaml file.

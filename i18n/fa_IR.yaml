@@ -1265,7 +1265,7 @@ ui:
     x_answers: جواب ها
     x_questions: سوالات
   install:
-    title: پاسخ
+    title: تثبيت
     next: بعدی
     done: انجام شده
     config_yaml_error: نمیتوان فایل config.yaml را ایجاد کرد.
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: ایمیل نمی تواند خالی باشد.
         incorrect: فرمت ایمیل نادرست است.
-    ready_title: موقعك جاهز
+    ready_title: Answer شما آماده است!
     ready_desc: >-
       اگر به تغییر بیشتر تنظیمات نیاز دارید،‌به <1> قسمت ادمین </1> مراجعه کنید،‌میتوانید این گزینه را در منو سایت مشاهده کنید.
     good_luck: "خوش بگذره و موفق باشید!"
@@ -1401,7 +1401,7 @@ ui:
       title: ادمین
     dashboard:
       title: داشبرد
-      welcome: به مدیر خوش آمدید!
+      welcome: به پاسخ مدیر خوش آمدید!
       site_statistics: Site statistics
       questions: "سوالات:"
       answers: "جواب ها:"
@@ -1734,7 +1734,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
         active: Active

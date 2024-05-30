@@ -1320,7 +1320,7 @@ ui:
     x_answers: answers
     x_questions: questions
   install:
-    title: Answer
+    title: Installation
     next: Next
     done: Done
     config_yaml_error: Can't create the config.yaml file.

@@ -1265,7 +1265,7 @@ ui:
     x_answers: відповіді
     x_questions: запитання
   install:
-    title: Відповідь
+    title: монтаж
     next: Далі
     done: Done
     config_yaml_error: Can't create the config.yaml file.

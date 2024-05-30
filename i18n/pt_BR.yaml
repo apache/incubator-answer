@@ -899,7 +899,7 @@ ui:
     x_answers: respostas
     x_questions: perguntas
   install:
-    title: Resposta
+    title: Instalação
     next: Proximo
     done: Completo
     config_yaml_error: Não é possível criar o arquivo config.yaml.

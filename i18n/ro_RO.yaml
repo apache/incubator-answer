@@ -1265,7 +1265,7 @@ ui:
     x_answers: răspunsuri
     x_questions: întrebări
   install:
-    title: Răspuns
+    title: Instalare
     next: Înainte
     done: Finalizat
     config_yaml_error: Nu se poate crea fișierul config.yaml.

@@ -1265,7 +1265,7 @@ ui:
     x_answers: odpowiedzi
     x_questions: pytania
   install:
-    title: Odpowiedź
+    title: Instalacja
     next: Dalej
     done: Zakończono
     config_yaml_error: Nie można utworzyć pliku config.yaml.
