@@ -506,14 +506,14 @@ ui:
   how_to_format:
     title: 포맷 방법
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">링크 만들기</p><pre 
-      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p 
-      class="mb-2">단락 사이에 줄 바꿈 넣기</p></li><li><p 
-      class="mb-2"><em>_이탤릭체_</em> 또는 **<strong>볼드체</strong>**</p></li><li><p 
+      <ul class="mb-0"><li><p class="mb-2">링크 만들기</p><pre
+      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
+      class="mb-2">단락 사이에 줄 바꿈 넣기</p></li><li><p
+      class="mb-2"><em>_이탤릭체_</em> 또는 **<strong>볼드체</strong>**</p></li><li><p
       class="mb-2">코드는 4칸 들여쓰기</p></li><li><p class="mb-2">
-      인용은 <code>&gt;</code>로 시작하기</p></li><li><p 
-      class="mb-2">백틱으로 이스케이프 <code>`이렇게_사용`</code></p></li><li><p 
-      class="mb-2">백틱으로 코드 펜스 만들기 <code>`</code></p><pre 
+      인용은 <code>&gt;</code>로 시작하기</p></li><li><p
+      class="mb-2">백틱으로 이스케이프 <code>`이렇게_사용`</code></p></li><li><p
+      class="mb-2">백틱으로 코드 펜스 만들기 <code>`</code></p><pre
       class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: 이전
@@ -1346,7 +1346,7 @@ ui:
       msg:
         empty: 이메일을 입력하세요.
         incorrect: 올바른 형식의 이메일을 입력하세요.
-    ready_title: 준비 완료!
+    ready_title: 귀하의 사이트가 준비되었습니다
     ready_desc: >-
       추가 설정을 원하시면 <1>관리자 섹션</1>에서 찾아보세요; 사이트 메뉴에서 확인할 수 있습니다.
     good_luck: 재미있고 행운을 빕니다!
@@ -1408,7 +1408,7 @@ ui:
       title: 관리자
     dashboard:
       title: 대시보드
-      welcome: Answer 관리자 페이지에 오신 것을 환영합니다!
+      welcome: 관리자에 오신 것을 환영합니다!
       site_statistics: 사이트 통계
       questions: "질문:"
       answers: "답변:"
@@ -1741,7 +1741,7 @@ ui:
         text: "경고: 끄면 다른 로그인 방법을 설정하지 않았다면 로그인할 수 없을 수 있습니다."
     installed_plugins:
       title: 설치된 플러그인
-      plugin_link: 플러그인은 Answer의 기능을 확장하고 확장합니다. <1>Answer 플러그인 저장소</1>에서 플러그인을 찾아보세요.
+      plugin_link: 플러그인은 기능을 확장하고 확장합니다. <1> 플러그인 저장소</1>에서 플러그인을 찾을 수 있습니다.
       filter:
         all: 전체
         active: 활성화됨
