@@ -45,8 +45,16 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
        * cannot use a fully dynamic import statement
        * ref: https://webpack.js.org/api/module-methods/#import-1
        */
-      const pagePath = rn.page.replace('pages/', '');
-      const Ctrl = lazy(() => import(`@/pages/${pagePath}`));
+
+      let Ctrl;
+
+      if (typeof rn.page === 'string') {
+        const pagePath = rn.page.replace('pages/', '');
+        Ctrl = lazy(() => import(`@/pages/${pagePath}`));
+      } else {
+        Ctrl = rn.page;
+      }
+
       rn.element = (
         <Suspense>
           {rn.guard ? (
@@ -68,8 +76,8 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
     }
   });
 };
+const mergedRoutes = mergeRoutePlugins(baseRoutes);
 
-routeWrapper(baseRoutes, routes);
-const mergedRoutes = mergeRoutePlugins(routes);
+routeWrapper(mergedRoutes, routes);
 
-export default mergedRoutes as RouteObject[];
+export default routes as RouteObject[];
