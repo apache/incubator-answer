@@ -687,8 +687,8 @@ export interface NotificationConfig {
 }
 
 export interface ActivatedPlugin {
-  name: string;
   slug_name: string;
+  enabled: boolean;
 }
 
 export interface UserPluginsConfigRes {
