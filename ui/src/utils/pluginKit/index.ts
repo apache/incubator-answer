@@ -17,8 +17,6 @@
  * under the License.
  */
 
-import React from 'react';
-
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
 import type * as Type from '@/common/interface';
@@ -43,11 +41,14 @@ import { initI18nResource, Plugin, PluginInfo, PluginType } from './utils';
 class Plugins {
   plugins: Plugin[] = [];
 
+  registeredPlugins: Type.ActivatedPlugin[] = [];
+
   constructor() {
     this.registerBuiltin();
     this.registerPlugins();
 
     getPluginsStatus().then((plugins) => {
+      this.registeredPlugins = plugins;
       this.activatePlugins(plugins);
     });
   }
@@ -158,6 +159,20 @@ const defaultProps = () => {
   };
 };
 
+const validateRoutePlugin = async (slugName) => {
+  let registeredPlugin;
+  if (plugins.registeredPlugins.length === 0) {
+    const pluginsStatus = await getPluginsStatus();
+    registeredPlugin = pluginsStatus.find((p) => p.slug_name === slugName);
+  } else {
+    registeredPlugin = plugins.registeredPlugins.find(
+      (p) => p.slug_name === slugName,
+    );
+  }
+
+  return Boolean(registeredPlugin?.enabled);
+};
+
 const mergeRoutePlugins = (routes) => {
   const routePlugins = getRoutePlugins();
   if (routePlugins.length === 0) {
@@ -168,13 +183,28 @@ const mergeRoutePlugins = (routes) => {
       route.children?.forEach((child) => {
         if (child.page === 'pages/SideNavLayout') {
           routePlugins.forEach((plugin) => {
-            const { slug_name, route: path } = plugin.info;
-            const Component = plugin.component;
-
+            const { route: path, slug_name } = plugin.info;
             child.children.push({
-              page: `plugin/${slug_name}`,
+              page: plugin.component,
               path,
-              element: React.createElement(Component, defaultProps(), null),
+              loader: async () => {
+                const bool = await validateRoutePlugin(slug_name);
+                return bool;
+              },
+              guard: (params) => {
+                if (params.loaderData) {
+                  return {
+                    ok: true,
+                  };
+                }
+
+                return {
+                  ok: false,
+                  error: {
+                    code: 404,
+                  },
+                };
+              },
             });
           });
         }
