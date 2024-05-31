@@ -318,7 +318,6 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
             ) : null}
             {widget === 'switch' ? (
               <Switch
-                title={title}
                 label={uiOpt && 'label' in uiOpt ? uiOpt.label : ''}
                 fieldName={key}
                 onChange={onChange}
