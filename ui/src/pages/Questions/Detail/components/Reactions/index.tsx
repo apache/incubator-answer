@@ -50,6 +50,7 @@ const Index: FC<Props> = ({
 
   const handleSubmit = (params: { object_id: string; emoji: string }) => {
     if (!tryNormalLogged(true)) {
+      setReactIsActive(false);
       return;
     }
     updateReaction({
@@ -135,7 +136,7 @@ const Index: FC<Props> = ({
               }>
               <Button
                 title={emoji.name}
-                className="rounded-pill ms-2 link-secondary d-flex align-items-center"
+                className="rounded-pill ms-2 link-secondary align-items-center"
                 variant="light"
                 size="sm"
                 onClick={() =>
