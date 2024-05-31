@@ -364,9 +364,12 @@ const Comment = ({ objectId, mode, commentId }) => {
   };
 
   const handleAddComment = () => {
-    if (tryNormalLogged(true)) {
-      setVisibleComment(!visibleComment);
+    if (!tryNormalLogged(true)) {
+      setVisibleComment(false);
+      return;
     }
+
+    setVisibleComment(!visibleComment);
   };
 
   return (
