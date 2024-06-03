@@ -282,7 +282,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
 
         return (
           <Form.Group
-            key={title}
+            key={`${title}-${key}`}
             controlId={key}
             className={classnames(
               groupClassName,
