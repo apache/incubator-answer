@@ -86,7 +86,7 @@ const Config = () => {
     };
     setSchema(result);
     setUISchema(uiConf);
-    setFormData(mergeFormData(initFormData(result), formData));
+    setFormData(mergeFormData(formData, initFormData(result)));
   }, [data?.config_fields]);
 
   const onSubmit = (evt) => {
