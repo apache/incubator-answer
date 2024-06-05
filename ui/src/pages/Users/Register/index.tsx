@@ -26,6 +26,7 @@ import { usePageTags } from '@/hooks';
 import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import { guard } from '@/utils';
 import { loginSettingStore } from '@/stores';
+import { PluginType } from '@/utils/pluginKit/interface';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -55,7 +56,7 @@ const Index: React.FC = () => {
       {showForm ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           <PluginRender
-            type="connector"
+            type={PluginType.Connector}
             slug_name="third_party_connector"
             className="mb-5"
           />
