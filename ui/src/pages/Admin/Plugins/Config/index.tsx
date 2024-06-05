@@ -111,7 +111,6 @@ const Config = () => {
   const handleOnChange = (form) => {
     setFormData(form);
   };
-  console.log('schema', schema?.properties, formData);
   return (
     <>
       <h3 className="mb-4">{data?.name}</h3>
