@@ -25,12 +25,7 @@ import { useToast } from '@/hooks';
 import type * as Types from '@/common/interface';
 import { SchemaForm, JSONSchema, UISchema } from '@/components';
 import { useQueryPluginConfig, updatePluginConfig } from '@/services';
-import {
-  InputOptions,
-  FormKit,
-  initFormData,
-  mergeFormData,
-} from '@/components/SchemaForm';
+import { InputOptions, FormKit, initFormData } from '@/components/SchemaForm';
 
 const Config = () => {
   const { t } = useTranslation('translation');
@@ -84,9 +79,9 @@ const Config = () => {
       required,
       properties,
     };
+    setFormData(initFormData(result));
     setSchema(result);
     setUISchema(uiConf);
-    setFormData(mergeFormData(formData, initFormData(result)));
   }, [data?.config_fields]);
 
   const onSubmit = (evt) => {
@@ -116,6 +111,7 @@ const Config = () => {
   const handleOnChange = (form) => {
     setFormData(form);
   };
+  console.log('schema', schema?.properties, formData);
   return (
     <>
       <h3 className="mb-4">{data?.name}</h3>
