@@ -16,12 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#reaction-button-tooltip {
-  .tooltip-inner {
-    padding: 0.2rem;
-    background-color: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
 
+#reaction-button-tooltip {
+  .popover-body {
     .btn {
       background-color: var(--bs-body-bg);
       border-color: transparent;
@@ -35,22 +32,10 @@
       }
     }
   }
+}
 
-  .tooltip-arrow {
-    overflow: hidden;
-    bottom: calc(-0.4rem + 1px);
-
-    &::before {
-      border: 1px solid var(--bs-gray-500);
-      width: 50%;
-      height: 100%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      box-sizing: content-box;
-      left: 50%;
-      bottom: 50%;
-      background-color: white;
-    }
-  }
+.answer-item {
+  border-top: 1px solid var(--an-answer-item-border-top);
 }
 
 .smile-btn.active::before {
