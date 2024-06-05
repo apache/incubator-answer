@@ -20,7 +20,6 @@
 package main
 
 import (
-	_ "github.com/apache/incubator-answer-plugins/embed-basic"
 	answercmd "github.com/apache/incubator-answer/cmd"
 )
 
