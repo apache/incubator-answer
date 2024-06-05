@@ -1,5 +1,5 @@
 import { FC, memo, useEffect, useState } from 'react';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -44,7 +44,7 @@ const Index: FC<Props> = ({
 
   useEffect(() => {
     queryReactions(objectId).then((res) => {
-      setReactions(res.reaction_summary);
+      setReactions(res?.reaction_summary);
     });
   }, []);
 
@@ -66,9 +66,9 @@ const Index: FC<Props> = ({
     });
   };
 
-  const renderTooltip = (props) => (
-    <Tooltip id="reaction-button-tooltip" {...props} bsPrefix="tooltip">
-      <div className="d-block d-md-flex flex-wrap m-0 p-0">
+  const renderPopover = (props) => (
+    <Popover id="reaction-button-tooltip" {...props}>
+      <Popover.Body className="d-block d-md-flex flex-wrap p-1">
         {emojiMap.map((d) => (
           <Button
             key={d.icon}
@@ -80,8 +80,8 @@ const Index: FC<Props> = ({
             <Icon name={d.icon} className={d.className} />
           </Button>
         ))}
-      </div>
-    </Tooltip>
+      </Popover.Body>
+    </Popover>
   );
 
   return (
@@ -103,7 +103,7 @@ const Index: FC<Props> = ({
       <OverlayTrigger
         trigger="click"
         placement="top"
-        overlay={renderTooltip}
+        overlay={renderPopover}
         show={reactIsActive}
         onToggle={(show) => setReactIsActive(show)}>
         <Button
@@ -137,6 +137,7 @@ const Index: FC<Props> = ({
                 title={emoji.name}
                 className="rounded-pill ms-2 link-secondary d-flex align-items-center"
                 variant="light"
+                active={reactions[emoji.name].is_active}
                 size="sm"
                 onClick={() =>
                   handleSubmit({ object_id: objectId, emoji: emoji.name })

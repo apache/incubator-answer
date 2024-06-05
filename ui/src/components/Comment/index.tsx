@@ -477,7 +477,7 @@ const Comment = ({ objectId, mode, commentId }) => {
           <Form
             mode={mode}
             className={classNames(
-              'mt-2',
+              comments.length <= 0 ? 'mt-3' : 'mt-2',
               comments.length <= 0 && 'bg-light p-3 rounded',
             )}
             onSendReply={(value) => handleSendReply({ value, type: 'comment' })}
