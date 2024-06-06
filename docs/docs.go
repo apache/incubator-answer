@@ -2673,6 +2673,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/embed/config": {
+            "get": {
+                "description": "GetEmbedConfig",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginEmbed"
+                ],
+                "summary": "GetEmbedConfig",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/file": {
             "post": {
                 "security": [
@@ -7621,6 +7659,17 @@ const docTemplate = `{
                 },
                 "website": {
                     "description": "website",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetEmbedOptionResp": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
                     "type": "string"
                 }
             }

@@ -53,8 +53,6 @@ const Index: FC<IProps> = ({ refreshCount }) => {
   const [reviewResp, setReviewResp] = useState<Type.QuestionDetailRes>();
   const flagItemData = reviewResp?.list[0] as Type.QueuedReviewItem;
 
-  // console.log('pendingResp', reviewResp);
-
   const resolveNextOne = (resp, pageNumber) => {
     const { count, list = [] } = resp;
     // auto rollback

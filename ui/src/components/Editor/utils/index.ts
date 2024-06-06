@@ -80,26 +80,23 @@ export const useEditor = ({
   const [editor, setEditor] = useState<Editor | null>(null);
   const [value, setValue] = useState<string>('');
   const init = async () => {
-    const theme = EditorView.theme(
-      {
-        '&': {
-          height: '100%',
-        },
-        '&.cm-focused': {
-          outline: 'none',
-        },
-        '.cm-content': {
-          width: '100%',
-          padding: '1rem',
-        },
-        '.cm-line': {
-          whiteSpace: 'pre-wrap',
-          wordWrap: 'break-word',
-          wordBreak: 'break-all',
-        },
+    const theme = EditorView.theme({
+      '&': {
+        height: '100%',
       },
-      { dark: false },
-    );
+      '&.cm-focused': {
+        outline: 'none',
+      },
+      '.cm-content': {
+        width: '100%',
+        padding: '1rem',
+      },
+      '.cm-line': {
+        whiteSpace: 'pre-wrap',
+        wordWrap: 'break-word',
+        wordBreak: 'break-all',
+      },
+    });
 
     const startState = EditorState.create({
       extensions: [
@@ -150,9 +147,13 @@ export const useEditor = ({
   }, [value]);
 
   useEffect(() => {
-    if (!(editorRef.current instanceof HTMLElement) || editor) {
+    if (!editorRef.current) {
       return;
     }
+    if (editorRef.current.children.length > 0 || editor) {
+      return;
+    }
+
     init();
   }, [editor]);
   return editor;

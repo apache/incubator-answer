@@ -60,7 +60,7 @@ const Heading = () => {
     },
   ];
   const item = {
-    label: 'heading',
+    label: 'type',
     keyMap: ['Ctrl-h'],
     tip: `${t('heading.text')} (Ctrl+h)`,
   };

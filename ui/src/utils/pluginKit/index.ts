@@ -17,6 +17,8 @@
  * under the License.
  */
 
+import { RefObject } from 'react';
+
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
 import type * as Type from '@/common/interface';
@@ -24,7 +26,8 @@ import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { getPluginsStatus } from '@/services';
 import Storage from '@/utils/storage';
 
-import { initI18nResource, Plugin, PluginInfo, PluginType } from './utils';
+import { initI18nResource } from './utils';
+import { Plugin, PluginInfo, PluginType } from './interface';
 
 /**
  * This information is to be defined for all components.
@@ -134,19 +137,10 @@ class Plugins {
 
 const plugins = new Plugins();
 
-const useRenderHtmlPlugin = (element: HTMLElement | null) => {
-  plugins
-    .getPlugins()
-    .filter((plugin) => plugin.activated && plugin.hooks?.useRender)
-    .forEach((plugin) => {
-      plugin.hooks?.useRender?.forEach((hook) => {
-        hook(element);
-      });
-    });
-};
-
 const getRoutePlugins = () => {
-  return plugins.getPlugins().filter((plugin) => plugin.info.type === 'route');
+  return plugins
+    .getPlugins()
+    .filter((plugin) => plugin.info.type === PluginType.Route);
 };
 
 const defaultProps = () => {
@@ -214,11 +208,36 @@ const mergeRoutePlugins = (routes) => {
   return routes;
 };
 
+/**
+ * Only used to enhance the capabilities of the markdown editor
+ * Add RefObject type to solve the problem of dom being null in hooks
+ */
+const useRenderHtmlPlugin = (
+  element: HTMLElement | RefObject<HTMLElement> | null,
+) => {
+  plugins
+    .getPlugins()
+    .filter((plugin) => {
+      return (
+        plugin.activated &&
+        plugin.hooks?.useRender &&
+        plugin.info.type === PluginType.Editor
+      );
+    })
+    .forEach((plugin) => {
+      plugin.hooks?.useRender?.forEach((hook) => {
+        hook(element);
+      });
+    });
+};
+
 // Only one captcha type plug-in can be enabled at the same time
 const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   const captcha = plugins
     .getPlugins()
-    .filter((plugin) => plugin.info.type === 'captcha' && plugin.activated);
+    .filter(
+      (plugin) => plugin.info.type === PluginType.Captcha && plugin.activated,
+    );
   const pluginHooks = plugins.getOnePluginHooks(captcha[0]?.info.slug_name);
   return pluginHooks?.useCaptcha?.({
     captchaKey: key,
@@ -226,7 +245,7 @@ const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   });
 };
 
-export type { Plugin, PluginInfo, PluginType };
+export type { Plugin, PluginInfo };
 
-export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin };
+export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin, PluginType };
 export default plugins;

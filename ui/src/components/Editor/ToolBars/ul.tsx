@@ -27,7 +27,7 @@ let context: IEditorContext;
 const UL = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
-    label: 'unorderedList',
+    label: 'list-ul',
     keyMap: ['Ctrl-u'],
     tip: `${t('unordered_list.text')} (Ctrl+u)`,
   };

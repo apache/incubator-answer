@@ -37,7 +37,7 @@ import {
   userCenter,
   scrollToElementTop,
 } from '@/utils';
-import { useCaptchaPlugin } from '@/utils/pluginKit';
+import { PluginType, useCaptchaPlugin } from '@/utils/pluginKit';
 import { login, UcAgent } from '@/services';
 import { setupAppTheme } from '@/utils/localize';
 
@@ -188,25 +188,25 @@ const Index: React.FC = () => {
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           <PluginRender
-            type="captcha"
+            type={PluginType.Captcha}
             slug_name="captcha_basic"
             className="mb-5"
           />
 
           <PluginRender
-            type="captcha"
+            type={PluginType.Captcha}
             slug_name="captcha_google_v2"
             className="mb-5"
           />
           {ucAgentInfo ? (
             <PluginRender
-              type="connector"
+              type={PluginType.Connector}
               slug_name="hosting_connector"
               className="mb-5"
             />
           ) : (
             <PluginRender
-              type="connector"
+              type={PluginType.Connector}
               slug_name="third_party_connector"
               className="mb-5"
             />

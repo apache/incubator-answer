@@ -27,6 +27,7 @@ import {
 
 import classNames from 'classnames';
 
+import { PluginType } from '@/utils/pluginKit';
 import PluginRender from '../PluginRender';
 
 import {
@@ -115,7 +116,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
         <EditorContext.Provider value={editor}>
           {editor && (
             <PluginRender
-              type="editor"
+              type={PluginType.Editor}
               className="toolbar-wrap px-3 d-flex align-items-center flex-wrap"
               editor={editor}
               previewElement={previewRef.current?.element}>

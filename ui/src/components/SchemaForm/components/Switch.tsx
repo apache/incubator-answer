@@ -23,7 +23,6 @@ import { Form } from 'react-bootstrap';
 import type * as Type from '@/common/interface';
 
 interface Props {
-  title: string;
   label: string | undefined;
   fieldName: string;
   onChange?: (fd: Type.FormDataType) => void;
@@ -31,7 +30,6 @@ interface Props {
   readOnly?: boolean;
 }
 const Index: FC<Props> = ({
-  title,
   fieldName,
   onChange,
   label,
@@ -55,7 +53,6 @@ const Index: FC<Props> = ({
   };
   return (
     <Form.Check
-      id={`switch-${title}`}
       name={fieldName}
       type="switch"
       label={label}

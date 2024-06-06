@@ -19,10 +19,10 @@
 
 import ThirdPartyConnector from './ThirdPartyConnector';
 import HostingConnector from './HostingConnector';
-import SerarchInfo from './SearchInfo';
+import SearchInfo from './SearchInfo';
 
 export default {
   ThirdPartyConnector,
   HostingConnector,
-  SerarchInfo,
+  SearchInfo,
 };

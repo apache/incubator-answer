@@ -27,7 +27,7 @@ let context: IEditorContext;
 const Indent = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
-    label: 'indent',
+    label: 'text-indent-left',
     tip: t('indent.text'),
   };
   const handleClick = (ctx) => {

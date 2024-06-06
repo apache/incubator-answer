@@ -98,6 +98,10 @@ func Register(p Base) {
 	if _, ok := p.(Captcha); ok {
 		registerCaptcha(p.(Captcha))
 	}
+
+	if _, ok := p.(Embed); ok {
+		registerEmbed(p.(Embed))
+	}
 }
 
 type Stack[T Base] struct {

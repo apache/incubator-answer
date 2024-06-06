@@ -16,12 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { NamedExoticComponent, FC, RefObject } from 'react';
 
-export type PluginType = 'connector' | 'search' | 'editor' | 'captcha';
+import type * as Type from '@/common/interface';
+
+export enum PluginType {
+  Connector = 'connector',
+  Search = 'search',
+  Editor = 'editor',
+  Route = 'route',
+  Captcha = 'captcha',
+}
 
 export interface PluginInfo {
   slug_name: string;
   type: PluginType;
   name?: string;
   description?: string;
+  route?: string;
+}
+
+export interface Plugin {
+  info: PluginInfo;
+  component: NamedExoticComponent | FC;
+  i18nConfig?;
+  hooks?: {
+    useRender?: Array<
+      (element: HTMLElement | RefObject<HTMLElement> | null) => void
+    >;
+    useCaptcha?: (props: { captchaKey: Type.CaptchaKey; commonProps: any }) => {
+      getCaptcha: () => Record<string, any>;
+      check: (t: () => void) => void;
+      handleCaptchaError: (error) => any;
+      close: () => Promise<void>;
+      resolveCaptchaReq: (data) => void;
+    };
+  };
+  activated?: boolean;
 }

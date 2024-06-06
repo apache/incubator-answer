@@ -651,6 +651,13 @@ definitions:
         description: website
         type: string
     type: object
+  schema.GetEmbedOptionResp:
+    properties:
+      enable:
+        type: boolean
+      platform:
+        type: string
+    type: object
   schema.GetFollowingTagsResp:
     properties:
       display_name:
@@ -4235,6 +4242,28 @@ paths:
       summary: unbind external user login
       tags:
       - PluginConnector
+  /answer/api/v1/embed/config:
+    get:
+      consumes:
+      - application/json
+      description: GetEmbedConfig
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetEmbedOptionResp'
+                  type: array
+              type: object
+      summary: GetEmbedConfig
+      tags:
+      - PluginEmbed
   /answer/api/v1/file:
     post:
       consumes:

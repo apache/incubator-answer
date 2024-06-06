@@ -36,7 +36,7 @@ const Image = ({ editorInstance }) => {
   const loadingText = `![${t('image.uploading')}...]()`;
 
   const item = {
-    label: 'image',
+    label: 'image-fill',
     keyMap: ['Ctrl-g'],
     tip: `${t('image.text')} (Ctrl+G)`,
   };
