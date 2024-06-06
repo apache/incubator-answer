@@ -20,44 +20,73 @@
 const path = require('path');
 const fs = require('fs');
 
-function pascalize(str) {
-    str = str.replace(/[-_\s]+/g, '');
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 const pluginPath = path.join(__dirname, '../src/plugins');
 const pluginFolders = fs.readdirSync(pluginPath);
 
+function pascalize(str) {
+  return str.replace(/\b\w/g, (match) => match.toUpperCase())
+    .replace(/[-_\s]+/g, '');
+}
+
+function resetPackageJson() {
+  const packageJsonPath = path.join(__dirname, '..', 'package.json');
+  const packageJsonContent = require(packageJsonPath);
+  const dependencies = packageJsonContent.dependencies;
+  for (const key in dependencies) {
+    if (dependencies[key].startsWith('workspace')) {
+      delete dependencies[key];
+    }
+  }
+  fs.writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJsonContent, null, 2),
+  );
+}
+
+function resetIndexTs() {
+  const indexTsPath = path.join(pluginPath, 'index.ts');
+  fs.writeFileSync(indexTsPath, '');
+}
+
+function addPluginToPackageJson(packageName) {
+  const packageJsonPath = path.join(__dirname, '..', 'package.json');
+  const packageJsonContent = require(packageJsonPath);
+  packageJsonContent.dependencies[packageName] = 'workspace:*';
+
+  fs.writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJsonContent, null, 2),
+  );
+}
+
+function addPluginToIndexTs(packageName) {
+  const indexTsPath = path.join(pluginPath, 'index.ts');
+  const indexTsContent = fs.readFileSync(indexTsPath, 'utf-8');
+  const lines = indexTsContent.split('\n');
+  const ComponentName = pascalize(packageName);
+  const importLine = `export { default as ${ComponentName} } from '${packageName}';`;
+  if (!lines.includes(importLine)) {
+    lines.push(importLine);
+  }
+  fs.writeFileSync(indexTsPath, lines.join('\n'));
+}
+
+
+resetPackageJson();
+resetIndexTs();
 pluginFolders.forEach((folder) => {
   const pluginFolder = path.join(pluginPath, folder);
   const stat = fs.statSync(pluginFolder);
+  
   if (stat.isDirectory() && folder !== 'builtin') {
     if (!fs.existsSync(path.join(pluginFolder, 'index.ts'))) {
       return;
     }
-
-    // add plugin to package.json
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
-    const packageJsonPath = path.join(__dirname, '..', 'package.json');
-    const packageJsonContent = require(packageJsonPath);
-    packageJsonContent.dependencies[packageName] = 'workspace:*';
 
-    fs.writeFileSync(
-      packageJsonPath,
-      JSON.stringify(packageJsonContent, null, 2),
-    );
-
-
-    // add plugin to index.ts last line
-    const indexTsPath = path.join(pluginPath, 'index.ts');
-    const indexTsContent = fs.readFileSync(indexTsPath, 'utf-8');
-    const lines = indexTsContent.split('\n');
-    const ComponentName = pascalize(packageName);
-    const importLine = `export { default as ${ComponentName} } from '${packageName}';`;
-    if (!lines.includes(importLine)) {
-      lines.push(importLine);
-    }
-    fs.writeFileSync(indexTsPath, lines.join('\n'));
+  
+    addPluginToPackageJson(packageName);
+    addPluginToIndexTs(packageName);
   }
 });
