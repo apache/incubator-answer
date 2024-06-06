@@ -122,7 +122,6 @@ func BuildNewAnswer(outputPath string, plugins []string, originalAnswerInfo Orig
 	builder.DoTask(createMainGoFile)
 	builder.DoTask(downloadGoModFile)
 	builder.DoTask(copyUIFiles)
-	builder.DoTask(overwriteIndexTs)
 	builder.DoTask(buildUI)
 	builder.DoTask(mergeI18nFiles)
 	builder.DoTask(buildBinary)
