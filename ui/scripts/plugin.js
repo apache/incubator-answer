@@ -71,13 +71,22 @@ function addPluginToIndexTs(packageName) {
   fs.writeFileSync(indexTsPath, lines.join('\n'));
 }
 
+const pluginLength = pluginFolders.filter((folder) => {
+  const pluginFolder = path.join(pluginPath, folder);
+  const stat = fs.statSync(pluginFolder);
+  return stat.isDirectory() && folder !== 'builtin';
+}).length
+
+if (pluginLength > 0) {
+  resetIndexTs();
+}
 
 resetPackageJson();
-resetIndexTs();
+
 pluginFolders.forEach((folder) => {
   const pluginFolder = path.join(pluginPath, folder);
   const stat = fs.statSync(pluginFolder);
-  
+
   if (stat.isDirectory() && folder !== 'builtin') {
     if (!fs.existsSync(path.join(pluginFolder, 'index.ts'))) {
       return;
@@ -85,7 +94,7 @@ pluginFolders.forEach((folder) => {
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
 
-  
+
     addPluginToPackageJson(packageName);
     addPluginToIndexTs(packageName);
   }
