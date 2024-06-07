@@ -342,6 +342,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.MainEntity.DateCreated = time.Unix(detail.CreateTime, 0)
 	jsonLD.MainEntity.Author.Type = "Person"
 	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
+	jsonLD.MainEntity.Author.URL = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, detail.UserInfo.Username)
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
 		if answer.Accepted == schema.AnswerAcceptedEnable {
@@ -353,6 +354,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 			acceptedAnswerItem.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
 			acceptedAnswerItem.Author.Type = "Person"
 			acceptedAnswerItem.Author.Name = answer.UserInfo.DisplayName
+			acceptedAnswerItem.Author.URL = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, answer.UserInfo.Username)
 			jsonLD.MainEntity.AcceptedAnswer = acceptedAnswerItem
 		} else {
 			item := &schema.SuggestedAnswerItem{}
@@ -363,6 +365,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 			item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
 			item.Author.Type = "Person"
 			item.Author.Name = answer.UserInfo.DisplayName
+			item.Author.URL = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, answer.UserInfo.Username)
 			answerList = append(answerList, item)
 		}
 

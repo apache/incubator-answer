@@ -58,6 +58,24 @@
     <script defer="defer" src="{{$path}}"></script>
     {{end}}
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" name="twitter:title" content="{{.title}}" />
+    <meta property="og:site_name" content="{{.siteinfo.General.Name}}" />
+    <meta property="og:url" content="{{.siteinfo.Canonical}}" />
+    <meta property="og:description" content="{{.description}}" />
+    <meta
+            property="og:image"
+            itemProp="image primaryImageOfPage"
+            content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:domain" content="{{.siteinfo.General.SiteUrl}}" />
+    <meta name="twitter:description" content="{{.description}}" />
+    <meta
+            name="twitter:image"
+            content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
+    />
   </head>
 
   <body>
