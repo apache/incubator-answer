@@ -40,6 +40,7 @@ type QAPageJsonLD struct {
 		UpvoteCount int       `json:"upvoteCount"`
 		DateCreated time.Time `json:"dateCreated"`
 		Author      struct {
+			URL  string `json:"url"`
 			Type string `json:"@type"`
 			Name string `json:"name"`
 		} `json:"author"`
@@ -55,6 +56,7 @@ type AcceptedAnswerItem struct {
 	UpvoteCount int       `json:"upvoteCount"`
 	URL         string    `json:"url"`
 	Author      struct {
+		URL  string `json:"url"`
 		Type string `json:"@type"`
 		Name string `json:"name"`
 	} `json:"author"`
@@ -67,6 +69,7 @@ type SuggestedAnswerItem struct {
 	UpvoteCount int       `json:"upvoteCount"`
 	URL         string    `json:"url"`
 	Author      struct {
+		URL  string `json:"url"`
 		Type string `json:"@type"`
 		Name string `json:"name"`
 	} `json:"author"`
