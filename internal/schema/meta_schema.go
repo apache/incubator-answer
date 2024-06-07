@@ -68,18 +68,24 @@ func (r *ReactionsSummaryMeta) AddReactionSummary(emoji, userID string) {
 
 // RemoveReactionSummary remove user operation from reaction summary
 func (r *ReactionsSummaryMeta) RemoveReactionSummary(emoji, userID string) {
+	updatedReactions := make([]*ReactionSummaryMeta, 0)
 	for _, reaction := range r.Reactions {
-		if reaction.Emoji != emoji {
+		if reaction.Emoji != emoji && len(reaction.UserIDs) > 0 {
+			updatedReactions = append(updatedReactions, reaction)
 			continue
 		}
-		updated := make([]string, 0, len(r.Reactions))
+		updatedUserIDs := make([]string, 0, len(r.Reactions))
 		for _, id := range reaction.UserIDs {
 			if id != userID {
-				updated = append(updated, id)
+				updatedUserIDs = append(updatedUserIDs, id)
 			}
 		}
-		reaction.UserIDs = updated
+		if len(updatedUserIDs) > 0 {
+			reaction.UserIDs = updatedUserIDs
+			updatedReactions = append(updatedReactions, reaction)
+		}
 	}
+	r.Reactions = updatedReactions
 }
 
 // CheckUserInReactionSummary check user's operation if in reaction summary
