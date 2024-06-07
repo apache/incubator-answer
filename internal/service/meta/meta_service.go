@@ -58,7 +58,7 @@ func NewMetaService(metaCommonService *metacommon.MetaCommonService, userCommon 
 }
 
 // GetReactionByObjectId get reaction
-func (ms *MetaService) GetReactionByObjectId(ctx context.Context, req *schema.GetReactionReq) (resp *schema.ReactionResp, err error) {
+func (ms *MetaService) GetReactionByObjectId(ctx context.Context, req *schema.GetReactionReq) (resp *schema.GetReactionByObjectIdResp, err error) {
 	reactionMeta, err := ms.metaCommonService.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
 
 	// if not exist, return nil
@@ -71,16 +71,16 @@ func (ms *MetaService) GetReactionByObjectId(ctx context.Context, req *schema.Ge
 		}
 	}
 
-	var reaction schema.ReactionSummaryMeta
+	var reaction schema.ReactionsSummaryMeta
 	err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
 	if err != nil {
 		return nil, err
 	}
-	return ms.convertToReactionResp(ctx, req.UserID, reaction)
+	return ms.convertToReactionResp(ctx, req.UserID, &reaction)
 }
 
 // AddOrUpdateReaction add or update reaction
-func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.UpdateReactionReq) (resp *schema.ReactionResp, err error) {
+func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.UpdateReactionReq) (resp *schema.GetReactionByObjectIdResp, err error) {
 	// check if object exist and it's answer or question
 	objectType, err := obj.GetObjectTypeStrByObjectID(req.ObjectID)
 	if err != nil {
@@ -107,23 +107,18 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 	}
 
 	// add or update
-	var reaction schema.ReactionSummaryMeta
+	reactions := &schema.ReactionsSummaryMeta{}
 	err = ms.metaCommonService.AddOrUpdateMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey, func(meta *entity.Meta, exist bool) (*entity.Meta, error) {
 		// if not exist, create new one
-		if !exist {
-			reaction = schema.ReactionSummaryMeta{}
-		} else {
-			err = json.Unmarshal([]byte(meta.Value), &reaction)
-			if err != nil {
-				return nil, err
-			}
+		if exist {
+			_ = json.Unmarshal([]byte(meta.Value), reactions)
 		}
 
 		// update reaction
-		ms.updateReaction(req, reaction)
+		ms.updateReaction(req, reactions)
 
 		// write back to meta repo
-		reactSumBytes, err := json.Marshal(reaction)
+		reactSumBytes, err := json.Marshal(reactions)
 		if err != nil {
 			return nil, err
 		}
@@ -139,7 +134,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 		return nil, myErrors.InternalServer(reason.DatabaseError).WithError(err)
 	}
 
-	resp, err = ms.convertToReactionResp(ctx, req.UserID, reaction)
+	resp, err = ms.convertToReactionResp(ctx, req.UserID, reactions)
 	if err != nil {
 		return nil, err
 	}
@@ -148,80 +143,48 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 }
 
 // updateReaction update reaction
-func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reaction schema.ReactionSummaryMeta) {
-	emojiUserIds, ok := reaction[req.Emoji]
-
-	if !ok {
-		emojiUserIds = make([]string, 0)
+func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reactions *schema.ReactionsSummaryMeta) {
+	if req.Reaction == "activate" {
+		reactions.AddReactionSummary(req.Emoji, req.UserID)
+	} else if req.Reaction == "deactivate" {
+		reactions.RemoveReactionSummary(req.Emoji, req.UserID)
 	}
-
-	found := false
-	for _, item := range emojiUserIds {
-		if item == req.UserID {
-			found = true
-			break
-		}
-	}
-
-	removeItem := func(arr []string, target string) []string {
-		result := make([]string, 0, len(arr))
-
-		for _, item := range arr {
-			if item != target {
-				result = append(result, item)
-			}
-		}
-
-		return result
-	}
-
-	if req.Reaction == "activate" && !found {
-		emojiUserIds = append(emojiUserIds, req.UserID)
-	} else if req.Reaction == "deactivate" && found {
-		emojiUserIds = removeItem(emojiUserIds, req.UserID)
-	}
-
-	reaction[req.Emoji] = emojiUserIds
 }
 
-func (ms *MetaService) convertToReactionResp(ctx context.Context, userId string, reaction schema.ReactionSummaryMeta) (*schema.ReactionResp, error) {
+func (ms *MetaService) convertToReactionResp(ctx context.Context, userId string, r *schema.ReactionsSummaryMeta) (
+	resp *schema.GetReactionByObjectIdResp, err error) {
 	lang := handler.GetLangByCtx(ctx)
-	resp := &schema.ReactionResp{
-		ReactionSummary: make(map[string]*schema.ReactionItem),
-	}
-	isInArray := func(arr []string, target string) bool {
-		for _, str := range arr {
-			if str == target {
-				return true
-			}
-		}
-		return false
+	resp = &schema.GetReactionByObjectIdResp{
+		ReactionSummary: make([]*schema.ReactionRespItem, 0),
 	}
 	// traverse map and convert to username
-	for emoji, userIds := range reaction {
-		resp.ReactionSummary[emoji] = &schema.ReactionItem{
-			IsActive: isInArray(userIds, userId),
+	for _, reaction := range r.Reactions {
+		item := &schema.ReactionRespItem{
+			Emoji:    reaction.Emoji,
+			IsActive: r.CheckUserInReactionSummary(reaction.Emoji, userId),
 		}
-		userNames := make([]string, 0)
-		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, userIds)
-		resp.ReactionSummary[emoji].Count = len(userBasicInfos)
+
+		usernames := make([]string, 0)
+		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, reaction.UserIDs)
+		item.Count = len(userBasicInfos)
 		if err != nil {
 			return resp, err
 		}
 		// get username
 		for _, userBasicInfo := range userBasicInfos {
-			userNames = append(userNames, userBasicInfo.Username)
-			if len(userNames) == 5 && len(userBasicInfos) > 5 {
-				resp.ReactionSummary[emoji].Tooltip = translator.TrWithData(lang, constant.ReactionTooltipLabel, map[string]string{
+			usernames = append(usernames, userBasicInfo.Username)
+			if len(usernames) == 5 && len(userBasicInfos) > 5 {
+				item.Tooltip = translator.TrWithData(lang, constant.ReactionTooltipLabel, map[string]string{
 					"Count": strconv.Itoa(len(userBasicInfos) - 5),
-					"Names": strings.Join(userNames, ", "),
+					"Names": strings.Join(usernames, ", "),
 				})
 				break
 			}
 		}
 		if len(userBasicInfos) <= 5 {
-			resp.ReactionSummary[emoji].Tooltip = strings.Join(userNames, ", ")
+			item.Tooltip = strings.Join(usernames, ", ")
 		}
+		resp.ReactionSummary = append(resp.ReactionSummary, item)
 	}
 
 	return resp, nil
