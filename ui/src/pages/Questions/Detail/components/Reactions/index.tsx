@@ -38,7 +38,7 @@ const Index: FC<Props> = ({
   showAddCommentBtn,
   handleClickComment,
 }) => {
-  const [reactions, setReactions] = useState<Record<string, ReactionItem>>();
+  const [reactions, setReactions] = useState<ReactionItem[]>();
   const [reactIsActive, setReactIsActive] = useState<boolean>(false);
   const { t } = useTranslation('translation');
 
@@ -54,12 +54,9 @@ const Index: FC<Props> = ({
     }
     updateReaction({
       ...params,
-      reaction:
-        reactions &&
-        reactions[params.emoji] &&
-        reactions[params.emoji].is_active
-          ? 'deactivate'
-          : 'activate',
+      reaction: reactions?.find((v) => v.emoji === params.emoji)?.is_active
+        ? 'deactivate'
+        : 'activate',
     }).then((res) => {
       setReactions(res.reaction_summary);
       setReactIsActive(false);
@@ -72,13 +69,13 @@ const Index: FC<Props> = ({
         {emojiMap.map((d, index) => (
           <Button
             aria-label={
-              reactions?.[d.name]?.is_active
+              reactions?.find((v) => v.emoji === d.name)?.is_active
                 ? t('reaction.undo_emoji', { emoji: d.name })
                 : t(`reaction.${d.name}`)
             }
             key={d.icon}
             variant="light"
-            active={reactions?.[d.name]?.is_active}
+            active={reactions?.find((v) => v.emoji === d.name)?.is_active}
             className={`${index !== 0 ? 'ms-1' : ''}`}
             size="sm"
             onClick={() =>
@@ -125,44 +122,46 @@ const Index: FC<Props> = ({
         </Button>
       </OverlayTrigger>
 
-      {reactions &&
-        Object.keys(reactions).map((emoji) => {
-          if (!reactions[emoji] || reactions[emoji]?.count <= 0) {
-            return null;
-          }
-          return (
-            <OverlayTrigger
-              key={emoji}
-              placement="top"
-              overlay={
-                <Tooltip>
-                  <div className="text-start">
-                    <b>{t(`reaction.${emoji}`)}</b> <br />{' '}
-                    {reactions[emoji].tooltip}
-                  </div>
-                </Tooltip>
+      {reactions?.map((data) => {
+        if (!data.emoji || data?.count <= 0) {
+          return null;
+        }
+        return (
+          <OverlayTrigger
+            key={data.emoji}
+            placement="top"
+            overlay={
+              <Tooltip>
+                <div className="text-start">
+                  <b>{t(`reaction.${data.emoji}`)}</b> <br /> {data.tooltip}
+                </div>
+              </Tooltip>
+            }>
+            <Button
+              className="rounded-pill ms-2 link-secondary d-flex align-items-center"
+              aria-label={
+                data?.is_active
+                  ? t('reaction.unreact_emoji', { emoji: data.emoji })
+                  : t('reaction.react_emoji', { emoji: data.emoji })
+              }
+              aria-pressed="true"
+              variant="light"
+              active={data.is_active}
+              size="sm"
+              onClick={() =>
+                handleSubmit({ object_id: objectId, emoji: data.emoji })
               }>
-              <Button
-                className="rounded-pill ms-2 link-secondary d-flex align-items-center"
-                aria-label={
-                  reactions?.[emoji]?.is_active
-                    ? t('reaction.unreact_emoji', { emoji })
-                    : t('reaction.react_emoji', { emoji })
+              <Icon
+                name={String(emojiMap.find((v) => v.name === data.emoji)?.icon)}
+                className={
+                  emojiMap.find((v) => v.name === data.emoji)?.className
                 }
-                aria-pressed="true"
-                variant="light"
-                active={reactions[emoji].is_active}
-                size="sm"
-                onClick={() => handleSubmit({ object_id: objectId, emoji })}>
-                <Icon
-                  name={String(emojiMap.find((v) => v.name === emoji)?.icon)}
-                  className={emojiMap.find((v) => v.name === emoji)?.className}
-                />
-                <span className="ms-1 lh-1">{reactions[emoji].count}</span>
-              </Button>
-            </OverlayTrigger>
-          );
-        })}
+              />
+              <span className="ms-1 lh-1">{data.count}</span>
+            </Button>
+          </OverlayTrigger>
+        );
+      })}
     </div>
   );
 };
