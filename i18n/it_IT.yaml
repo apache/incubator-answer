@@ -966,7 +966,7 @@ ui:
       avatar:
         label: Immagine del profilo
         gravatar: Gravatar
-        gravatar_text: Puoi cambiare l'immagine 
+        gravatar_text: Puoi cambiare l'immagine
         custom: Personalizzato
         custom_text: Puoi caricare la tua immagine.
         default: Sistema
@@ -1076,7 +1076,7 @@ ui:
       title: La tua risposta
       edit_answer: Modifica la mia risposta attuale
       btn_name: Pubblica la tua risposta
-      add_another_answer: Aggiungi un'altra risposta 
+      add_another_answer: Aggiungi un'altra risposta
       confirm_title: Continua a rispondere
       continue: Continua
       confirm_info: >-
@@ -1775,7 +1775,7 @@ ui:
     privilege:
       title: Privilegi
       level:
-        label: Livello di reputazione richiesto 
+        label: Livello di reputazione richiesto
         text: Scegli la reputazione richiesta per i privilegi
       msg:
         should_be_number: the input should be number
