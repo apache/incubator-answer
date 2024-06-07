@@ -70,10 +70,17 @@ const Index: FC<Props> = ({
   const renderPopover = (props) => (
     <Popover id="reaction-button-tooltip" {...props}>
       <Popover.Body className="d-block d-md-flex flex-wrap p-1">
-        {emojiMap.map((d) => (
+        {emojiMap.map((d, index) => (
           <Button
+            aria-label={
+              reactions?.[d.name]?.is_active
+                ? t('reaction.undo_emoji', { emoji: d.name })
+                : t(`reaction.${d.name}`)
+            }
             key={d.icon}
             variant="light"
+            active={reactions?.[d.name]?.is_active}
+            className={`${index !== 0 ? 'ms-1' : ''}`}
             size="sm"
             onClick={() =>
               handleSubmit({ object_id: objectId, emoji: d.name })
@@ -109,6 +116,8 @@ const Index: FC<Props> = ({
         onToggle={(show) => setReactIsActive(show)}>
         <Button
           size="sm"
+          aria-label={t('reaction.btn_label')}
+          aria-haspopup="true"
           active={reactIsActive}
           className="smile-btn rounded-pill link-secondary"
           variant="light">
@@ -118,33 +127,39 @@ const Index: FC<Props> = ({
       </OverlayTrigger>
 
       {reactions &&
-        emojiMap.map((emoji) => {
-          if (!reactions[emoji.name] || reactions[emoji.name].count === 0) {
+        Object.keys(reactions).map((emoji) => {
+          if (!reactions[emoji] || reactions[emoji]?.count <= 0) {
             return null;
           }
           return (
             <OverlayTrigger
-              key={emoji.name}
+              key={emoji}
               placement="top"
               overlay={
                 <Tooltip>
                   <div className="text-start">
-                    <b>{t(`reaction.${emoji.name}`)}</b> <br />{' '}
-                    {reactions[emoji.name].tooltip}
+                    <b>{t(`reaction.${emoji}`)}</b> <br />{' '}
+                    {reactions[emoji].tooltip}
                   </div>
                 </Tooltip>
               }>
               <Button
-                title={emoji.name}
-                className="rounded-pill ms-2 link-secondary align-items-center"
+                className="rounded-pill ms-2 link-secondary d-flex align-items-center"
+                aria-label={
+                  reactions?.[emoji]?.is_active
+                    ? t('reaction.unreact_emoji', { emoji })
+                    : t('reaction.react_emoji', { emoji })
+                }
+                aria-pressed="true"
                 variant="light"
-                active={reactions[emoji.name].is_active}
+                active={reactions[emoji].is_active}
                 size="sm"
-                onClick={() =>
-                  handleSubmit({ object_id: objectId, emoji: emoji.name })
-                }>
-                <Icon name={emoji.icon} className={emoji.className} />
-                <span className="ms-1 lh-1">{reactions[emoji.name].count}</span>
+                onClick={() => handleSubmit({ object_id: objectId, emoji })}>
+                <Icon
+                  name={String(emojiMap.find((v) => v.name === emoji)?.icon)}
+                  className={emojiMap.find((v) => v.name === emoji)?.className}
+                />
+                <span className="ms-1 lh-1">{reactions[emoji].count}</span>
               </Button>
             </OverlayTrigger>
           );

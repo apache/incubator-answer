@@ -27,7 +27,7 @@
         background-color: var(--bs-gray-100);
       }
 
-      &:active {
+      &:active, &.active {
         background-color: var(--bs-gray-200);
       }
     }
