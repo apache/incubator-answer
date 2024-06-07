@@ -238,7 +238,7 @@ const Ask = () => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      title: { ...formData.title, value: e.currentTarget.value, errorMsg: '' },
+      title: { value: e.currentTarget.value, errorMsg: '', isInvalid: false },
     });
     if (e.currentTarget.value.length >= 10) {
       querySimilarQuestions(e.currentTarget.value);
@@ -250,19 +250,19 @@ const Ask = () => {
   const handleContentChange = (value: string) => {
     setFormData({
       ...formData,
-      content: { ...formData.content, value, errorMsg: '' },
+      content: { value, errorMsg: '', isInvalid: false },
     });
   };
   const handleTagsChange = (value) =>
     setFormData({
       ...formData,
-      tags: { ...formData.tags, value, errorMsg: '' },
+      tags: { value, errorMsg: '', isInvalid: false },
     });
 
   const handleAnswerChange = (value: string) =>
     setFormData({
       ...formData,
-      answer_content: { ...formData.answer_content, value, errorMsg: '' },
+      answer_content: { value, errorMsg: '', isInvalid: false },
     });
 
   const handleSummaryChange = (evt: React.ChangeEvent<HTMLInputElement>) =>
@@ -541,6 +541,7 @@ const Ask = () => {
                       className={classNames(
                         'form-control p-0',
                         focusType === 'answer' && 'focus',
+                        formData.answer_content.isInvalid && 'is-invalid',
                       )}
                       onFocus={() => {
                         setForceType('answer');
