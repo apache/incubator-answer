@@ -152,6 +152,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: You cannot modify your password.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: You cannot modify your status.
       email_or_password_wrong:
@@ -1531,6 +1533,19 @@ ui:
             msg: Password must be at 8-32 characters in length.
       btn_cancel: Cancel
       btn_submit: Submit
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Add new user
       form:
@@ -1576,6 +1591,7 @@ ui:
       filter:
         placeholder: "Filter by name, user:id"
       set_new_password: Set new password
+      edit_profile: Edit profile
       change_status: Change status
       change_role: Change role
       show_logs: Show logs

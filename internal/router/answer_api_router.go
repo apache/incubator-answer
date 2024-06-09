@@ -311,6 +311,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.POST("/user", a.adminUserController.AddUser)
 	r.POST("/users", a.adminUserController.AddUsers)
 	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
+	r.PUT("/user/profile", a.adminUserController.EditUserProfile)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
