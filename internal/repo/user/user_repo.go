@@ -174,6 +174,16 @@ func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err 
 	return
 }
 
+// UpdateUserProfile update user profile
+func (ur *userRepo) UpdateUserProfile(ctx context.Context, userInfo *entity.User) (err error) {
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userInfo.ID).
+		Cols("username", "e_mail", "mail_status").Update(userInfo)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetByUserID get user info by user id
 func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}

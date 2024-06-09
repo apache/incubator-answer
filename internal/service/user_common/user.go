@@ -52,6 +52,7 @@ type UserRepo interface {
 	UpdateUserInterface(ctx context.Context, userID, language, colorSchema string) (err error)
 	UpdatePass(ctx context.Context, userID, pass string) error
 	UpdateInfo(ctx context.Context, userInfo *entity.User) (err error)
+	UpdateUserProfile(ctx context.Context, userInfo *entity.User) (err error)
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)
 	GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error)
@@ -117,6 +118,18 @@ func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, user
 		infomap[user.Username] = info
 	}
 	return infomap, nil
+}
+
+func (us *UserCommon) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
+	return us.userRepo.GetByEmail(ctx, email)
+}
+
+func (us *UserCommon) GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error) {
+	return us.userRepo.GetByUsername(ctx, username)
+}
+
+func (us *UserCommon) UpdateUserProfile(ctx context.Context, userInfo *entity.User) (err error) {
+	return us.userRepo.UpdateUserProfile(ctx, userInfo)
 }
 
 func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {

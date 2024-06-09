@@ -68,6 +68,14 @@ export const updateUserPassword = (params: {
   return request.put('/answer/admin/api/user/password', params);
 };
 
+export const updateUserProfile = (params: {
+  username: string;
+  email: string;
+  user_id: string;
+}) => {
+  return request.put('/answer/admin/api/user/profile', params);
+};
+
 export const getUserActivation = (userId: string) => {
   const apiUrl = `/answer/admin/api/user/activation`;
   return request.get<{
