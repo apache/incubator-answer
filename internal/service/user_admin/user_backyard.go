@@ -360,19 +360,7 @@ func (us *UserAdminService) EditUserProfile(ctx context.Context, req *schema.Edi
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
-	if checker.IsInvalidUsername(req.Username) {
-		return append(errFields, &validator.FormErrorField{
-			ErrorField: "username",
-			ErrorMsg:   reason.UsernameInvalid,
-		}), errors.BadRequest(reason.UsernameInvalid)
-	}
-
-	if !req.IsAdmin && checker.IsReservedUsername(req.Username) {
-		return append(errFields, &validator.FormErrorField{
-			ErrorField: "username",
-			ErrorMsg:   reason.UsernameInvalid,
-		}), errors.BadRequest(reason.UsernameInvalid)
-	} else if req.IsAdmin && checker.IsUsersIgnorePath(req.Username) {
+	if checker.IsInvalidUsername(req.Username) || checker.IsUsersIgnorePath(req.Username) {
 		return append(errFields, &validator.FormErrorField{
 			ErrorField: "username",
 			ErrorMsg:   reason.UsernameInvalid,
