@@ -883,8 +883,8 @@ ui:
       label: Namn
       msg:
         empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        range: Name must between 4 to 30 characters in length.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-postadress
       msg:
