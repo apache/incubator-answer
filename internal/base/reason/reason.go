@@ -98,6 +98,7 @@ const (
 	NotAllowedLoginViaPassword       = "error.user.not_allowed_login_via_password"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
 	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
+	AdminCannotEditTheirProfile      = "error.admin.cannot_edit_their_profile"
 	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 	UserAccessDenied                 = "error.user.access_denied"
 	UserPageAccessDenied             = "error.user.page_access_denied"

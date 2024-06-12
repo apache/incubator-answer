@@ -45,6 +45,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/role"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -342,6 +343,61 @@ func (us *UserAdminService) UpdateUserPassword(ctx context.Context, req *schema.
 	}
 	// logout this user
 	us.authService.RemoveUserAllTokens(ctx, req.UserID)
+	return
+}
+
+// EditUserProfile edit user profile
+func (us *UserAdminService) EditUserProfile(ctx context.Context, req *schema.EditUserProfileReq) (
+	errFields []*validator.FormErrorField, err error) {
+	if req.UserID == req.LoginUserID {
+		return nil, errors.BadRequest(reason.AdminCannotEditTheirProfile)
+	}
+	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	if checker.IsInvalidUsername(req.Username) || checker.IsUsersIgnorePath(req.Username) {
+		return append(errFields, &validator.FormErrorField{
+			ErrorField: "username",
+			ErrorMsg:   reason.UsernameInvalid,
+		}), errors.BadRequest(reason.UsernameInvalid)
+	}
+
+	userInfo, exist, err = us.userCommonService.GetByUsername(ctx, req.Username)
+	if err != nil {
+		return nil, err
+	}
+	if exist && userInfo.ID != req.UserID {
+		return append(errFields, &validator.FormErrorField{
+			ErrorField: "username",
+			ErrorMsg:   reason.UsernameDuplicate,
+		}), errors.BadRequest(reason.UsernameDuplicate)
+	}
+
+	userInfo, exist, err = us.userCommonService.GetByEmail(ctx, req.Email)
+	if err != nil {
+		return nil, err
+	}
+	if exist && userInfo.ID != req.UserID {
+		return append(errFields, &validator.FormErrorField{
+			ErrorField: "email",
+			ErrorMsg:   reason.EmailDuplicate,
+		}), errors.BadRequest(reason.EmailDuplicate)
+	}
+
+	user := &entity.User{}
+	user.ID = req.UserID
+	user.Username = req.Username
+	user.EMail = req.Email
+	user.MailStatus = entity.EmailStatusAvailable
+	err = us.userCommonService.UpdateUserProfile(ctx, user)
+	if err != nil {
+		return nil, err
+	}
 	return
 }
 
