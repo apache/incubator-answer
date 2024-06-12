@@ -883,8 +883,8 @@ ui:
       label: 名稱
       msg:
         empty: 名稱不能為空
-        range: 名稱最多 30 個字元
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        range: 名稱在 4 到 30 個字元
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: 郵箱
       msg:
