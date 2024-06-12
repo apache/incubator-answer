@@ -893,8 +893,8 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名字最多 30 个字符
-        character: '只能由 "a-z"、"0-9"、" - . _" 组成'
+        range: 名字应该在 4 到 30 个字符之间
+        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
       msg:
