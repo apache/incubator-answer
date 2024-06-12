@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
 
-import { scrollToElementTop } from '@/utils';
+import { scrollElementIntoView } from '@/utils';
 import type * as Type from '@/common/interface';
 
 import type {
@@ -202,7 +202,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
-      scrollToElementTop(document.getElementById(errors[0]));
+      scrollElementIntoView(document.getElementById(errors[0]));
       return false;
     }
     const syncErrors = await syncValidator();
@@ -218,7 +218,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
-      scrollToElementTop(document.getElementById(syncErrors[0].key));
+      scrollElementIntoView(document.getElementById(syncErrors[0].key));
       return false;
     }
     return true;

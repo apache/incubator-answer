@@ -60,6 +60,17 @@ function scrollToElementTop(element) {
   });
 }
 
+function scrollElementIntoView(element) {
+  if (!element) {
+    return;
+  }
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'center',
+  });
+}
+
 const scrollToDocTop = () => {
   setTimeout(() => {
     window.scrollTo({
@@ -274,6 +285,7 @@ function changeTheme(mode: 'default' | 'light' | 'dark' | 'system') {
 export {
   thousandthDivision,
   formatCount,
+  scrollElementIntoView,
   scrollToElementTop,
   scrollToDocTop,
   bgFadeOut,
