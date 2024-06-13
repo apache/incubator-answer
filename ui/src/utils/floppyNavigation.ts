@@ -26,16 +26,25 @@ import { getLoginUrl } from '@/utils/userCenter';
 
 const equalToCurrentHref = (target: string, base?: string) => {
   base ||= window.location.origin;
-  const targetUrl = new URL(target, base);
+  const targetUrl = new URL(
+    target.startsWith(REACT_BASE_PATH) ? target : `${REACT_BASE_PATH}${target}`,
+    base,
+  );
   return targetUrl.toString() === window.location.href;
 };
 const matchToCurrentHref = (target: string) => {
   target = (target || '').trim();
+  const hasBasePath = target.startsWith(REACT_BASE_PATH);
   // Empty string or `/` can match any path
   if (!target || target === '/') {
     return true;
   }
   const { pathname, search, hash } = window.location;
+  let pathWithOutBase = pathname;
+  if (!hasBasePath) {
+    pathWithOutBase = pathWithOutBase.replace(REACT_BASE_PATH, '');
+  }
+
   const tPart = target.split('?');
 
   /**
@@ -59,7 +68,7 @@ const matchToCurrentHref = (target: string) => {
    */
   let pathMatch = true;
   const tPath = tPart[0].split('/').filter((_) => !!_);
-  const lPath = pathname.split('/').filter((_) => !!_);
+  const lPath = pathWithOutBase.split('/').filter((_) => !!_);
 
   tPath.forEach((p, i) => {
     const lp = lPath[i];
@@ -73,9 +82,10 @@ const matchToCurrentHref = (target: string) => {
 
 const storageLoginRedirect = () => {
   const { pathname } = window.location;
-  if (pathname !== RouteAlias.login && pathname !== RouteAlias.signUp) {
+  const filterPath = pathname.replace(REACT_BASE_PATH, '');
+  if (filterPath !== RouteAlias.login && filterPath !== RouteAlias.signUp) {
     const loc = window.location;
-    const redirectUrl = loc.href.replace(loc.origin, '');
+    const redirectUrl = loc.href.replace(`${loc.origin}${REACT_BASE_PATH}`, '');
     Storage.set(REDIRECT_PATH_STORAGE_KEY, redirectUrl);
   }
 };
@@ -151,12 +161,12 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
       }
       window.location.replace(to);
     } else if (typeof handler === 'function') {
-      if (to === '/test') {
+      if (to === REACT_BASE_PATH) {
         to = '/';
       }
 
-      if (to !== '/test' && to.startsWith('/test')) {
-        to = to.replace('/test', '');
+      if (to !== REACT_BASE_PATH && to.startsWith(REACT_BASE_PATH)) {
+        to = to.replace(REACT_BASE_PATH, '');
       }
       handler(to, config.options);
     }
