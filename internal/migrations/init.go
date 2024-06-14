@@ -320,7 +320,8 @@ func (m *Mentor) initDefaultContent() {
 		Status:           entity.QuestionStatusAvailable,
 		AnswerCount:      1,
 		AcceptedAnswerID: "0",
-		LastAnswerID:     "0",
+		LastAnswerID:     a1Id,
+		PostUpdateTime:   now,
 		RevisionID:       "0",
 	}
 
@@ -349,7 +350,8 @@ func (m *Mentor) initDefaultContent() {
 		Status:           entity.QuestionStatusAvailable,
 		AnswerCount:      1,
 		AcceptedAnswerID: "0",
-		LastAnswerID:     "0",
+		LastAnswerID:     a2Id,
+		PostUpdateTime:   now,
 		RevisionID:       "0",
 	}
 
