@@ -75,14 +75,14 @@ const Index: React.FC<Props> = ({ callback }) => {
     } else if (name.value.length < 4 || name.value.length > 30) {
       bol = false;
       formData.name = {
-        value: '',
+        value: name.value,
         isInvalid: true,
         errorMsg: t('name.msg.range'),
       };
     } else if (!nameRegex.test(name.value)) {
       bol = false;
       formData.name = {
-        value: '',
+        value: name.value,
         isInvalid: true,
         errorMsg: t('name.msg.character'),
       };
