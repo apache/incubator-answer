@@ -107,7 +107,6 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		dashboardInfo.AnswerCount = ds.answerCount(ctx)
 		dashboardInfo.CommentCount = ds.commentCount(ctx)
 		dashboardInfo.UserCount = ds.userCount(ctx)
-		dashboardInfo.ReportCount = ds.reportCount(ctx)
 		dashboardInfo.VoteCount = ds.voteCount(ctx)
 		dashboardInfo.OccupyingStorageSpace = ds.calculateStorage()
 		general, err := ds.siteInfoService.GetSiteGeneral(ctx)
@@ -122,6 +121,7 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		dashboardInfo.DatabaseSize = ds.GetDatabaseSize()
 	}
 
+	dashboardInfo.ReportCount = ds.reportCount(ctx)
 	dashboardInfo.SMTP = ds.smtpStatus(ctx)
 	dashboardInfo.HTTPS = ds.httpsStatus(ctx)
 	dashboardInfo.TimeZone = ds.getTimezone(ctx)
