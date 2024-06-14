@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -207,7 +208,7 @@ func (m *Mentor) initSiteInfoThemeConfig() {
 
 func (m *Mentor) initSiteInfoSEOConfig() {
 	seoData := map[string]interface{}{
-		"permalink": 1,
+		"permalink": constant.PermalinkQuestionID,
 		"robots":    defaultSEORobotTxt + m.userData.SiteURL + "/sitemap.xml",
 	}
 	seoDataBytes, _ := json.Marshal(seoData)
