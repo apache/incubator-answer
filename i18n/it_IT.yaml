@@ -136,7 +136,7 @@ backend:
   password:
     other: Chiave di accesso
   pass:
-    other: Password
+    other: "Identificatore (chiave): backend. pass. other\nbackend -> passaggio -> altro\nFile: en_US. yaml"
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
@@ -511,9 +511,9 @@ ui:
   page_title:
     question: Domanda
     questions: Domande
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
+    tag: "Identificatore (chiave): ui. page_title. tag\nui -> titolo_pagina -> tag\nFile: en_US. yaml"
+    tags: "Identificatore (chiave): ui.page_title.tags\nui -> titolo_pagina -> tag\nFile: en_US.yaml\n"
+    tag_wiki: "Identificatore (chiave): ui.page_title.tag_wiki\nui -> titolo_pagina -> tag_wiki\nFile: en_US.yaml"
     create_tag: Crea tag
     edit_tag: Modifica Tag
     ask_a_question: Aggiungi una domanda
@@ -550,7 +550,7 @@ ui:
     someone: Qualcuno
     inbox_type:
       all: Tutti
-      posts: Posts
+      posts: "Identificatore (chiave): ui.notifications.inbox_type.posts\nui -> notifiche -> inbox_type -> post\nFile: en_US.yaml\n"
       invites: Inviti
       votes: Voti
   suspended:
@@ -589,7 +589,7 @@ ui:
       btn_cancel: Cancella
       btn_confirm: Aggiungi
     formula:
-      text: Formula
+      text: "Identificatore (chiave): ui. editor. formula. text\nui -> editor -> formula -> testo\nFile: en_US. yaml"
       options:
         inline: Formula nella linea
         block: "\nFormula di blocco"
@@ -645,7 +645,7 @@ ui:
       form:
         fields:
           url:
-            label: URL
+            label: "Identificatore (chiave): ui. editor. link. form. fields. url. label\nui -> editor -> collegamento -> modulo -> campi -> url -> etichetta\nFile: en_US. yaml"
             msg:
               empty: L'URL non può essere vuoto
           name:
@@ -670,7 +670,7 @@ ui:
       empty: Per favore seleziona un motivo
   report_modal:
     flag_title: Sto segnalando questo post per riportarlo come...
-    close_title: I am closing this post as...
+    close_title: "Identificatore (chiave): ui.report_modal.close_title\nui -> report_modal -> close_title\nFile: en_US.yaml..."
     review_question_title: Rivedi la domanda
     review_answer_title: Rivedi la risposta
     review_comment_title: Rivedi il commento
@@ -736,7 +736,7 @@ ui:
     btn_save_edits: Salva modifiche
     btn_cancel: Cancella
   dates:
-    long_date: MMM D
+    long_date: "Identificatore (chiave): ui. dates. long_date\nui -> date -> long_date\nFile: en_US. yaml"
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, AAAA [at] HH:mm"
     now: ora
