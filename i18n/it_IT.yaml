@@ -136,7 +136,7 @@ backend:
   password:
     other: Chiave di accesso
   pass:
-    other: "Identificatore (chiave): backend. pass. other\nbackend -> passaggio -> altro\nFile: en_US. yaml"
+    other: Password
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
@@ -511,9 +511,9 @@ ui:
   page_title:
     question: Domanda
     questions: Domande
-    tag: "Identificatore (chiave): ui. page_title. tag\nui -> titolo_pagina -> tag\nFile: en_US. yaml"
-    tags: "Identificatore (chiave): ui.page_title.tags\nui -> titolo_pagina -> tag\nFile: en_US.yaml\n"
-    tag_wiki: "Identificatore (chiave): ui.page_title.tag_wiki\nui -> titolo_pagina -> tag_wiki\nFile: en_US.yaml"
+    tag: Tag
+    tags: Tags
+    tag_wiki: tag wiki
     create_tag: Crea tag
     edit_tag: Modifica Tag
     ask_a_question: Aggiungi una domanda
@@ -550,7 +550,7 @@ ui:
     someone: Qualcuno
     inbox_type:
       all: Tutti
-      posts: "Identificatore (chiave): ui.notifications.inbox_type.posts\nui -> notifiche -> inbox_type -> post\nFile: en_US.yaml\n"
+      posts: Messaggi
       invites: Inviti
       votes: Voti
   suspended:
@@ -589,7 +589,7 @@ ui:
       btn_cancel: Cancella
       btn_confirm: Aggiungi
     formula:
-      text: "Identificatore (chiave): ui. editor. formula. text\nui -> editor -> formula -> testo\nFile: en_US. yaml"
+      text: Formula
       options:
         inline: Formula nella linea
         block: "\nFormula di blocco"
@@ -645,7 +645,7 @@ ui:
       form:
         fields:
           url:
-            label: "Identificatore (chiave): ui. editor. link. form. fields. url. label\nui -> editor -> collegamento -> modulo -> campi -> url -> etichetta\nFile: en_US. yaml"
+            label: URL
             msg:
               empty: L'URL non può essere vuoto
           name:
@@ -670,7 +670,7 @@ ui:
       empty: Per favore seleziona un motivo
   report_modal:
     flag_title: Sto segnalando questo post per riportarlo come...
-    close_title: "Identificatore (chiave): ui.report_modal.close_title\nui -> report_modal -> close_title\nFile: en_US.yaml..."
+    close_title: Sto chiudendo questo post come...
     review_question_title: Rivedi la domanda
     review_answer_title: Rivedi la risposta
     review_comment_title: Rivedi il commento
@@ -736,8 +736,8 @@ ui:
     btn_save_edits: Salva modifiche
     btn_cancel: Cancella
   dates:
-    long_date: "Identificatore (chiave): ui. dates. long_date\nui -> date -> long_date\nFile: en_US. yaml"
-    long_date_with_year: "MMM D, YYYY"
+    long_date: Mese, giorno
+    long_date_with_year: "Giorno, Mese, Anno"
     long_date_with_time: "MMM D, AAAA [at] HH:mm"
     now: ora
     x_seconds_ago: "{{count}}s fa"
@@ -886,7 +886,7 @@ ui:
         range: Nome fino a 30 caratteri.
         character: 'È necessario utilizzare il set di caratteri "a-z", "0-9", " - . _"'
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: L'email non può essere vuota.
     password:
@@ -900,7 +900,7 @@ ui:
     send_success: >-
       Se un account corrisponde a <strong>{{mail}}</strong>, a breve dovresti ricevere un'e-mail con le istruzioni su come reimpostare la password.
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: Il campo email non può essere vuoto.
   change_email:
@@ -919,7 +919,7 @@ ui:
     subtitle: Aggiungi un'email di recupero al tuo account.
     btn_update: Aggiorna l'indirizzo email
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: L'email non può essere vuota.
     modal_title: Email già esistente
@@ -948,7 +948,7 @@ ui:
     nav:
       profile: Profilo
       notification: Notifiche
-      account: Account
+      account: Profilo
       interface: Interfaccia
     profile:
       heading: Profilo
@@ -999,10 +999,10 @@ ui:
       change_email_info: >-
         Abbiamo inviato una mail a quell'indirizzo. Si prega di seguire le istruzioni di conferma.
       email:
-        label: Email
+        label: E-mail
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Nuova mail
+        msg: La nuova email non può essere vuota.
       pass:
         label: Password attuale
         msg: La password non può essere vuota
@@ -1162,7 +1162,7 @@ ui:
     closed: Chiuso
     deleted: Eliminato
     pending: In attesa
-    more: More
+    more: Altro
   search:
     title: Risultati della ricerca
     keywords: Parole chiave
@@ -1179,7 +1179,7 @@ ui:
       more: Altro
     tips:
       title: Suggerimenti per ricerca avanzata
-      tag: "<1>[tag]</1> search with a tag"
+      tag: "<1>[tag]</1> cerca dentro un tag"
       user: "<1>user:username</1> ricerca per autore"
       answer: "<1>risposte:0</1> domande senza risposta"
       score: "<1>punteggio:3</1> messaggi con un punteggio di 3+"
@@ -1258,7 +1258,7 @@ ui:
     answered: risposto
     asked: chiesto
     downvoted: votato negativamente
-    mod_short: MOD
+    mod_short: Moderatore
     mod_long: Moderatori
     x_reputation: reputazione
     x_votes: voti ricevuti
@@ -1335,7 +1335,7 @@ ui:
       msg_min_length: La password deve contenere almeno 8 caratteri.
       msg_max_length: La password deve contenere un massimo di 32 caratteri.
     admin_email:
-      label: Email
+      label: E-mail
       text: Avrai bisogno di questa email per accedere.
       msg:
         empty: Il campo email non può essere vuoto.
@@ -1377,7 +1377,7 @@ ui:
     settings: Impostazioni
     general: Generale
     interface: Interfaccia
-    smtp: SMTP
+    smtp: Protocollo di Trasferimento Posta Semplice
     branding: Marchio
     legal: Legale
     write: Scrivi
@@ -1417,11 +1417,11 @@ ui:
       run_mode: "Modalità di esecuzione:"
       private: Privato
       public: Pubblico
-      smtp: "SMTP:"
+      smtp: "Protocollo di Trasferimento Posta Semplice"
       timezone: "Fuso orario:"
       system_info: Info sistema
       go_version: "Versione Go:"
-      database: "Database:"
+      database: "Banca dati:"
       database_size: "Dimensioni del database"
       storage_used: "Spazio di archiviazione utilizzato:"
       uptime: "Tempo di attività:"
@@ -1448,7 +1448,7 @@ ui:
       writable: Editabile
       not_writable: Non editabile
     flags:
-      title: Flags
+      title: Contrassegni
       pending: In attesa
       completed: Completato
       flagged: Contrassegnato
@@ -1483,7 +1483,7 @@ ui:
             label: Nome da visualizzare
             msg: Il nome visualizzato deve avere una lunghezza compresa tra 4 e 30 caratteri.
           email:
-            label: Email
+            label: E-mail
             msg: L'email non è valida.
           password:
             label: Password
@@ -1493,7 +1493,7 @@ ui:
     users:
       title: Utenti
       name: Nome
-      email: Email
+      email: E-mail
       reputation: Reputazione
       created_at: Data di creazione
       delete_at: Data di cancellazione
@@ -1592,7 +1592,7 @@ ui:
         msg: Il fuso orario non può essere vuoto.
         text: Scegli una città con il tuo stesso fuso orario.
     smtp:
-      page_title: SMTP
+      page_title: Protocollo di Trasferimento Posta Semplice
       from_email:
         label: Dall'email
         msg: L'email del contatto non può essere vuota.
@@ -1714,7 +1714,7 @@ ui:
     login:
       page_title: Accedi
       membership:
-        title: Membership
+        title: Adesione
         label: Consenti nuove registrazioni
         text: Disattiva per impedire a chiunque di creare un nuovo account.
       email_registration:
@@ -1778,8 +1778,8 @@ ui:
         label: Livello di reputazione richiesto
         text: Scegli la reputazione richiesta per i privilegi
       msg:
-        should_be_number: the input should be number
-        number_larger_1: number should be equal or larger than 1
+        should_be_number: l'input dovrebbe essere un numero
+        number_larger_1: il numero dovrebbe essere uguale o superiore a 1
   form:
     optional: (opzionale)
     empty: non può essere vuoto
