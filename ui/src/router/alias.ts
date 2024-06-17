@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 export const REACT_BASE_PATH = process.env.REACT_APP_BASE_URL || '';
 export const BASE_ORIGIN = `${window.location.origin}${REACT_BASE_PATH}`;
 
