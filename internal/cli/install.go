@@ -100,6 +100,10 @@ func installUploadDir() {
 
 func InstallI18nBundle(replace bool) {
 	fmt.Println("[i18n] try to install i18n bundle...")
+	// if SKIP_REPLACE_I18N is set, skip replace i18n bundles
+	if len(os.Getenv("SKIP_REPLACE_I18N")) > 0 {
+		replace = false
+	}
 	if err := dir.CreateDirIfNotExist(I18nPath); err != nil {
 		fmt.Println(err.Error())
 		return
