@@ -20,7 +20,7 @@
 import { useEffect, useState } from 'react';
 
 import { minimalSetup } from 'codemirror';
-import { EditorState } from '@codemirror/state';
+import { EditorState, Compartment } from '@codemirror/state';
 import { EditorView, placeholder } from '@codemirror/view';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
@@ -29,6 +29,7 @@ import { Editor } from '../types';
 
 import createEditorUtils from './extension';
 
+const editableCompartment = new Compartment();
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
   // Replace all br tags with newlines
@@ -108,6 +109,7 @@ export const useEditor = ({
         theme,
         placeholder(placeholderText),
         EditorView.lineWrapping,
+        editableCompartment.of(EditorView.editable.of(true)),
       ],
     });
 
@@ -117,6 +119,14 @@ export const useEditor = ({
     });
 
     const cm = createEditorUtils(view as Editor);
+
+    cm.setReadOnly = (readOnly: boolean) => {
+      cm.dispatch({
+        effects: editableCompartment.reconfigure(
+          EditorView.editable.of(!readOnly),
+        ),
+      });
+    };
 
     if (autoFocus) {
       setTimeout(() => {
