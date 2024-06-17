@@ -62,6 +62,7 @@ export interface ExtendEditor {
   getCursor: () => Position;
   replaceRange: (value: string, from: Position, to: Position) => void;
   setSelection: (anchor: Position, head?: Position) => void;
+  setReadOnly: (readOnly: boolean) => void;
 }
 
 export type Editor = EditorView & ExtendEditor;
