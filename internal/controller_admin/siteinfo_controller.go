@@ -20,8 +20,8 @@
 package controller_admin
 
 import (
-	"net/http"
 	"html"
+	"net/http"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"

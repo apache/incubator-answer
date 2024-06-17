@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { NamedExoticComponent, FC, RefObject } from 'react';
 
 import type * as Type from '@/common/interface';
