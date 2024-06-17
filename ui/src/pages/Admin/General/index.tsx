@@ -26,6 +26,7 @@ import { useToast } from '@/hooks';
 import { siteInfoStore } from '@/stores';
 import { useGeneralSetting, updateGeneralSetting } from '@/services';
 import Pattern from '@/common/pattern';
+import { REACT_BASE_PATH } from '@/router/alias';
 import { handleFormError, scrollToElementTop } from '@/utils';
 
 const General: FC = () => {
@@ -90,7 +91,8 @@ const General: FC = () => {
           if (
             !url ||
             !/^https?:$/.test(url.protocol) ||
-            url.pathname !== '/' ||
+            (REACT_BASE_PATH && url.pathname !== REACT_BASE_PATH) ||
+            (!REACT_BASE_PATH && url.pathname !== '/') ||
             url.search !== '' ||
             url.hash !== ''
           ) {

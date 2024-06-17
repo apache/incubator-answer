@@ -24,7 +24,7 @@
     <div class="mb-5 mb-md-0 col-xxl-7 col-lg-8 col-sm-12">
       <div>
         <h1 class="h3 mb-3 text-wrap text-break">
-          <a class="link-dark" href="/questions/{{.detail.ID}}">{{.detail.Title}}</a>
+          <a class="link-dark" href="{{$.baseURL}}/questions/{{.detail.ID}}">{{.detail.Title}}</a>
         </h1>
         <div
           class="d-flex flex-wrap align-items-center small mb-3 text-secondary">
@@ -41,7 +41,7 @@
         </div>
         <div class="m-n1">
           {{range .detail.Tags}}
-          <a href="/tags/{{.SlugName}}"
+          <a href="{{$.baseURL}}/tags/{{.SlugName}}"
              class="badge-tag rounded-1 {{if .Reserved}}badge-tag-reserved{{end}} {{if .Recommend}}badge-tag-required{{end}} m-1">
             <span class="">{{.SlugName}}</span>
           </a>
@@ -71,7 +71,7 @@
 
           </div>
           <div class="mb-3 mb-md-0 col-lg-3">
-            <a href="/posts/{{.detail.ID}}/timeline">
+            <a href="{{$.baseURL}}/posts/{{.detail.ID}}/timeline">
               <time class="link-secondary small"
                     datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
                     title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">
@@ -81,7 +81,7 @@
           </div>
           <div class="col-lg-3">
             <div class="d-flex">
-              <a href="/users/bmckfbksayryy"><img
+              <a href="{{$.baseURL}}/users/{{.UserInfo.Username}}"><img
                 src="{{.detail.UserInfo.Avatar}}"
                 width="40px" height="40px"
                 class="rounded me-2 d-none d-md-block"
@@ -94,10 +94,10 @@
                 class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
-                     href="/users/{{.detail.UserInfo.Username}}">{{.detail.UserInfo.DisplayName}}</a><span
+                     href="{{$.baseURL}}/users/{{.detail.UserInfo.Username}}">{{.detail.UserInfo.DisplayName}}</a><span
                   class="fw-bold" title="Reputation">{{.detail.UserInfo.Rank}}</span>
                 </div>
-                <a href="/posts/{{.detail.ID}}/timeline">
+                <a href="{{$.baseURL}}/posts/{{.detail.ID}}/timeline">
                   <time class="link-secondary"
                         datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
                         title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">{{translator $.language "ui.question_detail.asked"}} {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
@@ -148,7 +148,7 @@
             </div>
           </div>
           <div class="mb-3 mb-md-0 col-lg-3">
-            <a href="/posts/{{$.detail.ID}}/{{.ID}}/timeline">
+            <a href="{{$.baseURL}}/posts/{{$.detail.ID}}/{{.ID}}/timeline">
               <time
                 class="link-secondary small"
                 datetime="{{timeFormatISO $.timezone .UpdateTime}}"
@@ -159,7 +159,7 @@
           </div>
           <div class="col-lg-4">
             <div class="d-flex">
-              <a href="/users/bmxtgtpksxayy"><img
+              <a href="{{$.baseURL}}/users/{{.UserInfo.Username}}"><img
                 src="{{.UserInfo.Avatar}}"
                 width="40px" height="40px"
                 class="rounded me-2 d-none d-md-block"
@@ -172,10 +172,10 @@
                 class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
-                     href="/users/{{.UserInfo.Username}}">{{.UserInfo.DisplayName}}</a><span
+                     href="{{$.baseURL}}/users/{{.UserInfo.Username}}">{{.UserInfo.DisplayName}}</a><span
                   class="fw-bold" title="Reputation">{{.UserInfo.Rank}}</span>
                 </div>
-                <a href="/posts/{{$.detail.ID}}/{{.ID}}/timeline">
+                <a href="{{$.baseURL}}/posts/{{$.detail.ID}}/{{.ID}}/timeline">
                   <time
                     class="link-secondary"
                     datetime="{{timeFormatISO $.timezone .CreateTime}}"

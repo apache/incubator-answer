@@ -58,6 +58,7 @@ const (
 	CaptchaVerificationFailed        = "error.object.captcha_verification_failed"
 	OldPasswordVerificationFailed    = "error.object.old_password_verification_failed"
 	NewPasswordSameAsPreviousSetting = "error.object.new_password_same_as_previous_setting"
+	NewObjectAlreadyDeleted          = "error.object.already_deleted"
 	UserNotFound                     = "error.user.not_found"
 	UsernameInvalid                  = "error.user.username_invalid"
 	UsernameDuplicate                = "error.user.username_duplicate"
@@ -97,12 +98,14 @@ const (
 	NotAllowedLoginViaPassword       = "error.user.not_allowed_login_via_password"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
 	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
+	AdminCannotEditTheirProfile      = "error.admin.cannot_edit_their_profile"
 	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 	UserAccessDenied                 = "error.user.access_denied"
 	UserPageAccessDenied             = "error.user.page_access_denied"
 	AddBulkUsersFormatError          = "error.user.add_bulk_users_format_error"
 	AddBulkUsersAmountError          = "error.user.add_bulk_users_amount_error"
 	InvalidURLError                  = "error.common.invalid_url"
+	MetaObjectNotFound               = "error.meta.object_not_found"
 )
 
 // user external login reasons

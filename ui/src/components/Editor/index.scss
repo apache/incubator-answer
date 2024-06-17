@@ -60,11 +60,9 @@
       background-color: var(--bs-body-bg);
       height: 100%;
       width: 100%;
-      border-radius: 0;
-      background-image: url('~@/assets/images/icon-editor-toolbar.png');
-      background-size: 576px 72px;
       border-radius: 3px;
-
+      font-size: 20px;
+      line-height: 20px;
       &:hover {
         background-color: var(--an-editor-toolbar-hover);
       }

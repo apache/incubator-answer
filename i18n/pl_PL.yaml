@@ -1265,7 +1265,7 @@ ui:
     x_answers: odpowiedzi
     x_questions: pytania
   install:
-    title: Odpowiedź
+    title: Instalacja
     next: Dalej
     done: Zakończono
     config_yaml_error: Nie można utworzyć pliku config.yaml.
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: Adres e-mail nie może być pusty.
         incorrect: Niepoprawny format adresu e-mail.
-    ready_title: Twój Answer jest już zainstalowany!
+    ready_title: Twoja witryna jest gotowa
     ready_desc: >-
       Jeśli kiedykolwiek zechcesz zmienić więcej ustawień, odwiedź <1>sekcję administratora</1>; znajdziesz ją w menu strony.
     good_luck: "Baw się dobrze i powodzenia!"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panel
-      welcome: Witamy w Answer Admin!
+      welcome: Witamy w Admin!
       site_statistics: Statystyki witryny
       questions: "Pytania:"
       answers: "Odpowiedzi:"
@@ -1734,7 +1734,7 @@ ui:
         text: "OSTRZEŻENIE: Jeśli wyłączone, już się nie zalogujesz, jeśli wcześniej nie skonfigurowałeś innej metody logowania."
     installed_plugins:
       title: Zainstalowane wtyczki
-      plugin_link: Wtyczki ulepszają i rozszerzają funkcjonalność Answer. Wtyczki można znaleźć w <1>Repozytorium Wtyczek</1>.
+      plugin_link: Wtyczki rozszerzają i rozszerzają funkcjonalność. Wtyczki możesz znaleźć w <1>Repozytorium wtyczek</1>.
       filter:
         all: Wszystkie
         active: Aktywne

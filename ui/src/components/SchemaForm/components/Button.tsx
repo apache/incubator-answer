@@ -53,7 +53,6 @@ const Index: FC<Props> = ({
   clickCallback,
   title,
 }) => {
-  console.log('Button.tsx: action:', title);
   const Toast = useToast();
   const [isLoading, setLoading] = useState(false);
   const handleToast = (msg, type: 'success' | 'danger' = 'success') => {

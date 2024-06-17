@@ -124,4 +124,8 @@ func (r *InitBaseInfoReq) FormatSiteUrl() {
 		return
 	}
 	r.SiteURL = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
+	if len(parsedUrl.Path) > 0 {
+		r.SiteURL = r.SiteURL + parsedUrl.Path
+		r.SiteURL = strings.TrimSuffix(r.SiteURL, "/")
+	}
 }

@@ -21,8 +21,6 @@ import { useEffect, useState, memo } from 'react';
 import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { EditorState, StateEffect } from '@codemirror/state';
-
 import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
 import { IEditorContext, Editor } from '../types';
@@ -36,7 +34,7 @@ const Image = ({ editorInstance }) => {
   const loadingText = `![${t('image.uploading')}...]()`;
 
   const item = {
-    label: 'image',
+    label: 'image-fill',
     keyMap: ['Ctrl-g'],
     tip: `${t('image.text')} (Ctrl+G)`,
   };
@@ -149,18 +147,14 @@ const Image = ({ editorInstance }) => {
       const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
 
       editor.replaceSelection(loadingText);
-      editor.dispatch({
-        effects: StateEffect.appendConfig.of([EditorState.readOnly.of(true)]),
-      });
+      editor.setReadOnly(true);
       const urls = await upload(clipboard.files);
       const text = urls.map(({ name, url }) => {
         return `![${name}](${url})`;
       });
 
       editor.replaceRange(text.join('\n'), startPos, endPos);
-      editor.dispatch({
-        effects: StateEffect.appendConfig.of([EditorState.readOnly.of(false)]),
-      });
+      editor.setReadOnly(false);
 
       return;
     }

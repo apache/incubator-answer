@@ -346,11 +346,6 @@ const Index: FC<Props> = ({
           {objectType === 'question' && (
             <Form.Group controlId="tags" className="my-3">
               <Form.Label>{t('form.fields.tags.label')}</Form.Label>
-              <Form.Control
-                defaultValue={JSON.stringify(formData.tags.value)}
-                isInvalid={formData.tags.isInvalid}
-                hidden
-              />
               <TagSelector
                 value={formData.tags.value}
                 onChange={(value) => {
@@ -360,10 +355,9 @@ const Index: FC<Props> = ({
                 }}
                 showRequiredTag
                 maxTagLength={5}
+                isInvalid={formData.tags.isInvalid}
+                errMsg={formData.tags.errorMsg}
               />
-              <Form.Control.Feedback type="invalid">
-                {formData.tags.errorMsg}
-              </Form.Control.Feedback>
             </Form.Group>
           )}
 

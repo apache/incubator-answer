@@ -1542,6 +1542,45 @@
                 }
             }
         },
+        "/answer/admin/api/user/profile": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "edit user profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "edit user profile",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.EditUserProfileReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/user/role": {
             "put": {
                 "security": [
@@ -2642,6 +2681,44 @@
                 }
             }
         },
+        "/answer/api/v1/embed/config": {
+            "get": {
+                "description": "GetEmbedConfig",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginEmbed"
+                ],
+                "summary": "GetEmbedConfig",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/file": {
             "post": {
                 "security": [
@@ -2829,6 +2906,92 @@
                     "Lang"
                 ],
                 "summary": "Get language options",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/meta/reaction": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get reaction for an object",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meta"
+                ],
+                "summary": "get reaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "object_id",
+                        "name": "object_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.ReactionResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update reaction. if not exist, add one",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meta"
+                ],
+                "summary": "add or update reaction",
+                "parameters": [
+                    {
+                        "description": "reaction",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateReactionReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -6177,41 +6340,6 @@
                 }
             }
         },
-        "/answer/api/v1/user/register/captcha": {
-            "get": {
-                "description": "UserRegisterCaptcha",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "UserRegisterCaptcha",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/schema.UserLoginResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/register/email": {
             "post": {
                 "description": "UserRegisterByEmail",
@@ -6249,6 +6377,57 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/schema.UserLoginResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/staff": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user staff",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user staff",
+                "parameters": [
+                    {
+                        "description": "GetUserStaffReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.GetUserStaffReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserStaffResp"
                                         }
                                     }
                                 }
@@ -6896,7 +7075,6 @@
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "mention_username_list": {
@@ -7271,6 +7449,26 @@
                 }
             }
         },
+        "schema.EditUserProfileReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "user_id"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30
+                }
+            }
+        },
         "schema.ExternalLoginBindingUserSendEmailReq": {
             "type": "object",
             "required": [
@@ -7575,6 +7773,17 @@
                 },
                 "website": {
                     "description": "website",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetEmbedOptionResp": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
                     "type": "string"
                 }
             }
@@ -7954,7 +8163,7 @@
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL",
+                    "description": "\"\" SSL TLS",
                     "type": "string"
                 },
                 "from_email": {
@@ -8298,6 +8507,36 @@
                     "type": "string"
                 },
                 "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserStaffReq": {
+            "type": "object",
+            "properties": {
+                "page_size": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "schema.GetUserStaffResp": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "avatar",
+                    "type": "string"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
                     "type": "string"
                 }
             }
@@ -8766,6 +9005,31 @@
                 }
             }
         },
+        "schema.ReactionItem": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "tooltip": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ReactionResp": {
+            "type": "object",
+            "properties": {
+                "reaction_summary": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/schema.ReactionItem"
+                    }
+                }
+            }
+        },
         "schema.ReasonItem": {
             "type": "object",
             "properties": {
@@ -8838,7 +9102,6 @@
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "comment_id": {
@@ -9828,6 +10091,34 @@
                 }
             }
         },
+        "schema.UpdateReactionReq": {
+            "type": "object",
+            "required": [
+                "emoji",
+                "object_id",
+                "reaction"
+            ],
+            "properties": {
+                "emoji": {
+                    "type": "string",
+                    "enum": [
+                        "heart",
+                        "smile",
+                        "frown"
+                    ]
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "reaction": {
+                    "type": "string",
+                    "enum": [
+                        "activate",
+                        "deactivate"
+                    ]
+                }
+            }
+        },
         "schema.UpdateReviewReq": {
             "type": "object",
             "required": [
@@ -9851,10 +10142,11 @@
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL",
+                    "description": "\"\" SSL TLS",
                     "type": "string",
                     "enum": [
-                        "SSL"
+                        "SSL",
+                        "TLS"
                     ]
                 },
                 "from_email": {
@@ -10086,12 +10378,10 @@
             ],
             "properties": {
                 "captcha_code": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "captcha_id": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "e_mail": {
                     "type": "string",
@@ -10256,12 +10546,10 @@
             ],
             "properties": {
                 "captcha_code": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "captcha_id": {
-                    "type": "string",
-                    "maxLength": 500
+                    "type": "string"
                 },
                 "old_pass": {
                     "type": "string",
@@ -10409,15 +10697,12 @@
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "is_cancel": {
-                    "description": "is cancel",
                     "type": "boolean"
                 },
                 "object_id": {
-                    "description": "id",
                     "type": "string"
                 }
             }

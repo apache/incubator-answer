@@ -82,13 +82,13 @@ const Users: FC = () => {
       <h3>{t('title')}</h3>
       <div className="mb-4">
         <Trans i18nKey="admin.installed_plugins.plugin_link">
-          Plugins extend and expand the functionality of Answer. You may find
-          plugins in the
+          Plugins extend and expand the functionality. You may find plugins in
+          the
           <a
             href="https://github.com/apache/incubator-answer-plugins"
             target="_blank"
             rel="noreferrer">
-            Answer Plugin Repository
+            Plugin Repository
           </a>
           .
         </Trans>
@@ -103,7 +103,7 @@ const Users: FC = () => {
           />
         </Stack>
       </div>
-      <Table responsive>
+      <Table responsive="md">
         <thead>
           <tr>
             <th className="min-w-15">{t('name')}</th>

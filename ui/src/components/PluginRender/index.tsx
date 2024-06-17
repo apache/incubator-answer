@@ -33,7 +33,7 @@ import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
 
 interface Props {
   slug_name?: string;
-  type?: PluginType;
+  type: PluginType;
   children?: ReactNode;
   [prop: string]: any;
 }

@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -207,7 +208,7 @@ func (m *Mentor) initSiteInfoThemeConfig() {
 
 func (m *Mentor) initSiteInfoSEOConfig() {
 	seoData := map[string]interface{}{
-		"permalink": 1,
+		"permalink": constant.PermalinkQuestionID,
 		"robots":    defaultSEORobotTxt + m.userData.SiteURL + "/sitemap.xml",
 	}
 	seoDataBytes, _ := json.Marshal(seoData)
@@ -302,52 +303,69 @@ func (m *Mentor) initDefaultContent() {
 		OriginalText:  "For general support questions.",
 		ParsedText:    "<p>For general support questions.</p>",
 		UserID:        "1",
-		QuestionCount: 1,
+		QuestionCount: 2,
 		Status:        entity.TagStatusAvailable,
+		RevisionID:    "0",
 	}
 
 	q1 := &entity.Question{
-		ID:           q1Id,
-		CreatedAt:    now,
-		UserID:       "1",
-		Title:        "What is a tag?",
-		OriginalText: "When asking a question, we need to choose tags. What are tags and why should I use them?",
-		ParsedText:   "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
-		Show:         entity.QuestionShow,
-		Status:       entity.QuestionStatusAvailable,
-		AnswerCount:  1,
+		ID:               q1Id,
+		CreatedAt:        now,
+		UserID:           "1",
+		LastEditUserID:   "1",
+		Title:            "What is a tag?",
+		OriginalText:     "When asking a question, we need to choose tags. What are tags and why should I use them?",
+		ParsedText:       "<p>When asking a question, we need to choose tags. What are tags and why should I use them?</p>",
+		Pin:              entity.QuestionUnPin,
+		Show:             entity.QuestionShow,
+		Status:           entity.QuestionStatusAvailable,
+		AnswerCount:      1,
+		AcceptedAnswerID: "0",
+		LastAnswerID:     a1Id,
+		PostUpdateTime:   now,
+		RevisionID:       "0",
 	}
 
 	a1 := &entity.Answer{
-		ID:           a1Id,
-		CreatedAt:    now,
-		QuestionID:   q1Id,
-		UserID:       "1",
-		OriginalText: "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
-		ParsedText:   "<p>Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.</p>",
-		Status:       entity.AnswerStatusAvailable,
+		ID:             a1Id,
+		CreatedAt:      now,
+		QuestionID:     q1Id,
+		UserID:         "1",
+		LastEditUserID: "0",
+		OriginalText:   "Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.",
+		ParsedText:     "<p>Tags help to organize content and make searching easier. It helps your question get more attention from people interested in that tag. Tags also send notifications. If you are interested in some topic, follow that tag to get updates.</p>",
+		Status:         entity.AnswerStatusAvailable,
+		RevisionID:     "0",
 	}
 
 	q2 := &entity.Question{
-		ID:           q2Id,
-		CreatedAt:    now,
-		UserID:       "1",
-		Title:        "What is reputation and how do I earn them?",
-		OriginalText: "I see that each user has reputation points, What is it and how do I earn them?",
-		ParsedText:   "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
-		Show:         entity.QuestionShow,
-		Status:       entity.QuestionStatusAvailable,
-		AnswerCount:  1,
+		ID:               q2Id,
+		CreatedAt:        now,
+		UserID:           "1",
+		LastEditUserID:   "1",
+		Title:            "What is reputation and how do I earn them?",
+		OriginalText:     "I see that each user has reputation points, What is it and how do I earn them?",
+		ParsedText:       "<p>I see that each user has reputation points, What is it and how do I earn them?</p>",
+		Pin:              entity.QuestionUnPin,
+		Show:             entity.QuestionShow,
+		Status:           entity.QuestionStatusAvailable,
+		AnswerCount:      1,
+		AcceptedAnswerID: "0",
+		LastAnswerID:     a2Id,
+		PostUpdateTime:   now,
+		RevisionID:       "0",
 	}
 
 	a2 := &entity.Answer{
-		ID:           a2Id,
-		CreatedAt:    now,
-		QuestionID:   q2Id,
-		UserID:       "1",
-		OriginalText: "Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.",
-		ParsedText:   "<p>Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.</p>",
-		Status:       entity.AnswerStatusAvailable,
+		ID:             a2Id,
+		CreatedAt:      now,
+		QuestionID:     q2Id,
+		UserID:         "1",
+		LastEditUserID: "0",
+		OriginalText:   "Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.",
+		ParsedText:     "<p>Your reputation points show how much the community values your knowledge. You earn points when someone find your question or answer helpful. You also get points when the person who asked the question thinks you did a good job and accepts your answer.</p>",
+		Status:         entity.AnswerStatusAvailable,
+		RevisionID:     "0",
 	}
 
 	_, m.err = m.engine.Context(m.ctx).Insert(tag)

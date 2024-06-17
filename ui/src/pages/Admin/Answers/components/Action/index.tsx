@@ -78,7 +78,7 @@ const AnswerActions = ({ itemData, curFilter, refreshList }) => {
           title={t('action', { keyPrefix: 'admin.answers' })}
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu align="end">
         {curFilter === 'deleted' ? (
           <Dropdown.Item onClick={() => handleAction('undelete')}>
             {t('undelete', { keyPrefix: 'btns' })}

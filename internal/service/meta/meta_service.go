@@ -21,74 +21,171 @@ package meta
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"strconv"
+	"strings"
 
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/segmentfault/pacman/errors"
+	"github.com/apache/incubator-answer/internal/schema"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	metacommon "github.com/apache/incubator-answer/internal/service/meta_common"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/obj"
+	myErrors "github.com/segmentfault/pacman/errors"
 )
-
-// MetaRepo meta repository
-type MetaRepo interface {
-	AddMeta(ctx context.Context, meta *entity.Meta) (err error)
-	RemoveMeta(ctx context.Context, id int) (err error)
-	UpdateMeta(ctx context.Context, meta *entity.Meta) (err error)
-	GetMetaByObjectIdAndKey(ctx context.Context, objectId, key string) (meta *entity.Meta, exist bool, err error)
-	GetMetaList(ctx context.Context, meta *entity.Meta) (metas []*entity.Meta, err error)
-}
 
 // MetaService user service
 type MetaService struct {
-	metaRepo MetaRepo
+	metaCommonService *metacommon.MetaCommonService
+	userCommon        *usercommon.UserCommon
+	questionRepo      questioncommon.QuestionRepo
+	answerRepo        answercommon.AnswerRepo
 }
 
-func NewMetaService(metaRepo MetaRepo) *MetaService {
+func NewMetaService(metaCommonService *metacommon.MetaCommonService, userCommon *usercommon.UserCommon, answerRepo answercommon.AnswerRepo, questionRepo questioncommon.QuestionRepo) *MetaService {
 	return &MetaService{
-		metaRepo: metaRepo,
+		metaCommonService: metaCommonService,
+		questionRepo:      questionRepo,
+		userCommon:        userCommon,
+		answerRepo:        answerRepo,
 	}
 }
 
-// AddMeta add meta
-func (ms *MetaService) AddMeta(ctx context.Context, objID, key, value string) (err error) {
-	meta := &entity.Meta{
-		ObjectID: objID,
-		Key:      key,
-		Value:    value,
-	}
-	return ms.metaRepo.AddMeta(ctx, meta)
-}
+// GetReactionByObjectId get reaction
+func (ms *MetaService) GetReactionByObjectId(ctx context.Context, req *schema.GetReactionReq) (resp *schema.GetReactionByObjectIdResp, err error) {
+	reactionMeta, err := ms.metaCommonService.GetMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey)
 
-// RemoveMeta delete meta
-func (ms *MetaService) RemoveMeta(ctx context.Context, id int) (err error) {
-	return ms.metaRepo.RemoveMeta(ctx, id)
-}
-
-// UpdateMeta update meta
-func (ms *MetaService) UpdateMeta(ctx context.Context, metaID int, key, value string) (err error) {
-	meta := &entity.Meta{
-		ID:    metaID,
-		Key:   key,
-		Value: value,
-	}
-	return ms.metaRepo.UpdateMeta(ctx, meta)
-}
-
-// GetMetaByObjectIdAndKey get meta one
-func (ms *MetaService) GetMetaByObjectIdAndKey(ctx context.Context, objectID, key string) (meta *entity.Meta, err error) {
-	meta, exist, err := ms.metaRepo.GetMetaByObjectIdAndKey(ctx, objectID, key)
+	// if not exist, return nil
 	if err != nil {
-		return
+		var pacmanErr *myErrors.Error
+		if errors.As(err, &pacmanErr) && pacmanErr.Reason == reason.MetaObjectNotFound {
+			return nil, nil
+		} else {
+			return nil, err
+		}
 	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UnknownError)
-	}
-	return meta, nil
-}
 
-// GetMetaList get meta list all
-func (ms *MetaService) GetMetaList(ctx context.Context, objID string) (metas []*entity.Meta, err error) {
-	metas, err = ms.metaRepo.GetMetaList(ctx, &entity.Meta{ObjectID: objID})
+	var reaction schema.ReactionsSummaryMeta
+	err = json.Unmarshal([]byte(reactionMeta.Value), &reaction)
 	if err != nil {
 		return nil, err
 	}
-	return metas, err
+	return ms.convertToReactionResp(ctx, req.UserID, &reaction)
+}
+
+// AddOrUpdateReaction add or update reaction
+func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.UpdateReactionReq) (resp *schema.GetReactionByObjectIdResp, err error) {
+	// check if object exist and it's answer or question
+	objectType, err := obj.GetObjectTypeStrByObjectID(req.ObjectID)
+	if err != nil {
+		return nil, err
+	}
+	if objectType == constant.AnswerObjectType {
+		_, exist, err := ms.answerRepo.GetAnswer(ctx, req.ObjectID)
+		if err != nil {
+			return nil, err
+		}
+		if !exist {
+			return nil, myErrors.BadRequest(reason.AnswerNotFound)
+		}
+	} else if objectType == constant.QuestionObjectType {
+		_, exist, err := ms.questionRepo.GetQuestion(ctx, req.ObjectID)
+		if err != nil {
+			return nil, err
+		}
+		if !exist {
+			return nil, myErrors.BadRequest(reason.QuestionNotFound)
+		}
+	} else {
+		return nil, myErrors.BadRequest(reason.ObjectNotFound)
+	}
+
+	// add or update
+	reactions := &schema.ReactionsSummaryMeta{}
+	err = ms.metaCommonService.AddOrUpdateMetaByObjectIdAndKey(ctx, req.ObjectID, entity.ObjectReactSummaryKey, func(meta *entity.Meta, exist bool) (*entity.Meta, error) {
+		// if not exist, create new one
+		if exist {
+			_ = json.Unmarshal([]byte(meta.Value), reactions)
+		}
+
+		// update reaction
+		ms.updateReaction(req, reactions)
+
+		// write back to meta repo
+		reactSumBytes, err := json.Marshal(reactions)
+		if err != nil {
+			return nil, err
+		}
+
+		return &entity.Meta{
+			ObjectID: req.ObjectID,
+			Key:      entity.ObjectReactSummaryKey,
+			Value:    string(reactSumBytes),
+		}, nil
+	})
+
+	if err != nil {
+		return nil, myErrors.InternalServer(reason.DatabaseError).WithError(err)
+	}
+
+	resp, err = ms.convertToReactionResp(ctx, req.UserID, reactions)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+// updateReaction update reaction
+func (ms *MetaService) updateReaction(req *schema.UpdateReactionReq, reactions *schema.ReactionsSummaryMeta) {
+	if req.Reaction == "activate" {
+		reactions.AddReactionSummary(req.Emoji, req.UserID)
+	} else if req.Reaction == "deactivate" {
+		reactions.RemoveReactionSummary(req.Emoji, req.UserID)
+	}
+}
+
+func (ms *MetaService) convertToReactionResp(ctx context.Context, userId string, r *schema.ReactionsSummaryMeta) (
+	resp *schema.GetReactionByObjectIdResp, err error) {
+	lang := handler.GetLangByCtx(ctx)
+	resp = &schema.GetReactionByObjectIdResp{
+		ReactionSummary: make([]*schema.ReactionRespItem, 0),
+	}
+	// traverse map and convert to username
+	for _, reaction := range r.Reactions {
+		item := &schema.ReactionRespItem{
+			Emoji:    reaction.Emoji,
+			IsActive: r.CheckUserInReactionSummary(reaction.Emoji, userId),
+		}
+
+		usernames := make([]string, 0)
+		userBasicInfos, err := ms.userCommon.BatchUserBasicInfoByID(ctx, reaction.UserIDs)
+		item.Count = len(userBasicInfos)
+		if err != nil {
+			return resp, err
+		}
+		// get username
+		for _, userBasicInfo := range userBasicInfos {
+			usernames = append(usernames, userBasicInfo.Username)
+			if len(usernames) == 5 && len(userBasicInfos) > 5 {
+				item.Tooltip = translator.TrWithData(lang, constant.ReactionTooltipLabel, map[string]string{
+					"Count": strconv.Itoa(len(userBasicInfos) - 5),
+					"Names": strings.Join(usernames, ", "),
+				})
+				break
+			}
+		}
+		if len(userBasicInfos) <= 5 {
+			item.Tooltip = strings.Join(usernames, ", ")
+		}
+		resp.ReactionSummary = append(resp.ReactionSummary, item)
+	}
+
+	return resp, nil
 }

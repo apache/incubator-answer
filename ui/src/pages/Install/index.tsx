@@ -36,6 +36,7 @@ import {
   scrollToElementTop,
 } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
+import { BASE_ORIGIN } from '@/router/alias';
 
 import {
   FirstStep,
@@ -99,7 +100,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     site_url: {
-      value: window.location.origin,
+      value: BASE_ORIGIN,
       isInvalid: false,
       errorMsg: '',
     },
@@ -330,7 +331,7 @@ const Index: FC = () => {
                           components={{ 1: <code /> }}
                         />{' '}
                         <Trans i18nKey="install.install_now">
-                          You may try{' '}
+                          You may try
                           <a href="###" onClick={(e) => handleInstallNow(e)}>
                             installing now
                           </a>

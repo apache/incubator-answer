@@ -55,6 +55,7 @@ const Index: React.FC<Props> = ({ callback }) => {
 
   const updateUser = userStore((state) => state.update);
   const emailCaptcha = useCaptchaPlugin('email');
+  const nameRegex = /^[\w.-\s]{4,30}$/;
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -62,7 +63,30 @@ const Index: React.FC<Props> = ({ callback }) => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { e_mail, pass } = formData;
+    const { name, e_mail, pass } = formData;
+
+    if (!name.value) {
+      bol = false;
+      formData.name = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('name.msg.empty'),
+      };
+    } else if (name.value.length < 4 || name.value.length > 30) {
+      bol = false;
+      formData.name = {
+        value: name.value,
+        isInvalid: true,
+        errorMsg: t('name.msg.range'),
+      };
+    } else if (!nameRegex.test(name.value)) {
+      bol = false;
+      formData.name = {
+        value: name.value,
+        isInvalid: true,
+        errorMsg: t('name.msg.character'),
+      };
+    }
 
     if (!e_mail.value) {
       bol = false;

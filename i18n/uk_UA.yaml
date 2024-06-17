@@ -1265,7 +1265,7 @@ ui:
     x_answers: відповіді
     x_questions: запитання
   install:
-    title: Відповідь
+    title: монтаж
     next: Далі
     done: Done
     config_yaml_error: Can't create the config.yaml file.
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: Поле електронної пошти не може бути пустим.
         incorrect: Email incorrect format.
-    ready_title: Ваша відповідь готова!
+    ready_title: Ваш сайт готовий
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Веселіться, і хай щастить!"
@@ -1401,7 +1401,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Запитання:"
       answers: "Відповіді:"
@@ -1734,7 +1734,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
       filter:
         all: All
         active: Active

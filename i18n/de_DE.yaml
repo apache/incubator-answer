@@ -1265,7 +1265,7 @@ ui:
     x_answers: Antworten
     x_questions: Fragen
   install:
-    title: Antwort
+    title: Installation
     next: Nächste
     done: Erledigt
     config_yaml_error: Die Datei config.yaml kann nicht erstellt werden.
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: E-Mail darf nicht leer sein.
         incorrect: E-Mail falsches Format.
-    ready_title: Dein Answer ist fertig!
+    ready_title: Dein site ist fertig!
     ready_desc: >-
       Wenn du noch mehr Einstellungen ändern möchtest, besuche den <1>Admin-Bereich</1>; du findest ihn im Seitenmenü.
     good_luck: "Viel Spaß und viel Glück!"
@@ -1401,7 +1401,7 @@ ui:
       title: Administrator
     dashboard:
       title: Dashboard
-      welcome: Willkommen beim Answer-Admin!
+      welcome: Willkommen beim Admin!
       site_statistics: Website-Statistiken
       questions: "Fragen:"
       answers: "Antworten:"
@@ -1734,7 +1734,7 @@ ui:
         text: "WARNUNG: Wenn du diese Option abschaltest, kannst du dich möglicherweise nicht mehr anmelden, wenn du zuvor keine andere Anmeldemethode konfiguriert hast."
     installed_plugins:
       title: Installierte Plugins
-      plugin_link: Plugins erweitern und ergänzen die Funktionalität von Answer. Du kannst Plugins im <1>Answer Plugin Repository</1> finden.
+      plugin_link: Plugins erweitern und ergänzen die Funktionalität. Du kannst Plugins im <1>Plugin Repository</1> finden.
       filter:
         all: Alle
         active: Aktiv

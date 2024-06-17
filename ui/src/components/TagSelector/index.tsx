@@ -40,6 +40,8 @@ interface IProps {
   maxTagLength?: number;
   showRequiredTag?: boolean;
   autoFocus?: boolean;
+  isInvalid?: boolean;
+  errMsg?: string;
 }
 
 let timer;
@@ -52,6 +54,8 @@ const TagSelector: FC<IProps> = ({
   maxTagLength = 0,
   showRequiredTag = false,
   autoFocus = false,
+  isInvalid = false,
+  errMsg = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -201,6 +205,7 @@ const TagSelector: FC<IProps> = ({
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchStr = e.currentTarget.value.replace(';', '');
+    onChange?.([...value]);
     setSearchValue(searchStr);
     fetchTags(searchStr);
   };
@@ -324,13 +329,19 @@ const TagSelector: FC<IProps> = ({
   useEffect(() => {
     // set width of tag Form.Control
     const ele = document.querySelector('.a-input-width') as HTMLElement;
+    const elePlaceholder = document.querySelector(
+      '.a-placeholder-width',
+    ) as HTMLElement;
     if (ele.offsetWidth > 60) {
       inputRef.current?.setAttribute(
         'style',
         `width:${ele.offsetWidth + 16}px`,
       );
     } else {
-      inputRef.current?.setAttribute('style', 'width: 60px');
+      inputRef.current?.setAttribute(
+        'style',
+        `width: ${elePlaceholder.offsetWidth + 7}px`,
+      );
     }
   }, [searchValue]);
 
@@ -341,6 +352,7 @@ const TagSelector: FC<IProps> = ({
         className={classNames(
           'tag-selector-wrap form-control position-relative p-0',
           focusState ? 'tag-selector-wrap--focus' : '',
+          isInvalid ? 'is-invalid' : '',
         )}
         onFocus={handleTagSelectorFocus}
         onKeyDown={handleKeyDown}>
@@ -387,6 +399,7 @@ const TagSelector: FC<IProps> = ({
               />
             )}
             <span className="a-input-width">{searchValue}</span>
+            <span className="a-placeholder-width">{t('add_btn')}</span>
           </div>
         </div>
         <Dropdown.Menu id="a-dropdown-menu" className="w-100" show={showMenu}>
@@ -423,6 +436,7 @@ const TagSelector: FC<IProps> = ({
         </Dropdown.Menu>
       </div>
       {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
+      <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
     </div>
   );
 };

@@ -44,6 +44,7 @@ import {
   postVote,
 } from '@/services';
 import { commentReplyStore } from '@/stores';
+import Reactions from '@/pages/Questions/Detail/components/Reactions';
 
 import { Form, ActionBar, Reply } from './components';
 
@@ -361,118 +362,133 @@ const Comment = ({ objectId, mode, commentId }) => {
       }),
     );
   };
+
+  const handleAddComment = () => {
+    if (!tryNormalLogged(true)) {
+      setVisibleComment(false);
+      return;
+    }
+
+    setVisibleComment(!visibleComment);
+  };
+
   return (
-    <div
-      className={classNames(
-        'comments-wrap',
-        comments.length > 0 && 'bg-light px-3 py-2 rounded',
-      )}>
-      {comments.map((item) => {
-        return (
-          <div
-            key={item.comment_id}
-            id={item.comment_id}
-            className="py-2 comment-item">
-            {item.showEdit ? (
-              <Form
-                className="mt-2"
-                value={item.original_text}
-                type="edit"
-                mode={mode}
-                onSendReply={(value) =>
-                  handleSendReply({ ...item, value, type: 'edit' })
-                }
-                onCancel={() => handleCancel(item.comment_id)}
-              />
-            ) : (
-              <div className="d-block">
-                {item.reply_user_display_name && (
-                  <Link to="." className="small me-1 text-nowrap">
-                    @{item.reply_user_display_name}
-                  </Link>
-                )}
-
-                <div
-                  className="fmt small text-break text-wrap"
-                  dangerouslySetInnerHTML={{ __html: item.parsed_text }}
+    <>
+      <Reactions
+        objectId={objectId}
+        showAddCommentBtn={comments.length === 0}
+        handleClickComment={handleAddComment}
+      />
+      <div
+        className={classNames(
+          'comments-wrap',
+          comments.length > 0 && 'bg-light px-3 py-2 rounded',
+        )}>
+        {comments.map((item) => {
+          return (
+            <div
+              key={item.comment_id}
+              id={item.comment_id}
+              className="py-2 comment-item">
+              {item.showEdit ? (
+                <Form
+                  className="mt-2"
+                  value={item.original_text}
+                  type="edit"
+                  mode={mode}
+                  onSendReply={(value) =>
+                    handleSendReply({ ...item, value, type: 'edit' })
+                  }
+                  onCancel={() => handleCancel(item.comment_id)}
                 />
-              </div>
-            )}
+              ) : (
+                <div className="d-block">
+                  {item.reply_user_display_name && (
+                    <Link to="." className="small me-1 text-nowrap">
+                      @{item.reply_user_display_name}
+                    </Link>
+                  )}
 
-            {currentReplyId === item.comment_id ? (
-              <Reply
-                userName={item.user_display_name}
-                mode={mode}
-                onSendReply={(value) =>
-                  handleSendReply({ ...item, value, type: 'reply' })
-                }
-                onCancel={() => handleCancel(item.comment_id)}
-              />
-            ) : null}
-            {item.showEdit || currentReplyId === item.comment_id ? null : (
-              <ActionBar
-                nickName={item.user_display_name}
-                username={item.username}
-                createdAt={item.created_at}
-                voteCount={item.vote_count}
-                isVote={item.is_vote}
-                memberActions={item.member_actions}
-                userStatus={item.user_status}
-                onReply={() => {
-                  handleReply(item.comment_id);
-                }}
-                onAction={(action) => handleAction(action, item)}
-                onVote={(e) => {
-                  e.preventDefault();
-                  handleVote(item.comment_id, item.is_vote);
-                }}
-              />
-            )}
-          </div>
-        );
-      })}
+                  <div
+                    className="fmt small text-break text-wrap"
+                    dangerouslySetInnerHTML={{ __html: item.parsed_text }}
+                  />
+                </div>
+              )}
 
-      <div className={classNames(comments.length > 0 && 'py-2')}>
-        <Button
-          variant="link"
-          className="p-0 btn-no-border"
-          size="sm"
-          onClick={() => {
-            if (tryNormalLogged(true)) {
-              setVisibleComment(!visibleComment);
-            }
-          }}>
-          {t('btn_add_comment')}
-        </Button>
-        {data &&
-          (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
+              {currentReplyId === item.comment_id ? (
+                <Reply
+                  userName={item.user_display_name}
+                  mode={mode}
+                  onSendReply={(value) =>
+                    handleSendReply({ ...item, value, type: 'reply' })
+                  }
+                  onCancel={() => handleCancel(item.comment_id)}
+                />
+              ) : null}
+              {item.showEdit || currentReplyId === item.comment_id ? null : (
+                <ActionBar
+                  nickName={item.user_display_name}
+                  username={item.username}
+                  createdAt={item.created_at}
+                  voteCount={item.vote_count}
+                  isVote={item.is_vote}
+                  memberActions={item.member_actions}
+                  userStatus={item.user_status}
+                  onReply={() => {
+                    handleReply(item.comment_id);
+                  }}
+                  onAction={(action) => handleAction(action, item)}
+                  onVote={(e) => {
+                    e.preventDefault();
+                    handleVote(item.comment_id, item.is_vote);
+                  }}
+                />
+              )}
+            </div>
+          );
+        })}
+
+        <div className={classNames(comments.length > 0 && 'py-2')}>
+          {comments.length > 0 && (
             <Button
               variant="link"
+              className="p-0 btn-no-border"
               size="sm"
-              className="p-0 ms-3 btn-no-border"
-              onClick={() => {
-                setPageIndex(pageIndex + 1);
-              }}>
-              {t('show_more', {
-                count:
-                  data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
-              })}
+              onClick={handleAddComment}>
+              {t('btn_add_comment')}
             </Button>
           )}
-      </div>
+          {data &&
+            (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 ms-3 btn-no-border"
+                onClick={() => {
+                  setPageIndex(pageIndex + 1);
+                }}>
+                {t('show_more', {
+                  count:
+                    data.count - (pageIndex === 0 ? 3 : pageIndex * pageSize),
+                })}
+              </Button>
+            )}
+        </div>
 
-      {visibleComment && (
-        <Form
-          mode={mode}
-          className={classNames(
-            'mt-2',
-            comments.length <= 0 && 'bg-light p-3 rounded',
-          )}
-          onSendReply={(value) => handleSendReply({ value, type: 'comment' })}
-          onCancel={() => setVisibleComment(!visibleComment)}
-        />
-      )}
-    </div>
+        {visibleComment && (
+          <Form
+            mode={mode}
+            className={classNames(
+              comments.length <= 0 ? 'mt-3' : 'mt-2',
+              comments.length <= 0 && 'bg-light p-3 rounded',
+            )}
+            onSendReply={(value) => handleSendReply({ value, type: 'comment' })}
+            onCancel={() => setVisibleComment(!visibleComment)}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

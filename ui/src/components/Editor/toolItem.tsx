@@ -87,9 +87,9 @@ const ToolItem: FC<IProps> = (props) => {
     <Button
       variant="link"
       title={tip}
-      className={`p-0 b-0 btn-no-border toolbar icon-${label} ${
+      className={`p-0 b-0 btn-no-border toolbar text-body ${
         disable ? 'disabled' : ''
-      } `}
+      }`}
       disabled={disable}
       tabIndex={-1}
       onClick={(e) => {
@@ -109,8 +109,9 @@ const ToolItem: FC<IProps> = (props) => {
           replaceLines: editor?.replaceLines,
           appendBlock: editor?.appendBlock,
         });
-      }}
-    />
+      }}>
+      <i className={`bi bi-${label}`} />
+    </Button>
   );
 
   if (!editor) {

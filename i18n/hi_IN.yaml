@@ -883,8 +883,8 @@ ui:
       label: Name
       msg:
         empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        range: Name must between 4 to 30 characters in length.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email
       msg:
@@ -1265,7 +1265,7 @@ ui:
     x_answers: answers
     x_questions: questions
   install:
-    title: Answer
+    title: Installation
     next: Next
     done: Done
     config_yaml_error: Can't create the config.yaml file.
@@ -1340,7 +1340,7 @@ ui:
       msg:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
-    ready_title: Your Answer is ready!
+    ready_title: Your site is ready
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Have fun, and good luck!"
@@ -1401,7 +1401,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
@@ -1734,7 +1734,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
       filter:
         all: All
         active: Active

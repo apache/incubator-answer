@@ -38,6 +38,8 @@ var (
 	dataDirPath string
 	// dumpDataPath dump data path
 	dumpDataPath string
+	// place to build new answer
+	buildDir string
 	// plugins needed to build in answer application
 	buildWithPlugins []string
 	// build output path
@@ -59,6 +61,8 @@ func init() {
 	buildCmd.Flags().StringSliceVarP(&buildWithPlugins, "with", "w", []string{}, "plugins needed to build")
 
 	buildCmd.Flags().StringVarP(&buildOutput, "output", "o", "", "build output path")
+
+	buildCmd.Flags().StringVarP(&buildDir, "build-dir", "b", "", "dir for build process")
 
 	upgradeCmd.Flags().StringVarP(&upgradeVersion, "from", "f", "", "upgrade from specific version, eg: -f v1.1.0")
 
@@ -209,7 +213,7 @@ To run answer, use:
 		Long:  `Build a new Answer with plugins that you need`,
 		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Printf("try to build a new answer with plugins:\n%s\n", strings.Join(buildWithPlugins, "\n"))
-			err := cli.BuildNewAnswer(buildOutput, buildWithPlugins, cli.OriginalAnswerInfo{
+			err := cli.BuildNewAnswer(buildDir, buildOutput, buildWithPlugins, cli.OriginalAnswerInfo{
 				Version:  Version,
 				Revision: Revision,
 				Time:     Time,

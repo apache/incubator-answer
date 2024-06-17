@@ -25,7 +25,9 @@ import '@/utils/pluginKit';
 import routes from '@/router';
 
 function App() {
-  const router = createBrowserRouter(routes);
+  const router = createBrowserRouter(routes, {
+    basename: process.env.REACT_APP_BASE_URL,
+  });
   return <RouterProvider router={router} />;
 }
 

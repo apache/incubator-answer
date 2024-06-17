@@ -32,13 +32,13 @@
     {{if .noindex }}<meta name="robots" content="noindex">{{end}}
 
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="{{$.baseURL}}/manifest.json" />
     <link href="{{.cssPath}}" rel="stylesheet" />
-    <link href="/custom.css" rel="stylesheet" />
+    <link href="{{$.baseURL}}/custom.css" rel="stylesheet" />
     <link
       rel="icon"
       type="image/png"
-      href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}/favicon.ico{{end}}"
+      href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"
       data-rh="true"
     />
     <link
@@ -58,6 +58,24 @@
     <script defer="defer" src="{{$path}}"></script>
     {{end}}
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" name="twitter:title" content="{{.title}}" />
+    <meta property="og:site_name" content="{{.siteinfo.General.Name}}" />
+    <meta property="og:url" content="{{.siteinfo.Canonical}}" />
+    <meta property="og:description" content="{{.description}}" />
+    <meta
+            property="og:image"
+            itemProp="image primaryImageOfPage"
+            content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:domain" content="{{.siteinfo.General.SiteUrl}}" />
+    <meta name="twitter:description" content="{{.description}}" />
+    <meta
+            name="twitter:image"
+            content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
+    />
   </head>
 
   <body>
@@ -133,11 +151,11 @@
             class="d-flex justify-content-between align-items-center nav-grow flex-nowrap"
           >
             {{if .siteinfo.Branding.Logo}}
-              <a class="lh-1 me-0 me-sm-5 p-0 navbar-brand" href="/">
+              <a class="lh-1 me-0 me-sm-5 p-0 navbar-brand" href="{{$.baseURL}}/">
                 <img class="logo me-0" src="{{.siteinfo.Branding.Logo}}" alt="{{.siteinfo.General.Name}}">
               </a>
             {{else}}
-              <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
+              <a class="lh-1 me-0 me-sm-3 navbar-brand" href="{{$.baseURL}}/">
                 {{.siteinfo.General.Name}}
               </a>
             {{end}}

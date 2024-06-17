@@ -27,7 +27,7 @@ let context: IEditorContext;
 const Outdent = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
-    label: 'outdent',
+    label: 'text-indent-right',
     keyMap: ['Shift-Tab'],
     tip: t('outdent.text'),
   };

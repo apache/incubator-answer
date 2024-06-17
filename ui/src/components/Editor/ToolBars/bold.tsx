@@ -27,7 +27,7 @@ let context: IEditorContext;
 const Bold = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
-    label: 'bold',
+    label: 'type-bold',
     keyMap: ['Ctrl-b'],
     tip: `${t('bold.text')} (Ctrl+b)`,
   };

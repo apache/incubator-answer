@@ -17,14 +17,43 @@
  * under the License.
  */
 
+#reaction-button-tooltip {
+  .popover-body {
+    .btn {
+      background-color: var(--bs-body-bg);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--bs-gray-100);
+      }
+
+      &:active, &.active {
+        background-color: var(--bs-gray-200);
+      }
+    }
+  }
+}
+
 .answer-item {
   border-top: 1px solid var(--an-answer-item-border-top);
+}
+
+.smile-btn.active::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+  display: block;
+  cursor: default;
+  content: " ";
 }
 
 @media screen and (max-width: 768px) {
   .questionDetailPage {
     h1.h3 {
-      font-size: calc(1.275rem + .3vw)!important;
+      font-size: calc(1.275rem + 0.3vw) !important;
     }
   }
 }

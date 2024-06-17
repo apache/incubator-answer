@@ -52,6 +52,7 @@ func initApplication(
 	i18nConf *translator.I18n,
 	swaggerConf *router.SwaggerConfig,
 	serviceConf *service_config.ServiceConfig,
+	uiConf *server.UI,
 	logConf log.Logger) (*pacman.Application, func(), error) {
 	panic(wire.Build(
 		server.ProviderSetServer,

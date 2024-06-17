@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import React from 'react';
+import { RefObject } from 'react';
 
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
@@ -26,7 +26,8 @@ import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { getPluginsStatus } from '@/services';
 import Storage from '@/utils/storage';
 
-import { initI18nResource, Plugin, PluginInfo, PluginType } from './utils';
+import { initI18nResource } from './utils';
+import { Plugin, PluginInfo, PluginType } from './interface';
 
 /**
  * This information is to be defined for all components.
@@ -43,11 +44,14 @@ import { initI18nResource, Plugin, PluginInfo, PluginType } from './utils';
 class Plugins {
   plugins: Plugin[] = [];
 
+  registeredPlugins: Type.ActivatedPlugin[] = [];
+
   constructor() {
     this.registerBuiltin();
     this.registerPlugins();
 
     getPluginsStatus().then((plugins) => {
+      this.registeredPlugins = plugins;
       this.activatePlugins(plugins);
     });
   }
@@ -133,19 +137,10 @@ class Plugins {
 
 const plugins = new Plugins();
 
-const useRenderHtmlPlugin = (element: HTMLElement | null) => {
-  plugins
-    .getPlugins()
-    .filter((plugin) => plugin.activated && plugin.hooks?.useRender)
-    .forEach((plugin) => {
-      plugin.hooks?.useRender?.forEach((hook) => {
-        hook(element);
-      });
-    });
-};
-
 const getRoutePlugins = () => {
-  return plugins.getPlugins().filter((plugin) => plugin.info.type === 'route');
+  return plugins
+    .getPlugins()
+    .filter((plugin) => plugin.info.type === PluginType.Route);
 };
 
 const defaultProps = () => {
@@ -158,6 +153,20 @@ const defaultProps = () => {
   };
 };
 
+const validateRoutePlugin = async (slugName) => {
+  let registeredPlugin;
+  if (plugins.registeredPlugins.length === 0) {
+    const pluginsStatus = await getPluginsStatus();
+    registeredPlugin = pluginsStatus.find((p) => p.slug_name === slugName);
+  } else {
+    registeredPlugin = plugins.registeredPlugins.find(
+      (p) => p.slug_name === slugName,
+    );
+  }
+
+  return Boolean(registeredPlugin?.enabled);
+};
+
 const mergeRoutePlugins = (routes) => {
   const routePlugins = getRoutePlugins();
   if (routePlugins.length === 0) {
@@ -168,13 +177,28 @@ const mergeRoutePlugins = (routes) => {
       route.children?.forEach((child) => {
         if (child.page === 'pages/SideNavLayout') {
           routePlugins.forEach((plugin) => {
-            const { slug_name, route: path } = plugin.info;
-            const Component = plugin.component;
-
+            const { route: path, slug_name } = plugin.info;
             child.children.push({
-              page: `plugin/${slug_name}`,
+              page: plugin.component,
               path,
-              element: React.createElement(Component, defaultProps(), null),
+              loader: async () => {
+                const bool = await validateRoutePlugin(slug_name);
+                return bool;
+              },
+              guard: (params) => {
+                if (params.loaderData) {
+                  return {
+                    ok: true,
+                  };
+                }
+
+                return {
+                  ok: false,
+                  error: {
+                    code: 404,
+                  },
+                };
+              },
             });
           });
         }
@@ -184,11 +208,36 @@ const mergeRoutePlugins = (routes) => {
   return routes;
 };
 
+/**
+ * Only used to enhance the capabilities of the markdown editor
+ * Add RefObject type to solve the problem of dom being null in hooks
+ */
+const useRenderHtmlPlugin = (
+  element: HTMLElement | RefObject<HTMLElement> | null,
+) => {
+  plugins
+    .getPlugins()
+    .filter((plugin) => {
+      return (
+        plugin.activated &&
+        plugin.hooks?.useRender &&
+        plugin.info.type === PluginType.Editor
+      );
+    })
+    .forEach((plugin) => {
+      plugin.hooks?.useRender?.forEach((hook) => {
+        hook(element);
+      });
+    });
+};
+
 // Only one captcha type plug-in can be enabled at the same time
 const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   const captcha = plugins
     .getPlugins()
-    .filter((plugin) => plugin.info.type === 'captcha' && plugin.activated);
+    .filter(
+      (plugin) => plugin.info.type === PluginType.Captcha && plugin.activated,
+    );
   const pluginHooks = plugins.getOnePluginHooks(captcha[0]?.info.slug_name);
   return pluginHooks?.useCaptcha?.({
     captchaKey: key,
@@ -196,7 +245,7 @@ const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   });
 };
 
-export type { Plugin, PluginInfo, PluginType };
+export type { Plugin, PluginInfo };
 
-export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin };
+export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin, PluginType };
 export default plugins;

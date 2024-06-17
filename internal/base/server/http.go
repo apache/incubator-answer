@@ -42,6 +42,7 @@ func NewHTTPServer(debug bool,
 	shortIDMiddleware *middleware.ShortIDMiddleware,
 	templateRouter *router.TemplateRouter,
 	pluginAPIRouter *router.PluginAPIRouter,
+	uiConf *UI,
 ) *gin.Engine {
 
 	if debug {
@@ -57,7 +58,7 @@ func NewHTTPServer(debug bool,
 	htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 	r.SetHTMLTemplate(htmlTemplate)
 	r.Use(middleware.HeadersByRequestURI())
-	viewRouter.Register(r)
+	viewRouter.Register(r, uiConf.BaseURL)
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
@@ -88,7 +89,7 @@ func NewHTTPServer(debug bool,
 	adminauthV1.Use(authUserMiddleware.AdminAuth())
 	answerRouter.RegisterAnswerAdminAPIRouter(adminauthV1)
 
-	templateRouter.RegisterTemplateRouter(rootGroup)
+	templateRouter.RegisterTemplateRouter(rootGroup, uiConf.BaseURL)
 
 	// plugin routes
 	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)

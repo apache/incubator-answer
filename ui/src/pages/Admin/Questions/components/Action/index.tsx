@@ -139,7 +139,7 @@ const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
           title={t('action', { keyPrefix: 'admin.answers' })}
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu align="end">
         {curFilter === 'normal' && (
           <Dropdown.Item onClick={() => handleAction('close')}>
             {t('close', { keyPrefix: 'btns' })}

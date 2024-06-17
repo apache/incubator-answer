@@ -26,6 +26,8 @@ import { loginToContinueStore, siteInfoStore } from '@/stores';
 import { floppyNavigation } from '@/utils';
 import { WelcomeTitle } from '@/components';
 
+import './login.scss';
+
 interface IProps {
   visible: boolean;
 }
@@ -44,10 +46,10 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
   };
   return (
     <Modal
-      title="LoginToContinue"
       show={visible}
       onHide={closeModal}
       centered
+      className="loginToContinueModal"
       fullscreen="sm-down">
       <Modal.Header closeButton>
         <Modal.Title as="h5">{t('login_to_continue')}</Modal.Title>

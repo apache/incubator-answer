@@ -88,6 +88,16 @@ export const addComment = (params) => {
   return request.post('/answer/api/v1/comment', params);
 };
 
+export const updateReaction = (params) => {
+  return request.put('/answer/api/v1/meta/reaction', params);
+};
+
+export const queryReactions = (object_id: string) => {
+  return request.get<Type.ReactionItems>(
+    `/answer/api/v1/meta/reaction?object_id=${object_id}`,
+  );
+};
+
 export const queryTags = (tag: string) => {
   return request.get(
     `/answer/api/v1/question/tags?tag=${encodeURIComponent(tag)}`,

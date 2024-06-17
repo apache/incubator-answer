@@ -54,6 +54,7 @@ type AnswerAPIRouter struct {
 	permissionController    *controller.PermissionController
 	userPluginController    *controller.UserPluginController
 	reviewController        *controller.ReviewController
+	metaController          *controller.MetaController
 }
 
 func NewAnswerAPIRouter(
@@ -84,6 +85,7 @@ func NewAnswerAPIRouter(
 	permissionController *controller.PermissionController,
 	userPluginController *controller.UserPluginController,
 	reviewController *controller.ReviewController,
+	metaController *controller.MetaController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -113,6 +115,7 @@ func NewAnswerAPIRouter(
 		permissionController:    permissionController,
 		userPluginController:    userPluginController,
 		reviewController:        reviewController,
+		metaController:          metaController,
 	}
 }
 
@@ -181,6 +184,9 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
+
+	// reaction
+	r.GET("/meta/reaction", a.metaController.GetReaction)
 }
 
 func (a *AnswerAPIRouter) RegisterAuthUserWithAnyStatusAnswerAPIRouter(r *gin.RouterGroup) {
@@ -285,6 +291,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/plugin/configs", a.userPluginController.GetUserPluginList)
 	r.GET("/user/plugin/config", a.userPluginController.GetUserPluginConfig)
 	r.PUT("/user/plugin/config", a.userPluginController.UpdatePluginUserConfig)
+
+	// meta
+	r.PUT("/meta/reaction", a.metaController.AddOrUpdateReaction)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
@@ -302,6 +311,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.POST("/user", a.adminUserController.AddUser)
 	r.POST("/users", a.adminUserController.AddUsers)
 	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
+	r.PUT("/user/profile", a.adminUserController.EditUserProfile)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

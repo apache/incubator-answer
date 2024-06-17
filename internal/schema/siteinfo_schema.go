@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"net/mail"
 	"net/url"
+	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -49,6 +50,10 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 		return
 	}
 	r.SiteUrl = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
+	if len(parsedUrl.Path) > 0 {
+		r.SiteUrl = r.SiteUrl + parsedUrl.Path
+		r.SiteUrl = strings.TrimSuffix(r.SiteUrl, "/")
+	}
 }
 
 // SiteInterfaceReq site interface request
@@ -236,7 +241,7 @@ type UpdateSMTPConfigReq struct {
 	FromName           string `validate:"omitempty,gt=0,lte=256" json:"from_name"`
 	SMTPHost           string `validate:"omitempty,gt=0,lte=256" json:"smtp_host"`
 	SMTPPort           int    `validate:"omitempty,min=1,max=65535" json:"smtp_port"`
-	Encryption         string `validate:"omitempty,oneof=SSL" json:"encryption"` // "" SSL
+	Encryption         string `validate:"omitempty,oneof=SSL TLS" json:"encryption"` // "" SSL TLS
 	SMTPUsername       string `validate:"omitempty,gt=0,lte=256" json:"smtp_username"`
 	SMTPPassword       string `validate:"omitempty,gt=0,lte=256" json:"smtp_password"`
 	SMTPAuthentication bool   `validate:"omitempty" json:"smtp_authentication"`
@@ -260,7 +265,7 @@ type GetSMTPConfigResp struct {
 	FromName           string `json:"from_name"`
 	SMTPHost           string `json:"smtp_host"`
 	SMTPPort           int    `json:"smtp_port"`
-	Encryption         string `json:"encryption"` // "" SSL
+	Encryption         string `json:"encryption"` // "" SSL TLS
 	SMTPUsername       string `json:"smtp_username"`
 	SMTPPassword       string `json:"smtp_password"`
 	SMTPAuthentication bool   `json:"smtp_authentication"`

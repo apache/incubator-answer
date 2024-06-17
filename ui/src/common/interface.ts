@@ -687,8 +687,8 @@ export interface NotificationConfig {
 }
 
 export interface ActivatedPlugin {
-  name: string;
   slug_name: string;
+  enabled: boolean;
 }
 
 export interface UserPluginsConfigRes {
@@ -718,4 +718,18 @@ export interface PutFlagReviewParams {
   // mention_username_list?: any;
   captcha_code?: any;
   captcha_id?: any;
+}
+
+/**
+ * @description response for reaction
+ */
+export interface ReactionItems {
+  reaction_summary: ReactionItem[];
+}
+
+export interface ReactionItem {
+  emoji: string;
+  count: number;
+  tooltip: string;
+  is_active: boolean;
 }

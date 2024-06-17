@@ -1265,7 +1265,7 @@ ui:
     x_answers: respostas
     x_questions: perguntas
   install:
-    title: Resposta
+    title: Instalação
     next: Proximo
     done: Completo
     config_yaml_error: Não é possível criar o arquivo config.yaml.
@@ -1401,7 +1401,7 @@ ui:
       title: Administrador
     dashboard:
       title: Painel
-      welcome: Bem vindo ao Answer Administrador!
+      welcome: Bem vindo ao Administrador!
       site_statistics: Site statistics
       questions: "Perguntas:"
       answers: "Respostas:"
@@ -1734,7 +1734,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Extensões instaladas
-      plugin_link: Extensões estendem e expandem a funcionalidade da Resposta. Você pode encontrar extensões no <1>Repositório de extensões do Answer</1>.
+      plugin_link: Os plug-ins estendem e expandem a funcionalidade. Você pode encontrar plug-ins no <1>Repositório de plug-ins</1>.
       filter:
         all: Todos
         active: Ativo

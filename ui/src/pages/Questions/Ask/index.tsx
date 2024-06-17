@@ -238,7 +238,7 @@ const Ask = () => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      title: { ...formData.title, value: e.currentTarget.value, errorMsg: '' },
+      title: { value: e.currentTarget.value, errorMsg: '', isInvalid: false },
     });
     if (e.currentTarget.value.length >= 10) {
       querySimilarQuestions(e.currentTarget.value);
@@ -250,19 +250,19 @@ const Ask = () => {
   const handleContentChange = (value: string) => {
     setFormData({
       ...formData,
-      content: { ...formData.content, value, errorMsg: '' },
+      content: { value, errorMsg: '', isInvalid: false },
     });
   };
   const handleTagsChange = (value) =>
     setFormData({
       ...formData,
-      tags: { ...formData.tags, value, errorMsg: '' },
+      tags: { value, errorMsg: '', isInvalid: false },
     });
 
   const handleAnswerChange = (value: string) =>
     setFormData({
       ...formData,
-      answer_content: { ...formData.answer_content, value, errorMsg: '' },
+      answer_content: { value, errorMsg: '', isInvalid: false },
     });
 
   const handleSummaryChange = (evt: React.ChangeEvent<HTMLInputElement>) =>
@@ -446,25 +446,21 @@ const Ask = () => {
                 autoFocus
                 contentEditable
               />
-
               <Form.Control.Feedback type="invalid">
                 {formData.title.errorMsg}
               </Form.Control.Feedback>
               {bool && <SearchQuestion similarQuestions={similarQuestions} />}
             </Form.Group>
+
             <Form.Group controlId="content">
               <Form.Label>{t('form.fields.body.label')}</Form.Label>
-              <Form.Control
-                defaultValue={formData.content.value}
-                isInvalid={formData.content.isInvalid}
-                hidden
-              />
               <Editor
                 value={formData.content.value}
                 onChange={handleContentChange}
                 className={classNames(
                   'form-control p-0',
                   focusType === 'content' && 'focus',
+                  formData.content.isInvalid && 'is-invalid',
                 )}
                 onFocus={() => {
                   setForceType('content');
@@ -478,23 +474,19 @@ const Ask = () => {
                 {formData.content.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
+
             <Form.Group controlId="tags" className="my-3">
               <Form.Label>{t('form.fields.tags.label')}</Form.Label>
-              <Form.Control
-                defaultValue={JSON.stringify(formData.tags.value)}
-                isInvalid={formData.tags.isInvalid}
-                hidden
-              />
               <TagSelector
                 value={formData.tags.value}
                 onChange={handleTagsChange}
                 showRequiredTag
                 maxTagLength={5}
+                isInvalid={formData.tags.isInvalid}
+                errMsg={formData.tags.errorMsg}
               />
-              <Form.Control.Feedback type="invalid">
-                {formData.tags.errorMsg}
-              </Form.Control.Feedback>
             </Form.Group>
+
             {isEdit && (
               <Form.Group controlId="edit_summary" className="my-3">
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
@@ -549,6 +541,7 @@ const Ask = () => {
                       className={classNames(
                         'form-control p-0',
                         focusType === 'answer' && 'focus',
+                        formData.answer_content.isInvalid && 'is-invalid',
                       )}
                       onFocus={() => {
                         setForceType('answer');

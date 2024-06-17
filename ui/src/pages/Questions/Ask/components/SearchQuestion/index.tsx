@@ -20,6 +20,7 @@
 import { memo } from 'react';
 import { Accordion, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { Icon } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
@@ -45,10 +46,10 @@ const SearchQuestion = ({ similarQuestions }) => {
               return (
                 <ListGroup.Item
                   action
-                  as="a"
+                  as={Link}
                   className="link-dark text-wrap text-break"
                   key={item.id}
-                  href={pathFactory.questionLanding(item.id, item.url_title)}
+                  to={pathFactory.questionLanding(item.id, item.url_title)}
                   target="_blank">
                   <span
                     className={`${

@@ -22,7 +22,15 @@ import { FormControl, FormControlProps } from 'react-bootstrap';
 
 const TextArea: FC<
   FormControlProps & { rows?: number; autoFocus?: boolean }
-> = ({ value, onChange, size, rows = 1, autoFocus = true, ...rest }) => {
+> = ({
+  value,
+  onChange,
+  size,
+  rows = 1,
+  autoFocus = true,
+  isInvalid,
+  ...rest
+}) => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const autoGrow = () => {
@@ -49,6 +57,7 @@ const TextArea: FC<
       autoFocus={autoFocus}
       ref={ref}
       onInput={autoGrow}
+      isInvalid={isInvalid}
       {...rest}
     />
   );
