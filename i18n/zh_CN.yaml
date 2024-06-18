@@ -208,7 +208,7 @@ backend:
         other: 该帖子已被删除。
     meta:
       object_not_found:
-        other: 找不到元对象
+        other: Meta 对象未找到
     question:
       already_deleted:
         other: 该帖子已被删除。
@@ -517,7 +517,7 @@ backend:
       other: 建议的编辑
   reaction:
     tooltip:
-      other: "{{ .Names }} 和 {{ .Count }} 更多..."
+      other: "{{ .Names }} 以及另外 {{ .Count }} 个..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -910,8 +910,8 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名称长度应该介于 4 到 30 个字符之间。
-        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
+        range: 名字应该在 4 到 30 个字符之间
+        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
       msg:
@@ -989,7 +989,7 @@ ui:
         caption: 用户可以通过 "@用户名" 来提及你。
         msg: 用户名不能为空
         msg_range: 用户名不能超过 30 个字符。
-        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
+        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
       avatar:
         label: 头像
         gravatar: Gravatar
@@ -1170,7 +1170,7 @@ ui:
     resend: 重新发送
     deactivate: 取消激活
     active: 激活
-    suspend: 已封禁
+    suspend: 封禁
     unsuspend: 解禁
     close: 关闭
     reopen: 重新打开
@@ -1776,7 +1776,7 @@ ui:
         text: "警告：如果您未配置过其他登录方式，关闭密码登录后您则可能无法登录。"
     installed_plugins:
       title: 已安装插件
-      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
+      plugin_link: 插件扩展功能。您可以在<1>插件仓库</1>中找到插件。
       filter:
         all: 全部
         active: 已启用
