@@ -204,9 +204,11 @@ backend:
         other: 旧密码验证失败。
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
+      already_deleted:
+        other: 该帖子已被删除。
     meta:
       object_not_found:
-        other: Meta 对象未找到
+        other: 找不到元对象
     question:
       already_deleted:
         other: 该帖子已被删除。
@@ -515,7 +517,7 @@ backend:
       other: 建议的编辑
   reaction:
     tooltip:
-      other: "{{ .Names }} 以及另外 {{ .Count }} 个..."
+      other: "{{ .Names }} 和 {{ .Count }} 更多..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -908,8 +910,8 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名字应该在 4 到 30 个字符之间
-        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
+        range: 名称长度应该介于 4 到 30 个字符之间。
+        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
       msg:
@@ -1168,7 +1170,7 @@ ui:
     resend: 重新发送
     deactivate: 取消激活
     active: 激活
-    suspend: 封禁
+    suspend: 已封禁
     unsuspend: 解禁
     close: 关闭
     reopen: 重新打开
@@ -1365,7 +1367,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的网站已经准备好了
+    ready_title: 您的网站已准备好
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1426,7 +1428,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到后台管理！
+      welcome: 欢迎来到管理后台！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
@@ -1774,7 +1776,7 @@ ui:
         text: "警告：如果您未配置过其他登录方式，关闭密码登录后您则可能无法登录。"
     installed_plugins:
       title: 已安装插件
-      plugin_link: 插件扩展功能。您可以在<1>插件仓库</1>中找到插件。
+      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
       filter:
         all: 全部
         active: 已启用
@@ -1832,7 +1834,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: "标签管理: 编辑标签"
+    tag_edit: '标签管理: 编辑标签'
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1861,7 +1863,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: "评论:"
+    commented: '评论:'
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于
