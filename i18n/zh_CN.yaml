@@ -137,6 +137,8 @@ backend:
     other: 密码
   pass:
     other: 密码
+  original_text:
+    other: 本帖
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: 你无法修改自己的密码。
+      cannot_edit_their_profile:
+        other: 您不能修改您的个人资料。
       cannot_modify_self_status:
         other: 你无法修改自己的状态。
       email_or_password_wrong:
@@ -200,6 +204,8 @@ backend:
         other: 旧密码验证失败。
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
+      already_deleted:
+        other: 该帖子已被删除。
     meta:
       object_not_found:
         other: Meta 对象未找到
@@ -315,7 +321,9 @@ backend:
       name:
         other: 粗鲁或辱骂的
       desc:
-        other: 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
+        other:
+          - 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
+          - 论坛
     a_duplicate:
       name:
         other: 重复内容
@@ -327,7 +335,10 @@ backend:
       name:
         other: 不是答案
       desc:
-        other: 该帖是作为答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑、评论、另一个问题或者需要被删除。
+        other:
+          - 这张贴作为答案，但它不会试图回答
+          - 这可能是一个编辑、一个评论、另一个问题。
+          - 或全部删除。
     no_longer_needed:
       name:
         other: 不再需要
@@ -386,7 +397,9 @@ backend:
         name:
           other: 需要细节或澄清
         desc:
-          other: 该问题目前涵盖多个问题。它应该只集中在一个问题上。
+          other:
+            - 该问题目前涵盖多个问题。它应该侧重在一个问题上。
+            - 只关注一个问题。
       other:
         name:
           other: 其他原因
@@ -755,8 +768,12 @@ ui:
     days: 日
   reaction:
     heart: 爱心
-    smile: 笑脸
-    frown: 难过
+    smile: 微笑
+    frown: 愁
+    btn_label: 添加或删除回应。
+    undo_emoji: 撤销 {{ emoji }} 回应
+    react_emoji: 用 {{ emoji }} 回应
+    unreact_emoji: 撤销 {{ emoji }}
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -972,7 +989,7 @@ ui:
         caption: 用户可以通过 "@用户名" 来提及你。
         msg: 用户名不能为空
         msg_range: 用户名不能超过 30 个字符。
-        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
+        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
       avatar:
         label: 头像
         gravatar: Gravatar
@@ -1350,7 +1367,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的网站已经准备好了
+    ready_title: 您的网站已准备好
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1411,7 +1428,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到后台管理！
+      welcome: 欢迎来到管理后台！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
@@ -1480,6 +1497,19 @@ ui:
             msg: 密码的长度必须是8-32个字符。
       btn_cancel: 取消
       btn_submit: 提交
+    edit_profile_modal:
+      title: 编辑资料
+      form:
+        fields:
+          username:
+            label: 用户名
+            msg_range: 用户名不能超过 30 个字符。
+          email:
+            label: 电子邮件地址
+            msg_invalid: 无效的邮箱地址
+      edit_success: 修改成功
+      btn_cancel: 取消
+      btn_submit: 提交
     user_modal:
       title: 添加新用户
       form:
@@ -1525,6 +1555,7 @@ ui:
       filter:
         placeholder: "按名称筛选，用户：id"
       set_new_password: 设置新密码
+      edit_profile: 编辑资料
       change_status: 更改状态
       change_role: 更改角色
       show_logs: 显示日志
@@ -1803,7 +1834,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: "标签管理: 编辑标签"
+    tag_edit: '标签管理: 编辑标签'
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1832,7 +1863,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: "评论:"
+    commented: '评论:'
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于
