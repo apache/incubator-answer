@@ -69,64 +69,64 @@ backend:
       user:
         other: Mặc định không có quyền truy cập đặc biệt.
       admin:
-        other: Have the full power to access the site.
+        other: Có toàn quyền truy cập vào trang.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Có quyền truy cập vào tất cả bài viết trừ cài đặt quản trị.
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Cấp độ 1 (yêu cầu danh tiếng thấp cho nhóm riêng, nhóm)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Cấp độ 2 (yêu cầu danh tiếng cao cho cộng đồng đã phát triển)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Cấp độ 3 (yêu cầu danh tiếng cao cho cộng đồng đã phát triển)
     level_custom:
       description:
-        other: Custom Level
+        other: Cấp độ tùy chỉnh
     rank_question_add_label:
       other: Đặt câu hỏi
     rank_answer_add_label:
       other: Viết câu trả lời
     rank_comment_add_label:
-      other: Write comment
+      other: Viết bình luận
     rank_report_add_label:
-      other: Flag
+      other: Gắn Cờ
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: Upvote cho một bình luận
     rank_link_url_limit_label:
-      other: Post more than 2 links at a time
+      other: Đăng nhiều hơn 2 liên kết cùng một lúc
     rank_question_vote_up_label:
-      other: Upvote question
+      other: Bình chọn lên cho câu hỏi
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: Bình chọn lên cho câu trả lời
     rank_question_vote_down_label:
-      other: Downvote question
+      other: Bình chọn xuống cho câu hỏi
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: Bình chọn xuống cho câu trả lời
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Mời ai đó trả lời
     rank_tag_add_label:
       other: Tạo thẻ mới
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Chỉnh sửa mô tả thẻ (cần xem xét)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Chỉnh sửa câu hỏi của người khác (cần xem xét)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Chỉnh sửa câu trả lời của người khác (cần xem xét)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Chỉnh sửa câu hỏi của người khác không cần xem xét
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: Chỉnh sửa câu trả lời của người khác không cần xem xét
     rank_question_audit_label:
-      other: Review question edits
+      other: Xem xét chỉnh sửa câu hỏi
     rank_answer_audit_label:
-      other: Review answer edits
+      other: Xem xét chỉnh sửa câu trả lời
     rank_tag_audit_label:
-      other: Review tag edits
+      other: Xem xét chỉnh sửa thẻ
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: Chỉnh sửa mô tả thẻ không cần xem xét
     rank_tag_synonym_label:
       other: Manage tag synonyms
   email:
@@ -179,9 +179,9 @@ backend:
       need_to_be_verified:
         other: Email cần được xác minh.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: URL xác minh email đã hết hạn, vui lòng gửi lại email.
       illegal_email_domain_error:
-        other: Email is not allowed from that email domain. Please use another one.
+        other: Email không được phép từ miền email đó. Vui lòng sử dụng miền khác.
     lang:
       not_found:
         other: Không tìm thấy file ngôn ngữ.
@@ -189,29 +189,29 @@ backend:
       captcha_verification_failed:
         other: Sai Captcha.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Bạn không được phép theo dõi.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Bạn không được phép bỏ phiếu.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Bạn không thể bỏ phiếu cho bài đăng của chính mình.
       not_found:
-        other: Object not found.
+        other: Đối tượng không tìm thấy.
       verification_failed:
         other: Xác thực không thành công.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: Email và mật khẩu không trùng khớp.
       old_password_verification_failed:
         other: The old password verification failed
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: Mật khẩu mới giống như cài đặt trước.
       already_deleted:
-        other: This post has been deleted.
+        other: Mật khẩu mới giống như cài đặt trước.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Đối tượng không tìm thấy
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Bài đăng này đã bị xóa.
       under_review:
         other: Bài đăng của bạn đang chờ xem xét. Nó sẽ hiển thị sau khi được phê duyệt.
       not_found:
