@@ -137,6 +137,8 @@ backend:
     other: Chiave di accesso
   pass:
     other: Password
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Non è possibile modificare la password.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Non è possibile modificare il tuo status.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: la verifica della vecchia password è fallita
       new_password_same_as_previous_setting:
         other: La nuova password è identica alla precedente
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Questo post è stato eliminato.
@@ -312,7 +321,9 @@ backend:
       name:
         other: scortese o offensivo
       desc:
-        other: Una persona ragionevole troverebbe questo contenuto inappropriato o irrispettoso.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: duplicato
@@ -324,7 +335,10 @@ backend:
       name:
         other: Non è una risposta
       desc:
-        other: Ciò è stato pubblicato come una risposta, ma non risponde alla domanda. Dovrebbe essere possibilmente una modifica, un commento, un'altra domanda o cancellato del tutto.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: Non più necessario
@@ -383,7 +397,9 @@ backend:
         name:
           other: richiede maggiori dettagli o chiarezza
         desc:
-          other: Questa domanda attualmente include più domande in uno. Dovrebbe concentrarsi su un solo problema.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: altro
@@ -499,6 +515,9 @@ backend:
       other: Post contrassegnato
     suggested_post_edit:
       other: Modifiche suggerite
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -550,7 +569,7 @@ ui:
     someone: Qualcuno
     inbox_type:
       all: Tutti
-      posts: Posts
+      posts: Messaggi
       invites: Inviti
       votes: Voti
   suspended:
@@ -670,7 +689,7 @@ ui:
       empty: Per favore seleziona un motivo
   report_modal:
     flag_title: Sto segnalando questo post per riportarlo come...
-    close_title: I am closing this post as...
+    close_title: Sto chiudendo questo post come...
     review_question_title: Rivedi la domanda
     review_answer_title: Rivedi la risposta
     review_comment_title: Rivedi il commento
@@ -736,8 +755,8 @@ ui:
     btn_save_edits: Salva modifiche
     btn_cancel: Cancella
   dates:
-    long_date: MMM D
-    long_date_with_year: "MMM D, YYYY"
+    long_date: Mese, giorno
+    long_date_with_year: "Giorno, Mese, Anno"
     long_date_with_time: "MMM D, AAAA [at] HH:mm"
     now: ora
     x_seconds_ago: "{{count}}s fa"
@@ -747,6 +766,14 @@ ui:
     day: giorno
     hours: ore
     days: giorni
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Aggiungi un commento
     reply_to: Rispondi a
@@ -883,10 +910,10 @@ ui:
       label: Nome
       msg:
         empty: Il nome non può essere vuoto.
-        range: Nome fino a 30 caratteri.
-        character: 'È necessario utilizzare il set di caratteri "a-z", "0-9", " - . _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: L'email non può essere vuota.
     password:
@@ -900,7 +927,7 @@ ui:
     send_success: >-
       Se un account corrisponde a <strong>{{mail}}</strong>, a breve dovresti ricevere un'e-mail con le istruzioni su come reimpostare la password.
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: Il campo email non può essere vuoto.
   change_email:
@@ -919,7 +946,7 @@ ui:
     subtitle: Aggiungi un'email di recupero al tuo account.
     btn_update: Aggiorna l'indirizzo email
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: L'email non può essere vuota.
     modal_title: Email già esistente
@@ -948,7 +975,7 @@ ui:
     nav:
       profile: Profilo
       notification: Notifiche
-      account: Account
+      account: Profilo
       interface: Interfaccia
     profile:
       heading: Profilo
@@ -999,10 +1026,10 @@ ui:
       change_email_info: >-
         Abbiamo inviato una mail a quell'indirizzo. Si prega di seguire le istruzioni di conferma.
       email:
-        label: Email
+        label: E-mail
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Nuova mail
+        msg: La nuova email non può essere vuota.
       pass:
         label: Password attuale
         msg: La password non può essere vuota
@@ -1162,7 +1189,7 @@ ui:
     closed: Chiuso
     deleted: Eliminato
     pending: In attesa
-    more: More
+    more: Altro
   search:
     title: Risultati della ricerca
     keywords: Parole chiave
@@ -1179,7 +1206,7 @@ ui:
       more: Altro
     tips:
       title: Suggerimenti per ricerca avanzata
-      tag: "<1>[tag]</1> search with a tag"
+      tag: "<1>[tag]</1> cerca dentro un tag"
       user: "<1>user:username</1> ricerca per autore"
       answer: "<1>risposte:0</1> domande senza risposta"
       score: "<1>punteggio:3</1> messaggi con un punteggio di 3+"
@@ -1258,7 +1285,7 @@ ui:
     answered: risposto
     asked: chiesto
     downvoted: votato negativamente
-    mod_short: MOD
+    mod_short: Moderatore
     mod_long: Moderatori
     x_reputation: reputazione
     x_votes: voti ricevuti
@@ -1335,7 +1362,7 @@ ui:
       msg_min_length: La password deve contenere almeno 8 caratteri.
       msg_max_length: La password deve contenere un massimo di 32 caratteri.
     admin_email:
-      label: Email
+      label: E-mail
       text: Avrai bisogno di questa email per accedere.
       msg:
         empty: Il campo email non può essere vuoto.
@@ -1377,7 +1404,7 @@ ui:
     settings: Impostazioni
     general: Generale
     interface: Interfaccia
-    smtp: SMTP
+    smtp: Protocollo di Trasferimento Posta Semplice
     branding: Marchio
     legal: Legale
     write: Scrivi
@@ -1417,11 +1444,11 @@ ui:
       run_mode: "Modalità di esecuzione:"
       private: Privato
       public: Pubblico
-      smtp: "SMTP:"
+      smtp: "Protocollo di Trasferimento Posta Semplice"
       timezone: "Fuso orario:"
       system_info: Info sistema
       go_version: "Versione Go:"
-      database: "Database:"
+      database: "Banca dati:"
       database_size: "Dimensioni del database"
       storage_used: "Spazio di archiviazione utilizzato:"
       uptime: "Tempo di attività:"
@@ -1448,7 +1475,7 @@ ui:
       writable: Editabile
       not_writable: Non editabile
     flags:
-      title: Flags
+      title: Contrassegni
       pending: In attesa
       completed: Completato
       flagged: Contrassegnato
@@ -1470,6 +1497,19 @@ ui:
             msg: La password deve contenere da 8 a 32 caratteri.
       btn_cancel: Cancella
       btn_submit: Invia
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Aggiungi un nuovo utente
       form:
@@ -1483,7 +1523,7 @@ ui:
             label: Nome da visualizzare
             msg: Il nome visualizzato deve avere una lunghezza compresa tra 4 e 30 caratteri.
           email:
-            label: Email
+            label: E-mail
             msg: L'email non è valida.
           password:
             label: Password
@@ -1493,7 +1533,7 @@ ui:
     users:
       title: Utenti
       name: Nome
-      email: Email
+      email: E-mail
       reputation: Reputazione
       created_at: Data di creazione
       delete_at: Data di cancellazione
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Filtra per nome, utente:id"
       set_new_password: Imposta una nuova password
+      edit_profile: Edit profile
       change_status: Modifica lo stato
       change_role: Cambia il ruolo
       show_logs: Visualizza i log
@@ -1592,7 +1633,7 @@ ui:
         msg: Il fuso orario non può essere vuoto.
         text: Scegli una città con il tuo stesso fuso orario.
     smtp:
-      page_title: SMTP
+      page_title: Protocollo di Trasferimento Posta Semplice
       from_email:
         label: Dall'email
         msg: L'email del contatto non può essere vuota.
@@ -1610,6 +1651,7 @@ ui:
         msg: La crittografia non può essere vuota.
         text: Per la maggior parte dei server SSL è l'opzione consigliata.
         ssl: SSL
+        tls: TLS
         none: Nessuna
       smtp_port:
         label: Porta SMTP
@@ -1714,7 +1756,7 @@ ui:
     login:
       page_title: Accedi
       membership:
-        title: Membership
+        title: Adesione
         label: Consenti nuove registrazioni
         text: Disattiva per impedire a chiunque di creare un nuovo account.
       email_registration:
@@ -1778,8 +1820,8 @@ ui:
         label: Livello di reputazione richiesto
         text: Scegli la reputazione richiesta per i privilegi
       msg:
-        should_be_number: the input should be number
-        number_larger_1: number should be equal or larger than 1
+        should_be_number: l'input dovrebbe essere un numero
+        number_larger_1: il numero dovrebbe essere uguale o superiore a 1
   form:
     optional: (opzionale)
     empty: non può essere vuoto

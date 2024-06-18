@@ -137,6 +137,8 @@ backend:
     other: Contraseña
   pass:
     other: Contraseña
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Contraseña o correo incorrecto.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: No puede modificar su contraseña.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: No puede modificar su contraseña.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: La verificación de la contraseña antigua falló
       new_password_same_as_previous_setting:
         other: La nueva contraseña es igual a la anterior.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Esta publicación ha sido eliminada.
@@ -312,7 +321,9 @@ backend:
       name:
         other: grosero u ofensivo
       desc:
-        other: Una persona con juicio encontraría este contenido inapropiado para el discurso respetuoso.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: un duplicado
@@ -324,7 +335,10 @@ backend:
       name:
         other: no es una respuesta
       desc:
-        other: Esto fue publicado como respuesta, pero no intenta responder la pregunta. Posiblemente debería ser una edición, un comentario, otra pregunta o eliminado por completo.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: ya no es necesario
@@ -383,7 +397,9 @@ backend:
         name:
           other: necesita más detalles o aclaraciónes
         desc:
-          other: Esta pregunta incluye múltiples preguntas en una. Debería centrarse en un único problema/pregunta.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: otra razón
@@ -499,6 +515,9 @@ backend:
       other: Flagged post
     suggested_post_edit:
       other: Suggested edits
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: día
     hours: horas
     days: días
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Añadir comentario
     reply_to: Responder a
@@ -883,8 +910,8 @@ ui:
       label: Nombre
       msg:
         empty: El nombre no puede estar vacío.
-        range: Nombre hasta 30 caracteres.
-        character: 'Debe usar el conjunto de caracteres "a-z", "0-9", "- . _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Correo electrónico
       msg:
@@ -1470,6 +1497,19 @@ ui:
             msg: La contraseña debe contener entre 8 y 32 caracteres de longitud.
       btn_cancel: Cancelar
       btn_submit: Enviar
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Añadir nuevo usuario
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Filtrar por nombre, usuario:id"
       set_new_password: Establecer nueva contraseña
+      edit_profile: Edit profile
       change_status: Cambiar Estado
       change_role: Cambiar rol
       show_logs: Mostrar registros
@@ -1610,6 +1651,7 @@ ui:
         msg: El cifrado no puede estar vacío.
         text: Para la mayoría de los servidores, SSL es la opción recomendada.
         ssl: SSL
+        tls: TLS
         none: Ninguno
       smtp_port:
         label: Puerto SMTP
@@ -1734,7 +1776,7 @@ ui:
         text: "ADVERTENCIA: Si se desactiva, es posible que no pueda iniciar sesión si no ha configurado previamente otro método de inicio de sesión."
     installed_plugins:
       title: Extensiones Instaladas
-      plugin_link: Las extensiones amplían y expanden la funcionalidad de la Respusta. Puedes encontrar extensiones en el <1>Repositorio de Extensiones de Respuesta</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Todos
         active: Activo
