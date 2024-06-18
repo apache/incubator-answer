@@ -137,6 +137,8 @@ backend:
     other: Пароль
   pass:
     other: Пароль
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Електронна пошта та пароль не збігаються.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Ви не можете змінити свій пароль.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Ви не можете змінити свій статус.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: Не вдалося перевірити старий пароль
       new_password_same_as_previous_setting:
         other: Новий пароль збігається з попереднім.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Публікацію видалено.
@@ -312,7 +321,9 @@ backend:
       name:
         other: грубо чи образливо
       desc:
-        other: Розумна людина вважала б цей вміст неприйнятним для шанобливого дискурсу.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: дублікат
@@ -324,7 +335,10 @@ backend:
       name:
         other: не відповідь
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: no longer needed
@@ -383,7 +397,9 @@ backend:
         name:
           other: потребує деталей або ясності
         desc:
-          other: Наразі це запитання містить кілька запитань в одному. Воно має бути зосереджене лише на одній проблемі.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: інше
@@ -499,6 +515,9 @@ backend:
       other: Flagged post
     suggested_post_edit:
       other: Suggested edits
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: day
     hours: hours
     days: days
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Додати коментар
     reply_to: Відповісти на
@@ -883,8 +910,8 @@ ui:
       label: Ім’я
       msg:
         empty: Ім'я не може бути порожнім.
-        range: Ім'я до 30 символів.
-        character: 'Необхідно використовувати набір символів "a-z", "0-9", "-. _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Електронна пошта
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: відповіді
     x_questions: запитання
   install:
-    title: Відповідь
+    title: Installation
     next: Далі
     done: Done
     config_yaml_error: Can't create the config.yaml file.
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: Поле електронної пошти не може бути пустим.
         incorrect: Email incorrect format.
-    ready_title: Ваша відповідь готова!
+    ready_title: Your site is ready
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Веселіться, і хай щастить!"
@@ -1401,7 +1428,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Запитання:"
       answers: "Відповіді:"
@@ -1470,6 +1497,19 @@ ui:
             msg: Password must be at 8-32 characters in length.
       btn_cancel: Cancel
       btn_submit: Submit
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Add new user
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Filter by name, user:id"
       set_new_password: Встановити новий пароль
+      edit_profile: Edit profile
       change_status: Змінити статус
       change_role: Змінити роль
       show_logs: Show logs
@@ -1610,6 +1651,7 @@ ui:
         msg: Поле шифрування не може бути пустим.
         text: For most servers SSL is the recommended option.
         ssl: SSL
+        tls: TLS
         none: None
       smtp_port:
         label: SMTP port
@@ -1734,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: All
         active: Active
