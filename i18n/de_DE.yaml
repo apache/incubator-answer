@@ -137,6 +137,8 @@ backend:
     other: Passwort
   pass:
     other: Passwort
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: E-Mail und Passwort stimmen nicht überein.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Du kannst dein Passwort nicht ändern.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Du kannst deinen Status nicht ändern.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: Die Überprüfung des alten Passworts ist fehlgeschlagen
       new_password_same_as_previous_setting:
         other: Das neue Passwort ist das gleiche wie das vorherige Passwort.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Dieser Beitrag wurde gelöscht.
@@ -312,7 +321,9 @@ backend:
       name:
         other: unhöflich oder beleidigend
       desc:
-        other: Eine vernünftige Person würde diesen Inhalt als unangemessen für einen respektvollen Diskurs empfinden.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: ein Duplikat
@@ -324,7 +335,10 @@ backend:
       name:
         other: keine Antwort
       desc:
-        other: Das wurde als Antwort gepostet, aber es versucht nicht, die Frage zu beantworten. Sie sollte entweder bearbeitet, kommentiert, als weitere Frage gestellt oder ganz gelöscht werden.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: nicht mehr benötigt
@@ -383,7 +397,9 @@ backend:
         name:
           other: benötigt Details oder Klarheit
         desc:
-          other: Diese Frage enthält derzeit mehrere Fragen in einer. Sie sollte sich auf ein einziges Problem konzentrieren.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: etwas anderes
@@ -499,6 +515,9 @@ backend:
       other: Beiträge gemeldet
     suggested_post_edit:
       other: Änderungsvorschläge
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: tag
     hours: Stunden
     days: Tage
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Einen Kommentar hinzufügen
     reply_to: Antwort an
@@ -883,8 +910,8 @@ ui:
       label: Name
       msg:
         empty: Der Name darf nicht leer sein.
-        range: Name mit bis zu 30 Zeichen.
-        character: 'Muss den Zeichensatz "a-z", "0-9", " - . _" verwenden'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-Mail
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: Antworten
     x_questions: Fragen
   install:
-    title: Antwort
+    title: Installation
     next: Nächste
     done: Erledigt
     config_yaml_error: Die Datei config.yaml kann nicht erstellt werden.
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: E-Mail darf nicht leer sein.
         incorrect: E-Mail falsches Format.
-    ready_title: Dein Answer ist fertig!
+    ready_title: Your site is ready
     ready_desc: >-
       Wenn du noch mehr Einstellungen ändern möchtest, besuche den <1>Admin-Bereich</1>; du findest ihn im Seitenmenü.
     good_luck: "Viel Spaß und viel Glück!"
@@ -1401,7 +1428,7 @@ ui:
       title: Administrator
     dashboard:
       title: Dashboard
-      welcome: Willkommen beim Answer-Admin!
+      welcome: Welcome to Admin!
       site_statistics: Website-Statistiken
       questions: "Fragen:"
       answers: "Antworten:"
@@ -1470,6 +1497,19 @@ ui:
             msg: Das Passwort muss mindestens 8-32 Zeichen lang sein.
       btn_cancel: Abbrechen
       btn_submit: Senden
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Neuen Benutzer hinzufügen
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Nach Namen, user:id filtern"
       set_new_password: Neues Passwort festlegen
+      edit_profile: Edit profile
       change_status: Status ändern
       change_role: Rolle wechseln
       show_logs: Protokolle anzeigen
@@ -1610,6 +1651,7 @@ ui:
         msg: Verschlüsselung darf nicht leer sein.
         text: Für die meisten Server ist SSL die empfohlene Option.
         ssl: SSL
+        tls: TLS
         none: Keine
       smtp_port:
         label: SMTP-Port
@@ -1734,7 +1776,7 @@ ui:
         text: "WARNUNG: Wenn du diese Option abschaltest, kannst du dich möglicherweise nicht mehr anmelden, wenn du zuvor keine andere Anmeldemethode konfiguriert hast."
     installed_plugins:
       title: Installierte Plugins
-      plugin_link: Plugins erweitern und ergänzen die Funktionalität von Answer. Du kannst Plugins im <1>Answer Plugin Repository</1> finden.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Alle
         active: Aktiv
