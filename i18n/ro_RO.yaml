@@ -137,6 +137,8 @@ backend:
     other: Parolă
   pass:
     other: Parolă
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: E-mailul și parola nu se potrivesc.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Nu vă puteți modifica parola.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Nu vă puteți modifica starea.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: Verificarea parolei vechi a eșuat
       new_password_same_as_previous_setting:
         other: Noua parolă este identică cu cea anterioară.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Această postare a fost ștearsă.
@@ -312,7 +321,9 @@ backend:
       name:
         other: nepoliticos sau abuziv
       desc:
-        other: O persoană rezonabilă consideră acest conţinut nepotrivit pentru un discurs respectuos.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: un duplicat
@@ -324,7 +335,10 @@ backend:
       name:
         other: nu este un răspuns
       desc:
-        other: Acesta a fost postat ca răspuns, dar nu încearcă să răspundă la întrebare. Este posibil să fie o editare, un comentariu, o altă întrebare sau să fie ştearsă complet.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: nu mai este necesar
@@ -383,7 +397,9 @@ backend:
         name:
           other: necesită detalii sau claritate
         desc:
-          other: Această întrebare include în prezent mai multe întrebări. Ar trebui să se concentreze asupra unei singure probleme.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: altceva
@@ -499,6 +515,9 @@ backend:
       other: Postare marcată
     suggested_post_edit:
       other: Suggested edits
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: zi
     hours: ore
     days: zile
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Adaugă comentariu
     reply_to: Raspunde la
@@ -883,8 +910,8 @@ ui:
       label: Nume
       msg:
         empty: Câmpul Nume trebuie completat.
-        range: Nume afișat până la 30 de caractere.
-        character: 'Trebuie să utilizați setul de caractere "a-z", "0-9", " - . _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-mail
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: răspunsuri
     x_questions: întrebări
   install:
-    title: Răspuns
+    title: Installation
     next: Înainte
     done: Finalizat
     config_yaml_error: Nu se poate crea fișierul config.yaml.
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: Câmpul e-mail nu poate fi gol.
         incorrect: Campul e-mail are formatul incorect.
-    ready_title: Răspunsul tău este gata!
+    ready_title: Your site is ready
     ready_desc: >-
       Dacă te simți vreodată ca și cum ai schimba mai multe setări, vizitează <1>secțiunea de administrare </1>; găsește-o în meniul site-ului.
     good_luck: "Distracție plăcută și noroc!"
@@ -1401,7 +1428,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panou de control
-      welcome: Bine ai venit la Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Statisticile site-ului
       questions: "Întrebări:"
       answers: "Răspunsuri:"
@@ -1470,6 +1497,19 @@ ui:
             msg: Parola trebuie să aibă o lungime de 8-32 caractere.
       btn_cancel: Anulați
       btn_submit: Trimiteți
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Adaugă un nou utilizator
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Filtrare după nume, utilizator:id"
       set_new_password: Setați parola nouă
+      edit_profile: Edit profile
       change_status: Schimba starea
       change_role: Schimbare rol
       show_logs: Arată jurnalele
@@ -1610,6 +1651,7 @@ ui:
         msg: Câmpul decriptare nu poate fi gol.
         text: Pentru majoritatea serverelor SSL este opțiunea recomandată.
         ssl: SSL
+        tls: TLS
         none: Niciuna
       smtp_port:
         label: Portul SMTP
@@ -1734,7 +1776,7 @@ ui:
         text: "AVERTISMENT: Dacă opriți, este posibil să nu vă puteți conecta dacă nu ați configurat anterior o altă metodă de autentificare."
     installed_plugins:
       title: Extensii instalate
-      plugin_link: Plugin-urile extind funcţionalitatea Answer. Este posibil să găsiţi plugin-uri în <1>Repository-ul Answer</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Toate
         active: Activ
