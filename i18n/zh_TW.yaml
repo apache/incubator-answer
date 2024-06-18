@@ -910,7 +910,7 @@ ui:
       label: 名稱
       msg:
         empty: 名稱不能為空
-        range: 名稱在 4 到 30 個字元
+        range: Length of name should between 4 to 30 characters.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: 郵箱
@@ -1292,7 +1292,7 @@ ui:
     x_answers: 個回答
     x_questions: 個問題
   install:
-    title: 安装
+    title: Installation
     next: 下一步
     done: 完成
     config_yaml_error: 無法建立 config.yaml 檔。
@@ -1428,7 +1428,7 @@ ui:
       title: 後台管理
     dashboard:
       title: 後台管理
-      welcome: 歡迎來到後台管理！
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "問題:"
       answers: "回答:"
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: All
         active: Active
