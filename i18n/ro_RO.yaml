@@ -1292,7 +1292,7 @@ ui:
     x_answers: răspunsuri
     x_questions: întrebări
   install:
-    title: Instalare
+    title: Installation
     next: Înainte
     done: Finalizat
     config_yaml_error: Nu se poate crea fișierul config.yaml.
@@ -1367,7 +1367,7 @@ ui:
       msg:
         empty: Câmpul e-mail nu poate fi gol.
         incorrect: Campul e-mail are formatul incorect.
-    ready_title: Site-ul dvs. este gata
+    ready_title: Your site is ready
     ready_desc: >-
       Dacă te simți vreodată ca și cum ai schimba mai multe setări, vizitează <1>secțiunea de administrare </1>; găsește-o în meniul site-ului.
     good_luck: "Distracție plăcută și noroc!"
@@ -1428,7 +1428,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panou de control
-      welcome: Bine ai venit la Admin!
+      welcome: Welcome to Admin!
       site_statistics: Statisticile site-ului
       questions: "Întrebări:"
       answers: "Răspunsuri:"
@@ -1776,7 +1776,7 @@ ui:
         text: "AVERTISMENT: Dacă opriți, este posibil să nu vă puteți conecta dacă nu ați configurat anterior o altă metodă de autentificare."
     installed_plugins:
       title: Extensii instalate
-      plugin_link: Plugin-urile extind funcţionalitatea. Este posibil să găsiţi plugin-uri în <1>Repository-ul</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Toate
         active: Activ

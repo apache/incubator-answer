@@ -910,7 +910,7 @@ ui:
       label: Namn
       msg:
         empty: Name cannot be empty.
-        range: Name must between 4 to 30 characters in length.
+        range: Length of name should between 4 to 30 characters.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-postadress
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Alla
         active: Aktiv

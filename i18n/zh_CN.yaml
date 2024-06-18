@@ -204,6 +204,8 @@ backend:
         other: 旧密码验证失败。
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
+      already_deleted:
+        other: 该帖子已被删除。
     meta:
       object_not_found:
         other: Meta 对象未找到
@@ -987,7 +989,7 @@ ui:
         caption: 用户可以通过 "@用户名" 来提及你。
         msg: 用户名不能为空
         msg_range: 用户名不能超过 30 个字符。
-        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
+        character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
       avatar:
         label: 头像
         gravatar: Gravatar
@@ -1365,7 +1367,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的网站已经准备好了
+    ready_title: 您的网站已准备好
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1426,7 +1428,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到后台管理！
+      welcome: 欢迎来到管理后台！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
@@ -1832,7 +1834,7 @@ ui:
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
-    tag_edit: "标签管理: 编辑标签"
+    tag_edit: '标签管理: 编辑标签'
     edit_summary: 编辑备注
     edit_question: 编辑问题
     edit_answer: 编辑回答
@@ -1861,7 +1863,7 @@ ui:
     upvote: 点赞
     accept: 采纳
     cancelled: 已取消
-    commented: "评论:"
+    commented: '评论:'
     rollback: 回滚
     edited: 最后编辑于
     answered: 回答于

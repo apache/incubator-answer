@@ -1292,7 +1292,7 @@ ui:
     x_answers: jawaban
     x_questions: pertanyaan
   install:
-    title: Instalasi
+    title: Installation
     next: Selanjutnya
     done: Selesai
     config_yaml_error: Can't create the config.yaml file.
@@ -1428,7 +1428,7 @@ ui:
       title: Admin
     dashboard:
       title: Dasbor
-      welcome: Selamat datang di Admin!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Pertanyaan:"
       answers: "Jawaban:"
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: All
         active: Active

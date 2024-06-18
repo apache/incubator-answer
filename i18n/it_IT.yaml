@@ -1292,7 +1292,7 @@ ui:
     x_answers: risposte
     x_questions: domande
   install:
-    title: Installazione
+    title: Installation
     next: Avanti
     done: Fatto
     config_yaml_error: Impossibile creare il file config.yaml.
@@ -1367,7 +1367,7 @@ ui:
       msg:
         empty: Il campo email non può essere vuoto.
         incorrect: Formato dell'email errato.
-    ready_title: Il tuo sito è pronto
+    ready_title: Your site is ready
     ready_desc: >-
       Se vuoi cambiare più impostazioni, visita la sezione <1>admin</1> che si trova nel menu del sito.
     good_luck: "Divertiti e buona fortuna!"
@@ -1428,7 +1428,7 @@ ui:
       title: Amministratore
     dashboard:
       title: Pannello di controllo
-      welcome: "\nBenvenuto nell'amministratore di!"
+      welcome: Welcome to Admin!
       site_statistics: Statistiche del sito
       questions: "Domande:"
       answers: "Risposte:"
@@ -1776,7 +1776,7 @@ ui:
         text: "ATTENZIONE: Se disattivi, potresti non essere in grado di accedere se non hai precedentemente configurato un altro metodo di login."
     installed_plugins:
       title: Plugin installati
-      plugin_link: I plugin estendono ed espandono le funzionalità. Potresti trovare plug-in nel <1>Repository plug-in</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Tutto
         active: Attivo
