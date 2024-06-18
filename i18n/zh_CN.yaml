@@ -137,6 +137,8 @@ backend:
     other: 密码
   pass:
     other: 密码
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: 你无法修改自己的密码。
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: 你无法修改自己的状态。
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: 旧密码验证失败。
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: 该帖子已被删除。
@@ -312,7 +321,9 @@ backend:
       name:
         other: 粗鲁或辱骂的
       desc:
-        other: 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: 重复内容
@@ -324,7 +335,10 @@ backend:
       name:
         other: 不是答案
       desc:
-        other: 该帖是作为答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑、评论、另一个问题或者需要被删除。
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: 不再需要
@@ -383,7 +397,9 @@ backend:
         name:
           other: 需要细节或澄清
         desc:
-          other: 该问题目前涵盖多个问题。它应该只集中在一个问题上。
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: 其他原因
@@ -499,6 +515,9 @@ backend:
       other: 举报的帖子
     suggested_post_edit:
       other: 建议的编辑
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: 天
     hours: 小时
     days: 日
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -883,8 +910,8 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名字最多 30 个字符
-        character: '只能由 "a-z"、"0-9"、" - . _" 组成'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: 邮箱
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: 个回答
     x_questions: 个问题
   install:
-    title: 回答
+    title: Installation
     next: 下一步
     done: 完成
     config_yaml_error: 无法创建 config.yaml 文件。
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的 Answer 已经准备好了!
+    ready_title: Your site is ready
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1401,7 +1428,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到 Answer 后台管理！
+      welcome: Welcome to Admin!
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
@@ -1470,6 +1497,19 @@ ui:
             msg: 密码的长度必须是8-32个字符。
       btn_cancel: 取消
       btn_submit: 提交
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: 添加新用户
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "按名称筛选，用户：id"
       set_new_password: 设置新密码
+      edit_profile: Edit profile
       change_status: 更改状态
       change_role: 更改角色
       show_logs: 显示日志
@@ -1610,6 +1651,7 @@ ui:
         msg: 不能为空
         text: 对于大多数服务器而言，SSL 是推荐开启的。
         ssl: SSL
+        tls: TLS
         none: 无加密
       smtp_port:
         label: SMTP 端口
@@ -1734,7 +1776,7 @@ ui:
         text: "警告：如果您未配置过其他登录方式，关闭密码登录后您则可能无法登录。"
     installed_plugins:
       title: 已安装插件
-      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: 全部
         active: 已启用
