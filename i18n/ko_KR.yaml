@@ -16,7 +16,6 @@
 # under the License.
 
 # The following fields are used for back-end
-
 backend:
   base:
     success:
@@ -138,6 +137,8 @@ backend:
     other: 비밀번호
   pass:
     other: 비밀번호
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: 이메일과 비밀번호가 일치하지 않습니다.
   error:
@@ -150,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: 암호를 변경할 수 없습니다.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: 상태를 변경할 수 없습니다.
       email_or_password_wrong:
@@ -201,6 +204,11 @@ backend:
         other: 이전 암호 확인에 실패했습니다
       new_password_same_as_previous_setting:
         other: 새 비밀번호는 이전 비밀번호와 다르게 입력해주세요.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: 삭제된 게시물입니다.
@@ -313,7 +321,9 @@ backend:
       name:
         other: 폭언 또는 무례한 언행입니다.
       desc:
-        other: 대화에 부적절한 내용입니다.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: 중복
@@ -325,7 +335,10 @@ backend:
       name:
         other: 답변이 아닙니다
       desc:
-        other: 질문에 적절한 대답이 아닙니다. 편집, 댓글, 다른 질문, 또는 완전히 삭제된 것이어야 합니다.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: 더 이상 필요하지 않습니다.
@@ -384,7 +397,9 @@ backend:
         name:
           other: 세부사항 또는 명확성이 필요합니다.
         desc:
-          other: 이 질문은 현재 하나에 여러 개의 질문이 포함되어 있습니다. 하나의 문제에만 초점을 맞추어야 합니다.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: 다른 이유
@@ -500,21 +515,15 @@ backend:
       other: 신고된 게시물
     suggested_post_edit:
       other: 건의된 수정
-
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: 포맷 방법
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">링크 만들기</p><pre
-      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
-      class="mb-2">단락 사이에 줄 바꿈 넣기</p></li><li><p
-      class="mb-2"><em>_이탤릭체_</em> 또는 **<strong>볼드체</strong>**</p></li><li><p
-      class="mb-2">코드는 4칸 들여쓰기</p></li><li><p class="mb-2">
-      인용은 <code>&gt;</code>로 시작하기</p></li><li><p
-      class="mb-2">백틱으로 이스케이프 <code>`이렇게_사용`</code></p></li><li><p
-      class="mb-2">백틱으로 코드 펜스 만들기 <code>`</code></p><pre
-      class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">링크 만들기</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">단락 사이에 줄 바꿈 넣기</p></li><li><p class="mb-2"><em>_이탤릭체_</em> 또는 **<strong>볼드체</strong>**</p></li><li><p class="mb-2">코드는 4칸 들여쓰기</p></li><li><p class="mb-2"> 인용은 <code>&gt;</code>로 시작하기</p></li><li><p class="mb-2">백틱으로 이스케이프 <code>`이렇게_사용`</code></p></li><li><p class="mb-2">백틱으로 코드 펜스 만들기 <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: 이전
     next: 다음
@@ -757,6 +766,14 @@ ui:
     day: 일
     hours: 시간
     days: 일
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: 댓글 추가
     reply_to: 답글 달기
@@ -923,8 +940,8 @@ ui:
       msg:
         empty: 이메일을 입력하세요.
   oauth:
-    connect: "{{ auth_name }}로 연결"
-    remove: "{{ auth_name }} 연결 해제"
+    connect: '{{ auth_name }}로 연결'
+    remove: '{{ auth_name }} 연결 해제'
   oauth_bind_email:
     subtitle: 계정에 복구 이메일 추가
     btn_update: 이메일 주소 업데이트
@@ -1057,6 +1074,7 @@ ui:
     search: 사람 검색
   question_detail:
     action: 동작
+    Asked: Asked
     asked: 질문 작성
     update: 수정됨
     edit: 편집됨
@@ -1208,9 +1226,11 @@ ui:
   account_result:
     success: 새 계정이 확인되었습니다. 홈페이지로 이동합니다.
     link: 홈페이지로 이동
-    invalid: 죄송합니다, 이 계정 확인 링크는 더 이상 유효하지 않습니다. 이미 계정이 활성화된 상태일 수 있습니다.
+    invalid: >-
+      죄송합니다, 이 계정 확인 링크는 더 이상 유효하지 않습니다. 이미 계정이 활성화된 상태일 수 있습니다.
     confirm_new_email: 이메일이 업데이트되었습니다.
-    confirm_new_email_invalid: 죄송합니다, 이 확인 링크는 더 이상 유효하지 않습니다. 이미 이메일이 변경된 상태일 수 있습니다.
+    confirm_new_email_invalid: >-
+      죄송합니다, 이 확인 링크는 더 이상 유효하지 않습니다. 이미 이메일이 변경된 상태일 수 있습니다.
   unsubscribe:
     page_title: 구독 해지
     success_title: 구독 해지 완료
@@ -1336,7 +1356,8 @@ ui:
       msg_max_length: 이름은 최대 30자여야 합니다.
     admin_password:
       label: 비밀번호
-      text: 로그인에 필요한 비밀번호입니다. 안전한 위치에 보관하세요.
+      text: >-
+        로그인에 필요한 비밀번호입니다. 안전한 위치에 보관하세요.
       msg: 비밀번호를 입력하세요.
       msg_min_length: 비밀번호는 최소 8자여야 합니다.
       msg_max_length: 비밀번호는 최대 32자여야 합니다.
@@ -1349,7 +1370,7 @@ ui:
     ready_title: 귀하의 사이트가 준비되었습니다
     ready_desc: >-
       추가 설정을 원하시면 <1>관리자 섹션</1>에서 찾아보세요; 사이트 메뉴에서 확인할 수 있습니다.
-    good_luck: 재미있고 행운을 빕니다!
+    good_luck: "재미있고 행운을 빕니다!"
     warn_title: 경고
     warn_desc: >-
       파일 <1>config.yaml</1>이 이미 존재합니다. 이 파일의 구성 항목 중 재설정이 필요하면 먼저 삭제하세요.
@@ -1397,12 +1418,11 @@ ui:
     privileges: 권한
     plugins: 플러그인
     installed_plugins: 설치된 플러그인
-  website_welcome: "{{site_name}}에 오신 것을 환영합니다"
+  website_welcome: '{{site_name}}에 오신 것을 환영합니다'
   user_center:
     login: 로그인
-    qrcode_login_tip: "{{ agentName }}을(를) 사용하여 QR 코드를 스캔하고 로그인하세요."
+    qrcode_login_tip: '{{ agentName }}을(를) 사용하여 QR 코드를 스캔하고 로그인하세요.'
     login_failed_email_tip: 로그인 실패, 다시 시도하기 전에 이 앱이 이메일 정보에 접근할 수 있도록 허용하세요.
-
   admin:
     admin_header:
       title: 관리자
@@ -1459,7 +1479,7 @@ ui:
       pending: 처리 대기 중
       completed: 완료됨
       flagged: 신고됨
-      flagged_type: "{{ type }}로 신고됨"
+      flagged_type: '{{ type }}로 신고됨'
       created: 생성됨
       action: 동작
       review: 검토
@@ -1477,6 +1497,19 @@ ui:
             msg: 비밀번호는 8-32자여야 합니다.
       btn_cancel: 취소
       btn_submit: 제출
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: 새 사용자 추가
       form:
@@ -1485,7 +1518,7 @@ ui:
             label: 대량 사용자 추가
             placeholder: "홍길동, hong@example.com, BUSYopr2\n김철수, kim@example.com, fpDntV8q"
             text: 쉼표로 구분하여 “이름, 이메일, 비밀번호”를 입력하세요. 한 줄에 한 명의 사용자.
-            msg: 사용자의 이메일을 입력하세요. 한 줄에 한 명씩 입력하세요.
+            msg: "사용자의 이메일을 입력하세요. 한 줄에 한 명씩 입력하세요."
           display_name:
             label: 표시 이름
             msg: 표시 이름은 4-30자여야 합니다.
@@ -1522,6 +1555,7 @@ ui:
       filter:
         placeholder: "이름 또는 사용자 ID로 필터링"
       set_new_password: 새 비밀번호 설정
+      edit_profile: Edit profile
       change_status: 상태 변경
       change_role: 역할 변경
       show_logs: 로그 표시
@@ -1571,7 +1605,7 @@ ui:
         label: 사이트 URL
         msg: 사이트 URL을 입력하세요.
         validate: 유효한 URL을 입력하세요.
-        text: "사이트 주소입니다."
+        text: 사이트 주소입니다.
       short_desc:
         label: 짧은 사이트 설명
         msg: 짧은 사이트 설명을 입력하세요.
@@ -1617,6 +1651,7 @@ ui:
         msg: 암호화 방식을 선택하세요.
         text: 대부분의 서버에서 SSL을 권장합니다.
         ssl: SSL
+        tls: TLS
         none: 없음
       smtp_port:
         label: SMTP 포트
@@ -1636,8 +1671,8 @@ ui:
         label: 인증 사용
         title: SMTP 인증
         msg: SMTP 인증을 선택하세요.
-        "yes": 예
-        "no": 아니오
+        "yes": "예"
+        "no": "아니오"
     branding:
       page_title: 브랜딩
       logo:
@@ -1703,15 +1738,15 @@ ui:
       custom_css:
         label: 사용자 정의 CSS
         text: >
-          사용자 정의 CSS 코드를 입력하세요.
+
       head:
         label: 헤드
         text: >
-          헤드 부분에 추가할 HTML 코드를 입력하세요.
+
       header:
         label: 헤더
         text: >
-          헤더 부분에 추가할 HTML 코드를 입력하세요.
+
       footer:
         label: 푸터
         text: 본문의 바로 앞에 삽입됩니다.
@@ -1787,7 +1822,6 @@ ui:
       msg:
         should_be_number: 입력값은 숫자여야 합니다.
         number_larger_1: 숫자는 1 이상이어야 합니다.
-
   form:
     optional: (선택 사항)
     empty: 비어 있을 수 없습니다
@@ -1795,7 +1829,6 @@ ui:
     btn_submit: 저장
     not_found_props: "필수 속성 {{ key }}을(를) 찾을 수 없습니다."
     select: 선택
-
   page_review:
     review: 리뷰
     proposed: 제안된
