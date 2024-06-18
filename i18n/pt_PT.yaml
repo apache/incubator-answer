@@ -1292,7 +1292,7 @@ ui:
     x_answers: respostas
     x_questions: perguntas
   install:
-    title: Instalação
+    title: Installation
     next: Proximo
     done: Completo
     config_yaml_error: Não é possível criar o arquivo config.yaml.
@@ -1428,7 +1428,7 @@ ui:
       title: Administrador
     dashboard:
       title: Painel
-      welcome: Bem vindo ao Administrador!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Perguntas:"
       answers: "Respostas:"
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Extensões instaladas
-      plugin_link: Os plug-ins estendem e expandem a funcionalidade. Você pode encontrar plug-ins no <1>Repositório de plug-ins</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Todos
         active: Ativo
