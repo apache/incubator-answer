@@ -23,13 +23,13 @@ backend:
     unknown:
       other: Lỗi không xác định.
     request_format_error:
-      other: Request format is not valid.
+      other: Định dạng yêu cầu không hợp lệ.
     unauthorized_error:
-      other: Unauthorized.
+      other: Chưa được cấp quyền.
     database_error:
       other: Lỗi dữ liệu máy chủ.
     forbidden_error:
-      other: Forbidden.
+      other: Bị cấm.
     duplicate_request_error:
       other: Duplicate submission.
   action:
@@ -140,19 +140,19 @@ backend:
   original_text:
     other: This post
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: Email và mật khẩu không trùng khớp.
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: URL không tồn tại.
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: Mật khẩu không thể tồn tại khoảng trắng.
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Bạn không thể thay đổi mật khẩu.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Bạn không thể thay đổi hồ sơ.
       cannot_modify_self_status:
         other: You cannot modify your status.
       email_or_password_wrong:
