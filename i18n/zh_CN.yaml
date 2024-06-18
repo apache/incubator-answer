@@ -138,7 +138,7 @@ backend:
   pass:
     other: 密码
   original_text:
-    other: This post
+    other: 本帖
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
@@ -152,7 +152,7 @@ backend:
       cannot_update_their_password:
         other: 你无法修改自己的密码。
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: 您不能修改您的个人资料。
       cannot_modify_self_status:
         other: 你无法修改自己的状态。
       email_or_password_wrong:
@@ -205,10 +205,10 @@ backend:
       new_password_same_as_previous_setting:
         other: 新密码和旧密码相同。
       already_deleted:
-        other: This post has been deleted.
+        other: 该帖子已被删除。
     meta:
       object_not_found:
-        other: Meta object not found
+        other: 找不到元对象
     question:
       already_deleted:
         other: 该帖子已被删除。
@@ -322,8 +322,8 @@ backend:
         other: 粗鲁或辱骂的
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+          - 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
+          - 论坛
     a_duplicate:
       name:
         other: 重复内容
@@ -336,9 +336,9 @@ backend:
         other: 不是答案
       desc:
         other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+          - 这张贴作为答案，但它不会试图回答
+          - 这可能是一个编辑、一个评论、另一个问题。
+          - 或全部删除。
     no_longer_needed:
       name:
         other: 不再需要
@@ -398,8 +398,8 @@ backend:
           other: 需要细节或澄清
         desc:
           other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+            - 该问题目前涵盖多个问题。它应该侧重在一个问题上。
+            - 只关注一个问题。
       other:
         name:
           other: 其他原因
@@ -517,7 +517,7 @@ backend:
       other: 建议的编辑
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
+      other: "{{ .Names }} 和 {{ .Count }} 更多..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -767,13 +767,13 @@ ui:
     hours: 小时
     days: 日
   reaction:
-    heart: heart
-    smile: smile
-    frown: frown
-    btn_label: add or remove reactions
-    undo_emoji: undo {{ emoji }} reaction
-    react_emoji: react with {{ emoji }}
-    unreact_emoji: unreact with {{ emoji }}
+    heart: 爱心
+    smile: 微笑
+    frown: 愁
+    btn_label: 添加或删除回应。
+    undo_emoji: 撤销 {{ emoji }} 回应
+    react_emoji: 用 {{ emoji }} 回应
+    unreact_emoji: 撤销 {{ emoji }}
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -910,8 +910,8 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: Length of name should between 4 to 30 characters.
-        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
+        range: 名称长度应该介于 4 到 30 个字符之间。
+        character: '用户名只能由 "a-z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
       msg:
@@ -1292,7 +1292,7 @@ ui:
     x_answers: 个回答
     x_questions: 个问题
   install:
-    title: Installation
+    title: 安装
     next: 下一步
     done: 完成
     config_yaml_error: 无法创建 config.yaml 文件。
@@ -1367,7 +1367,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: Your site is ready
+    ready_title: 您的网站已准备好
     ready_desc: >-
       如果你想改变更多的设置，请访问 <1>管理区域</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝你好运！"
@@ -1428,7 +1428,7 @@ ui:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: Welcome to Admin!
+      welcome: 欢迎来到管理后台！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"
@@ -1498,18 +1498,18 @@ ui:
       btn_cancel: 取消
       btn_submit: 提交
     edit_profile_modal:
-      title: Edit profile
+      title: 编辑资料
       form:
         fields:
           username:
-            label: Username
-            msg_range: Username up to 30 characters.
+            label: 用户名
+            msg_range: 用户名不能超过 30 个字符。
           email:
-            label: Email
-            msg_invalid: Invalid Email Address.
-      edit_success: Edited successfully
-      btn_cancel: Cancel
-      btn_submit: Submit
+            label: 电子邮件地址
+            msg_invalid: 无效的邮箱地址
+      edit_success: 修改成功
+      btn_cancel: 取消
+      btn_submit: 提交
     user_modal:
       title: 添加新用户
       form:
@@ -1555,7 +1555,7 @@ ui:
       filter:
         placeholder: "按名称筛选，用户：id"
       set_new_password: 设置新密码
-      edit_profile: Edit profile
+      edit_profile: 编辑资料
       change_status: 更改状态
       change_role: 更改角色
       show_logs: 显示日志
@@ -1776,7 +1776,7 @@ ui:
         text: "警告：如果您未配置过其他登录方式，关闭密码登录后您则可能无法登录。"
     installed_plugins:
       title: 已安装插件
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
+      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
       filter:
         all: 全部
         active: 已启用
