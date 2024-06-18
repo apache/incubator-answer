@@ -138,7 +138,7 @@ backend:
   pass:
     other: Passwort
   original_text:
-    other: This post
+    other: Dieser Beitrag
   email_or_password_wrong_error:
     other: E-Mail und Passwort stimmen nicht überein.
   error:
@@ -152,7 +152,7 @@ backend:
       cannot_update_their_password:
         other: Du kannst dein Passwort nicht ändern.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Du kannst dein Profil nicht bearbeiten.
       cannot_modify_self_status:
         other: Du kannst deinen Status nicht ändern.
       email_or_password_wrong:
@@ -205,10 +205,10 @@ backend:
       new_password_same_as_previous_setting:
         other: Das neue Passwort ist das gleiche wie das vorherige Passwort.
       already_deleted:
-        other: This post has been deleted.
+        other: Dieser Beitrag wurde gelöscht.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Metaobjekt nicht gefunden
     question:
       already_deleted:
         other: Dieser Beitrag wurde gelöscht.
@@ -767,10 +767,10 @@ ui:
     hours: Stunden
     days: Tage
   reaction:
-    heart: heart
-    smile: smile
+    heart: Herz
+    smile: Lächeln
     frown: frown
-    btn_label: add or remove reactions
+    btn_label: Reaktionen hinzufügen oder entfernen
     undo_emoji: undo {{ emoji }} reaction
     react_emoji: react with {{ emoji }}
     unreact_emoji: unreact with {{ emoji }}
@@ -808,7 +808,7 @@ ui:
     btn_save_edits: Änderungen speichern
     btn_cancel: Abbrechen
   tags:
-    title: Tags
+    title: Schlagwörter
     sort_buttons:
       popular: Beliebt
       name: Name
@@ -910,7 +910,7 @@ ui:
       label: Name
       msg:
         empty: Der Name darf nicht leer sein.
-        range: Length of name should between 4 to 30 characters.
+        range: Die Länge des Namens sollte zwischen 4 und 30 Zeichen liegen.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-Mail
@@ -1174,7 +1174,7 @@ ui:
     unsuspend: Entsperren
     close: Schließen
     reopen: Wieder öffnen
-    ok: OK
+    ok: Okay
     light: Hell
     dark: Dunkel
     system_setting: System-Einstellung
@@ -1186,7 +1186,7 @@ ui:
     ignore: Ignore
     submit: Submit
     normal: Normal
-    closed: Closed
+    closed: Geschlossen
     deleted: Deleted
     pending: Pending
     more: More
@@ -1446,7 +1446,7 @@ ui:
       public: Öffentlich
       smtp: "SMTP:"
       timezone: "Zeitzone:"
-      system_info: System info
+      system_info: Systeminformationen
       go_version: "Go Version:"
       database: "Datenbank:"
       database_size: "Datenbankgröße:"
@@ -1498,17 +1498,17 @@ ui:
       btn_cancel: Abbrechen
       btn_submit: Senden
     edit_profile_modal:
-      title: Edit profile
+      title: Profil bearbeiten
       form:
         fields:
           username:
-            label: Username
-            msg_range: Username up to 30 characters.
+            label: Nutzername
+            msg_range: Nutzername bis zu 30 Zeichen.
           email:
-            label: Email
-            msg_invalid: Invalid Email Address.
-      edit_success: Edited successfully
-      btn_cancel: Cancel
+            label: E-Mail
+            msg_invalid: Ungültige E-Mail-Adresse.
+      edit_success: Erfolgreich bearbeitet
+      btn_cancel: Abbrechen
       btn_submit: Submit
     user_modal:
       title: Neuen Benutzer hinzufügen
@@ -1620,7 +1620,7 @@ ui:
         validate: Kontakt-E-Mail ist ungültig.
         text: E-Mail-Adresse des Hauptkontakts, der für diese Website verantwortlich ist.
       check_update:
-        label: Software updates
+        label: Softwareaktualisierungen
         text: Automatically check for updates
     interface:
       page_title: Benutzeroberfläche
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNUNG: Wenn du diese Option abschaltest, kannst du dich möglicherweise nicht mehr anmelden, wenn du zuvor keine andere Anmeldemethode konfiguriert hast."
     installed_plugins:
       title: Installierte Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
+      plugin_link: Plugins erweitern und ergänzen die Funktionalität. Du kannst Plugins im <1>Pluginverzeichnis</1> finden.
       filter:
         all: Alle
         active: Aktiv
@@ -1845,8 +1845,8 @@ ui:
     approve_post_tip: Do you approve this post?
     approve_user_tip: Do you approve this user?
     suggest_edits: Suggested edits
-    flag_post: Flag post
-    flag_user: Flag user
+    flag_post: Beitrag melden
+    flag_user: Nutzer melden
     queued_post: Queued post
     queued_user: Queued user
     filter_label: Type
