@@ -31,7 +31,7 @@ backend:
     forbidden_error:
       other: Bị cấm.
     duplicate_request_error:
-      other: Duplicate submission.
+      other: Trùng lặp yêu cầu.
   action:
     report:
       other: Flag
@@ -40,23 +40,23 @@ backend:
     delete:
       other: Xóa
     close:
-      other: Close
+      other: Đóng
     reopen:
-      other: Reopen
+      other: Mở lại
     forbidden_error:
-      other: Forbidden.
+      other: Bị cấm.
     pin:
-      other: Pin
+      other: Ghim
     hide:
-      other: Unlist
+      other: Gỡ bỏ khỏi danh sách
     unpin:
-      other: Unpin
+      other: Bỏ ghim
     show:
-      other: List
+      other: Hiển thị
     invite_someone_to_answer:
-      other: Edit
+      other: Chỉnh sửa
     undelete:
-      other: Undelete
+      other: Khôi phục
   role:
     name:
       user:
@@ -64,10 +64,10 @@ backend:
       admin:
         other: Quản trị viên
       moderator:
-        other: Moderator
+        other: Người điều hành
     description:
       user:
-        other: Default with no special access.
+        other: Mặc định không có quyền truy cập đặc biệt.
       admin:
         other: Have the full power to access the site.
       moderator:
