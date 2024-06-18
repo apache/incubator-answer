@@ -137,6 +137,8 @@ backend:
     other: Пароль
   pass:
     other: Пароль
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Неверное имя пользователя или пароль.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Вы не можете изменить свой пароль.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Вы не можете изменить свой статус.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: Не удалось подтвердить старый пароль
       new_password_same_as_previous_setting:
         other: Пароль не может быть таким же как прежний.
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Этот пост был удалён.
@@ -312,7 +321,9 @@ backend:
       name:
         other: Грубость или оскорбления
       desc:
-        other: Человек может посчитать такое содержимое неподходящим для уважительной беседы.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: дубликат
@@ -324,7 +335,10 @@ backend:
       name:
         other: это не ответ
       desc:
-        other: Это сообщение было опубликовано в качестве ответа, но оно не пытается ответить на вопрос. Возможно, оно должно быть отредактировано, дополнено, быть другим вопросом или удалено навсегда.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: Не актуально
@@ -383,7 +397,9 @@ backend:
         name:
           other: нуждается в деталях или ясности
         desc:
-          other: В настоящее время этот вопрос включает в себя несколько вопросов в одном. Он должен быть сосредоточен только на одной проблеме.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: прочее
@@ -499,6 +515,9 @@ backend:
       other: Flagged post
     suggested_post_edit:
       other: Предложенные исправления
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: дней
     hours: часов
     days: дней
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Добавить комментарий
     reply_to: Ответить на
@@ -883,8 +910,8 @@ ui:
       label: Имя пользователя
       msg:
         empty: Имя пользователя не должно быть пустым.
-        range: Имя пользователя должно быть до 30 символов.
-        character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email адрес
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: ответы
     x_questions: вопросы
   install:
-    title: Ответ
+    title: Installation
     next: Следующий
     done: Готово
     config_yaml_error: Не удается создать файл config.yaml.
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: Адрес электронной почты не может быть пустым.
         incorrect: Недопустимый формат e-mail адреса.
-    ready_title: Ваш ответ готов!
+    ready_title: Your site is ready
     ready_desc: >-
       Если вам когда-нибудь захочется изменить дополнительные настройки, посетите <1>раздел администратора</1>; найдите его в меню сайта.
     good_luck: "Получайте удовольствие и удачи!"
@@ -1401,7 +1428,7 @@ ui:
       title: Администратор
     dashboard:
       title: Панель управления
-      welcome: Добро пожаловать в Answer Admin!
+      welcome: Welcome to Admin!
       site_statistics: Статистика сайта
       questions: "Вопросы:"
       answers: "Ответы:"
@@ -1470,6 +1497,19 @@ ui:
             msg: Длина пароля должна составлять от 8 до 32 символов.
       btn_cancel: Отменить
       btn_submit: Отправить
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Создание новых пользователей
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Фильтровать по имени, user:id"
       set_new_password: Задать новый пароль
+      edit_profile: Edit profile
       change_status: Изменить статус
       change_role: Изменить роль
       show_logs: Показать логи
@@ -1610,6 +1651,7 @@ ui:
         msg: Шифрование не может быть пустым.
         text: Для большинства серверов рекомендуется использовать протокол SSL.
         ssl: SSL
+        tls: TLS
         none: Нет
       smtp_port:
         label: Порт SMTP
@@ -1734,7 +1776,7 @@ ui:
         text: "Предупреждение: При отключении, вы не сможете войти, если ранее не настроили другой способ входа."
     installed_plugins:
       title: Установленные плагины
-      plugin_link: Плагины расширяют функциональность Answer. Вы можете найти плагины в <1>Answer Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Все
         active: Активные
