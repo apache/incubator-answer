@@ -110,12 +110,12 @@ const Image = ({ editorInstance }) => {
       return;
     }
 
-    // const startPos = editor.getCursor(''); codemirror 6
     const startPos = editor.getCursor();
 
     const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
 
     editor.replaceSelection(loadingText);
+    editor.setReadOnly(true);
     const urls = await upload(fileList).catch((ex) => {
       console.error('upload file error: ', ex);
     });
@@ -131,9 +131,10 @@ const Image = ({ editorInstance }) => {
     if (text.length) {
       editor.replaceRange(text.join('\n'), startPos, endPos);
     } else {
-      // Clear loading text
       editor.replaceRange('', startPos, endPos);
     }
+    editor.setReadOnly(false);
+    editor.focus();
   };
 
   const paste = async (event) => {
@@ -155,6 +156,7 @@ const Image = ({ editorInstance }) => {
 
       editor.replaceRange(text.join('\n'), startPos, endPos);
       editor.setReadOnly(false);
+      editor.focus();
 
       return;
     }
