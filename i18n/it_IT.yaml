@@ -137,6 +137,8 @@ backend:
     other: Chiave di accesso
   pass:
     other: Password
+  original_text:
+    other: This post
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
@@ -149,6 +151,8 @@ backend:
     admin:
       cannot_update_their_password:
         other: Non è possibile modificare la password.
+      cannot_edit_their_profile:
+        other: You cannot modify your profile.
       cannot_modify_self_status:
         other: Non è possibile modificare il tuo status.
       email_or_password_wrong:
@@ -200,6 +204,11 @@ backend:
         other: la verifica della vecchia password è fallita
       new_password_same_as_previous_setting:
         other: La nuova password è identica alla precedente
+      already_deleted:
+        other: This post has been deleted.
+    meta:
+      object_not_found:
+        other: Meta object not found
     question:
       already_deleted:
         other: Questo post è stato eliminato.
@@ -312,7 +321,9 @@ backend:
       name:
         other: scortese o offensivo
       desc:
-        other: Una persona ragionevole troverebbe questo contenuto inappropriato o irrispettoso.
+        other:
+          - A reasonable person would find this content inappropriate for respectful
+          - discourse.
     a_duplicate:
       name:
         other: duplicato
@@ -324,7 +335,10 @@ backend:
       name:
         other: Non è una risposta
       desc:
-        other: Ciò è stato pubblicato come una risposta, ma non risponde alla domanda. Dovrebbe essere possibilmente una modifica, un commento, un'altra domanda o cancellato del tutto.
+        other:
+          - This was posted as an answer, but it does not attempt to answer the
+          - question. It should possibly be an edit, a comment, another question,
+          - or deleted altogether.
     no_longer_needed:
       name:
         other: Non più necessario
@@ -383,7 +397,9 @@ backend:
         name:
           other: richiede maggiori dettagli o chiarezza
         desc:
-          other: Questa domanda attualmente include più domande in uno. Dovrebbe concentrarsi su un solo problema.
+          other:
+            - This question currently includes multiple questions in one. It should
+            - focus on one problem only.
       other:
         name:
           other: altro
@@ -499,6 +515,9 @@ backend:
       other: Post contrassegnato
     suggested_post_edit:
       other: Modifiche suggerite
+  reaction:
+    tooltip:
+      other: "{{ .Names }} and {{ .Count }} more..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -747,6 +766,14 @@ ui:
     day: giorno
     hours: ore
     days: giorni
+  reaction:
+    heart: heart
+    smile: smile
+    frown: frown
+    btn_label: add or remove reactions
+    undo_emoji: undo {{ emoji }} reaction
+    react_emoji: react with {{ emoji }}
+    unreact_emoji: unreact with {{ emoji }}
   comment:
     btn_add_comment: Aggiungi un commento
     reply_to: Rispondi a
@@ -883,8 +910,8 @@ ui:
       label: Nome
       msg:
         empty: Il nome non può essere vuoto.
-        range: Nome fino a 30 caratteri.
-        character: 'È necessario utilizzare il set di caratteri "a-z", "0-9", " - . _"'
+        range: Length of name should between 4 to 30 characters.
+        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-mail
       msg:
@@ -1265,7 +1292,7 @@ ui:
     x_answers: risposte
     x_questions: domande
   install:
-    title: Risposta
+    title: Installation
     next: Avanti
     done: Fatto
     config_yaml_error: Impossibile creare il file config.yaml.
@@ -1340,7 +1367,7 @@ ui:
       msg:
         empty: Il campo email non può essere vuoto.
         incorrect: Formato dell'email errato.
-    ready_title: La tua risposta è pronta!
+    ready_title: Your site is ready
     ready_desc: >-
       Se vuoi cambiare più impostazioni, visita la sezione <1>admin</1> che si trova nel menu del sito.
     good_luck: "Divertiti e buona fortuna!"
@@ -1401,7 +1428,7 @@ ui:
       title: Amministratore
     dashboard:
       title: Pannello di controllo
-      welcome: "\nBenvenuto nell'amministratore di risposta!"
+      welcome: Welcome to Admin!
       site_statistics: Statistiche del sito
       questions: "Domande:"
       answers: "Risposte:"
@@ -1470,6 +1497,19 @@ ui:
             msg: La password deve contenere da 8 a 32 caratteri.
       btn_cancel: Cancella
       btn_submit: Invia
+    edit_profile_modal:
+      title: Edit profile
+      form:
+        fields:
+          username:
+            label: Username
+            msg_range: Username up to 30 characters.
+          email:
+            label: Email
+            msg_invalid: Invalid Email Address.
+      edit_success: Edited successfully
+      btn_cancel: Cancel
+      btn_submit: Submit
     user_modal:
       title: Aggiungi un nuovo utente
       form:
@@ -1515,6 +1555,7 @@ ui:
       filter:
         placeholder: "Filtra per nome, utente:id"
       set_new_password: Imposta una nuova password
+      edit_profile: Edit profile
       change_status: Modifica lo stato
       change_role: Cambia il ruolo
       show_logs: Visualizza i log
@@ -1610,6 +1651,7 @@ ui:
         msg: La crittografia non può essere vuota.
         text: Per la maggior parte dei server SSL è l'opzione consigliata.
         ssl: SSL
+        tls: TLS
         none: Nessuna
       smtp_port:
         label: Porta SMTP
@@ -1734,7 +1776,7 @@ ui:
         text: "ATTENZIONE: Se disattivi, potresti non essere in grado di accedere se non hai precedentemente configurato un altro metodo di login."
     installed_plugins:
       title: Plugin installati
-      plugin_link: I plugin estendono ed espandono le funzionalità di Answer. Potresti trovare plug-in nel <1>Repository dei plug-in di risposta</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Tutto
         active: Attivo
