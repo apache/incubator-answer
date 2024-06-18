@@ -1292,7 +1292,7 @@ ui:
     x_answers: جواب ها
     x_questions: سوالات
   install:
-    title: تثبيت
+    title: Installation
     next: بعدی
     done: انجام شده
     config_yaml_error: نمیتوان فایل config.yaml را ایجاد کرد.
