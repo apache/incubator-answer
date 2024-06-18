@@ -136,9 +136,9 @@ backend:
   password:
     other: Mật khẩu
   pass:
-    other: Password
+    other: Mật khẩu
   original_text:
-    other: This post
+    other: post này
   email_or_password_wrong_error:
     other: Email và mật khẩu không trùng khớp.
   error:
@@ -154,30 +154,30 @@ backend:
       cannot_edit_their_profile:
         other: Bạn không thể thay đổi hồ sơ.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Bạn không thể thay đổi trạng thái của mình.
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: Email và mật khẩu không khớp.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Không tìm thấy câu trả lời.
       cannot_deleted:
-        other: No permission to delete.
+        other: Không có quyền xóa.
       cannot_update:
-        other: No permission to update.
+        other: Không có quyền cập nhật.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Câu hỏi đã đóng và không thể thêm.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: Không được phép chỉnh sửa bình luận.
       not_found:
-        other: Comment not found.
+        other: Không tìm thấy bình luận.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: Thời gian bình luận đã quá lâu để chỉnh sửa.
     email:
       duplicate:
         other: Email đã được dùng.
       need_to_be_verified:
-        other: Email should be verified.
+        other: Email cần được xác minh.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
