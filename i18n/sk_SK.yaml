@@ -1292,7 +1292,7 @@ ui:
     x_answers: odpovede
     x_questions: otázky
   install:
-    title: Inštalácia
+    title: Installation
     next: Ďalšie
     done: Hotový
     config_yaml_error: Nie je možné vytvoriť súbor config.yaml.
@@ -1428,7 +1428,7 @@ ui:
       title: Administrátor
     dashboard:
       title: Nástenka
-      welcome: Vitajte v Administrátorovi!
+      welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Otázky:"
       answers: "Odpovede:"
@@ -1776,7 +1776,7 @@ ui:
         text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
-      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1> Plugin Repository</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: All
         active: Active
