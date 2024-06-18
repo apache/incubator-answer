@@ -213,130 +213,130 @@ backend:
       already_deleted:
         other: This post has been deleted.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Bài đăng của bạn đang chờ xem xét. Nó sẽ hiển thị sau khi được phê duyệt.
       not_found:
         other: Không tìm thấy câu hỏi.
       cannot_deleted:
-        other: No permission to delete.
+        other: Không có quyền xóa.
       cannot_close:
-        other: No permission to close.
+        other: Không có quyền đóng.
       cannot_update:
-        other: No permission to update.
+        other: Không có quyền cập nhật.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: Xếp hạng danh tiếng không đạt được điều kiện.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+        other: Cảm ơn phản hồi của bạn. Bạn cần ít nhất {{.Rank}} danh tiếng để bỏ phiếu.
       no_enough_rank_to_operate:
-        other: You need at least {{.Rank}} reputation to do this.
+        other: Bạn cần ít nhất {{.Rank}} danh tiếng để làm điều này.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Xử lý báo cáo thất bại.
       not_found:
-        other: Report not found.
+        other: Không tìm thấy báo cáo.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Thẻ đã tồn tại.
       not_found:
         other: Không tìm thấy thẻ.
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: Thẻ đề xuất không tồn tại.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Vui lòng nhập ít nhất một thẻ bắt buộc.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Không nên chứa các thẻ đồng nghĩa.
       cannot_update:
-        other: No permission to update.
+        other: Không có quyền cập nhật.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: Bạn không thể xóa thẻ đang được sử dụng.
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Bạn không thể đặt từ đồng nghĩa của thẻ hiện tại là chính nó.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
+        other: Tên người gửi không thể là địa chỉ email.
     theme:
       not_found:
-        other: Theme not found.
+        other: Chủ đề không tìm thấy.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: Không thể chỉnh sửa hiện tại, có một phiên bản đang trong hàng đợi xem xét.
       no_permission:
-        other: No permission to revise.
+        other: Không có quyền sửa đổi.
     user:
       external_login_missing_user_id:
-        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
+        other: Nền tảng bên thứ ba không cung cấp UserID duy nhất, vì vậy bạn không thể đăng nhập, vui lòng liên hệ với quản trị viên trang web.
       external_login_unbinding_forbidden:
-        other: Please set a login password for your account before you remove this login.
+        other: Vui lòng đặt mật khẩu đăng nhập cho tài khoản của bạn trước khi bạn gỡ bỏ đăng nhập này.
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: Email và mật khẩu không khớp.
       not_found:
-        other: User not found.
+        other: Không tìm thấy người dùng.
       suspended:
-        other: User has been suspended.
+        other: Người dùng đã bị đình chỉ.
       username_invalid:
-        other: Username is invalid.
+        other: Tên người dùng không hợp lệ.
       username_duplicate:
-        other: Username is already in use.
+        other: Tên người dùng đã được sử dụng.
       set_avatar:
-        other: Avatar set failed.
+        other: Thiết lập hình đại diện thất bại.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Bạn không thể sửa đổi vai trò của mình.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: Hiện tại trang không mở đăng ký.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: Hiện tại trang không cho phép đăng nhập qua mật khẩu.
       access_denied:
         other: Truy cập bị từ chối
       page_access_denied:
-        other: You do not have access to this page.
+        other: Bạn không có quyền truy cập trang này.
       add_bulk_users_format_error:
-        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+        other: "Lỗi định dạng {{.Field}} gần '{{.Content}}' tại dòng {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "Số lượng người dùng bạn thêm cùng một lúc nên nằm trong khoảng từ 1-{{.MaxAmount}}."
     config:
       read_config_failed:
-        other: Read config failed
+        other: Đọc cấu hình thất bại
     database:
       connection_failed:
-        other: Database connection failed
+        other: Kết nối cơ sở dữ liệu thất bại
       create_table_failed:
-        other: Create table failed
+        other: Tạo bảng thất bại
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Không thể tạo file config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Định dạng tệp không được hỗ trợ.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Không tìm thấy cấu hình trang.
   reason:
     spam:
       name:
-        other: spam
+        other: Lạm dụng
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: Bài đăng này là quảng cáo hoặc phá hoại. Nó không hữu ích hoặc liên quan đến chủ đề hiện tại.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: thô lỗ hoặc lạm dụng
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+          - Một người lý trí sẽ thấy nội dung này không phù hợp để thảo luận tôn trọng
+          - Đàm thoại
     a_duplicate:
       name:
-        other: a duplicate
+        other: một bản sao
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Câu hỏi này đã được hỏi trước đó và đã có câu trả lời.
       placeholder:
-        other: Enter the existing question link
+        other: Nhập liên kết câu hỏi hiện tại
     not_a_answer:
       name:
-        other: not an answer
+        other: không phải là câu trả lời
       desc:
         other:
-          - This was posted as an answer, but it does not attempt to answer the
+          - Nội dung này được đăng dưới dạng câu trả lời, nhưng nó không hề trả lời cho câu hỏi...
           - question. It should possibly be an edit, a comment, another question,
           - or deleted altogether.
     no_longer_needed:
@@ -455,55 +455,55 @@ backend:
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Xác nhận địa chỉ email mới của bạn"
       body:
-        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Xác nhận địa chỉ email mới của bạn cho {{.SiteName}} bằng cách nhấp vào liên kết sau:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nNếu bạn không yêu cầu thay đổi này, vui lòng bỏ qua email này.\n"
     new_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+        other: "[{{.SiteName}}] {{.DisplayName}} đã trả lời câu hỏi của bạn"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Xem trên {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Hủy đăng ký</a></small>"
     invited_you_to_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+        other: "[{{.SiteName}}] {{.DisplayName}} mời bạn trả lời"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Tôi nghĩ bạn có thể biết câu trả lời.</blockquote><br>\n<a href='{{.InviteUrl}}'>Xem trên {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Hủy đăng ký</a></small>"
     new_comment:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+        other: "[{{.SiteName}}] {{.DisplayName}} đã bình luận về bài đăng của bạn"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Xem trên {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Hủy đăng ký</a></small>"
     new_question:
       title:
-        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+        other: "[{{.SiteName}}] Câu hỏi mới: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Hủy đăng ký</a></small>"
     pass_reset:
       title:
-        other: "[{{.SiteName }}] Password reset"
+        other: "[{{.SiteName}}] Đặt lại mật khẩu"
       body:
-        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Ai đó đã yêu cầu đặt lại mật khẩu của bạn trên {{.SiteName}}.<br><br>\n\nNếu đó không phải là bạn, bạn có thể bỏ qua email này.<br><br>\n\nNhấp vào liên kết sau để chọn một mật khẩu mới:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
-        other: "[{{.SiteName}}] Confirm your new account"
+        other: "[{{.SiteName}}] Xác nhận tài khoản mới của bạn"
       body:
-        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Chào mừng bạn đến với {{.SiteName}}!<br><br>\n\nNhấp vào liên kết sau để xác nhận và kích hoạt tài khoản mới của bạn:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nNếu liên kết trên không thể nhấp, hãy thử sao chép và dán nó vào thanh địa chỉ của trình duyệt web của bạn.\n"
     test:
       title:
-        other: "[{{.SiteName}}] Test Email"
+        other: "[{{.SiteName}}] Email kiểm tra"
       body:
-        other: "This is a test email."
+        other: "Đây là một email kiểm tra."
   action_activity_type:
     upvote:
-      other: upvote
+      other: bình chọn lên
     upvoted:
-      other: upvoted
+      other: đã bình chọn lên
     downvote:
-      other: downvote
+      other: bình chọn xuống
     downvoted:
-      other: downvoted
+      other: đã bình chọn xuống
     accept:
-      other: accept
+      other:
     accepted:
       other: accepted
     edit:
