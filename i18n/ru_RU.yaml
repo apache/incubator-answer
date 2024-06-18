@@ -1292,7 +1292,7 @@ ui:
     x_answers: ответы
     x_questions: вопросы
   install:
-    title: монтаж
+    title: Installation
     next: Следующий
     done: Готово
     config_yaml_error: Не удается создать файл config.yaml.
@@ -1367,7 +1367,7 @@ ui:
       msg:
         empty: Адрес электронной почты не может быть пустым.
         incorrect: Недопустимый формат e-mail адреса.
-    ready_title: Вашият сайт е готов
+    ready_title: Your site is ready
     ready_desc: >-
       Если вам когда-нибудь захочется изменить дополнительные настройки, посетите <1>раздел администратора</1>; найдите его в меню сайта.
     good_luck: "Получайте удовольствие и удачи!"
@@ -1428,7 +1428,7 @@ ui:
       title: Администратор
     dashboard:
       title: Панель управления
-      welcome: Добро пожаловать в Admin!
+      welcome: Welcome to Admin!
       site_statistics: Статистика сайта
       questions: "Вопросы:"
       answers: "Ответы:"
@@ -1776,7 +1776,7 @@ ui:
         text: "Предупреждение: При отключении, вы не сможете войти, если ранее не настроили другой способ входа."
     installed_plugins:
       title: Установленные плагины
-      plugin_link: Плагины расширяют и расширяют функциональность. Вы можете найти плагины в <1> репозитории плагинов</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Все
         active: Активные
