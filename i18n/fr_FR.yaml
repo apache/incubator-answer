@@ -1367,7 +1367,7 @@ ui:
       msg:
         empty: L'email ne peut pas être vide.
         incorrect: Le format de l'email est incorrect.
-    ready_title: Votre site est prêt
+    ready_title: Your site is ready
     ready_desc: >-
       Si vous avez envie de changer plus de paramètres, visitez la <1>section admin</1>; retrouvez la dans le menu du site.
     good_luck: "Amusez-vous et bonne chance !"
@@ -1428,7 +1428,7 @@ ui:
       title: Admin
     dashboard:
       title: Tableau de bord
-      welcome: Bienvenue sur l'admin!
+      welcome: Welcome to Admin!
       site_statistics: Statistiques du site
       questions: "Questions :"
       answers: "Réponses :"
@@ -1776,7 +1776,7 @@ ui:
         text: "AVERTISSEMENT : Si cette option est désactivée, vous ne pourrez peut-être pas vous connecter si vous n'avez pas configuré une autre méthode de connexion."
     installed_plugins:
       title: Extensions installées
-      plugin_link: Les plugins étendent les fonctionnalités. Vous pouvez trouver des plugins dans le dépôt <1>Plugin Repositor</1>.
+      plugin_link: Plugins extend and expand the functionality. You may find plugins in the <1>Plugin Repository</1>.
       filter:
         all: Tous
         active: Actif
