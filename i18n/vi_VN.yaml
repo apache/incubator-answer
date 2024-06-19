@@ -34,7 +34,7 @@ backend:
       other: Trùng lặp yêu cầu.
   action:
     report:
-      other: Flag
+      other: Gắn Cờ
     edit:
       other: Chỉnh sửa
     delete:
@@ -128,7 +128,7 @@ backend:
     rank_tag_edit_without_review_label:
       other: Chỉnh sửa mô tả thẻ không cần xem xét
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Quản lý từ đồng nghĩa của thẻ
   email:
     other: Email
   e_mail:
@@ -201,7 +201,7 @@ backend:
       email_or_password_incorrect:
         other: Email và mật khẩu không trùng khớp.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Xác minh mật khẩu cũ thất bại.
       new_password_same_as_previous_setting:
         other: Mật khẩu mới giống như cài đặt trước.
       already_deleted:
@@ -337,121 +337,121 @@ backend:
       desc:
         other:
           - Nội dung này được đăng dưới dạng câu trả lời, nhưng nó không hề trả lời cho câu hỏi...
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+          - câu hỏi. Nó có thể là một chỉnh sửa, một bình luận, một câu hỏi khác,
+          - hoặc bị xóa hoàn toàn.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: không còn cần thiết
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Bình luận này đã lỗi thời, đối thoại hoặc không liên quan đến bài đăng này.
     something:
       name:
-        other: something else
+        other: điều gì đó khác
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Bài đăng này cần sự chú ý của nhân viên vì một lý do khác không được liệt kê ở trên.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: Hãy cho chúng tôi biết cụ thể điều gì bạn quan tâm
     community_specific:
       name:
-        other: a community-specific reason
+        other: một lý do cụ thể của cộng đồng
       desc:
-        other: This question doesn't meet a community guideline.
+        other: Câu hỏi này không đáp ứng hướng dẫn của cộng đồng.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: cần chi tiết hoặc rõ ràng
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: Câu hỏi này hiện bao gồm nhiều câu hỏi trong một. Nó nên tập trung vào một vấn đề duy nhất.
     looks_ok:
       name:
-        other: looks OK
+        other: trông ổn
       desc:
-        other: This post is good as-is and not low quality.
+        other: Bài đăng này tốt như vậy và không kém chất lượng.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: cần chỉnh sửa, và tôi đã làm điều đó
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: Cải thiện và sửa các vấn đề với bài đăng này bằng chính bạn.
     needs_close:
       name:
-        other: needs close
+        other: cần đóng
       desc:
-        other: A closed question can't answer, but still can edit, vote and comment.
+        other: Một câu hỏi đã đóng không thể trả lời, nhưng vẫn có thể chỉnh sửa, bỏ phiếu và bình luận.
     needs_delete:
       name:
-        other: needs delete
+        other: cần xóa
       desc:
-        other: This post will be deleted.
+        other: Bài đăng này sẽ bị xóa.
   question:
     close:
       duplicate:
         name:
           other: spam
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Câu hỏi này đã được hỏi trước đó và đã có câu trả lời.
       guideline:
         name:
-          other: a community-specific reason
+          other: một lý do cụ thể của cộng đồng
         desc:
-          other: This question doesn't meet a community guideline.
+          other: Câu hỏi này không đáp ứng hướng dẫn của cộng đồng.
       multiple:
         name:
-          other: needs details or clarity
+          other: cần chi tiết hoặc rõ ràng
         desc:
           other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+            - Câu hỏi này hiện bao gồm nhiều câu hỏi trong một. Nó nên tập trung vào một vấn đề duy nhất
+            - chỉ tập trung vào một vấn đề.
       other:
         name:
-          other: something else
+          other: điều gì đó khác
         desc:
-          other: This post requires another reason not listed above.
+          other: Bài đăng này cần một lý do khác không được liệt kê ở trên.
     operation_type:
       asked:
-        other: asked
+        other: đã hỏi
       answered:
-        other: answered
+        other: đã trả lời
       modified:
-        other: modified
+        other: đã chỉnh sửa
     deleted_title:
-      other: Deleted question
+      other: Câu hỏi đã xóa
   notification:
     action:
       update_question:
-        other: updated question
+        other: câu hỏi đã cập nhật
       answer_the_question:
-        other: answered question
+        other: đã trả lời câu hỏi
       update_answer:
-        other: updated answer
+        other: câu trả lời đã cập nhật
       accept_answer:
-        other: accepted answer
+        other: câu trả lời đã chấp nhận
       comment_question:
-        other: commented question
+        other: đã bình luận câu hỏi
       comment_answer:
-        other: commented answer
+        other: đã bình luận câu trả lời
       reply_to_you:
-        other: replied to you
+        other: đã trả lời bạn
       mention_you:
-        other: mentioned you
+        other: đã nhắc đến bạn
       your_question_is_closed:
-        other: Your question has been closed
+        other: Câu hỏi của bạn đã được đóng
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: Câu hỏi của bạn đã bị xóa
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: Câu trả lời của bạn đã bị xóa
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: Bình luận của bạn đã bị xóa
       up_voted_question:
-        other: upvoted question
+        other: câu hỏi đã bình chọn lên
       down_voted_question:
-        other: downvoted question
+        other: câu hỏi đã bình chọn xuống
       up_voted_answer:
-        other: upvoted answer
+        other: câu trả lời đã bình chọn lên
       down_voted_answer:
-        other: downvoted answer
+        other: câu trả lời đã bình chọn xuống
       up_voted_comment:
-        other: upvoted comment
+        other: bình luận đã bình chọn lên
       invited_you_to_answer:
-        other: invited you to answer
+        other: đã mời bạn trả lời
   email_tpl:
     change_email:
       title:
@@ -505,211 +505,211 @@ backend:
     accept:
       other:
     accepted:
-      other: accepted
+      other: đã chấp nhận
     edit:
-      other: edit
+      other: chỉnh sửa
   review:
     queued_post:
-      other: Queued post
+      other: Bài đăng trong hàng đợi
     flagged_post:
-      other: Flagged post
+      other: Bài đăng được đánh dấu
     suggested_post_edit:
-      other: Suggested edits
+      other: Đề xuất chỉnh sửa
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
+      other: "{{ .Names }} và {{ .Count }} thêm..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Cách định dạng
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Trước
+    next: Tiếp
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
-    oauth_callback: Processing
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
-    http_403: HTTP Error 403
-    logout: Log Out
+    question: Câu hỏi
+    questions: Các câu hỏi
+    tag: Thẻ
+    tags: Các thẻ
+    tag_wiki: wiki thẻ
+    create_tag: Tạo thẻ
+    edit_tag: Chỉnh sửa thẻ
+    ask_a_question: Thêm câu hỏi
+    edit_question: Chỉnh sửa câu hỏi
+    edit_answer: Chỉnh sửa câu
+    search: Tìm kiếm
+    posts_containing: Bài đăng chứa
+    settings: Cài đặt
+    notifications: Các thông báo
+    login: Đăng nhập
+    sign_up: Đăng ký
+    account_recovery: Khôi phục tài khoản
+    account_activation: Kích hoạt tài khoản
+    confirm_email: Xác nhận Email
+    account_suspended: Tài khoản bị đình chỉ
+    admin: Quản trị
+    change_email: Thay đổi Email
+    install: Cài đặt Answer
+    upgrade: Nâng cấp Answer
+    maintenance: Bảo trì trang web
+    users: Người dùng
+    oauth_callback: Đang xử lý
+    http_404: Lỗi HTTP 404
+    http_50X: Lỗi HTTP 500
+    http_403: Lỗi HTTP 403
+    logout: Đăng xuất
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    new_alerts: New alerts
-    all_read: Mark all as read
-    show_more: Show more
-    someone: Someone
+    title: Các thông báo
+    inbox: Hộp thư đến
+    achievement: Thành tích
+    new_alerts: Cảnh báo mới
+    all_read: Đánh dấu tất cả đã đọc
+    show_more: Xem thêm
+    someone: Ai đó
     inbox_type:
-      all: All
-      posts: Posts
-      invites: Invites
-      votes: Votes
+      all: Tất cả
+      posts: Bài đăng
+      invites: Lời mời
+      votes: Bình chọn
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
-    contact_us: Contact us
+    title: Tài khoản của bạn đã bị đình chỉ
+    until_time: "Tài khoản của bạn đã bị đình chỉ cho đến {{ time }}."
+    forever: Người dùng này đã bị đình chỉ vĩnh viễn.
+    end: Bạn không tuân thủ hướng dẫn cộng đồng.
+    contact_us: Liên hệ với chúng tôi
   editor:
     blockquote:
-      text: Blockquote
+      text: Trích dẫn
     bold:
-      text: Strong
+      text: Đậm
     chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      text: Biểu đồ
+      flow_chart: Biểu đồ luồng
+      sequence_diagram: Sơ đồ trình tự
+      class_diagram: Sơ đồ lớp
+      state_diagram: Sơ đồ trạng thái
+      entity_relationship_diagram: Sơ đồ quan hệ thực thể
+      user_defined_diagram: Sơ đồ do người dùng định nghĩa
+      gantt_chart: Biểu đồ Gantt
+      pie_chart: Biểu đồ tròn
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Mẫu mã
+      add_code: Thêm mẫu mã
       form:
         fields:
           code:
-            label: Code
+            label: Mã
             msg:
-              empty: Code cannot be empty.
+              empty: Mã không thể trống.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Ngôn ngữ
+            placeholder: Phát hiện tự động
+      btn_cancel: Hủy
+      btn_confirm: Thêm
     formula:
-      text: Formula
+      text: Công thức
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: Công thức nội dòng
+        block: Công thức khối
     heading:
-      text: Heading
+      text: Tiêu đề
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Tiêu đề 1
+        h2: Tiêu đề 2
+        h3: Tiêu đề 3
+        h4: Tiêu đề 4
+        h5: Tiêu đề 5
+        h6: Tiêu đề 6
     help:
-      text: Help
+      text: Trợ giúp
     hr:
-      text: Horizontal rule
+      text: Thước ngang
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Hình ảnh
+      add_image: Thêm hình ảnh
+      tab_image: Tải Ảnh lên
       form_image:
         fields:
           file:
-            label: Image file
-            btn: Select image
+            label: Tệp hình ảnh
+            btn: Chọn hình ảnh
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              empty: Tệp không thể trống.
+              only_image: Chỉ cho phép tệp hình ảnh.
+              max_size: Kích thước tệp không vượt quá 4 MB.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Mô tả
+      tab_url: URL hình ảnh
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL hình ảnh
             msg:
-              empty: Image URL cannot be empty.
+              empty: URL hình ảnh không thể trống.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: Mô tả
+      btn_cancel: Hủy
+      btn_confirm: Thêm
+      uploading: Đang tải lên
     indent:
-      text: Indent
+      text: Canh lề
     outdent:
-      text: Outdent
+      text: Lùi lề
     italic:
-      text: Emphasis
+      text: Nhấn mạnh
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Liên kết
+      add_link: Thêm liên kết
       form:
         fields:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: URL không thể trống.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Mô tả
+      btn_cancel: Hủy
+      btn_confirm: Thêm
     ordered_list:
-      text: Numbered list
+      text: Danh sách đánh số
     unordered_list:
-      text: Bulleted list
+      text: Danh sách gạch đầu dòng
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: Bảng
+      heading: Tiêu đề
+      cell: Ô
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    title: Tôi đang đóng bài đăng này với lý do...
+    btn_cancel: Hủy
+    btn_submit: Gửi
     remark:
-      empty: Cannot be empty.
+      empty: Không thể trống.
     msg:
-      empty: Please select a reason.
+      empty: Vui lòng chọn một lý do.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    flag_title: Tôi đang đánh dấu để báo cáo bài đăng này với lý do...
+    close_title: Tôi đang đóng bài đăng này với lý do...
+    review_question_title: Xem xét câu hỏi
+    review_answer_title: Xem xét câu trả lời
+    review_comment_title: Xem xét bình luận
+    btn_cancel: Hủy
+    btn_submit: Gửi
     remark:
-      empty: Cannot be empty.
+      empty: Không thể trống.
     msg:
-      empty: Please select a reason.
-      not_a_url: URL format is incorrect.
-      url_not_match: URL origin does not match the current website.
+      empty: Vui lòng chọn một lý do.
+      not_a_url: Định dạng URL không chính xác.
+      url_not_match: Nguồn gốc URL không khớp với trang web hiện tại.
   tag_modal:
-    title: Create new tag
+    title: Tạo thẻ mới
     form:
       fields:
         display_name:
-          label: Display name
+          label: Tên hiển thị
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: Tên hiển thị không thể trống.
+            range: Tên hiển thị tối đa 35 ký tự.
         slug_name:
           label: URL slug
           desc: URL slug up to 35 characters.
