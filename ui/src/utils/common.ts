@@ -118,7 +118,7 @@ function matchedUsers(markdown) {
  */
 function parseUserInfo(markdown) {
   const globalReg = /\B@([\w\\_\\.\\-]+)/g;
-  return markdown.replace(globalReg, '[@$1](/u/$1)');
+  return markdown.replace(globalReg, '[@$1](/users/$1)');
 }
 
 function parseEditMentionUser(markdown) {
