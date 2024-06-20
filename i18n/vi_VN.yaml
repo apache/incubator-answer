@@ -712,54 +712,54 @@ ui:
             range: Tên hiển thị tối đa 35 ký tự.
         slug_name:
           label: URL slug
-          desc: URL slug up to 35 characters.
+          desc: URL slug tối đa 35 ký tự.
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: URL slug không thể trống.
+            range: URL slug tối đa 35 ký tự.
+            character: URL slug chứa bộ ký tự không được phép.
         desc:
-          label: Description
+          label: Mô tả
         revision:
-          label: Revision
+          label: Sửa đổi
         edit_summary:
-          label: Edit summary
+          label: Tóm tắt chỉnh sửa
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_cancel: Cancel
-    btn_submit: Submit
-    btn_post: Post new tag
+            Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, cải thiện định dạng)
+    btn_cancel:
+    btn_submit: Gửi
+    btn_post: Đăng thẻ mới
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Đã tạo
+    edited_at: Đã chỉnh sửa
+    history: Lịch sử
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: Từ đồng nghĩa
+      text: Các thẻ sau sẽ được ánh xạ lại thành
+      empty: Không tìm thấy từ đồng nghĩa.
+      btn_add: Thêm từ đồng nghĩa
+      btn_edit: Chỉnh sửa
+      btn_save: Lưu
+    synonyms_text: Các thẻ sau sẽ được ánh xạ lại thành
     delete:
-      title: Delete this tag
+      title: Xóa thẻ này
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>Chúng tôi không cho phép <strong>xóa thẻ có bài đăng</strong>.</p> <p>Vui lòng xóa thẻ này khỏi các bài đăng trước.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
-      close: Close
+        <p>Chúng tôi không cho phép <strong>xóa thẻ có từ đồng nghĩa</strong>.</p> <p>Vui lòng xóa các từ đồng nghĩa khỏi thẻ này trước.</p>
+      tip: Bạn có chắc chắn muốn xóa không?
+      close: Đóng
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
-    default_first_reason: Add tag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+    title: Chỉnh sửa Thẻ
+    default_reason: Chỉnh sửa thẻ
+    default_first_reason: Thêm thẻ
+    btn_save_edits: Lưu chỉnh sửa
+    btn_cancel: Hủy
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
-    x_seconds_ago: "{{count}}s ago"
+    now: bây giờ
+    x_seconds_ago: "{{count}}s trước"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
     hour: hour
