@@ -429,7 +429,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	}
 	nowPage := req.Page
 	req.Name = tag
-	taginifo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
+	tagInfo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
 	if err != nil {
 		tc.Page404(ctx)
 		return
@@ -441,19 +441,19 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	if req.Page > 1 {
 		siteInfo.Canonical = fmt.Sprintf("%s/tags/%s?page=%d", siteInfo.General.SiteUrl, tag, req.Page)
 	}
-	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
-	if len(taginifo.ParsedText) == 0 {
+	siteInfo.Description = htmltext.FetchExcerpt(tagInfo.ParsedText, "...", 240)
+	if len(tagInfo.ParsedText) == 0 {
 		siteInfo.Description = translator.Tr(handler.GetLang(ctx), constant.TagHasNoDescription)
 	}
-	siteInfo.Keywords = taginifo.DisplayName
+	siteInfo.Keywords = tagInfo.DisplayName
 
 	UrlUseTitle := false
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("'%s' %s - %s", taginifo.DisplayName, translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("'%s' %s - %s", tagInfo.DisplayName, translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
-		"tag":           taginifo,
+		"tag":           tagInfo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
 		"useTitle":      UrlUseTitle,
