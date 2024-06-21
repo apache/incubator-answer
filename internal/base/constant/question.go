@@ -21,4 +21,7 @@ package constant
 
 const (
 	DeletedQuestionTitleTrKey = "question.deleted_title"
+	QuestionsTitleTrKey       = "question.questions_title"
+	TagsListTitleTrKey        = "tag.tags_title"
+	TagHasNoDescription       = "tag.no_description"
 )

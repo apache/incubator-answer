@@ -31,6 +31,7 @@ import (
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	templaterender "github.com/apache/incubator-answer/internal/controller/template_render"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -176,7 +177,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
 		"data":     data,
 		"useTitle": UrlUseTitle,
@@ -411,7 +412,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 	if req.Page > 1 {
 		siteInfo.Canonical = fmt.Sprintf("%s/tags?page=%d", siteInfo.General.SiteUrl, req.Page)
 	}
-	siteInfo.Title = fmt.Sprintf("%s - %s", "Tags", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.TagsListTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
 		"page": page,
 		"data": data,
@@ -442,7 +443,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	}
 	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
 	if len(taginifo.ParsedText) == 0 {
-		siteInfo.Description = "The tag has no description."
+		siteInfo.Description = translator.Tr(handler.GetLang(ctx), constant.TagHasNoDescription)
 	}
 	siteInfo.Keywords = taginifo.DisplayName
 
@@ -450,7 +451,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("'%s' %s - %s", taginifo.DisplayName, translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
