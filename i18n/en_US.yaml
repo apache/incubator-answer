@@ -415,6 +415,13 @@ backend:
         other: modified
     deleted_title:
       other: Deleted question
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+       other: The tag has no description.
   notification:
     action:
       update_question:
