@@ -183,11 +183,14 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	}
 
 	for _, p := range b.plugins {
-		if len(p.Path) == 0 {
-			continue
+		// If user set a path, use it to replace the module with local path
+		if len(p.Path) > 0 {
+			replacement := fmt.Sprintf("%s@%s=%s", p.Name, p.Version, p.Path)
+			err = b.newExecCmd("go", "mod", "edit", "-replace", replacement).Run()
+		} else if len(p.Version) > 0 {
+			// If user specify a version, use it to get specific version of the module
+			err = b.newExecCmd("go", "get", fmt.Sprintf("%s@%s", p.Name, p.Version)).Run()
 		}
-		replacement := fmt.Sprintf("%s@v%s=%s", p.Name, p.Version, p.Path)
-		err = b.newExecCmd("go", "mod", "edit", "-replace", replacement).Run()
 		if err != nil {
 			return err
 		}
