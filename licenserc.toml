@@ -34,7 +34,3 @@ excludes = [
   "charts/templates/_helpers.tpl",
   "charts/.helmignore",
 ]
-
-[properties]
-inceptionYear = 2024
-copyrightOwner = "tison <wander4096@gmail.com>"
