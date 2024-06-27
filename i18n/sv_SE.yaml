@@ -46,7 +46,7 @@ backend:
     forbidden_error:
       other: Förbjudet.
     pin:
-      other: Pin
+      other: Fäst
     hide:
       other: Unlist
     unpin:
