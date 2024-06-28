@@ -495,11 +495,11 @@ backend:
         other: "Це тестовий електронний лист."
   action_activity_type:
     upvote:
-      other: upvote
+      other: підтримати
     upvoted:
-      other: upvoted
+      other: підтримано
     downvote:
-      other: downvote
+      other: голос "проти"
     downvoted:
       other: downvoted
     accept:
