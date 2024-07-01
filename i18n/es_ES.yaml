@@ -213,7 +213,7 @@ backend:
       already_deleted:
         other: Esta publicación ha sido eliminada.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Tu publicación está siendo revisada. Será visible una vez sea aprobada.
       not_found:
         other: Pregunta no encontrada.
       cannot_deleted:
@@ -322,7 +322,7 @@ backend:
         other: grosero u ofensivo
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
+          - Una persona razonable consideraría este contenido como inapropiado
           - discourse.
     a_duplicate:
       name:
@@ -336,8 +336,8 @@ backend:
         other: no es una respuesta
       desc:
         other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
+          - Esto fue publicado como respuesta, pero no responde la
+          - pregunta. Podría ser una edición, un comentario, otra pregunta,
           - or deleted altogether.
     no_longer_needed:
       name:
