@@ -138,7 +138,7 @@ backend:
   pass:
     other: 비밀번호
   original_text:
-    other: This post
+    other: 이 게시물
   email_or_password_wrong_error:
     other: 이메일과 비밀번호가 일치하지 않습니다.
   error:
@@ -152,7 +152,7 @@ backend:
       cannot_update_their_password:
         other: 암호를 변경할 수 없습니다.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: 수정할 수 없습니다.
       cannot_modify_self_status:
         other: 상태를 변경할 수 없습니다.
       email_or_password_wrong:
@@ -205,10 +205,10 @@ backend:
       new_password_same_as_previous_setting:
         other: 새 비밀번호는 이전 비밀번호와 다르게 입력해주세요.
       already_deleted:
-        other: This post has been deleted.
+        other: 이 게시물은 삭제되었습니다.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: 메타 객체를 찾을 수 없습니다
     question:
       already_deleted:
         other: 삭제된 게시물입니다.
@@ -246,7 +246,7 @@ backend:
       not_contain_synonym_tags:
         other: 동일한 태그를 포함하지 않아야 합니다.
       cannot_update:
-        other: 업데이트 권한이 없습니다.
+        other: 편집 권한이 없습니다.
       is_used_cannot_delete:
         other: 사용 중인 태그는 삭제할 수 없습니다.
       cannot_set_synonym_as_itself:
