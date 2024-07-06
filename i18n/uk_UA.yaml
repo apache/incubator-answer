@@ -34,7 +34,7 @@ backend:
       other: Повторний запит.
   action:
     report:
-      other: Flag
+      other: Прапор
     edit:
       other: Редагувати
     delete:
@@ -75,16 +75,16 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Рівень 1 (для приватної команди, групи потрібна менша репутація)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Рівень 2 (низька репутація, необхідна для стартап-спільноти)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Рівень 3 (висока репутація, необхідна для зрілої спільноти)
     level_custom:
       description:
-        other: Custom Level
+        other: Користувацький рівень
     rank_question_add_label:
       other: Задати питання
     rank_answer_add_label:
@@ -92,7 +92,7 @@ backend:
     rank_comment_add_label:
       other: Написати коментар
     rank_report_add_label:
-      other: Flag
+      other: Прапор
     rank_comment_vote_up_label:
       other: Проголосувати за коментар
     rank_link_url_limit_label:
@@ -128,7 +128,7 @@ backend:
     rank_tag_edit_without_review_label:
       other: Редагувати опис теґу без розгляду
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Керування синонімами тегів
   email:
     other: Електронна пошта
   e_mail:
@@ -138,13 +138,13 @@ backend:
   pass:
     other: Пароль
   original_text:
-    other: This post
+    other: Цей допис
   email_or_password_wrong_error:
     other: Електронна пошта та пароль не збігаються.
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: Невірна URL.
     password:
       space_invalid:
         other: Пароль не може містити пробіли.
@@ -152,7 +152,7 @@ backend:
       cannot_update_their_password:
         other: Ви не можете змінити свій пароль.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Ви не можете змінити свій профіль.
       cannot_modify_self_status:
         other: Ви не можете змінити свій статус.
       email_or_password_wrong:
@@ -172,16 +172,16 @@ backend:
       not_found:
         other: Коментар не знайдено.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: Час коментаря був занадто довгим, щоб його можна було змінити.
     email:
       duplicate:
         other: Такий E-mail вже існує.
       need_to_be_verified:
         other: Електронна пошта повинна бути підтверджена.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: Термін дії підтвердженої URL-адреси закінчився, будь ласка, надішліть листа повторно.
       illegal_email_domain_error:
-        other: Email is not allowed from that email domain. Please use another one.
+        other: З цього поштового домену заборонено надсилати електронну пошту. Будь ласка, використовуйте інший.
     lang:
       not_found:
         other: Мовний файл не знайдено.
