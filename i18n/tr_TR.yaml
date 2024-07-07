@@ -54,7 +54,7 @@ backend:
     show:
       other: Listele
     invite_someone_to_answer:
-      other: Edit
+      other: Düzenle
     undelete:
       other: Undelete
   role:
@@ -92,7 +92,7 @@ backend:
     rank_comment_add_label:
       other: Write comment
     rank_report_add_label:
-      other: Flag
+      other: Bildir
     rank_comment_vote_up_label:
       other: Upvote comment
     rank_link_url_limit_label:
@@ -108,7 +108,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Invite someone to answer
     rank_tag_add_label:
-      other: Create new tag
+      other: Yeni etiket oluştur
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
