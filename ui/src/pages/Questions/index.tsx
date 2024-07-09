@@ -36,8 +36,7 @@ import {
 } from '@/stores';
 import { useQuestionList } from '@/services';
 import * as Type from '@/common/interface';
-import { userCenter, floppyNavigation, Storage } from '@/utils';
-import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
+import { userCenter, floppyNavigation } from '@/utils';
 import { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 
 const Questions: FC = () => {
@@ -46,12 +45,8 @@ const Questions: FC = () => {
   const { user: loggedUser } = loggedUserInfoStore((_) => _);
   const [urlSearchParams] = useSearchParams();
   const curPage = Number(urlSearchParams.get('page')) || 1;
-  const storageOrder = Storage.get(QUESTIONS_ORDER_STORAGE_KEY);
-  const curOrder =
-    urlSearchParams.get('order') || storageOrder || QUESTION_ORDER_KEYS[0];
-  if (curOrder !== storageOrder) {
-    Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
-  }
+  const curOrder = (urlSearchParams.get('order') ||
+    QUESTION_ORDER_KEYS[0]) as Type.QuestionOrderBy;
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,
     page: curPage,

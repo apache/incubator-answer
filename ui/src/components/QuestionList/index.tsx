@@ -22,7 +22,6 @@ import { ListGroup } from 'react-bootstrap';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import type { QuestionOrderBy } from '@/common/interface';
 import { pathFactory } from '@/router/pathFactory';
 import {
   Tag,
@@ -39,15 +38,15 @@ import * as Type from '@/common/interface';
 import { useSkeletonControl } from '@/hooks';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
-  'active',
   'newest',
+  'active',
   'frequent',
   'score',
   'unanswered',
 ];
 interface Props {
   source: 'questions' | 'tag';
-  order?: QuestionOrderBy;
+  order?: Type.QuestionOrderBy;
   data;
   isLoading: boolean;
 }
