@@ -137,8 +137,16 @@ const Ask = () => {
 
   useEffect(() => {
     if (!qid) {
+      // order: 1. tags query. 2. prefill query. 3. draft
       initQueryTags();
-      const draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
+      let draft;
+      const prefill = searchParams.get('prefill');
+      if (prefill) {
+        draft = JSON.parse(decodeURIComponent(prefill));
+      } else {
+        draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
+      }
+
       if (draft) {
         formData.title.value = draft.title;
         formData.content.value = draft.content;
