@@ -180,7 +180,14 @@ func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.Site
 
 // SaveSiteWrite save site configuration about write
 func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (resp interface{}, err error) {
-	errData, err := s.tagCommonService.SetSiteWriteTag(ctx, req.RecommendTags, req.ReservedTags, req.UserID)
+	recommendTags, reservedTags := make([]string, 0), make([]string, 0)
+	for _, tag := range req.RecommendTags {
+		recommendTags = append(recommendTags, tag.SlugName)
+	}
+	for _, tag := range req.ReservedTags {
+		reservedTags = append(reservedTags, tag.SlugName)
+	}
+	errData, err := s.tagCommonService.SetSiteWriteTag(ctx, recommendTags, reservedTags, req.UserID)
 	if err != nil {
 		return errData, err
 	}
