@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
+import matter from 'gray-matter';
 
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
@@ -113,14 +114,10 @@ const Ask = () => {
   const { qid } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const initQueryTags = () => {
-    const queryTags = searchParams.get('tags');
-    if (!queryTags) {
-      return;
-    }
-    getTagsBySlugName(queryTags).then((tags) => {
+  const updateTags = (tags: string) => {
+    getTagsBySlugName(tags).then((resp) => {
       // eslint-disable-next-line
-      handleTagsChange(tags);
+      handleTagsChange(resp);
     });
   };
 
@@ -138,20 +135,27 @@ const Ask = () => {
   useEffect(() => {
     if (!qid) {
       // order: 1. tags query. 2. prefill query. 3. draft
-      initQueryTags();
-      let draft;
-      const prefill = searchParams.get('prefill');
-      if (prefill) {
-        draft = JSON.parse(decodeURIComponent(prefill));
-      } else {
-        draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
+      const queryTags = searchParams.get('tags');
+      if (queryTags) {
+        updateTags(queryTags);
       }
+      const draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
 
-      if (draft) {
-        formData.title.value = draft.title;
-        formData.content.value = draft.content;
-        formData.tags.value = draft.tags;
-        formData.answer_content.value = draft.answer_content;
+      const prefill = searchParams.get('prefill');
+      if (prefill || draft) {
+        if (prefill) {
+          const file = matter(decodeURIComponent(prefill));
+          formData.title.value = file.data?.title;
+          formData.content.value = file.content;
+          if (!queryTags && file.data?.tags) {
+            updateTags(file.data.tags);
+          }
+        } else if (draft) {
+          formData.title.value = draft.title;
+          formData.content.value = draft.content;
+          formData.tags.value = draft.tags;
+          formData.answer_content.value = draft.answer_content;
+        }
         setCheckState(Boolean(draft.answer_content));
         setHasDraft(true);
         setFormData({ ...formData });
