@@ -8833,7 +8833,7 @@ const docTemplate = `{
                     "enum": [
                         "newest",
                         "active",
-                        "frequent",
+                        "hot",
                         "score",
                         "unanswered"
                     ]

@@ -1249,7 +1249,7 @@ ui:
     answers: Відповіді
     newest: Найновіші
     active: Активні
-    frequent: Frequent
+    hot: Hot
     score: Оцінка
     unanswered: Без відповідей
     modified: modified

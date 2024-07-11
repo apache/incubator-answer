@@ -66,6 +66,7 @@ type Question struct {
 	UniqueViewCount  int       `xorm:"not null default 0 INT(11) unique_view_count"`
 	VoteCount        int       `xorm:"not null default 0 INT(11) vote_count"`
 	AnswerCount      int       `xorm:"not null default 0 INT(11) answer_count"`
+	HotScore         int       `xorm:"not null default 0 INT(11) hot_score"`
 	CollectionCount  int       `xorm:"not null default 0 INT(11) collection_count"`
 	FollowCount      int       `xorm:"not null default 0 INT(11) follow_count"`
 	AcceptedAnswerID string    `xorm:"not null default 0 BIGINT(20) accepted_answer_id"`
