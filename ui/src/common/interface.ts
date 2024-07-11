@@ -290,7 +290,7 @@ export interface LangsType {
 export type QuestionOrderBy =
   | 'newest'
   | 'active'
-  | 'frequent'
+  | 'hot'
   | 'score'
   | 'unanswered';
 

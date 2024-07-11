@@ -40,7 +40,7 @@ import { useSkeletonControl } from '@/hooks';
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'newest',
   'active',
-  'frequent',
+  'hot',
   'score',
   'unanswered',
 ];

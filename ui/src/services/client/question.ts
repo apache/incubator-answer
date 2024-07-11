@@ -40,7 +40,7 @@ export const useHotQuestions = (
   params: Type.QueryQuestionsReq = {
     page: 1,
     page_size: 6,
-    order: 'frequent',
+    order: 'hot',
     in_days: 7,
   },
 ) => {
