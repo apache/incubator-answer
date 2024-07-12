@@ -26,7 +26,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import matter from 'gray-matter';
+import fm from 'front-matter';
 
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
@@ -144,20 +144,21 @@ const Ask = () => {
       const prefill = searchParams.get('prefill');
       if (prefill || draft) {
         if (prefill) {
-          const file = matter(decodeURIComponent(prefill));
-          formData.title.value = file.data?.title;
-          formData.content.value = file.content;
-          if (!queryTags && file.data?.tags) {
-            updateTags(file.data.tags);
+          const file = fm<any>(decodeURIComponent(prefill));
+          formData.title.value = file.attributes?.title;
+          formData.content.value = file.body;
+          if (!queryTags && file.attributes?.tags) {
+            updateTags(file.attributes.tags);
           }
         } else if (draft) {
           formData.title.value = draft.title;
           formData.content.value = draft.content;
           formData.tags.value = draft.tags;
           formData.answer_content.value = draft.answer_content;
+          setCheckState(Boolean(draft.answer_content));
+          setHasDraft(true);
         }
-        setCheckState(Boolean(draft.answer_content));
-        setHasDraft(true);
+
         setFormData({ ...formData });
       } else {
         resetForm();
