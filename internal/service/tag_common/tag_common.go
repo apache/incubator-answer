@@ -108,7 +108,7 @@ func NewTagCommonService(
 }
 
 // SearchTagLike get tag list all
-func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
+func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.GetTagBasicResp, err error) {
 	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, len(req.Tag) == 0, false)
 	if err != nil {
 		return
@@ -142,11 +142,11 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 			tag.Recommend = mainTagMap[mainTagID].Recommend
 		}
 	}
-	resp = make([]schema.SearchTagLikeResp, 0)
+	resp = make([]schema.GetTagBasicResp, 0)
 	repetitiveTag := make(map[string]bool)
 	for _, tag := range tags {
 		if _, ok := repetitiveTag[tag.SlugName]; !ok {
-			item := schema.SearchTagLikeResp{}
+			item := schema.GetTagBasicResp{}
 			item.SlugName = tag.SlugName
 			item.DisplayName = tag.DisplayName
 			item.Recommend = tag.Recommend
