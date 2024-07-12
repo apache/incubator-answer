@@ -181,11 +181,23 @@ func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.Site
 // SaveSiteWrite save site configuration about write
 func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (resp interface{}, err error) {
 	recommendTags, reservedTags := make([]string, 0), make([]string, 0)
-	for _, tag := range req.RecommendTags {
-		recommendTags = append(recommendTags, tag.SlugName)
-	}
+	recommendTagMapping, reservedTagMapping := make(map[string]bool), make(map[string]bool)
 	for _, tag := range req.ReservedTags {
-		reservedTags = append(reservedTags, tag.SlugName)
+		if !recommendTagMapping[tag.SlugName] {
+			reservedTagMapping[tag.SlugName] = true
+			reservedTags = append(reservedTags, tag.SlugName)
+		}
+	}
+
+	// recommend tags can't contain reserved tag
+	for _, tag := range req.RecommendTags {
+		if reservedTagMapping[tag.SlugName] {
+			continue
+		}
+		if !recommendTagMapping[tag.SlugName] {
+			recommendTagMapping[tag.SlugName] = true
+			recommendTags = append(recommendTags, tag.SlugName)
+		}
 	}
 	errData, err := s.tagCommonService.SetSiteWriteTag(ctx, recommendTags, reservedTags, req.UserID)
 	if err != nil {
