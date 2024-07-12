@@ -147,6 +147,7 @@ const Ask = () => {
           const file = fm<any>(decodeURIComponent(prefill));
           formData.title.value = file.attributes?.title;
           formData.content.value = file.body;
+          setFormData({ ...formData });
           if (!queryTags && file.attributes?.tags) {
             updateTags(file.attributes.tags);
           }
@@ -157,9 +158,8 @@ const Ask = () => {
           formData.answer_content.value = draft.answer_content;
           setCheckState(Boolean(draft.answer_content));
           setHasDraft(true);
+          setFormData({ ...formData });
         }
-
-        setFormData({ ...formData });
       } else {
         resetForm();
       }
