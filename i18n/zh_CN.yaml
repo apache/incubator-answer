@@ -1249,7 +1249,7 @@ ui:
     answers: 回答
     newest: 最新
     active: 活跃
-    frequent: 浏览量
+    hot: 热度
     score: 评分
     unanswered: 未回答
     modified: 更新于

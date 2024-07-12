@@ -118,7 +118,7 @@ function matchedUsers(markdown) {
  */
 function parseUserInfo(markdown) {
   const globalReg = /\B@([\w\\_\\.\\-]+)/g;
-  return markdown.replace(globalReg, '[@$1](/u/$1)');
+  return markdown.replace(globalReg, '[@$1](/users/$1)');
 }
 
 function parseEditMentionUser(markdown) {
@@ -188,6 +188,23 @@ function escapeHtml(str: string) {
   return str.replace(/[&<>"'`]/g, (tag) => tagsToReplace[tag] || tag);
 }
 
+function formatDiffPart(part: any, className: string): string {
+  if (part.value.replace(/\n/g, '').length <= 0) {
+    if (part.value.match(/\n/g)?.length > 1) {
+      const value = part.value.replace(/\n/, '');
+      return `<span class="${className}"> </span><div><span class="${className}">${value.replace(
+        /\n/g,
+        ' ',
+      )}</span></div>`;
+    }
+    return `<div><span class="${className}">${part.value.replace(
+      /\n/g,
+      ' ',
+    )}</span></div>`;
+  }
+  return `<span class="${className}">${part.value}</span>`;
+}
+
 function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
@@ -200,22 +217,10 @@ function diffText(newText: string, oldText?: string): string {
   const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
   result = diff.map((part) => {
     if (part.added) {
-      if (part.value.replace(/\n/g, '').length <= 0) {
-        return `<span class="review-text-add d-block">${part.value.replace(
-          /\n/g,
-          '↵\n',
-        )}</span>`;
-      }
-      return `<span class="review-text-add">${part.value}</span>`;
+      return formatDiffPart(part, 'review-text-add');
     }
     if (part.removed) {
-      if (part.value.replace(/\n/g, '').length <= 0) {
-        return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
-          /\n/g,
-          '↵\n',
-        )}</span>`;
-      }
-      return `<span class="review-text-delete">${part.value}</span>`;
+      return formatDiffPart(part, 'review-text-remove text-decoration-none');
     }
 
     return part.value;

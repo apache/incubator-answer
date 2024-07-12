@@ -19,14 +19,10 @@
 
 const path = require('path');
 const fs = require('fs');
+const humps = require('humps');
 
 const pluginPath = path.join(__dirname, '../src/plugins');
 const pluginFolders = fs.readdirSync(pluginPath);
-
-function pascalize(str) {
-  return str.replace(/\b\w/g, (match) => match.toUpperCase())
-    .replace(/[-_\s]+/g, '');
-}
 
 function resetPackageJson() {
   const packageJsonPath = path.join(__dirname, '..', 'package.json');
@@ -63,7 +59,7 @@ function addPluginToIndexTs(packageName) {
   const indexTsPath = path.join(pluginPath, 'index.ts');
   const indexTsContent = fs.readFileSync(indexTsPath, 'utf-8');
   const lines = indexTsContent.split('\n');
-  const ComponentName = pascalize(packageName);
+  const ComponentName = humps.pascalize(packageName);
   const importLine = `export { default as ${ComponentName} } from '${packageName}';`;
   if (!lines.includes(importLine)) {
     lines.push(importLine);
@@ -93,7 +89,6 @@ pluginFolders.forEach((folder) => {
     }
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
-
 
     addPluginToPackageJson(packageName);
     addPluginToIndexTs(packageName);
