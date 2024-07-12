@@ -97,6 +97,9 @@ export const useEditor = ({
         wordWrap: 'break-word',
         wordBreak: 'break-all',
       },
+      '.ͼ7, .ͼ6': {
+        textDecoration: 'none',
+      },
     });
 
     const startState = EditorState.create({
