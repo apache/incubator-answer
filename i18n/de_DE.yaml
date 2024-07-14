@@ -322,8 +322,8 @@ backend:
         other: unhöflich oder beleidigend
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+          - Eine vernünftige Person würde diesen Inhalt als unangemessen für einen respektvollen
+          - Umgang empfinden
     a_duplicate:
       name:
         other: ein Duplikat
@@ -1555,7 +1555,7 @@ ui:
       filter:
         placeholder: "Nach Namen, user:id filtern"
       set_new_password: Neues Passwort festlegen
-      edit_profile: Edit profile
+      edit_profile: Profil bearbeiten
       change_status: Status ändern
       change_role: Rolle wechseln
       show_logs: Protokolle anzeigen
@@ -1574,7 +1574,7 @@ ui:
         content: Ein gesperrter Benutzer kann sich nicht einloggen.
     questions:
       page_title: Fragen
-      unlisted: Unlisted
+      unlisted: Nicht gelistet
       post: Beitrag
       votes: Stimmen
       answers: Antworten
