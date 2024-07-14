@@ -131,11 +131,35 @@ const Index: FC = () => {
     },
   });
 
+  const updateFormData = (params: FormDataType) => {
+    if (step === 2) {
+      let updatedFormData = formData;
+      if (params.db_type.value === 'mysql') {
+        updatedFormData = {
+          ...updatedFormData,
+          db_username: { ...updatedFormData.db_username, value: 'root' },
+          db_password: { ...updatedFormData.db_password, value: 'root' },
+          db_host: { ...updatedFormData.db_host, value: 'db:3306' },
+        };
+      } else if (params.db_type.value === 'postgres') {
+        updatedFormData = {
+          ...updatedFormData,
+          db_username: { ...updatedFormData.db_username, value: 'postgres' },
+          db_password: { ...updatedFormData.db_password, value: 'postgres' },
+          db_host: { ...updatedFormData.db_host, value: 'db:5432' },
+        };
+      }
+      return updatedFormData;
+    }
+    return formData;
+  };
+  
   const handleChange = (params: FormDataType) => {
     setErrorData({
       msg: '',
     });
-    setFormData({ ...formData, ...params });
+    const updatedFormData = updateFormData(params);
+    setFormData({ ...updatedFormData, ...params });
   };
 
   const handleErr = (data) => {
