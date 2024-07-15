@@ -1855,7 +1855,7 @@ ui:
     flag_user_type: Flagged this user as {{ type }}.
     edit_post: Edit post
     list_post: List post
-    unlist_post: Unlist post
+    unlist_post: پست فهرست نشده
   timeline:
     undeleted: undeleted
     deleted: deleted
