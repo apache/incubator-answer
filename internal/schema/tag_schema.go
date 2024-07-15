@@ -33,10 +33,10 @@ type SearchTagLikeReq struct {
 	IsAdmin bool   `json:"-"`
 }
 
+// SearchTagsBySlugName search tags by slug name
 type SearchTagsBySlugName struct {
-	Tags    string   `json:"tags" form:"tags"`
-	TagList []string `json:"-"`
-	IsAdmin bool     `json:"-"`
+	// slug name list split by ','
+	Tags string `form:"tags"`
 }
 
 // GetTagInfoReq get tag info request
@@ -298,7 +298,8 @@ type GetFollowingTagsResp struct {
 	Reserved        bool   `json:"reserved"`
 }
 
-type SearchTagLikeResp struct {
+// GetTagBasicResp get tag basic response
+type GetTagBasicResp struct {
 	SlugName    string `json:"slug_name"`
 	DisplayName string `json:"display_name"`
 	Recommend   bool   `json:"recommend"`

@@ -22,6 +22,7 @@ package tag
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
@@ -190,18 +191,24 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	return resp, nil
 }
 
-func (ts *TagService) GetTagsBySlugName(ctx context.Context, tagNames []string) ([]*schema.TagItem, error) {
-	tagList := make([]*schema.TagItem, 0)
-	tagListInDB, err := ts.tagCommonService.GetTagListByNames(ctx, tagNames)
+// GetTagsBySlugName get tags by slug name
+func (ts *TagService) GetTagsBySlugName(ctx context.Context, req *schema.SearchTagsBySlugName) (
+	resp []*schema.GetTagBasicResp, err error) {
+	resp = make([]*schema.GetTagBasicResp, 0)
+	tagSlugNames := strings.Split(req.Tags, ",")
+	if len(tagSlugNames) == 0 {
+		return resp, nil
+	}
+	tagList, err := ts.tagCommonService.GetTagListByNames(ctx, tagSlugNames)
 	if err != nil {
-		return tagList, err
+		return resp, err
 	}
-	for _, tag := range tagListInDB {
-		tagItem := &schema.TagItem{}
-		copier.Copy(tagItem, tag)
-		tagList = append(tagList, tagItem)
+	for _, tag := range tagList {
+		tagItem := &schema.GetTagBasicResp{}
+		_ = copier.Copy(tagItem, tag)
+		resp = append(resp, tagItem)
 	}
-	return tagList, nil
+	return resp, nil
 }
 
 // GetFollowingTags get following tags
