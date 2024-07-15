@@ -220,7 +220,7 @@ function diffText(newText: string, oldText?: string): string {
       return formatDiffPart(part, 'review-text-add');
     }
     if (part.removed) {
-      return formatDiffPart(part, 'review-text-remove text-decoration-none');
+      return formatDiffPart(part, 'review-text-delete text-decoration-none');
     }
 
     return part.value;
