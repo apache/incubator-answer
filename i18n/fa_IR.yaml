@@ -138,7 +138,7 @@ backend:
   pass:
     other: رمز
   original_text:
-    other: This post
+    other: پست جاری
   email_or_password_wrong_error:
     other: ایمیل و رمز وارد شده صحیح نیست.
   error:
