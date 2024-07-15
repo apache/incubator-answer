@@ -153,7 +153,7 @@ const Index: FC = () => {
     }
     return formData;
   };
-  
+
   const handleChange = (params: FormDataType) => {
     setErrorData({
       msg: '',
