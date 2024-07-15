@@ -189,7 +189,6 @@ function escapeHtml(str: string) {
 }
 
 function formatDiffPart(part: any, className: string): string {
-  console.log('333333', part);
   if (part.value.replace(/\n/g, '').length <= 0) {
     if (part.value.match(/\n/g)?.length > 1) {
       const value = part.value.replace(/\n/, '');
