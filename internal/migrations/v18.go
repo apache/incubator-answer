@@ -57,7 +57,14 @@ func addPasswordLoginControl(ctx context.Context, x *xorm.Engine) error {
 		return fmt.Errorf("get config failed: %w", err)
 	}
 	if exist {
-		content := &schema.SiteWriteReq{}
+		type OldSiteWriteReq struct {
+			RestrictAnswer bool     `validate:"omitempty" form:"restrict_answer" json:"restrict_answer"`
+			RequiredTag    bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
+			RecommendTags  []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
+			ReservedTags   []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
+			UserID         string   `json:"-"`
+		}
+		content := &OldSiteWriteReq{}
 		_ = json.Unmarshal([]byte(writeSiteInfo.Content), content)
 		content.RestrictAnswer = true
 		data, _ := json.Marshal(content)

@@ -76,9 +76,15 @@
             name="twitter:image"
             content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
     />
+    <!--customize_head-->
+    {{if .HeadCode }} {{.HeadCode}} {{end}}
+    <!--customize_head-->
   </head>
 
   <body>
+    <!--customize_header-->
+    {{if .HeaderCode }} {{.HeaderCode}} {{end}}
+    <!--customize_header-->
     <div id="root">
 
       <div id="spin-mask">

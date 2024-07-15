@@ -59,5 +59,15 @@ func (s *ScheduledTaskManager) Run() {
 	if err != nil {
 		log.Error(err)
 	}
+
+	_, err = c.AddFunc("0 */1 * * *", func() {
+		ctx := context.Background()
+		fmt.Println("refresh hottest cron execution")
+		s.questionService.RefreshHottestCron(ctx)
+	})
+	if err != nil {
+		log.Error(err)
+	}
+
 	c.Start()
 }

@@ -1249,7 +1249,7 @@ ui:
     answers: 回答
     newest: 最新
     active: 有効
-    frequent: 頻繁
+    hot: Hot
     score: スコア
     unanswered: 未回答
     modified: 修正済み

@@ -1249,7 +1249,7 @@ ui:
     answers: Jawaban
     newest: Terbaru
     active: Aktif
-    frequent: Sering
+    hot: Hot
     score: Nilai
     unanswered: Belum dijawab
     modified: diubah
