@@ -41,6 +41,8 @@ interface IProps {
   showRequiredTag?: boolean;
   autoFocus?: boolean;
   isInvalid?: boolean;
+  tagStyleMode?: 'default' | 'simple';
+  formText?: string;
   errMsg?: string;
 }
 
@@ -55,6 +57,8 @@ const TagSelector: FC<IProps> = ({
   showRequiredTag = false,
   autoFocus = false,
   isInvalid = false,
+  formText = '',
+  tagStyleMode = 'default',
   errMsg = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -366,8 +370,12 @@ const TagSelector: FC<IProps> = ({
                   key={item.slug_name}
                   className={classNames(
                     'badge-tag rounded-1 m-1 flex-shrink-0',
-                    item.reserved && 'badge-tag-reserved',
-                    item.recommend && 'badge-tag-required',
+                    tagStyleMode === 'default' &&
+                      item.reserved &&
+                      'badge-tag-reserved',
+                    tagStyleMode === 'default' &&
+                      item.recommend &&
+                      'badge-tag-required',
                     index === repeatIndex && 'bg-fade-out',
                   )}>
                   {item.display_name}
@@ -435,7 +443,7 @@ const TagSelector: FC<IProps> = ({
           )}
         </Dropdown.Menu>
       </div>
-      {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
+      {!hiddenDescription && <Form.Text>{formText || t('hint')}</Form.Text>}
       <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
     </div>
   );

@@ -17,29 +17,32 @@
  * under the License.
  */
 
-import create from 'zustand';
+package plugin
 
-import { AdminSettingsWrite } from '@/common/interface';
+var (
+	DefaultCDNFileType = map[string]bool{
+		".ico":   true,
+		".json":  true,
+		".css":   true,
+		".js":    true,
+		".webp":  true,
+		".woff2": true,
+		".woff":  true,
+		".jpg":   true,
+		".svg":   true,
+		".png":   true,
+		".map":   true,
+		".txt":   true,
+	}
+)
 
-interface IProps {
-  write: AdminSettingsWrite;
-  update: (params: AdminSettingsWrite) => void;
+type CDN interface {
+	Base
+	GetStaticPrefix() string
 }
 
-const Index = create<IProps>((set) => ({
-  write: {
-    restrict_answer: true,
-    recommend_tags: [],
-    required_tag: false,
-    reserved_tags: [],
-  },
-  update: (params) =>
-    set((state) => {
-      const o = { ...state.write, ...params };
-      return {
-        write: o,
-      };
-    }),
-}));
-
-export default Index;
+var (
+	// CallCDN is a function that calls all registered parsers
+	CallCDN,
+	registerCDN = MakePlugin[CDN](false)
+)

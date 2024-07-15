@@ -102,6 +102,10 @@ func Register(p Base) {
 	if _, ok := p.(Embed); ok {
 		registerEmbed(p.(Embed))
 	}
+
+	if _, ok := p.(CDN); ok {
+		registerCDN(p.(CDN))
+	}
 }
 
 type Stack[T Base] struct {

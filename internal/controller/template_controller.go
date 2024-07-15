@@ -22,6 +22,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/plugin"
 	"html/template"
 	"net/http"
 	"net/url"
@@ -69,6 +70,12 @@ func NewTemplateController(
 	}
 }
 func GetStyle() (script []string, css string) {
+	prefix := ""
+	_ = plugin.CallCDN(func(fn plugin.CDN) error {
+		prefix = fn.GetStaticPrefix()
+		return nil
+	})
+
 	file, err := ui.Build.ReadFile("build/index.html")
 	if err != nil {
 		return
@@ -77,14 +84,14 @@ func GetStyle() (script []string, css string) {
 	scriptData := scriptRegexp.FindAllStringSubmatch(string(file), -1)
 	for _, s := range scriptData {
 		if len(s) == 2 {
-			script = append(script, s[1])
+			script = append(script, prefix+s[1])
 		}
 	}
 
 	cssRegexp := regexp.MustCompile(`<link href="(.*)" rel="stylesheet">`)
 	cssListData := cssRegexp.FindStringSubmatch(string(file))
 	if len(cssListData) == 2 {
-		css = cssListData[1]
+		css = prefix + cssListData[1]
 	}
 	return
 }

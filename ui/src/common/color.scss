@@ -72,19 +72,27 @@
   }
   /** CodeMirror **/
 
-  .CodeMirror {
+  .cm-editor {
     background: var(--bs-body-bg);
     color: var(--bs-body-color);
   }
-  .CodeMirror-cursor {
-    border-left: 1px solid var(--bs-body-color);
+
+  .cm-cursor {
+    border-left-color: var(--bs-body-color);
   }
-  .cm-header, .cm-link, .cm-url {
+  .ͼ2.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {
+    background-color: #3E4451;
+  }
+   /** link color **/
+  .ͼc {
+    color: rgb(60, 138, 233);
+  }
+  .ͼ5 {
     color: var(--bs-body-color);
   }
-  div.CodeMirror-selected { background: rgba(127, 190, 244, 0.4); }
-  .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: rgba(84,174,255,0.4); }
-  .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: rgba(84,174,255,0.4); }
+
+  .ͼ2 .cm-selectionBackground {background: #3E4451;}
+ /** CodeMirror end **/
 
   .bg-light {
     background-color: rgba(0, 0, 0, 0.5) !important;

@@ -72,11 +72,17 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RestrictAnswer bool     `validate:"omitempty" form:"restrict_answer" json:"restrict_answer"`
-	RequiredTag    bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
-	RecommendTags  []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
-	ReservedTags   []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
-	UserID         string   `json:"-"`
+	RestrictAnswer bool            `validate:"omitempty" json:"restrict_answer"`
+	RequiredTag    bool            `validate:"omitempty" json:"required_tag"`
+	RecommendTags  []*SiteWriteTag `validate:"omitempty,dive" json:"recommend_tags"`
+	ReservedTags   []*SiteWriteTag `validate:"omitempty,dive" json:"reserved_tags"`
+	UserID         string          `json:"-"`
+}
+
+// SiteWriteTag site write response tag
+type SiteWriteTag struct {
+	SlugName    string `validate:"required" json:"slug_name"`
+	DisplayName string `json:"display_name"`
 }
 
 // SiteLegalReq site branding request
