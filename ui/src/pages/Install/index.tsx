@@ -132,7 +132,7 @@ const Index: FC = () => {
   });
 
   const updateFormData = (params: FormDataType) => {
-    if (step === 2) {
+    if (Object.keys(params)?.[0] === 'db_type') {
       let updatedFormData = formData;
       if (params.db_type.value === 'mysql') {
         updatedFormData = {
