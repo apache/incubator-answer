@@ -189,6 +189,7 @@ function escapeHtml(str: string) {
 }
 
 function formatDiffPart(part: any, className: string): string {
+  console.log('333333', part);
   if (part.value.replace(/\n/g, '').length <= 0) {
     if (part.value.match(/\n/g)?.length > 1) {
       const value = part.value.replace(/\n/, '');
@@ -220,7 +221,7 @@ function diffText(newText: string, oldText?: string): string {
       return formatDiffPart(part, 'review-text-add');
     }
     if (part.removed) {
-      return formatDiffPart(part, 'review-text-remove text-decoration-none');
+      return formatDiffPart(part, 'review-text-delete text-decoration-none');
     }
 
     return part.value;
