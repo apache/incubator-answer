@@ -1,21 +1,18 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-
-# The following fields are used for back-end
+#Licensed to the Apache Software Foundation (ASF) under one
+#or more contributor license agreements.  See the NOTICE file
+#distributed with this work for additional information
+#regarding copyright ownership.  The ASF licenses this file
+#to you under the Apache License, Version 2.0 (the
+#"License"); you may not use this file except in compliance
+#with the License.  You may obtain a copy of the License at
+#http://www.apache.org/licenses/LICENSE-2.0
+#Unless required by applicable law or agreed to in writing,
+#software distributed under the License is distributed on an
+#"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#KIND, either express or implied.  See the License for the
+#specific language governing permissions and limitations
+#under the License.
+#The following fields are used for back-end
 backend:
   base:
     success:
@@ -517,8 +514,8 @@ backend:
       other: Sugerowane zmiany
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
-# The following fields are used for interface presentation(Front-end)
+      other: "{{ .Names }} już {{ .Count }} razy ..."
+#The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Jak formatować
@@ -767,13 +764,13 @@ ui:
     hours: godziny
     days: dni
   reaction:
-    heart: heart
-    smile: smile
-    frown: frown
-    btn_label: add or remove reactions
-    undo_emoji: undo {{ emoji }} reaction
-    react_emoji: react with {{ emoji }}
-    unreact_emoji: unreact with {{ emoji }}
+    heart: serce
+    smile: uśmiech
+    frown: niezadowolenie
+    btn_label: dodaj lub usuń reakcje
+    undo_emoji: cofnij reakcje {{ emoji }}
+    react_emoji: zareaguj {{ emoji }}
+    unreact_emoji: usuń reakcje {{ emoji }}
   comment:
     btn_add_comment: Dodaj komentarz
     reply_to: Odpowiedź na
@@ -910,8 +907,8 @@ ui:
       label: Imię
       msg:
         empty: Imię nie może być puste.
-        range: Length of name should between 4 to 30 characters.
-        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
+        range: Długość nazwy powinna wynosić od 4 do 30 znaków.
+        character: 'Możesz użyć dozwolone znaki "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Adres e-mail
       msg:
@@ -1028,8 +1025,8 @@ ui:
       email:
         label: Email
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Nowy Email
+        msg: Nowy Email nie może być pusty.
       pass:
         label: Aktualne hasło
         msg: Hasło nie może być puste.
@@ -1150,8 +1147,8 @@ ui:
     delete: Usuń
     undelete: Przywróć
     list: Lista
-    unlist: Unlist
-    unlisted: Unlisted
+    unlist: Usuń z listy
+    unlisted: Usunięte z listy
     login: Zaloguj się
     signup: Zarejestruj się
     logout: Wyloguj się
@@ -1181,15 +1178,15 @@ ui:
     default: Domyślne
     reset: Reset
     tag: Tag
-    post_lowercase: post
-    filter: Filter
-    ignore: Ignore
+    post_lowercase: wpis
+    filter: Filtry
+    ignore: Ignoruj
     submit: Prześlij
     normal: Normalny
     closed: Zamknięty
     deleted: Usunięty
     pending: Oczekujący
-    more: More
+    more: Więcej
   search:
     title: Wyniki wyszukiwania
     keywords: Słowa kluczowe
@@ -1292,7 +1289,7 @@ ui:
     x_answers: odpowiedzi
     x_questions: pytania
   install:
-    title: Installation
+    title: Instalacja
     next: Dalej
     done: Zakończono
     config_yaml_error: Nie można utworzyć pliku config.yaml.
@@ -1367,7 +1364,7 @@ ui:
       msg:
         empty: Adres e-mail nie może być pusty.
         incorrect: Niepoprawny format adresu e-mail.
-    ready_title: Your site is ready
+    ready_title: Twoja strona jest gotowa
     ready_desc: >-
       Jeśli kiedykolwiek zechcesz zmienić więcej ustawień, odwiedź <1>sekcję administratora</1>; znajdziesz ją w menu strony.
     good_luck: "Baw się dobrze i powodzenia!"
@@ -1428,7 +1425,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panel
-      welcome: Welcome to Admin!
+      welcome: Witaj Administratorze!
       site_statistics: Statystyki witryny
       questions: "Pytania:"
       answers: "Odpowiedzi:"
@@ -1452,7 +1449,7 @@ ui:
       database_size: "Wielkość bazy danych:"
       storage_used: "Wykorzystane miejsce:"
       uptime: "Czas pracy:"
-      links: Links
+      links: Linki
       plugins: Wtyczki
       github: GitHub
       blog: Blog
@@ -1498,18 +1495,18 @@ ui:
       btn_cancel: Anuluj
       btn_submit: Prześlij
     edit_profile_modal:
-      title: Edit profile
+      title: Edytuj profil
       form:
         fields:
           username:
-            label: Username
+            label: Nazwa
             msg_range: Username up to 30 characters.
           email:
             label: Email
-            msg_invalid: Invalid Email Address.
-      edit_success: Edited successfully
-      btn_cancel: Cancel
-      btn_submit: Submit
+            msg_invalid: Błędny adresy email.
+      edit_success: Edycja zakończona pomyślnie
+      btn_cancel: Anuluj
+      btn_submit: Prześlij
     user_modal:
       title: Dodaj nowego użytkownika
       form:
@@ -1555,7 +1552,7 @@ ui:
       filter:
         placeholder: "Filtruj według imienia, użytkownik:id"
       set_new_password: Ustaw nowe hasło
-      edit_profile: Edit profile
+      edit_profile: Edytuj profil
       change_status: Zmień status
       change_role: Zmień rolę
       show_logs: Pokaż logi
@@ -1582,7 +1579,7 @@ ui:
       status: Status
       action: Akcja
       change: Zmień
-      pending: Pending
+      pending: Oczekuje
       filter:
         placeholder: "Filtruj według tytułu, pytanie:id"
     answers:
