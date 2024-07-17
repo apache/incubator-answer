@@ -287,6 +287,11 @@ function changeTheme(mode: 'default' | 'light' | 'dark' | 'system') {
   }
 }
 
+function isDarkTheme() {
+  const htmlTag = document.querySelector('html') as HTMLHtmlElement;
+  return htmlTag.getAttribute('data-bs-theme') === 'dark';
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -304,4 +309,5 @@ export {
   base64ToSvg,
   getUaType,
   changeTheme,
+  isDarkTheme,
 };
