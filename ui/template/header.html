@@ -77,13 +77,13 @@
             content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
     />
     <!--customize_head-->
-    {{if .HeadCode }} {{.HeadCode}} {{end}}
+    {{if .HeadCode }} {{.HeadCode | templateHTML}} {{end}}
     <!--customize_head-->
   </head>
 
   <body>
     <!--customize_header-->
-    {{if .HeaderCode }} {{.HeaderCode}} {{end}}
+    {{if .HeaderCode }} {{.HeaderCode | templateHTML}} {{end}}
     <!--customize_header-->
     <div id="root">
 
