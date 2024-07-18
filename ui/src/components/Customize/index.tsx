@@ -53,9 +53,7 @@ const ActivateScriptNodes = (el, part) => {
   }
   scriptList?.forEach((so) => {
     const script = document.createElement('script');
-    script.text = `(() => {
-      ${so.text}
-    })();`;
+    script.text = `(() => {${so.text}})();`;
     for (let i = 0; i < so.attributes.length; i += 1) {
       const attr = so.attributes[i];
       script.setAttribute(attr.name, attr.value);
@@ -68,7 +66,6 @@ type pos = 'afterbegin' | 'beforeend';
 const renderCustomArea = (el, part, pos: pos, content: string = '') => {
   let startMarkNode;
   let endMarkNode;
-  let accumulatedContent = ''; //
   const { childNodes } = el;
   for (let i = 0; i < childNodes.length; i += 1) {
     const node = childNodes[i];
@@ -80,29 +77,6 @@ const renderCustomArea = (el, part, pos: pos, content: string = '') => {
         break;
       }
     }
-  }
-
-  // Iterate over all nodes between startMarkNode and endMarkNode.
-  if (startMarkNode && endMarkNode) {
-    let contentNode = startMarkNode.nextSibling;
-    while (contentNode && contentNode !== endMarkNode) {
-      if (contentNode.nodeType === 1) {
-        // element node
-        accumulatedContent += contentNode.outerHTML;
-      } else if (contentNode.nodeType === 3) {
-        // text node
-        accumulatedContent += contentNode.textContent;
-      }
-      contentNode = contentNode.nextSibling;
-    }
-  }
-
-  console.log('====', accumulatedContent);
-
-  // 比较累积的内容和指定的内容
-  if (accumulatedContent.includes(content)) {
-    console.log('Content already exists. No insertion needed.');
-    return;
   }
 
   if (startMarkNode && endMarkNode) {
@@ -131,7 +105,6 @@ const handleCustomHead = (content) => {
 
 const handleCustomHeader = (content) => {
   const el = document.body;
-  console.log('====11', content);
   renderCustomArea(el, CUSTOM_MARK_HEADER, 'afterbegin', content);
 };
 
@@ -145,11 +118,14 @@ const Index: FC = () => {
     (state) => state,
   );
   useEffect(() => {
-    setTimeout(() => {
-      handleCustomHead(custom_head);
-    }, 1000);
-    handleCustomHeader(custom_header);
-    handleCustomFooter(custom_footer);
+    const isSeo = document.querySelector('meta[name="go-template"]');
+    if (!isSeo) {
+      setTimeout(() => {
+        handleCustomHead(custom_head);
+      }, 1000);
+      handleCustomHeader(custom_header);
+      handleCustomFooter(custom_footer);
+    }
   }, [custom_head, custom_header, custom_footer]);
   return null;
 };

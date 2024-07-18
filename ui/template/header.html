@@ -76,6 +76,7 @@
             name="twitter:image"
             content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
     />
+    <meta name="go-template">
     <!--customize_head-->
     {{if .HeadCode }} {{.HeadCode | templateHTML}} {{end}}
     <!--customize_head-->
