@@ -154,10 +154,10 @@ const TagSelector: FC<IProps> = ({
     queryTags(str).then((res) => {
       const tagArray: Type.Tag[] = filterTags(res || []);
       if (str === '') {
-        setRequiredTags(res?.length > 5 ? res.slice(0, 5) : res);
+        setRequiredTags(res);
       }
       handleMenuShow(tagArray.length > 0);
-      setTags(tagArray?.length > 5 ? tagArray.slice(0, 5) : tagArray);
+      setTags(tagArray);
     });
   };
 
