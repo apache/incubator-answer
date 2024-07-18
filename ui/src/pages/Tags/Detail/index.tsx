@@ -38,7 +38,7 @@ import {
 } from '@/services';
 import QuestionList, { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove, guard, scrollToDocTop } from '@/utils';
+import { escapeRemove, guard } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
 const Index: FC = () => {
@@ -74,12 +74,6 @@ const Index: FC = () => {
       object_id: tagInfo.tag_id,
     });
   };
-
-  useEffect(() => {
-    if (!listLoading) {
-      scrollToDocTop();
-    }
-  }, [listLoading]);
 
   useEffect(() => {
     if (tagResp) {

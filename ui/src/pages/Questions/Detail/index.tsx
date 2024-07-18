@@ -214,7 +214,6 @@ const Index = () => {
     if (!qid) {
       return;
     }
-    scrollToDocTop();
     getDetail();
     requestAnswers();
   }, [qid]);
