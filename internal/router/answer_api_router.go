@@ -159,6 +159,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/info", a.questionController.GetQuestion)
 	r.GET("/question/invite", a.questionController.GetQuestionInviteUserInfo)
 	r.GET("/question/page", a.questionController.QuestionPage)
+	r.GET("/question/recommend/page", a.questionController.QuestionRecommendPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
 	r.GET("/personal/question/page", a.questionController.PersonalQuestionPage)

@@ -340,6 +340,21 @@ func (qc *QuestionController) QuestionPage(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
 }
 
+func (qc *QuestionController) QuestionRecommendPage(ctx *gin.Context) {
+	req := &schema.QuestionPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	questions, total, err := qc.questionService.GetRecommendQuestionPage(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
+}
+
 // AddQuestion add question
 // @Summary add question
 // @Description add question

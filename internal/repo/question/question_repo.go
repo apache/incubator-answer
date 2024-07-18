@@ -401,6 +401,57 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	return questionList, total, err
 }
 
+// GetRecommendQuestionPageByTags get recommend question page by tags
+func (qr *questionRepo) GetRecommendQuestionPageByTags(ctx context.Context, userID string, tagIDs, followedQuestionIDs []string, page, pageSize int) (
+	questionList []*entity.Question, total int64, err error) {
+	questionList = make([]*entity.Question, 0)
+	orderBySQL := "question.pin DESC, question.created_at DESC"
+
+	// Please Make sure every question has at least one tag
+	session := qr.data.DB.Context(ctx).Select(entity.Question{}.TableName() + ".*")
+
+	if len(tagIDs) > 0 {
+		session.Where("question.user_id != ?", userID).
+			And("question.id NOT IN (SELECT question_id FROM answer WHERE user_id = ?)", userID).
+			Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
+			And("tag_rel.status = ?", entity.TagRelStatusAvailable).
+			Join("INNER", "tag", "tag.id = tag_rel.tag_id").
+			In("tag.id", tagIDs)
+	} else if len(followedQuestionIDs) == 0 {
+		return questionList, 0, nil
+	}
+
+	if len(followedQuestionIDs) > 0 {
+		idStr := "'" + strings.Join(followedQuestionIDs, "','") + "'"
+		orderBySQL = fmt.Sprintf("CASE WHEN question.id IN (%s) THEN 0 ELSE 1 END, ", idStr) + orderBySQL
+		if len(tagIDs) > 0 {
+			// if tags provided, show followed questions and tag questions
+			session.Or(builder.In("question.id", followedQuestionIDs))
+		} else {
+			// if no tags, only show followed questions
+			session.Where(builder.In("question.id", followedQuestionIDs))
+		}
+	}
+
+	session.
+		And("question.show = ? and question.status = ?", entity.QuestionShow, entity.QuestionStatusAvailable).
+		Distinct("question.id").
+		OrderBy(orderBySQL)
+
+	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
+	}
+
+	return questionList, total, err
+}
+
 func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error) {
 	var (
 		count   int64
