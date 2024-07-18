@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/apache/incubator-answer/configs"
 	"github.com/apache/incubator-answer/i18n"
@@ -37,10 +38,11 @@ const (
 )
 
 var (
-	ConfigFileDir  = "/conf/"
-	UploadFilePath = "/uploads/"
-	I18nPath       = "/i18n/"
-	CacheDir       = "/cache/"
+	ConfigFileDir     = "/conf/"
+	UploadFilePath    = "/uploads/"
+	I18nPath          = "/i18n/"
+	CacheDir          = "/cache/"
+	formatAllPathONCE sync.Once
 )
 
 // GetConfigFilePath get config file path
@@ -49,10 +51,12 @@ func GetConfigFilePath() string {
 }
 
 func FormatAllPath(dataDirPath string) {
-	ConfigFileDir = filepath.Join(dataDirPath, ConfigFileDir)
-	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
-	I18nPath = filepath.Join(dataDirPath, I18nPath)
-	CacheDir = filepath.Join(dataDirPath, CacheDir)
+	formatAllPathONCE.Do(func() {
+		ConfigFileDir = filepath.Join(dataDirPath, ConfigFileDir)
+		UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
+		I18nPath = filepath.Join(dataDirPath, I18nPath)
+		CacheDir = filepath.Join(dataDirPath, CacheDir)
+	})
 }
 
 // InstallAllInitialEnvironment install all initial environment
