@@ -69,6 +69,7 @@ export const updateUserPassword = (params: {
 };
 
 export const updateUserProfile = (params: {
+  display_name: string;
   username: string;
   email: string;
   user_id: string;
