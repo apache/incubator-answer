@@ -45,8 +45,13 @@ const useChangeProfileModal = (props: IProps = {}, userData) => {
   const [userId, setUserId] = useState('');
   const schema: JSONSchema = {
     title: t('title'),
-    required: ['username', 'email'],
+    required: ['display_name', 'username', 'email'],
     properties: {
+      display_name: {
+        type: 'string',
+        title: t('form.fields.display_name.label'),
+        default: userData.display_name,
+      },
       username: {
         type: 'string',
         title: t('form.fields.username.label'),
@@ -60,6 +65,19 @@ const useChangeProfileModal = (props: IProps = {}, userData) => {
     },
   };
   const uiSchema: UISchema = {
+    display_name: {
+      'ui:options': {
+        inputType: 'text',
+        validator: (value) => {
+          const MIN_LENGTH = 3;
+          const MAX_LENGTH = 30;
+          if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
+            return t('form.fields.display_name.msg_range');
+          }
+          return true;
+        },
+      },
+    },
     username: {
       'ui:options': {
         inputType: 'text',
@@ -114,6 +132,7 @@ const useChangeProfileModal = (props: IProps = {}, userData) => {
 
     if (onConfirm instanceof Function) {
       onConfirm({
+        display_name: formData.display_name.value,
         username: formData.username.value,
         email: formData.email.value,
         user_id: userId,
