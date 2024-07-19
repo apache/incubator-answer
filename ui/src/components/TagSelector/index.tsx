@@ -214,6 +214,17 @@ const TagSelector: FC<IProps> = ({
     fetchTags(searchStr);
   };
 
+  const scrollIntoView = (targetId) => {
+    const container = document.getElementById('a-dropdown-menu') as HTMLElement;
+    const ele = document.getElementById(targetId) as HTMLElement;
+    if (ele?.offsetTop >= 104) {
+      container.scrollTo({
+        top: ele.offsetTop - 104,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const handleKeyDown = (e) => {
     e.stopPropagation();
     const { keyCode } = e;
@@ -230,9 +241,11 @@ const TagSelector: FC<IProps> = ({
     }
 
     if (keyCode === 38 && currentIndex > 0) {
+      scrollIntoView(tags[currentIndex - 1].slug_name);
       setCurrentIndex(currentIndex - 1);
     }
     if (keyCode === 40 && currentIndex < tags.length - 1) {
+      scrollIntoView(tags[currentIndex + 1].slug_name);
       setCurrentIndex(currentIndex + 1);
     }
 
@@ -422,6 +435,7 @@ const TagSelector: FC<IProps> = ({
             return (
               <Dropdown.Item
                 key={item.slug_name}
+                id={item.slug_name}
                 active={index === currentIndex}
                 onClick={() => handleClick(item)}>
                 {item.display_name}
