@@ -70,12 +70,6 @@ func NewTemplateController(
 	}
 }
 func GetStyle() (script []string, css string) {
-	prefix := ""
-	_ = plugin.CallCDN(func(fn plugin.CDN) error {
-		prefix = fn.GetStaticPrefix()
-		return nil
-	})
-
 	file, err := ui.Build.ReadFile("build/index.html")
 	if err != nil {
 		return
@@ -84,14 +78,14 @@ func GetStyle() (script []string, css string) {
 	scriptData := scriptRegexp.FindAllStringSubmatch(string(file), -1)
 	for _, s := range scriptData {
 		if len(s) == 2 {
-			script = append(script, prefix+s[1])
+			script = append(script, s[1])
 		}
 	}
 
 	cssRegexp := regexp.MustCompile(`<link href="(.*)" rel="stylesheet">`)
 	cssListData := cssRegexp.FindStringSubmatch(string(file))
 	if len(cssListData) == 2 {
-		css = prefix + cssListData[1]
+		css = cssListData[1]
 	}
 	return
 }
@@ -511,13 +505,34 @@ func (tc *TemplateController) Page404(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
+	var (
+		prefix     = ""
+		cssPath    = ""
+		scriptPath = make([]string, len(tc.scriptPath))
+	)
+
+	_ = plugin.CallCDN(func(fn plugin.CDN) error {
+		prefix = fn.GetStaticPrefix()
+		return nil
+	})
+
+	if prefix != "" {
+		cssPath = prefix + tc.cssPath
+		for i, path := range tc.scriptPath {
+			scriptPath[i] = prefix + path
+		}
+	} else {
+		cssPath = tc.cssPath
+		scriptPath = tc.scriptPath
+	}
+
 	data["siteinfo"] = siteInfo
 	data["baseURL"] = ""
 	if parsedUrl, err := url.Parse(siteInfo.General.SiteUrl); err == nil {
 		data["baseURL"] = parsedUrl.Path
 	}
-	data["scriptPath"] = tc.scriptPath
-	data["cssPath"] = tc.cssPath
+	data["scriptPath"] = scriptPath
+	data["cssPath"] = cssPath
 	data["keywords"] = siteInfo.Keywords
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description
