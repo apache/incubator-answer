@@ -268,7 +268,7 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	if err != nil {
 		return false, err
 	}
-	if !taginfo.RequiredTag {
+	if !taginfo.RequiredTag || len(taginfo.RecommendTags) == 0 {
 		return true, nil
 	}
 	tagNames := make([]string, 0)
