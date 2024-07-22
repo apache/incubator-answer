@@ -163,7 +163,12 @@ func (m *statusManager) Enable(name string, enabled bool) {
 		return
 	}
 	m.status[name] = enabled
+
 	for _, slugName := range coordinatedCaptchaPlugins(name) {
+		m.status[slugName] = false
+	}
+
+	for _, slugName := range coordinatedCDNPlugins(name) {
 		m.status[slugName] = false
 	}
 }
