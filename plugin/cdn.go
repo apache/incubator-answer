@@ -46,3 +46,20 @@ var (
 	CallCDN,
 	registerCDN = MakePlugin[CDN](false)
 )
+
+func coordinatedCDNPlugins(slugName string) (enabledSlugNames []string) {
+	isCDN := false
+	_ = CallCDN(func(cdn CDN) error {
+		name := cdn.Info().SlugName
+		if slugName == name {
+			isCDN = true
+		} else {
+			enabledSlugNames = append(enabledSlugNames, name)
+		}
+		return nil
+	})
+	if isCDN {
+		return enabledSlugNames
+	}
+	return nil
+}
