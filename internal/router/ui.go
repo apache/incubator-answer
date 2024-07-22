@@ -148,6 +148,9 @@ func (a *UIRouter) Register(r *gin.Engine, baseURLPath string) {
 			return nil
 		})
 		if cdnPrefix != "" {
+			if cdnPrefix[len(cdnPrefix)-1:] == "/" {
+				cdnPrefix = strings.TrimSuffix(cdnPrefix, "/")
+			}
 			c.String(http.StatusOK, strings.ReplaceAll(string(file), "/static", cdnPrefix+"/static"))
 			return
 		}

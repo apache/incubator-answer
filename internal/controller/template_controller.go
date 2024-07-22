@@ -517,6 +517,9 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	})
 
 	if prefix != "" {
+		if prefix[len(prefix)-1:] == "/" {
+			prefix = strings.TrimSuffix(prefix, "/")
+		}
 		cssPath = prefix + tc.cssPath
 		for i, path := range tc.scriptPath {
 			scriptPath[i] = prefix + path
