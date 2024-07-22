@@ -274,7 +274,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		if err != nil {
 			return err
 		}
-		go s.emailService.SendAndSaveCode(ctx, req.TestEmailRecipient, title, body, "", "")
+		go s.emailService.Send(ctx, req.TestEmailRecipient, title, body)
 	}
 	return nil
 }
