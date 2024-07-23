@@ -34,7 +34,7 @@ backend:
       other: Повторний запит.
   action:
     report:
-      other: Прапор
+      other: Відмітити
     edit:
       other: Редагувати
     delete:
@@ -92,7 +92,7 @@ backend:
     rank_comment_add_label:
       other: Написати коментар
     rank_report_add_label:
-      other: Прапор
+      other: Відмітити
     rank_comment_vote_up_label:
       other: Проголосувати за коментар
     rank_link_url_limit_label:
@@ -512,7 +512,7 @@ backend:
     queued_post:
       other: Queued post
     flagged_post:
-      other: Flagged post
+      other: Відмічений пост
     suggested_post_edit:
       other: Suggested edits
   reaction:
@@ -688,7 +688,7 @@ ui:
     msg:
       empty: Будь ласка, оберіть причину.
   report_modal:
-    flag_title: I am flagging to report this post as...
+    flag_title: Я ставлю відмітку, щоб повідомити про цю публікацію як...
     close_title: Я закриваю цей пост, оскільки...
     review_question_title: Переглянути питання
     review_answer_title: Переглянути відповідь
@@ -708,8 +708,8 @@ ui:
         display_name:
           label: Ім'я для відображення
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: Ім'я для відображення не може бути порожнім.
+            range: Ім'я для відображення до 35 символів.
         slug_name:
           label: URL slug
           desc: URL slug up to 35 characters.
@@ -734,12 +734,12 @@ ui:
     history: Історія
     synonyms:
       title: Синоніми
-      text: The following tags will be remapped to
+      text: Наступні теги буде змінено на
       empty: Синонімів не знайдено.
       btn_add: Додати синонім
       btn_edit: Редагувати
       btn_save: Зберегти
-    synonyms_text: The following tags will be remapped to
+    synonyms_text: Наступні теги буде змінено на
     delete:
       title: Видалити цей теґ
       tip_with_posts: >-
@@ -780,15 +780,15 @@ ui:
     btn_reply: Відповісти
     btn_edit: Редагувати
     btn_delete: Видалити
-    btn_flag: Flag
+    btn_flag: Відмітити
     btn_save_edits: Зберегти зміни
     btn_cancel: Скасувати
-    show_more: "{{count}} more comments"
+    show_more: "Ще {{count}} коментарів"
     tip_question: >-
       Використовуйте коментарі, щоб попросити більше інформації або запропонувати покращення. Уникайте відповідей на питання в коментарях.
     tip_answer: >-
       Використовуйте коментарі, щоб відповідати іншим користувачам або повідомляти їх про зміни. Якщо ви додаєте нову інформацію, відредагуйте свою публікацію, а не коментуйте.
-    tip_vote: It adds something useful to the post
+    tip_vote: Це додає щось корисне до допису
   edit_answer:
     title: Редагувати відповідь
     default_reason: Редагувати відповідь
@@ -796,13 +796,13 @@ ui:
     form:
       fields:
         revision:
-          label: Revision
+          label: Редакція
         answer:
           label: Відповідь
           feedback:
             characters: вміст має бути не менше 6 символів.
         edit_summary:
-          label: Edit summary
+          label: Редагувати підсумок
           placeholder: >-
             Коротко поясніть ваші зміни (виправлена орфографія, виправлена граматика, покращене форматування)
     btn_save_edits: Зберегти зміни
@@ -813,8 +813,8 @@ ui:
       popular: Популярне
       name: Назва
       newest: Найновіші
-    button_follow: Follow
-    button_following: Following
+    button_follow: Підписатися
+    button_following: Підписані
     tag_label: запитання
     search_placeholder: Фільтрувати за назвою теґу
     no_desc: Цей теґ не має опису.
@@ -828,7 +828,7 @@ ui:
     form:
       fields:
         revision:
-          label: Revision
+          label: Редакція
         title:
           label: Назва
           placeholder: Будьте конкретними та уявіть, що ви ставите запитання іншій людині
@@ -836,9 +836,9 @@ ui:
             empty: Назва не може бути порожньою.
             range: Назва до 150 символів
         body:
-          label: Body
+          label: Тіло
           msg:
-            empty: Body cannot be empty.
+            empty: Тіло не може бути порожнім.
         tags:
           label: Теґи
           msg:
@@ -848,20 +848,20 @@ ui:
           msg:
             empty: Відповідь не може бути порожньою.
         edit_summary:
-          label: Edit summary
+          label: Редагувати підсумок
           placeholder: >-
             Коротко поясніть ваші зміни (виправлена орфографія, виправлена граматика, покращене форматування)
     btn_post_question: Опублікуйте своє запитання
     btn_save_edits: Зберегти зміни
     answer_question: Відповісти на власне питання
-    post_question&answer: Post your question and answer
+    post_question&answer: Опублікуйте своє запитання і відповідь
   tag_selector:
     add_btn: Додати теґ
     create_btn: Створити новий теґ
     search_tag: Шукати теґ
-    hint: "Describe what your question is about, at least one tag is required."
-    no_result: No tags matched
-    tag_required_text: Required tag (at least one)
+    hint: "Опишіть, про що ваше запитання, принаймні один тег є обов'язковим."
+    no_result: Не знайдено тегів
+    tag_required_text: Обов'язковий тег (принаймні один)
   header:
     nav:
       question: Запитання
@@ -871,19 +871,19 @@ ui:
       setting: Налаштування
       logout: Вийти
       admin: Адмін
-      review: Review
+      review: Огляд
       bookmark: Закладки
       moderation: Модерація
     search:
       placeholder: Пошук
   footer:
     build_on: >-
-      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Працює на основі <1> Apache Answer </1> - програмного забезпечення з відкритим вихідним кодом, яке забезпечує роботу спільнот запитань та відповідей.<br />Зроблено з любов'ю © {{cc}}.
   upload_img:
-    name: Change
+    name: Змінити
     loading: завантаження...
   pic_auth_code:
-    title: Captcha
+    title: Капча
     placeholder: Введіть текст вище
     msg:
       empty: Капча не може бути порожньою.
@@ -899,7 +899,7 @@ ui:
       empty: Не може бути порожнім.
     resend_email:
       url_label: Ви впевнені, що бажаєте повторно надіслати електронний лист для активації?
-      url_text: You can also give the activation link above to the user.
+      url_text: Ви також можете дати користувачеві наведене вище посилання для активації.
   login:
     login_to_continue: Увійдіть, щоб продовжити
     info_sign: Немає облікового запису? <1>Зареєструйтесь</1>
@@ -910,8 +910,8 @@ ui:
       label: Ім’я
       msg:
         empty: Ім'я не може бути порожнім.
-        range: Length of name should between 4 to 30 characters.
-        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
+        range: Довжина імені має бути від 4 до 30 символів.
+        character: 'Необхідно використовувати набір символів "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Електронна пошта
       msg:
@@ -952,7 +952,7 @@ ui:
     modal_title: Електронна адреса вже існує.
     modal_content: Ця електронна адреса вже зареєстрована. Ви впевнені, що бажаєте підключитися до існуючого облікового запису?
     modal_cancel: Змінити електронну пошту
-    modal_confirm: Connect to the existing account
+    modal_confirm: Під'єднати до існуючого облікового запису
   password_reset:
     page_title: Скинути пароль
     btn_name: Скинути мій пароль
@@ -971,7 +971,7 @@ ui:
       label: Підтвердити новий пароль
   settings:
     page_title: Налаштування
-    goto_modify: Go to modify
+    goto_modify: Перейти до зміни
     nav:
       profile: Профіль
       notification: Сповіщення
@@ -982,21 +982,21 @@ ui:
       btn_name: Зберегти
       display_name:
         label: Ім'я для відображення
-        msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters.
+        msg: Ім'я для відображення не може бути порожнім.
+        msg_range: Ім'я для відображення до 30 символів.
       username:
         label: Ім'я користувача
-        caption: People can mention you as "@username".
+        caption: Користувачі можуть згадувати вас як "@username".
         msg: Ім’я користувача не може бути порожнім.
         msg_range: Ім'я користувача до 30 символів.
         character: 'Необхідно використовувати набір символів "a-z", "0-9", "-. _"'
       avatar:
         label: Зображення профілю
         gravatar: Gravatar
-        gravatar_text: You can change image on
-        custom: Custom
+        gravatar_text: Ви можете змінити зображення на
+        custom: Власне
         custom_text: Ви можете завантажити своє зображення.
-        default: System
+        default: Системне
         msg: Будь ласка, завантажте аватар
       bio:
         label: Про мене
@@ -1008,7 +1008,7 @@ ui:
         label: Місцезнаходження
         placeholder: "Місто, Країна"
     notification:
-      heading: Email Notifications
+      heading: Сповіщення електронною поштою
       turn_on: Увімкнути
       inbox:
         label: Вхідні сповіщення
@@ -1017,8 +1017,8 @@ ui:
         label: Усі нові запитання
         description: Отримуйте сповіщення про всі нові питання. До 50 питань на тиждень.
       all_new_question_for_following_tags:
-        label: All new questions for following tags
-        description: Get notified of new questions for following tags.
+        label: Всі нові запитання з наступними тегами
+        description: Отримувати сповіщення про нові запитання з наступними тегами.
     account:
       heading: Обліковий запис
       change_email_btn: Змінити електронну пошту
@@ -1028,8 +1028,8 @@ ui:
       email:
         label: Нова електронна пошта
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Нова електронна пошта
+        msg: Нова електронна пошта не може бути порожньою.
       pass:
         label: Поточний пароль
         msg: Комірка паролю не може бути порожньою.
@@ -1050,17 +1050,17 @@ ui:
         label: Мова інтерфейсу
         text: Мова інтерфейсу користувача. Зміниться, коли ви оновите сторінку.
     my_logins:
-      title: My logins
-      label: Log in or sign up on this site using these accounts.
-      modal_title: Remove login
-      modal_content: Are you sure you want to remove this login from your account?
+      title: Мої логіни
+      label: Увійдіть або зареєструйтеся на цьому сайті, використовуючи ці облікові записи.
+      modal_title: Видалити логін
+      modal_content: Ви впевнені, що хочете видалити цей логін з облікового запису?
       modal_confirm_btn: Видалити
       remove_success: Успішно видалено
   toast:
     update: успішно оновлено
     update_password: Пароль успішно змінено.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
+    flag_success: Дякую, що відмітили.
+    forbidden_operate_self: Заборонено застосовувати на собі
     review: Ваша версія з'явиться після перевірки.
     sent_success: Успішно відправлено
   related_question:
@@ -1075,17 +1075,17 @@ ui:
   question_detail:
     action: Дія
     Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    commented: commented
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    follow_tip: Follow this question to receive notifications
+    asked: запитали
+    update: Змінено
+    edit: відредаговано
+    commented: прокоментовано
+    Views: Переглянуто
+    Follow: Підписатися
+    Following: Підписані
+    follow_tip: Підпишіться на це запитання, щоб отримувати сповіщення
     answered: answered
     closed_in: Closed in
-    show_exist: Show existing question.
+    show_exist: Показати наявне запитання.
     useful: Useful
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
@@ -1194,8 +1194,8 @@ ui:
     title: Результати пошуку
     keywords: Ключові слова
     options: Options
-    follow: Follow
-    following: Following
+    follow: Підписатися
+    following: Підписані
     counts: "{{count}} Results"
     more: More
     sort_btns:
@@ -1237,10 +1237,10 @@ ui:
     success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
-    following_tags: Following Tags
+    following_tags: Підписки на теги
     edit: Edit
     save: Save
-    follow_tag_tip: Follow tags to curate your list of questions.
+    follow_tag_tip: Підпишіться на теги, щоб упорядкувати свій список запитань.
     hot_questions: Hot Questions
     all_questions: Всі питання
     x_questions: "{{ count }} Questions"
@@ -1256,7 +1256,7 @@ ui:
     answered: answered
     asked: asked
     closed: closed
-    follow_a_tag: Follow a tag
+    follow_a_tag: Підписатися на тег
     more: Більше
   personal:
     overview: Overview
@@ -1324,7 +1324,7 @@ ui:
       title: Create config.yaml
       label: The config.yaml file created.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
+        Ви можете створити файл <1>config.yaml</1> вручну в каталозі <1>/var/www/xxx/</1> і вставити в нього наступний текст.
       info: After you've done that, click "Next" button.
     site_information: Site Information
     admin_account: Admin Account
@@ -1400,7 +1400,7 @@ ui:
     questions: Questions
     answers: Answers
     users: Users
-    flags: Flags
+    flags: Відмітки
     settings: Settings
     general: General
     interface: Interface
@@ -1435,7 +1435,7 @@ ui:
       comments: "Коментарі:"
       votes: "Голоси:"
       users: "Користувачі:"
-      flags: "Flags:"
+      flags: "Відмітки:"
       reviews: "Reviews:"
       site_health: Site health
       version: "Version:"
@@ -1475,14 +1475,14 @@ ui:
       writable: Writable
       not_writable: Not writable
     flags:
-      title: Flags
+      title: Відмітки
       pending: В очікуванні
       completed: Завершено
-      flagged: Flagged
-      flagged_type: Flagged {{ type }}
-      created: Created
-      action: Action
-      review: Review
+      flagged: Відмічено
+      flagged_type: Відмічено {{ type }}
+      created: Створені
+      action: Дія
+      review: Огляд
     user_role_modal:
       title: Change user role to...
       btn_cancel: Cancel
@@ -1520,8 +1520,8 @@ ui:
             text: Separate “name, email, password” with commas. One user per line.
             msg: "Please enter the user's email, one per line."
           display_name:
-            label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            label: Ім'я для відображення
+            msg: Ім'я для відображення повинно мати довжину від 4 до 30 символів.
           email:
             label: Email
             msg: Email is not valid.
@@ -1803,7 +1803,7 @@ ui:
       profile_editable:
         title: Profile editable
       allow_update_display_name:
-        label: Allow users to change their display name
+        label: Дозволити користувачам змінювати ім'я для відображення
       allow_update_username:
         label: Allow users to change their username
       allow_update_avatar:
@@ -1841,18 +1841,18 @@ ui:
     edit_tag: Edit tag
     empty: No review tasks left.
     approve_revision_tip: Do you approve this revision?
-    approve_flag_tip: Do you approve this flag?
+    approve_flag_tip: Ви схвалюєте цю відмітку?
     approve_post_tip: Do you approve this post?
     approve_user_tip: Do you approve this user?
     suggest_edits: Suggested edits
-    flag_post: Flag post
-    flag_user: Flag user
+    flag_post: Відмітити публікацію
+    flag_user: Відмітити користувача
     queued_post: Queued post
     queued_user: Queued user
     filter_label: Type
     reputation: reputation
-    flag_post_type: Flagged this post as {{ type }}.
-    flag_user_type: Flagged this user as {{ type }}.
+    flag_post_type: Відмічено цей пост як {{ type }}.
+    flag_user_type: Відмічено цього користувача як {{ type }}.
     edit_post: Edit post
     list_post: List post
     unlist_post: Unlist post
