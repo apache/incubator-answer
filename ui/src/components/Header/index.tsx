@@ -47,6 +47,7 @@ import {
   sideNavStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
+import { Icon } from '@/components';
 
 import NavItems from './components/NavItems';
 
@@ -205,8 +206,11 @@ const Header: FC = () => {
           <Col lg={8} className="ps-0">
             <Form
               action="/search"
-              className="w-100 maxw-400"
+              className="w-100 maxw-400 position-relative"
               onSubmit={handleSearch}>
+              <div className="search-wrap" onClick={handleSearch}>
+                <Icon name="search" className="search-icon" />
+              </div>
               <FormControl
                 type="search"
                 placeholder={t('header.search.placeholder')}

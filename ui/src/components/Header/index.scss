@@ -55,6 +55,7 @@
   // style for colored navbar
   &.theme-colored {
     .placeholder-search {
+      padding-left: 42px;
       box-shadow: none;
       color: #fff;
       background-color: rgba(255, 255, 255, .2);
@@ -66,6 +67,9 @@
         color: rgba(255, 255, 255, 0.75);
       }
     }
+    .search-icon {
+      color: #fff;
+    }
   }
 
   // style for colored navbar
@@ -75,6 +79,7 @@
       color: rgba(0, 0, 0, 0.65);
     }
     .placeholder-search {
+      padding-left: 42px;
       box-shadow: none;
       color: var(--bs-body-color);
       background-color: rgba(255, 255, 255, .2);
@@ -86,10 +91,20 @@
         color: rgba(0, 0, 0, 0.65);
       }
     }
+    .search-icon {
+      color: var(--bs-body-color);
+    }
   }
 
   .maxw-400 {
     max-width: 400px;;
+  }
+
+  .search-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5rem 1rem;
   }
 }
 
