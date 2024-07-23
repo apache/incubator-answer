@@ -187,11 +187,11 @@ backend:
         other: Мовний файл не знайдено.
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: Неправильно введено капчу.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Вам не дозволено підписатися.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Вам не дозволено голосувати.
       disallow_vote_your_self:
         other: Ви не можете проголосувати за власну публікацію.
       not_found:
@@ -205,15 +205,15 @@ backend:
       new_password_same_as_previous_setting:
         other: Новий пароль збігається з попереднім.
       already_deleted:
-        other: This post has been deleted.
+        other: Публікацію видалено.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Мета-об'єкт не знайдено
     question:
       already_deleted:
         other: Публікацію видалено.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Ваше повідомлення очікує на розгляд. Його буде видно після того, як воно буде схвалено.
       not_found:
         other: Питання не знайдено.
       cannot_deleted:
@@ -231,9 +231,9 @@ backend:
         other: Щоб це зробити, вам потрібна репутація не менше {{.Rank}}.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Не вдалося обробити звіт.
       not_found:
-        other: Report not found.
+        other: Звіт не знайдено.
     tag:
       already_exist:
         other: Теґ уже існує.
@@ -250,7 +250,7 @@ backend:
       is_used_cannot_delete:
         other: Ви не можете видалити теґ, який використовується.
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Ви не можете встановити синонім поточного тегу як сам тег.
     smtp:
       config_from_name_cannot_be_email:
         other: Ім’я відправника не може бути електронною адресою.
@@ -296,7 +296,7 @@ backend:
         other: "Кількість користувачів, яких ви додаєте одночасно, має бути в діапазоні 1-{{.MaxAmount}}."
     config:
       read_config_failed:
-        other: Read config failed
+        other: Не вдалося прочитати конфігурацію
     database:
       connection_failed:
         other: Не вдалося встановити з'єднання з базою даних
@@ -310,7 +310,7 @@ backend:
         other: Непідтримуваний формат файлу.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Конфігурацію сайту не знайдено.
   reason:
     spam:
       name:
@@ -322,8 +322,8 @@ backend:
         other: грубо чи образливо
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+          - Розсудлива людина вважатиме цей контент неприйнятним з точки зору шанобливого ставлення
+          - дискурс.
     a_duplicate:
       name:
         other: дублікат
@@ -336,12 +336,12 @@ backend:
         other: не відповідь
       desc:
         other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+          - Це повідомлення було розміщено як відповідь, але воно не є спробою відповісти на
+          - запитання. Можливо, його слід відредагувати, додати коментар, поставити інше запитання
+          - або взагалі видалити.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: більше не потрібно
       desc:
         other: Цей коментар є застарілим, розмовним або не стосується цієї публікації.
     something:
@@ -353,7 +353,7 @@ backend:
         other: Дайте нам знати, що саме вас турбує
     community_specific:
       name:
-        other: a community-specific reason
+        other: причина для спільноти
       desc:
         other: Це запитання не відповідає правилам спільноти.
     not_clarity:
@@ -370,7 +370,7 @@ backend:
       name:
         other: потребує редагування, і я це зробив
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: Поліпшіть та виправте проблеми з цією публікацією самостійно.
     needs_close:
       name:
         other: потрібно закрити
@@ -390,7 +390,7 @@ backend:
           other: Це питання ставилося раніше, і на нього вже є відповідь.
       guideline:
         name:
-          other: a community-specific reason
+          other: причина для спільноти
         desc:
           other: Це запитання не відповідає правилам спільноти.
       multiple:
@@ -398,8 +398,8 @@ backend:
           other: потребує деталей або ясності
         desc:
           other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+            - Наразі це запитання містить кілька запитань в одному. Воно має
+            - зосереджуватися лише на одній проблемі.
       other:
         name:
           other: інше
@@ -407,11 +407,11 @@ backend:
           other: Для цього допису потрібна інша причина, не зазначена вище.
     operation_type:
       asked:
-        other: asked
+        other: запитав
       answered:
-        other: answered
+        other: відповів
       modified:
-        other: modified
+        other: змінено
     deleted_title:
       other: Видалене питання
   notification:
@@ -507,7 +507,7 @@ backend:
     accepted:
       other: прийнято
     edit:
-      other: edit
+      other: редагувати
   review:
     queued_post:
       other: Queued post
@@ -535,23 +535,23 @@ ui:
     tag_wiki: tag wiki
     create_tag: Створити теґ
     edit_tag: Редагувати теґ
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
+    ask_a_question: Додати запитання
+    edit_question: Редагувати запитання
+    edit_answer: Редагувати відповідь
+    search: Пошук
+    posts_containing: Публікації, що містять
+    settings: Налаштування
+    notifications: Сповіщення
+    login: Увійти
+    sign_up: Зареєструватися
+    account_recovery: Відновлення облікового запису
+    account_activation: Активація облікового запису
     confirm_email: Підтвердити електронну адресу
     account_suspended: Обліковий запис призупинено
     admin: Адмін
     change_email: Змінити електронну адресу
-    install: Answer Installation
-    upgrade: Answer Upgrade
+    install: Встановлення Answer
+    upgrade: Оновлення Answer
     maintenance: Технічне обслуговування сайту
     users: Користувачі
     oauth_callback: Обробка
@@ -566,7 +566,7 @@ ui:
     new_alerts: Нові сповіщення
     all_read: Позначити все як прочитане
     show_more: Показати більше
-    someone: Someone
+    someone: Хтось
     inbox_type:
       all: Усі
       posts: Публікації
