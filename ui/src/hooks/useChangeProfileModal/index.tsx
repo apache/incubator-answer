@@ -112,7 +112,7 @@ const useChangeProfileModal = (props: IProps = {}, userData) => {
   }>(null);
 
   const onClose = () => {
-    setFormData(initFormData(schema));
+    setFormData(formData);
     setVisibleState(false);
   };
 
