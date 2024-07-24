@@ -56,8 +56,7 @@ const Index: FC<Props> = ({
           className={classNames(imgClassNames)}
           src={value}
           alt=""
-          height="100%"
-          width="100%"
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
         />
       </div>
       <ButtonGroup vertical className="fit-content">
