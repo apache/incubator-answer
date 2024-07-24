@@ -46,18 +46,18 @@ type AllConfig struct {
 	UI            *server.UI                    `json:"ui" mapstructure:"ui" yaml:"ui"`
 }
 
-type EnvConfigOverrides struct {
-	SWAGGER_HOST         string
-	SWAGGER_ADDRESS_PORT string
+type envConfigOverrides struct {
+	SwaggerHost         string
+	SwaggerAddressPort string
 
-	SITE_ADDR string
+	SiteAddr string
 }
 
-func loadEnvs() (envOverrides *EnvConfigOverrides) {
-	return &EnvConfigOverrides{
-		SWAGGER_HOST:         os.Getenv("SWAGGER_HOST"),
-		SWAGGER_ADDRESS_PORT: os.Getenv("SWAGGER_ADDRESS_PORT"),
-		SITE_ADDR:            os.Getenv("SITE_ADDR"),
+func loadEnvs() (envOverrides *envConfigOverrides) {
+	return &envConfigOverrides{
+		SwaggerHost:         os.Getenv("SWAGGER_HOST"),
+		SwaggerAddressPort:  os.Getenv("SWAGGER_ADDRESS_PORT"),
+		SiteAddr:            os.Getenv("SITE_ADDR"),
 	}
 }
 
@@ -85,14 +85,14 @@ func (c *AllConfig) SetDefault() {
 
 func (c *AllConfig) SetEnvironmentOverrides() {
 	envs := loadEnvs()
-	if envs.SITE_ADDR != "" {
-		c.Server.HTTP.Addr = envs.SITE_ADDR
+	if envs.SiteAddr != "" {
+		c.Server.HTTP.Addr = envs.SiteAddr
 	}
-	if envs.SWAGGER_HOST != "" {
-		c.Swaggerui.Host = envs.SWAGGER_HOST
+	if envs.SwaggerHost != "" {
+		c.Swaggerui.Host = envs.SwaggerHost
 	}
-	if envs.SWAGGER_ADDRESS_PORT != "" {
-		c.Swaggerui.Address = envs.SWAGGER_ADDRESS_PORT
+	if envs.SwaggerAddressPort != "" {
+		c.Swaggerui.Address = envs.SwaggerAddressPort
 	}
 }
 
