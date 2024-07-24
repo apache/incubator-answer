@@ -44,3 +44,7 @@ const (
 	ColorSchemeDark    = "dark"
 	ColorSchemeSystem  = "system"
 )
+
+const (
+	EmailConfigKey = "email.config"
+)

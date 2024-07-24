@@ -328,7 +328,7 @@ func (es *EmailService) NewQuestionTemplate(ctx context.Context, raw *schema.New
 }
 
 func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, err error) {
-	emailConf, err := es.configService.GetStringValue(ctx, "email.config")
+	emailConf, err := es.configService.GetStringValue(ctx, constant.EmailConfigKey)
 	if err != nil {
 		return nil, err
 	}
@@ -344,5 +344,5 @@ func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, er
 // SetEmailConfig set email config
 func (es *EmailService) SetEmailConfig(ctx context.Context, ec *EmailConfig) (err error) {
 	data, _ := json.Marshal(ec)
-	return es.configService.UpdateConfig(ctx, "email.config", string(data))
+	return es.configService.UpdateConfig(ctx, constant.EmailConfigKey, string(data))
 }
