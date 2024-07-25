@@ -414,6 +414,13 @@ backend:
         other: modificada
     deleted_title:
       other: Pregunta eliminada
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Eliminar esta etiqueta
       tip_with_posts: >-
-        <p>No permitimos <strong>eliminar etiquetas con publicaciones</strong>.</p> <p>Primero elimine esta etiqueta de las publicaciones.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>No permitimos <strong>eliminar etiquetas con sinónimos</strong>.</p> <p>Elimine primero los sinónimos de esta etiqueta.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: '¿Estás seguro de que deseas borrarlo?'
       close: Cerrar
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Tu nueva cuenta ha sido confirmada, serás redirigido a la página de inicio.
     link: Continuar a la página de inicio
-    invalid: >-
-      Lo sentimos, este link de confirmación de cuenta ya no es válido. ¿Quizás tu cuenta ya está activa?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Tu email ha sido actualizado.
     confirm_new_email_invalid: >-
       Lo siento, este enlace de confirmación ya no es válido. ¿Quizás ya se haya cambiado tu correo electrónico?
@@ -1249,7 +1256,7 @@ ui:
     answers: Respuestas
     newest: Más reciente
     active: Activo
-    frequent: Frecuente
+    hot: Hot
     score: Puntuación
     unanswered: Sin respuesta
     modified: modificada
@@ -1501,6 +1508,9 @@ ui:
       title: Editar perfil
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Nombre de usuario
             msg_range: Nombre de usuario hasta 30 caracteres.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Escribir
       restrict_answer:
-        title: Restringir respuesta
+        title: Answer write
         label: Cada usuario solo puede escribir una respuesta por pregunta
-        text: "En su lugar, pueden utilizar el enlace de edición para pulir y mejorar la respuesta existente."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Etiquetas recomendadas
-        text: "Ingrese el slug de la etiqueta arriba, una etiqueta por línea."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Etiqueta requerida
-        label: Establezca la etiqueta de recomendación según sea necesario
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Cada nueva pregunta debe tener al menos una etiqueta de recomendación."
       reserved_tags:
         label: Etiquetas reservadas
-        text: "Solo el moderador puede agregar etiquetas reservadas a una publicación."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:
