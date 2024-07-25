@@ -148,7 +148,12 @@ const Ask = () => {
           formData.title.value = file.attributes?.title;
           formData.content.value = file.body;
           if (!queryTags && file.attributes?.tags) {
-            updateTags(file.attributes.tags);
+            // Remove spaces in file.attributes.tags
+            const filterTags = file.attributes.tags
+              .split(',')
+              .map((tag) => tag.trim())
+              .join(',');
+            updateTags(filterTags);
           }
         } else if (draft) {
           formData.title.value = draft.title;
