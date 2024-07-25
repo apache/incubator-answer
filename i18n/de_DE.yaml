@@ -414,6 +414,13 @@ backend:
         other: geändert
     deleted_title:
       other: Gelöschte Frage
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Diesen Tag löschen
       tip_with_posts: >-
-        <p>Wir erlauben das <strong>Löschen von Tags mit Beiträgen</strong> nicht.</p> <p>Bitte entferne dieses Tag zuerst aus den Beiträgen.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Wir erlauben das <strong>Löschen von Tags mit Synonymen</strong> nicht.</p> <p>Bitte entferne zuerst die Synonyme aus diesem Tag.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Bist du sicher, dass du löschen möchtest?
       close: Schließen
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Dein neues Konto ist bestätigt; du wirst zur Startseite weitergeleitet.
     link: Weiter zur Startseite
-    invalid: >-
-      Entschuldige, dieser Link zur Aktivierung des Benutzerkontos ist nicht länger gültig. Ist Dein Konto schon aktiviert?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Deine E-Mail wurde aktualisiert.
     confirm_new_email_invalid: >-
       Dieser Bestätigungslink ist leider nicht mehr gültig. Vielleicht wurde deine E-Mail-Adresse bereits geändert?
@@ -1249,7 +1256,7 @@ ui:
     answers: Antworten
     newest: Neueste
     active: Aktiv
-    frequent: Häufig
+    hot: Hot
     score: Punktzahl
     unanswered: Unbeantwortet
     modified: geändert
@@ -1501,6 +1508,9 @@ ui:
       title: Profil bearbeiten
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Nutzername
             msg_range: Nutzername bis zu 30 Zeichen.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Schreiben
       restrict_answer:
-        title: Antwort einschränken
+        title: Answer write
         label: Jeder Benutzer kann für jede Frage nur eine Antwort schreiben
-        text: "Sie können den Bearbeiten-Link verwenden, um ihre bestehende Antwort zu verfeinern und zu verbessern."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Empfohlene Tags
-        text: "Bitte gib den Tag-Slug oben ein, ein Tag pro Zeile."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Erforderlicher Tag
-        label: Setze den Empfehlungs-Tag wie gewünscht
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Jede neue Frage muss mindestens ein Empfehlungs-Tag haben."
       reserved_tags:
         label: Reservierte Tags
-        text: "Reservierte Tags können nur vom Moderator zu einem Beitrag hinzugefügt werden."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:
