@@ -26,6 +26,7 @@ import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
 
 import { Editor } from '../types';
+import { isDarkTheme } from '@/utils/common';
 
 import createEditorUtils from './extension';
 
@@ -81,21 +82,29 @@ export const useEditor = ({
   const [editor, setEditor] = useState<Editor | null>(null);
   const [value, setValue] = useState<string>('');
   const init = async () => {
+    const isDark = isDarkTheme();
+
     const theme = EditorView.theme({
       '&': {
         height: '100%',
+        padding: '.375rem .75rem',
       },
       '&.cm-focused': {
         outline: 'none',
       },
       '.cm-content': {
         width: '100%',
-        padding: '1rem',
       },
       '.cm-line': {
         whiteSpace: 'pre-wrap',
         wordWrap: 'break-word',
         wordBreak: 'break-all',
+      },
+      '.ͼ7, .ͼ6': {
+        textDecoration: 'none',
+      },
+      '.cm-cursor': {
+        'border-left-color': isDark ? 'white' : 'black',
       },
     });
 

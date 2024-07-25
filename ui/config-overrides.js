@@ -104,14 +104,6 @@ module.exports = {
           chunks: 'all',
           enforce: true,
         },
-        nodesAsync: {
-          name: 'chunk-nodesAsync',
-          test: /[\/]node_modules[\/]/,
-          priority: 2,
-          minChunks: 2,
-          chunks: 'async', // only package dependencies that are referenced asynchronously
-          reuseExistingChunk: true, // reuse an existing block
-        },
         nodesInitial: {
           name: 'chunk-nodesInitial',
           filename: 'static/js/[name].[contenthash:8].chunk.js',

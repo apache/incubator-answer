@@ -18,7 +18,7 @@
  */
 
 import { FC, memo, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
@@ -86,6 +86,7 @@ const Layout: FC = () => {
         <Footer />
         <Customize />
         <LoginToContinueModal visible={showLoginToContinueModal} />
+        <ScrollRestoration />
       </SWRConfig>
     </HelmetProvider>
   );

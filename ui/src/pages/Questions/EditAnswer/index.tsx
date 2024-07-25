@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { handleFormError, scrollToDocTop } from '@/utils';
+import { handleFormError } from '@/utils';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { useCaptchaPlugin, useRenderHtmlPlugin } from '@/utils/pluginKit';
 import { pathFactory } from '@/router/pathFactory';
@@ -47,9 +47,6 @@ interface FormDataItem {
 const Index = () => {
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
-  useLayoutEffect(() => {
-    scrollToDocTop();
-  }, []);
 
   const { t } = useTranslation('translation', { keyPrefix: 'edit_answer' });
   const navigate = useNavigate();

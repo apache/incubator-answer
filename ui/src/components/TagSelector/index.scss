@@ -20,6 +20,8 @@
 .tag-selector-wrap {
   .dropdown-menu {
     min-width: 15rem;
+    max-height: 178px;
+    overflow-y: auto;
   }
   .dropdown-toggle {
     &::after {

@@ -30,6 +30,9 @@
             </div>
         </footer>
     </div>
+<!--customize_footer-->
+{{if .FooterCode }}{{.FooterCode | templateHTML}}{{end}}
+<!--customize_footer-->
 </body>
 </html>
 {{end}}

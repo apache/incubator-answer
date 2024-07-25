@@ -53,9 +53,7 @@ const ActivateScriptNodes = (el, part) => {
   }
   scriptList?.forEach((so) => {
     const script = document.createElement('script');
-    script.text = `(() => {
-      ${so.text}
-    })();`;
+    script.text = `(() => {${so.text}})();`;
     for (let i = 0; i < so.attributes.length; i += 1) {
       const attr = so.attributes[i];
       script.setAttribute(attr.name, attr.value);
@@ -80,6 +78,7 @@ const renderCustomArea = (el, part, pos: pos, content: string = '') => {
       }
     }
   }
+
   if (startMarkNode && endMarkNode) {
     while (
       startMarkNode.nextSibling &&
@@ -119,11 +118,14 @@ const Index: FC = () => {
     (state) => state,
   );
   useEffect(() => {
-    setTimeout(() => {
-      handleCustomHead(custom_head);
-    }, 1000);
-    handleCustomHeader(custom_header);
-    handleCustomFooter(custom_footer);
+    const isSeo = document.querySelector('meta[name="go-template"]');
+    if (!isSeo) {
+      setTimeout(() => {
+        handleCustomHead(custom_head);
+      }, 1000);
+      handleCustomHeader(custom_header);
+      handleCustomFooter(custom_footer);
+    }
   }, [custom_head, custom_header, custom_footer]);
   return null;
 };

@@ -59,8 +59,9 @@ func (ns *ExternalNotificationService) sendNewCommentNotificationEmail(ctx conte
 		NotificationSources: []constant.NotificationSource{
 			constant.InboxSource,
 		},
-		Email:  email,
-		UserID: userID,
+		Email:                    email,
+		UserID:                   userID,
+		SkipValidationLatestCode: true,
 	}
 	// If receiver has set language, use it to send email.
 	if len(lang) > 0 {
@@ -73,5 +74,5 @@ func (ns *ExternalNotificationService) sendNewCommentNotificationEmail(ctx conte
 	}
 
 	ns.emailService.SendAndSaveCodeWithTime(
-		ctx, email, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 1*24*time.Hour)
+		ctx, userID, email, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 1*24*time.Hour)
 }
