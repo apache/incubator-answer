@@ -285,9 +285,9 @@ const routes: RouteNode[] = [
       {
         path: '/users/account-activation/failed',
         page: 'pages/Users/ActivationResult',
-        guard: () => {
-          return guard.notActivated();
-        },
+        // guard: () => {
+        //   return guard.notActivated();
+        // },
       },
       {
         path: '/users/confirm-new-email',
