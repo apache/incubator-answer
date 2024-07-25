@@ -38,9 +38,8 @@ import {
 } from '@/services';
 import QuestionList, { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove, guard, Storage, scrollToDocTop } from '@/utils';
+import { escapeRemove, guard } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
-import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -48,12 +47,8 @@ const Index: FC = () => {
   const routeParams = useParams();
   const curTagName = routeParams.tagName || '';
   const [urlSearchParams] = useSearchParams();
-  const storageOrder = Storage.get(QUESTIONS_ORDER_STORAGE_KEY);
-  const curOrder =
-    urlSearchParams.get('order') || storageOrder || QUESTION_ORDER_KEYS[0];
-  if (curOrder !== storageOrder) {
-    Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
-  }
+  const curOrder = (urlSearchParams.get('order') ||
+    QUESTION_ORDER_KEYS[0]) as Type.QuestionOrderBy;
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,
@@ -79,12 +74,6 @@ const Index: FC = () => {
       object_id: tagInfo.tag_id,
     });
   };
-
-  useEffect(() => {
-    if (!listLoading) {
-      scrollToDocTop();
-    }
-  }, [listLoading]);
 
   useEffect(() => {
     if (tagResp) {

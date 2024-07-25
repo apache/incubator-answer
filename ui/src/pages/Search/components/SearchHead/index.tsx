@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 import { QueryGroup } from '@/components';
 
-const sortBtns = ['active', 'newest', 'relevance', 'score'];
+const sortBtns = ['relevance', 'newest', 'active', 'score'];
 
 interface Props {
   count: number;

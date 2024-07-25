@@ -518,6 +518,130 @@ backend:
   reaction:
     tooltip:
       other: "{{ .Names }} 以及另外 {{ .Count }} 个..."
+plugin:
+  s3_cdn:
+    backend:
+      info:
+        name:
+          other: S3 存储 CDN
+        description:
+          other: 上传文件到S3存储
+      config:
+        endpoint:
+          title:
+            other: Endpoint
+          description:
+            other: S3存储的Endpoint
+        bucket_name:
+          title:
+            other: Bucket名称
+          description:
+            other: S3存储的Bucket名称
+        object_key_prefix:
+          title:
+            other: 对象Key前缀
+          description:
+            other: 对象键的前缀，如'answer/data/'，以'/'结尾
+        access_key_id:
+          title:
+            other: AccessKeyID
+          description:
+            other: S3存储的AccessKeyID
+        access_key_secret:
+          title:
+            other: AccessKeySecret
+          description:
+            other: S3存储的AccessKeySecret
+        access_token:
+          title:
+            other: AccessToken
+          description:
+            other: 访问 S3 所需的 AccessToken
+        visit_url_prefix:
+          title:
+            other: 访问URL前缀
+          description:
+            other: 上传静态文件CDN最终访问地址的前缀，以 '/' 结尾 https://static.example.com/xxx/
+        max_file_size:
+          title:
+            other: 文件最大大小(MB)
+          description:
+            other: 限制上传文件的最大大小，单位MB，默认为10MB
+        region:
+          title:
+            other: 区域(Region)
+          description:
+            other: S3存储区域
+        disable_ssl:
+          title:
+            other: 禁用SSL
+          description:
+            other: 我们建议您使用SSL访问S3存储。如果您想禁用SSL，请选中此选项。
+      err:
+        mis_storage_config:
+          other: 错误的存储配置导致上传失败
+        file_not_found:
+          other: 文件未找到
+        unsupported_file_type:
+          other: 不支持的文件类型
+        over_file_size_limit:
+          other: 超过文件大小限制
+        upload_file_failed:
+          other: 上传文件失败
+  aliyunoss_cdn:
+    backend:
+      info:
+        name:
+          other: 阿里云CDN OSS存储
+        description:
+          other: 上传文件到阿里云CDN OSS存储
+      config:
+        endpoint:
+          title:
+            other: Endpoint
+          description:
+            other: 阿里云OSS存储的Endpoint
+        bucket_name:
+          title:
+            other: Bucket名称
+          description:
+            other: 阿里云OSS存储的Bucket名称
+        object_key_prefix:
+          title:
+            other: 对象Key前缀
+          description:
+            other: 对象键的前缀，如'answer/data/'，以'/'结尾
+        access_key_id:
+          title:
+            other: AccessKeyID
+          description:
+            other: 阿里云OSS存储的AccessKeyID
+        access_key_secret:
+          title:
+            other: AccessKeySecret
+          description:
+            other: 阿里云OSS存储的AccessKeySecret
+        visit_url_prefix:
+          title:
+            other: 访问URL前缀
+          description:
+            other: CDN最终访问地址的前缀，以 '/' 结尾 https://example.com/xxx/
+        max_file_size:
+          title:
+            other: 最大文件大小(MB)
+          description:
+            other: 限制上传文件的最大大小，单位为MB，默认为 10MB
+      err:
+        mis_storage_config:
+          other: 错误的存储配置导致上传失败
+        file_not_found:
+          other: 文件未找到
+        unsupported_file_type:
+          other: 不支持的文件类型
+        over_file_size_limit:
+          other: 超过文件大小限制
+        upload_file_failed:
+          other: 上传文件失败
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -1249,7 +1373,7 @@ ui:
     answers: 回答
     newest: 最新
     active: 活跃
-    hot: 热度
+    hot: 热门
     score: 评分
     unanswered: 未回答
     modified: 更新于

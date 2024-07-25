@@ -444,6 +444,10 @@ definitions:
     type: object
   schema.EditUserProfileReq:
     properties:
+      display_name:
+        maxLength: 30
+        minLength: 4
+        type: string
       email:
         maxLength: 500
         type: string
@@ -453,6 +457,7 @@ definitions:
         maxLength: 30
         type: string
     required:
+    - display_name
     - email
     - user_id
     type: object
@@ -1537,21 +1542,20 @@ definitions:
     required:
     - id
     type: object
-  schema.ReactionItem:
+  schema.ReactionRespItem:
     properties:
       count:
+        description: Count is the number of users who reacted
         type: integer
+      emoji:
+        description: Emoji is the reaction emoji
+        type: string
       is_active:
+        description: IsActive is if current user has reacted
         type: boolean
       tooltip:
+        description: Tooltip is the user's name who reacted
         type: string
-    type: object
-  schema.ReactionResp:
-    properties:
-      reaction_summary:
-        additionalProperties:
-          $ref: '#/definitions/schema.ReactionItem'
-        type: object
     type: object
   schema.ReasonItem:
     properties:
@@ -4496,7 +4500,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.ReactionResp'
+                  $ref: '#/definitions/schema.ReactionRespItem'
               type: object
       security:
       - ApiKeyAuth: []

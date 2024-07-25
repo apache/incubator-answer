@@ -22,6 +22,7 @@ package content
 import (
 	"encoding/json"
 	"fmt"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"strings"
 	"time"
 
@@ -65,6 +66,7 @@ import (
 // QuestionService user service
 type QuestionService struct {
 	questionRepo                     questioncommon.QuestionRepo
+	answerRepo                       answercommon.AnswerRepo
 	tagCommon                        *tagcommon.TagCommonService
 	questioncommon                   *questioncommon.QuestionCommon
 	userCommon                       *usercommon.UserCommon
@@ -86,6 +88,7 @@ type QuestionService struct {
 
 func NewQuestionService(
 	questionRepo questioncommon.QuestionRepo,
+	answerRepo answercommon.AnswerRepo,
 	tagCommon *tagcommon.TagCommonService,
 	questioncommon *questioncommon.QuestionCommon,
 	userCommon *usercommon.UserCommon,
@@ -106,6 +109,7 @@ func NewQuestionService(
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:                     questionRepo,
+		answerRepo:                       answerRepo,
 		tagCommon:                        tagCommon,
 		questioncommon:                   questioncommon,
 		userCommon:                       userCommon,
@@ -1264,7 +1268,7 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 		tagNames = append(tagNames, tag.SlugName)
 	}
 	search := &schema.QuestionPageReq{}
-	search.OrderCond = "frequent"
+	search.OrderCond = "hot"
 	search.Page = 0
 	search.PageSize = 6
 	if len(tagNames) > 0 {
@@ -1326,6 +1330,10 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 			return questions, 0, nil
 		}
 		req.UserIDBeSearched = userinfo.ID
+	}
+
+	if req.OrderCond == schema.QuestionOrderCondHot {
+		req.InDays = schema.HotInDays
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,

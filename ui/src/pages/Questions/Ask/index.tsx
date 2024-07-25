@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
+import fm from 'front-matter';
 
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
@@ -113,14 +114,10 @@ const Ask = () => {
   const { qid } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const initQueryTags = () => {
-    const queryTags = searchParams.get('tags');
-    if (!queryTags) {
-      return;
-    }
-    getTagsBySlugName(queryTags).then((tags) => {
+  const updateTags = (tags: string) => {
+    getTagsBySlugName(tags).then((resp) => {
       // eslint-disable-next-line
-      handleTagsChange(tags);
+      handleTagsChange(resp);
     });
   };
 
@@ -137,15 +134,35 @@ const Ask = () => {
 
   useEffect(() => {
     if (!qid) {
-      initQueryTags();
+      // order: 1. tags query. 2. prefill query. 3. draft
+      const queryTags = searchParams.get('tags');
+      if (queryTags) {
+        updateTags(queryTags);
+      }
       const draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
-      if (draft) {
-        formData.title.value = draft.title;
-        formData.content.value = draft.content;
-        formData.tags.value = draft.tags;
-        formData.answer_content.value = draft.answer_content;
-        setCheckState(Boolean(draft.answer_content));
-        setHasDraft(true);
+
+      const prefill = searchParams.get('prefill');
+      if (prefill || draft) {
+        if (prefill) {
+          const file = fm<any>(decodeURIComponent(prefill));
+          formData.title.value = file.attributes?.title;
+          formData.content.value = file.body;
+          if (!queryTags && file.attributes?.tags) {
+            // Remove spaces in file.attributes.tags
+            const filterTags = file.attributes.tags
+              .split(',')
+              .map((tag) => tag.trim())
+              .join(',');
+            updateTags(filterTags);
+          }
+        } else if (draft) {
+          formData.title.value = draft.title;
+          formData.content.value = draft.content;
+          formData.tags.value = draft.tags;
+          formData.answer_content.value = draft.answer_content;
+          setCheckState(Boolean(draft.answer_content));
+          setHasDraft(true);
+        }
         setFormData({ ...formData });
       } else {
         resetForm();
@@ -487,6 +504,47 @@ const Ask = () => {
               />
             </Form.Group>
 
+            {!isEdit && (
+              <>
+                <Form.Switch
+                  checked={checked}
+                  type="switch"
+                  label={t('answer_question')}
+                  onChange={(e) => setCheckState(e.target.checked)}
+                  id="radio-answer"
+                />
+                {checked && (
+                  <Form.Group controlId="answer" className="mt-3">
+                    <Form.Label>{t('form.fields.answer.label')}</Form.Label>
+                    <Editor
+                      value={formData.answer_content.value}
+                      onChange={handleAnswerChange}
+                      ref={editorRef2}
+                      className={classNames(
+                        'form-control p-0',
+                        focusType === 'answer' && 'focus',
+                        formData.answer_content.isInvalid && 'is-invalid',
+                      )}
+                      onFocus={() => {
+                        setForceType('answer');
+                      }}
+                      onBlur={() => {
+                        setForceType('');
+                      }}
+                    />
+                    <Form.Control
+                      type="text"
+                      isInvalid={formData.answer_content.isInvalid}
+                      hidden
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formData.answer_content.errorMsg}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                )}
+              </>
+            )}
+
             {isEdit && (
               <Form.Group controlId="edit_summary" className="my-3">
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
@@ -520,47 +578,6 @@ const Ask = () => {
                   </Button>
                 )}
               </div>
-            )}
-            {!isEdit && (
-              <>
-                <Form.Check
-                  className="mt-5"
-                  checked={checked}
-                  type="checkbox"
-                  label={t('answer_question')}
-                  onChange={(e) => setCheckState(e.target.checked)}
-                  id="radio-answer"
-                />
-                {checked && (
-                  <Form.Group controlId="answer" className="mt-4">
-                    <Form.Label>{t('form.fields.answer.label')}</Form.Label>
-                    <Editor
-                      value={formData.answer_content.value}
-                      onChange={handleAnswerChange}
-                      ref={editorRef2}
-                      className={classNames(
-                        'form-control p-0',
-                        focusType === 'answer' && 'focus',
-                        formData.answer_content.isInvalid && 'is-invalid',
-                      )}
-                      onFocus={() => {
-                        setForceType('answer');
-                      }}
-                      onBlur={() => {
-                        setForceType('');
-                      }}
-                    />
-                    <Form.Control
-                      type="text"
-                      isInvalid={formData.answer_content.isInvalid}
-                      hidden
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {formData.answer_content.errorMsg}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                )}
-              </>
             )}
             {checked && (
               <div className="mt-3">

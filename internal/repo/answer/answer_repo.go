@@ -430,6 +430,17 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, req *schema.AdminAnsw
 	return resp, total, nil
 }
 
+// SumVotesByQuestionID sum votes by question id
+func (ar *answerRepo) SumVotesByQuestionID(ctx context.Context, questionID string) (float64, error) {
+	questionID = uid.DeShortID(questionID)
+	var resp entity.Answer
+	count, err := ar.data.DB.Context(ctx).Where("question_id = ? and status = ?", questionID, entity.AnswerStatusAvailable).Sum(&resp, "vote_count")
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
 // updateSearch update search, if search plugin not enable, do nothing
 func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err error) {
 	answerID = uid.DeShortID(answerID)

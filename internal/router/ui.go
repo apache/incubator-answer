@@ -22,6 +22,7 @@ package router
 import (
 	"embed"
 	"fmt"
+	"github.com/apache/incubator-answer/plugin"
 	"io/fs"
 	"net/http"
 	"os"
@@ -138,6 +139,19 @@ func (a *UIRouter) Register(r *gin.Engine, baseURLPath string) {
 		if err != nil {
 			log.Error(err)
 			c.Status(http.StatusNotFound)
+			return
+		}
+
+		cdnPrefix := ""
+		_ = plugin.CallCDN(func(fn plugin.CDN) error {
+			cdnPrefix = fn.GetStaticPrefix()
+			return nil
+		})
+		if cdnPrefix != "" {
+			if cdnPrefix[len(cdnPrefix)-1:] == "/" {
+				cdnPrefix = strings.TrimSuffix(cdnPrefix, "/")
+			}
+			c.String(http.StatusOK, strings.ReplaceAll(string(file), "/static", cdnPrefix+"/static"))
 			return
 		}
 		c.String(http.StatusOK, string(file))

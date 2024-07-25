@@ -22,6 +22,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/plugin"
 	"html/template"
 	"net/http"
 	"net/url"
@@ -31,6 +32,7 @@ import (
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	templaterender "github.com/apache/incubator-answer/internal/controller/template_render"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -176,7 +178,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
 		"data":     data,
 		"useTitle": UrlUseTitle,
@@ -411,7 +413,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 	if req.Page > 1 {
 		siteInfo.Canonical = fmt.Sprintf("%s/tags?page=%d", siteInfo.General.SiteUrl, req.Page)
 	}
-	siteInfo.Title = fmt.Sprintf("%s - %s", "Tags", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.TagsListTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
 		"page": page,
 		"data": data,
@@ -428,7 +430,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	}
 	nowPage := req.Page
 	req.Name = tag
-	taginifo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
+	tagInfo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
 	if err != nil {
 		tc.Page404(ctx)
 		return
@@ -440,19 +442,19 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	if req.Page > 1 {
 		siteInfo.Canonical = fmt.Sprintf("%s/tags/%s?page=%d", siteInfo.General.SiteUrl, tag, req.Page)
 	}
-	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
-	if len(taginifo.ParsedText) == 0 {
-		siteInfo.Description = "The tag has no description."
+	siteInfo.Description = htmltext.FetchExcerpt(tagInfo.ParsedText, "...", 240)
+	if len(tagInfo.ParsedText) == 0 {
+		siteInfo.Description = translator.Tr(handler.GetLang(ctx), constant.TagHasNoDescription)
 	}
-	siteInfo.Keywords = taginifo.DisplayName
+	siteInfo.Keywords = tagInfo.DisplayName
 
 	UrlUseTitle := false
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("'%s' %s - %s", tagInfo.DisplayName, translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
-		"tag":           taginifo,
+		"tag":           tagInfo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
 		"useTitle":      UrlUseTitle,
@@ -503,13 +505,37 @@ func (tc *TemplateController) Page404(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
+	var (
+		prefix     = ""
+		cssPath    = ""
+		scriptPath = make([]string, len(tc.scriptPath))
+	)
+
+	_ = plugin.CallCDN(func(fn plugin.CDN) error {
+		prefix = fn.GetStaticPrefix()
+		return nil
+	})
+
+	if prefix != "" {
+		if prefix[len(prefix)-1:] == "/" {
+			prefix = strings.TrimSuffix(prefix, "/")
+		}
+		cssPath = prefix + tc.cssPath
+		for i, path := range tc.scriptPath {
+			scriptPath[i] = prefix + path
+		}
+	} else {
+		cssPath = tc.cssPath
+		scriptPath = tc.scriptPath
+	}
+
 	data["siteinfo"] = siteInfo
 	data["baseURL"] = ""
 	if parsedUrl, err := url.Parse(siteInfo.General.SiteUrl); err == nil {
 		data["baseURL"] = parsedUrl.Path
 	}
-	data["scriptPath"] = tc.scriptPath
-	data["cssPath"] = tc.cssPath
+	data["scriptPath"] = scriptPath
+	data["cssPath"] = cssPath
 	data["keywords"] = siteInfo.Keywords
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description

@@ -42,6 +42,8 @@ type EmailCodeContent struct {
 	NotificationSources []constant.NotificationSource `json:"notification_source,omitempty"`
 	// Used for third-party login account binding
 	BindingKey string `json:"binding_key,omitempty"`
+	// Skip the validation of the latest code
+	SkipValidationLatestCode bool `json:"skip_validation_latest_code"`
 }
 
 func (r *EmailCodeContent) ToJSONString() string {

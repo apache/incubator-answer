@@ -17,34 +17,49 @@
  * under the License.
  */
 
-package constant
+package plugin
 
-const (
-	DefaultGravatarBaseURL = "https://www.gravatar.com/avatar/"
-	DefaultAvatar          = "system"
-	AvatarTypeDefault      = "default"
-	AvatarTypeGravatar     = "gravatar"
-	AvatarTypeCustom       = "custom"
+var (
+	DefaultCDNFileType = map[string]bool{
+		".ico":   true,
+		".json":  true,
+		".css":   true,
+		".js":    true,
+		".webp":  true,
+		".woff2": true,
+		".woff":  true,
+		".jpg":   true,
+		".svg":   true,
+		".png":   true,
+		".map":   true,
+		".txt":   true,
+	}
 )
 
-const (
-	// PermalinkQuestionIDAndTitle /questions/10010000000000001/post-title
-	PermalinkQuestionIDAndTitle = iota + 1
-	// PermalinkQuestionID /questions/10010000000000001
-	PermalinkQuestionID
-	// PermalinkQuestionIDAndTitleByShortID /questions/11/post-title
-	PermalinkQuestionIDAndTitleByShortID
-	// PermalinkQuestionIDByShortID /questions/11
-	PermalinkQuestionIDByShortID
+type CDN interface {
+	Base
+	GetStaticPrefix() string
+}
+
+var (
+	// CallCDN is a function that calls all registered parsers
+	CallCDN,
+	registerCDN = MakePlugin[CDN](false)
 )
 
-const (
-	ColorSchemeDefault = "default"
-	ColorSchemeLight   = "light"
-	ColorSchemeDark    = "dark"
-	ColorSchemeSystem  = "system"
-)
-
-const (
-	EmailConfigKey = "email.config"
-)
+func coordinatedCDNPlugins(slugName string) (enabledSlugNames []string) {
+	isCDN := false
+	_ = CallCDN(func(cdn CDN) error {
+		name := cdn.Info().SlugName
+		if slugName == name {
+			isCDN = true
+		} else {
+			enabledSlugNames = append(enabledSlugNames, name)
+		}
+		return nil
+	})
+	if isCDN {
+		return enabledSlugNames
+	}
+	return nil
+}

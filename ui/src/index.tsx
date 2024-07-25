@@ -60,8 +60,29 @@ const handleImgLoad = (evt: Event | UIEvent) => {
   }
 };
 
+/**
+ *Automatically jump when the href of a Link component within a matching project is not a front-end route.
+ *
+ */
+const handleClickLink = (evt: Event) => {
+  const { target } = evt;
+
+  if (target === null || !(target instanceof Element)) {
+    return;
+  }
+  if (!/A/i.test(target.nodeName)) {
+    return;
+  }
+
+  if (target.getAttribute('href')?.includes('/answer/api/')) {
+    evt.preventDefault();
+    window.location.href = target.getAttribute('href') || '';
+  }
+};
+
 document.addEventListener('error', handleImgLoad, true);
 document.addEventListener('load', handleImgLoad, true);
+document.addEventListener('click', handleClickLink, true);
 
 root.render(
   <React.StrictMode>

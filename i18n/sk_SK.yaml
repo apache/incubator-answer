@@ -1249,7 +1249,7 @@ ui:
     answers: Odpovede
     newest: Najnovšie
     active: Aktívne
-    frequent: Časté
+    hot: Hot
     score: Skóre
     unanswered: Nezodpovedané
     modified: upravené

@@ -1249,7 +1249,7 @@ ui:
     answers: Respuestas
     newest: Más reciente
     active: Activo
-    frequent: Frecuente
+    hot: Hot
     score: Puntuación
     unanswered: Sin respuesta
     modified: modificada

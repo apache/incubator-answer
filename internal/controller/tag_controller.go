@@ -20,8 +20,6 @@
 package controller
 
 import (
-	"strings"
-
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -57,7 +55,7 @@ func NewTagController(
 // @Produce json
 // @Security ApiKeyAuth
 // @Param tag query string false "tag"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetTagResp}
+// @Success 200 {object} handler.RespBody{data=[]schema.GetTagBasicResp}
 // @Router /answer/api/v1/question/tags [get]
 func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	req := &schema.SearchTagLikeReq{}
@@ -68,22 +66,21 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetTagsBySlugName
+// GetTagsBySlugName get tags list
 // @Summary get tags list
-// @Description get tags list
+// @Description get tags list by slug name
 // @Tags Tag
 // @Produce json
 // @Param tags query []string false "string collection" collectionFormat(csv)
-// @Success 200 {object} handler.RespBody{}
+// @Success 200 {object} handler.RespBody{data=[]schema.GetTagBasicResp}
 // @Router /answer/api/v1/tags [get]
 func (tc *TagController) GetTagsBySlugName(ctx *gin.Context) {
 	req := &schema.SearchTagsBySlugName{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.TagList = strings.Split(req.Tags, ",")
-	// req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	resp, err := tc.tagService.GetTagsBySlugName(ctx, req.TagList)
+
+	resp, err := tc.tagService.GetTagsBySlugName(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
 

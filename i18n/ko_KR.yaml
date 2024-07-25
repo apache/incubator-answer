@@ -1249,7 +1249,7 @@ ui:
     answers: 답변
     newest: 최신순
     active: 활성순
-    frequent: 자주 본 질문
+    hot: Hot
     score: 평점순
     unanswered: 답변이 없는 질문
     modified: 수정됨

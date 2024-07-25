@@ -20,17 +20,18 @@
 package gravatar
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // GetAvatarURL get avatar url from gravatar by email
 func GetAvatarURL(baseURL, email string) string {
-	h := md5.New()
-	h.Write([]byte(email))
-	return baseURL + hex.EncodeToString(h.Sum(nil))
+	hasher := sha256.Sum256([]byte(strings.TrimSpace(email)))
+	hash := hex.EncodeToString(hasher[:])
+	return baseURL + hash
 }
 
 // Resize resize avatar by pixel

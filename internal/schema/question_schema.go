@@ -343,16 +343,19 @@ type UserQuestionInfo struct {
 const (
 	QuestionOrderCondNewest     = "newest"
 	QuestionOrderCondActive     = "active"
-	QuestionOrderCondFrequent   = "frequent"
+	QuestionOrderCondHot        = "hot"
 	QuestionOrderCondScore      = "score"
 	QuestionOrderCondUnanswered = "unanswered"
+
+	// HotInDays limit max days of the hottest question
+	HotInDays = 90
 )
 
 // QuestionPageReq query questions page
 type QuestionPageReq struct {
 	Page      int    `validate:"omitempty,min=1" form:"page"`
 	PageSize  int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	OrderCond string `validate:"omitempty,oneof=newest active hot score unanswered" form:"order"`
 	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
 	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	InDays    int    `validate:"omitempty,min=1" form:"in_days"`
@@ -475,7 +478,7 @@ type AdminUpdateQuestionStatusReq struct {
 type PersonalQuestionPageReq struct {
 	Page        int    `validate:"omitempty,min=1" form:"page"`
 	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	OrderCond   string `validate:"omitempty,oneof=newest active hot score unanswered" form:"order"`
 	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	LoginUserID string `json:"-"`
 	IsAdmin     bool   `json:"-"`
@@ -484,7 +487,7 @@ type PersonalQuestionPageReq struct {
 type PersonalAnswerPageReq struct {
 	Page        int    `validate:"omitempty,min=1" form:"page"`
 	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	OrderCond   string `validate:"omitempty,oneof=newest active hot score unanswered" form:"order"`
 	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	LoginUserID string `json:"-"`
 	IsAdmin     bool   `json:"-"`
