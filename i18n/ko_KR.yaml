@@ -414,6 +414,13 @@ backend:
         other: 수정됨
     deleted_title:
       other: 이미 삭제된 게시물입니다.
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: 이 태그 삭제
       tip_with_posts: >-
-        <p>게시물이 있는 태그는 <strong>삭제할 수 없습니다</strong>.</p> <p>먼저 해당 게시물에서 이 태그를 제거하세요.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>동의어가 있는 태그는 <strong>삭제할 수 없습니다</strong>.</p> <p>먼저 이 태그의 동의어를 제거하세요.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: 정말로 삭제하시겠습니까?
       close: 닫기
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: 새 계정이 확인되었습니다. 홈페이지로 이동합니다.
     link: 홈페이지로 이동
-    invalid: >-
-      죄송합니다, 이 계정 확인 링크는 더 이상 유효하지 않습니다. 이미 계정이 활성화된 상태일 수 있습니다.
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: 이메일이 업데이트되었습니다.
     confirm_new_email_invalid: >-
       죄송합니다, 이 확인 링크는 더 이상 유효하지 않습니다. 이미 이메일이 변경된 상태일 수 있습니다.
@@ -1249,7 +1256,7 @@ ui:
     answers: 답변
     newest: 최신순
     active: 활성순
-    frequent: 자주 본 질문
+    hot: Hot
     score: 평점순
     unanswered: 답변이 없는 질문
     modified: 수정됨
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: 작성
       restrict_answer:
-        title: 답변 제한
+        title: Answer write
         label: 각 사용자는 각 질문에 대해 단 하나의 답변만 작성할 수 있습니다.
-        text: "기존 답변을 개선하고 향상시키기 위해 편집 링크를 사용할 수 있습니다."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: 추천 태그
-        text: "태그 슬러그를 입력하세요. 한 줄에 하나의 태그를 입력하세요."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: 필수 태그
-        label: 추천 태그를 필수로 설정합니다.
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "모든 새로운 질문은 최소한 하나의 추천 태그가 있어야 합니다."
       reserved_tags:
         label: 예약된 태그
-        text: "예약된 태그는 관리자만이 게시물에 추가할 수 있습니다."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:
