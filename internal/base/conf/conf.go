@@ -47,17 +47,16 @@ type AllConfig struct {
 }
 
 type envConfigOverrides struct {
-	SwaggerHost         string
+	SwaggerHost        string
 	SwaggerAddressPort string
-
-	SiteAddr string
+	SiteAddr           string
 }
 
 func loadEnvs() (envOverrides *envConfigOverrides) {
 	return &envConfigOverrides{
-		SwaggerHost:         os.Getenv("SWAGGER_HOST"),
-		SwaggerAddressPort:  os.Getenv("SWAGGER_ADDRESS_PORT"),
-		SiteAddr:            os.Getenv("SITE_ADDR"),
+		SwaggerHost:        os.Getenv("SWAGGER_HOST"),
+		SwaggerAddressPort: os.Getenv("SWAGGER_ADDRESS_PORT"),
+		SiteAddr:           os.Getenv("SITE_ADDR"),
 	}
 }
 
