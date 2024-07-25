@@ -28,8 +28,13 @@ generate:
 	@$(GO) generate ./...
 	@$(GO) mod tidy
 
+image:
+	@$(DOCKER_CMD) build . -t answerdev/answer:latest
+
 test:
 	@$(GO) test ./internal/repo/repo_test
+test-e2e: image
+	cd e2e && ./start.sh
 
 # clean all build result
 clean:
