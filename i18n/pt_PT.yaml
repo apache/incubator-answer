@@ -414,6 +414,13 @@ backend:
         other: modificado
     deleted_title:
       other: Questão excluída
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Remover este marcador
       tip_with_posts: >-
-        <p>Nós não permitimos <strong>remover marcadores com postagens</strong>.</p> <p>Por favor, remova este marcador a partir da postagem.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Nós não permitimos <strong>remover marcadores com sinônimos</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Você tem certeza que deseja remover?
       close: Fechar
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: A sua nova conta está confirmada; você será redirecionado para a página inicial.
     link: Continuar para a página inicial.
-    invalid: >-
-      Desculpe, este link de confirmação não é mais válido. Talvez a sua já está ativa.
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: O seu e-mail foi atualizado.
     confirm_new_email_invalid: >-
       Desculpe, este link de confirmação não é mais válido. Talvez o seu e-mail já tenha sido alterado.
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Escrever
       restrict_answer:
-        title: Restrict answer
+        title: Answer write
         label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend Marcadores
-        text: "Por favor input tag slug above, one tag per line."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Required Tag
-        label: Set recommend tag as requirido
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Every new question must have ao menos one recommend tag."
       reserved_tags:
         label: Reserved Marcadores
-        text: "Marcadores reservados só podem ser adicionadas a uma publicação por moderador."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:

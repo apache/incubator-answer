@@ -414,6 +414,13 @@ backend:
         other: измененные
     deleted_title:
       other: Удаленные вопросы
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Удалить этот тег
       tip_with_posts: >-
-        <p>Мы не разрешаем <strong>удалять тег с сообщениями</strong>.</p> <p>Пожалуйста, сначала удалите этот тег из записей.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Мы не разрешаем <strong>удалять тег с сообщениями</strong>.</p> <p>Пожалуйста, сначала удалите этот тег из записей.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Вы уверены, что хотите удалить?
       close: Закрыть
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Ваша новая учетная запись подтверждена; вы будете перенаправлены на главную страницу.
     link: Перейти на главную
-    invalid: >-
-      Извините, эта ссылка для подтверждения учетной записи больше недействительна. Возможно, ваша учетная запись уже активна?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Ваш адрес электронной почты был обновлен.
     confirm_new_email_invalid: >-
       Извините, эта ссылка для подтверждения больше недействительна. Возможно, ваш адрес электронной почты уже был изменен?
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Написать
       restrict_answer:
-        title: Ограничения
+        title: Answer write
         label: Каждый пользователь может написать только один ответ на каждый вопрос
-        text: "Они могут использовать ссылку редактирования для уточнения и улучшения существующего ответа."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Рекомендованные теги
-        text: "Пожалуйста, введите slug тегов выше, один тег на строку."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Обязательный тег
-        label: Установите рекомендованный тег как обязательный.
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Каждый новый вопрос должен иметь хотя бы один рекомендуемый тег."
       reserved_tags:
         label: Зарезервированные теги
-        text: "Зарезервированные теги могут быть добавлены к сообщению только модератором."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:
