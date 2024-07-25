@@ -391,6 +391,7 @@ func (us *UserAdminService) EditUserProfile(ctx context.Context, req *schema.Edi
 
 	user := &entity.User{}
 	user.ID = req.UserID
+	user.DisplayName = req.DisplayName
 	user.Username = req.Username
 	user.EMail = req.Email
 	user.MailStatus = entity.EmailStatusAvailable

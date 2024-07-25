@@ -177,7 +177,7 @@ func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err 
 // UpdateUserProfile update user profile
 func (ur *userRepo) UpdateUserProfile(ctx context.Context, userInfo *entity.User) (err error) {
 	_, err = ur.data.DB.Context(ctx).Where("id = ?", userInfo.ID).
-		Cols("username", "e_mail", "mail_status").Update(userInfo)
+		Cols("username", "e_mail", "mail_status", "display_name").Update(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
