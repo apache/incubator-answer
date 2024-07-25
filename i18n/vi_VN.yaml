@@ -414,6 +414,13 @@ backend:
         other: đã chỉnh sửa
     deleted_title:
       other: Câu hỏi đã xóa
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Xóa thẻ này
       tip_with_posts: >-
-        <p>Chúng tôi không cho phép <strong>xóa thẻ có bài đăng</strong>.</p> <p>Vui lòng xóa thẻ này khỏi các bài đăng trước.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Chúng tôi không cho phép <strong>xóa thẻ có từ đồng nghĩa</strong>.</p> <p>Vui lòng xóa các từ đồng nghĩa khỏi thẻ này trước.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Bạn có chắc chắn muốn xóa không?
       close: Đóng
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Tài khoản mới của bạn đã được xác nhận; bạn sẽ được chuyển hướng đến trang chủ.
     link: Tiếp tục đến trang chủ
-    invalid: >-
-      Xin lỗi, liên kết xác nhận tài khoản này không còn hợp lệ. Có thể tài khoản của bạn đã được kích hoạt?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Email của bạn đã được cập nhật.
     confirm_new_email_invalid: >-
       Xin lỗi, liên kết xác nhận này không còn hợp lệ. Có thể email của bạn đã được thay đổi?
@@ -1249,7 +1256,7 @@ ui:
     answers: Câu trả lời
     newest: Mới nhất
     active: Hoạt động
-    frequent: Thường xuyên
+    hot: Hot
     score: Điểm
     unanswered: Chưa được trả lời
     modified: đã chỉnh sửa
@@ -1501,6 +1508,9 @@ ui:
       title: Chỉnh sửa hồ sơ
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Tên người dùng
             msg_range: Tên người dùng tối đa 30 ký tự.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Viết
       restrict_answer:
-        title: Hạn chế câu trả lời
+        title: Answer write
         label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Thẻ được đề xuất
-        text: "Vui lòng nhập slug thẻ ở trên, một thẻ mỗi dòng."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Thẻ bắt buộc
-        label: Đặt thẻ được đề xuất là bắt buộc
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Mỗi câu hỏi mới phải có ít nhất một thẻ được đề xuất."
       reserved_tags:
         label: Thẻ dành riêng
-        text: "Thẻ dành riêng chỉ có thể được thêm vào một bài đăng bởi điều hành viên."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:
