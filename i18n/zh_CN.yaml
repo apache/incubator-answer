@@ -414,6 +414,13 @@ backend:
         other: 修改于
     deleted_title:
       other: 删除的问题
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: 删除标签
       tip_with_posts: >-
-        <p>我们不允许 <strong>删除带有帖子的标签</strong>。</p> <p>请先从帖子中移除此标签。</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>我们不允许 <strong>删除带有同义词的标签</strong>。</p> <p>请先从此标签中删除同义词。</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: 确定要删除吗？
       close: 关闭
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
-    invalid: >-
-      抱歉，此验证链接已失效。也许你的账号已经激活了？
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: 你的电子邮箱已更新
     confirm_new_email_invalid: >-
       抱歉，此验证链接已失效。也许是你的邮箱已经成功更改了？
@@ -1249,7 +1256,7 @@ ui:
     answers: 回答
     newest: 最新
     active: 活跃
-    frequent: 浏览量
+    hot: Hot
     score: 评分
     unanswered: 未回答
     modified: 更新于
@@ -1501,6 +1508,9 @@ ui:
       title: 编辑资料
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: 用户名
             msg_range: 用户名不能超过 30 个字符。
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: 编辑
       restrict_answer:
-        title: 限制一个回答
+        title: Answer write
         label: 每个用户对于每个问题只能有一个回答
-        text: "用户可以使用编辑按钮优化已有的回答"
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: 推荐标签
-        text: "请在上方输入标签固定链接，每行一个标签。"
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: 必需的标签
-        label: 根据需要设置推荐标签
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "每个新问题必须至少有一个推荐标签。"
       reserved_tags:
         label: 保留标签
-        text: "保留的标签只能由版主添加到一个帖子中。"
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: 搜索引擎优化
       permalink:
