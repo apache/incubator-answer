@@ -111,6 +111,7 @@ type UpdateUserRoleReq struct {
 // EditUserProfileReq edit user profile request
 type EditUserProfileReq struct {
 	UserID      string `validate:"required" json:"user_id"`
+	DisplayName string `validate:"required,gte=4,lte=30" json:"display_name"`
 	Username    string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
 	LoginUserID string `json:"-"`

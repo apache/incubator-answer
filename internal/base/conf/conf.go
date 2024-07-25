@@ -21,6 +21,7 @@ package conf
 
 import (
 	"bytes"
+	"os"
 	"path/filepath"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -45,6 +46,20 @@ type AllConfig struct {
 	UI            *server.UI                    `json:"ui" mapstructure:"ui" yaml:"ui"`
 }
 
+type envConfigOverrides struct {
+	SwaggerHost        string
+	SwaggerAddressPort string
+	SiteAddr           string
+}
+
+func loadEnvs() (envOverrides *envConfigOverrides) {
+	return &envConfigOverrides{
+		SwaggerHost:        os.Getenv("SWAGGER_HOST"),
+		SwaggerAddressPort: os.Getenv("SWAGGER_ADDRESS_PORT"),
+		SiteAddr:           os.Getenv("SITE_ADDR"),
+	}
+}
+
 type PathIgnore struct {
 	Users []string `yaml:"users"`
 }
@@ -67,6 +82,19 @@ func (c *AllConfig) SetDefault() {
 	}
 }
 
+func (c *AllConfig) SetEnvironmentOverrides() {
+	envs := loadEnvs()
+	if envs.SiteAddr != "" {
+		c.Server.HTTP.Addr = envs.SiteAddr
+	}
+	if envs.SwaggerHost != "" {
+		c.Swaggerui.Host = envs.SwaggerHost
+	}
+	if envs.SwaggerAddressPort != "" {
+		c.Swaggerui.Address = envs.SwaggerAddressPort
+	}
+}
+
 // ReadConfig read config
 func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 	if len(configFilePath) == 0 {
@@ -81,6 +109,7 @@ func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 		return nil, err
 	}
 	c.SetDefault()
+	c.SetEnvironmentOverrides()
 	return c, nil
 }
 

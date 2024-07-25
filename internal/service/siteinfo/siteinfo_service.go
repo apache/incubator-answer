@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -276,13 +277,23 @@ func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (resp *schema.GetSM
 	}
 	resp = &schema.GetSMTPConfigResp{}
 	_ = copier.Copy(resp, emailConfig)
+	resp.SMTPPassword = strings.Repeat("*", len(resp.SMTPPassword))
 	return resp, nil
 }
 
 // UpdateSMTPConfig get smtp config
 func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
+	emailConfig, err := s.emailService.GetEmailConfig(ctx)
+	if err != nil {
+		return err
+	}
+
 	ec := &export.EmailConfig{}
 	_ = copier.Copy(ec, req)
+
+	if len(ec.SMTPPassword) > 0 && ec.SMTPPassword == strings.Repeat("*", len(ec.SMTPPassword)) {
+		ec.SMTPPassword = emailConfig.SMTPPassword
+	}
 
 	err = s.emailService.SetEmailConfig(ctx, ec)
 	if err != nil {
@@ -293,7 +304,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		if err != nil {
 			return err
 		}
-		go s.emailService.SendAndSaveCode(ctx, req.TestEmailRecipient, title, body, "", "")
+		go s.emailService.Send(ctx, req.TestEmailRecipient, title, body)
 	}
 	return nil
 }

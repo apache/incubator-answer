@@ -189,9 +189,10 @@ func (ns *ExternalNotificationService) sendNewQuestionNotificationEmail(ctx cont
 			constant.AllNewQuestionSource,
 			constant.AllNewQuestionForFollowingTagsSource,
 		},
+		SkipValidationLatestCode: true,
 	}
 	ns.emailService.SendAndSaveCodeWithTime(
-		ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 1*24*time.Hour)
+		ctx, userInfo.ID, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 1*24*time.Hour)
 }
 
 func (ns *ExternalNotificationService) syncNewQuestionNotificationToPlugin(ctx context.Context,

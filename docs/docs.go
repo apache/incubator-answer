@@ -2985,7 +2985,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.ReactionResp"
+                                            "$ref": "#/definitions/schema.ReactionRespItem"
                                         }
                                     }
                                 }
@@ -7482,10 +7482,16 @@ const docTemplate = `{
         "schema.EditUserProfileReq": {
             "type": "object",
             "required": [
+                "display_name",
                 "email",
                 "user_id"
             ],
             "properties": {
+                "display_name": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 4
+                },
                 "email": {
                     "type": "string",
                     "maxLength": 500
@@ -9035,28 +9041,24 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.ReactionItem": {
+        "schema.ReactionRespItem": {
             "type": "object",
             "properties": {
                 "count": {
+                    "description": "Count is the number of users who reacted",
                     "type": "integer"
                 },
+                "emoji": {
+                    "description": "Emoji is the reaction emoji",
+                    "type": "string"
+                },
                 "is_active": {
+                    "description": "IsActive is if current user has reacted",
                     "type": "boolean"
                 },
                 "tooltip": {
+                    "description": "Tooltip is the user's name who reacted",
                     "type": "string"
-                }
-            }
-        },
-        "schema.ReactionResp": {
-            "type": "object",
-            "properties": {
-                "reaction_summary": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/schema.ReactionItem"
-                    }
                 }
             }
         },

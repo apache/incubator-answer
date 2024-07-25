@@ -328,7 +328,7 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 	if err != nil {
 		return nil, err
 	}
-	go us.emailService.SendAndSaveCode(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, userInfo.ID, userInfo.EMail, title, body, code, data.ToJSONString())
 	return resp, nil
 }
 
