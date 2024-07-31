@@ -23,10 +23,10 @@ import "time"
 
 // BadgeGroup badge_group
 type BadgeGroup struct {
-	ID        string    `json:"id" xorm:"id"`
-	Name      string    `json:"name" xorm:"name"`
-	CreatedAt time.Time `json:"created_at" xorm:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" xorm:"updated_at"`
+	ID        string    `json:"id" xorm:"not null pk autoincr BIGINT(20) id"`
+	Name      string    `json:"name" xorm:"not null default '' VARCHAR(256) name"`
+	CreatedAt time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
 }
 
 // TableName badge_group table name

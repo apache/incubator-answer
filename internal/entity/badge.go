@@ -21,20 +21,25 @@ package entity
 
 import "time"
 
+const (
+	BadgeStatusAvailable = 1
+	BadgeStatusDeleted   = 10
+)
+
 // Badge badge
 type Badge struct {
 	ID           string    `json:"id" xorm:"id"`
-	CreatedAt    time.Time `json:"created_at" xorm:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at" xorm:"updated_at"`
-	Name         string    `json:"name" xorm:"name"`
-	AwardTotal   int64     `json:"award_total" xorm:"award_total"`
-	Description  string    `json:"description" xorm:"description"`
-	Status       int8      `json:"status" xorm:"status"`
-	BadgeGroupId int64     `json:"badge_group_id" xorm:"badge_group_id"`
-	Single       int8      `json:"single" xorm:"single"`
-	Collect      string    `json:"collect" xorm:"collect"`
-	Handler      string    `json:"handler" xorm:"handler"`
-	Param        string    `json:"param" xorm:"param"`
+	CreatedAt    time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt    time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	Name         string    `json:"name" xorm:"not null default '' VARCHAR(256) name"`
+	AwardCount   int64     `json:"award_count" xorm:"not null default 0 INT(11) award_count"`
+	Description  string    `json:"description" xorm:"not null default '' MEDIUMTEXT description"`
+	Status       int8      `json:"status" xorm:"not null default 1 INT(11) status"`
+	BadgeGroupId int64     `json:"badge_group_id" xorm:"not null default 0 BIGINT(20) badge_group_id"`
+	Single       int8      `json:"single" xorm:"not null default 1 TINYINT(4) single"`
+	Collect      string    `json:"collect" xorm:"not null default '' VARCHAR(64) collect"`
+	Handler      string    `json:"handler" xorm:"not null default '' VARCHAR(64) handler"`
+	Param        string    `json:"param" xorm:"not null default '' VARCHAR(128) param"`
 }
 
 // TableName badge table name
