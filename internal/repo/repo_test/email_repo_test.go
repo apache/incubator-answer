@@ -30,8 +30,8 @@ import (
 
 func Test_emailRepo_VerifyCode(t *testing.T) {
 	emailRepo := export.NewEmailRepo(testDataSource)
-	code, content := "1111", "test"
-	err := emailRepo.SetCode(context.TODO(), code, content, time.Minute)
+	code, content := "1111", "{\"source_type\":\"\",\"e_mail\":\"\",\"user_id\":\"1\",\"skip_validation_latest_code\":false}"
+	err := emailRepo.SetCode(context.TODO(), "1", code, content, time.Minute)
 	assert.NoError(t, err)
 
 	verifyContent, err := emailRepo.VerifyCode(context.TODO(), code)
