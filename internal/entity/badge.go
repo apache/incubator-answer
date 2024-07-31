@@ -24,6 +24,13 @@ import "time"
 const (
 	BadgeStatusAvailable = 1
 	BadgeStatusDeleted   = 10
+
+	BadgeLevelBronze = 1
+	BadgeLevelSilver = 2
+	BadgeLevelGold   = 3
+
+	BadgeSingleAward = 1
+	BadgeMultiAward  = 2
 )
 
 // Badge badge
@@ -32,10 +39,12 @@ type Badge struct {
 	CreatedAt    time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
 	UpdatedAt    time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
 	Name         string    `json:"name" xorm:"not null default '' VARCHAR(256) name"`
+	Icon         string    `json:"icon" xorm:"not null default '' VARCHAR(1024) icon"`
 	AwardCount   int64     `json:"award_count" xorm:"not null default 0 INT(11) award_count"`
 	Description  string    `json:"description" xorm:"not null default '' MEDIUMTEXT description"`
 	Status       int8      `json:"status" xorm:"not null default 1 INT(11) status"`
 	BadgeGroupId int64     `json:"badge_group_id" xorm:"not null default 0 BIGINT(20) badge_group_id"`
+	Level        int64     `json:"level" xorm:"not null default 1 TINYINT(4) level"`
 	Single       int8      `json:"single" xorm:"not null default 1 TINYINT(4) single"`
 	Collect      string    `json:"collect" xorm:"not null default '' VARCHAR(64) collect"`
 	Handler      string    `json:"handler" xorm:"not null default '' VARCHAR(64) handler"`
