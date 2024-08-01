@@ -22,8 +22,9 @@ package entity
 import "time"
 
 const (
-	BadgeStatusAvailable = 1
-	BadgeStatusDeleted   = 10
+	BadgeStatusActive   = 1
+	BadgeStatusDeleted  = 10
+	BadgeStatusInactive = 11
 
 	BadgeLevelBronze = 1
 	BadgeLevelSilver = 2
@@ -52,6 +53,6 @@ type Badge struct {
 }
 
 // TableName badge table name
-func (*Badge) TableName() string {
+func (Badge) TableName() string {
 	return "badge"
 }

@@ -34,6 +34,6 @@ type BadgeAward struct {
 }
 
 // TableName badge_award table name
-func (*BadgeAward) TableName() string {
+func (BadgeAward) TableName() string {
 	return "badge_award"
 }

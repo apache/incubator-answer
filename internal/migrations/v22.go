@@ -21,7 +21,9 @@ package migrations
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/unique"
 	"time"
 	"xorm.io/xorm"
 )
@@ -37,11 +39,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.autobiographer.name",
+			Name:         "badge.default_badges.autobiographer.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.autobiographer.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.autobiographer.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -52,11 +54,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.editor.name",
+			Name:         "badge.default_badges.editor.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.editor.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.editor.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -67,11 +69,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.first_flag.name",
+			Name:         "badge.default_badges.first_flag.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.first_flag.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.first_flag.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -82,11 +84,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.first_upvote.name",
+			Name:         "badge.default_badges.first_upvote.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.first_upvote.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.first_upvote.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -97,11 +99,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.first_reaction.name",
+			Name:         "badge.default_badges.first_reaction.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.first_reaction.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.first_reaction.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -112,11 +114,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.first_share.name",
+			Name:         "badge.default_badges.first_share.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.first_share.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.first_share.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -127,11 +129,11 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.scholar.name",
+			Name:         "badge.default_badges.scholar.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.scholar.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.scholar.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 1,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
@@ -142,14 +144,104 @@ var (
 		{
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
-			Name:         "badge.badges.solved.name",
+			Name:         "badge.default_badges.solved.name",
 			Icon:         "",
 			AwardCount:   0,
-			Description:  "badge.badges.solved.desc",
-			Status:       entity.BadgeStatusAvailable,
+			Description:  "badge.default_badges.solved.desc",
+			Status:       entity.BadgeStatusActive,
 			BadgeGroupId: 2,
 			Level:        entity.BadgeLevelBronze,
 			Single:       entity.BadgeSingleAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.nice_answer.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.nice_answer.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeMultiAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.good_answer.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.good_answer.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeMultiAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.great_answer.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.great_answer.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeMultiAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.nice_question.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.nice_question.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeMultiAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.good_question.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.good_question.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeSingleAward,
+			Collect:      "",
+			Handler:      "",
+			Param:        "",
+		},
+		{
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+			Name:         "badge.default_badges.great_question.name",
+			Icon:         "",
+			AwardCount:   0,
+			Description:  "badge.default_badges.great_question.desc",
+			Status:       entity.BadgeStatusActive,
+			BadgeGroupId: 3,
+			Level:        entity.BadgeLevelBronze,
+			Single:       entity.BadgeMultiAward,
 			Collect:      "",
 			Handler:      "",
 			Param:        "",
@@ -158,6 +250,7 @@ var (
 )
 
 func addBadges(ctx context.Context, x *xorm.Engine) (err error) {
+	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: x})
 	// create table
 	err = x.Context(ctx).Sync(new(entity.Badge))
 	if err != nil {
@@ -179,6 +272,15 @@ func addBadges(ctx context.Context, x *xorm.Engine) (err error) {
 	if err != nil {
 		return
 	}
-	_, err = x.Context(ctx).Insert(defaultBadgeTable)
+	for _, badge := range defaultBadgeTable {
+		badge.ID, err = uniqueIDRepo.GenUniqueIDStr(ctx, entity.Badge{}.TableName())
+		if err != nil {
+			return
+		}
+		_, err = x.Context(ctx).Insert(badge)
+		if err != nil {
+			return
+		}
+	}
 	return
 }

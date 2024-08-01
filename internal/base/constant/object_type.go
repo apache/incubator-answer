@@ -29,7 +29,6 @@ const (
 	ReportObjectType     = "report"
 	BadgeObjectType      = "badge"
 	BadgeAwardObjectType = "badge_award"
-	BadgeGroupObjectType = "badge_group"
 )
 
 var (
@@ -43,7 +42,6 @@ var (
 		ReportObjectType:     8,
 		BadgeObjectType:      9,
 		BadgeAwardObjectType: 10,
-		BadgeGroupObjectType: 11,
 	}
 
 	ObjectTypeNumberMapping = map[int]string{
@@ -56,6 +54,5 @@ var (
 		8:  ReportObjectType,
 		9:  BadgeObjectType,
 		10: BadgeAwardObjectType,
-		11: BadgeGroupObjectType,
 	}
 )
