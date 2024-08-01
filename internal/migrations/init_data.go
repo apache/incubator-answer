@@ -69,6 +69,9 @@ var (
 		&entity.UserNotificationConfig{},
 		&entity.PluginUserConfig{},
 		&entity.Review{},
+		&entity.Badge{},
+		&entity.BadgeGroup{},
+		&entity.BadgeAward{},
 	}
 
 	roles = []*entity.Role{

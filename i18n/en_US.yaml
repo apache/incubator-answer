@@ -527,7 +527,7 @@ backend:
     tooltip:
       other: "{{ .Names }} and {{ .Count }} more..."
   badge:
-    badges:
+    default_badges:
       autobiographer:
         name:
           other: Autobiographer

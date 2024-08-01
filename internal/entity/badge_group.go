@@ -30,6 +30,6 @@ type BadgeGroup struct {
 }
 
 // TableName badge_group table name
-func (*BadgeGroup) TableName() string {
+func (BadgeGroup) TableName() string {
 	return "badge_group"
 }
