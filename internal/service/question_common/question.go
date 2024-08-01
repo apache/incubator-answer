@@ -145,6 +145,15 @@ func (qs *QuestionCommon) UpdateAnswerCount(ctx context.Context, questionID stri
 	if err != nil {
 		return err
 	}
+	if count == 0 {
+		err = qs.questionRepo.UpdateLastAnswer(ctx, &entity.Question{
+			ID:           questionID,
+			LastAnswerID: "0",
+		})
+		if err != nil {
+			return err
+		}
+	}
 	return qs.questionRepo.UpdateAnswerCount(ctx, questionID, int(count))
 }
 
