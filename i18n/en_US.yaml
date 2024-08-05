@@ -1692,6 +1692,7 @@ ui:
     questions: Questions
     answers: Answers
     users: Users
+    badges: Badges
     flags: Flags
     settings: Settings
     general: General
@@ -2117,7 +2118,20 @@ ui:
       msg:
         should_be_number: the input should be number
         number_larger_1: number should be equal or larger than 1
-
+    badges:
+      action: Action
+      active: Active
+      all: All
+      awards: Awards
+      deactivate: Deactivate
+      filter:
+        placeholder: Filter by name, badge:id
+      group: Group
+      inactive: Inactive
+      name: Name
+      show_logs: Show logs
+      status: Status
+      title: Badges
   form:
     optional: (optional)
     empty: cannot be empty
