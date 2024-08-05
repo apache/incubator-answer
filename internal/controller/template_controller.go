@@ -562,6 +562,14 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	ctx.HTML(code, tpl, data)
 }
 
+func (tc *TemplateController) OpenSearch(ctx *gin.Context) {
+	if tc.checkPrivateMode(ctx) {
+		tc.Page404(ctx)
+		return
+	}
+	tc.templateRenderController.OpenSearch(ctx)
+}
+
 func (tc *TemplateController) Sitemap(ctx *gin.Context) {
 	if tc.checkPrivateMode(ctx) {
 		tc.Page404(ctx)
