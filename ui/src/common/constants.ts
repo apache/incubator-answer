@@ -94,6 +94,9 @@ export const ADMIN_NAV_MENUS = [
     name: 'users',
   },
   {
+    name: 'badges',
+  },
+  {
     name: 'customize',
     children: [
       {
