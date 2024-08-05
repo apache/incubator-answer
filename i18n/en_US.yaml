@@ -891,6 +891,7 @@ ui:
       question: Questions
       tag: Tags
       user: Users
+      badges: Badges
       profile: Profile
       setting: Settings
       logout: Log out
@@ -1308,12 +1309,14 @@ ui:
     reputation: Reputation
     comments: Comments
     votes: Votes
+    badges: Badges
     newest: Newest
     score: Score
     edit_profile: Edit profile
     visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
+    comma: ','
     last_login: Seen
     about_me: About Me
     about_me_empty: "// Hello, World !"
@@ -1468,6 +1471,13 @@ ui:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
     login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+  badges:
+    title: Badges
+    awarded: Awarded
+    earned_x: Earned x{{ number }}
+    x_awarded: "{{ number }} awarded"
+    can_earn_multiple: You can earn this multiple times.
+
 
   admin:
     admin_header:

@@ -16,28 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'react-i18next';
+import { FC } from 'react';
+import { Card, Badge } from 'react-bootstrap';
 
-import { memo, FC, useState } from 'react';
-import { Alert } from 'react-bootstrap';
+import { formatCount } from '@/utils';
 
-interface Props {
-  data;
+import './index.scss';
+
+interface IProps {
+  data: any;
+  badgePill: boolean;
 }
-const Index: FC<Props> = ({ data }) => {
-  const [show, setShow] = useState(Boolean(data));
 
+const Index: FC<IProps> = ({ data, badgePill }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'badges' });
+  console.log(data);
   return (
-    <Alert
-      variant="info"
-      show={show}
-      className="mb-3"
-      dismissible
-      onClose={() => {
-        setShow(false);
-      }}>
-      <div dangerouslySetInnerHTML={{ __html: data }} />
-    </Alert>
+    <Card className="text-center badge-card">
+      <Card.Body>
+        <Badge pill={badgePill} bg="success" className="label">
+          0
+        </Badge>
+        <img src="" width={96} height={96} alt="" />
+        <h6 className="mb-0 mt-3 text-center">Nice Question</h6>
+        <div className="small text-secondary">
+          {t('x_awarded', { number: formatCount(16) })}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
-export default memo(Index);
+export default Index;

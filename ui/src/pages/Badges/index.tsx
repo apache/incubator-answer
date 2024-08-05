@@ -17,30 +17,29 @@
  * under the License.
  */
 
-import UserInfo from './UserInfo';
-import NavBar from './NavBar';
-import Overview from './Overview';
-import TopList from './TopList';
-import Alert from './Alert';
-import ListHead from './ListHead';
-import DefaultList from './DefaultList';
-import Reputation from './Reputation';
-import Comments from './Comments';
-import Votes from './Votes';
-import Answers from './Answers';
-import Badges from './Badges';
+import { useTranslation } from 'react-i18next';
 
-export {
-  Alert,
-  UserInfo,
-  NavBar,
-  Overview,
-  TopList,
-  ListHead,
-  DefaultList,
-  Reputation,
-  Comments,
-  Votes,
-  Answers,
-  Badges,
+import { CardBadge } from '@/components';
+import { usePageTags } from '@/hooks';
+
+const Index = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'badges' });
+
+  usePageTags({
+    title: t('title'),
+  });
+
+  return (
+    <div className="pt-4 mb-5">
+      <h3 className="mb-4">{t('title')}</h3>
+      <h5 className="mb-4">Community Badges</h5>
+      <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+        {[0, 1, 2, 3, 4, 5, 6].map((item) => {
+          return <CardBadge data={item} badgePill={false} />;
+        })}
+      </div>
+    </div>
+  );
 };
+
+export default Index;
