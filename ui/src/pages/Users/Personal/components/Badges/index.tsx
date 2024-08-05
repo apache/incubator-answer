@@ -17,30 +17,27 @@
  * under the License.
  */
 
-import UserInfo from './UserInfo';
-import NavBar from './NavBar';
-import Overview from './Overview';
-import TopList from './TopList';
-import Alert from './Alert';
-import ListHead from './ListHead';
-import DefaultList from './DefaultList';
-import Reputation from './Reputation';
-import Comments from './Comments';
-import Votes from './Votes';
-import Answers from './Answers';
-import Badges from './Badges';
+import { FC } from 'react';
 
-export {
-  Alert,
-  UserInfo,
-  NavBar,
-  Overview,
-  TopList,
-  ListHead,
-  DefaultList,
-  Reputation,
-  Comments,
-  Votes,
-  Answers,
-  Badges,
+import { CardBadge } from '@/components';
+
+interface IProps {
+  data: any[];
+  visible: boolean;
+}
+
+const Index: FC<IProps> = ({ data, visible }) => {
+  console.log(data);
+  if (!visible) {
+    return null;
+  }
+  return (
+    <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+      {[0, 1, 2, 3, 4, 5, 6].map((item) => {
+        return <CardBadge data={item} badgePill />;
+      })}
+    </div>
+  );
 };
+
+export default Index;

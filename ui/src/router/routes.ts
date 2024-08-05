@@ -217,6 +217,14 @@ const routes: RouteNode[] = [
             path: 'review',
             page: 'pages/Review',
           },
+          {
+            path: '/badges',
+            page: 'pages/Badges/index',
+          },
+          {
+            path: '/badges/:badge_id',
+            page: 'pages/Badges/Detail/index',
+          },
         ],
       },
       {

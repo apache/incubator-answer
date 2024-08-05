@@ -19,6 +19,7 @@
 
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Row, Col } from 'react-bootstrap';
 
 import TopList from '../TopList';
 
@@ -37,26 +38,31 @@ const Index: FC<Props> = ({ visible, introduction, data }) => {
       <h5 className="mb-3">{t('about_me')}</h5>
       {introduction ? (
         <div
-          className="mb-4 text-break fmt"
+          className="mb-5 text-break fmt"
           dangerouslySetInnerHTML={{ __html: introduction }}
         />
       ) : (
-        <div className="text-center py-5 mb-4">{t('about_me_empty')}</div>
+        <div className="text-center py-5 mb-5">{t('about_me_empty')}</div>
       )}
 
-      {data?.answer?.length > 0 && (
-        <>
-          <h5 className="mb-3">{t('top_answers')}</h5>
-          <TopList data={data?.answer} type="answer" />
-        </>
-      )}
-
-      {data?.question?.length > 0 && (
-        <>
-          <h5 className="mb-3">{t('top_questions')}</h5>
-          <TopList data={data?.question} type="question" />
-        </>
-      )}
+      <Row className="mb-4">
+        <Col sm={12} md={6} className="mb-4">
+          {data?.answer?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_answers')}</h5>
+              <TopList data={data?.answer} type="answer" />
+            </>
+          )}
+        </Col>
+        <Col sm={12} md={6} className="mb-4">
+          {data?.question?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_questions')}</h5>
+              <TopList data={data?.question} type="question" />
+            </>
+          )}
+        </Col>
+      </Row>
     </div>
   );
 };

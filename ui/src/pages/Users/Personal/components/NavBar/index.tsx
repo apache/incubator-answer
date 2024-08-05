@@ -59,6 +59,11 @@ const list = [
     path: '/votes',
     name: 'votes',
   },
+  {
+    role: 'self', // Only visible to author
+    path: '/badges',
+    name: 'badges',
+  },
 ];
 const Index: FC<Props> = ({ slug, tabName = 'overview', isSelf }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
