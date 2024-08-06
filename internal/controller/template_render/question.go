@@ -96,9 +96,9 @@ func (t *TemplateRenderController) OpenSearch(ctx *gin.Context) {
 		return
 	}
 
-	favicon := "favicon.ico"
+	favicon := general.SiteUrl + "/favicon.ico"
 	branding, err := t.siteInfoService.GetSiteBranding(ctx)
-	if err == nil {
+	if err == nil && len(branding.Favicon) > 0 {
 		favicon = branding.Favicon
 	}
 
