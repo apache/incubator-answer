@@ -20,7 +20,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "answer.fullname" . }}-claim
-  {{- with .Values.persistence.annotations  }}
+  {{- with .Values.persistence.annotations }}
   annotations:
     {{ toYaml . | indent 4 }}
   {{- end }}
@@ -39,4 +39,10 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
+  {{- with .Values.persistence.dataSource }}
+  dataSource:
+    name: {{ .name }}
+    kind: {{ .kind | default "VolumeSnapshot" }}
+    apiGroup: {{ .apiGroup | default "snapshot.storage.k8s.io" }}
+  {{- end }}
 {{- end }}
