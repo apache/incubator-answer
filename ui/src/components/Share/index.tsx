@@ -46,7 +46,7 @@ const Index: FC<IProps> = ({ type, qid, aid, title }) => {
       ? `${BASE_ORIGIN}/questions/${qid}`
       : `${BASE_ORIGIN}/questions/${qid}/${aid}`;
   if (user.id) {
-    baseUrl = `${baseUrl}?shareUserId=${user.username}`;
+    baseUrl = `${baseUrl}?share=${user.username}`;
   }
 
   const closeShare = () => {
