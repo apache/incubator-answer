@@ -108,7 +108,7 @@ func NewTagCommonService(
 }
 
 // SearchTagLike get tag list all
-func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
+func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.GetTagBasicResp, err error) {
 	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, len(req.Tag) == 0, false)
 	if err != nil {
 		return
@@ -142,11 +142,11 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 			tag.Recommend = mainTagMap[mainTagID].Recommend
 		}
 	}
-	resp = make([]schema.SearchTagLikeResp, 0)
+	resp = make([]schema.GetTagBasicResp, 0)
 	repetitiveTag := make(map[string]bool)
 	for _, tag := range tags {
 		if _, ok := repetitiveTag[tag.SlugName]; !ok {
-			item := schema.SearchTagLikeResp{}
+			item := schema.GetTagBasicResp{}
 			item.SlugName = tag.SlugName
 			item.DisplayName = tag.DisplayName
 			item.Recommend = tag.Recommend
@@ -158,14 +158,32 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	return resp, nil
 }
 
-func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags []string, err error) {
-	tags = make([]string, 0)
+func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags []*schema.SiteWriteTag, err error) {
+	tags = make([]*schema.SiteWriteTag, 0)
 	list, err := ts.tagCommonRepo.GetRecommendTagList(ctx)
 	if err != nil {
 		return tags, err
 	}
 	for _, item := range list {
-		tags = append(tags, item.SlugName)
+		tags = append(tags, &schema.SiteWriteTag{
+			SlugName:    item.SlugName,
+			DisplayName: item.DisplayName,
+		})
+	}
+	return tags, nil
+}
+
+func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []*schema.SiteWriteTag, err error) {
+	tags = make([]*schema.SiteWriteTag, 0)
+	list, err := ts.tagCommonRepo.GetReservedTagList(ctx)
+	if err != nil {
+		return tags, err
+	}
+	for _, item := range list {
+		tags = append(tags, &schema.SiteWriteTag{
+			SlugName:    item.SlugName,
+			DisplayName: item.DisplayName,
+		})
 	}
 	return tags, nil
 }
@@ -203,33 +221,26 @@ func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, 
 	return nil, nil
 }
 
-func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
-	tags = make([]string, 0)
-	list, err := ts.tagCommonRepo.GetReservedTagList(ctx)
-	if err != nil {
-		return tags, err
-	}
-	for _, item := range list {
-		tags = append(tags, item.SlugName)
-	}
-	return tags, nil
-}
-
 // SetTagsAttribute
 func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string, attribute string) (err error) {
-	var tagslist []string
+	var oldTags []*entity.Tag
 	switch attribute {
 	case "recommend":
-		tagslist, err = ts.GetSiteWriteRecommendTag(ctx)
+		oldTags, err = ts.tagCommonRepo.GetRecommendTagList(ctx)
 	case "reserved":
-		tagslist, err = ts.GetSiteWriteReservedTag(ctx)
+		oldTags, err = ts.tagCommonRepo.GetReservedTagList(ctx)
 	default:
 		return
 	}
 	if err != nil {
 		return err
 	}
-	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
+	oldTagSlugNameList := make([]string, 0)
+	for _, tag := range oldTags {
+		oldTagSlugNameList = append(oldTagSlugNameList, tag.SlugName)
+	}
+
+	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, oldTagSlugNameList, attribute, false)
 	if err != nil {
 		return err
 	}
@@ -257,7 +268,7 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	if err != nil {
 		return false, err
 	}
-	if !taginfo.RequiredTag {
+	if !taginfo.RequiredTag || len(taginfo.RecommendTags) == 0 {
 		return true, nil
 	}
 	tagNames := make([]string, 0)

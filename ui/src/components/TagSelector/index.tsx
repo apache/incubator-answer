@@ -41,6 +41,8 @@ interface IProps {
   showRequiredTag?: boolean;
   autoFocus?: boolean;
   isInvalid?: boolean;
+  tagStyleMode?: 'default' | 'simple';
+  formText?: string;
   errMsg?: string;
 }
 
@@ -55,6 +57,8 @@ const TagSelector: FC<IProps> = ({
   showRequiredTag = false,
   autoFocus = false,
   isInvalid = false,
+  formText = '',
+  tagStyleMode = 'default',
   errMsg = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -150,10 +154,10 @@ const TagSelector: FC<IProps> = ({
     queryTags(str).then((res) => {
       const tagArray: Type.Tag[] = filterTags(res || []);
       if (str === '') {
-        setRequiredTags(res?.length > 5 ? res.slice(0, 5) : res);
+        setRequiredTags(res);
       }
       handleMenuShow(tagArray.length > 0);
-      setTags(tagArray?.length > 5 ? tagArray.slice(0, 5) : tagArray);
+      setTags(tagArray);
     });
   };
 
@@ -210,6 +214,17 @@ const TagSelector: FC<IProps> = ({
     fetchTags(searchStr);
   };
 
+  const scrollIntoView = (targetId) => {
+    const container = document.getElementById('a-dropdown-menu') as HTMLElement;
+    const ele = document.getElementById(targetId) as HTMLElement;
+    if (ele?.offsetTop >= 104) {
+      container.scrollTo({
+        top: ele.offsetTop - 104,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const handleKeyDown = (e) => {
     e.stopPropagation();
     const { keyCode } = e;
@@ -226,9 +241,11 @@ const TagSelector: FC<IProps> = ({
     }
 
     if (keyCode === 38 && currentIndex > 0) {
+      scrollIntoView(tags[currentIndex - 1].slug_name);
       setCurrentIndex(currentIndex - 1);
     }
     if (keyCode === 40 && currentIndex < tags.length - 1) {
+      scrollIntoView(tags[currentIndex + 1].slug_name);
       setCurrentIndex(currentIndex + 1);
     }
 
@@ -366,8 +383,12 @@ const TagSelector: FC<IProps> = ({
                   key={item.slug_name}
                   className={classNames(
                     'badge-tag rounded-1 m-1 flex-shrink-0',
-                    item.reserved && 'badge-tag-reserved',
-                    item.recommend && 'badge-tag-required',
+                    tagStyleMode === 'default' &&
+                      item.reserved &&
+                      'badge-tag-reserved',
+                    tagStyleMode === 'default' &&
+                      item.recommend &&
+                      'badge-tag-required',
                     index === repeatIndex && 'bg-fade-out',
                   )}>
                   {item.display_name}
@@ -414,6 +435,7 @@ const TagSelector: FC<IProps> = ({
             return (
               <Dropdown.Item
                 key={item.slug_name}
+                id={item.slug_name}
                 active={index === currentIndex}
                 onClick={() => handleClick(item)}>
                 {item.display_name}
@@ -435,7 +457,7 @@ const TagSelector: FC<IProps> = ({
           )}
         </Dropdown.Menu>
       </div>
-      {!hiddenDescription && <Form.Text>{t('hint')}</Form.Text>}
+      {!hiddenDescription && <Form.Text>{formText || t('hint')}</Form.Text>}
       <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
     </div>
   );

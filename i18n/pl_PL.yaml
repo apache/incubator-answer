@@ -138,7 +138,7 @@ backend:
   pass:
     other: Hasło
   original_text:
-    other: This post
+    other: Ten wpis
   email_or_password_wrong_error:
     other: Email lub hasło nie są poprawne.
   error:
@@ -152,7 +152,7 @@ backend:
       cannot_update_their_password:
         other: Nie możesz zmieniać swojego hasła.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Nie możesz modyfikować swojego profilu.
       cannot_modify_self_status:
         other: Nie możesz modyfikować swojego statusu.
       email_or_password_wrong:
@@ -205,10 +205,10 @@ backend:
       new_password_same_as_previous_setting:
         other: Nowe hasło jest takie samo jak poprzednie.
       already_deleted:
-        other: This post has been deleted.
+        other: Ten wpis został usunięty.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Meta obiekt nie został odnaleziony
     question:
       already_deleted:
         other: Ten post został usunięty.
@@ -322,8 +322,8 @@ backend:
         other: niegrzeczny lub obraźliwy
       desc:
         other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+          - Rozsądna osoba uznałaby tę treść za nieodpowiednią do dyskusji opartej na szacunku
+          - dyskomfort.
     a_duplicate:
       name:
         other: duplikat
@@ -336,9 +336,9 @@ backend:
         other: nie jest odpowiedzią
       desc:
         other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+          - To zostało opublikowane jako odpowiedź, ale nie próbuje odpowiedzieć na
+          - pytanie. Powinna być prawdopodobnie edytowana, opatrzona komentarzem, kolejnym pytaniem,
+          - lub całkowicie usunięta.
     no_longer_needed:
       name:
         other: nie jest już potrzebne
@@ -414,6 +414,13 @@ backend:
         other: zmodyfikowane
     deleted_title:
       other: Usunięte pytanie
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -517,7 +524,7 @@ backend:
       other: Sugerowane zmiany
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
+      other: "{{ .Names }} już {{ .Count }} razy ..."
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Usuń ten tag
       tip_with_posts: >-
-        <p>Nie możemy <strong>usunąć tagu z wpisami</strong>.</p> <p>Proszę najpierw usunąć ten tag z wpisów.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Nie zezwalamy na <strong>usuwanie tagów z synonimami</strong>.</p> <p>Proszę najpierw usunąć synonimy z tego tagu.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Czy na pewno chcesz usunąć?
       close: Zamknij
   edit_tag:
@@ -767,13 +774,13 @@ ui:
     hours: godziny
     days: dni
   reaction:
-    heart: heart
-    smile: smile
-    frown: frown
-    btn_label: add or remove reactions
-    undo_emoji: undo {{ emoji }} reaction
-    react_emoji: react with {{ emoji }}
-    unreact_emoji: unreact with {{ emoji }}
+    heart: serce
+    smile: uśmiech
+    frown: niezadowolenie
+    btn_label: dodaj lub usuń reakcje
+    undo_emoji: cofnij reakcje {{ emoji }}
+    react_emoji: zareaguj {{ emoji }}
+    unreact_emoji: usuń reakcje {{ emoji }}
   comment:
     btn_add_comment: Dodaj komentarz
     reply_to: Odpowiedź na
@@ -910,8 +917,8 @@ ui:
       label: Imię
       msg:
         empty: Imię nie może być puste.
-        range: Length of name should between 4 to 30 characters.
-        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
+        range: Długość nazwy powinna wynosić od 4 do 30 znaków.
+        character: 'Możesz użyć dozwolone znaki "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Adres e-mail
       msg:
@@ -1028,8 +1035,8 @@ ui:
       email:
         label: Email
       new_email:
-        label: New email
-        msg: New email cannot be empty.
+        label: Nowy Email
+        msg: Nowy Email nie może być pusty.
       pass:
         label: Aktualne hasło
         msg: Hasło nie może być puste.
@@ -1150,8 +1157,8 @@ ui:
     delete: Usuń
     undelete: Przywróć
     list: Lista
-    unlist: Unlist
-    unlisted: Unlisted
+    unlist: Usuń z listy
+    unlisted: Usunięte z listy
     login: Zaloguj się
     signup: Zarejestruj się
     logout: Wyloguj się
@@ -1181,15 +1188,15 @@ ui:
     default: Domyślne
     reset: Reset
     tag: Tag
-    post_lowercase: post
-    filter: Filter
-    ignore: Ignore
+    post_lowercase: wpis
+    filter: Filtry
+    ignore: Ignoruj
     submit: Prześlij
     normal: Normalny
     closed: Zamknięty
     deleted: Usunięty
     pending: Oczekujący
-    more: More
+    more: Więcej
   search:
     title: Wyniki wyszukiwania
     keywords: Słowa kluczowe
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Twoje nowe konto zostało potwierdzone; zostaniesz przekierowany na stronę główną.
     link: Kontynuuj do strony głównej
-    invalid: >-
-      Przepraszamy, ten link potwierdzający konto jest już nieaktualny. Być może twoje konto jest już aktywne?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Twój adres e-mail został zaktualizowany.
     confirm_new_email_invalid: >-
       Przepraszamy, ten link potwierdzający jest już nieaktualny. Być może twój adres e-mail został już zmieniony?
@@ -1249,7 +1256,7 @@ ui:
     answers: Odpowiedzi
     newest: Najnowsze
     active: Aktywne
-    frequent: Częste
+    hot: Hot
     score: Ocena
     unanswered: Bez odpowiedzi
     modified: zmodyfikowane
@@ -1292,7 +1299,7 @@ ui:
     x_answers: odpowiedzi
     x_questions: pytania
   install:
-    title: Installation
+    title: Instalacja
     next: Dalej
     done: Zakończono
     config_yaml_error: Nie można utworzyć pliku config.yaml.
@@ -1367,7 +1374,7 @@ ui:
       msg:
         empty: Adres e-mail nie może być pusty.
         incorrect: Niepoprawny format adresu e-mail.
-    ready_title: Your site is ready
+    ready_title: Twoja strona jest gotowa
     ready_desc: >-
       Jeśli kiedykolwiek zechcesz zmienić więcej ustawień, odwiedź <1>sekcję administratora</1>; znajdziesz ją w menu strony.
     good_luck: "Baw się dobrze i powodzenia!"
@@ -1408,7 +1415,7 @@ ui:
     branding: Marka
     legal: Prawne
     write: Pisanie
-    tos: Warunki korzystania
+    tos: Warunki korzystania z usługi
     privacy: Prywatność
     seo: SEO
     customize: Dostosowywanie
@@ -1428,7 +1435,7 @@ ui:
       title: Administrator
     dashboard:
       title: Panel
-      welcome: Welcome to Admin!
+      welcome: Witaj Administratorze!
       site_statistics: Statystyki witryny
       questions: "Pytania:"
       answers: "Odpowiedzi:"
@@ -1452,7 +1459,7 @@ ui:
       database_size: "Wielkość bazy danych:"
       storage_used: "Wykorzystane miejsce:"
       uptime: "Czas pracy:"
-      links: Links
+      links: Linki
       plugins: Wtyczki
       github: GitHub
       blog: Blog
@@ -1498,18 +1505,21 @@ ui:
       btn_cancel: Anuluj
       btn_submit: Prześlij
     edit_profile_modal:
-      title: Edit profile
+      title: Edytuj profil
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
-            label: Username
+            label: Nazwa
             msg_range: Username up to 30 characters.
           email:
             label: Email
-            msg_invalid: Invalid Email Address.
-      edit_success: Edited successfully
-      btn_cancel: Cancel
-      btn_submit: Submit
+            msg_invalid: Błędny adresy email.
+      edit_success: Edycja zakończona pomyślnie
+      btn_cancel: Anuluj
+      btn_submit: Prześlij
     user_modal:
       title: Dodaj nowego użytkownika
       form:
@@ -1555,7 +1565,7 @@ ui:
       filter:
         placeholder: "Filtruj według imienia, użytkownik:id"
       set_new_password: Ustaw nowe hasło
-      edit_profile: Edit profile
+      edit_profile: Edytuj profil
       change_status: Zmień status
       change_role: Zmień rolę
       show_logs: Pokaż logi
@@ -1582,7 +1592,7 @@ ui:
       status: Status
       action: Akcja
       change: Zmień
-      pending: Pending
+      pending: Oczekuje
       filter:
         placeholder: "Filtruj według tytułu, pytanie:id"
     answers:
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Pisanie
       restrict_answer:
-        title: Ogranicz odpowiedź
+        title: Answer write
         label: Każdy użytkownik może napisać tylko jedną odpowiedź na każde pytanie
-        text: "Mogą użyć linku edycji, aby udoskonalić i ulepszyć swoją istniejącą odpowiedź."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Rekomendowane tagi
-        text: "Proszę wpisać tutaj tag slug, jeden tag na linię."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Wymagany tag
-        label: Ustaw rekomendowany tag jako wymagany
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Każde nowe pytanie musi mieć przynajmniej jeden rekomendowany tag."
       reserved_tags:
         label: Zarezerwowane tagi
-        text: "Zarezerwowane tagi mogą być dodane do postu tylko przez moderatora."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:

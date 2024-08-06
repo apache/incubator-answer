@@ -3,6 +3,7 @@
 *.rej
 *.so
 *~
+*.db
 .DS_Store
 ._*
 /.idea

@@ -35,9 +35,9 @@ const Index: FC = () => {
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
         <Col lg={6}>
-          <WelcomeTitle className="mt-3 mb-5" />
           {location.pathname?.includes('success') && (
             <>
+              <WelcomeTitle className="mt-3 mb-5" />
               <p className="text-center">{t('success')}</p>
               <div className="text-center">
                 <Link to="/">{t('link')}</Link>
@@ -46,7 +46,21 @@ const Index: FC = () => {
           )}
 
           {location.pathname?.includes('failed') && (
-            <p className="text-center">{t('invalid')}</p>
+            <div className="d-flex flex-column flex-shrink-1 flex-grow-1 justify-content-center align-items-center">
+              <div
+                className="mb-4 text-secondary"
+                style={{ fontSize: '120px', lineHeight: 1.2 }}>
+                (=‘x‘=)
+              </div>
+
+              <h4 className="text-center">{t('oops')}</h4>
+              <p className="text-center mb-3 fs-5">{t('invalid')}</p>
+              <div className="text-center">
+                <Link to="/" className="btn btn-link">
+                  {t('back_home', { keyPrefix: 'page_error' })}
+                </Link>
+              </div>
+            </div>
           )}
         </Col>
       </Row>

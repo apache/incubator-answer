@@ -63,6 +63,7 @@ type ReviewService struct {
 	answerRepo                       answercommon.AnswerRepo
 	userRoleService                  *role.UserRoleRelService
 	tagCommon                        *tagcommon.TagCommonService
+	questionCommon                   *questioncommon.QuestionCommon
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
 	notificationQueueService         notice_queue.NotificationQueueService
 	siteInfoService                  siteinfo_common.SiteInfoCommonService
@@ -79,6 +80,7 @@ func NewReviewService(
 	userRoleService *role.UserRoleRelService,
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	tagCommon *tagcommon.TagCommonService,
+	questionCommon *questioncommon.QuestionCommon,
 	notificationQueueService notice_queue.NotificationQueueService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *ReviewService {
@@ -92,6 +94,7 @@ func NewReviewService(
 		userRoleService:                  userRoleService,
 		externalNotificationQueueService: externalNotificationQueueService,
 		tagCommon:                        tagCommon,
+		questionCommon:                   questionCommon,
 		notificationQueueService:         notificationQueueService,
 		siteInfoService:                  siteInfoService,
 	}
@@ -294,6 +297,12 @@ func (cs *ReviewService) updateObjectStatus(ctx context.Context, review *entity.
 		if isApprove {
 			cs.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, answerInfo.ID,
 				answerInfo.UserID, questionInfo.Title, answerInfo.OriginalText)
+		}
+		if err := cs.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID); err != nil {
+			log.Errorf("update question answer count failed, err: %v", err)
+		}
+		if err := cs.questionCommon.UpdateLastAnswer(ctx, answerInfo.QuestionID, uid.DeShortID(answerInfo.ID)); err != nil {
+			log.Errorf("update question last answer failed, err: %v", err)
 		}
 		userAnswerCount, err := cs.answerRepo.GetCountByUserID(ctx, answerInfo.UserID)
 		if err != nil {

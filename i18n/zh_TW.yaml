@@ -414,6 +414,13 @@ backend:
         other: 修改於
     deleted_title:
       other: Deleted question
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: 刪除標籤
       tip_with_posts: >-
-        <p>我們不允許<strong>刪除帶有貼文的標籤</strong>。</p> <p>請先從該貼文中刪除此標籤。</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>我們不允許<strong>刪除帶有同義詞的標籤</strong>。</p> <p>請先從該標籤中刪除同義詞。</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: 你確定要刪除嗎？
       close: 關閉
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: 你的帳號已通過驗證，即將返回首頁。
     link: 繼續訪問主頁
-    invalid: >-
-      抱歉，此驗證連結已失效。也許是你的帳號已經通過驗證了？
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: 你的電子郵箱已更新
     confirm_new_email_invalid: >-
       抱歉，此驗證連結已失效。也許是你的郵箱已經成功更改了？
@@ -1249,7 +1256,7 @@ ui:
     answers: 回答
     newest: 最新的
     active: 活躍的
-    frequent: 瀏覽量
+    hot: 熱門
     score: 評分
     unanswered: 未回答
     modified: 修改於
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: 編輯
       restrict_answer:
-        title: Restrict answer
+        title: Answer write
         label: Each user can only write one answer for each question
-        text: "關閉此功能以允許使用者對同一問題撰寫多個答案，可能導致答案不集中。"
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
-        text: "請在上方輸入標籤固定連結，每行一個標籤。"
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Required tag
-        label: 根據需要設置推薦標籤
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "每個新問題必須至少有一個推薦標籤。"
       reserved_tags:
         label: Reserved tags
-        text: "保留的標籤只能由版主加入到一個貼文中。"
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: 搜尋引擎優化
       permalink:

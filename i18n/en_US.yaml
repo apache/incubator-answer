@@ -415,6 +415,13 @@ backend:
         other: modified
     deleted_title:
       other: Deleted question
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+       other: The tag has no description.
   notification:
     action:
       update_question:
@@ -754,10 +761,10 @@ ui:
     delete:
       title: Delete this tag
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p>
         <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p>
         <p>Please remove the synonyms from this tag first.</p>
       tip: Are you sure you wish to delete?
       close: Close
@@ -1258,9 +1265,8 @@ ui:
   account_result:
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
-    invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your
-      account is already active?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Your email has been updated.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was
@@ -1283,7 +1289,7 @@ ui:
     answers: Answers
     newest: Newest
     active: Active
-    frequent: Frequent
+    hot: Hot
     score: Score
     unanswered: Unanswered
     modified: modified
@@ -1541,6 +1547,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1740,19 +1749,21 @@ ui:
     write:
       page_title: Write
       restrict_answer:
-        title: Restrict answer
+        title: Answer write
         label: Each user can only write one answer for the same question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
-        text: "Please input tag slug above, one tag per line."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Required tag
-        label: Set recommend tag as required
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Every new question must have at least one recommend tag."
       reserved_tags:
         label: Reserved tags
-        text: "Reserved tags can only be added to a post by moderator."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:

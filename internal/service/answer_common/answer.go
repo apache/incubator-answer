@@ -49,6 +49,7 @@ type AnswerRepo interface {
 	UpdateAnswerStatus(ctx context.Context, answerID string, status int) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
 	RemoveAllUserAnswer(ctx context.Context, userID string) (err error)
+	SumVotesByQuestionID(ctx context.Context, questionID string) (float64, error)
 }
 
 // AnswerCommon user service

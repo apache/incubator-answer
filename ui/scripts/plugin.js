@@ -24,8 +24,7 @@ const pluginPath = path.join(__dirname, '../src/plugins');
 const pluginFolders = fs.readdirSync(pluginPath);
 
 function pascalize(str) {
-  return str.replace(/\b\w/g, (match) => match.toUpperCase())
-    .replace(/[-_\s]+/g, '');
+  return str.split(/[_-]/).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('');
 }
 
 function resetPackageJson() {
@@ -93,7 +92,6 @@ pluginFolders.forEach((folder) => {
     }
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
-
 
     addPluginToPackageJson(packageName);
     addPluginToIndexTs(packageName);

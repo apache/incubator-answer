@@ -290,7 +290,7 @@ export interface LangsType {
 export type QuestionOrderBy =
   | 'newest'
   | 'active'
-  | 'frequent'
+  | 'hot'
   | 'score'
   | 'unanswered';
 
@@ -425,9 +425,9 @@ export interface AdminSettingsLegal {
 
 export interface AdminSettingsWrite {
   restrict_answer?: boolean;
-  recommend_tags?: string[];
-  required_tag?: string;
-  reserved_tags?: string[];
+  recommend_tags?: Tag[];
+  required_tag?: boolean;
+  reserved_tags?: Tag[];
 }
 
 export interface AdminSettingsSeo {

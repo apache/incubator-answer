@@ -76,9 +76,16 @@
             name="twitter:image"
             content="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}{{$.baseURL}}/favicon.ico{{end}}"}
     />
+    <meta name="go-template">
+    <!--customize_head-->
+    {{if .HeadCode }} {{.HeadCode | templateHTML}} {{end}}
+    <!--customize_head-->
   </head>
 
   <body>
+    <!--customize_header-->
+    {{if .HeaderCode }} {{.HeaderCode | templateHTML}} {{end}}
+    <!--customize_header-->
     <div id="root">
 
       <div id="spin-mask">

@@ -138,7 +138,7 @@ backend:
   pass:
     other: رمز
   original_text:
-    other: This post
+    other: پست جاری
   email_or_password_wrong_error:
     other: ایمیل و رمز وارد شده صحیح نیست.
   error:
@@ -414,6 +414,13 @@ backend:
         other: تغییر یافته
     deleted_title:
       other: سوال حذف شده
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: این برچسب حذف شود
       tip_with_posts: >-
-        <p>ما به <strong>حذف برچسب دارای پست‌ها</strong> اجازه حذف نمی‌دهیم.</p> <p>لطفاً ابتدا این برچسب را از پست‌ها حذف کنید.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>ما اجازه <strong>حذف برچسب دارای مترادف</strong> را نمی‌دهیم.</p> <p>لطفاً ابتدا مترادف ها را از این برچسب حذف کنید.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: مطمئنید که میخواهید حذف شود?
       close: بستن
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: اکانت جدید شما تایید شده است، به صفحه خانه منتقل خواهید شد.
     link: ادامه بدهید تا به صفحه خانه برسید
-    invalid: >-
-      متاسفیم، لینک تایید این حساب دیگر مجاز نیست. شاید حساب شما از قبل فعال شده است?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: ایمیل شما به‌روز شده است.
     confirm_new_email_invalid: >-
       متاسفیم، لینک تایید دیگر مجاز نیست. شاید حساب شما از قبل فعال شده است?
@@ -1249,7 +1256,7 @@ ui:
     answers: پاسخ ها
     newest: جدیدترین
     active: فعال
-    frequent: پرتکرار
+    hot: Hot
     score: امتیاز
     unanswered: بدون پاسخ
     modified: تغییر یافته
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: نوشتن
       restrict_answer:
-        title: Restrict answer
+        title: Answer write
         label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
-        text: "Please input tag slug above, one tag per line."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Required tag
-        label: Set recommend tag as required
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Every new question must have at least one recommend tag."
       reserved_tags:
         label: Reserved tags
-        text: "Reserved tags can only be added to a post by moderator."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: بهینه‌سازی عملیات موتورهای جستجو
       permalink:
@@ -1855,7 +1867,7 @@ ui:
     flag_user_type: Flagged this user as {{ type }}.
     edit_post: Edit post
     list_post: List post
-    unlist_post: Unlist post
+    unlist_post: پست فهرست نشده
   timeline:
     undeleted: undeleted
     deleted: deleted

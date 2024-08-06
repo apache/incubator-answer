@@ -414,6 +414,13 @@ backend:
         other: upravený
     deleted_title:
       other: Deleted question
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Odstrániť túto značku
       tip_with_posts: >-
-        <p>Nepovoľujeme <strong>odstraňovať značku s príspevkami</strong>.</p> <p>Najskôr odstráňte túto značku z príspevkov.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Nepovoľujeme <strong>odstraňovať značku so synonymami</strong>.</p> <p>Najskôr odstráňte z tejto značky synonymá.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Naozaj chcete odstrániť?
       close: Zavrieť
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Váš nový účet je potvrdený; Budete presmerovaný na domovskú stránku.
     link: Pokračovať na domovskú stránku
-    invalid: >-
-      Ospravedlňujeme sa, tento odkaz na potvrdenie účtu už nie je platný. Váš profil už možno je aktívny.
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: Váš e-mail bol aktualizovaný.
     confirm_new_email_invalid: >-
       Ospravedlňujeme sa, tento potvrdzovací odkaz už nie je platný. Váš e-mail je už môžno zmenený.
@@ -1249,7 +1256,7 @@ ui:
     answers: Odpovede
     newest: Najnovšie
     active: Aktívne
-    frequent: Časté
+    hot: Hot
     score: Skóre
     unanswered: Nezodpovedané
     modified: upravené
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Písať
       restrict_answer:
-        title: Restrict answer
+        title: Answer write
         label: Each user can only write one answer for each question
-        text: "They can use the edit link to refine and improve their existing answer, instead."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
-        text: "Vyššie zadajte tag slug, jednu značku na riadok."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Required tag
-        label: Nastavte odporúčanú značku podľa potreby
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Každá nová otázka musí mať aspoň jedenu odporúčaciu značku."
       reserved_tags:
         label: Reserved tags
-        text: "Vyhradené štítky môže k príspevku pridať iba moderátor."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:

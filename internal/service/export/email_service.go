@@ -51,7 +51,7 @@ type EmailService struct {
 
 // EmailRepo email repository
 type EmailRepo interface {
-	SetCode(ctx context.Context, code, content string, duration time.Duration) error
+	SetCode(ctx context.Context, userID, code, content string, duration time.Duration) error
 	VerifyCode(ctx context.Context, code string) (content string, err error)
 }
 
@@ -89,30 +89,32 @@ func (e *EmailConfig) IsTLS() bool {
 }
 
 // SaveCode save code
-func (es *EmailService) SaveCode(ctx context.Context, code, codeContent string) {
-	err := es.emailRepo.SetCode(ctx, code, codeContent, 10*time.Minute)
+func (es *EmailService) SaveCode(ctx context.Context, userID, code, codeContent string) {
+	err := es.emailRepo.SetCode(ctx, userID, code, codeContent, constant.UserEmailCodeCacheTime)
 	if err != nil {
 		log.Error(err)
 	}
 }
 
 // SendAndSaveCode send email and save code
-func (es *EmailService) SendAndSaveCode(ctx context.Context, toEmailAddr, subject, body, code, codeContent string) {
-	es.Send(ctx, toEmailAddr, subject, body)
-	err := es.emailRepo.SetCode(ctx, code, codeContent, 10*time.Minute)
+func (es *EmailService) SendAndSaveCode(ctx context.Context, userID, toEmailAddr, subject, body, code, codeContent string) {
+	err := es.emailRepo.SetCode(ctx, userID, code, codeContent, constant.UserEmailCodeCacheTime)
 	if err != nil {
 		log.Error(err)
+		return
 	}
+	es.Send(ctx, toEmailAddr, subject, body)
 }
 
 // SendAndSaveCodeWithTime send email and save code
 func (es *EmailService) SendAndSaveCodeWithTime(
-	ctx context.Context, toEmailAddr, subject, body, code, codeContent string, duration time.Duration) {
-	es.Send(ctx, toEmailAddr, subject, body)
-	err := es.emailRepo.SetCode(ctx, code, codeContent, duration)
+	ctx context.Context, userID, toEmailAddr, subject, body, code, codeContent string, duration time.Duration) {
+	err := es.emailRepo.SetCode(ctx, userID, code, codeContent, duration)
 	if err != nil {
 		log.Error(err)
+		return
 	}
+	es.Send(ctx, toEmailAddr, subject, body)
 }
 
 // Send email send
@@ -326,7 +328,7 @@ func (es *EmailService) NewQuestionTemplate(ctx context.Context, raw *schema.New
 }
 
 func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, err error) {
-	emailConf, err := es.configService.GetStringValue(ctx, "email.config")
+	emailConf, err := es.configService.GetStringValue(ctx, constant.EmailConfigKey)
 	if err != nil {
 		return nil, err
 	}
@@ -342,5 +344,5 @@ func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, er
 // SetEmailConfig set email config
 func (es *EmailService) SetEmailConfig(ctx context.Context, ec *EmailConfig) (err error) {
 	data, _ := json.Marshal(ec)
-	return es.configService.UpdateConfig(ctx, "email.config", string(data))
+	return es.configService.UpdateConfig(ctx, constant.EmailConfigKey, string(data))
 }

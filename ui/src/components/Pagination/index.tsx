@@ -22,7 +22,7 @@ import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-import { scrollToDocTop, floppyNavigation } from '@/utils';
+import { floppyNavigation } from '@/utils';
 
 interface Props {
   currentPage: number;
@@ -71,7 +71,6 @@ const PageItem = ({ page, currentPage, path }: PageItemProps) => {
           e.preventDefault();
           e.stopPropagation();
           navigate(path);
-          scrollToDocTop();
         }
       }}>
       {page}
@@ -115,7 +114,6 @@ const Index: FC<Props> = ({
             if (floppyNavigation.shouldProcessLinkClick(e)) {
               e.preventDefault();
               navigate(handleParams(currentPage - 1));
-              scrollToDocTop();
             }
           }}>
           {t('prev')}
@@ -212,7 +210,6 @@ const Index: FC<Props> = ({
             if (floppyNavigation.shouldProcessLinkClick(e)) {
               e.preventDefault();
               navigate(handleParams(currentPage + 1));
-              scrollToDocTop();
             }
           }}>
           {t('next')}

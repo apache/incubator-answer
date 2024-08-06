@@ -414,6 +414,13 @@ backend:
         other: modificat
     deleted_title:
       other: Întrebare ștearsă
+    questions_title:
+      other: Questions
+  tag:
+    tags_title:
+      other: Tags
+    no_description:
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -743,9 +750,9 @@ ui:
     delete:
       title: Șterge această etichetă
       tip_with_posts: >-
-        <p>Nu este permisă ștergerea etichetei <strong>cu postările</strong>.</p> <p>vă rugăm să eliminați mai întâi această etichetă din postări.</p>
+        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
-        <p>Nu este permisă ștergerea etichetei <strong>cu postările</strong>.</p> <p>vă rugăm să eliminați mai întâi această etichetă din postări.</p>
+        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Sunteţi sigur că doriţi să ştergeţi?
       close: Închide
   edit_tag:
@@ -1226,8 +1233,8 @@ ui:
   account_result:
     success: Noul tău cont este confirmat; vei fi redirecționat către pagina de pornire.
     link: Continuă la pagina principală
-    invalid: >-
-      Ne pare rău, acest link de confirmare a contului nu mai este valabil. Poate că contul dvs. este deja activ?
+    oops: Oops!
+    invalid: The link you used no longer works.
     confirm_new_email: E-mailul dvs. a fost actualizat.
     confirm_new_email_invalid: >-
       Ne pare rău, acest link de confirmare nu mai este valabil. Poate că e-mailul dvs. a fost deja modificat?
@@ -1249,7 +1256,7 @@ ui:
     answers: Răspunsuri
     newest: Cele mai noi
     active: Activ
-    frequent: Frecvent
+    hot: Hot
     score: Scor
     unanswered: Fără răspuns
     modified: modificat
@@ -1501,6 +1508,9 @@ ui:
       title: Edit profile
       form:
         fields:
+          display_name:
+            label: Display name
+            msg_range: Display name up to 30 characters.
           username:
             label: Username
             msg_range: Username up to 30 characters.
@@ -1700,19 +1710,21 @@ ui:
     write:
       page_title: Scrie
       restrict_answer:
-        title: Restricționare răspuns
+        title: Answer write
         label: Fiecare utilizator poate scrie doar câte un răspuns pentru fiecare întrebare
-        text: "Ei pot folosi link-ul de editare pentru a rafina și îmbunătăți răspunsul existent, în schimb."
+        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Etichete recomandate
-        text: "Vă rugăm să introduceți eticheta slug mai sus, câte o etichetă pe linie."
+        text: "Recommend tags will show in the dropdown list by default."
+        msg:
+          contain_reserved: "recommended tags cannot contain reserved tags"
       required_tag:
-        title: Etichetă necesară
-        label: Setează eticheta recomandată ca necesară
+        title: Set required tags
+        label: Set “Recommend tags” as required tags
         text: "Fiecare întrebare nouă trebuie să aibă cel puțin o etichetă recomandată."
       reserved_tags:
         label: Etichete rezervate
-        text: "Etichetele rezervate pot fi adăugate la un post doar de moderator."
+        text: "Reserved tags can only be used by moderator."
     seo:
       page_title: SEO
       permalink:

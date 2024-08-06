@@ -98,7 +98,6 @@ func (r *DangerousHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegis
 	reg.Register(ast.KindRawHTML, r.renderRawHTML)
 	reg.Register(ast.KindLink, r.renderLink)
 	reg.Register(ast.KindAutoLink, r.renderAutoLink)
-
 }
 
 func (r *DangerousHTMLRenderer) renderRawHTML(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -136,7 +135,6 @@ func (r *DangerousHTMLRenderer) renderHTMLBlock(w util.BufWriter, source []byte,
 }
 
 func (r *DangerousHTMLRenderer) renderLink(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
-
 	n := node.(*ast.Link)
 	if entering && r.renderLinkIsUrl(string(n.Destination)) {
 		_, _ = w.WriteString("<a href=\"")
@@ -186,5 +184,7 @@ func (r *DangerousHTMLRenderer) renderAutoLink(w util.BufWriter, source []byte, 
 }
 
 func (r *DangerousHTMLRenderer) renderLinkIsUrl(verifyUrl string) bool {
-	return govalidator.IsURL(verifyUrl)
+	isURL := govalidator.IsURL(verifyUrl)
+	isPath, _ := regexp.MatchString(`^/`, verifyUrl)
+	return isURL || isPath
 }

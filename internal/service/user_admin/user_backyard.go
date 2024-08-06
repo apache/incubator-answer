@@ -391,6 +391,7 @@ func (us *UserAdminService) EditUserProfile(ctx context.Context, req *schema.Edi
 
 	user := &entity.User{}
 	user.ID = req.UserID
+	user.DisplayName = req.DisplayName
 	user.Username = req.Username
 	user.EMail = req.Email
 	user.MailStatus = entity.EmailStatusAvailable
@@ -513,7 +514,7 @@ func (us *UserAdminService) setUserRoleInfo(ctx context.Context, resp []*schema.
 
 func (us *UserAdminService) GetUserActivation(ctx context.Context, req *schema.GetUserActivationReq) (
 	resp *schema.GetUserActivationResp, err error) {
-	user, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -527,11 +528,11 @@ func (us *UserAdminService) GetUserActivation(ctx context.Context, req *schema.G
 	}
 
 	data := &schema.EmailCodeContent{
-		Email:  user.EMail,
-		UserID: user.ID,
+		Email:  userInfo.EMail,
+		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	us.emailService.SaveCode(ctx, code, data.ToJSONString())
+	us.emailService.SaveCode(ctx, userInfo.ID, code, data.ToJSONString())
 	resp = &schema.GetUserActivationResp{
 		ActivationURL: fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code),
 	}
@@ -540,7 +541,7 @@ func (us *UserAdminService) GetUserActivation(ctx context.Context, req *schema.G
 
 // SendUserActivation send user activation email
 func (us *UserAdminService) SendUserActivation(ctx context.Context, req *schema.SendUserActivationReq) (err error) {
-	user, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -554,17 +555,16 @@ func (us *UserAdminService) SendUserActivation(ctx context.Context, req *schema.
 	}
 
 	data := &schema.EmailCodeContent{
-		Email:  user.EMail,
-		UserID: user.ID,
+		Email:  userInfo.EMail,
+		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	us.emailService.SaveCode(ctx, code, data.ToJSONString())
 
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
 	}
-	go us.emailService.SendAndSaveCode(ctx, user.EMail, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, userInfo.ID, userInfo.EMail, title, body, code, data.ToJSONString())
 	return nil
 }
