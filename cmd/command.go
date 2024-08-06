@@ -120,6 +120,9 @@ To run answer, use:
 					fmt.Println("connect to database successfully and table already exists, do nothing.")
 					return
 				}
+				if len(os.Getenv("SKIP_INIT")) > 0 {
+					return
+				}
 			}
 
 			// start installation server to install
