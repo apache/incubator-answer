@@ -68,7 +68,7 @@ env:
 
 # Configure extra containers
 extraContainers: []
-  # - name: cloudsql-proxy 
+  # - name: cloudsql-proxy
   #   image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.1.2
   #   command:
   #     - /cloud-sql-proxy
@@ -91,6 +91,12 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
   annotations: {}
+  # To restore a PVC from a VolumeSnapshot, set the dataSource;
+  # the kind and apiGroup are optional and default to the shown values
+  dataSource: {}
+    # name: my-volume-snapshot
+    # kind: VolumeSnapshot
+    # apiGroup: snapshot.storage.k8s.io
 
 imagePullSecrets: []
 nameOverride: ""
