@@ -21,6 +21,7 @@ import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
 
+import { CardBadge } from '@/components';
 import TopList from '../TopList';
 
 interface Props {
@@ -54,7 +55,7 @@ const Index: FC<Props> = ({ visible, introduction, data }) => {
             </>
           )}
         </Col>
-        <Col sm={12} md={6} className="mb-4">
+        <Col sm={12} md={6}>
           {data?.question?.length > 0 && (
             <>
               <h5 className="mb-3">{t('top_questions')}</h5>
@@ -63,6 +64,15 @@ const Index: FC<Props> = ({ visible, introduction, data }) => {
           )}
         </Col>
       </Row>
+
+      <div className="mb-5">
+        <h5 className="mb-3">{t('recent_badges')}</h5>
+        <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+          {[0, 1, 2, 3, 4, 5, 6].map((item) => {
+            return <CardBadge data={item} badgePill />;
+          })}
+        </div>
+      </div>
     </div>
   );
 };

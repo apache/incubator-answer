@@ -1598,6 +1598,7 @@ ui:
     x_votes: votes received
     x_answers: answers
     x_questions: questions
+    recent_badges: Recent Badges
   install:
     title: Installation
     next: Next
