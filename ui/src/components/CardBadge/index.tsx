@@ -27,9 +27,10 @@ import './index.scss';
 interface IProps {
   data: any;
   badgePill: boolean;
+  showAwardedCount?: boolean;
 }
 
-const Index: FC<IProps> = ({ data, badgePill }) => {
+const Index: FC<IProps> = ({ data, badgePill, showAwardedCount = false }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
   console.log(data);
   return (
@@ -40,9 +41,11 @@ const Index: FC<IProps> = ({ data, badgePill }) => {
         </Badge>
         <img src="" width={96} height={96} alt="" />
         <h6 className="mb-0 mt-3 text-center">Nice Question</h6>
-        <div className="small text-secondary">
-          {t('x_awarded', { number: formatCount(16) })}
-        </div>
+        {showAwardedCount && (
+          <div className="small text-secondary">
+            {t('x_awarded', { number: formatCount(16) })}
+          </div>
+        )}
       </Card.Body>
     </Card>
   );
