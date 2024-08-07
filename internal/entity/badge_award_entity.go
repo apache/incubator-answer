@@ -37,3 +37,13 @@ type BadgeAward struct {
 func (BadgeAward) TableName() string {
 	return "badge_award"
 }
+
+type BadgeEarnedCount struct {
+	BadgeID     string `xorm:"badge_id"`
+	EarnedCount int    `xorm:"earned_count"`
+}
+
+// TableName badge_award table name
+func (BadgeEarnedCount) TableName() string {
+	return "badge_award"
+}

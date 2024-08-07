@@ -55,6 +55,7 @@ type AnswerAPIRouter struct {
 	userPluginController    *controller.UserPluginController
 	reviewController        *controller.ReviewController
 	metaController          *controller.MetaController
+	badgeController         *controller.BadgeController
 }
 
 func NewAnswerAPIRouter(
@@ -86,6 +87,7 @@ func NewAnswerAPIRouter(
 	userPluginController *controller.UserPluginController,
 	reviewController *controller.ReviewController,
 	metaController *controller.MetaController,
+	badgeController *controller.BadgeController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -116,6 +118,7 @@ func NewAnswerAPIRouter(
 		userPluginController:    userPluginController,
 		reviewController:        reviewController,
 		metaController:          metaController,
+		badgeController:         badgeController,
 	}
 }
 
@@ -187,6 +190,9 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// reaction
 	r.GET("/meta/reaction", a.metaController.GetReaction)
+
+	// badges
+	r.GET("/badges", a.badgeController.GetBadgeList)
 }
 
 func (a *AnswerAPIRouter) RegisterAuthUserWithAnyStatusAnswerAPIRouter(r *gin.RouterGroup) {

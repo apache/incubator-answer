@@ -17,39 +17,24 @@
  * under the License.
  */
 
-package controller
+package badge_group
 
-import "github.com/google/wire"
-
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
-	NewMetaController,
-	NewEmbedController,
-	NewBadgeController,
+import (
+	"context"
+	"github.com/apache/incubator-answer/internal/entity"
 )
+
+type BadgeGroupRepo interface {
+	ListGroups(ctx context.Context) (groups []*entity.BadgeGroup, err error)
+	AddGroup(ctx context.Context, group *entity.BadgeGroup) (err error)
+}
+
+type BadgeGroupService struct {
+	badgeGroupRepo BadgeGroupRepo
+}
+
+func NewBadgeGroupService(badgeGroupRepo BadgeGroupRepo) *BadgeGroupService {
+	return &BadgeGroupService{
+		badgeGroupRepo: badgeGroupRepo,
+	}
+}

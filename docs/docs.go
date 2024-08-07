@@ -2239,6 +2239,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/badges": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "list all badges group by group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "list all badges group by group",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetBadgeListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/collection/switch": {
             "post": {
                 "security": [
@@ -4410,7 +4453,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetTagResp"
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
                                             }
                                         }
                                     }
@@ -5380,7 +5423,7 @@ const docTemplate = `{
         },
         "/answer/api/v1/tags": {
             "get": {
-                "description": "get tags list",
+                "description": "get tags list by slug name",
                 "produces": [
                     "application/json"
                 ],
@@ -5404,7 +5447,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -7327,6 +7385,26 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.BadgeListInfo": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "type": "integer"
+                },
+                "earned": {
+                    "type": "boolean"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.CloseQuestionReq": {
             "type": "object",
             "required": [
@@ -7575,6 +7653,20 @@ const docTemplate = `{
                 "is_followed": {
                     "description": "if user is followed object will be true,otherwise false",
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.GetBadgeListResp": {
+            "type": "object",
+            "properties": {
+                "badges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.BadgeListInfo"
+                    }
+                },
+                "group_name": {
+                    "type": "string"
                 }
             }
         },
@@ -8238,6 +8330,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetTagBasicResp": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
+                "slug_name": {
                     "type": "string"
                 }
             }
@@ -9819,7 +9928,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9828,7 +9937,7 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
@@ -9842,7 +9951,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9851,11 +9960,25 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteTag": {
+            "type": "object",
+            "required": [
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
                 }
             }
         },

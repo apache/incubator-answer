@@ -40,6 +40,9 @@ import (
 	"github.com/apache/incubator-answer/internal/repo/activity_common"
 	"github.com/apache/incubator-answer/internal/repo/answer"
 	"github.com/apache/incubator-answer/internal/repo/auth"
+	"github.com/apache/incubator-answer/internal/repo/badge"
+	"github.com/apache/incubator-answer/internal/repo/badge_award"
+	"github.com/apache/incubator-answer/internal/repo/badge_group"
 	"github.com/apache/incubator-answer/internal/repo/captcha"
 	"github.com/apache/incubator-answer/internal/repo/collection"
 	"github.com/apache/incubator-answer/internal/repo/comment"
@@ -71,6 +74,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
 	"github.com/apache/incubator-answer/internal/service/answer_common"
 	auth2 "github.com/apache/incubator-answer/internal/service/auth"
+	badge2 "github.com/apache/incubator-answer/internal/service/badge"
 	collection2 "github.com/apache/incubator-answer/internal/service/collection"
 	"github.com/apache/incubator-answer/internal/service/collection_common"
 	comment2 "github.com/apache/incubator-answer/internal/service/comment"
@@ -253,7 +257,12 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reviewController := controller.NewReviewController(reviewService, rankService, captchaService)
 	metaService := meta2.NewMetaService(metaCommonService, userCommon, answerRepo, questionRepo)
 	metaController := controller.NewMetaController(metaService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController, metaController)
+	badgeRepo := badge.NewBadgeRepo(dataData, uniqueIDRepo)
+	badgeGroupRepo := badge_group.NewBadgeGroupRepo(dataData, uniqueIDRepo)
+	badgeAwardRepo := badge_award.NewBadgeAwardRepo(dataData, uniqueIDRepo)
+	badgeService := badge2.NewBadgeService(badgeRepo, badgeGroupRepo, badgeAwardRepo)
+	badgeController := controller.NewBadgeController(badgeService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController, metaController, badgeController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(controllerSiteInfoController, siteInfoCommonService)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)
