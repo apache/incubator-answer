@@ -26,6 +26,9 @@ import (
 	"github.com/apache/incubator-answer/internal/service/activity_queue"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"github.com/apache/incubator-answer/internal/service/auth"
+	"github.com/apache/incubator-answer/internal/service/badge"
+	"github.com/apache/incubator-answer/internal/service/badge_award"
+	"github.com/apache/incubator-answer/internal/service/badge_group"
 	"github.com/apache/incubator-answer/internal/service/collection"
 	collectioncommon "github.com/apache/incubator-answer/internal/service/collection_common"
 	"github.com/apache/incubator-answer/internal/service/comment"
@@ -117,4 +120,7 @@ var ProviderSetService = wire.NewSet(
 	notice_queue.NewNewQuestionNotificationQueueService,
 	review.NewReviewService,
 	meta.NewMetaService,
+	badge.NewBadgeService,
+	badge_award.NewBadgeAwardService,
+	badge_group.NewBadgeGroupService,
 )

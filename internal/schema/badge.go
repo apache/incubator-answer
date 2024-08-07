@@ -17,39 +17,18 @@
  * under the License.
  */
 
-package controller
+package schema
 
-import "github.com/google/wire"
+// BadgeListInfo get badge list response
+type BadgeListInfo struct {
+	ID         string `json:"id" `
+	Name       string `json:"name" `
+	Icon       string `json:"icon" `
+	AwardCount int    `json:"award_count" `
+	Earned     bool   `json:"earned" `
+}
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
-	NewMetaController,
-	NewEmbedController,
-	NewBadgeController,
-)
+type GetBadgeListResp struct {
+	Badges    []*BadgeListInfo `json:"badges" `
+	GroupName string           `json:"group_name" `
+}
