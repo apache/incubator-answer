@@ -219,7 +219,7 @@ func MakeTranslator(key string) Translator {
 
 // Translate translates the key to the current language of the context
 func (t Translator) Translate(ctx *GinContext) string {
-	if &t == nil || t.Fn == nil {
+	if t.Fn == nil {
 		return ""
 	}
 	return t.Fn(ctx)
