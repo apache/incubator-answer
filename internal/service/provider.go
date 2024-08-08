@@ -39,7 +39,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/follow"
 	"github.com/apache/incubator-answer/internal/service/meta"
-	"github.com/apache/incubator-answer/internal/service/meta_common"
+	metacommon "github.com/apache/incubator-answer/internal/service/meta_common"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/notification"
 	notficationcommon "github.com/apache/incubator-answer/internal/service/notification_common"

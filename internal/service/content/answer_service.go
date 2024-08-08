@@ -22,6 +22,7 @@ package content
 import (
 	"context"
 	"encoding/json"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -67,6 +68,7 @@ type AnswerService struct {
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
 	activityQueueService             activity_queue.ActivityQueueService
 	reviewService                    *review.ReviewService
+	eventQueueService                event_queue.EventQueueService
 }
 
 func NewAnswerService(
@@ -86,6 +88,7 @@ func NewAnswerService(
 	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
 	reviewService *review.ReviewService,
+	eventQueueService event_queue.EventQueueService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:                       answerRepo,
@@ -104,6 +107,7 @@ func NewAnswerService(
 		externalNotificationQueueService: externalNotificationQueueService,
 		activityQueueService:             activityQueueService,
 		reviewService:                    reviewService,
+		eventQueueService:                eventQueueService,
 	}
 }
 
@@ -175,6 +179,8 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		OriginalObjectID: answerInfo.ID,
 		ActivityTypeKey:  constant.ActAnswerDeleted,
 	})
+	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerDelete, req.UserID).
+		AID(answerInfo.ID, answerInfo.UserID))
 	return
 }
 
@@ -295,6 +301,8 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionAnswered,
 	})
+	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerCreate, req.UserID).
+		AID(insertData.ID, insertData.UserID))
 	return insertData.ID, nil
 }
 
@@ -383,6 +391,8 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 			ActivityTypeKey:  constant.ActAnswerEdited,
 			RevisionID:       revisionID,
 		})
+		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerUpdate, req.UserID).
+			AID(insertData.ID, insertData.UserID))
 	}
 
 	return insertData.ID, nil
@@ -435,6 +445,9 @@ func (as *AnswerService) AcceptAnswer(ctx context.Context, req *schema.AcceptAns
 		}
 		oldAnswerInfo.ID = uid.DeShortID(oldAnswerInfo.ID)
 	}
+
+	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionAccept, req.UserID).
+		QID(questionInfo.ID, questionInfo.UserID).AID(req.AnswerID, req.UserID))
 
 	as.updateAnswerRank(ctx, req.UserID, questionInfo, acceptedAnswerInfo, oldAnswerInfo)
 	return nil
