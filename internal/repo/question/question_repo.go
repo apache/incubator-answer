@@ -401,6 +401,40 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	return questionList, total, err
 }
 
+// GetRecommendQuestionPageByTags get recommend question page by tags
+func (qr *questionRepo) GetRecommendQuestionPageByTags(ctx context.Context, userID string, tagIDs, followedQuestionIDs []string, page, pageSize int) (
+	questionList []*entity.Question, total int64, err error) {
+	questionList = make([]*entity.Question, 0)
+	idStr := "'" + strings.Join(followedQuestionIDs, "','") + "'"
+	orderBySQL := fmt.Sprintf("CASE WHEN question.id IN (%s) THEN 0 ELSE 1 END, question.pin DESC, question.created_at DESC", idStr)
+
+	// Please Make sure every question has at least one tag
+	session := qr.data.DB.Context(ctx)
+	session.Select(entity.Question{}.TableName()+".*").
+		Where("question.user_id != ? and question.status = ?", userID, entity.QuestionStatusAvailable).
+		And("question.id NOT IN (SELECT question_id FROM answer WHERE user_id = ?)", userID).
+		Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
+		Join("INNER", "tag", "tag.id = tag_rel.tag_id").
+		And("tag_rel.status = ?", entity.TagRelStatusAvailable).
+		In("tag.id", tagIDs).
+		Or(builder.In("question.id", followedQuestionIDs)).
+		Distinct("question.id").
+		OrderBy(orderBySQL)
+
+	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
+	}
+
+	return questionList, total, err
+}
+
 func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error) {
 	var (
 		count   int64

@@ -43,11 +43,13 @@ export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'hot',
   'score',
   'unanswered',
+  'recommend',
 ];
 interface Props {
   source: 'questions' | 'tag';
   order?: Type.QuestionOrderBy;
   data;
+  orderList?: Type.QuestionOrderBy[];
   isLoading: boolean;
 }
 
@@ -55,6 +57,7 @@ const QuestionList: FC<Props> = ({
   source,
   order,
   data,
+  orderList,
   isLoading = false,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
@@ -65,6 +68,7 @@ const QuestionList: FC<Props> = ({
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
   const count = data?.count || 0;
+  const orderKeys = orderList || QUESTION_ORDER_KEYS;
 
   return (
     <div>
@@ -75,7 +79,7 @@ const QuestionList: FC<Props> = ({
             : t('x_questions', { count })}
         </h5>
         <QueryGroup
-          data={QUESTION_ORDER_KEYS}
+          data={orderKeys}
           currentSort={curOrder}
           pathname={source === 'questions' ? '/questions' : ''}
           i18nKeyPrefix="question"

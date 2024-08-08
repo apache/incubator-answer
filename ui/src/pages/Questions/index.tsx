@@ -34,7 +34,7 @@ import {
   loggedUserInfoStore,
   loginSettingStore,
 } from '@/stores';
-import { useQuestionList } from '@/services';
+import { useQuestionList, useQuestionRecommendList } from '@/services';
 import * as Type from '@/common/interface';
 import { userCenter, floppyNavigation } from '@/utils';
 import { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
@@ -52,7 +52,10 @@ const Questions: FC = () => {
     page: curPage,
     order: curOrder as Type.QuestionOrderBy,
   };
-  const { data: listData, isLoading: listLoading } = useQuestionList(reqParams);
+  const { data: listData, isLoading: listLoading } =
+    curOrder === 'recommend'
+      ? useQuestionRecommendList(reqParams)
+      : useQuestionList(reqParams);
   const isIndexPage = useMatch('/');
   let pageTitle = t('questions', { keyPrefix: 'page_title' });
   let slogan = '';
@@ -71,6 +74,11 @@ const Questions: FC = () => {
           source="questions"
           data={listData}
           order={curOrder}
+          orderList={
+            loggedUser.username
+              ? QUESTION_ORDER_KEYS
+              : QUESTION_ORDER_KEYS.filter((key) => key !== 'recommend')
+          }
           isLoading={listLoading}
         />
       </Col>
