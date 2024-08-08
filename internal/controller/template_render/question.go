@@ -89,6 +89,28 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 	)
 }
 
+func (t *TemplateRenderController) OpenSearch(ctx *gin.Context) {
+	general, err := t.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Error("get site general failed:", err)
+		return
+	}
+
+	favicon := general.SiteUrl + "/favicon.ico"
+	branding, err := t.siteInfoService.GetSiteBranding(ctx)
+	if err == nil && len(branding.Favicon) > 0 {
+		favicon = branding.Favicon
+	}
+
+	ctx.Header("Content-Type", "application/xml")
+	ctx.HTML(
+		http.StatusOK, "opensearch.xml", gin.H{
+			"general": general,
+			"favicon": favicon,
+		},
+	)
+}
+
 func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error {
 	general, err := t.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
