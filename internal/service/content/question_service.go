@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"fmt"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"strings"
 	"time"
 
@@ -84,6 +85,7 @@ type QuestionService struct {
 	newQuestionNotificationService   *notification.ExternalNotificationService
 	reviewService                    *review.ReviewService
 	configService                    *config.ConfigService
+	eventQueueService                event_queue.EventQueueService
 }
 
 func NewQuestionService(
@@ -106,6 +108,7 @@ func NewQuestionService(
 	newQuestionNotificationService *notification.ExternalNotificationService,
 	reviewService *review.ReviewService,
 	configService *config.ConfigService,
+	eventQueueService event_queue.EventQueueService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:                     questionRepo,
@@ -127,6 +130,7 @@ func NewQuestionService(
 		newQuestionNotificationService:   newQuestionNotificationService,
 		reviewService:                    reviewService,
 		configService:                    configService,
+		eventQueueService:                eventQueueService,
 	}
 }
 
@@ -385,6 +389,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		qs.externalNotificationQueueService.Send(ctx,
 			schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
 	}
+	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionCreate, req.UserID).
+		QID(question.ID, question.UserID))
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
@@ -546,6 +552,8 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
 	})
+	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionDelete, req.UserID).
+		QID(questionInfo.ID, questionInfo.UserID))
 	return nil
 }
 
@@ -937,6 +945,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 			RevisionID:       revisionID,
 			OriginalObjectID: question.ID,
 		})
+		qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionUpdate, req.UserID).
+			QID(question.ID, question.UserID))
 	}
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
