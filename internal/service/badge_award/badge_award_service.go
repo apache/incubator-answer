@@ -21,7 +21,17 @@ package badge_award
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
+	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	"github.com/apache/incubator-answer/internal/service/object_info"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/jinzhu/copier"
+	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 	"time"
 )
 
@@ -33,32 +43,98 @@ type BadgeAwardRepo interface {
 	CountByUserId(ctx context.Context, userID string) (awardCount int64)
 	CountByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (awardCount int64)
 	CountByObjectId(ctx context.Context, objectID string) (awardCount int64)
-	CountByObjectIdAndBadgeId(ctx context.Context, objectID string, badgeID string) int64
+	CountByObjectIdAndBadgeId(ctx context.Context, objectID string, badgeID string) (awardCount int64)
 	CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, objectID string, badgeID string) (awardCount int64)
 
 	SumUserEarnedGroupByBadgeID(ctx context.Context, userID string) (earnedCounts []*entity.BadgeEarnedCount, err error)
 
 	ListAllByUserId(ctx context.Context, userID string) (badgeAwards []*entity.BadgeAward)
-	ListPagedByBadgeId(ctx context.Context, badgeID string, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListPagedByObjectId(ctx context.Context, badgeID string, objectID string, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, objectID string, userID string, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListTagPagedByBadgeId(ctx context.Context, badgeIDs []int64, page int64, pageSize int64, filterUserID int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListTagPagedByBadgeIdAndUserId(ctx context.Context, badgeIDs []int64, userID string, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListPagedLatest(ctx context.Context, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int64) (badgeAwards []*entity.BadgeAward, total int64)
-	ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int64, page int64, pageSize int64) (badgeAwards []*entity.BadgeAward, total int64)
+	ListPagedByBadgeId(ctx context.Context, badgeID string, page int, pageSize int) (badgeAwardList []*entity.BadgeAward, total int64, err error)
+	ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListPagedByObjectId(ctx context.Context, badgeID string, objectID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, objectID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListTagPagedByBadgeId(ctx context.Context, badgeIDs []string, page int, pageSize int, filterUserID string) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListTagPagedByBadgeIdAndUserId(ctx context.Context, badgeIDs []string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListPagedLatest(ctx context.Context, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 
 	GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward)
 	GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, objectID string) (badgeAward *entity.BadgeAward)
 }
 
 type BadgeAwardService struct {
-	badgeAwardRepo BadgeAwardRepo
+	badgeAwardRepo    BadgeAwardRepo
+	userCommon        *usercommon.UserCommon
+	objectInfoService *object_info.ObjService
+	questionRepo      questioncommon.QuestionRepo
+	answerRepo        answercommon.AnswerRepo
 }
 
-func NewBadgeAwardService(badgeAwardRepo BadgeAwardRepo) *BadgeAwardService {
+func NewBadgeAwardService(
+	badgeAwardRepo BadgeAwardRepo,
+	userCommon *usercommon.UserCommon,
+	objectInfoService *object_info.ObjService,
+	questionRepo questioncommon.QuestionRepo,
+	answerRepo answercommon.AnswerRepo,
+) *BadgeAwardService {
 	return &BadgeAwardService{
-		badgeAwardRepo: badgeAwardRepo,
+		badgeAwardRepo:    badgeAwardRepo,
+		userCommon:        userCommon,
+		objectInfoService: objectInfoService,
+		questionRepo:      questionRepo,
+		answerRepo:        answerRepo,
 	}
+}
+
+// GetBadgeAwardList get badge award list
+func (b *BadgeAwardService) GetBadgeAwardList(
+	ctx context.Context, req *schema.GetBadgeAwardWithPageReq,
+) (resp []*schema.GetBadgeAwardWithPageResp, total int64, err error) {
+	var (
+		badgeAwardList []*entity.BadgeAward
+	)
+
+	badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeId(ctx, req.BadgeID, req.Page, req.PageSize)
+	if err != nil {
+		return
+	}
+
+	resp = make([]*schema.GetBadgeAwardWithPageResp, 0, len(badgeAwardList))
+
+	for i, badgeAward := range badgeAwardList {
+		objInfo, e := b.objectInfoService.GetInfo(ctx, badgeAward.ObjectID)
+		if e != nil {
+			err = e
+			return
+		}
+		if objInfo.IsDeleted() {
+			err = errors.BadRequest(reason.NewObjectAlreadyDeleted)
+			return
+		}
+
+		row := &schema.GetBadgeAwardWithPageResp{
+			CreatedAt:      badgeAward.CreatedAt.Unix(),
+			ObjectID:       badgeAward.ObjectID,
+			QuestionID:     objInfo.QuestionID,
+			AnswerID:       objInfo.AnswerID,
+			CommentID:      objInfo.CommentID,
+			ObjectType:     objInfo.ObjectType,
+			UrlTitle:       htmltext.UrlTitle(objInfo.Title),
+			AuthorUserInfo: schema.UserBasicInfo{},
+		}
+
+		// get user info
+		userInfo, exists, e := b.userCommon.GetUserBasicInfoByID(ctx, badgeAward.UserID)
+		if e != nil {
+			log.Errorf("user not found by id: %s, err: %v", badgeAward.UserID, e)
+		}
+		if exists {
+			_ = copier.Copy(&row.AuthorUserInfo, userInfo)
+		}
+
+		resp[i] = row
+	}
+
+	return
 }

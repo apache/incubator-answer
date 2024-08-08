@@ -312,6 +312,9 @@ backend:
     site_info:
       config_not_found:
         other: Site config not found.
+    badge:
+      object_not_found:
+        other: Badge object not found
   reason:
     spam:
       name:

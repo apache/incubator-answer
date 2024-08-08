@@ -2239,6 +2239,117 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/badge": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get badge info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get badge info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetBadgeInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge/awards/page": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get badge award list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "badge id",
+                        "name": "badge_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetBadgeInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/badges": {
             "get": {
                 "security": [
@@ -6942,6 +7053,19 @@ const docTemplate = `{
                 }
             }
         },
+        "entity.BadgeLevel": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "BadgeLevelBronze",
+                "BadgeLevelSilver",
+                "BadgeLevelGold"
+            ]
+        },
         "handler.RespBody": {
             "type": "object",
             "properties": {
@@ -7400,6 +7524,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "level": {
+                    "$ref": "#/definitions/entity.BadgeLevel"
+                },
                 "name": {
                     "type": "string"
                 }
@@ -7653,6 +7780,35 @@ const docTemplate = `{
                 "is_followed": {
                     "description": "if user is followed object will be true,otherwise false",
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.GetBadgeInfoResp": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "earned_count": {
+                    "type": "integer"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_single": {
+                    "type": "boolean"
+                },
+                "level": {
+                    "$ref": "#/definitions/entity.BadgeLevel"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

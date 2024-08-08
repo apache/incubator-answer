@@ -106,6 +106,7 @@ const (
 	AddBulkUsersAmountError          = "error.user.add_bulk_users_amount_error"
 	InvalidURLError                  = "error.common.invalid_url"
 	MetaObjectNotFound               = "error.meta.object_not_found"
+	BadgeObjectNotFound              = "error.badge.object_not_found"
 )
 
 // user external login reasons
