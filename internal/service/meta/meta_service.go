@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"strconv"
 	"strings"
 
@@ -46,14 +47,22 @@ type MetaService struct {
 	userCommon        *usercommon.UserCommon
 	questionRepo      questioncommon.QuestionRepo
 	answerRepo        answercommon.AnswerRepo
+	eventQueueService event_queue.EventQueueService
 }
 
-func NewMetaService(metaCommonService *metacommon.MetaCommonService, userCommon *usercommon.UserCommon, answerRepo answercommon.AnswerRepo, questionRepo questioncommon.QuestionRepo) *MetaService {
+func NewMetaService(
+	metaCommonService *metacommon.MetaCommonService,
+	userCommon *usercommon.UserCommon,
+	answerRepo answercommon.AnswerRepo,
+	questionRepo questioncommon.QuestionRepo,
+	eventQueueService event_queue.EventQueueService,
+) *MetaService {
 	return &MetaService{
 		metaCommonService: metaCommonService,
 		questionRepo:      questionRepo,
 		userCommon:        userCommon,
 		answerRepo:        answerRepo,
+		eventQueueService: eventQueueService,
 	}
 }
 
@@ -86,22 +95,27 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 	if err != nil {
 		return nil, err
 	}
+	var event *schema.EventMsg
 	if objectType == constant.AnswerObjectType {
-		_, exist, err := ms.answerRepo.GetAnswer(ctx, req.ObjectID)
+		answerInfo, exist, err := ms.answerRepo.GetAnswer(ctx, req.ObjectID)
 		if err != nil {
 			return nil, err
 		}
 		if !exist {
 			return nil, myErrors.BadRequest(reason.AnswerNotFound)
 		}
+		event = schema.NewEvent(constant.EventAnswerReact, req.UserID).
+			AID(answerInfo.ID, answerInfo.UserID)
 	} else if objectType == constant.QuestionObjectType {
-		_, exist, err := ms.questionRepo.GetQuestion(ctx, req.ObjectID)
+		questionInfo, exist, err := ms.questionRepo.GetQuestion(ctx, req.ObjectID)
 		if err != nil {
 			return nil, err
 		}
 		if !exist {
 			return nil, myErrors.BadRequest(reason.QuestionNotFound)
 		}
+		event = schema.NewEvent(constant.EventQuestionReact, req.UserID).
+			QID(questionInfo.ID, questionInfo.UserID)
 	} else {
 		return nil, myErrors.BadRequest(reason.ObjectNotFound)
 	}
@@ -138,7 +152,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 	if err != nil {
 		return nil, err
 	}
-
+	ms.eventQueueService.Send(ctx, event)
 	return resp, nil
 }
 

@@ -385,7 +385,7 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	case "score":
 		session.OrderBy("question.pin desc,question.vote_count DESC, question.view_count DESC")
 	case "unanswered":
-		session.Where("question.last_answer_id = 0")
+		session.Where("question.answer_count = 0")
 		session.OrderBy("question.pin desc,question.created_at DESC")
 	}
 
