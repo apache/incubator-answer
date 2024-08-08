@@ -21,9 +21,12 @@ import { useTranslation } from 'react-i18next';
 
 import { CardBadge } from '@/components';
 import { usePageTags } from '@/hooks';
+import { useGetAllBadges } from '@/services';
 
 const Index = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
+
+  const { data: badgesList } = useGetAllBadges();
 
   usePageTags({
     title: t('title'),
@@ -32,12 +35,18 @@ const Index = () => {
   return (
     <div className="pt-4 mb-5">
       <h3 className="mb-4">{t('title')}</h3>
-      <h5 className="mb-4">Community Badges</h5>
-      <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
-        {[0, 1, 2, 3, 4, 5, 6].map((item) => {
-          return <CardBadge data={item} badgePill={false} />;
-        })}
-      </div>
+      {badgesList?.map((item) => {
+        return (
+          <div key={item.group_name} className="mb-5">
+            <h5 className="mb-4">{item.group_name}</h5>
+            <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+              {item.badges?.map((badge) => {
+                return <CardBadge data={badge} key={badge.id} />;
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
