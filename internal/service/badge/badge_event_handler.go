@@ -21,6 +21,8 @@ package badge
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/service/badge_award"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/segmentfault/pacman/log"
 
@@ -31,15 +33,28 @@ import (
 type BadgeEventService struct {
 	data              *data.Data
 	eventQueueService event_queue.EventQueueService
+	badgeAwardRepo    badge_award.BadgeAwardRepo
+	badgeRepo         BadgeRepo
+	eventRuleRepo     EventRuleRepo
+}
+
+type EventRuleHandler func(ctx context.Context, event *schema.EventMsg) (awards []*entity.BadgeAward, err error)
+
+type EventRuleRepo interface {
+	HandleEventWithRule(ctx context.Context, msg *schema.EventMsg) (awards []*entity.BadgeAward)
 }
 
 func NewBadgeEventService(
 	data *data.Data,
 	eventQueueService event_queue.EventQueueService,
+	badgeRepo BadgeRepo,
+	eventRuleRepo EventRuleRepo,
 ) *BadgeEventService {
 	n := &BadgeEventService{
 		data:              data,
 		eventQueueService: eventQueueService,
+		badgeRepo:         badgeRepo,
+		eventRuleRepo:     eventRuleRepo,
 	}
 	eventQueueService.RegisterHandler(n.Handler)
 	return n
@@ -47,11 +62,24 @@ func NewBadgeEventService(
 
 func (ns *BadgeEventService) Handler(ctx context.Context, msg *schema.EventMsg) error {
 	log.Debugf("received badge event %+v", msg)
-	// TODO: Check if badge already exists
 
-	// TODO: Check rule
+	awards := ns.eventRuleRepo.HandleEventWithRule(ctx, msg)
+	if len(awards) == 0 {
+		return nil
+	}
 
-	// TODO: Distribute badge
+	badgeIDs := make([]string, 0)
+	for _, award := range awards {
+		badgeIDs = append(badgeIDs, award.BadgeID)
+	}
 
+	badges, err := ns.badgeRepo.GetByIDs(ctx, badgeIDs)
+	if err != nil {
+		log.Errorf("error getting badges %+v: %v", badgeIDs, err)
+		return err
+	}
+
+	// TODO: award badges to user
+	log.Debugf("awarding badges %+v to user", badges)
 	return nil
 }
