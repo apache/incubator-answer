@@ -32,6 +32,16 @@ definitions:
         minimum: 1
         type: integer
     type: object
+  entity.BadgeLevel:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - BadgeLevelBronze
+    - BadgeLevelSilver
+    - BadgeLevelGold
   handler.RespBody:
     properties:
       code:
@@ -352,6 +362,8 @@ definitions:
         type: string
       id:
         type: string
+      level:
+        $ref: '#/definitions/entity.BadgeLevel'
       name:
         type: string
     type: object
@@ -525,6 +537,25 @@ definitions:
       is_followed:
         description: if user is followed object will be true,otherwise false
         type: boolean
+    type: object
+  schema.GetBadgeInfoResp:
+    properties:
+      award_count:
+        type: integer
+      description:
+        type: string
+      earned_count:
+        type: integer
+      icon:
+        type: string
+      id:
+        type: string
+      is_single:
+        type: boolean
+      level:
+        $ref: '#/definitions/entity.BadgeLevel'
+      name:
+        type: string
     type: object
   schema.GetBadgeListResp:
     properties:
@@ -4105,6 +4136,71 @@ paths:
       summary: recover answer
       tags:
       - Answer
+  /answer/api/v1/badge:
+    get:
+      consumes:
+      - application/json
+      description: get badge info
+      parameters:
+      - default: string
+        description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetBadgeInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get badge info
+      tags:
+      - api-badge
+  /answer/api/v1/badge/awards/page:
+    get:
+      consumes:
+      - application/json
+      description: get badge award list
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: badge id
+        in: query
+        name: badge_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetBadgeInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get badge award list
+      tags:
+      - api-badge
   /answer/api/v1/badges:
     get:
       consumes:
