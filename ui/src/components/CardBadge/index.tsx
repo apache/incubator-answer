@@ -19,35 +19,59 @@
 import { useTranslation } from 'react-i18next';
 import { FC } from 'react';
 import { Card, Badge } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
+import classnames from 'classnames';
+
+import { Icon } from '@/components';
+import * as Type from '@/common/interface';
 import { formatCount } from '@/utils';
 
 import './index.scss';
 
 interface IProps {
-  data: any;
-  badgePill: boolean;
+  data: Type.BadgeListItem;
   showAwardedCount?: boolean;
 }
 
-const Index: FC<IProps> = ({ data, badgePill, showAwardedCount = false }) => {
+const Index: FC<IProps> = ({ data, showAwardedCount = false }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
   console.log(data);
   return (
-    <Card className="text-center badge-card">
+    <Link className="card text-center badge-card" to={`/badges/${data.id}`}>
       <Card.Body>
-        <Badge pill={badgePill} bg="success" className="label">
-          0
-        </Badge>
-        <img src="" width={96} height={96} alt="" />
-        <h6 className="mb-0 mt-3 text-center">Nice Question</h6>
+        {data.earned && (
+          <Badge bg="success" className="label">
+            {t('earned')}
+          </Badge>
+        )}
+
+        {/* <Badge pill={badgePill} bg="success" className="label">
+          {showEarned ? t('earned') : data.award_count}
+        </Badge> */}
+        {data.icon.startsWith('http') ? (
+          <img src={data.icon} width={96} height={96} alt={data.name} />
+        ) : (
+          <Icon
+            name={data.icon}
+            size="96px"
+            className={classnames(
+              'lh-1',
+              data.level === 1 && 'bronze',
+              data.level === 2 && 'silver',
+              data.level === 3 && 'gold',
+            )}
+          />
+        )}
+
+        <h6 className="mb-0 mt-3 text-center">{data.name}</h6>
         {showAwardedCount && (
           <div className="small text-secondary">
-            {t('x_awarded', { number: formatCount(16) })}
+            {t('x_awarded', { number: formatCount(data.award_count) })}
           </div>
         )}
       </Card.Body>
-    </Card>
+    </Link>
   );
 };
 

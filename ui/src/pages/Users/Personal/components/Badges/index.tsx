@@ -19,10 +19,11 @@
 
 import { FC } from 'react';
 
+import * as Type from '@/common/interface';
 import { CardBadge } from '@/components';
 
 interface IProps {
-  data: any[];
+  data: Type.BadgeListItem[];
   visible: boolean;
 }
 
@@ -33,8 +34,8 @@ const Index: FC<IProps> = ({ data, visible }) => {
   }
   return (
     <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
-      {[0, 1, 2, 3, 4, 5, 6].map((item) => {
-        return <CardBadge data={item} badgePill />;
+      {data.map((item) => {
+        return <CardBadge data={item} />;
       })}
     </div>
   );

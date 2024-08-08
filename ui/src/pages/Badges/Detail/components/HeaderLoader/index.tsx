@@ -17,17 +17,33 @@
  * under the License.
  */
 
-export * from './activity';
-export * from './personal';
-export * from './notification';
-export * from './question';
-export * from './search';
-export * from './tag';
-export * from './settings';
-export * from './legal';
-export * from './timeline';
-export * from './revision';
-export * from './user';
-export * from './Oauth';
-export * from './review';
-export * from './badges';
+import { Card } from 'react-bootstrap';
+
+const Index = () => {
+  return (
+    <Card className="mb-4 placeholder-glow">
+      <Card.Body className="d-flex">
+        <div
+          className="placeholder me-3"
+          style={{ width: '96px', height: '96px' }}
+        />
+
+        <div>
+          <div className="placeholder h5" />
+          <div className="placeholder" />
+          <div className="placeholder" />
+
+          <div className="placeholder mt-2 w-50" />
+
+          <div className="small mt-2">
+            <span className="placeholder" style={{ width: '100px' }} />
+
+            <span className="placeholder ms-2" style={{ width: '100px' }} />
+          </div>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+};
+
+export default Index;

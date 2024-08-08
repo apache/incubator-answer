@@ -735,3 +735,35 @@ export interface ReactionItem {
   tooltip: string;
   is_active: boolean;
 }
+
+export interface BadgeListItem {
+  id: string;
+  name: string;
+  icon: string;
+  award_count: number;
+  earned: boolean;
+  /** 1: bronze 2: silver 3:gold */
+  level: number;
+}
+
+export interface BadgeListGroupItem {
+  badges: BadgeListItem[];
+  group_name: string;
+}
+
+export interface BadgeInfo extends BadgeListItem {
+  description: string;
+  earned_count: number;
+  is_single: boolean;
+}
+
+export interface BadgeDetailListReq {
+  page: number;
+  page_size: number;
+  badge_id: string;
+}
+
+export interface BadgeDetailListRes {
+  count: number;
+  list: BadgeInfo[];
+}
