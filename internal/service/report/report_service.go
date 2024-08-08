@@ -21,6 +21,7 @@ package report
 
 import (
 	"encoding/json"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -55,6 +56,7 @@ type ReportService struct {
 	commentCommonRepo comment_common.CommentCommonRepo
 	reportHandle      *report_handle.ReportHandle
 	configService     *config.ConfigService
+	eventQueueService event_queue.EventQueueService
 }
 
 // NewReportService new report service
@@ -67,6 +69,7 @@ func NewReportService(
 	commentCommonRepo comment_common.CommentCommonRepo,
 	reportHandle *report_handle.ReportHandle,
 	configService *config.ConfigService,
+	eventQueueService event_queue.EventQueueService,
 ) *ReportService {
 	return &ReportService{
 		reportRepo:        reportRepo,
@@ -77,6 +80,7 @@ func NewReportService(
 		commentCommonRepo: commentCommonRepo,
 		reportHandle:      reportHandle,
 		configService:     configService,
+		eventQueueService: eventQueueService,
 	}
 }
 
@@ -112,7 +116,12 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 		Content:        req.Content,
 		Status:         entity.ReportStatusPending,
 	}
-	return rs.reportRepo.AddReport(ctx, report)
+	err = rs.reportRepo.AddReport(ctx, report)
+	if err != nil {
+		return err
+	}
+	rs.sendEvent(ctx, report, objInfo)
+	return nil
 }
 
 // GetUnreviewedReportPostPage get unreviewed report post page
@@ -217,4 +226,23 @@ func (rs *ReportService) ReviewReport(ctx context.Context, req *schema.ReviewRep
 	}
 
 	return rs.reportRepo.UpdateStatus(ctx, report.ID, entity.ReportStatusCompleted)
+}
+
+func (rs *ReportService) sendEvent(ctx context.Context,
+	report *entity.Report, objectInfo *schema.SimpleObjectInfo) {
+	var event *schema.EventMsg
+	switch objectInfo.ObjectType {
+	case constant.QuestionObjectType:
+		event = schema.NewEvent(constant.EventQuestionFlag, report.UserID).
+			QID(objectInfo.QuestionID, objectInfo.ObjectCreatorUserID)
+	case constant.AnswerObjectType:
+		event = schema.NewEvent(constant.EventAnswerFlag, report.UserID).
+			AID(objectInfo.AnswerID, objectInfo.ObjectCreatorUserID)
+	case constant.CommentObjectType:
+		event = schema.NewEvent(constant.EventCommentFlag, report.UserID).
+			CID(objectInfo.CommentID, objectInfo.ObjectCreatorUserID)
+	default:
+		return
+	}
+	rs.eventQueueService.Send(ctx, event)
 }

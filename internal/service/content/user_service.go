@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -65,6 +66,7 @@ type UserService struct {
 	userNotificationConfigRepo    user_notification_config.UserNotificationConfigRepo
 	userNotificationConfigService *user_notification_config.UserNotificationConfigService
 	questionService               *questioncommon.QuestionCommon
+	eventQueueService             event_queue.EventQueueService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -79,6 +81,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 	userNotificationConfigRepo user_notification_config.UserNotificationConfigRepo,
 	userNotificationConfigService *user_notification_config.UserNotificationConfigService,
 	questionService *questioncommon.QuestionCommon,
+	eventQueueService event_queue.EventQueueService,
 ) *UserService {
 	return &UserService{
 		userCommonService:             userCommonService,
@@ -93,6 +96,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 		userNotificationConfigRepo:    userNotificationConfigRepo,
 		userNotificationConfigService: userNotificationConfigService,
 		questionService:               questionService,
+		eventQueueService:             eventQueueService,
 	}
 }
 
@@ -352,6 +356,10 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 
 	cond := us.formatUserInfoForUpdateInfo(oldUserInfo, req, siteUsers)
 	err = us.userRepo.UpdateInfo(ctx, cond)
+	if err != nil {
+		return nil, err
+	}
+	us.eventQueueService.Send(ctx, schema.NewEvent(constant.EventUserUpdate, req.UserID))
 	return nil, err
 }
 
