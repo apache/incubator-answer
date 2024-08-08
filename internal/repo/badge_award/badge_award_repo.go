@@ -43,10 +43,10 @@ func NewBadgeAwardRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge_
 	}
 }
 
-func (r *badgeAwardRepo) Award(ctx context.Context, badgeID string, userID string, objectID string, force bool, createdAt time.Time) {
+func (r *badgeAwardRepo) Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time) {
 	return
 }
-func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID string, userID string, objectID string) (isAward bool) {
+func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string) (isAward bool) {
 	return
 }
 func (r *badgeAwardRepo) CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64) {

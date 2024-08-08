@@ -33,8 +33,8 @@ import (
 )
 
 type BadgeAwardRepo interface {
-	Award(ctx context.Context, badgeID string, userID string, objectID string, force bool, createdAt time.Time)
-	CheckIsAward(ctx context.Context, badgeID string, userID string, objectID string) bool
+	Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time)
+	CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string) bool
 
 	CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64)
 	CountByUserId(ctx context.Context, userID string) (awardCount int64)
