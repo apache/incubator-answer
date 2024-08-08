@@ -21,16 +21,13 @@ package badge_award
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
-	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"time"
 )
@@ -103,24 +100,29 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 	resp = make([]*schema.GetBadgeAwardWithPageResp, 0, len(badgeAwardList))
 
 	for i, badgeAward := range badgeAwardList {
-		objInfo, e := b.objectInfoService.GetInfo(ctx, badgeAward.ObjectID)
-		if e != nil {
-			err = e
-			return
-		}
-		if objInfo.IsDeleted() {
-			err = errors.BadRequest(reason.NewObjectAlreadyDeleted)
-			return
+		var (
+			objectID, questionID, answerID, commentID, objectType, urlTitle string
+		)
+
+		// if exist object info
+		objInfo, e := b.objectInfoService.GetInfo(ctx, badgeAward.AwardKey)
+		if e == nil && !objInfo.IsDeleted() {
+			objectID = objInfo.ObjectID
+			questionID = objInfo.QuestionID
+			answerID = objInfo.AnswerID
+			commentID = objInfo.CommentID
+			objectType = objInfo.ObjectType
+			urlTitle = objInfo.Title
 		}
 
 		row := &schema.GetBadgeAwardWithPageResp{
 			CreatedAt:      badgeAward.CreatedAt.Unix(),
-			ObjectID:       badgeAward.ObjectID,
-			QuestionID:     objInfo.QuestionID,
-			AnswerID:       objInfo.AnswerID,
-			CommentID:      objInfo.CommentID,
-			ObjectType:     objInfo.ObjectType,
-			UrlTitle:       htmltext.UrlTitle(objInfo.Title),
+			ObjectID:       objectID,
+			QuestionID:     questionID,
+			AnswerID:       answerID,
+			CommentID:      commentID,
+			ObjectType:     objectType,
+			UrlTitle:       urlTitle,
 			AuthorUserInfo: schema.UserBasicInfo{},
 		}
 
