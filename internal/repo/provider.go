@@ -104,6 +104,7 @@ var ProviderSetRepo = wire.NewSet(
 	plugin_config.NewPluginUserConfigRepo,
 	review.NewReviewRepo,
 	badge.NewBadgeRepo,
+	badge.NewEventRuleRepo,
 	badge_group.NewBadgeGroupRepo,
 	badge_award.NewBadgeAwardRepo,
 )

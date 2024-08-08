@@ -123,6 +123,7 @@ var ProviderSetService = wire.NewSet(
 	meta.NewMetaService,
 	event_queue.NewEventQueueService,
 	badge.NewBadgeService,
+	badge.NewBadgeEventService,
 	badge_award.NewBadgeAwardService,
 	badge_group.NewBadgeGroupService,
 )

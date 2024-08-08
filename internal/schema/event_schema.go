@@ -68,3 +68,13 @@ func (e *EventMsg) AddExtra(key, value string) *EventMsg {
 	e.ExtraInfo[key] = value
 	return e
 }
+
+func (e *EventMsg) GetObjectID() string {
+	if len(e.CommentID) > 0 {
+		return e.CommentID
+	}
+	if len(e.AnswerID) > 0 {
+		return e.AnswerID
+	}
+	return e.QuestionID
+}

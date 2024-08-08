@@ -22,9 +22,11 @@ package badge
 import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/unique"
+	"github.com/segmentfault/pacman/errors"
 )
 
 type badgeRepo struct {
@@ -40,9 +42,21 @@ func NewBadgeRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge.Badge
 	}
 }
 
-func (r badgeRepo) GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error) {
+func (r *badgeRepo) GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error) {
 	badge = &entity.Badge{}
 	exists, err = r.data.DB.Context(ctx).Where("id = ?", id).Get(badge)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (r *badgeRepo) GetByIDs(ctx context.Context, ids []string) (badges []*entity.Badge, err error) {
+	badges = make([]*entity.Badge, 0)
+	err = r.data.DB.Context(ctx).In("id", ids).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
@@ -50,6 +64,9 @@ func (r badgeRepo) GetByID(ctx context.Context, id string) (badge *entity.Badge,
 func (r *badgeRepo) ListByLevel(ctx context.Context, level entity.BadgeLevel) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)
 	err = r.data.DB.Context(ctx).Where("level = ?", level).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
@@ -57,6 +74,9 @@ func (r *badgeRepo) ListByLevel(ctx context.Context, level entity.BadgeLevel) (b
 func (r *badgeRepo) ListByGroup(ctx context.Context, groupID int64) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)
 	err = r.data.DB.Context(ctx).Where("group_id = ?", groupID).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
@@ -64,6 +84,9 @@ func (r *badgeRepo) ListByGroup(ctx context.Context, groupID int64) (badges []*e
 func (r *badgeRepo) ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)
 	err = r.data.DB.Context(ctx).Where("level = ? AND group_id = ?", level, groupID).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
@@ -71,6 +94,9 @@ func (r *badgeRepo) ListByLevelAndGroup(ctx context.Context, level entity.BadgeL
 func (r *badgeRepo) ListActivated(ctx context.Context) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)
 	err = r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusActive).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
@@ -78,5 +104,8 @@ func (r *badgeRepo) ListActivated(ctx context.Context) (badges []*entity.Badge, 
 func (r *badgeRepo) ListInactivated(ctx context.Context) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)
 	err = r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusInactive).Find(&badges)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }

@@ -36,6 +36,7 @@ import (
 
 type BadgeRepo interface {
 	GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error)
+	GetByIDs(ctx context.Context, ids []string) (badges []*entity.Badge, err error)
 	ListByLevel(ctx context.Context, level entity.BadgeLevel) ([]*entity.Badge, error)
 	ListByGroup(ctx context.Context, groupID int64) ([]*entity.Badge, error)
 	ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) ([]*entity.Badge, error)
@@ -44,19 +45,23 @@ type BadgeRepo interface {
 }
 
 type BadgeService struct {
-	badgeRepo      BadgeRepo
-	badgeGroupRepo badge_group.BadgeGroupRepo
-	badgeAwardRepo badge_award.BadgeAwardRepo
+	badgeRepo         BadgeRepo
+	badgeGroupRepo    badge_group.BadgeGroupRepo
+	badgeAwardRepo    badge_award.BadgeAwardRepo
+	badgeEventService *BadgeEventService
 }
 
 func NewBadgeService(
 	badgeRepo BadgeRepo,
 	badgeGroupRepo badge_group.BadgeGroupRepo,
-	badgeAwardRepo badge_award.BadgeAwardRepo) *BadgeService {
+	badgeAwardRepo badge_award.BadgeAwardRepo,
+	badgeEventService *BadgeEventService,
+) *BadgeService {
 	return &BadgeService{
-		badgeRepo:      badgeRepo,
-		badgeGroupRepo: badgeGroupRepo,
-		badgeAwardRepo: badgeAwardRepo,
+		badgeRepo:         badgeRepo,
+		badgeGroupRepo:    badgeGroupRepo,
+		badgeAwardRepo:    badgeAwardRepo,
+		badgeEventService: badgeEventService,
 	}
 }
 
