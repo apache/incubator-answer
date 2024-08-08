@@ -75,6 +75,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/answer_common"
 	auth2 "github.com/apache/incubator-answer/internal/service/auth"
 	badge2 "github.com/apache/incubator-answer/internal/service/badge"
+	badge_award2 "github.com/apache/incubator-answer/internal/service/badge_award"
 	collection2 "github.com/apache/incubator-answer/internal/service/collection"
 	"github.com/apache/incubator-answer/internal/service/collection_common"
 	comment2 "github.com/apache/incubator-answer/internal/service/comment"
@@ -261,7 +262,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	badgeGroupRepo := badge_group.NewBadgeGroupRepo(dataData, uniqueIDRepo)
 	badgeAwardRepo := badge_award.NewBadgeAwardRepo(dataData, uniqueIDRepo)
 	badgeService := badge2.NewBadgeService(badgeRepo, badgeGroupRepo, badgeAwardRepo)
-	badgeController := controller.NewBadgeController(badgeService)
+	badgeAwardService := badge_award2.NewBadgeAwardService(badgeAwardRepo, userCommon, objService, questionRepo, answerRepo)
+	badgeController := controller.NewBadgeController(badgeService, badgeAwardService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController, metaController, badgeController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(controllerSiteInfoController, siteInfoCommonService)

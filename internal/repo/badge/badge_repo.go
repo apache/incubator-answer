@@ -40,6 +40,12 @@ func NewBadgeRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge.Badge
 	}
 }
 
+func (r badgeRepo) GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error) {
+	badge = &entity.Badge{}
+	exists, err = r.data.DB.Context(ctx).Where("id = ?", id).Get(badge)
+	return
+}
+
 // ListByLevel returns a list of badges by level
 func (r *badgeRepo) ListByLevel(ctx context.Context, level entity.BadgeLevel) (badges []*entity.Badge, err error) {
 	badges = make([]*entity.Badge, 0)

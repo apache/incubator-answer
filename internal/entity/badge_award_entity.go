@@ -26,10 +26,10 @@ type BadgeAward struct {
 	ID             string    `json:"id" xorm:"id"`
 	CreatedAt      time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
 	UpdatedAt      time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
-	UserId         int64     `json:"user_id" xorm:"not null index BIGINT(20) user_id"`
-	BadgeId        int64     `json:"badge_id" xorm:"not null index BIGINT(20) badge_id"`
-	ObjectId       int64     `json:"object_id" xorm:"not null index BIGINT(20) object_id"`
-	BadgeGroupId   int8      `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
+	UserID         string    `json:"user_id" xorm:"not null index BIGINT(20) user_id"`
+	BadgeID        string    `json:"badge_id" xorm:"not null index BIGINT(20) badge_id"`
+	ObjectID       string    `json:"object_id" xorm:"not null index BIGINT(20) object_id"`
+	BadgeGroupID   int8      `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
 	IsBadgeDeleted int8      `json:"is_badge_deleted" xorm:"not null index TINYINT(1) s_badge_deleted"`
 }
 

@@ -192,6 +192,8 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/meta/reaction", a.metaController.GetReaction)
 
 	// badges
+	r.GET("/badge", a.badgeController.GetBadgeInfo)
+	r.GET("/badge/awards/page", a.badgeController.GetBadgeAwardList)
 	r.GET("/badges", a.badgeController.GetBadgeList)
 }
 

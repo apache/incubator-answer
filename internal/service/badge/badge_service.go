@@ -22,15 +22,20 @@ package badge
 import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/badge_award"
 	"github.com/apache/incubator-answer/internal/service/badge_group"
 	"github.com/apache/incubator-answer/pkg/converter"
+	"github.com/apache/incubator-answer/pkg/uid"
+	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 )
 
 type BadgeRepo interface {
+	GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error)
 	ListByLevel(ctx context.Context, level entity.BadgeLevel) ([]*entity.Badge, error)
 	ListByGroup(ctx context.Context, groupID int64) ([]*entity.Badge, error)
 	ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) ([]*entity.Badge, error)
@@ -55,6 +60,7 @@ func NewBadgeService(
 	}
 }
 
+// ListByGroup list all badges group by group
 func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*schema.GetBadgeListResp, err error) {
 	var (
 		groups       []*entity.BadgeGroup
@@ -74,7 +80,13 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 	if err != nil {
 		return
 	}
-	earnedCounts, err = b.badgeAwardRepo.SumUserEarnedGroupByBadgeID(ctx, userID)
+
+	if len(userID) > 0 {
+		earnedCounts, err = b.badgeAwardRepo.SumUserEarnedGroupByBadgeID(ctx, userID)
+		if err != nil {
+			return
+		}
+	}
 
 	for _, group := range groups {
 		groupMap[converter.StringToInt64(group.ID)] = group.Name
@@ -93,11 +105,12 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 		}
 
 		badgesMap[badge.BadgeGroupId] = append(badgesMap[badge.BadgeGroupId], &schema.BadgeListInfo{
-			ID:         badge.ID,
+			ID:         uid.EnShortID(badge.ID),
 			Name:       translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
 			Icon:       badge.Icon,
 			AwardCount: badge.AwardCount,
 			Earned:     earned,
+			Level:      badge.Level,
 		})
 	}
 
@@ -108,5 +121,40 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 		})
 	}
 
+	return
+}
+
+// GetBadgeInfo get badge info
+func (b *BadgeService) GetBadgeInfo(ctx *gin.Context, id string, userID string) (info *schema.GetBadgeInfoResp, err error) {
+	var (
+		badge       *entity.Badge
+		earnedTotal int64 = 0
+		exists            = false
+	)
+
+	badge, exists, err = b.badgeRepo.GetByID(ctx, id)
+	if err != nil {
+		return
+	}
+
+	if !exists || badge.Status == entity.BadgeStatusInactive {
+		err = errors.BadRequest(reason.BadgeObjectNotFound)
+		return
+	}
+
+	if len(userID) > 0 {
+		earnedTotal = b.badgeAwardRepo.CountByUserIdAndBadgeId(ctx, userID, badge.ID)
+	}
+
+	info = &schema.GetBadgeInfoResp{
+		ID:          uid.EnShortID(badge.ID),
+		Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
+		Description: translator.Tr(handler.GetLangByCtx(ctx), badge.Description),
+		Icon:        badge.Icon,
+		AwardCount:  badge.AwardCount,
+		EarnedCount: earnedTotal,
+		IsSingle:    badge.Single == entity.BadgeSingleAward,
+		Level:       badge.Level,
+	}
 	return
 }
