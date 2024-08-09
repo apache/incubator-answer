@@ -26,8 +26,6 @@ import (
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service/badge_award"
-	"github.com/apache/incubator-answer/internal/service/badge_group"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
@@ -48,16 +46,16 @@ type BadgeRepo interface {
 }
 
 type BadgeService struct {
-	badgeRepo         BadgeRepo
-	badgeGroupRepo    badge_group.BadgeGroupRepo
-	badgeAwardRepo    badge_award.BadgeAwardRepo
+	badgeRepo      BadgeRepo
+	badgeGroupRepo BadgeGroupRepo
+	badgeAwardRepo BadgeAwardRepo
 	badgeEventService *BadgeEventService
 }
 
 func NewBadgeService(
 	badgeRepo BadgeRepo,
-	badgeGroupRepo badge_group.BadgeGroupRepo,
-	badgeAwardRepo badge_award.BadgeAwardRepo,
+	badgeGroupRepo BadgeGroupRepo,
+	badgeAwardRepo BadgeAwardRepo,
 	badgeEventService *BadgeEventService,
 ) *BadgeService {
 	return &BadgeService{

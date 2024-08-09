@@ -23,7 +23,7 @@ import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/service/badge_group"
+	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/unique"
 )
 
@@ -32,7 +32,7 @@ type badgeGroupRepo struct {
 	uniqueIDRepo unique.UniqueIDRepo
 }
 
-func NewBadgeGroupRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge_group.BadgeGroupRepo {
+func NewBadgeGroupRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge.BadgeGroupRepo {
 	return &badgeGroupRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,

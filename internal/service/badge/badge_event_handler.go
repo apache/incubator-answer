@@ -22,7 +22,6 @@ package badge
 import (
 	"context"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/service/badge_award"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/segmentfault/pacman/log"
 
@@ -33,7 +32,7 @@ import (
 type BadgeEventService struct {
 	data              *data.Data
 	eventQueueService event_queue.EventQueueService
-	badgeAwardRepo    badge_award.BadgeAwardRepo
+	badgeAwardRepo    BadgeAwardRepo
 	badgeRepo         BadgeRepo
 	eventRuleRepo     EventRuleRepo
 }
