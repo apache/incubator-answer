@@ -37,11 +37,14 @@ import (
 type BadgeRepo interface {
 	GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error)
 	GetByIDs(ctx context.Context, ids []string) (badges []*entity.Badge, err error)
+
 	ListByLevel(ctx context.Context, level entity.BadgeLevel) ([]*entity.Badge, error)
 	ListByGroup(ctx context.Context, groupID int64) ([]*entity.Badge, error)
 	ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) ([]*entity.Badge, error)
 	ListActivated(ctx context.Context) ([]*entity.Badge, error)
 	ListInactivated(ctx context.Context) ([]*entity.Badge, error)
+
+	UpdateAwardCount(ctx context.Context, id string, count int64) error
 }
 
 type BadgeService struct {
@@ -109,7 +112,7 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 			}
 		}
 
-		badgesMap[badge.BadgeGroupId] = append(badgesMap[badge.BadgeGroupId], &schema.BadgeListInfo{
+		badgesMap[badge.BadgeGroupID] = append(badgesMap[badge.BadgeGroupID], &schema.BadgeListInfo{
 			ID:         uid.EnShortID(badge.ID),
 			Name:       translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
 			Icon:       badge.Icon,
