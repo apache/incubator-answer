@@ -211,6 +211,6 @@ func (br *eventRuleRepo) createBadgeAward(userID, badgeID, objectID string) (awa
 	return &entity.BadgeAward{
 		UserID:   userID,
 		BadgeID:  badgeID,
-		ObjectID: objectID,
+		AwardKey: objectID,
 	}
 }

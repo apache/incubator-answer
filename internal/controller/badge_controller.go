@@ -25,19 +25,18 @@ import (
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/badge"
-	"github.com/apache/incubator-answer/internal/service/badge_award"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 )
 
 type BadgeController struct {
 	badgeService      *badge.BadgeService
-	badgeAwardService *badge_award.BadgeAwardService
+	badgeAwardService *badge.BadgeAwardService
 }
 
 func NewBadgeController(
 	badgeService *badge.BadgeService,
-	badgeAwardService *badge_award.BadgeAwardService) *BadgeController {
+	badgeAwardService *badge.BadgeAwardService) *BadgeController {
 	return &BadgeController{
 		badgeService:      badgeService,
 		badgeAwardService: badgeAwardService,

@@ -17,14 +17,13 @@
  * under the License.
  */
 
-package badge_award
+package badge
 
 import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
@@ -62,15 +61,15 @@ type BadgeAwardRepo interface {
 }
 
 type BadgeAwardService struct {
-	badgeAwardRepo    BadgeAwardRepo
-	badgeRepo         badge.BadgeRepo
-	userCommon        *usercommon.UserCommon
+	badgeAwardRepo BadgeAwardRepo
+	badgeRepo      BadgeRepo
+	userCommon     *usercommon.UserCommon
 	objectInfoService *object_info.ObjService
 }
 
 func NewBadgeAwardService(
 	badgeAwardRepo BadgeAwardRepo,
-	badgeRepo badge.BadgeRepo,
+	badgeRepo BadgeRepo,
 	userCommon *usercommon.UserCommon,
 	objectInfoService *object_info.ObjService,
 ) *BadgeAwardService {
