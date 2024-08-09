@@ -28,7 +28,6 @@ import (
 	"github.com/apache/incubator-answer/internal/service/badge_award"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
-	"time"
 )
 
 type badgeAwardRepo struct {
@@ -43,10 +42,36 @@ func NewBadgeAwardRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge_
 	}
 }
 
-func (r *badgeAwardRepo) Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time) {
+func (r *badgeAwardRepo) Add(ctx context.Context, badgeAward *entity.BadgeAward) (err error) {
+	badgeAward.ID, err = r.uniqueIDRepo.GenUniqueIDStr(ctx, entity.BadgeAward{}.TableName())
+	if err != nil {
+		return
+	}
+	_, err = r.data.DB.Context(ctx).Insert(badgeAward)
 	return
 }
-func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string) (isAward bool) {
+func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string, singleOrMulti int8) (isAward bool) {
+	isAward = false
+	if singleOrMulti == entity.BadgeSingleAward {
+		_, exists, err := r.GetByUserIdAndBadgeId(ctx, userID, badgeID)
+		if err != nil {
+			err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+			return
+		}
+		if exists {
+			return true
+		}
+	} else {
+		_, exists, err := r.GetByUserIdAndBadgeIdAndObjectId(ctx, userID, badgeID, awardKey)
+		if err != nil {
+			err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+			return
+		}
+		if exists {
+			return true
+		}
+	}
+
 	return
 }
 func (r *badgeAwardRepo) CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64) {
@@ -62,13 +87,13 @@ func (r *badgeAwardRepo) CountByUserIdAndBadgeId(ctx context.Context, userID str
 	}
 	return
 }
-func (r *badgeAwardRepo) CountByObjectId(ctx context.Context, objectID string) (awardCount int64) {
+func (r *badgeAwardRepo) CountByObjectId(ctx context.Context, awardKey string) (awardCount int64) {
 	return
 }
-func (r *badgeAwardRepo) CountByObjectIdAndBadgeId(ctx context.Context, objectID string, badgeID string) (awardCount int64) {
+func (r *badgeAwardRepo) CountByObjectIdAndBadgeId(ctx context.Context, awardKey string, badgeID string) (awardCount int64) {
 	return
 }
-func (r *badgeAwardRepo) CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, objectID string, badgeID string) (awardCount int64) {
+func (r *badgeAwardRepo) CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, awardKey string, badgeID string) (awardCount int64) {
 	return
 }
 func (r *badgeAwardRepo) SumUserEarnedGroupByBadgeID(ctx context.Context, userID string) (earnedCounts []*entity.BadgeEarnedCount, err error) {
@@ -92,10 +117,10 @@ func (r *badgeAwardRepo) ListPagedByBadgeId(ctx context.Context, badgeID string,
 func (r *badgeAwardRepo) ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
-func (r *badgeAwardRepo) ListPagedByObjectId(ctx context.Context, badgeID string, objectID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
+func (r *badgeAwardRepo) ListPagedByObjectId(ctx context.Context, badgeID string, awardKey string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
-func (r *badgeAwardRepo) ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, objectID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
+func (r *badgeAwardRepo) ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, awardKey string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
 func (r *badgeAwardRepo) ListTagPagedByBadgeId(ctx context.Context, badgeIDs []string, page int, pageSize int, filterUserID string) (badgeAwards []*entity.BadgeAward, total int64, err error) {
@@ -113,9 +138,15 @@ func (r *badgeAwardRepo) ListNewestEarnedByLevel(ctx context.Context, userID str
 func (r *badgeAwardRepo) ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
-func (r *badgeAwardRepo) GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward) {
+
+// GetByUserIdAndBadgeId get badge award by user id and badge id
+func (r *badgeAwardRepo) GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward, exists bool, err error) {
+	exists, err = r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ? AND is_badge_deleted = 0", userID, badgeID).Get(&badgeAward)
 	return
 }
-func (r *badgeAwardRepo) GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, objectID string) (badgeAward *entity.BadgeAward) {
+
+// GetByUserIdAndBadgeIdAndObjectId get badge award by user id, badge id and object id
+func (r *badgeAwardRepo) GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, awardKey string) (badgeAward *entity.BadgeAward, exists bool, err error) {
+	exists, err = r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ? AND award_key = ? AND is_badge_deleted = 0", userID, badgeID, awardKey).Get(&badgeAward)
 	return
 }
