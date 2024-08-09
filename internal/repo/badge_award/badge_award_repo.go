@@ -25,7 +25,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
-	"github.com/apache/incubator-answer/internal/service/badge_award"
+	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -35,7 +35,7 @@ type badgeAwardRepo struct {
 	uniqueIDRepo unique.UniqueIDRepo
 }
 
-func NewBadgeAwardRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge_award.BadgeAwardRepo {
+func NewBadgeAwardRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge.BadgeAwardRepo {
 	return &badgeAwardRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,
