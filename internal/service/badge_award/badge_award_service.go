@@ -21,66 +21,64 @@ package badge_award
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
-	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
+	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/object_info"
-	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"time"
 )
 
 type BadgeAwardRepo interface {
-	Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time)
-	CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string) bool
+	Add(ctx context.Context, badgeAward *entity.BadgeAward) (err error)
+	CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string, singleOrMulti int8) bool
 
 	CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64)
 	CountByUserId(ctx context.Context, userID string) (awardCount int64)
 	CountByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (awardCount int64)
-	CountByObjectId(ctx context.Context, objectID string) (awardCount int64)
-	CountByObjectIdAndBadgeId(ctx context.Context, objectID string, badgeID string) (awardCount int64)
-	CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, objectID string, badgeID string) (awardCount int64)
+	CountByObjectId(ctx context.Context, awardKey string) (awardCount int64)
+	CountByObjectIdAndBadgeId(ctx context.Context, awardKey string, badgeID string) (awardCount int64)
+	CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, awardKey string, badgeID string) (awardCount int64)
 
 	SumUserEarnedGroupByBadgeID(ctx context.Context, userID string) (earnedCounts []*entity.BadgeEarnedCount, err error)
 
 	ListAllByUserId(ctx context.Context, userID string) (badgeAwards []*entity.BadgeAward)
 	ListPagedByBadgeId(ctx context.Context, badgeID string, page int, pageSize int) (badgeAwardList []*entity.BadgeAward, total int64, err error)
 	ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
-	ListPagedByObjectId(ctx context.Context, badgeID string, objectID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
-	ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, objectID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListPagedByObjectId(ctx context.Context, badgeID string, awardKey string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, awardKey string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListTagPagedByBadgeId(ctx context.Context, badgeIDs []string, page int, pageSize int, filterUserID string) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListTagPagedByBadgeIdAndUserId(ctx context.Context, badgeIDs []string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListPagedLatest(ctx context.Context, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 
-	GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward)
-	GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, objectID string) (badgeAward *entity.BadgeAward)
+	GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward, exists bool, err error)
+	GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, awardKey string) (badgeAward *entity.BadgeAward, exists bool, err error)
 }
 
 type BadgeAwardService struct {
 	badgeAwardRepo    BadgeAwardRepo
+	badgeRepo         badge.BadgeRepo
 	userCommon        *usercommon.UserCommon
 	objectInfoService *object_info.ObjService
-	questionRepo      questioncommon.QuestionRepo
-	answerRepo        answercommon.AnswerRepo
 }
 
 func NewBadgeAwardService(
 	badgeAwardRepo BadgeAwardRepo,
+	badgeRepo badge.BadgeRepo,
 	userCommon *usercommon.UserCommon,
 	objectInfoService *object_info.ObjService,
-	questionRepo questioncommon.QuestionRepo,
-	answerRepo answercommon.AnswerRepo,
 ) *BadgeAwardService {
 	return &BadgeAwardService{
 		badgeAwardRepo:    badgeAwardRepo,
+		badgeRepo:         badgeRepo,
 		userCommon:        userCommon,
 		objectInfoService: objectInfoService,
-		questionRepo:      questionRepo,
-		answerRepo:        answerRepo,
 	}
 }
 
@@ -137,6 +135,51 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 
 		resp[i] = row
 	}
+
+	return
+}
+
+// Award award badge
+func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time) (err error) {
+	var (
+		badgeData       *entity.Badge
+		exists, awarded bool
+	)
+
+	badgeData, exists, err = b.badgeRepo.GetByID(ctx, badgeID)
+	if err != nil {
+		return
+	}
+
+	if !exists || badgeData.Status == entity.BadgeStatusInactive {
+		err = errors.BadRequest(reason.BadgeObjectNotFound)
+		return
+	}
+
+	awarded = b.badgeAwardRepo.CheckIsAward(ctx, badgeID, userID, awardKey, badgeData.Single)
+	if !force && awarded {
+		return
+	}
+
+	if createdAt.IsZero() {
+		createdAt = time.Now()
+	}
+
+	err = b.badgeAwardRepo.Add(ctx, &entity.BadgeAward{
+		CreatedAt:      createdAt,
+		UpdatedAt:      createdAt,
+		UserID:         userID,
+		BadgeID:        badgeID,
+		AwardKey:       awardKey,
+		BadgeGroupID:   badgeData.BadgeGroupID,
+		IsBadgeDeleted: 0,
+	})
+	if err != nil {
+		return
+	}
+
+	// increment badge award count
+	err = b.badgeRepo.UpdateAwardCount(ctx, badgeID, 1)
 
 	return
 }

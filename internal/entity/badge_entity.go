@@ -46,7 +46,7 @@ type Badge struct {
 	AwardCount   int        `json:"award_count" xorm:"not null default 0 INT(11) award_count"`
 	Description  string     `json:"description" xorm:"not null default '' MEDIUMTEXT description"`
 	Status       int8       `json:"status" xorm:"not null default 1 INT(11) status"`
-	BadgeGroupId int64      `json:"badge_group_id" xorm:"not null default 0 BIGINT(20) badge_group_id"`
+	BadgeGroupID int64      `json:"badge_group_id" xorm:"not null default 0 BIGINT(20) badge_group_id"`
 	Level        BadgeLevel `json:"level" xorm:"not null default 1 TINYINT(4) level"`
 	Single       int8       `json:"single" xorm:"not null default 1 TINYINT(4) single"`
 	Collect      string     `json:"collect" xorm:"not null default '' VARCHAR(64) collect"`

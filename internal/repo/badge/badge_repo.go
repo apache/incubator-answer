@@ -109,3 +109,9 @@ func (r *badgeRepo) ListInactivated(ctx context.Context) (badges []*entity.Badge
 	}
 	return
 }
+
+// UpdateAwardCount updates the award count of a badge
+func (r *badgeRepo) UpdateAwardCount(ctx context.Context, id string, count int64) (err error) {
+	_, err = r.data.DB.Context(ctx).Where("id = ?", id).Incr("award_count", count).Update(&entity.Badge{})
+	return
+}

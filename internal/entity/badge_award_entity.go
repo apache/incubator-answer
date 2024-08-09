@@ -29,7 +29,7 @@ type BadgeAward struct {
 	UserID         string    `json:"user_id" xorm:"not null index BIGINT(20) user_id"`
 	BadgeID        string    `json:"badge_id" xorm:"not null index BIGINT(20) badge_id"`
 	AwardKey       string    `json:"award_key" xorm:"not null index VARCHAR(64) award_key"`
-	BadgeGroupID   int8      `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
+	BadgeGroupID   int64     `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
 	IsBadgeDeleted int8      `json:"is_badge_deleted" xorm:"not null index TINYINT(1) s_badge_deleted"`
 }
 
