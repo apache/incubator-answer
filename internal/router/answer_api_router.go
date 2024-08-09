@@ -194,6 +194,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// badges
 	r.GET("/badge", a.badgeController.GetBadgeInfo)
 	r.GET("/badge/awards/page", a.badgeController.GetBadgeAwardList)
+	r.GET("/badge/user/awards", a.badgeController.GetBadgeAwardListByUsername)
 	r.GET("/badges", a.badgeController.GetBadgeList)
 }
 

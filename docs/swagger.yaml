@@ -1203,6 +1203,19 @@ definitions:
       activation_url:
         type: string
     type: object
+  schema.GetUserBadgeAwardListResp:
+    properties:
+      earned_count:
+        type: integer
+      icon:
+        type: string
+      id:
+        type: string
+      level:
+        $ref: '#/definitions/entity.BadgeLevel'
+      name:
+        type: string
+    type: object
   schema.GetUserNotificationConfigResp:
     properties:
       all_new_question:
@@ -4199,6 +4212,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get badge award list
+      tags:
+      - api-badge
+  /answer/api/v1/badge/user/awards:
+    get:
+      consumes:
+      - application/json
+      description: get user badge award list
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetUserBadgeAwardListResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user badge award list
       tags:
       - api-badge
   /answer/api/v1/badges:
