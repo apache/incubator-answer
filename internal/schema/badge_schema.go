@@ -68,3 +68,15 @@ type GetBadgeAwardWithPageResp struct {
 	UrlTitle       string        `json:"url_title"`
 	AuthorUserInfo UserBasicInfo `json:"author_user_info"`
 }
+
+type GetUserBadgeAwardListReq struct {
+	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	UserID   string `json:"-"`
+}
+type GetUserBadgeAwardListResp struct {
+	ID          string            `json:"id" `
+	Name        string            `json:"name" `
+	Icon        string            `json:"icon" `
+	EarnedCount int64             `json:"earned_count" `
+	Level       entity.BadgeLevel `json:"level" `
+}
