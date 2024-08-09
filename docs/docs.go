@@ -2350,6 +2350,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/badge/user/awards": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get user badge award list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetUserBadgeAwardListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/badges": {
             "get": {
                 "security": [
@@ -8730,6 +8782,26 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "activation_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserBadgeAwardListResp": {
+            "type": "object",
+            "properties": {
+                "earned_count": {
+                    "type": "integer"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "level": {
+                    "$ref": "#/definitions/entity.BadgeLevel"
+                },
+                "name": {
                     "type": "string"
                 }
             }

@@ -40,7 +40,7 @@ func (BadgeAward) TableName() string {
 
 type BadgeEarnedCount struct {
 	BadgeID     string `xorm:"badge_id"`
-	EarnedCount int    `xorm:"earned_count"`
+	EarnedCount int64  `xorm:"earned_count"`
 }
 
 // TableName badge_award table name

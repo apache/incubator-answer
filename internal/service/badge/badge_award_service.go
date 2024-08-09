@@ -21,11 +21,14 @@ package badge
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -61,9 +64,9 @@ type BadgeAwardRepo interface {
 }
 
 type BadgeAwardService struct {
-	badgeAwardRepo BadgeAwardRepo
-	badgeRepo      BadgeRepo
-	userCommon     *usercommon.UserCommon
+	badgeAwardRepo    BadgeAwardRepo
+	badgeRepo         BadgeRepo
+	userCommon        *usercommon.UserCommon
 	objectInfoService *object_info.ObjService
 }
 
@@ -179,6 +182,66 @@ func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID st
 
 	// increment badge award count
 	err = b.badgeRepo.UpdateAwardCount(ctx, badgeID, 1)
+
+	return
+}
+
+// GetUserBadgeAwardList get user badge award list
+func (b *BadgeAwardService) GetUserBadgeAwardList(
+	ctx *gin.Context,
+	req *schema.GetUserBadgeAwardListReq,
+) (
+	resp []*schema.GetUserBadgeAwardListResp,
+	total int64,
+	err error,
+) {
+	var (
+		earnedCounts []*entity.BadgeEarnedCount
+		userInfo     *schema.UserBasicInfo
+		exist        bool
+	)
+
+	// validate user exists or not
+	if len(req.Username) > 0 {
+		userInfo, exist, err = b.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
+		if err != nil {
+			return
+		}
+		if !exist {
+			err = errors.BadRequest(reason.UserNotFound)
+			return
+		}
+		req.UserID = userInfo.ID
+	}
+	if len(req.UserID) == 0 {
+		err = errors.BadRequest(reason.UserNotFound)
+		return
+	}
+
+	earnedCounts, err = b.badgeAwardRepo.SumUserEarnedGroupByBadgeID(ctx, req.UserID)
+	if err != nil {
+		return
+	}
+	total = int64(len(earnedCounts))
+	resp = make([]*schema.GetUserBadgeAwardListResp, 0, total)
+
+	for i, earnedCount := range earnedCounts {
+		badge, exists, e := b.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
+		if e != nil {
+			err = e
+			return
+		}
+		if !exists {
+			continue
+		}
+		resp[i] = &schema.GetUserBadgeAwardListResp{
+			ID:          badge.ID,
+			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
+			Icon:        badge.Icon,
+			EarnedCount: earnedCount.EarnedCount,
+			Level:       badge.Level,
+		}
+	}
 
 	return
 }

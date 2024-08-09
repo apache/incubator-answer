@@ -46,9 +46,9 @@ type BadgeRepo interface {
 }
 
 type BadgeService struct {
-	badgeRepo      BadgeRepo
-	badgeGroupRepo BadgeGroupRepo
-	badgeAwardRepo BadgeAwardRepo
+	badgeRepo         BadgeRepo
+	badgeGroupRepo    BadgeGroupRepo
+	badgeAwardRepo    BadgeAwardRepo
 	badgeEventService *BadgeEventService
 }
 
@@ -103,7 +103,7 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 		earned := false
 		if len(earnedCounts) > 0 {
 			for _, earnedCount := range earnedCounts {
-				if badge.ID == earnedCount.BadgeID {
+				if badge.ID == earnedCount.BadgeID && earnedCount.EarnedCount > 0 {
 					earned = true
 					break
 				}
