@@ -761,9 +761,21 @@ export interface BadgeDetailListReq {
   page: number;
   page_size: number;
   badge_id: string;
+  username?: string | null;
+}
+
+export interface BadgeDetailListItem {
+  created_at: number;
+  author_user_info: UserInfoBase;
+  object_type: string;
+  object_id: string;
+  url_title: string;
+  question_id: string;
+  answer_id: string;
+  comment_id: string;
 }
 
 export interface BadgeDetailListRes {
   count: number;
-  list: BadgeInfo[];
+  list: BadgeDetailListItem[];
 }

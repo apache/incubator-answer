@@ -22,23 +22,23 @@ import { Card } from 'react-bootstrap';
 const Index = () => {
   return (
     <Card className="mb-4 placeholder-glow">
-      <Card.Body className="d-flex">
+      <Card.Body className="d-block d-sm-flex">
         <div
-          className="placeholder me-3"
+          className="placeholder me-3 flex-shrink-0"
           style={{ width: '96px', height: '96px' }}
         />
 
-        <div>
-          <div className="placeholder h5" />
-          <div className="placeholder" />
-          <div className="placeholder" />
+        <div className="w-100 mt-3 mt-sm-0">
+          <div className="placeholder h5 w-25" />
+          <div className="placeholder w-100" />
+          <div className="placeholder w-75" />
 
           <div className="placeholder mt-2 w-50" />
 
           <div className="small mt-2">
-            <span className="placeholder" style={{ width: '100px' }} />
+            <span className="placeholder" style={{ width: '80px' }} />
 
-            <span className="placeholder ms-2" style={{ width: '100px' }} />
+            <span className="placeholder ms-2" style={{ width: '80px' }} />
           </div>
         </div>
       </Card.Body>
