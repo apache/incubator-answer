@@ -28,6 +28,7 @@ import (
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -56,6 +57,7 @@ type BadgeAwardRepo interface {
 	ListTagPagedByBadgeId(ctx context.Context, badgeIDs []string, page int, pageSize int, filterUserID string) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListTagPagedByBadgeIdAndUserId(ctx context.Context, badgeIDs []string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListPagedLatest(ctx context.Context, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
+	ListNewestEarned(ctx context.Context, userID string, limit int) (badgeAwards []*entity.BadgeAwardRecent, err error)
 	ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 	ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 
@@ -86,13 +88,20 @@ func NewBadgeAwardService(
 
 // GetBadgeAwardList get badge award list
 func (b *BadgeAwardService) GetBadgeAwardList(
-	ctx context.Context, req *schema.GetBadgeAwardWithPageReq,
+	ctx context.Context,
+	req *schema.GetBadgeAwardWithPageReq,
 ) (resp []*schema.GetBadgeAwardWithPageResp, total int64, err error) {
 	var (
 		badgeAwardList []*entity.BadgeAward
 	)
 
-	badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeId(ctx, req.BadgeID, req.Page, req.PageSize)
+	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	if err != nil {
+		badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeId(ctx, req.BadgeID, req.Page, req.PageSize)
+	} else {
+		badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeIdAndUserId(ctx, req.BadgeID, req.UserID, req.Page, req.PageSize)
+	}
+
 	if err != nil {
 		return
 	}
@@ -197,24 +206,10 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 ) {
 	var (
 		earnedCounts []*entity.BadgeEarnedCount
-		userInfo     *schema.UserBasicInfo
-		exist        bool
 	)
 
-	// validate user exists or not
-	if len(req.Username) > 0 {
-		userInfo, exist, err = b.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
-		if err != nil {
-			return
-		}
-		if !exist {
-			err = errors.BadRequest(reason.UserNotFound)
-			return
-		}
-		req.UserID = userInfo.ID
-	}
-	if len(req.UserID) == 0 {
-		err = errors.BadRequest(reason.UserNotFound)
+	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	if err != nil {
 		return
 	}
 
@@ -223,7 +218,7 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 		return
 	}
 	total = int64(len(earnedCounts))
-	resp = make([]*schema.GetUserBadgeAwardListResp, 0, total)
+	resp = make([]*schema.GetUserBadgeAwardListResp, total)
 
 	for i, earnedCount := range earnedCounts {
 		badge, exists, e := b.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
@@ -235,7 +230,7 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 			continue
 		}
 		resp[i] = &schema.GetUserBadgeAwardListResp{
-			ID:          badge.ID,
+			ID:          uid.EnShortID(badge.ID),
 			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
 			Icon:        badge.Icon,
 			EarnedCount: earnedCount.EarnedCount,
@@ -243,5 +238,83 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 		}
 	}
 
+	return
+}
+
+// GetUserRecentBadgeAwardList get user badge award list
+func (b *BadgeAwardService) GetUserRecentBadgeAwardList(
+	ctx *gin.Context,
+	req *schema.GetUserBadgeAwardListReq,
+) (
+	resp []*schema.GetUserBadgeAwardListResp,
+	total int64,
+	err error,
+) {
+	var (
+		earnedCounts []*entity.BadgeAwardRecent
+	)
+
+	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	if err != nil {
+		return
+	}
+
+	earnedCounts, err = b.badgeAwardRepo.ListNewestEarned(ctx, req.UserID, req.Limit)
+	if err != nil {
+		return
+	}
+
+	total = int64(len(earnedCounts))
+	resp = make([]*schema.GetUserBadgeAwardListResp, total)
+
+	for i, earnedCount := range earnedCounts {
+		badge, exists, e := b.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
+		if e != nil {
+			err = e
+			return
+		}
+		if !exists {
+			continue
+		}
+		resp[i] = &schema.GetUserBadgeAwardListResp{
+			ID:          uid.EnShortID(badge.ID),
+			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
+			Icon:        badge.Icon,
+			EarnedCount: earnedCount.EarnedCount,
+			Level:       badge.Level,
+		}
+	}
+
+	return
+}
+
+// validate user
+
+type userReq struct {
+	UserID   string
+	Username string
+}
+
+func (b *BadgeAwardService) validateUserByUsername(ctx context.Context, userName string) (userID string, err error) {
+	var (
+		userInfo *schema.UserBasicInfo
+		exist    bool
+	)
+	// validate user exists or not
+	if len(userName) > 0 {
+		userInfo, exist, err = b.userCommon.GetUserBasicInfoByUserName(ctx, userName)
+		if err != nil {
+			return
+		}
+		if !exist {
+			err = errors.BadRequest(reason.UserNotFound)
+			return
+		}
+		userID = userInfo.ID
+	}
+	if len(userID) == 0 {
+		err = errors.BadRequest(reason.UserNotFound)
+		return
+	}
 	return
 }

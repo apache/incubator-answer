@@ -355,16 +355,23 @@ definitions:
   schema.BadgeListInfo:
     properties:
       award_count:
+        description: badge award count
         type: integer
       earned:
+        description: badge earned count
         type: boolean
       icon:
+        description: badge icon
         type: string
       id:
+        description: badge id
         type: string
       level:
-        $ref: '#/definitions/entity.BadgeLevel'
+        allOf:
+        - $ref: '#/definitions/entity.BadgeLevel'
+        description: badge level
       name:
+        description: badge name
         type: string
     type: object
   schema.CloseQuestionReq:
@@ -541,29 +548,40 @@ definitions:
   schema.GetBadgeInfoResp:
     properties:
       award_count:
+        description: badge award count
         type: integer
       description:
+        description: badge description
         type: string
       earned_count:
+        description: badge earned count
         type: integer
       icon:
+        description: badge icon
         type: string
       id:
+        description: badge id
         type: string
       is_single:
+        description: badge is single or multiple
         type: boolean
       level:
-        $ref: '#/definitions/entity.BadgeLevel'
+        allOf:
+        - $ref: '#/definitions/entity.BadgeLevel'
+        description: badge level
       name:
+        description: badge name
         type: string
     type: object
   schema.GetBadgeListResp:
     properties:
       badges:
+        description: badge list info
         items:
           $ref: '#/definitions/schema.BadgeListInfo'
         type: array
       group_name:
+        description: badge group name
         type: string
     type: object
   schema.GetCommentPersonalWithPageResp:
@@ -1206,14 +1224,20 @@ definitions:
   schema.GetUserBadgeAwardListResp:
     properties:
       earned_count:
+        description: badge award count
         type: integer
       icon:
+        description: badge icon
         type: string
       id:
+        description: badge id
         type: string
       level:
-        $ref: '#/definitions/entity.BadgeLevel'
+        allOf:
+        - $ref: '#/definitions/entity.BadgeLevel'
+        description: badge level
       name:
+        description: badge name
         type: string
     type: object
   schema.GetUserNotificationConfigResp:
@@ -4197,6 +4221,10 @@ paths:
         name: badge_id
         required: true
         type: string
+      - description: only list the award by username
+        in: query
+        name: username
+        type: string
       produces:
       - application/json
       responses:
@@ -4220,11 +4248,41 @@ paths:
       - application/json
       description: get user badge award list
       parameters:
-      - description: user id
+      - description: user name
         in: query
-        name: user_id
+        name: username
         required: true
-        type: integer
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetUserBadgeAwardListResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user badge award list
+      tags:
+      - api-badge
+  /answer/api/v1/badge/user/awards/recent:
+    get:
+      consumes:
+      - application/json
+      description: get user badge award list
+      parameters:
+      - description: user name
+        in: query
+        name: username
+        required: true
+        type: string
       produces:
       - application/json
       responses:

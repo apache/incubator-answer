@@ -2326,6 +2326,12 @@ const docTemplate = `{
                         "name": "badge_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "only list the award by username",
+                        "name": "username",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2370,9 +2376,61 @@ const docTemplate = `{
                 "summary": "get user badge award list",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "user id",
-                        "name": "user_id",
+                        "type": "string",
+                        "description": "user name",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetUserBadgeAwardListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge/user/awards/recent": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get user badge award list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user name",
+                        "name": "username",
                         "in": "query",
                         "required": true
                     }
@@ -7565,21 +7623,31 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "award_count": {
+                    "description": "badge award count",
                     "type": "integer"
                 },
                 "earned": {
+                    "description": "badge earned count",
                     "type": "boolean"
                 },
                 "icon": {
+                    "description": "badge icon",
                     "type": "string"
                 },
                 "id": {
+                    "description": "badge id",
                     "type": "string"
                 },
                 "level": {
-                    "$ref": "#/definitions/entity.BadgeLevel"
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
                 },
                 "name": {
+                    "description": "badge name",
                     "type": "string"
                 }
             }
@@ -7839,27 +7907,39 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "award_count": {
+                    "description": "badge award count",
                     "type": "integer"
                 },
                 "description": {
+                    "description": "badge description",
                     "type": "string"
                 },
                 "earned_count": {
+                    "description": "badge earned count",
                     "type": "integer"
                 },
                 "icon": {
+                    "description": "badge icon",
                     "type": "string"
                 },
                 "id": {
+                    "description": "badge id",
                     "type": "string"
                 },
                 "is_single": {
+                    "description": "badge is single or multiple",
                     "type": "boolean"
                 },
                 "level": {
-                    "$ref": "#/definitions/entity.BadgeLevel"
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
                 },
                 "name": {
+                    "description": "badge name",
                     "type": "string"
                 }
             }
@@ -7868,12 +7948,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "badges": {
+                    "description": "badge list info",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/schema.BadgeListInfo"
                     }
                 },
                 "group_name": {
+                    "description": "badge group name",
                     "type": "string"
                 }
             }
@@ -8790,18 +8872,27 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "earned_count": {
+                    "description": "badge award count",
                     "type": "integer"
                 },
                 "icon": {
+                    "description": "badge icon",
                     "type": "string"
                 },
                 "id": {
+                    "description": "badge id",
                     "type": "string"
                 },
                 "level": {
-                    "$ref": "#/definitions/entity.BadgeLevel"
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
                 },
                 "name": {
+                    "description": "badge name",
                     "type": "string"
                 }
             }

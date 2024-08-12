@@ -108,13 +108,21 @@ func (r *badgeAwardRepo) ListAllByUserId(ctx context.Context, userID string) (ba
 func (r *badgeAwardRepo) ListPagedByBadgeId(ctx context.Context, badgeID string, page int, pageSize int) (badgeAwardList []*entity.BadgeAward, total int64, err error) {
 	session := r.data.DB.Context(ctx)
 	session.Where("badge_id = ?", badgeID)
-	total, err = pager.Help(page, pageSize, &badgeAwardList, &entity.Question{}, session)
+	total, err = pager.Help(page, pageSize, &badgeAwardList, &entity.BadgeAward{}, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
-func (r *badgeAwardRepo) ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
+
+// ListPagedByBadgeIdAndUserId list badge awards by badge id and user id
+func (r *badgeAwardRepo) ListPagedByBadgeIdAndUserId(ctx context.Context, badgeID string, userID string, page int, pageSize int) (badgeAwardList []*entity.BadgeAward, total int64, err error) {
+	session := r.data.DB.Context(ctx)
+	session.Where("badge_id = ? AND user_id = ?", badgeID, userID)
+	total, err = pager.Help(page, pageSize, &badgeAwardList, &entity.Question{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 func (r *badgeAwardRepo) ListPagedByObjectId(ctx context.Context, badgeID string, awardKey string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
@@ -132,6 +140,19 @@ func (r *badgeAwardRepo) ListTagPagedByBadgeIdAndUserId(ctx context.Context, bad
 func (r *badgeAwardRepo) ListPagedLatest(ctx context.Context, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
+
+// ListNewestEarned list newest earned badge awards
+func (r *badgeAwardRepo) ListNewestEarned(ctx context.Context, userID string, limit int) (badgeAwards []*entity.BadgeAwardRecent, err error) {
+	badgeAwards = make([]*entity.BadgeAwardRecent, 0)
+	err = r.data.DB.Context(ctx).
+		Select("user_id, badge_id, max(created_at) created,count(*) earned_count").
+		Where("user_id = ? AND is_badge_deleted = ? ", userID, entity.IsBadgeNotDeleted).
+		GroupBy("badge_id").
+		OrderBy("created desc").
+		Limit(limit).Find(&badgeAwards)
+	return
+}
+
 func (r *badgeAwardRepo) ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
