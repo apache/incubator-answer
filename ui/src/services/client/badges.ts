@@ -52,7 +52,9 @@ export const useGetBadgeInfo = (id: string) => {
 
 export const useBadgeDetailList = (params: Type.BadgeDetailListReq) => {
   const { data, error, mutate } = useSWR<Type.BadgeDetailListRes, Error>(
-    `/answer/api/v1/badge/awards/page?${qs.stringify(params)}`,
+    `/answer/api/v1/badge/awards/page?${qs.stringify(params, {
+      skipNulls: true,
+    })}`,
     request.instance.get,
   );
   return {
