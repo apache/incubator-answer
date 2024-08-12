@@ -273,7 +273,7 @@ func addBadges(ctx context.Context, x *xorm.Engine) (err error) {
 		return
 	}
 	for _, badge := range defaultBadgeTable {
-		badge.ID, err = uniqueIDRepo.GenUniqueIDStr(ctx, entity.Badge{}.TableName())
+		badge.ID, err = uniqueIDRepo.GenUniqueIDStr(ctx, new(entity.Badge).TableName())
 		if err != nil {
 			return
 		}

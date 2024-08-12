@@ -136,7 +136,7 @@ func (m *Mentor) initBadge() {
 	}
 
 	for _, badge := range defaultBadgeTable {
-		badge.ID, m.err = uniqueIDRepo.GenUniqueIDStr(m.ctx, entity.Badge{}.TableName())
+		badge.ID, m.err = uniqueIDRepo.GenUniqueIDStr(m.ctx, new(entity.Badge).TableName())
 		if m.err != nil {
 			return
 		}

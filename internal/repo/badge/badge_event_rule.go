@@ -29,6 +29,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"strconv"
 )
 
 // eventRuleRepo event rule repo
@@ -170,6 +171,26 @@ func (br *eventRuleRepo) ReachAnswerAcceptedAmount(ctx context.Context,
 	if b == nil {
 		return nil, nil
 	}
+	if len(event.AnswerUserID) == 0 {
+		return nil, nil
+	}
+
+	// count user's accepted answer amount
+	amount, err := br.data.DB.Context(ctx).Count(&entity.Answer{
+		UserID:   event.AnswerUserID,
+		Accepted: schema.AnswerAcceptedEnable,
+		Status:   entity.AnswerStatusAvailable,
+	})
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	// get badge requirement
+	requirement := b.GetIntParam("amount")
+	if requirement == 0 || amount < requirement {
+		return nil, nil
+	}
+
 	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
 }
 
@@ -180,7 +201,20 @@ func (br *eventRuleRepo) ReachAnswerVote(ctx context.Context,
 	if b == nil {
 		return nil, nil
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+
+	// get vote amount
+	amount, _ := strconv.Atoi(event.GetExtra("vote_up_amount"))
+	if amount == 0 {
+		return nil, nil
+	}
+
+	// get badge requirement
+	requirement := b.GetIntParam("amount")
+	if requirement == 0 || int64(amount) < requirement {
+		return nil, nil
+	}
+
+	return append(awards, br.createBadgeAward(event.AnswerUserID, b.ID, event.AnswerID)), nil
 }
 
 // ReachQuestionVote reach question vote
@@ -190,7 +224,20 @@ func (br *eventRuleRepo) ReachQuestionVote(ctx context.Context,
 	if b == nil {
 		return nil, nil
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+
+	// get vote amount
+	amount, _ := strconv.Atoi(event.GetExtra("vote_up_amount"))
+	if amount == 0 {
+		return nil, nil
+	}
+
+	// get badge requirement
+	requirement := b.GetIntParam("amount")
+	if requirement == 0 || int64(amount) < requirement {
+		return nil, nil
+	}
+
+	return append(awards, br.createBadgeAward(event.QuestionUserID, b.ID, event.QuestionID)), nil
 }
 
 func (br *eventRuleRepo) getBadgeByHandler(ctx context.Context, handler string) (b *entity.Badge) {
@@ -207,10 +254,10 @@ func (br *eventRuleRepo) getBadgeByHandler(ctx context.Context, handler string) 
 	return b
 }
 
-func (br *eventRuleRepo) createBadgeAward(userID, badgeID, objectID string) (awards *entity.BadgeAward) {
+func (br *eventRuleRepo) createBadgeAward(userID, badgeID, awardKey string) (awards *entity.BadgeAward) {
 	return &entity.BadgeAward{
 		UserID:   userID,
 		BadgeID:  badgeID,
-		AwardKey: objectID,
+		AwardKey: awardKey,
 	}
 }
