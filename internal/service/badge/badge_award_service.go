@@ -106,7 +106,7 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 		return
 	}
 
-	resp = make([]*schema.GetBadgeAwardWithPageResp, 0, len(badgeAwardList))
+	resp = make([]*schema.GetBadgeAwardWithPageResp, len(badgeAwardList))
 
 	for i, badgeAward := range badgeAwardList {
 		var (
