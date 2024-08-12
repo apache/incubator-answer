@@ -21,6 +21,11 @@ package entity
 
 import "time"
 
+const (
+	IsBadgeNotDeleted = 0
+	IsBadgeDeleted    = 1
+)
+
 // BadgeAward badge_award
 type BadgeAward struct {
 	ID             string    `json:"id" xorm:"id"`
@@ -30,7 +35,7 @@ type BadgeAward struct {
 	BadgeID        string    `json:"badge_id" xorm:"not null index BIGINT(20) badge_id"`
 	AwardKey       string    `json:"award_key" xorm:"not null index VARCHAR(64) award_key"`
 	BadgeGroupID   int64     `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
-	IsBadgeDeleted int8      `json:"is_badge_deleted" xorm:"not null index TINYINT(1) s_badge_deleted"`
+	IsBadgeDeleted int8      `json:"is_badge_deleted" xorm:"not null index TINYINT(1) is_badge_deleted"`
 }
 
 // TableName badge_award table name
@@ -45,5 +50,19 @@ type BadgeEarnedCount struct {
 
 // TableName badge_award table name
 func (BadgeEarnedCount) TableName() string {
+	return "badge_award"
+}
+
+type BadgeAwardRecent struct {
+	Created        time.Time `xorm:"created"`
+	UserID         string    `xorm:"user_id"`
+	BadgeID        string    `xorm:"badge_id"`
+	AwardKey       string    `xorm:"award_key"`
+	EarnedCount    int64     `xorm:"earned_count"`
+	IsBadgeDeleted int8      `xorm:"is_badge_deleted"`
+}
+
+// TableName badge_award table name
+func (BadgeAwardRecent) TableName() string {
 	return "badge_award"
 }
