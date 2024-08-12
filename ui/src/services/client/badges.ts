@@ -64,3 +64,19 @@ export const useBadgeDetailList = (params: Type.BadgeDetailListReq) => {
     mutate,
   };
 };
+
+export const useGetRecentAwardBadges = (username) => {
+  const apiUrl = username
+    ? `/answer/api/v1/badge/user/awards/recent?username=${username}`
+    : null;
+  const { data, error, mutate } = useSWR<
+    { count: number; list: Array<Type.BadgeListItem> },
+    Error
+  >(apiUrl, request.instance.get);
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+    mutate,
+  };
+};

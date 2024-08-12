@@ -1479,7 +1479,7 @@ ui:
     earned_x: Earned x{{ number }}
     x_awarded: "{{ number }} awarded"
     can_earn_multiple: You can earn this multiple times.
-
+    earned: Earned
 
   admin:
     admin_header:
