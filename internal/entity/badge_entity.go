@@ -19,7 +19,10 @@
 
 package entity
 
-import "time"
+import (
+	"github.com/tidwall/gjson"
+	"time"
+)
 
 type BadgeLevel int
 
@@ -38,23 +41,31 @@ const (
 
 // Badge badge
 type Badge struct {
-	ID           string     `json:"id" xorm:"id"`
-	CreatedAt    time.Time  `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-	UpdatedAt    time.Time  `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
-	Name         string     `json:"name" xorm:"not null default '' VARCHAR(256) name"`
-	Icon         string     `json:"icon" xorm:"not null default '' VARCHAR(1024) icon"`
-	AwardCount   int        `json:"award_count" xorm:"not null default 0 INT(11) award_count"`
-	Description  string     `json:"description" xorm:"not null default '' MEDIUMTEXT description"`
-	Status       int8       `json:"status" xorm:"not null default 1 INT(11) status"`
-	BadgeGroupID int64      `json:"badge_group_id" xorm:"not null default 0 BIGINT(20) badge_group_id"`
-	Level        BadgeLevel `json:"level" xorm:"not null default 1 TINYINT(4) level"`
-	Single       int8       `json:"single" xorm:"not null default 1 TINYINT(4) single"`
-	Collect      string     `json:"collect" xorm:"not null default '' VARCHAR(64) collect"`
-	Handler      string     `json:"handler" xorm:"not null default '' VARCHAR(64) handler"`
-	Param        string     `json:"param" xorm:"not null default '' VARCHAR(128) param"`
+	ID           string     `xorm:"not null pk autoincr BIGINT(20) id"`
+	CreatedAt    time.Time  `xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt    time.Time  `xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	Name         string     `xorm:"not null default '' VARCHAR(256) name"`
+	Icon         string     `xorm:"not null default '' VARCHAR(1024) icon"`
+	AwardCount   int        `xorm:"not null default 0 INT(11) award_count"`
+	Description  string     `xorm:"not null default '' MEDIUMTEXT description"`
+	Status       int8       `xorm:"not null default 1 INT(11) status"`
+	BadgeGroupID int64      `xorm:"not null default 0 BIGINT(20) badge_group_id"`
+	Level        BadgeLevel `xorm:"not null default 1 TINYINT(4) level"`
+	Single       int8       `xorm:"not null default 1 TINYINT(4) single"`
+	Collect      string     `xorm:"not null default '' VARCHAR(64) collect"`
+	Handler      string     `xorm:"not null default '' VARCHAR(64) handler"`
+	Param        string     `xorm:"not null default '' TEXT param"`
 }
 
 // TableName badge table name
-func (Badge) TableName() string {
+func (b *Badge) TableName() string {
 	return "badge"
+}
+
+func (b *Badge) GetIntParam(key string) int64 {
+	return gjson.Get(b.Param, key).Int()
+}
+
+func (b *Badge) GetStringParam(key string) string {
+	return gjson.Get(b.Param, key).String()
 }
