@@ -21,20 +21,17 @@ import { memo, FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import classnames from 'classnames';
-
 import { Avatar } from '@/components';
 import { formatCount } from '@/utils';
 
 interface Props {
   data: any;
-  className?: string;
 }
 
-const Index: FC<Props> = ({ data, className = '' }) => {
+const Index: FC<Props> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
   return (
-    <div className={classnames('d-flex', className)}>
+    <div className="d-flex">
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data?.username}`}>
           <Avatar
@@ -72,19 +69,17 @@ const Index: FC<Props> = ({ data, className = '' }) => {
           />
         </>
       )}
-      <div className="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
-        <div className="me-1 me-md-0 d-flex align-items-center">
-          {data?.status !== 'deleted' ? (
-            <Link
-              to={`/users/${data?.username}`}
-              className="me-1 text-break name-ellipsis"
-              style={{ maxWidth: '100px' }}>
-              {data?.display_name}
-            </Link>
-          ) : (
-            <span className="me-1 text-break">{data?.display_name}</span>
-          )}
-        </div>
+      <div className="small text-secondary d-flex flex-column">
+        {data?.status !== 'deleted' ? (
+          <Link
+            to={`/users/${data?.username}`}
+            className="me-1 text-break name-ellipsis"
+            style={{ maxWidth: '100px' }}>
+            {data?.display_name}
+          </Link>
+        ) : (
+          <span className="me-1 text-break">{data?.display_name}</span>
+        )}
         <div className="text-secondary">
           {formatCount(data?.rank)}{' '}
           {t('x_reputation', { keyPrefix: 'personal' })}

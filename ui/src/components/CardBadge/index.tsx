@@ -32,23 +32,34 @@ import './index.scss';
 interface IProps {
   data: Type.BadgeListItem;
   showAwardedCount?: boolean;
+  urlSearchParams?: string;
+  badgePillType?: 'earned' | 'count';
 }
 
-const Index: FC<IProps> = ({ data, showAwardedCount = false }) => {
+const Index: FC<IProps> = ({
+  data,
+  badgePillType = 'earned',
+  showAwardedCount = false,
+  urlSearchParams,
+}) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
   console.log(data);
   return (
-    <Link className="card text-center badge-card" to={`/badges/${data.id}`}>
+    <Link
+      className="card text-center badge-card"
+      to={`/badges/${data.id}${urlSearchParams ? `?${urlSearchParams}` : ''}`}>
       <Card.Body>
-        {data.earned && (
+        {data.earned && badgePillType === 'earned' && (
           <Badge bg="success" className="label">
             {t('earned')}
           </Badge>
         )}
 
-        {/* <Badge pill={badgePill} bg="success" className="label">
-          {showEarned ? t('earned') : data.award_count}
-        </Badge> */}
+        {badgePillType === 'count' && Number(data?.earned_count) > 0 && (
+          <Badge pill bg="success" className="label">
+            x{data.earned_count}
+          </Badge>
+        )}
         {data.icon.startsWith('http') ? (
           <img src={data.icon} width={96} height={96} alt={data.name} />
         ) : (
