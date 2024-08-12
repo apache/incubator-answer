@@ -23,28 +23,44 @@ import "github.com/apache/incubator-answer/internal/entity"
 
 // BadgeListInfo get badge list response
 type BadgeListInfo struct {
-	ID         string            `json:"id" `
-	Name       string            `json:"name" `
-	Icon       string            `json:"icon" `
-	AwardCount int               `json:"award_count" `
-	Earned     bool              `json:"earned" `
-	Level      entity.BadgeLevel `json:"level" `
+	// badge id
+	ID string `json:"id" `
+	// badge name
+	Name string `json:"name" `
+	// badge icon
+	Icon string `json:"icon" `
+	// badge award count
+	AwardCount int `json:"award_count" `
+	// badge earned count
+	Earned bool `json:"earned" `
+	// badge level
+	Level entity.BadgeLevel `json:"level" `
 }
 
 type GetBadgeListResp struct {
-	Badges    []*BadgeListInfo `json:"badges" `
-	GroupName string           `json:"group_name" `
+	// badge list info
+	Badges []*BadgeListInfo `json:"badges" `
+	// badge group name
+	GroupName string `json:"group_name" `
 }
 
 type GetBadgeInfoResp struct {
-	ID          string            `json:"id" `
-	Name        string            `json:"name" `
-	Description string            `json:"description" `
-	Icon        string            `json:"icon" `
-	AwardCount  int               `json:"award_count" `
-	EarnedCount int64             `json:"earned_count" `
-	IsSingle    bool              `json:"is_single" `
-	Level       entity.BadgeLevel `json:"level" `
+	// badge id
+	ID string `json:"id" `
+	// badge name
+	Name string `json:"name" `
+	// badge description
+	Description string `json:"description" `
+	// badge icon
+	Icon string `json:"icon" `
+	// badge award count
+	AwardCount int `json:"award_count" `
+	// badge earned count
+	EarnedCount int64 `json:"earned_count" `
+	// badge is single or multiple
+	IsSingle bool `json:"is_single" `
+	// badge level
+	Level entity.BadgeLevel `json:"level" `
 }
 
 type GetBadgeAwardWithPageReq struct {
@@ -54,29 +70,48 @@ type GetBadgeAwardWithPageReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// badge id
 	BadgeID string `validate:"required" form:"badge_id"`
+	// username
+	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	// user id
 	UserID string `json:"-"`
 }
 
 type GetBadgeAwardWithPageResp struct {
-	CreatedAt      int64         `json:"created_at"`
-	ObjectID       string        `json:"object_id"`
-	QuestionID     string        `json:"question_id"`
-	AnswerID       string        `json:"answer_id"`
-	CommentID      string        `json:"comment_id"`
-	ObjectType     string        `json:"object_type" enums:"question,answer,comment"`
-	UrlTitle       string        `json:"url_title"`
+	// created time
+	CreatedAt int64 `json:"created_at"`
+	// object id
+	ObjectID string `json:"object_id"`
+	// question id
+	QuestionID string `json:"question_id"`
+	// answer id
+	AnswerID string `json:"answer_id"`
+	// comment id
+	CommentID string `json:"comment_id"`
+	// object type
+	ObjectType string `json:"object_type" enums:"question,answer,comment"`
+	// url title
+	UrlTitle string `json:"url_title"`
+	// author user info
 	AuthorUserInfo UserBasicInfo `json:"author_user_info"`
 }
 
 type GetUserBadgeAwardListReq struct {
-	Username string `validate:"omitempty,gt=0,lte=100" form:"username"`
-	UserID   string `json:"-"`
+	// username
+	Username string `validate:"required,gt=0,lte=100" form:"username"`
+	// user id
+	UserID string `json:"-"`
+	Limit  int    `json:"-"`
 }
+
 type GetUserBadgeAwardListResp struct {
-	ID          string            `json:"id" `
-	Name        string            `json:"name" `
-	Icon        string            `json:"icon" `
-	EarnedCount int64             `json:"earned_count" `
-	Level       entity.BadgeLevel `json:"level" `
+	// badge id
+	ID string `json:"id" `
+	// badge name
+	Name string `json:"name" `
+	// badge icon
+	Icon string `json:"icon" `
+	// badge award count
+	EarnedCount int64 `json:"earned_count" `
+	// badge level
+	Level entity.BadgeLevel `json:"level" `
 }

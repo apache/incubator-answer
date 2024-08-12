@@ -87,6 +87,7 @@ func (b *BadgeController) GetBadgeInfo(ctx *gin.Context) {
 // @Param page query int false "page"
 // @Param page_size query int false "page size"
 // @Param badge_id query string true "badge id"
+// @Param username query string false "only list the award by username"
 // @Success 200 {object} handler.RespBody{data=schema.GetBadgeInfoResp}
 // @Router /answer/api/v1/badge/awards/page [get]
 func (b *BadgeController) GetBadgeAwardList(ctx *gin.Context) {
@@ -95,7 +96,6 @@ func (b *BadgeController) GetBadgeAwardList(ctx *gin.Context) {
 		return
 	}
 	req.BadgeID = uid.DeShortID(req.BadgeID)
-	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, total, err := b.badgeAwardService.GetBadgeAwardList(ctx, req)
 	if err != nil {
@@ -105,23 +105,50 @@ func (b *BadgeController) GetBadgeAwardList(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, resp))
 }
 
-// GetBadgeAwardListByUsername get user badge award list
+// GetAllBadgeAwardListByUsername get user badge award list
 // @Summary get user badge award list
 // @Description get user badge award list
 // @Tags api-badge
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param user_id query int true "user id"
+// @Param username query string true "user name"
 // @Success 200 {object} handler.RespBody{data=[]schema.GetUserBadgeAwardListResp}
 // @Router /answer/api/v1/badge/user/awards [get]
-func (b *BadgeController) GetBadgeAwardListByUsername(ctx *gin.Context) {
+func (b *BadgeController) GetAllBadgeAwardListByUsername(ctx *gin.Context) {
 	req := &schema.GetUserBadgeAwardListReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 
 	resp, total, err := b.badgeAwardService.GetUserBadgeAwardList(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, resp))
+}
+
+// GetRecentBadgeAwardListByUsername get user badge award list
+// @Summary get user badge award list
+// @Description get user badge award list
+// @Tags api-badge
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param username query string true "user name"
+// @Success 200 {object} handler.RespBody{data=[]schema.GetUserBadgeAwardListResp}
+// @Router /answer/api/v1/badge/user/awards/recent [get]
+func (b *BadgeController) GetRecentBadgeAwardListByUsername(ctx *gin.Context) {
+	req := &schema.GetUserBadgeAwardListReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.Limit = 10
+
+	resp, total, err := b.badgeAwardService.GetUserRecentBadgeAwardList(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
