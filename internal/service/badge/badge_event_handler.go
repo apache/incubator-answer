@@ -60,8 +60,6 @@ func NewBadgeEventService(
 }
 
 func (ns *BadgeEventService) Handler(ctx context.Context, msg *schema.EventMsg) error {
-	log.Debugf("received badge event %+v", msg)
-
 	awards := ns.eventRuleRepo.HandleEventWithRule(ctx, msg)
 	if len(awards) == 0 {
 		return nil
