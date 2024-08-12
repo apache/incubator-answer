@@ -24,10 +24,11 @@ import { CardBadge } from '@/components';
 
 interface IProps {
   data: Type.BadgeListItem[];
+  username: string;
   visible: boolean;
 }
 
-const Index: FC<IProps> = ({ data, visible }) => {
+const Index: FC<IProps> = ({ data, visible, username }) => {
   console.log(data);
   if (!visible) {
     return null;
@@ -35,7 +36,13 @@ const Index: FC<IProps> = ({ data, visible }) => {
   return (
     <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
       {data.map((item) => {
-        return <CardBadge data={item} />;
+        return (
+          <CardBadge
+            data={item}
+            urlSearchParams={`username=${username}`}
+            badgePillType="count"
+          />
+        );
       })}
     </div>
   );

@@ -69,16 +69,16 @@ const Index: FC<IProps> = ({ data }) => {
             <div className="mt-2">{t('can_earn_multiple')}</div>
           )}
 
-          {data.award_count > 0 && data.earned_count > 0 && (
+          {(data.award_count > 0 || data.earned_count > 0) && (
             <div className="small mt-2">
               {data.award_count > 0 && (
-                <span className="text-secondary">
+                <span className="text-secondary me-2">
                   {t('x_awarded', { number: formatCount(data.award_count) })}
                 </span>
               )}
 
               {data.earned_count > 0 && (
-                <Badge bg="success" className="ms-2">
+                <Badge bg="success">
                   {t('earned_x', { number: data.earned_count })}
                 </Badge>
               )}

@@ -744,6 +744,7 @@ export interface BadgeListItem {
   earned: boolean;
   /** 1: bronze 2: silver 3:gold */
   level: number;
+  earned_count?: number;
 }
 
 export interface BadgeListGroupItem {

@@ -102,6 +102,7 @@ const Personal: FC = () => {
             visible={tabName === 'overview'}
             introduction={userInfo?.bio_html || ''}
             data={topData}
+            username={username}
           />
 
           <ListHead
@@ -119,7 +120,11 @@ const Personal: FC = () => {
           <Reputation data={list} visible={tabName === 'reputation'} />
           <Comments data={list} visible={tabName === 'comments'} />
           <Votes data={list} visible={tabName === 'votes'} />
-          <Badges data={list} visible={tabName === 'badges'} />
+          <Badges
+            data={list}
+            visible={tabName === 'badges'}
+            username={username}
+          />
           {!list?.length && !isLoading && <Empty />}
 
           {count > 0 && (
