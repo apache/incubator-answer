@@ -29,7 +29,6 @@ interface IProps {
 }
 
 const Index: FC<IProps> = ({ data, visible, username }) => {
-  console.log(data);
   if (!visible) {
     return null;
   }
