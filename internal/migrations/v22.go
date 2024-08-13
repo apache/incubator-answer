@@ -30,9 +30,9 @@ import (
 
 var (
 	defaultBadgeGroupTable = []*entity.BadgeGroup{
-		{ID: "1", Name: "Getting Started"},
-		{ID: "2", Name: "Community"},
-		{ID: "3", Name: "Posting"},
+		{ID: "1", Name: "badge.default_badge_groups.getting_started.name"},
+		{ID: "2", Name: "badge.default_badge_groups.community.name"},
+		{ID: "3", Name: "badge.default_badge_groups.posting.name"},
 	}
 
 	defaultBadgeTable = []*entity.Badge{
