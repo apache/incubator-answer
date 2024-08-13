@@ -43,7 +43,6 @@ const Index: FC<IProps> = ({
   urlSearchParams,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges' });
-  console.log(data);
   return (
     <Link
       className="card text-center badge-card"
