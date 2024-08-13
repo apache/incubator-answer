@@ -146,6 +146,8 @@ backend:
     common:
       invalid_url:
         other: Invalid URL.
+      status_invalid:
+        other: Invalid status.
     password:
       space_invalid:
         other: Password cannot contain spaces.
@@ -776,6 +778,16 @@ backend:
           other: Famous Link
         desc:
           other: Posted an external link with 100 clicks.
+    default_badge_groups:
+      getting_started:
+        name:
+          other: Getting Started
+      community:
+        name:
+          other: Community
+      posting:
+        name:
+          other: Posting
 
 # The following fields are used for interface presentation(Front-end)
 ui:

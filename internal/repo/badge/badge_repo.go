@@ -22,11 +22,13 @@ package badge
 import (
 	"context"
 	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
+	"xorm.io/xorm"
 )
 
 type badgeRepo struct {
@@ -90,10 +92,29 @@ func (r *badgeRepo) ListByLevelAndGroup(ctx context.Context, level entity.BadgeL
 	return
 }
 
-// ListActivated returns a list of activated badges
-func (r *badgeRepo) ListActivated(ctx context.Context) (badges []*entity.Badge, err error) {
+// ListPaged returns a list of activated badges
+func (r *badgeRepo) ListPaged(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error) {
 	badges = make([]*entity.Badge, 0)
-	err = r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusActive).Find(&badges)
+	session := r.data.DB.Context(ctx).Where("status <> ?", entity.BadgeStatusDeleted)
+	total, err = pager.Help(page, pageSize, &badges, &entity.Badge{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// ListActivated returns a list of activated badges
+func (r *badgeRepo) ListActivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error) {
+	badges = make([]*entity.Badge, 0)
+	total = 0
+
+	session := r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusActive)
+	if page == 0 || pageSize == 0 {
+		err = session.Find(&badges)
+	} else {
+		total, err = pager.Help(page, pageSize, &badges, &entity.Badge{}, session)
+	}
+
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -101,9 +122,17 @@ func (r *badgeRepo) ListActivated(ctx context.Context) (badges []*entity.Badge, 
 }
 
 // ListInactivated returns a list of inactivated badges
-func (r *badgeRepo) ListInactivated(ctx context.Context) (badges []*entity.Badge, err error) {
+func (r *badgeRepo) ListInactivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error) {
 	badges = make([]*entity.Badge, 0)
-	err = r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusInactive).Find(&badges)
+	total = 0
+
+	session := r.data.DB.Context(ctx).Where("status = ?", entity.BadgeStatusInactive)
+	if page == 0 || pageSize == 0 {
+		err = session.Find(&badges)
+	} else {
+		total, err = pager.Help(page, pageSize, &badges, &entity.Badge{}, session)
+	}
+
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -113,5 +142,30 @@ func (r *badgeRepo) ListInactivated(ctx context.Context) (badges []*entity.Badge
 // UpdateAwardCount updates the award count of a badge
 func (r *badgeRepo) UpdateAwardCount(ctx context.Context, id string, count int64) (err error) {
 	_, err = r.data.DB.Context(ctx).Where("id = ?", id).Incr("award_count", count).Update(&entity.Badge{})
+	return
+}
+
+// UpdateStatus updates the award count of a badge
+func (r *badgeRepo) UpdateStatus(ctx context.Context, id string, status int8) (err error) {
+	_, err = r.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		_, err = session.ID(id).Update(&entity.Badge{
+			Status: status,
+		})
+		if err != nil {
+			err = errors.InternalServer(reason.DatabaseError).WithError(session.Rollback()).WithStack()
+			return
+		}
+		if status >= entity.BadgeStatusDeleted {
+			_, err = session.Where("badge_id = ?", id).Cols("is_badge_deleted").Update(&entity.BadgeAward{
+				IsBadgeDeleted: entity.IsBadgeDeleted,
+			})
+		} else {
+			_, err = session.Where("badge_id = ?", id).Cols("is_badge_deleted").Update(&entity.BadgeAward{
+				IsBadgeDeleted: entity.IsBadgeNotDeleted,
+			})
+		}
+		return
+	})
+
 	return
 }

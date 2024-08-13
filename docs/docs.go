@@ -154,6 +154,113 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/badge/status": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update badge status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminBadge"
+                ],
+                "summary": "update badge status",
+                "parameters": [
+                    {
+                        "description": "UpdateBadgeStatusReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateBadgeStatusReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/badges": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "list all badges by page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminBadge"
+                ],
+                "summary": "list all badges by page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "",
+                            "active",
+                            "inactive"
+                        ],
+                        "type": "string",
+                        "description": "badge status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetBadgeListPagedResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/dashboard": {
             "get": {
                 "security": [
@@ -7652,6 +7759,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.BadgeStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive"
+            ],
+            "x-enum-varnames": [
+                "BadgeStatusActive",
+                "BadgeStatusInactive"
+            ]
+        },
         "schema.CloseQuestionReq": {
             "type": "object",
             "required": [
@@ -7941,6 +8059,55 @@ const docTemplate = `{
                 "name": {
                     "description": "badge name",
                     "type": "string"
+                }
+            }
+        },
+        "schema.GetBadgeListPagedResp": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "description": "badge award count",
+                    "type": "integer"
+                },
+                "description": {
+                    "description": "badge description",
+                    "type": "string"
+                },
+                "earned": {
+                    "description": "badge earned count",
+                    "type": "boolean"
+                },
+                "group_name": {
+                    "description": "badge group name",
+                    "type": "string"
+                },
+                "icon": {
+                    "description": "badge icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "badge name",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "badge status",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.BadgeStatus"
+                        }
+                    ]
                 }
             }
         },
@@ -10443,6 +10610,27 @@ const docTemplate = `{
                 },
                 "url_title": {
                     "type": "string"
+                }
+            }
+        },
+        "schema.UpdateBadgeStatusReq": {
+            "type": "object",
+            "required": [
+                "id",
+                "status"
+            ],
+            "properties": {
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "badge status",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.BadgeStatus"
+                        }
+                    ]
                 }
             }
         },

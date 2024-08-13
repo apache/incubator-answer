@@ -21,6 +21,23 @@ package schema
 
 import "github.com/apache/incubator-answer/internal/entity"
 
+const (
+	BadgeStatusActive   BadgeStatus = "active"
+	BadgeStatusInactive BadgeStatus = "inactive"
+)
+
+type BadgeStatus string
+
+var BadgeStatusMap = map[int8]BadgeStatus{
+	entity.BadgeStatusActive:   BadgeStatusActive,
+	entity.BadgeStatusInactive: BadgeStatusInactive,
+}
+
+var BadgeStatusEMap = map[BadgeStatus]int8{
+	BadgeStatusActive:   entity.BadgeStatusActive,
+	BadgeStatusInactive: entity.BadgeStatusInactive,
+}
+
 // BadgeListInfo get badge list response
 type BadgeListInfo struct {
 	// badge id
@@ -42,6 +59,43 @@ type GetBadgeListResp struct {
 	Badges []*BadgeListInfo `json:"badges" `
 	// badge group name
 	GroupName string `json:"group_name" `
+}
+
+type UpdateBadgeStatusReq struct {
+	// badge id
+	ID string `validate:"required" json:"id"`
+	// badge status
+	Status BadgeStatus `validate:"required" json:"status"`
+}
+
+type GetBadgeListPagedReq struct {
+	// page
+	Page int `validate:"omitempty,min=1" form:"page"`
+	// page size
+	PageSize int `validate:"omitempty,min=1" form:"page_size"`
+	// badge status
+	Status BadgeStatus `validate:"omitempty" form:"status"`
+}
+
+type GetBadgeListPagedResp struct {
+	// badge id
+	ID string `json:"id" `
+	// badge name
+	Name string `json:"name" `
+	// badge description
+	Description string `json:"description" `
+	// badge icon
+	Icon string `json:"icon" `
+	// badge award count
+	AwardCount int `json:"award_count" `
+	// badge earned count
+	Earned bool `json:"earned" `
+	// badge level
+	Level entity.BadgeLevel `json:"level" `
+	// badge group name
+	GroupName string `json:"group_name" `
+	// badge status
+	Status BadgeStatus `json:"status"`
 }
 
 type GetBadgeInfoResp struct {
