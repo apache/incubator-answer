@@ -221,7 +221,8 @@ const useRenderHtmlPlugin = (
       return (
         plugin.activated &&
         plugin.hooks?.useRender &&
-        plugin.info.type === PluginType.Editor
+        (plugin.info.type === PluginType.Editor ||
+          plugin.info.type === PluginType.Render)
       );
     })
     .forEach((plugin) => {
