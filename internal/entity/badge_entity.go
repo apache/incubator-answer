@@ -41,7 +41,7 @@ const (
 
 // Badge badge
 type Badge struct {
-	ID           string     `xorm:"not null pk autoincr BIGINT(20) id"`
+	ID           string     `xorm:"not null pk BIGINT(20) id"`
 	CreatedAt    time.Time  `xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
 	UpdatedAt    time.Time  `xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
 	Name         string     `xorm:"not null default '' VARCHAR(256) name"`

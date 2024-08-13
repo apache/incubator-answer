@@ -39,10 +39,12 @@ type BadgeRepo interface {
 	ListByLevel(ctx context.Context, level entity.BadgeLevel) ([]*entity.Badge, error)
 	ListByGroup(ctx context.Context, groupID int64) ([]*entity.Badge, error)
 	ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) ([]*entity.Badge, error)
-	ListActivated(ctx context.Context) ([]*entity.Badge, error)
-	ListInactivated(ctx context.Context) ([]*entity.Badge, error)
+	ListPaged(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
+	ListActivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
+	ListInactivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
 
-	UpdateAwardCount(ctx context.Context, id string, count int64) error
+	UpdateAwardCount(ctx context.Context, id string, count int64) (err error)
+	UpdateStatus(ctx context.Context, id string, status int8) (err error)
 }
 
 type BadgeService struct {
@@ -82,7 +84,7 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 	if err != nil {
 		return
 	}
-	badges, err = b.badgeRepo.ListActivated(ctx)
+	badges, _, err = b.badgeRepo.ListActivated(ctx, 0, 0)
 	if err != nil {
 		return
 	}
@@ -95,7 +97,7 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 	}
 
 	for _, group := range groups {
-		groupMap[converter.StringToInt64(group.ID)] = group.Name
+		groupMap[converter.StringToInt64(group.ID)] = translator.Tr(handler.GetLangByCtx(ctx), group.Name)
 	}
 
 	for _, badge := range badges {
@@ -122,11 +124,58 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 
 	for _, group := range groups {
 		resp = append(resp, &schema.GetBadgeListResp{
-			GroupName: group.Name,
+			GroupName: translator.Tr(handler.GetLangByCtx(ctx), group.Name),
 			Badges:    badgesMap[converter.StringToInt64(group.ID)],
 		})
 	}
 
+	return
+}
+
+// ListPaged list all badges by page
+func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPagedReq) (resp []*schema.GetBadgeListPagedResp, total int64, err error) {
+	var (
+		groups   []*entity.BadgeGroup
+		badges   []*entity.Badge
+		groupMap = make(map[int64]string, 0)
+	)
+
+	switch req.Status {
+	case schema.BadgeStatusActive:
+		badges, total, err = b.badgeRepo.ListActivated(ctx, req.Page, req.PageSize)
+	case schema.BadgeStatusInactive:
+		badges, total, err = b.badgeRepo.ListInactivated(ctx, req.Page, req.PageSize)
+	default:
+		badges, total, err = b.badgeRepo.ListPaged(ctx, req.Page, req.PageSize)
+	}
+
+	if err != nil {
+		return
+	}
+
+	// find all group and build group map
+	groups, err = b.badgeGroupRepo.ListGroups(ctx)
+	if err != nil {
+		return
+	}
+	for _, group := range groups {
+		groupMap[converter.StringToInt64(group.ID)] = translator.Tr(handler.GetLangByCtx(ctx), group.Name)
+	}
+
+	resp = make([]*schema.GetBadgeListPagedResp, len(badges))
+
+	for i, badge := range badges {
+		resp[i] = &schema.GetBadgeListPagedResp{
+			ID:          uid.EnShortID(badge.ID),
+			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
+			Description: translator.Tr(handler.GetLangByCtx(ctx), badge.Description),
+			Icon:        badge.Icon,
+			AwardCount:  badge.AwardCount,
+			Level:       badge.Level,
+			GroupName:   groupMap[badge.BadgeGroupID],
+			Status:      schema.BadgeStatusMap[badge.Status],
+		}
+	}
 	return
 }
 
@@ -162,5 +211,37 @@ func (b *BadgeService) GetBadgeInfo(ctx *gin.Context, id string, userID string) 
 		IsSingle:    badge.Single == entity.BadgeSingleAward,
 		Level:       badge.Level,
 	}
+	return
+}
+
+// UpdateStatus update badge status
+func (b *BadgeService) UpdateStatus(ctx *gin.Context, req *schema.UpdateBadgeStatusReq) (err error) {
+	var (
+		badge  *entity.Badge
+		exists bool
+	)
+	req.ID = uid.DeShortID(req.ID)
+
+	badge, exists, err = b.badgeRepo.GetByID(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	if !exists {
+		err = errors.BadRequest(reason.BadgeObjectNotFound)
+		return
+	}
+
+	status, ok := schema.BadgeStatusEMap[req.Status]
+	// check duplicate action
+	if badge.Status == status {
+		return
+	}
+
+	if !ok {
+		err = errors.BadRequest(reason.StatusInvalid)
+		return
+	}
+
+	err = b.badgeRepo.UpdateStatus(ctx, req.ID, status)
 	return
 }

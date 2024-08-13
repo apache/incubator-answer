@@ -56,6 +56,7 @@ type AnswerAPIRouter struct {
 	reviewController        *controller.ReviewController
 	metaController          *controller.MetaController
 	badgeController         *controller.BadgeController
+	adminBadgeController    *controller_admin.BadgeController
 }
 
 func NewAnswerAPIRouter(
@@ -88,6 +89,7 @@ func NewAnswerAPIRouter(
 	reviewController *controller.ReviewController,
 	metaController *controller.MetaController,
 	badgeController *controller.BadgeController,
+	adminBadgeController *controller_admin.BadgeController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:          langController,
@@ -119,6 +121,7 @@ func NewAnswerAPIRouter(
 		reviewController:        reviewController,
 		metaController:          metaController,
 		badgeController:         badgeController,
+		adminBadgeController:    adminBadgeController,
 	}
 }
 
@@ -369,4 +372,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/plugin/status", a.pluginController.UpdatePluginStatus)
 	r.GET("/plugin/config", a.pluginController.GetPluginConfig)
 	r.PUT("/plugin/config", a.pluginController.UpdatePluginConfig)
+
+	// badge
+	r.GET("/badges", a.adminBadgeController.GetBadgeList)
+	r.PUT("/badge/status", a.adminBadgeController.UpdateBadgeStatus)
 }

@@ -28,7 +28,7 @@ const (
 
 // BadgeAward badge_award
 type BadgeAward struct {
-	ID             string    `json:"id" xorm:"id"`
+	ID             string    `xorm:"not null pk BIGINT(20) id"`
 	CreatedAt      time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
 	UpdatedAt      time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
 	UserID         string    `json:"user_id" xorm:"not null index BIGINT(20) user_id"`
