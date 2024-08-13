@@ -75,6 +75,8 @@ type GetBadgeListPagedReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// badge status
 	Status BadgeStatus `validate:"omitempty" form:"status"`
+	// query condition
+	Query string `validate:"omitempty" form:"q"`
 }
 
 type GetBadgeListPagedResp struct {

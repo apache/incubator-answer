@@ -204,6 +204,12 @@
                         "description": "badge status",
                         "name": "status",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search param",
+                        "name": "q",
+                        "in": "query"
                     }
                 ],
                 "responses": {

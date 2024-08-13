@@ -3023,6 +3023,10 @@ paths:
         in: query
         name: status
         type: string
+      - description: search param
+        in: query
+        name: q
+        type: string
       produces:
       - application/json
       responses:

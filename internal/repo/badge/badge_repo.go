@@ -95,8 +95,15 @@ func (r *badgeRepo) ListByLevelAndGroup(ctx context.Context, level entity.BadgeL
 // ListPaged returns a list of activated badges
 func (r *badgeRepo) ListPaged(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error) {
 	badges = make([]*entity.Badge, 0)
+	total = 0
+
 	session := r.data.DB.Context(ctx).Where("status <> ?", entity.BadgeStatusDeleted)
-	total, err = pager.Help(page, pageSize, &badges, &entity.Badge{}, session)
+	if page == 0 || pageSize == 0 {
+		err = session.Find(&badges)
+	} else {
+		total, err = pager.Help(page, pageSize, &badges, &entity.Badge{}, session)
+	}
+
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
