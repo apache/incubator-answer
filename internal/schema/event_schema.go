@@ -38,6 +38,7 @@ type EventMsg struct {
 	ExtraInfo map[string]string
 }
 
+// NewEvent create a new event
 func NewEvent(e constant.EventType, userID string) *EventMsg {
 	return &EventMsg{
 		UserID:    userID,
@@ -46,29 +47,34 @@ func NewEvent(e constant.EventType, userID string) *EventMsg {
 	}
 }
 
+// QID get question id
 func (e *EventMsg) QID(questionID, userID string) *EventMsg {
 	e.QuestionID = questionID
 	e.QuestionUserID = userID
 	return e
 }
 
+// AID get answer id
 func (e *EventMsg) AID(answerID, userID string) *EventMsg {
 	e.AnswerID = answerID
 	e.AnswerUserID = userID
 	return e
 }
 
+// CID get comment id
 func (e *EventMsg) CID(comment, userID string) *EventMsg {
 	e.CommentID = comment
 	e.CommentUserID = userID
 	return e
 }
 
+// AddExtra add extra info
 func (e *EventMsg) AddExtra(key, value string) *EventMsg {
 	e.ExtraInfo[key] = value
 	return e
 }
 
+// GetExtra get extra info
 func (e *EventMsg) GetExtra(key string) string {
 	if v, ok := e.ExtraInfo[key]; ok {
 		return v
@@ -76,6 +82,7 @@ func (e *EventMsg) GetExtra(key string) string {
 	return ""
 }
 
+// GetObjectID get object id
 func (e *EventMsg) GetObjectID() string {
 	if len(e.CommentID) > 0 {
 		return e.CommentID
