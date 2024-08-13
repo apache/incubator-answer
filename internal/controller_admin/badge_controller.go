@@ -47,6 +47,7 @@ func NewBadgeController(badgeService *badge.BadgeService) *BadgeController {
 // @Param page query int false "page"
 // @Param page_size query int false "page size"
 // @Param status query string false "badge status" Enums(, active, inactive)
+// @Param q query string false "search param"
 // @Success 200 {object} handler.RespBody{data=[]schema.GetBadgeListPagedResp}
 // @Router /answer/admin/api/badges [get]
 func (b *BadgeController) GetBadgeList(ctx *gin.Context) {

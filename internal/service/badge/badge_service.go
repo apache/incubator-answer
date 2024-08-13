@@ -30,6 +30,7 @@ import (
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"strings"
 )
 
 type BadgeRepo interface {
@@ -137,20 +138,44 @@ func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPa
 	var (
 		groups   []*entity.BadgeGroup
 		badges   []*entity.Badge
+		badge    *entity.Badge
+		exists   bool
 		groupMap = make(map[int64]string, 0)
 	)
 
-	switch req.Status {
-	case schema.BadgeStatusActive:
-		badges, total, err = b.badgeRepo.ListActivated(ctx, req.Page, req.PageSize)
-	case schema.BadgeStatusInactive:
-		badges, total, err = b.badgeRepo.ListInactivated(ctx, req.Page, req.PageSize)
-	default:
-		badges, total, err = b.badgeRepo.ListPaged(ctx, req.Page, req.PageSize)
-	}
+	total = 0
 
-	if err != nil {
-		return
+	if len(req.Query) > 0 {
+		isID := strings.Index(req.Query, "badge:")
+		if isID != 0 {
+			badges, err = b.searchByName(ctx, req.Query)
+			if err != nil {
+				return
+			}
+		} else {
+			req.Query = strings.TrimSpace(strings.TrimLeft(req.Query, "badge:"))
+			id := uid.DeShortID(req.Query)
+			if len(id) == 0 {
+				return
+			}
+			badge, exists, err = b.badgeRepo.GetByID(ctx, id)
+			if err != nil || !exists {
+				return
+			}
+			badges = append(badges, badge)
+		}
+	} else {
+		switch req.Status {
+		case schema.BadgeStatusActive:
+			badges, total, err = b.badgeRepo.ListActivated(ctx, req.Page, req.PageSize)
+		case schema.BadgeStatusInactive:
+			badges, total, err = b.badgeRepo.ListInactivated(ctx, req.Page, req.PageSize)
+		default:
+			badges, total, err = b.badgeRepo.ListPaged(ctx, req.Page, req.PageSize)
+		}
+		if err != nil {
+			return
+		}
 	}
 
 	// find all group and build group map
@@ -174,6 +199,22 @@ func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPa
 			Level:       badge.Level,
 			GroupName:   groupMap[badge.BadgeGroupID],
 			Status:      schema.BadgeStatusMap[badge.Status],
+		}
+	}
+	return
+}
+
+// searchByName
+func (b *BadgeService) searchByName(ctx context.Context, name string) (result []*entity.Badge, err error) {
+	var badges []*entity.Badge
+	name = strings.ToLower(name)
+	result = make([]*entity.Badge, 0)
+
+	badges, _, err = b.badgeRepo.ListPaged(ctx, 0, 0)
+	for _, badge := range badges {
+		tn := strings.ToLower(translator.Tr(handler.GetLangByCtx(ctx), badge.Name))
+		if strings.Contains(tn, name) {
+			result = append(result, badge)
 		}
 	}
 	return
