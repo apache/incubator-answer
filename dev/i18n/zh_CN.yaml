@@ -1524,6 +1524,7 @@ ui:
     questions: 问题
     answers: 回答
     users: 用户管理
+    badges: 徽章管理
     flags: 举报管理
     settings: 站点设置
     general: 一般

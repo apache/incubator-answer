@@ -1407,6 +1407,7 @@ ui:
     questions: 问题
     answers: 回答
     users: 用户管理
+    badges: 徽章管理
     flags: 举报管理
     settings: 站点设置
     general: 一般
@@ -1834,6 +1835,20 @@ ui:
       msg:
         should_be_number: 输入必须是数字
         number_larger_1: 数字应该大于等于 1
+    badges:
+      action: 操作
+      active: 激活
+      all: 全部
+      awards: 奖励
+      deactivate: 取消激活
+      filter:
+        placeholder: "按名称筛选，徽章:id"
+      group: 组
+      inactive: 未激活
+      name: 名称
+      show_logs: 显示日志
+      status: 状态
+      title: 徽章
   form:
     optional: (选填)
     empty: 不能为空
