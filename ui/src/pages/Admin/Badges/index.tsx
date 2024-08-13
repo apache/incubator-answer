@@ -50,7 +50,7 @@ const Users: FC = () => {
   const { data, isLoading, mutate } = useQueryBadges({
     page: curPage,
     pageSize: PAGE_SIZE,
-    query: curQuery,
+    q: curQuery,
     ...(curFilter === 'all' ? {} : { status: curFilter }),
   });
 
