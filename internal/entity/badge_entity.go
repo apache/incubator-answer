@@ -47,14 +47,14 @@ type Badge struct {
 	Name         string     `xorm:"not null default '' VARCHAR(256) name"`
 	Icon         string     `xorm:"not null default '' VARCHAR(1024) icon"`
 	AwardCount   int        `xorm:"not null default 0 INT(11) award_count"`
-	Description  string     `xorm:"not null default '' MEDIUMTEXT description"`
+	Description  string     `xorm:"not null MEDIUMTEXT description"`
 	Status       int8       `xorm:"not null default 1 INT(11) status"`
 	BadgeGroupID int64      `xorm:"not null default 0 BIGINT(20) badge_group_id"`
 	Level        BadgeLevel `xorm:"not null default 1 TINYINT(4) level"`
 	Single       int8       `xorm:"not null default 1 TINYINT(4) single"`
-	Collect      string     `xorm:"not null default '' VARCHAR(64) collect"`
-	Handler      string     `xorm:"not null default '' VARCHAR(64) handler"`
-	Param        string     `xorm:"not null default '' TEXT param"`
+	Collect      string     `xorm:"not null default '' VARCHAR(128) collect"`
+	Handler      string     `xorm:"not null default '' VARCHAR(128) handler"`
+	Param        string     `xorm:"not null TEXT param"`
 }
 
 // TableName badge table name

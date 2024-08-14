@@ -21,265 +21,51 @@ package migrations
 
 import (
 	"context"
+	"fmt"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/repo/unique"
-	"time"
 	"xorm.io/xorm"
-)
-
-var (
-	defaultBadgeGroupTable = []*entity.BadgeGroup{
-		{ID: "1", Name: "badge.default_badge_groups.getting_started.name"},
-		{ID: "2", Name: "badge.default_badge_groups.community.name"},
-		{ID: "3", Name: "badge.default_badge_groups.posting.name"},
-	}
-
-	defaultBadgeTable = []*entity.Badge{
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.autobiographer.name",
-			Icon:         "person-badge-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.autobiographer.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.editor.name",
-			Icon:         "pencil-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.editor.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "question",
-			Handler:      "FirstQuestion",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.first_flag.name",
-			Icon:         "flag-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.first_flag.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.first_upvote.name",
-			Icon:         "hand-thumbs-up-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.first_upvote.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.first_reaction.name",
-			Icon:         "emoji-smile-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.first_reaction.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.first_share.name",
-			Icon:         "share-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.first_share.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.scholar.name",
-			Icon:         "check-circle-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.scholar.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 1,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.solved.name",
-			Icon:         "check-square-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.solved.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 2,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.nice_answer.name",
-			Icon:         "chat-square-text-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.nice_answer.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeMultiAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.good_answer.name",
-			Icon:         "chat-square-text-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.good_answer.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelSilver,
-			Single:       entity.BadgeMultiAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.great_answer.name",
-			Icon:         "chat-square-text-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.great_answer.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelGold,
-			Single:       entity.BadgeMultiAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.nice_question.name",
-			Icon:         "question-circle-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.nice_question.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelBronze,
-			Single:       entity.BadgeMultiAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.good_question.name",
-			Icon:         "question-circle-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.good_question.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelSilver,
-			Single:       entity.BadgeSingleAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-		{
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Name:         "badge.default_badges.great_question.name",
-			Icon:         "question-circle-fill",
-			AwardCount:   0,
-			Description:  "badge.default_badges.great_question.desc",
-			Status:       entity.BadgeStatusActive,
-			BadgeGroupID: 3,
-			Level:        entity.BadgeLevelGold,
-			Single:       entity.BadgeMultiAward,
-			Collect:      "",
-			Handler:      "",
-			Param:        "",
-		},
-	}
 )
 
 func addBadges(ctx context.Context, x *xorm.Engine) (err error) {
 	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: x})
-	// create table
-	err = x.Context(ctx).Sync(new(entity.Badge))
+
+	err = x.Context(ctx).Sync(new(entity.Badge), new(entity.BadgeGroup), new(entity.BadgeAward))
 	if err != nil {
-		return
+		return fmt.Errorf("sync table failed: %w", err)
 	}
 
-	err = x.Context(ctx).Sync(new(entity.BadgeGroup))
-	if err != nil {
-		return
+	for _, badgeGroup := range defaultBadgeGroupTable {
+		exist, err := x.Context(ctx).Get(&entity.BadgeGroup{ID: badgeGroup.ID})
+		if err != nil {
+			return err
+		}
+		if exist {
+			_, err = x.Context(ctx).ID(badgeGroup.ID).Update(badgeGroup)
+		} else {
+			_, err = x.Context(ctx).Insert(badgeGroup)
+		}
+		if err != nil {
+			return fmt.Errorf("insert badge group failed: %w", err)
+		}
 	}
 
-	err = x.Context(ctx).Sync(new(entity.BadgeAward))
-	if err != nil {
-		return
-	}
-
-	// insert default data
-	_, err = x.Context(ctx).Insert(defaultBadgeGroupTable)
-	if err != nil {
-		return
-	}
 	for _, badge := range defaultBadgeTable {
+		exist, err := x.Context(ctx).Get(&entity.Badge{Name: badge.Name})
+		if err != nil {
+			return err
+		}
+		if exist {
+			continue
+		}
 		badge.ID, err = uniqueIDRepo.GenUniqueIDStr(ctx, new(entity.Badge).TableName())
 		if err != nil {
-			return
+			return err
 		}
-		_, err = x.Context(ctx).Insert(badge)
-		if err != nil {
-			return
+
+		if _, err := x.Context(ctx).Insert(badge); err != nil {
+			return err
 		}
 	}
 	return

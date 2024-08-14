@@ -446,8 +446,10 @@ func (as *AnswerService) AcceptAnswer(ctx context.Context, req *schema.AcceptAns
 		oldAnswerInfo.ID = uid.DeShortID(oldAnswerInfo.ID)
 	}
 
-	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionAccept, req.UserID).
-		QID(questionInfo.ID, questionInfo.UserID).AID(req.AnswerID, req.UserID))
+	if acceptedAnswerInfo != nil {
+		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionAccept, req.UserID).
+			QID(questionInfo.ID, questionInfo.UserID).AID(acceptedAnswerInfo.ID, acceptedAnswerInfo.UserID))
+	}
 
 	as.updateAnswerRank(ctx, req.UserID, questionInfo, acceptedAnswerInfo, oldAnswerInfo)
 	return nil
