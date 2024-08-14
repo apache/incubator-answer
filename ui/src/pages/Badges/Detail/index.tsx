@@ -60,8 +60,6 @@ const Index = () => {
     return null;
   }
 
-  console.log(badges);
-
   return (
     <div className="pt-4 mb-5">
       <h3 className="mb-4">{t('title')}</h3>
