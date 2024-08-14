@@ -71,6 +71,16 @@ const Index = () => {
           <Loader />
         ) : (
           badges?.list?.map((item) => {
+            const linkUrl =
+              item.object_type === 'question'
+                ? `/question/${item.question_id}`
+                : item.object_type === 'answer'
+                  ? `/question/${item.question_id}/${item.answer_id}`
+                  : item.object_type === 'comment' && item.answer_id
+                    ? `/question/${item.question_id}/${item.answer_id}?commentId=${item.comment_id}`
+                    : item.object_type === 'comment'
+                      ? `/question/${item.question_id}?commentId=${item.comment_id}`
+                      : '';
             return (
               <Col sm={12} md={6} lg={3} key={item.object_id} className="mb-4">
                 <FormatTime
@@ -79,9 +89,11 @@ const Index = () => {
                   className="small mb-1 d-block"
                 />
                 <UserCard data={item.author_user_info} />
-                <Link to="/question" className="mt-1 d-block">
-                  {item.url_title}
-                </Link>
+                {item.url_title && (
+                  <Link to={linkUrl} className="mt-1 d-block">
+                    {item.url_title}
+                  </Link>
+                )}
               </Col>
             );
           })
