@@ -99,7 +99,7 @@ func (br *eventRuleRepo) FirstUpdateUserProfile(ctx context.Context,
 		return nil, nil
 	}
 	if len(bean.Bio) > 0 {
-		return append(awards, br.createBadgeAward(event.UserID, b.ID, "")), nil
+		return append(awards, br.createBadgeAward(event.UserID, b.ID, entity.BadgeOnceAwardKey)), nil
 	}
 	return nil, nil
 }

@@ -33,12 +33,11 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
-	"time"
 )
 
 type BadgeAwardRepo interface {
-	Add(ctx context.Context, badgeAward *entity.BadgeAward) (err error)
-	CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string, singleOrMulti int8) bool
+	CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string, singleOrMulti int8) (isAward bool, err error)
+	AwardBadgeForUser(ctx context.Context, badgeAward *entity.BadgeAward) (err error)
 
 	CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64)
 	CountByUserId(ctx context.Context, userID string) (awardCount int64)
@@ -62,7 +61,7 @@ type BadgeAwardRepo interface {
 	ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error)
 
 	GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward, exists bool, err error)
-	GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, awardKey string) (badgeAward *entity.BadgeAward, exists bool, err error)
+	GetByUserIdAndBadgeIdAndAwardKey(ctx context.Context, userID string, badgeID string, awardKey string) (badgeAward *entity.BadgeAward, exists bool, err error)
 }
 
 type BadgeAwardService struct {
@@ -151,48 +150,32 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 }
 
 // Award award badge
-func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID string, awardKey string, force bool, createdAt time.Time) (err error) {
-	var (
-		badgeData       *entity.Badge
-		exists, awarded bool
-	)
-
-	badgeData, exists, err = b.badgeRepo.GetByID(ctx, badgeID)
+func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID string, awardKey string) (err error) {
+	badgeData, exists, err := b.badgeRepo.GetByID(ctx, badgeID)
 	if err != nil {
-		return
+		return err
 	}
 
 	if !exists || badgeData.Status == entity.BadgeStatusInactive {
-		err = errors.BadRequest(reason.BadgeObjectNotFound)
-		return
+		return errors.BadRequest(reason.BadgeObjectNotFound)
 	}
 
-	awarded = b.badgeAwardRepo.CheckIsAward(ctx, badgeID, userID, awardKey, badgeData.Single)
-	if !force && awarded {
-		return
+	alreadyAwarded, err := b.badgeAwardRepo.CheckIsAward(ctx, badgeID, userID, awardKey, badgeData.Single)
+	if err != nil {
+		return err
+	}
+	if alreadyAwarded {
+		return nil
 	}
 
-	if createdAt.IsZero() {
-		createdAt = time.Now()
-	}
-
-	err = b.badgeAwardRepo.Add(ctx, &entity.BadgeAward{
-		CreatedAt:      createdAt,
-		UpdatedAt:      createdAt,
+	badgeAward := &entity.BadgeAward{
 		UserID:         userID,
 		BadgeID:        badgeID,
 		AwardKey:       awardKey,
 		BadgeGroupID:   badgeData.BadgeGroupID,
-		IsBadgeDeleted: 0,
-	})
-	if err != nil {
-		return
+		IsBadgeDeleted: entity.IsBadgeNotDeleted,
 	}
-
-	// increment badge award count
-	err = b.badgeRepo.UpdateAwardCount(ctx, badgeID, 1)
-
-	return
+	return b.badgeAwardRepo.AwardBadgeForUser(ctx, badgeAward)
 }
 
 // GetUserBadgeAwardList get user badge award list

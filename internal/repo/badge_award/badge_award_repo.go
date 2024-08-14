@@ -21,6 +21,7 @@ package badge_award
 
 import (
 	"context"
+	"fmt"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -28,6 +29,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
+	"xorm.io/xorm"
 )
 
 type badgeAwardRepo struct {
@@ -42,38 +44,62 @@ func NewBadgeAwardRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) badge.
 	}
 }
 
-func (r *badgeAwardRepo) Add(ctx context.Context, badgeAward *entity.BadgeAward) (err error) {
+// AwardBadgeForUser award badge for user
+func (r *badgeAwardRepo) AwardBadgeForUser(ctx context.Context, badgeAward *entity.BadgeAward) (err error) {
 	badgeAward.ID, err = r.uniqueIDRepo.GenUniqueIDStr(ctx, entity.BadgeAward{}.TableName())
 	if err != nil {
-		return
-	}
-	_, err = r.data.DB.Context(ctx).Insert(badgeAward)
-	return
-}
-func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID string, userID string, awardKey string, singleOrMulti int8) (isAward bool) {
-	isAward = false
-	if singleOrMulti == entity.BadgeSingleAward {
-		_, exists, err := r.GetByUserIdAndBadgeId(ctx, userID, badgeID)
-		if err != nil {
-			err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-			return
-		}
-		if exists {
-			return true
-		}
-	} else {
-		_, exists, err := r.GetByUserIdAndBadgeIdAndObjectId(ctx, userID, badgeID, awardKey)
-		if err != nil {
-			err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-			return
-		}
-		if exists {
-			return true
-		}
+		return err
 	}
 
-	return
+	_, err = r.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
+
+		badgeInfo := &entity.Badge{}
+		exist, err := session.ID(badgeAward.BadgeID).ForUpdate().Get(badgeInfo)
+		if err != nil {
+			return nil, err
+		}
+		if !exist {
+			return nil, fmt.Errorf("badge not exist")
+		}
+
+		old := &entity.BadgeAward{}
+		exist, err = session.Where("user_id = ? AND badge_id = ? AND award_key = ? AND is_badge_deleted = 0",
+			badgeAward.UserID, badgeAward.BadgeID, badgeAward.AwardKey).Get(old)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			return nil, fmt.Errorf("badge already awarded")
+		}
+
+		_, err = session.Insert(badgeAward)
+		if err != nil {
+			return nil, err
+		}
+
+		return session.ID(badgeInfo.ID).Incr("award_count", 1).Update(&entity.Badge{})
+	})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
 }
+
+// CheckIsAward check this badge is awarded for this user or not
+func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID, userID, awardKey string, singleOrMulti int8) (
+	isAward bool, err error) {
+	if singleOrMulti == entity.BadgeSingleAward {
+		_, isAward, err = r.GetByUserIdAndBadgeId(ctx, userID, badgeID)
+	} else {
+		_, isAward, err = r.GetByUserIdAndBadgeIdAndAwardKey(ctx, userID, badgeID, awardKey)
+	}
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return isAward, err
+}
+
 func (r *badgeAwardRepo) CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64) {
 	return
 }
@@ -161,13 +187,25 @@ func (r *badgeAwardRepo) ListNewestByUserIdAndLevel(ctx context.Context, userID 
 }
 
 // GetByUserIdAndBadgeId get badge award by user id and badge id
-func (r *badgeAwardRepo) GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (badgeAward *entity.BadgeAward, exists bool, err error) {
-	exists, err = r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ? AND is_badge_deleted = 0", userID, badgeID).Get(&badgeAward)
+func (r *badgeAwardRepo) GetByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (
+	badgeAward *entity.BadgeAward, exists bool, err error) {
+	badgeAward = &entity.BadgeAward{}
+	exists, err = r.data.DB.Context(ctx).
+		Where("user_id = ? AND badge_id = ? AND is_badge_deleted = 0", userID, badgeID).Get(badgeAward)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
-// GetByUserIdAndBadgeIdAndObjectId get badge award by user id, badge id and object id
-func (r *badgeAwardRepo) GetByUserIdAndBadgeIdAndObjectId(ctx context.Context, userID string, badgeID string, awardKey string) (badgeAward *entity.BadgeAward, exists bool, err error) {
-	exists, err = r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ? AND award_key = ? AND is_badge_deleted = 0", userID, badgeID, awardKey).Get(&badgeAward)
+// GetByUserIdAndBadgeIdAndAwardKey get badge award by user id and badge id and award key
+func (r *badgeAwardRepo) GetByUserIdAndBadgeIdAndAwardKey(ctx context.Context, userID string, badgeID string, awardKey string) (
+	badgeAward *entity.BadgeAward, exists bool, err error) {
+	badgeAward = &entity.BadgeAward{}
+	exists, err = r.data.DB.Context(ctx).
+		Where("user_id = ? AND badge_id = ? AND award_key = ? AND is_badge_deleted = 0", userID, badgeID, awardKey).Get(badgeAward)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
