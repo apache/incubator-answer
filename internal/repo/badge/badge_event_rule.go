@@ -86,91 +86,87 @@ func (br *eventRuleRepo) HandleEventWithRule(ctx context.Context, msg *schema.Ev
 // FirstUpdateUserProfile first update user profile
 func (br *eventRuleRepo) FirstUpdateUserProfile(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstUpdateUserProfile")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstUpdateUserProfile")
+	for _, b := range badges {
+		bean := &entity.User{ID: event.UserID}
+		exist, err := br.data.DB.Context(ctx).Get(bean)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		if !exist {
+			continue
+		}
+		if len(bean.Bio) > 0 {
+			awards = append(awards, br.createBadgeAward(event.UserID, "", b))
+		}
 	}
-	bean := &entity.User{ID: event.UserID}
-	exist, err := br.data.DB.Context(ctx).Get(bean)
-	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !exist {
-		return nil, nil
-	}
-	if len(bean.Bio) > 0 {
-		return append(awards, br.createBadgeAward(event.UserID, b.ID, entity.BadgeOnceAwardKey)), nil
-	}
-	return nil, nil
+	return awards, nil
 }
 
 // FirstPostEdit first post edit
 func (br *eventRuleRepo) FirstPostEdit(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstPostEdit")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstPostEdit")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // FirstFlaggedPost first flagged post.
 func (br *eventRuleRepo) FirstFlaggedPost(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstFlaggedPost")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstFlaggedPost")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // FirstVotedPost first voted post
 func (br *eventRuleRepo) FirstVotedPost(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstVotedPost")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstVotedPost")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // FirstReactedPost first reacted post
 func (br *eventRuleRepo) FirstReactedPost(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstReactedPost")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstReactedPost")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // FirstSharedPost first shared post
 func (br *eventRuleRepo) FirstSharedPost(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstSharedPost")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstSharedPost")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // FirstAcceptAnswer user first accept answer
 func (br *eventRuleRepo) FirstAcceptAnswer(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "FirstAcceptAnswer")
-	if b == nil {
-		return nil, nil
+	badges := br.getBadgesByHandler(ctx, "FirstAcceptAnswer")
+	for _, b := range badges {
+		awards = append(awards, br.createBadgeAward(event.UserID, event.GetObjectID(), b))
 	}
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // ReachAnswerAcceptedAmount reach answer accepted amount
 func (br *eventRuleRepo) ReachAnswerAcceptedAmount(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "ReachAnswerAcceptedAmount")
-	if b == nil {
-		return nil, nil
-	}
+	badges := br.getBadgesByHandler(ctx, "ReachAnswerAcceptedAmount")
 	if len(event.AnswerUserID) == 0 {
 		return nil, nil
 	}
@@ -185,79 +181,76 @@ func (br *eventRuleRepo) ReachAnswerAcceptedAmount(ctx context.Context,
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 
-	// get badge requirement
-	requirement := b.GetIntParam("amount")
-	if requirement == 0 || amount < requirement {
-		return nil, nil
+	for _, b := range badges {
+		// get badge requirement
+		requirement := b.GetIntParam("amount")
+		if requirement == 0 || amount < requirement {
+			continue
+		}
+		awards = append(awards, br.createBadgeAward(event.AnswerUserID, event.AnswerID, b))
 	}
-
-	return append(awards, br.createBadgeAward(event.UserID, b.ID, event.GetObjectID())), nil
+	return awards, nil
 }
 
 // ReachAnswerVote reach answer vote
 func (br *eventRuleRepo) ReachAnswerVote(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "ReachAnswerVote")
-	if b == nil {
-		return nil, nil
-	}
-
+	badges := br.getBadgesByHandler(ctx, "ReachAnswerVote")
 	// get vote amount
 	amount, _ := strconv.Atoi(event.GetExtra("vote_up_amount"))
 	if amount == 0 {
 		return nil, nil
 	}
 
-	// get badge requirement
-	requirement := b.GetIntParam("amount")
-	if requirement == 0 || int64(amount) < requirement {
-		return nil, nil
+	for _, b := range badges {
+		// get badge requirement
+		requirement := b.GetIntParam("amount")
+		if requirement == 0 || int64(amount) < requirement {
+			continue
+		}
+		awards = append(awards, br.createBadgeAward(event.AnswerUserID, event.AnswerID, b))
 	}
-
-	return append(awards, br.createBadgeAward(event.AnswerUserID, b.ID, event.AnswerID)), nil
+	return awards, nil
 }
 
 // ReachQuestionVote reach question vote
 func (br *eventRuleRepo) ReachQuestionVote(ctx context.Context,
 	event *schema.EventMsg) (awards []*entity.BadgeAward, err error) {
-	b := br.getBadgeByHandler(ctx, "ReachQuestionVote")
-	if b == nil {
-		return nil, nil
-	}
-
+	badges := br.getBadgesByHandler(ctx, "ReachQuestionVote")
 	// get vote amount
 	amount, _ := strconv.Atoi(event.GetExtra("vote_up_amount"))
 	if amount == 0 {
 		return nil, nil
 	}
 
-	// get badge requirement
-	requirement := b.GetIntParam("amount")
-	if requirement == 0 || int64(amount) < requirement {
-		return nil, nil
+	for _, b := range badges {
+		// get badge requirement
+		requirement := b.GetIntParam("amount")
+		if requirement == 0 || int64(amount) < requirement {
+			continue
+		}
+		awards = append(awards, br.createBadgeAward(event.QuestionUserID, event.QuestionID, b))
 	}
-
-	return append(awards, br.createBadgeAward(event.QuestionUserID, b.ID, event.QuestionID)), nil
+	return awards, nil
 }
 
-func (br *eventRuleRepo) getBadgeByHandler(ctx context.Context, handler string) (b *entity.Badge) {
-	b = &entity.Badge{Handler: handler}
-	exist, err := br.data.DB.Context(ctx).Get(b)
+func (br *eventRuleRepo) getBadgesByHandler(ctx context.Context, handler string) (badges []*entity.Badge) {
+	badges = make([]*entity.Badge, 0)
+	err := br.data.DB.Context(ctx).Where("handler = ?", handler).Find(&badges)
 	if err != nil {
 		log.Errorf("error getting badge by handler %s: %v", handler, err)
 		return nil
 	}
-	if !exist {
-		log.Errorf("badge not found by handler %s", handler)
-		return nil
-	}
-	return b
+	return badges
 }
 
-func (br *eventRuleRepo) createBadgeAward(userID, badgeID, awardKey string) (awards *entity.BadgeAward) {
+func (br *eventRuleRepo) createBadgeAward(userID, awardKey string, badge *entity.Badge) (awards *entity.BadgeAward) {
+	if badge.Single == entity.BadgeSingleAward {
+		awardKey = entity.BadgeOnceAwardKey
+	}
 	return &entity.BadgeAward{
 		UserID:   userID,
-		BadgeID:  badgeID,
+		BadgeID:  badge.ID,
 		AwardKey: awardKey,
 	}
 }
