@@ -67,17 +67,6 @@ func (ns *BadgeEventService) Handler(ctx context.Context, msg *schema.EventMsg) 
 		return nil
 	}
 
-	//badgeIDs := make([]string, 0)
-	//for _, award := range awards {
-	//	badgeIDs = append(badgeIDs, award.BadgeID)
-	//}
-	//
-	//badges, err := ns.badgeRepo.GetByIDs(ctx, badgeIDs)
-	//if err != nil {
-	//	log.Errorf("error getting badges %+v: %v", badgeIDs, err)
-	//	return err
-	//}
-
 	for _, award := range awards {
 		err := ns.badgeAwardService.Award(ctx, award.BadgeID, award.UserID, award.AwardKey)
 		if err != nil {
