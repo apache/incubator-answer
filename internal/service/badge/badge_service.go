@@ -152,6 +152,19 @@ func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPa
 			if err != nil {
 				return
 			}
+			// paged result
+			count := len(badges)
+			total = int64(count)
+			start := (req.Page - 1) * req.PageSize
+			end := req.Page * req.PageSize
+			if start >= count {
+				start = count
+				end = count
+			}
+			if end > count {
+				end = count
+			}
+			badges = badges[start:end]
 		} else {
 			req.Query = strings.TrimSpace(strings.TrimLeft(req.Query, "badge:"))
 			id := uid.DeShortID(req.Query)
