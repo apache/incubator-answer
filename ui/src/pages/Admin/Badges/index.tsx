@@ -127,7 +127,7 @@ const Users: FC = () => {
                 )}
                 <div>
                   <div className="text-primary">{badge.name}</div>
-                  <div className="text-small">{badge.description}</div>
+                  <div className="text-body small">{badge.description}</div>
                 </div>
               </td>
 
