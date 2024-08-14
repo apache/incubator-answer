@@ -17,11 +17,26 @@
  * under the License.
  */
 
-export * from './answer';
-export * from './flag';
-export * from './question';
-export * from './settings';
-export * from './users';
-export * from './dashboard';
-export * from './plugins';
-export * from './badges';
+import qs from 'qs';
+import useSWR from 'swr';
+
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
+
+export const useQueryBadges = (params) => {
+  const apiUrl = `/answer/admin/api/badges?${qs.stringify(params)}`;
+  const { data, error, mutate } = useSWR<Type.ListResult, Error>(
+    apiUrl,
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+    mutate,
+  };
+};
+
+export const updateBadgeStatus = (params) => {
+  return request.put('/answer/admin/api/badge/status', params);
+};
