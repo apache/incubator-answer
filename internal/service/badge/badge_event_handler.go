@@ -21,12 +21,11 @@ package badge
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/segmentfault/pacman/log"
-
-	"github.com/apache/incubator-answer/internal/base/data"
-	"github.com/apache/incubator-answer/internal/schema"
 )
 
 type BadgeEventService struct {
@@ -35,6 +34,7 @@ type BadgeEventService struct {
 	badgeAwardRepo    BadgeAwardRepo
 	badgeRepo         BadgeRepo
 	eventRuleRepo     EventRuleRepo
+	badgeAwardService *BadgeAwardService
 }
 
 type EventRuleHandler func(ctx context.Context, event *schema.EventMsg) (awards []*entity.BadgeAward, err error)
@@ -48,12 +48,14 @@ func NewBadgeEventService(
 	eventQueueService event_queue.EventQueueService,
 	badgeRepo BadgeRepo,
 	eventRuleRepo EventRuleRepo,
+	badgeAwardService *BadgeAwardService,
 ) *BadgeEventService {
 	n := &BadgeEventService{
 		data:              data,
 		eventQueueService: eventQueueService,
 		badgeRepo:         badgeRepo,
 		eventRuleRepo:     eventRuleRepo,
+		badgeAwardService: badgeAwardService,
 	}
 	eventQueueService.RegisterHandler(n.Handler)
 	return n
@@ -65,18 +67,22 @@ func (ns *BadgeEventService) Handler(ctx context.Context, msg *schema.EventMsg) 
 		return nil
 	}
 
-	badgeIDs := make([]string, 0)
+	//badgeIDs := make([]string, 0)
+	//for _, award := range awards {
+	//	badgeIDs = append(badgeIDs, award.BadgeID)
+	//}
+	//
+	//badges, err := ns.badgeRepo.GetByIDs(ctx, badgeIDs)
+	//if err != nil {
+	//	log.Errorf("error getting badges %+v: %v", badgeIDs, err)
+	//	return err
+	//}
+
 	for _, award := range awards {
-		badgeIDs = append(badgeIDs, award.BadgeID)
+		err := ns.badgeAwardService.Award(ctx, award.BadgeID, award.UserID, award.AwardKey)
+		if err != nil {
+			log.Debugf("error awarding badge %s: %v", award.BadgeID, err)
+		}
 	}
-
-	badges, err := ns.badgeRepo.GetByIDs(ctx, badgeIDs)
-	if err != nil {
-		log.Errorf("error getting badges %+v: %v", badgeIDs, err)
-		return err
-	}
-
-	// TODO: award badges to user
-	log.Debugf("awarding badges %+v to user", badges)
 	return nil
 }

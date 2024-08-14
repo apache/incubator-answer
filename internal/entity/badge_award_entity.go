@@ -24,18 +24,20 @@ import "time"
 const (
 	IsBadgeNotDeleted = 0
 	IsBadgeDeleted    = 1
+
+	BadgeOnceAwardKey = "0"
 )
 
 // BadgeAward badge_award
 type BadgeAward struct {
 	ID             string    `xorm:"not null pk BIGINT(20) id"`
-	CreatedAt      time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-	UpdatedAt      time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
-	UserID         string    `json:"user_id" xorm:"not null index BIGINT(20) user_id"`
-	BadgeID        string    `json:"badge_id" xorm:"not null index BIGINT(20) badge_id"`
-	AwardKey       string    `json:"award_key" xorm:"not null index VARCHAR(64) award_key"`
-	BadgeGroupID   int64     `json:"badge_group_id" xorm:"not null index BIGINT(20) badge_group_id"`
-	IsBadgeDeleted int8      `json:"is_badge_deleted" xorm:"not null index TINYINT(1) is_badge_deleted"`
+	CreatedAt      time.Time `xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt      time.Time `xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	UserID         string    `xorm:"not null index BIGINT(20) user_id"`
+	BadgeID        string    `xorm:"not null index BIGINT(20) badge_id"`
+	AwardKey       string    `xorm:"not null index VARCHAR(64) award_key"`
+	BadgeGroupID   int64     `xorm:"not null index BIGINT(20) badge_group_id"`
+	IsBadgeDeleted int8      `xorm:"not null TINYINT(1) is_badge_deleted"`
 }
 
 // TableName badge_award table name
