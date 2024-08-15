@@ -56,6 +56,8 @@ const (
 	NotificationYourCommentWasDeleted = "notification.action.your_comment_was_deleted"
 	// NotificationInvitedYouToAnswer invited you to answer
 	NotificationInvitedYouToAnswer = "notification.action.invited_you_to_answer"
+	// NotificationEarnedBadge earned badge
+	NotificationEarnedBadge = "notification.action.earned_badge"
 )
 
 type NotificationChannelKey string
@@ -69,6 +71,12 @@ const (
 
 const (
 	EmailChannel NotificationChannelKey = "email"
+)
+
+const (
+	NotificationTypeInbox            = "inbox"
+	NotificationTypeAchievement      = "achievement"
+	NotificationTypeBadgeAchievement = "badge"
 )
 
 var (

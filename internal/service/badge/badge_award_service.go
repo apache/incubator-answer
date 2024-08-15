@@ -21,11 +21,13 @@ package badge
 
 import (
 	"context"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/notice_queue"
 	"github.com/apache/incubator-answer/internal/service/object_info"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
 	"github.com/apache/incubator-answer/pkg/uid"
@@ -65,10 +67,11 @@ type BadgeAwardRepo interface {
 }
 
 type BadgeAwardService struct {
-	badgeAwardRepo    BadgeAwardRepo
-	badgeRepo         BadgeRepo
-	userCommon        *usercommon.UserCommon
-	objectInfoService *object_info.ObjService
+	badgeAwardRepo           BadgeAwardRepo
+	badgeRepo                BadgeRepo
+	userCommon               *usercommon.UserCommon
+	objectInfoService        *object_info.ObjService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewBadgeAwardService(
@@ -76,17 +79,19 @@ func NewBadgeAwardService(
 	badgeRepo BadgeRepo,
 	userCommon *usercommon.UserCommon,
 	objectInfoService *object_info.ObjService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *BadgeAwardService {
 	return &BadgeAwardService{
-		badgeAwardRepo:    badgeAwardRepo,
-		badgeRepo:         badgeRepo,
-		userCommon:        userCommon,
-		objectInfoService: objectInfoService,
+		badgeAwardRepo:           badgeAwardRepo,
+		badgeRepo:                badgeRepo,
+		userCommon:               userCommon,
+		objectInfoService:        objectInfoService,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
 // GetBadgeAwardList get badge award list
-func (b *BadgeAwardService) GetBadgeAwardList(
+func (bs *BadgeAwardService) GetBadgeAwardList(
 	ctx context.Context,
 	req *schema.GetBadgeAwardWithPageReq,
 ) (resp []*schema.GetBadgeAwardWithPageResp, total int64, err error) {
@@ -94,11 +99,11 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 		badgeAwardList []*entity.BadgeAward
 	)
 
-	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	req.UserID, err = bs.validateUserByUsername(ctx, req.Username)
 	if err != nil {
-		badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeId(ctx, req.BadgeID, req.Page, req.PageSize)
+		badgeAwardList, total, err = bs.badgeAwardRepo.ListPagedByBadgeId(ctx, req.BadgeID, req.Page, req.PageSize)
 	} else {
-		badgeAwardList, total, err = b.badgeAwardRepo.ListPagedByBadgeIdAndUserId(ctx, req.BadgeID, req.UserID, req.Page, req.PageSize)
+		badgeAwardList, total, err = bs.badgeAwardRepo.ListPagedByBadgeIdAndUserId(ctx, req.BadgeID, req.UserID, req.Page, req.PageSize)
 	}
 
 	if err != nil {
@@ -113,7 +118,7 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 		)
 
 		// if exist object info
-		objInfo, e := b.objectInfoService.GetInfo(ctx, badgeAward.AwardKey)
+		objInfo, e := bs.objectInfoService.GetInfo(ctx, badgeAward.AwardKey)
 		if e == nil && !objInfo.IsDeleted() {
 			objectID = objInfo.ObjectID
 			questionID = objInfo.QuestionID
@@ -135,7 +140,7 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 		}
 
 		// get user info
-		userInfo, exists, e := b.userCommon.GetUserBasicInfoByID(ctx, badgeAward.UserID)
+		userInfo, exists, e := bs.userCommon.GetUserBasicInfoByID(ctx, badgeAward.UserID)
 		if e != nil {
 			log.Errorf("user not found by id: %s, err: %v", badgeAward.UserID, e)
 		}
@@ -150,8 +155,8 @@ func (b *BadgeAwardService) GetBadgeAwardList(
 }
 
 // Award award badge
-func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID string, awardKey string) (err error) {
-	badgeData, exists, err := b.badgeRepo.GetByID(ctx, badgeID)
+func (bs *BadgeAwardService) Award(ctx context.Context, badgeID string, userID string, awardKey string) (err error) {
+	badgeData, exists, err := bs.badgeRepo.GetByID(ctx, badgeID)
 	if err != nil {
 		return err
 	}
@@ -160,7 +165,7 @@ func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID st
 		return errors.BadRequest(reason.BadgeObjectNotFound)
 	}
 
-	alreadyAwarded, err := b.badgeAwardRepo.CheckIsAward(ctx, badgeID, userID, awardKey, badgeData.Single)
+	alreadyAwarded, err := bs.badgeAwardRepo.CheckIsAward(ctx, badgeID, userID, awardKey, badgeData.Single)
 	if err != nil {
 		return err
 	}
@@ -175,11 +180,27 @@ func (b *BadgeAwardService) Award(ctx context.Context, badgeID string, userID st
 		BadgeGroupID:   badgeData.BadgeGroupID,
 		IsBadgeDeleted: entity.IsBadgeNotDeleted,
 	}
-	return b.badgeAwardRepo.AwardBadgeForUser(ctx, badgeAward)
+	err = bs.badgeAwardRepo.AwardBadgeForUser(ctx, badgeAward)
+	if err != nil {
+		return err
+	}
+
+	msg := &schema.NotificationMsg{
+		TriggerUserID:      badgeAward.UserID,
+		ReceiverUserID:     badgeAward.UserID,
+		Type:               schema.NotificationTypeAchievement,
+		ObjectID:           badgeAward.ID,
+		ObjectType:         constant.BadgeAwardObjectType,
+		Title:              badgeData.Name,
+		ExtraInfo:          map[string]string{"badge_id": badgeData.ID},
+		NotificationAction: constant.NotificationEarnedBadge,
+	}
+	bs.notificationQueueService.Send(ctx, msg)
+	return nil
 }
 
 // GetUserBadgeAwardList get user badge award list
-func (b *BadgeAwardService) GetUserBadgeAwardList(
+func (bs *BadgeAwardService) GetUserBadgeAwardList(
 	ctx *gin.Context,
 	req *schema.GetUserBadgeAwardListReq,
 ) (
@@ -191,12 +212,12 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 		earnedCounts []*entity.BadgeEarnedCount
 	)
 
-	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	req.UserID, err = bs.validateUserByUsername(ctx, req.Username)
 	if err != nil {
 		return
 	}
 
-	earnedCounts, err = b.badgeAwardRepo.SumUserEarnedGroupByBadgeID(ctx, req.UserID)
+	earnedCounts, err = bs.badgeAwardRepo.SumUserEarnedGroupByBadgeID(ctx, req.UserID)
 	if err != nil {
 		return
 	}
@@ -204,7 +225,7 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 	resp = make([]*schema.GetUserBadgeAwardListResp, total)
 
 	for i, earnedCount := range earnedCounts {
-		badge, exists, e := b.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
+		badge, exists, e := bs.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
 		if e != nil {
 			err = e
 			return
@@ -225,24 +246,18 @@ func (b *BadgeAwardService) GetUserBadgeAwardList(
 }
 
 // GetUserRecentBadgeAwardList get user badge award list
-func (b *BadgeAwardService) GetUserRecentBadgeAwardList(
-	ctx *gin.Context,
-	req *schema.GetUserBadgeAwardListReq,
-) (
-	resp []*schema.GetUserBadgeAwardListResp,
-	total int64,
-	err error,
-) {
+func (bs *BadgeAwardService) GetUserRecentBadgeAwardList(ctx *gin.Context, req *schema.GetUserBadgeAwardListReq) (
+	resp []*schema.GetUserBadgeAwardListResp, total int64, err error) {
 	var (
 		earnedCounts []*entity.BadgeAwardRecent
 	)
 
-	req.UserID, err = b.validateUserByUsername(ctx, req.Username)
+	req.UserID, err = bs.validateUserByUsername(ctx, req.Username)
 	if err != nil {
 		return
 	}
 
-	earnedCounts, err = b.badgeAwardRepo.ListNewestEarned(ctx, req.UserID, req.Limit)
+	earnedCounts, err = bs.badgeAwardRepo.ListNewestEarned(ctx, req.UserID, req.Limit)
 	if err != nil {
 		return
 	}
@@ -251,7 +266,7 @@ func (b *BadgeAwardService) GetUserRecentBadgeAwardList(
 	resp = make([]*schema.GetUserBadgeAwardListResp, total)
 
 	for i, earnedCount := range earnedCounts {
-		badge, exists, e := b.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
+		badge, exists, e := bs.badgeRepo.GetByID(ctx, earnedCount.BadgeID)
 		if e != nil {
 			err = e
 			return
@@ -278,14 +293,14 @@ type userReq struct {
 	Username string
 }
 
-func (b *BadgeAwardService) validateUserByUsername(ctx context.Context, userName string) (userID string, err error) {
+func (bs *BadgeAwardService) validateUserByUsername(ctx context.Context, userName string) (userID string, err error) {
 	var (
 		userInfo *schema.UserBasicInfo
 		exist    bool
 	)
 	// validate user exists or not
 	if len(userName) > 0 {
-		userInfo, exist, err = b.userCommon.GetUserBasicInfoByUserName(ctx, userName)
+		userInfo, exist, err = bs.userCommon.GetUserBasicInfoByUserName(ctx, userName)
 		if err != nil {
 			return
 		}
