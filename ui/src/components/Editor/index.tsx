@@ -27,7 +27,7 @@ import {
 
 import classNames from 'classnames';
 
-import { PluginType } from '@/utils/pluginKit';
+import { PluginType, useRenderPlugin } from '@/utils/pluginKit';
 import PluginRender from '../PluginRender';
 
 import {
@@ -83,6 +83,8 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
 ) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<{ getHtml; element } | null>(null);
+
+  useRenderPlugin(previewRef.current?.element);
 
   const editor = useEditor({
     editorRef,

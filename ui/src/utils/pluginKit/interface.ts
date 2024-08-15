@@ -46,7 +46,7 @@ export interface Plugin {
     useRender?: Array<
       (element: HTMLElement | RefObject<HTMLElement> | null) => void
     >;
-    useCaptcha?: (props: { captchaKey: Type.CaptchaKey; commonProps: any; }) => {
+    useCaptcha?: (props: { captchaKey: Type.CaptchaKey; commonProps: any }) => {
       getCaptcha: () => Record<string, any>;
       check: (t: () => void) => void;
       handleCaptchaError: (error) => any;
