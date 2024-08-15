@@ -1,8 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "= \"answer api\"",
+        "title": "\"answer\"",
+        "contact": {},
+        "version": "= \"v0.0.1\""
     },
+    "basePath": "= \"/\"",
     "paths": {
         "/": {
             "get": {
@@ -4380,7 +4384,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetTagResp"
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
                                             }
                                         }
                                     }
@@ -5350,7 +5354,7 @@
         },
         "/answer/api/v1/tags": {
             "get": {
-                "description": "get tags list",
+                "description": "get tags list by slug name",
                 "produces": [
                     "application/json"
                 ],
@@ -5374,7 +5378,22 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -8212,6 +8231,23 @@
                 }
             }
         },
+        "schema.GetTagBasicResp": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
+                "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -8809,7 +8845,7 @@
                     "enum": [
                         "newest",
                         "active",
-                        "frequent",
+                        "hot",
                         "score",
                         "unanswered"
                     ]
@@ -9789,7 +9825,7 @@
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9798,7 +9834,7 @@
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
@@ -9812,7 +9848,7 @@
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9821,11 +9857,25 @@
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteTag": {
+            "type": "object",
+            "required": [
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
                 }
             }
         },
