@@ -50,4 +50,6 @@ const (
 	NewQuestionNotificationLimitMax            = 50
 	RateLimitCacheKeyPrefix                    = "answer:rate-limit:"
 	RateLimitCacheTime                         = 5 * time.Minute
+	RedDotCacheKey                             = "answer:red-dot:%s:%s"
+	RedDotCacheTime                            = 30 * 24 * time.Hour
 )

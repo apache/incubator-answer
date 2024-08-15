@@ -171,3 +171,21 @@ type GetUserBadgeAwardListResp struct {
 	// badge level
 	Level entity.BadgeLevel `json:"level" `
 }
+
+// GetBadgeByIDResp get badge by id response
+type GetBadgeByIDResp struct {
+	// badge id
+	ID string `json:"id" `
+	// badge name
+	Name string `json:"name" `
+	// badge description
+	Description string `json:"description" `
+	// badge icon
+	Icon string `json:"icon" `
+	// badge award count
+	AwardCount int `json:"award_count" `
+	// badge is single or multiple
+	IsSingle bool `json:"is_single" `
+	// badge level
+	Level entity.BadgeLevel `json:"level" `
+}
