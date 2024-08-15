@@ -23,7 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
+	"github.com/apache/incubator-answer/internal/service/badge"
 	"github.com/apache/incubator-answer/internal/service/report_common"
 	"github.com/apache/incubator-answer/internal/service/review"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
@@ -52,6 +52,7 @@ type NotificationService struct {
 	reportRepo         report_common.ReportRepo
 	reviewService      *review.ReviewService
 	userRepo           usercommon.UserRepo
+	badgeRepo          badge.BadgeRepo
 }
 
 func NewNotificationService(
@@ -62,6 +63,7 @@ func NewNotificationService(
 	userRepo usercommon.UserRepo,
 	reportRepo report_common.ReportRepo,
 	reviewService *review.ReviewService,
+	badgeRepo badge.BadgeRepo,
 ) *NotificationService {
 	return &NotificationService{
 		data:               data,
@@ -71,33 +73,58 @@ func NewNotificationService(
 		userRepo:           userRepo,
 		reportRepo:         reportRepo,
 		reviewService:      reviewService,
+		badgeRepo:          badgeRepo,
 	}
 }
 
 func (ns *NotificationService) GetRedDot(ctx context.Context, req *schema.GetRedDot) (resp *schema.RedDot, err error) {
+	inboxKey := fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeInbox, req.UserID)
+	achievementKey := fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeAchievement, req.UserID)
+
 	redBot := &schema.RedDot{}
-	inboxKey := fmt.Sprintf("answer_RedDot_%d_%s", schema.NotificationTypeInbox, req.UserID)
-	achievementKey := fmt.Sprintf("answer_RedDot_%d_%s", schema.NotificationTypeAchievement, req.UserID)
-	inboxValue, _, err := ns.data.Cache.GetInt64(ctx, inboxKey)
-	if err != nil {
-		redBot.Inbox = 0
-	} else {
-		redBot.Inbox = inboxValue
-	}
-	achievementValue, _, err := ns.data.Cache.GetInt64(ctx, achievementKey)
-	if err != nil {
-		redBot.Achievement = 0
-	} else {
-		redBot.Achievement = achievementValue
-	}
-	revisionCount := &schema.RevisionSearch{}
-	_ = copier.Copy(revisionCount, req)
+	redBot.Inbox, _, err = ns.data.Cache.GetInt64(ctx, inboxKey)
+	redBot.Achievement, _, err = ns.data.Cache.GetInt64(ctx, achievementKey)
+
+	// get review amount
 	if req.CanReviewAnswer || req.CanReviewQuestion || req.CanReviewTag {
 		redBot.CanRevision = true
 		redBot.Revision = ns.countAllReviewAmount(ctx, req)
 	}
 
+	// get badge award
+	redBot.BadgeAward = ns.getBadgeAward(ctx, req.UserID)
 	return redBot, nil
+}
+
+func (ns *NotificationService) getBadgeAward(ctx context.Context, userID string) (badgeAward *schema.RedDotBadgeAward) {
+	key := fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeBadgeAchievement, userID)
+	cacheData, exist, err := ns.data.Cache.GetString(ctx, key)
+	if err != nil {
+		log.Errorf("get badge award failed: %v", err)
+		return nil
+	}
+	if !exist {
+		return nil
+	}
+
+	c := schema.NewRedDotBadgeAwardCache()
+	c.FromJSON(cacheData)
+	award := c.GetBadgeAward()
+	if award == nil {
+		return nil
+	}
+	badgeInfo, exists, err := ns.badgeRepo.GetByID(ctx, award.BadgeID)
+	if err != nil {
+		log.Errorf("get badge info failed: %v", err)
+		return nil
+	}
+	if !exists {
+		return nil
+	}
+	award.Name = translator.Tr(handler.GetLangByCtx(ctx), badgeInfo.Name)
+	award.Icon = badgeInfo.Icon
+	award.Level = badgeInfo.Level
+	return award
 }
 
 func (ns *NotificationService) countAllReviewAmount(ctx context.Context, req *schema.GetRedDot) (amount int64) {
@@ -137,21 +164,16 @@ func (ns *NotificationService) countAllReviewAmount(ctx context.Context, req *sc
 }
 
 func (ns *NotificationService) ClearRedDot(ctx context.Context, req *schema.NotificationClearRequest) (*schema.RedDot, error) {
-	botType, ok := schema.NotificationType[req.TypeStr]
-	if ok {
-		key := fmt.Sprintf("answer_RedDot_%d_%s", botType, req.UserID)
-		err := ns.data.Cache.Del(ctx, key)
-		if err != nil {
-			log.Error("ClearRedDot del cache error", err.Error())
-		}
-	}
-	getRedDotreq := &schema.GetRedDot{}
-	_ = copier.Copy(getRedDotreq, req)
-	return ns.GetRedDot(ctx, getRedDotreq)
+	key := fmt.Sprintf(constant.RedDotCacheKey, req.NotificationType, req.UserID)
+	_ = ns.data.Cache.Del(ctx, key)
+
+	resp := &schema.GetRedDot{}
+	_ = copier.Copy(resp, req)
+	return ns.GetRedDot(ctx, resp)
 }
 
-func (ns *NotificationService) ClearUnRead(ctx context.Context, userID string, botTypeStr string) error {
-	botType, ok := schema.NotificationType[botTypeStr]
+func (ns *NotificationService) ClearUnRead(ctx context.Context, userID string, notificationType string) error {
+	botType, ok := schema.NotificationType[notificationType]
 	if ok {
 		err := ns.notificationRepo.ClearUnRead(ctx, userID, botType)
 		if err != nil {
@@ -164,19 +186,23 @@ func (ns *NotificationService) ClearUnRead(ctx context.Context, userID string, b
 func (ns *NotificationService) ClearIDUnRead(ctx context.Context, userID string, id string) error {
 	notificationInfo, exist, err := ns.notificationRepo.GetById(ctx, id)
 	if err != nil {
-		log.Error("notificationRepo.GetById error", err.Error())
+		log.Errorf("get notification failed: %v", err)
 		return nil
 	}
-	if !exist {
+	if !exist || notificationInfo.UserID != userID {
 		return nil
 	}
-	if notificationInfo.UserID == userID && notificationInfo.IsRead == schema.NotificationNotRead {
+	if notificationInfo.IsRead == schema.NotificationNotRead {
 		err := ns.notificationRepo.ClearIDUnRead(ctx, userID, id)
 		if err != nil {
 			return err
 		}
 	}
 
+	err = ns.notificationCommon.RemoveBadgeAwardAlertCache(ctx, userID, id)
+	if err != nil {
+		log.Errorf("remove badge award alert cache failed: %v", err)
+	}
 	return nil
 }
 
@@ -222,6 +248,14 @@ func (ns *NotificationService) formatNotificationPage(ctx context.Context, notif
 		// If notification is downvote, the user info is not needed.
 		if item.NotificationAction == constant.NotificationDownVotedTheQuestion ||
 			item.NotificationAction == constant.NotificationDownVotedTheAnswer {
+			item.UserInfo = nil
+		}
+		// If notification is badge, the user info is not needed and the title need to be translated.
+		if item.ObjectInfo.ObjectType == constant.BadgeAwardObjectType {
+			badgeName := translator.Tr(lang, item.ObjectInfo.Title)
+			item.ObjectInfo.Title = translator.TrWithData(lang, constant.NotificationEarnedBadge, struct {
+				BadgeName string
+			}{BadgeName: badgeName})
 			item.UserInfo = nil
 		}
 
