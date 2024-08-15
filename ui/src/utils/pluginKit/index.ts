@@ -232,6 +232,26 @@ const useRenderHtmlPlugin = (
     });
 };
 
+// Only for render type plugins
+const useRenderPlugin = (
+  element: HTMLElement | RefObject<HTMLElement> | null,
+) => {
+  return plugins
+    .getPlugins()
+    .filter((plugin) => {
+      return (
+        plugin.activated &&
+        plugin.hooks?.useRender &&
+        plugin.info.type === PluginType.Render
+      );
+    })
+    .forEach((plugin) => {
+      plugin.hooks?.useRender?.forEach((hook) => {
+        hook(element);
+      });
+    });
+};
+
 // Only one captcha type plug-in can be enabled at the same time
 const useCaptchaPlugin = (key: Type.CaptchaKey) => {
   const captcha = plugins
@@ -248,5 +268,11 @@ const useCaptchaPlugin = (key: Type.CaptchaKey) => {
 
 export type { Plugin, PluginInfo };
 
-export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin, PluginType };
+export {
+  useRenderHtmlPlugin,
+  mergeRoutePlugins,
+  useCaptchaPlugin,
+  useRenderPlugin,
+  PluginType,
+};
 export default plugins;
