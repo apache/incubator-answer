@@ -220,11 +220,19 @@ export interface SetNoticeReq {
   notice_switch: boolean;
 }
 
+export interface NotificationBadgeAward {
+  notification_id: string;
+  badge_id: string;
+  name: string;
+  icon: string;
+  level: number;
+}
 export interface NotificationStatus {
   inbox: number;
   achievement: number;
   revision: number;
   can_revision: boolean;
+  badge_award: NotificationBadgeAward | null;
 }
 
 export interface QuestionDetailRes {
@@ -758,13 +766,18 @@ export interface BadgeInfo extends BadgeListItem {
   is_single: boolean;
 }
 
+export interface AdminBadgeListItem extends BadgeListItem {
+  group_name: string;
+  status: string;
+  description: string;
+}
+
 export interface BadgeDetailListReq {
   page: number;
   page_size: number;
   badge_id: string;
   username?: string | null;
 }
-
 export interface BadgeDetailListItem {
   created_at: number;
   author_user_info: UserInfoBase;
