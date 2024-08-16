@@ -421,7 +421,7 @@ backend:
     tags_title:
       other: Tags
     no_description:
-       other: The tag has no description.
+      other: The tag has no description.
   notification:
     action:
       update_question:
@@ -1316,7 +1316,7 @@ ui:
     visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
-    comma: ','
+    comma: ","
     last_login: Seen
     about_me: About Me
     about_me_empty: "// Hello, World !"
@@ -1474,6 +1474,11 @@ ui:
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
     login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
   badges:
+    modal:
+      title: Congratulations
+      content: You've earned a new badge.
+      close: Close
+      confirm: View badges
     title: Badges
     awarded: Awarded
     earned_x: Earned x{{ number }}
