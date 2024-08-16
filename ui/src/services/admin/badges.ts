@@ -25,10 +25,10 @@ import type * as Type from '@/common/interface';
 
 export const useQueryBadges = (params) => {
   const apiUrl = `/answer/admin/api/badges?${qs.stringify(params)}`;
-  const { data, error, mutate } = useSWR<Type.ListResult, Error>(
-    apiUrl,
-    request.instance.get,
-  );
+  const { data, error, mutate } = useSWR<
+    Type.ListResult<Type.AdminBadgeListItem>,
+    Error
+  >(apiUrl, request.instance.get);
   return {
     data,
     isLoading: !data && !error,

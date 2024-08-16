@@ -39,7 +39,7 @@ const bgMap = {
 
 const PAGE_SIZE = 10;
 
-const Users: FC = () => {
+const Badges: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.badges' });
 
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
@@ -103,7 +103,7 @@ const Users: FC = () => {
         </thead>
         <tbody className="align-middle">
           {data?.list.map((badge) => (
-            <tr>
+            <tr key={badge.id}>
               <td className="d-flex align-items-center">
                 {badge.icon?.startsWith('http') ? (
                   <img
@@ -157,4 +157,4 @@ const Users: FC = () => {
   );
 };
 
-export default Users;
+export default Badges;
