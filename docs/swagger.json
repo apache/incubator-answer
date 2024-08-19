@@ -3085,7 +3085,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                                "$ref": "#/definitions/plugin.EmbedConfig"
                                             }
                                         }
                                     }
@@ -7379,6 +7379,17 @@
                 "list": {}
             }
         },
+        "plugin.EmbedConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AcceptAnswerReq": {
             "type": "object",
             "required": [
@@ -8334,17 +8345,6 @@
                 },
                 "website": {
                     "description": "website",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.GetEmbedOptionResp": {
-            "type": "object",
-            "properties": {
-                "enable": {
-                    "type": "boolean"
-                },
-                "platform": {
                     "type": "string"
                 }
             }

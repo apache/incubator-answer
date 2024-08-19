@@ -127,6 +127,13 @@ definitions:
         type: integer
       list: {}
     type: object
+  plugin.EmbedConfig:
+    properties:
+      enable:
+        type: boolean
+      platform:
+        type: string
+    type: object
   schema.AcceptAnswerReq:
     properties:
       answer_id:
@@ -796,13 +803,6 @@ definitions:
         type: string
       website:
         description: website
-        type: string
-    type: object
-  schema.GetEmbedOptionResp:
-    properties:
-      enable:
-        type: boolean
-      platform:
         type: string
     type: object
   schema.GetFollowingTagsResp:
@@ -4738,7 +4738,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.GetEmbedOptionResp'
+                    $ref: '#/definitions/plugin.EmbedConfig'
                   type: array
               type: object
       summary: GetEmbedConfig
