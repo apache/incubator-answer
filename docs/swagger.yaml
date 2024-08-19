@@ -117,6 +117,13 @@ definitions:
         type: integer
       list: {}
     type: object
+  plugin.EmbedConfig:
+    properties:
+      enable:
+        type: boolean
+      platform:
+        type: string
+    type: object
   schema.AcceptAnswerReq:
     properties:
       answer_id:
@@ -687,13 +694,6 @@ definitions:
         description: website
         type: string
     type: object
-  schema.GetEmbedOptionResp:
-    properties:
-      enable:
-        type: boolean
-      platform:
-        type: string
-    type: object
   schema.GetFollowingTagsResp:
     properties:
       display_name:
@@ -981,6 +981,17 @@ definitions:
       terms_of_service_original_text:
         type: string
       terms_of_service_parsed_text:
+        type: string
+    type: object
+  schema.GetTagBasicResp:
+    properties:
+      display_name:
+        type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
+      slug_name:
         type: string
     type: object
   schema.GetTagPageResp:
@@ -1401,7 +1412,7 @@ definitions:
         enum:
         - newest
         - active
-        - frequent
+        - hot
         - score
         - unanswered
         type: string
@@ -2071,13 +2082,13 @@ definitions:
     properties:
       recommend_tags:
         items:
-          type: string
+          $ref: '#/definitions/schema.SiteWriteTag'
         type: array
       required_tag:
         type: boolean
       reserved_tags:
         items:
-          type: string
+          $ref: '#/definitions/schema.SiteWriteTag'
         type: array
       restrict_answer:
         type: boolean
@@ -2086,16 +2097,25 @@ definitions:
     properties:
       recommend_tags:
         items:
-          type: string
+          $ref: '#/definitions/schema.SiteWriteTag'
         type: array
       required_tag:
         type: boolean
       reserved_tags:
         items:
-          type: string
+          $ref: '#/definitions/schema.SiteWriteTag'
         type: array
       restrict_answer:
         type: boolean
+    type: object
+  schema.SiteWriteTag:
+    properties:
+      display_name:
+        type: string
+      slug_name:
+        type: string
+    required:
+    - slug_name
     type: object
   schema.TagItem:
     properties:
@@ -4353,7 +4373,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.GetEmbedOptionResp'
+                    $ref: '#/definitions/plugin.EmbedConfig'
                   type: array
               type: object
       summary: GetEmbedConfig
@@ -5382,7 +5402,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.GetTagResp'
+                    $ref: '#/definitions/schema.GetTagBasicResp'
                   type: array
               type: object
       security:
@@ -5965,7 +5985,7 @@ paths:
       - Tag
   /answer/api/v1/tags:
     get:
-      description: get tags list
+      description: get tags list by slug name
       parameters:
       - collectionFormat: csv
         description: string collection
@@ -5980,7 +6000,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetTagBasicResp'
+                  type: array
+              type: object
       summary: get tags list
       tags:
       - Tag
@@ -6677,15 +6704,15 @@ paths:
       - Activity
   /custom.css:
     get:
-      description: get site robots information
+      description: get site custom CSS
       produces:
-      - application/json
+      - text/css
       responses:
         "200":
           description: OK
           schema:
             type: string
-      summary: get site robots information
+      summary: get site custom CSS
       tags:
       - site
   /installation/base-info:

@@ -2738,7 +2738,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                                "$ref": "#/definitions/plugin.EmbedConfig"
                                             }
                                         }
                                     }
@@ -4410,7 +4410,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetTagResp"
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
                                             }
                                         }
                                     }
@@ -5380,7 +5380,7 @@ const docTemplate = `{
         },
         "/answer/api/v1/tags": {
             "get": {
-                "description": "get tags list",
+                "description": "get tags list by slug name",
                 "produces": [
                     "application/json"
                 ],
@@ -5404,7 +5404,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -6571,14 +6586,14 @@ const docTemplate = `{
         },
         "/custom.css": {
             "get": {
-                "description": "get site robots information",
+                "description": "get site custom CSS",
                 "produces": [
-                    "application/json"
+                    "text/css"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "get site robots information",
+                "summary": "get site custom CSS",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -7002,6 +7017,17 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "list": {}
+            }
+        },
+        "plugin.EmbedConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
+                    "type": "string"
+                }
             }
         },
         "schema.AcceptAnswerReq": {
@@ -7813,17 +7839,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetEmbedOptionResp": {
-            "type": "object",
-            "properties": {
-                "enable": {
-                    "type": "boolean"
-                },
-                "platform": {
-                    "type": "string"
-                }
-            }
-        },
         "schema.GetFollowingTagsResp": {
             "type": "object",
             "properties": {
@@ -8238,6 +8253,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetTagBasicResp": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
+                "slug_name": {
                     "type": "string"
                 }
             }
@@ -9819,7 +9851,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9828,7 +9860,7 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
@@ -9842,7 +9874,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9851,11 +9883,25 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteTag": {
+            "type": "object",
+            "required": [
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
                 }
             }
         },
