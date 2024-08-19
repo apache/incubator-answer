@@ -37,14 +37,10 @@ type BadgeRepo interface {
 	GetByID(ctx context.Context, id string) (badge *entity.Badge, exists bool, err error)
 	GetByIDs(ctx context.Context, ids []string) (badges []*entity.Badge, err error)
 
-	ListByLevel(ctx context.Context, level entity.BadgeLevel) ([]*entity.Badge, error)
-	ListByGroup(ctx context.Context, groupID int64) ([]*entity.Badge, error)
-	ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) ([]*entity.Badge, error)
 	ListPaged(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
 	ListActivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
 	ListInactivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
 
-	UpdateAwardCount(ctx context.Context, id string, count int64) (err error)
 	UpdateStatus(ctx context.Context, id string, status int8) (err error)
 }
 
