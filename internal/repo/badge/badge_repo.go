@@ -62,36 +62,6 @@ func (r *badgeRepo) GetByIDs(ctx context.Context, ids []string) (badges []*entit
 	return
 }
 
-// ListByLevel returns a list of badges by level
-func (r *badgeRepo) ListByLevel(ctx context.Context, level entity.BadgeLevel) (badges []*entity.Badge, err error) {
-	badges = make([]*entity.Badge, 0)
-	err = r.data.DB.Context(ctx).Where("level = ?", level).Find(&badges)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
-
-// ListByGroup returns a list of badges by group
-func (r *badgeRepo) ListByGroup(ctx context.Context, groupID int64) (badges []*entity.Badge, err error) {
-	badges = make([]*entity.Badge, 0)
-	err = r.data.DB.Context(ctx).Where("group_id = ?", groupID).Find(&badges)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
-
-// ListByLevelAndGroup returns a list of badges by level and group
-func (r *badgeRepo) ListByLevelAndGroup(ctx context.Context, level entity.BadgeLevel, groupID int64) (badges []*entity.Badge, err error) {
-	badges = make([]*entity.Badge, 0)
-	err = r.data.DB.Context(ctx).Where("level = ? AND group_id = ?", level, groupID).Find(&badges)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
-
 // ListPaged returns a list of activated badges
 func (r *badgeRepo) ListPaged(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error) {
 	badges = make([]*entity.Badge, 0)
@@ -143,12 +113,6 @@ func (r *badgeRepo) ListInactivated(ctx context.Context, page int, pageSize int)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return
-}
-
-// UpdateAwardCount updates the award count of a badge
-func (r *badgeRepo) UpdateAwardCount(ctx context.Context, id string, count int64) (err error) {
-	_, err = r.data.DB.Context(ctx).Where("id = ?", id).Incr("award_count", count).Update(&entity.Badge{})
 	return
 }
 

@@ -100,12 +100,6 @@ func (r *badgeAwardRepo) CheckIsAward(ctx context.Context, badgeID, userID, awar
 	return isAward, err
 }
 
-func (r *badgeAwardRepo) CountByUserIdAndBadgeLevel(ctx context.Context, userID string, badgeLevel entity.BadgeLevel) (awardCount int64) {
-	return
-}
-func (r *badgeAwardRepo) CountByUserId(ctx context.Context, userID string) (awardCount int64) {
-	return
-}
 func (r *badgeAwardRepo) CountByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (awardCount int64) {
 	awardCount, err := r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ?", userID, badgeID).Count(&entity.BadgeAward{})
 	if err != nil {
@@ -113,20 +107,9 @@ func (r *badgeAwardRepo) CountByUserIdAndBadgeId(ctx context.Context, userID str
 	}
 	return
 }
-func (r *badgeAwardRepo) CountByObjectId(ctx context.Context, awardKey string) (awardCount int64) {
-	return
-}
-func (r *badgeAwardRepo) CountByObjectIdAndBadgeId(ctx context.Context, awardKey string, badgeID string) (awardCount int64) {
-	return
-}
-func (r *badgeAwardRepo) CountBadgesByUserIdAndObjectId(ctx context.Context, userID string, awardKey string, badgeID string) (awardCount int64) {
-	return
-}
+
 func (r *badgeAwardRepo) SumUserEarnedGroupByBadgeID(ctx context.Context, userID string) (earnedCounts []*entity.BadgeEarnedCount, err error) {
 	err = r.data.DB.Context(ctx).Select("badge_id, count(`id`) AS earned_count").Where("user_id = ?", userID).GroupBy("badge_id").Find(&earnedCounts)
-	return
-}
-func (r *badgeAwardRepo) ListAllByUserId(ctx context.Context, userID string) (badgeAwards []*entity.BadgeAward) {
 	return
 }
 
@@ -151,21 +134,6 @@ func (r *badgeAwardRepo) ListPagedByBadgeIdAndUserId(ctx context.Context, badgeI
 	}
 	return
 }
-func (r *badgeAwardRepo) ListPagedByObjectId(ctx context.Context, badgeID string, awardKey string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
-func (r *badgeAwardRepo) ListPagedByObjectIdAndUserId(ctx context.Context, badgeID string, awardKey string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
-func (r *badgeAwardRepo) ListTagPagedByBadgeId(ctx context.Context, badgeIDs []string, page int, pageSize int, filterUserID string) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
-func (r *badgeAwardRepo) ListTagPagedByBadgeIdAndUserId(ctx context.Context, badgeIDs []string, userID string, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
-func (r *badgeAwardRepo) ListPagedLatest(ctx context.Context, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
 
 // ListNewestEarned list newest earned badge awards
 func (r *badgeAwardRepo) ListNewestEarned(ctx context.Context, userID string, limit int) (badgeAwards []*entity.BadgeAwardRecent, err error) {
@@ -176,13 +144,6 @@ func (r *badgeAwardRepo) ListNewestEarned(ctx context.Context, userID string, li
 		GroupBy("badge_id").
 		OrderBy("created desc").
 		Limit(limit).Find(&badgeAwards)
-	return
-}
-
-func (r *badgeAwardRepo) ListNewestEarnedByLevel(ctx context.Context, userID string, level entity.BadgeLevel, num int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
-	return
-}
-func (r *badgeAwardRepo) ListNewestByUserIdAndLevel(ctx context.Context, userID string, level int, page int, pageSize int) (badgeAwards []*entity.BadgeAward, total int64, err error) {
 	return
 }
 
