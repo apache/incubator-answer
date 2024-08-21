@@ -400,6 +400,10 @@ const routes: RouteNode[] = [
             path: ':slug_name',
             page: 'pages/Admin/Plugins/Config',
           },
+          {
+            path: 'badges',
+            page: 'pages/Admin/Badges',
+          },
         ],
       },
       {

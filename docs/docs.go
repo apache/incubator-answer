@@ -154,6 +154,119 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/badge/status": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update badge status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminBadge"
+                ],
+                "summary": "update badge status",
+                "parameters": [
+                    {
+                        "description": "UpdateBadgeStatusReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateBadgeStatusReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/badges": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "list all badges by page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminBadge"
+                ],
+                "summary": "list all badges by page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "",
+                            "active",
+                            "inactive"
+                        ],
+                        "type": "string",
+                        "description": "badge status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search param",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetBadgeListPagedResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/dashboard": {
             "get": {
                 "security": [
@@ -2234,6 +2347,270 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get badge info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get badge info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetBadgeInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge/awards/page": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get badge award list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "badge id",
+                        "name": "badge_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "only list the award by username",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetBadgeInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge/user/awards": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get user badge award list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user name",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetUserBadgeAwardListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badge/user/awards/recent": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user badge award list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "get user badge award list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user name",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetUserBadgeAwardListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/badges": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "list all badges group by group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-badge"
+                ],
+                "summary": "list all badges group by group",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetBadgeListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -4410,7 +4787,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetTagResp"
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
                                             }
                                         }
                                     }
@@ -5380,7 +5757,7 @@ const docTemplate = `{
         },
         "/answer/api/v1/tags": {
             "get": {
-                "description": "get tags list",
+                "description": "get tags list by slug name",
                 "produces": [
                     "application/json"
                 ],
@@ -5404,7 +5781,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetTagBasicResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -6571,14 +6963,14 @@ const docTemplate = `{
         },
         "/custom.css": {
             "get": {
-                "description": "get site robots information",
+                "description": "get site custom CSS",
                 "produces": [
-                    "application/json"
+                    "text/css"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "get site robots information",
+                "summary": "get site custom CSS",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -6883,6 +7275,19 @@ const docTemplate = `{
                     "minimum": 1
                 }
             }
+        },
+        "entity.BadgeLevel": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "BadgeLevelBronze",
+                "BadgeLevelSilver",
+                "BadgeLevelGold"
+            ]
         },
         "handler.RespBody": {
             "type": "object",
@@ -7327,6 +7732,50 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.BadgeListInfo": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "description": "badge award count",
+                    "type": "integer"
+                },
+                "earned": {
+                    "description": "badge earned count",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "badge icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "badge name",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.BadgeStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive"
+            ],
+            "x-enum-varnames": [
+                "BadgeStatusActive",
+                "BadgeStatusInactive"
+            ]
+        },
         "schema.CloseQuestionReq": {
             "type": "object",
             "required": [
@@ -7575,6 +8024,112 @@ const docTemplate = `{
                 "is_followed": {
                     "description": "if user is followed object will be true,otherwise false",
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.GetBadgeInfoResp": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "description": "badge award count",
+                    "type": "integer"
+                },
+                "description": {
+                    "description": "badge description",
+                    "type": "string"
+                },
+                "earned_count": {
+                    "description": "badge earned count",
+                    "type": "integer"
+                },
+                "icon": {
+                    "description": "badge icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "is_single": {
+                    "description": "badge is single or multiple",
+                    "type": "boolean"
+                },
+                "level": {
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "badge name",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetBadgeListPagedResp": {
+            "type": "object",
+            "properties": {
+                "award_count": {
+                    "description": "badge award count",
+                    "type": "integer"
+                },
+                "description": {
+                    "description": "badge description",
+                    "type": "string"
+                },
+                "earned": {
+                    "description": "badge earned count",
+                    "type": "boolean"
+                },
+                "group_name": {
+                    "description": "badge group name",
+                    "type": "string"
+                },
+                "icon": {
+                    "description": "badge icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "badge name",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "badge status",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.BadgeStatus"
+                        }
+                    ]
+                }
+            }
+        },
+        "schema.GetBadgeListResp": {
+            "type": "object",
+            "properties": {
+                "badges": {
+                    "description": "badge list info",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.BadgeListInfo"
+                    }
+                },
+                "group_name": {
+                    "description": "badge group name",
+                    "type": "string"
                 }
             }
         },
@@ -8242,6 +8797,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetTagBasicResp": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
+                "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -8465,6 +9037,35 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "activation_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserBadgeAwardListResp": {
+            "type": "object",
+            "properties": {
+                "earned_count": {
+                    "description": "badge award count",
+                    "type": "integer"
+                },
+                "icon": {
+                    "description": "badge icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "badge level",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.BadgeLevel"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "badge name",
                     "type": "string"
                 }
             }
@@ -9819,7 +10420,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9828,7 +10429,7 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
@@ -9842,7 +10443,7 @@ const docTemplate = `{
                 "recommend_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "required_tag": {
@@ -9851,11 +10452,25 @@ const docTemplate = `{
                 "reserved_tags": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/schema.SiteWriteTag"
                     }
                 },
                 "restrict_answer": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteTag": {
+            "type": "object",
+            "required": [
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
                 }
             }
         },
@@ -10001,6 +10616,27 @@ const docTemplate = `{
                 },
                 "url_title": {
                     "type": "string"
+                }
+            }
+        },
+        "schema.UpdateBadgeStatusReq": {
+            "type": "object",
+            "required": [
+                "id",
+                "status"
+            ],
+            "properties": {
+                "id": {
+                    "description": "badge id",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "badge status",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.BadgeStatus"
+                        }
+                    ]
                 }
             }
         },

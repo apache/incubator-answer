@@ -105,8 +105,8 @@ func (nc *NotificationController) ClearRedDot(ctx *gin.Context) {
 	req.CanReviewAnswer = canList[1]
 	req.CanReviewTag = canList[2]
 
-	RedDot, err := nc.notificationService.ClearRedDot(ctx, req)
-	handler.HandleResponse(ctx, err, RedDot)
+	resp, err := nc.notificationService.ClearRedDot(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // ClearUnRead
@@ -125,7 +125,7 @@ func (nc *NotificationController) ClearUnRead(ctx *gin.Context) {
 		return
 	}
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	err := nc.notificationService.ClearUnRead(ctx, userID, req.TypeStr)
+	err := nc.notificationService.ClearUnRead(ctx, userID, req.NotificationType)
 	handler.HandleResponse(ctx, err, gin.H{})
 }
 

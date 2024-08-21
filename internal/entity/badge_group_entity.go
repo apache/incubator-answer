@@ -17,39 +17,19 @@
  * under the License.
  */
 
-package controller
+package entity
 
-import "github.com/google/wire"
+import "time"
 
-// ProviderSetController is controller providers.
-var ProviderSetController = wire.NewSet(
-	NewLangController,
-	NewCommentController,
-	NewReportController,
-	NewVoteController,
-	NewTagController,
-	NewFollowController,
-	NewCollectionController,
-	NewUserController,
-	NewQuestionController,
-	NewAnswerController,
-	NewSearchController,
-	NewRevisionController,
-	NewRankController,
-	NewReasonController,
-	NewNotificationController,
-	NewSiteInfoController,
-	NewDashboardController,
-	NewUploadController,
-	NewActivityController,
-	NewTemplateController,
-	NewConnectorController,
-	NewUserCenterController,
-	NewPermissionController,
-	NewUserPluginController,
-	NewReviewController,
-	NewCaptchaController,
-	NewMetaController,
-	NewEmbedController,
-	NewBadgeController,
-)
+// BadgeGroup badge_group
+type BadgeGroup struct {
+	ID        string    `json:"id" xorm:"not null pk autoincr BIGINT(20) id"`
+	Name      string    `json:"name" xorm:"not null default '' VARCHAR(256) name"`
+	CreatedAt time.Time `json:"created_at" xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt time.Time `json:"updated_at" xorm:"updated not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+}
+
+// TableName badge_group table name
+func (BadgeGroup) TableName() string {
+	return "badge_group"
+}

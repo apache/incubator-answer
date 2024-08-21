@@ -27,6 +27,8 @@ const (
 	CollectionObjectType = "collection"
 	CommentObjectType    = "comment"
 	ReportObjectType     = "report"
+	BadgeObjectType      = "badge"
+	BadgeAwardObjectType = "badge_award"
 )
 
 var (
@@ -38,15 +40,19 @@ var (
 		CollectionObjectType: 6,
 		CommentObjectType:    7,
 		ReportObjectType:     8,
+		BadgeObjectType:      9,
+		BadgeAwardObjectType: 10,
 	}
 
 	ObjectTypeNumberMapping = map[int]string{
-		1: QuestionObjectType,
-		2: AnswerObjectType,
-		3: TagObjectType,
-		4: UserObjectType,
-		6: CollectionObjectType,
-		7: CommentObjectType,
-		8: ReportObjectType,
+		1:  QuestionObjectType,
+		2:  AnswerObjectType,
+		3:  TagObjectType,
+		4:  UserObjectType,
+		6:  CollectionObjectType,
+		7:  CommentObjectType,
+		8:  ReportObjectType,
+		9:  BadgeObjectType,
+		10: BadgeAwardObjectType,
 	}
 )

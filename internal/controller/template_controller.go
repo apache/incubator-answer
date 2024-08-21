@@ -22,6 +22,8 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/service/content"
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/apache/incubator-answer/plugin"
 	"html/template"
 	"net/http"
@@ -54,12 +56,16 @@ type TemplateController struct {
 	cssPath                  string
 	templateRenderController *templaterender.TemplateRenderController
 	siteInfoService          siteinfo_common.SiteInfoCommonService
+	eventQueueService        event_queue.EventQueueService
+	userService              *content.UserService
 }
 
 // NewTemplateController new controller
 func NewTemplateController(
 	templateRenderController *templaterender.TemplateRenderController,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
+	eventQueueService event_queue.EventQueueService,
+	userService *content.UserService,
 ) *TemplateController {
 	script, css := GetStyle()
 	return &TemplateController{
@@ -67,6 +73,8 @@ func NewTemplateController(
 		cssPath:                  css,
 		templateRenderController: templateRenderController,
 		siteInfoService:          siteInfoService,
+		eventQueueService:        eventQueueService,
+		userService:              userService,
 	}
 }
 func GetStyle() (script []string, css string) {
@@ -271,6 +279,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	answerid := ctx.Param("answerid")
+	shareUsername := ctx.Query("share")
 	if checker.IsQuestionsIgnorePath(id) {
 		// if id == "ask" {
 		file, err := ui.Build.ReadFile("build/index.html")
@@ -290,6 +299,13 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	if err != nil {
 		tc.Page404(ctx)
 		return
+	}
+	if len(shareUsername) > 0 {
+		userInfo, err := tc.userService.GetOtherUserInfoByUsername(
+			ctx, &schema.GetOtherUserInfoByUsernameReq{Username: shareUsername})
+		if err == nil {
+			tc.eventQueueService.Send(ctx, schema.NewEvent(constant.EventUserShare, userInfo.ID))
+		}
 	}
 	encodeTitle := htmltext.UrlTitle(detail.Title)
 	if encodeTitle == title {

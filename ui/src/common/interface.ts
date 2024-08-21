@@ -328,6 +328,8 @@ export type UserFilterBy =
   | 'suspended'
   | 'deleted';
 
+export type BadgeFilterBy = 'all' | 'active' | 'inactive';
+
 export type InstalledPluginsFilterBy =
   | 'all'
   | 'active'

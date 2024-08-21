@@ -37,6 +37,7 @@ const g10Paths = [
   'questions',
   'answers',
   'users',
+  'badges',
   'flags',
   'installed-plugins',
 ];
