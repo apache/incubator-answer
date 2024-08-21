@@ -19,8 +19,16 @@
 
 package plugin
 
+import "github.com/gin-gonic/gin"
+
+type EmbedConfig struct {
+	Platform string `json:"platform"`
+	Enable   bool   `json:"enable"`
+}
+
 type Embed interface {
 	Base
+	GetEmbedConfigs(ctx *gin.Context) (embedConfigs []*EmbedConfig, err error)
 }
 
 var (

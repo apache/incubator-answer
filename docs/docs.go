@@ -3115,7 +3115,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                                "$ref": "#/definitions/plugin.EmbedConfig"
                                             }
                                         }
                                     }
@@ -7409,6 +7409,17 @@ const docTemplate = `{
                 "list": {}
             }
         },
+        "plugin.EmbedConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AcceptAnswerReq": {
             "type": "object",
             "required": [
@@ -8364,17 +8375,6 @@ const docTemplate = `{
                 },
                 "website": {
                     "description": "website",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.GetEmbedOptionResp": {
-            "type": "object",
-            "properties": {
-                "enable": {
-                    "type": "boolean"
-                },
-                "platform": {
                     "type": "string"
                 }
             }
