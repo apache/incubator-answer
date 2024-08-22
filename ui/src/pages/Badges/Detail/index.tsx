@@ -80,7 +80,12 @@ const Index = () => {
                       ? `/question/${item.question_id}?commentId=${item.comment_id}`
                       : '';
             return (
-              <Col sm={12} md={6} lg={3} key={item.object_id} className="mb-4">
+              <Col
+                sm={12}
+                md={6}
+                lg={3}
+                key={item.author_user_info.id}
+                className="mb-4">
                 <FormatTime
                   time={item.created_at}
                   preFix={t('awarded')}
