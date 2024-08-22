@@ -37,8 +37,6 @@ const BadgeOperation = ({ onSelect }: Props) => {
         <Dropdown.Menu align="end">
           <Dropdown.Item eventKey="active">{t('active')}</Dropdown.Item>
           <Dropdown.Item eventKey="inactive">{t('deactivate')}</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>{t('show_logs')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </td>
