@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { useTranslation } from 'react-i18next';
 
 import { CardBadge } from '@/components';
