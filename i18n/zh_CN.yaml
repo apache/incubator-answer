@@ -1840,7 +1840,7 @@ ui:
       active: 激活
       all: 全部
       awards: 奖励
-      deactivate: 取消激活
+      deactivate: 停用
       filter:
         placeholder: "按名称筛选，徽章:id"
       group: 组
