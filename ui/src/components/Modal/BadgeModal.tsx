@@ -19,14 +19,21 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges.modal' });
   const { user } = loggedUserInfoStore();
   const navigate = useNavigate();
-  const { data } = useQueryNotificationStatus();
+  const { data, mutate } = useQueryNotificationStatus();
 
-  const handleCancel = async () => {
+  const handle = async () => {
     if (!data) return;
     await readNotification(badge?.notification_id);
+    await mutate({
+      ...data,
+      badge_award: null,
+    });
+  };
+  const handleCancel = async () => {
+    await handle();
   };
   const handleConfirm = async () => {
-    await readNotification(badge?.notification_id);
+    await handle();
 
     const url = `/badges/${badge?.badge_id}?username=${user.username}`;
     navigate(url);
