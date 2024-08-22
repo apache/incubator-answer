@@ -43,10 +43,10 @@ func NewEmbedController() *EmbedController {
 func (c *EmbedController) GetEmbedConfig(ctx *gin.Context) {
 	resp := make([]*plugin.EmbedConfig, 0)
 
-	_ = plugin.CallEmbed(func(embed plugin.Embed) (err error) {
+	err := plugin.CallEmbed(func(embed plugin.Embed) (err error) {
 		resp, err = embed.GetEmbedConfigs(ctx)
-		return nil
+		return err
 	})
 
-	handler.HandleResponse(ctx, nil, resp)
+	handler.HandleResponse(ctx, err, resp)
 }
