@@ -853,6 +853,9 @@ ui:
       posts: Posts
       invites: Invites
       votes: Votes
+    answer: Answer
+    question: Question
+    badge_award: Badge
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."

@@ -19,6 +19,7 @@
 
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -30,6 +31,7 @@ import './index.scss';
 
 const Achievements = ({ data, handleReadNotification }) => {
   const { user } = loggedUserInfoStore();
+  const { t } = useTranslation('translation', { keyPrefix: 'notifications' });
 
   if (!data) {
     return null;
@@ -87,7 +89,7 @@ const Achievements = ({ data, handleReadNotification }) => {
                 {item.object_info.title}
               </Link>
               <span className="text-secondary small">
-                {item.object_info.object_type}
+                {t(item.object_info.object_type)}
               </span>
             </div>
           </ListGroup.Item>
