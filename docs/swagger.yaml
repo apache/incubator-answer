@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+basePath: = "/"
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -2899,6 +2900,9 @@ definitions:
     type: object
 info:
   contact: {}
+  description: = "answer api"
+  title: '"answer"'
+  version: = "v0.0.1"
 paths:
   /:
     get:

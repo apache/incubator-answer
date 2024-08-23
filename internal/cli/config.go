@@ -31,6 +31,8 @@ import (
 
 type ConfigField struct {
 	AllowPasswordLogin bool `json:"allow_password_login"`
+	// The slug name of plugin that you want to deactivate
+	DeactivatePluginSlugName string `json:"deactivate_plugin_slug_name"`
 }
 
 // SetDefaultConfig set default config
@@ -54,6 +56,9 @@ func SetDefaultConfig(dbConf *data.Database, cacheConf *data.CacheConf, field *C
 
 	if field.AllowPasswordLogin {
 		return defaultLoginConfig(db)
+	}
+	if len(field.DeactivatePluginSlugName) > 0 {
+		return deactivatePlugin(db, field.DeactivatePluginSlugName)
 	}
 
 	return nil
@@ -79,6 +84,40 @@ func defaultLoginConfig(x *xorm.Engine) (err error) {
 		if err != nil {
 			return fmt.Errorf("update site info failed: %w", err)
 		}
+	}
+	return nil
+}
+
+func deactivatePlugin(x *xorm.Engine, pluginSlugName string) (err error) {
+	fmt.Printf("try to deactivate plugin: %s\n", pluginSlugName)
+
+	item := &entity.Config{Key: constant.PluginStatus}
+	exist, err := x.Get(item)
+	if err != nil {
+		return fmt.Errorf("get config failed: %w", err)
+	}
+	if !exist {
+		return nil
+	}
+
+	pluginStatusMapping := make(map[string]bool)
+	_ = json.Unmarshal([]byte(item.Value), &pluginStatusMapping)
+	status, ok := pluginStatusMapping[pluginSlugName]
+	if !ok {
+		fmt.Printf("plugin %s not exist\n", pluginSlugName)
+		return nil
+	}
+	if !status {
+		fmt.Printf("plugin %s already deactivated\n", pluginSlugName)
+		return nil
+	}
+
+	pluginStatusMapping[pluginSlugName] = false
+	dataByte, _ := json.Marshal(pluginStatusMapping)
+	item.Value = string(dataByte)
+	_, err = x.ID(item.ID).Cols("value").Update(item)
+	if err != nil {
+		return fmt.Errorf("update plugin status failed: %w", err)
 	}
 	return nil
 }

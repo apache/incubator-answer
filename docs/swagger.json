@@ -1,8 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "= \"answer api\"",
+        "title": "\"answer\"",
+        "contact": {},
+        "version": "= \"v0.0.1\""
     },
+    "basePath": "= \"/\"",
     "paths": {
         "/": {
             "get": {
