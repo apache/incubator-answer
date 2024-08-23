@@ -29,6 +29,7 @@ type PluginAPIRouter struct {
 	userCenterController *controller.UserCenterController
 	captchaController    *controller.CaptchaController
 	embedController      *controller.EmbedController
+	renderController     *controller.RenderController
 }
 
 func NewPluginAPIRouter(
@@ -36,12 +37,14 @@ func NewPluginAPIRouter(
 	userCenterController *controller.UserCenterController,
 	captchaController *controller.CaptchaController,
 	embedController *controller.EmbedController,
+	renderController *controller.RenderController,
 ) *PluginAPIRouter {
 	return &PluginAPIRouter{
 		connectorController:  connectorController,
 		userCenterController: userCenterController,
 		captchaController:    captchaController,
 		embedController:      embedController,
+		renderController:     renderController,
 	}
 }
 
@@ -64,6 +67,7 @@ func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	// captcha plugin
 	r.GET("/captcha/config", pr.captchaController.GetCaptchaConfig)
 	r.GET("/embed/config", pr.embedController.GetEmbedConfig)
+	r.GET("/render/config", pr.renderController.GetRenderConfig)
 }
 
 func (pr *PluginAPIRouter) RegisterAuthUserConnectorRouter(r *gin.RouterGroup) {

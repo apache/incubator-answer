@@ -103,6 +103,10 @@ func Register(p Base) {
 		registerEmbed(p.(Embed))
 	}
 
+	if _, ok := p.(Render); ok {
+		registerRender(p.(Render))
+	}
+
 	if _, ok := p.(CDN); ok {
 		registerCDN(p.(CDN))
 	}
