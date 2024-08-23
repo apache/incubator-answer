@@ -4854,6 +4854,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/render/config": {
+            "get": {
+                "description": "GetRenderConfig",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginRender"
+                ],
+                "summary": "GetRenderConfig",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/plugin.RenderConfig"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/report": {
             "post": {
                 "security": [
@@ -7420,6 +7455,14 @@ const docTemplate = `{
                 }
             }
         },
+        "plugin.RenderConfig": {
+            "type": "object",
+            "properties": {
+                "select_theme": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AcceptAnswerReq": {
             "type": "object",
             "required": [
@@ -9257,10 +9300,16 @@ const docTemplate = `{
         },
         "schema.NotificationClearRequest": {
             "type": "object",
+            "required": [
+                "type"
+            ],
             "properties": {
                 "type": {
-                    "description": "inbox achievement",
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "inbox",
+                        "achievement"
+                    ]
                 }
             }
         },
