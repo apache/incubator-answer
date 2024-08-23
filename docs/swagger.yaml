@@ -134,6 +134,11 @@ definitions:
       platform:
         type: string
     type: object
+  plugin.RenderConfig:
+    properties:
+      select_theme:
+        type: string
+    type: object
   schema.AcceptAnswerReq:
     properties:
       answer_id:
@@ -1413,8 +1418,12 @@ definitions:
   schema.NotificationClearRequest:
     properties:
       type:
-        description: inbox achievement
+        enum:
+        - inbox
+        - achievement
         type: string
+    required:
+    - type
     type: object
   schema.OnCompleteAction:
     properties:
@@ -5813,6 +5822,26 @@ paths:
       summary: get reasons by object type and action
       tags:
       - reason
+  /answer/api/v1/render/config:
+    get:
+      consumes:
+      - application/json
+      description: GetRenderConfig
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/plugin.RenderConfig'
+              type: object
+      summary: GetRenderConfig
+      tags:
+      - PluginRender
   /answer/api/v1/report:
     post:
       consumes:
