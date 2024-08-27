@@ -65,7 +65,6 @@ func (m *Mentor) InitDB() error {
 	m.do("init version table", m.initVersionTable)
 	m.do("init admin user", m.initAdminUser)
 	m.do("init config", m.initConfig)
-	m.do("init badge", m.initBadge)
 	m.do("init default privileges config", m.initDefaultRankPrivileges)
 	m.do("init role", m.initRole)
 	m.do("init power", m.initPower)
@@ -126,26 +125,6 @@ func (m *Mentor) initAdminUser() {
 
 func (m *Mentor) initConfig() {
 	_, m.err = m.engine.Context(m.ctx).Insert(defaultConfigTable)
-}
-
-// initBadge init badge's table and data
-func (m *Mentor) initBadge() {
-	uniqueIDRepo := unique.NewUniqueIDRepo(&data.Data{DB: m.engine})
-	_, m.err = m.engine.Context(m.ctx).Insert(defaultBadgeGroupTable)
-	if m.err != nil {
-		return
-	}
-
-	for _, badge := range defaultBadgeTable {
-		badge.ID, m.err = uniqueIDRepo.GenUniqueIDStr(m.ctx, new(entity.Badge).TableName())
-		if m.err != nil {
-			return
-		}
-		_, m.err = m.engine.Context(m.ctx).Insert(badge)
-		if m.err != nil {
-			return
-		}
-	}
 }
 
 func (m *Mentor) initDefaultRankPrivileges() {
