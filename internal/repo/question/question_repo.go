@@ -408,7 +408,13 @@ func (qr *questionRepo) GetRecommendQuestionPageByTags(ctx context.Context, user
 	orderBySQL := "question.pin DESC, question.created_at DESC"
 
 	// Please Make sure every question has at least one tag
-	session := qr.data.DB.Context(ctx).Select(entity.Question{}.TableName() + ".*")
+	selectSQL := entity.Question{}.TableName() + ".*"
+	if len(followedQuestionIDs) > 0 {
+		idStr := "'" + strings.Join(followedQuestionIDs, "','") + "'"
+		selectSQL += fmt.Sprintf(", CASE WHEN question.id IN (%s) THEN 0 ELSE 1 END AS order_priority", idStr)
+		orderBySQL = "order_priority, " + orderBySQL
+	}
+	session := qr.data.DB.Context(ctx).Select(selectSQL)
 
 	if len(tagIDs) > 0 {
 		session.Where("question.user_id != ?", userID).
@@ -422,8 +428,6 @@ func (qr *questionRepo) GetRecommendQuestionPageByTags(ctx context.Context, user
 	}
 
 	if len(followedQuestionIDs) > 0 {
-		idStr := "'" + strings.Join(followedQuestionIDs, "','") + "'"
-		orderBySQL = fmt.Sprintf("CASE WHEN question.id IN (%s) THEN 0 ELSE 1 END, ", idStr) + orderBySQL
 		if len(tagIDs) > 0 {
 			// if tags provided, show followed questions and tag questions
 			session.Or(builder.In("question.id", followedQuestionIDs))
