@@ -71,13 +71,13 @@ const Index = () => {
           badges?.list?.map((item) => {
             const linkUrl =
               item.object_type === 'question'
-                ? `/question/${item.question_id}`
+                ? `/questions/${item.question_id}`
                 : item.object_type === 'answer'
-                  ? `/question/${item.question_id}/${item.answer_id}`
+                  ? `/questions/${item.question_id}/${item.answer_id}`
                   : item.object_type === 'comment' && item.answer_id
-                    ? `/question/${item.question_id}/${item.answer_id}?commentId=${item.comment_id}`
+                    ? `/questions/${item.question_id}/${item.answer_id}?commentId=${item.comment_id}`
                     : item.object_type === 'comment'
-                      ? `/question/${item.question_id}?commentId=${item.comment_id}`
+                      ? `/questions/${item.question_id}?commentId=${item.comment_id}`
                       : '';
             return (
               <Col
