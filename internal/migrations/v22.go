@@ -52,11 +52,14 @@ func addBadges(ctx context.Context, x *xorm.Engine) (err error) {
 	}
 
 	for _, badge := range defaultBadgeTable {
-		exist, err := x.Context(ctx).Get(&entity.Badge{Name: badge.Name})
+		beans := &entity.Badge{Name: badge.Name}
+		exist, err := x.Context(ctx).Get(beans)
 		if err != nil {
 			return err
 		}
 		if exist {
+			badge.ID = beans.ID
+			_, err = x.Context(ctx).ID(beans.ID).Update(badge)
 			continue
 		}
 		badge.ID, err = uniqueIDRepo.GenUniqueIDStr(ctx, new(entity.Badge).TableName())
