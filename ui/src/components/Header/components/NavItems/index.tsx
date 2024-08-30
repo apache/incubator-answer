@@ -35,24 +35,25 @@ interface Props {
 
 const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
   const { t } = useTranslation();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { agent: ucAgent } = userCenterStore();
   const handleLinkClick = (evt) => {
     if (floppyNavigation.shouldProcessLinkClick(evt)) {
       evt.preventDefault();
       const href = evt.currentTarget.getAttribute('href');
-      navigate(href);
+      floppyNavigation.navigate(href, {
+        handler: navigate,
+      });
     }
   };
   return (
     <>
       <Nav className="flex-row">
-        <Nav.Link
-          as={NavLink}
+        <NavLink
           to="/users/notifications/inbox"
           title={t('inbox', { keyPrefix: 'notifications' })}
-          className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
+          className="icon-link nav-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
           <Icon name="bell-fill" className="fs-4" />
           {(redDot?.inbox || 0) > 0 && (
             <div className="unread-dot bg-danger">
@@ -61,13 +62,12 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
               </span>
             </div>
           )}
-        </Nav.Link>
+        </NavLink>
 
-        <Nav.Link
-          as={NavLink}
+        <NavLink
           to="/users/notifications/achievement"
           title={t('achievement', { keyPrefix: 'notifications' })}
-          className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
+          className="icon-link nav-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
           <Icon name="trophy-fill" className="fs-4" />
           {(redDot?.achievement || 0) > 0 && (
             <div className="unread-dot bg-danger">
@@ -76,7 +76,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
               </span>
             </div>
           )}
-        </Nav.Link>
+        </NavLink>
       </Nav>
 
       <Dropdown align="end">
@@ -95,25 +95,31 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item
-            href={`/users/${userInfo.username}`}
+          <NavLink
+            to={`/users/${userInfo.username}`}
+            className={() => 'dropdown-item'}
             onClick={handleLinkClick}>
             {t('header.nav.profile')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            href={`/users/${userInfo.username}/bookmarks`}
+          </NavLink>
+          <NavLink
+            to={`/users/${userInfo.username}/bookmarks`}
+            className={() => 'dropdown-item'}
             onClick={handleLinkClick}>
             {t('header.nav.bookmark')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            href="/users/settings/profile"
+          </NavLink>
+          <NavLink
+            to="/users/settings/profile"
+            className={() => 'dropdown-item'}
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
-          </Dropdown.Item>
+          </NavLink>
           <Dropdown.Divider />
-          <Dropdown.Item href="/users/logout" onClick={(e) => logOut(e)}>
+          <NavLink
+            to="/users/logout"
+            className={() => 'dropdown-item'}
+            onClick={(e) => logOut(e)}>
             {t('header.nav.logout')}
-          </Dropdown.Item>
+          </NavLink>
         </Dropdown.Menu>
       </Dropdown>
       {/* Dropdown for user center agent info */}

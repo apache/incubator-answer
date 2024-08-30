@@ -20,7 +20,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Accordion, Nav } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useMatch } from 'react-router-dom';
+import { useNavigate, useMatch, NavLink } from 'react-router-dom';
 
 import classNames from 'classnames';
 
@@ -38,30 +38,54 @@ function MenuNode({
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
   const isLeaf = !menu.children.length;
   const href = isLeaf ? `${path}${menu.path}` : '#';
-
   return (
     <Nav.Item key={menu.path} className="w-100">
-      <Nav.Link
-        eventKey={menu.path}
-        as={isLeaf ? 'a' : 'button'}
-        onClick={(evt) => {
-          callback(evt, menu, href, isLeaf);
-        }}
-        href={href}
-        className={classNames(
-          'text-nowrap d-flex flex-nowrap align-items-center w-100',
-          { expanding, 'link-dark': activeKey !== menu.path },
-        )}>
-        <span className="me-auto text-truncate">
-          {menu.displayName ? menu.displayName : t(menu.name)}
-        </span>
-        {menu.badgeContent ? (
-          <span className="badge text-bg-dark">{menu.badgeContent}</span>
-        ) : null}
-        {!isLeaf && (
-          <Icon className="collapse-indicator" name="chevron-right" />
-        )}
-      </Nav.Link>
+      {isLeaf ? (
+        <Nav.Link
+          eventKey={menu.path}
+          as={NavLink}
+          to={href}
+          onClick={(evt) => {
+            callback(evt, menu, href, isLeaf);
+          }}
+          className={classNames(
+            'text-nowrap d-flex flex-nowrap align-items-center w-100',
+            { expanding, 'link-dark': activeKey !== menu.path },
+          )}>
+          <span className="me-auto text-truncate">
+            {menu.displayName ? menu.displayName : t(menu.name)}
+          </span>
+          {menu.badgeContent ? (
+            <span className="badge text-bg-dark">{menu.badgeContent}</span>
+          ) : null}
+          {!isLeaf && (
+            <Icon className="collapse-indicator" name="chevron-right" />
+          )}
+        </Nav.Link>
+      ) : (
+        <Nav.Link
+          eventKey={menu.path}
+          as="button"
+          href={href}
+          onClick={(evt) => {
+            callback(evt, menu, href, isLeaf);
+          }}
+          className={classNames(
+            'text-nowrap d-flex flex-nowrap align-items-center w-100',
+            { expanding, 'link-dark': activeKey !== menu.path },
+          )}>
+          <span className="me-auto text-truncate">
+            {menu.displayName ? menu.displayName : t(menu.name)}
+          </span>
+          {menu.badgeContent ? (
+            <span className="badge text-bg-dark">{menu.badgeContent}</span>
+          ) : null}
+          {!isLeaf && (
+            <Icon className="collapse-indicator" name="chevron-right" />
+          )}
+        </Nav.Link>
+      )}
+
       {menu.children.length ? (
         <Accordion.Collapse eventKey={menu.path} className="ms-3">
           <>

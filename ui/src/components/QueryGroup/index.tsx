@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
+import { REACT_BASE_PATH } from '@/router/alias';
 import { floppyNavigation } from '@/utils';
 
 interface Props {
@@ -82,7 +83,6 @@ const Index: FC<Props> = ({
         const name = typeof btn === 'string' ? btn : btn.name;
         return (
           <Button
-            as="a"
             key={key}
             variant="outline-secondary"
             active={currentSort === name}
@@ -102,7 +102,9 @@ const Index: FC<Props> = ({
                 : {}
             }
             href={
-              pathname ? `${pathname}${handleParams(key)}` : handleParams(key)
+              pathname
+                ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
+                : handleParams(key)
             }
             onClick={(evt) => handleClick(evt, key)}>
             {t(name)}
@@ -131,7 +133,7 @@ const Index: FC<Props> = ({
                 )}
                 href={
                   pathname
-                    ? `${pathname}${handleParams(key)}`
+                    ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
                     : handleParams(key)
                 }
                 onClick={(evt) => handleClick(evt, key)}>
