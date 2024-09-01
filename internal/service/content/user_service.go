@@ -527,6 +527,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	}
 	if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
 		log.Error(err)
+		return nil, err
 	}
 
 	// In the case of three-party login, the associated users are bound
@@ -660,6 +661,7 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
 		if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
 			log.Error(err)
+			return nil, err
 		}
 	}
 
