@@ -57,7 +57,7 @@ const Index: FC<IProps> = ({
 
         {badgePillType === 'count' && Number(data?.earned_count) > 0 && (
           <Badge pill bg="success" className="label">
-            x{data.earned_count}
+            ×{data.earned_count}
           </Badge>
         )}
         {data.icon.startsWith('http') ? (
@@ -78,7 +78,7 @@ const Index: FC<IProps> = ({
         <h6 className="mb-0 mt-3 text-center">{data.name}</h6>
         {showAwardedCount && (
           <div className="small text-secondary">
-            {t('x_awarded', { number: formatCount(data.award_count) })}
+            {t('×_awarded', { number: formatCount(data.award_count) })}
           </div>
         )}
       </Card.Body>

@@ -1748,8 +1748,8 @@ ui:
       confirm: View badges
     title: Badges
     awarded: Awarded
-    earned_x: Earned x{{ number }}
-    x_awarded: "{{ number }} awarded"
+    earned_×: Earned ×{{ number }}
+    ×_awarded: "{{ number }} awarded"
     can_earn_multiple: You can earn this multiple times.
     earned: Earned
 
