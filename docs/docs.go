@@ -7793,7 +7793,7 @@ const docTemplate = `{
                     "description": "badge award count",
                     "type": "integer"
                 },
-                "earned": {
+                "earned_count": {
                     "description": "badge earned count",
                     "type": "integer"
                 },

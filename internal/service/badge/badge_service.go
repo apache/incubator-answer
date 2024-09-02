@@ -110,12 +110,12 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 		}
 
 		badgesMap[badge.BadgeGroupID] = append(badgesMap[badge.BadgeGroupID], &schema.BadgeListInfo{
-			ID:         uid.EnShortID(badge.ID),
-			Name:       translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
-			Icon:       badge.Icon,
-			AwardCount: badge.AwardCount,
-			Earned:     earned,
-			Level:      badge.Level,
+			ID:          uid.EnShortID(badge.ID),
+			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
+			Icon:        badge.Icon,
+			AwardCount:  badge.AwardCount,
+			EarnedCount: earned,
+			Level:       badge.Level,
 		})
 	}
 
