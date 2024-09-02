@@ -41,7 +41,9 @@ const Index = () => {
             <h5 className="mb-4">{item.group_name}</h5>
             <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
               {item.badges?.map((badge) => {
-                return <CardBadge data={badge} key={badge.id} />;
+                return (
+                  <CardBadge data={badge} key={badge.id} showAwardedCount />
+                );
               })}
             </div>
           </div>
