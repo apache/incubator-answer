@@ -49,7 +49,7 @@ type BadgeListInfo struct {
 	// badge award count
 	AwardCount int `json:"award_count" `
 	// badge earned count
-	Earned bool `json:"earned" `
+	Earned int64 `json:"earned" `
 	// badge level
 	Level entity.BadgeLevel `json:"level" `
 }

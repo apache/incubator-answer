@@ -7795,7 +7795,7 @@ const docTemplate = `{
                 },
                 "earned": {
                     "description": "badge earned count",
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "icon": {
                     "description": "badge icon",
@@ -11472,8 +11472,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "= \"/\"",
 	Schemes:          []string{},
-	Title:            "\"answer\"",
-	Description:      "= \"answer api\"",
+	Title:            "\"apache answer\"",
+	Description:      "= \"apache answer api\"",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

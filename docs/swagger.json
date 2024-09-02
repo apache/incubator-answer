@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "= \"answer api\"",
-        "title": "\"answer\"",
+        "description": "= \"apache answer api\"",
+        "title": "\"apache answer\"",
         "contact": {},
         "version": "= \"v0.0.1\""
     },
@@ -7769,7 +7769,7 @@
                 },
                 "earned": {
                     "description": "badge earned count",
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "icon": {
                     "description": "badge icon",

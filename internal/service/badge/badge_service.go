@@ -99,11 +99,11 @@ func (b *BadgeService) ListByGroup(ctx context.Context, userID string) (resp []*
 
 	for _, badge := range badges {
 		// check is earned
-		earned := false
+		var earned int64 = 0
 		if len(earnedCounts) > 0 {
 			for _, earnedCount := range earnedCounts {
 				if badge.ID == earnedCount.BadgeID && earnedCount.EarnedCount > 0 {
-					earned = true
+					earned = earnedCount.EarnedCount
 					break
 				}
 			}
