@@ -539,7 +539,7 @@ backend:
         name:
           other: Autobiographer
         desc:
-          other: Filled out [profile] information.
+          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
       certified:
         name:
           other: Certified
