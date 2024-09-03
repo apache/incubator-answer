@@ -31,14 +31,14 @@ interface Props {
 const Index: FC<Props> = ({ data, type }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
   return (
-    <ol className="mb-4 list-unstyled">
-      {data?.map((item) => {
+    <ol className="list-unstyled">
+      {data?.map((item, index) => {
         return (
           <li
-            className="mb-2"
+            className={`${index === data.length - 1 ? '' : 'mb-2'}`}
             key={type === 'answer' ? item.answer_id : item.question_id}>
             <Link
-              className="me-3"
+              className="text-truncate-1"
               to={
                 type === 'answer'
                   ? pathFactory.answerLanding({
@@ -54,36 +54,37 @@ const Index: FC<Props> = ({ data, type }) => {
               {type === 'answer' ? item.question_info.title : item.title}
             </Link>
 
-            <div className="d-inline-block text-secondary me-3 small">
+            <div className="text-secondary small">
               <Icon name="hand-thumbs-up-fill me-1" />
               <span>
                 {item.vote_count} {t('votes', { keyPrefix: 'counts' })}
               </span>
-            </div>
-            {type === 'question' && (
-              <div
-                className={`d-inline-block text-secondary me-3 small ${
-                  Number(item.accepted_answer_id) > 0 ? 'text-success' : ''
-                }`}>
-                {Number(item.accepted_answer_id) > 0 ? (
+
+              {type === 'question' && (
+                <div
+                  className={`d-inline-block text-secondary ms-3 small ${
+                    Number(item.accepted_answer_id) > 0 ? 'text-success' : ''
+                  }`}>
+                  {Number(item.accepted_answer_id) > 0 ? (
+                    <Icon name="check-circle-fill" />
+                  ) : (
+                    <Icon name="chat-square-text-fill" />
+                  )}
+
+                  <span>
+                    {' '}
+                    {item.answer_count} {t('answers', { keyPrefix: 'counts' })}
+                  </span>
+                </div>
+              )}
+
+              {type === 'answer' && item.accepted === 2 && (
+                <div className="d-inline-block text-success ms-3 small">
                   <Icon name="check-circle-fill" />
-                ) : (
-                  <Icon name="chat-square-text-fill" />
-                )}
-
-                <span>
-                  {' '}
-                  {item.answer_count} {t('answers', { keyPrefix: 'counts' })}
-                </span>
-              </div>
-            )}
-
-            {type === 'answer' && item.accepted === 2 && (
-              <div className="d-inline-block text-success me-3 small">
-                <Icon name="check-circle-fill" />
-                <span> {t('accepted')}</span>
-              </div>
-            )}
+                  <span> {t('accepted')}</span>
+                </div>
+              )}
+            </div>
           </li>
         );
       })}

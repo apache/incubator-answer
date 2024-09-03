@@ -23,29 +23,24 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components';
 
 interface Props {
-  badgeData;
+  onSelect: (eventKey: string | null) => void;
 }
-
-const UserOperation = ({ badgeData }: Props) => {
+const BadgeOperation = ({ onSelect }: Props) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.badges' });
-
-  console.log(badgeData);
 
   return (
     <td className="text-end">
-      <Dropdown>
+      <Dropdown onSelect={onSelect}>
         <Dropdown.Toggle variant="link" className="no-toggle p-0">
           <Icon name="three-dots-vertical" title={t('action')} />
         </Dropdown.Toggle>
         <Dropdown.Menu align="end">
-          <Dropdown.Item>{t('active')}</Dropdown.Item>
-          <Dropdown.Item>{t('deactivate')}</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>{t('show_logs')}</Dropdown.Item>
+          <Dropdown.Item eventKey="active">{t('active')}</Dropdown.Item>
+          <Dropdown.Item eventKey="inactive">{t('deactivate')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </td>
   );
 };
 
-export default UserOperation;
+export default BadgeOperation;

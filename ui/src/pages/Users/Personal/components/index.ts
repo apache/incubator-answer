@@ -28,6 +28,7 @@ import Reputation from './Reputation';
 import Comments from './Comments';
 import Votes from './Votes';
 import Answers from './Answers';
+import Badges from './Badges';
 
 export {
   Alert,
@@ -41,4 +42,5 @@ export {
   Comments,
   Votes,
   Answers,
+  Badges,
 };

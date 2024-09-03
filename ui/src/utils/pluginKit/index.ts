@@ -221,7 +221,28 @@ const useRenderHtmlPlugin = (
       return (
         plugin.activated &&
         plugin.hooks?.useRender &&
-        plugin.info.type === PluginType.Editor
+        (plugin.info.type === PluginType.Editor ||
+          plugin.info.type === PluginType.Render)
+      );
+    })
+    .forEach((plugin) => {
+      plugin.hooks?.useRender?.forEach((hook) => {
+        hook(element);
+      });
+    });
+};
+
+// Only for render type plugins
+const useRenderPlugin = (
+  element: HTMLElement | RefObject<HTMLElement> | null,
+) => {
+  return plugins
+    .getPlugins()
+    .filter((plugin) => {
+      return (
+        plugin.activated &&
+        plugin.hooks?.useRender &&
+        plugin.info.type === PluginType.Render
       );
     })
     .forEach((plugin) => {
@@ -247,5 +268,11 @@ const useCaptchaPlugin = (key: Type.CaptchaKey) => {
 
 export type { Plugin, PluginInfo };
 
-export { useRenderHtmlPlugin, mergeRoutePlugins, useCaptchaPlugin, PluginType };
+export {
+  useRenderHtmlPlugin,
+  mergeRoutePlugins,
+  useCaptchaPlugin,
+  useRenderPlugin,
+  PluginType,
+};
 export default plugins;

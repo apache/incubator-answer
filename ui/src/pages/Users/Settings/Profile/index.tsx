@@ -21,7 +21,7 @@ import React, { FormEvent, useState, useEffect } from 'react';
 import { Form, Button, Stack, ButtonGroup } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import MD5 from 'md5';
+import { sha256 } from 'js-sha256';
 
 import type { FormDataType } from '@/common/interface';
 import { UploadImg, Avatar, Icon, ImgViewer } from '@/components';
@@ -273,7 +273,7 @@ const Index: React.FC = () => {
       setFormData({ ...formData });
       if (res.e_mail) {
         const str = res.e_mail.toLowerCase().trim();
-        const hash = MD5(str);
+        const hash = sha256(str);
         setMailHash(hash);
       }
     });

@@ -98,7 +98,6 @@ export const useEditor = ({
       '.cm-line': {
         whiteSpace: 'pre-wrap',
         wordWrap: 'break-word',
-        wordBreak: 'break-all',
       },
       '.ͼ7, .ͼ6': {
         textDecoration: 'none',

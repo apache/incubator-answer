@@ -59,6 +59,10 @@ const list = [
     path: '/votes',
     name: 'votes',
   },
+  {
+    path: '/badges',
+    name: 'badges',
+  },
 ];
 const Index: FC<Props> = ({ slug, tabName = 'overview', isSelf }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });

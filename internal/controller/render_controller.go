@@ -17,9 +17,36 @@
  * under the License.
  */
 
-package schema
+package controller
 
-type GetEmbedOptionResp struct {
-	Platform string `json:"platform"`
-	Enable   bool   `json:"enable"`
+import (
+	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/plugin"
+	"github.com/gin-gonic/gin"
+)
+
+type RenderController struct {
+}
+
+func NewRenderController() *RenderController {
+	return &RenderController{}
+}
+
+// GetRenderConfig godoc
+// @Summary GetRenderConfig
+// @Description GetRenderConfig
+// @Tags PluginRender
+// @Accept json
+// @Produce json
+// @Router /answer/api/v1/render/config [get]
+// @Success 200 {object} handler.RespBody{data=plugin.RenderConfig}
+func (c *RenderController) GetRenderConfig(ctx *gin.Context) {
+	var resp *plugin.RenderConfig
+
+	_ = plugin.CallRender(func(render plugin.Render) (err error) {
+		resp = render.GetRenderConfig(ctx)
+		return nil
+	})
+
+	handler.HandleResponse(ctx, nil, resp)
 }

@@ -27,6 +27,7 @@ export enum PluginType {
   Editor = 'editor',
   Route = 'route',
   Captcha = 'captcha',
+  Render = 'render',
 }
 
 export interface PluginInfo {

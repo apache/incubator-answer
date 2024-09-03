@@ -853,6 +853,9 @@ ui:
       posts: Posts
       invites: Invites
       votes: Votes
+    answer: Answer
+    question: Question
+    badge_award: Badge
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."
@@ -1155,6 +1158,7 @@ ui:
       question: Questions
       tag: Tags
       user: Users
+      badges: Badges
       profile: Profile
       setting: Settings
       logout: Log out
@@ -1572,12 +1576,14 @@ ui:
     reputation: Reputation
     comments: Comments
     votes: Votes
+    badges: Badges
     newest: Newest
     score: Score
     edit_profile: Edit profile
     visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
+    comma: ","
     last_login: Seen
     about_me: About Me
     about_me_empty: "// Hello, World !"
@@ -1595,6 +1601,7 @@ ui:
     x_votes: votes received
     x_answers: answers
     x_questions: questions
+    recent_badges: Recent Badges
   install:
     title: Installation
     next: Next
@@ -1733,6 +1740,18 @@ ui:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
     login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+  badges:
+    modal:
+      title: Congratulations
+      content: You've earned a new badge.
+      close: Close
+      confirm: View badges
+    title: Badges
+    awarded: Awarded
+    earned_×: Earned ×{{ number }}
+    ×_awarded: "{{ number }} awarded"
+    can_earn_multiple: You can earn this multiple times.
+    earned: Earned
 
   admin:
     admin_header:

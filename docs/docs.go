@@ -3115,7 +3115,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.GetEmbedOptionResp"
+                                                "$ref": "#/definitions/plugin.EmbedConfig"
                                             }
                                         }
                                     }
@@ -4849,6 +4849,41 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/render/config": {
+            "get": {
+                "description": "GetRenderConfig",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginRender"
+                ],
+                "summary": "GetRenderConfig",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/plugin.RenderConfig"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -7409,6 +7444,25 @@ const docTemplate = `{
                 "list": {}
             }
         },
+        "plugin.EmbedConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "platform": {
+                    "type": "string"
+                }
+            }
+        },
+        "plugin.RenderConfig": {
+            "type": "object",
+            "properties": {
+                "select_theme": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AcceptAnswerReq": {
             "type": "object",
             "required": [
@@ -7739,9 +7793,9 @@ const docTemplate = `{
                     "description": "badge award count",
                     "type": "integer"
                 },
-                "earned": {
+                "earned_count": {
                     "description": "badge earned count",
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "icon": {
                     "description": "badge icon",
@@ -8364,17 +8418,6 @@ const docTemplate = `{
                 },
                 "website": {
                     "description": "website",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.GetEmbedOptionResp": {
-            "type": "object",
-            "properties": {
-                "enable": {
-                    "type": "boolean"
-                },
-                "platform": {
                     "type": "string"
                 }
             }
@@ -9257,10 +9300,16 @@ const docTemplate = `{
         },
         "schema.NotificationClearRequest": {
             "type": "object",
+            "required": [
+                "type"
+            ],
             "properties": {
                 "type": {
-                    "description": "inbox achievement",
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "inbox",
+                        "achievement"
+                    ]
                 }
             }
         },
@@ -11423,8 +11472,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "= \"/\"",
 	Schemes:          []string{},
-	Title:            "\"answer\"",
-	Description:      "= \"answer api\"",
+	Title:            "\"apache answer\"",
+	Description:      "= \"apache answer api\"",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

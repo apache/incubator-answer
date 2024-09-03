@@ -19,15 +19,20 @@
 
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 
 import { Empty } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
 
 import './index.scss';
 
 const Achievements = ({ data, handleReadNotification }) => {
+  const { user } = loggedUserInfoStore();
+  const { t } = useTranslation('translation', { keyPrefix: 'notifications' });
+
   if (!data) {
     return null;
   }
@@ -50,6 +55,9 @@ const Achievements = ({ data, handleReadNotification }) => {
           case 'comment':
             url = `/questions/${question}/${answer}?commentId=${comment}`;
             break;
+          case 'badge_award':
+            url = `/badges/${item.object_info.object_map.badge_id}?username=${user.username}`;
+            break;
           default:
             url = '';
         }
@@ -60,19 +68,28 @@ const Achievements = ({ data, handleReadNotification }) => {
               'd-flex border-start-0 border-end-0 py-3',
               !item.is_read && 'warning',
             )}>
-            {item.rank > 0 && (
-              <div className="text-success num text-end">{`+${item.rank}`}</div>
+            {item.object_info.object_type === 'badge_award' ? (
+              <div className="icon text-end">👏</div>
+            ) : (
+              <>
+                {item.rank > 0 && (
+                  <div className="text-success num text-end">{`+${item.rank}`}</div>
+                )}
+                {item.rank === 0 && (
+                  <div className="num text-end">{item.rank}</div>
+                )}
+                {item.rank < 0 && (
+                  <div className="text-danger num text-end">{`${item.rank}`}</div>
+                )}
+              </>
             )}
-            {item.rank === 0 && <div className="num text-end">{item.rank}</div>}
-            {item.rank < 0 && (
-              <div className="text-danger num text-end">{`${item.rank}`}</div>
-            )}
+
             <div className="d-flex flex-column ms-3 flex-fill">
               <Link to={url} onClick={() => handleReadNotification(item.id)}>
                 {item.object_info.title}
               </Link>
               <span className="text-secondary small">
-                {item.object_info.object_type}
+                {t(item.object_info.object_type)}
               </span>
             </div>
           </ListGroup.Item>

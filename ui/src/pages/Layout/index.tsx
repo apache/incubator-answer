@@ -33,8 +33,9 @@ import {
   PageTags,
   HttpErrorContent,
 } from '@/components';
-import { LoginToContinueModal } from '@/components/Modal';
+import { LoginToContinueModal, BadgeModal } from '@/components/Modal';
 import { changeTheme } from '@/utils';
+import { useQueryNotificationStatus } from '@/services';
 
 const Layout: FC = () => {
   const location = useLocation();
@@ -44,6 +45,7 @@ const Layout: FC = () => {
   };
   const { code: httpStatusCode, reset: httpStatusReset } = errorCodeStore();
   const { show: showLoginToContinueModal } = loginToContinueStore();
+  const { data: notificationData } = useQueryNotificationStatus();
 
   useEffect(() => {
     httpStatusReset();
@@ -86,6 +88,10 @@ const Layout: FC = () => {
         <Footer />
         <Customize />
         <LoginToContinueModal visible={showLoginToContinueModal} />
+        <BadgeModal
+          badge={notificationData?.badge_award}
+          visible={Boolean(notificationData?.badge_award)}
+        />
         <ScrollRestoration />
       </SWRConfig>
     </HelmetProvider>

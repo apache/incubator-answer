@@ -128,6 +128,18 @@ definitions:
         type: integer
       list: {}
     type: object
+  plugin.EmbedConfig:
+    properties:
+      enable:
+        type: boolean
+      platform:
+        type: string
+    type: object
+  plugin.RenderConfig:
+    properties:
+      select_theme:
+        type: string
+    type: object
   schema.AcceptAnswerReq:
     properties:
       answer_id:
@@ -358,9 +370,9 @@ definitions:
       award_count:
         description: badge award count
         type: integer
-      earned:
+      earned_count:
         description: badge earned count
-        type: boolean
+        type: integer
       icon:
         description: badge icon
         type: string
@@ -797,13 +809,6 @@ definitions:
         type: string
       website:
         description: website
-        type: string
-    type: object
-  schema.GetEmbedOptionResp:
-    properties:
-      enable:
-        type: boolean
-      platform:
         type: string
     type: object
   schema.GetFollowingTagsResp:
@@ -1414,8 +1419,12 @@ definitions:
   schema.NotificationClearRequest:
     properties:
       type:
-        description: inbox achievement
+        enum:
+        - inbox
+        - achievement
         type: string
+    required:
+    - type
     type: object
   schema.OnCompleteAction:
     properties:
@@ -2900,8 +2909,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: = "answer api"
-  title: '"answer"'
+  description: = "apache answer api"
+  title: '"apache answer"'
   version: = "v0.0.1"
 paths:
   /:
@@ -4742,7 +4751,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.GetEmbedOptionResp'
+                    $ref: '#/definitions/plugin.EmbedConfig'
                   type: array
               type: object
       summary: GetEmbedConfig
@@ -5817,6 +5826,26 @@ paths:
       summary: get reasons by object type and action
       tags:
       - reason
+  /answer/api/v1/render/config:
+    get:
+      consumes:
+      - application/json
+      description: GetRenderConfig
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/plugin.RenderConfig'
+              type: object
+      summary: GetRenderConfig
+      tags:
+      - PluginRender
   /answer/api/v1/report:
     post:
       consumes:

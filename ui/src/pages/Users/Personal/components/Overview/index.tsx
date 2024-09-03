@@ -19,16 +19,24 @@
 
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Row, Col } from 'react-bootstrap';
 
+// import * as Type from '@/common/interface';
+import { CardBadge } from '@/components';
+import { useGetRecentAwardBadges } from '@/services';
 import TopList from '../TopList';
 
 interface Props {
+  username: string;
   visible: boolean;
   introduction: string;
   data;
 }
-const Index: FC<Props> = ({ visible, introduction, data }) => {
+const Index: FC<Props> = ({ visible, introduction, data, username }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
+  const { data: recentBadges } = useGetRecentAwardBadges(
+    visible ? username : null,
+  );
   if (!visible) {
     return null;
   }
@@ -37,25 +45,47 @@ const Index: FC<Props> = ({ visible, introduction, data }) => {
       <h5 className="mb-3">{t('about_me')}</h5>
       {introduction ? (
         <div
-          className="mb-4 text-break fmt"
+          className="mb-5 text-break fmt"
           dangerouslySetInnerHTML={{ __html: introduction }}
         />
       ) : (
-        <div className="text-center py-5 mb-4">{t('about_me_empty')}</div>
+        <div className="text-center py-5 mb-5">{t('about_me_empty')}</div>
       )}
 
-      {data?.answer?.length > 0 && (
-        <>
-          <h5 className="mb-3">{t('top_answers')}</h5>
-          <TopList data={data?.answer} type="answer" />
-        </>
-      )}
+      <Row className="mb-4">
+        <Col sm={12} md={6} className="mb-4">
+          {data?.answer?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_answers')}</h5>
+              <TopList data={data?.answer} type="answer" />
+            </>
+          )}
+        </Col>
+        <Col sm={12} md={6}>
+          {data?.question?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_questions')}</h5>
+              <TopList data={data?.question} type="question" />
+            </>
+          )}
+        </Col>
+      </Row>
 
-      {data?.question?.length > 0 && (
-        <>
-          <h5 className="mb-3">{t('top_questions')}</h5>
-          <TopList data={data?.question} type="question" />
-        </>
+      {Number(recentBadges?.count) > 0 && (
+        <div className="mb-5">
+          <h5 className="mb-3">{t('recent_badges')}</h5>
+          <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+            {recentBadges?.list?.map((item) => {
+              return (
+                <CardBadge
+                  data={item}
+                  urlSearchParams={`username=${username}`}
+                  badgePillType="count"
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
     </div>
   );

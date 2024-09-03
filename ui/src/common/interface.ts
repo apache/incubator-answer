@@ -220,11 +220,19 @@ export interface SetNoticeReq {
   notice_switch: boolean;
 }
 
+export interface NotificationBadgeAward {
+  notification_id: string;
+  badge_id: string;
+  name: string;
+  icon: string;
+  level: number;
+}
 export interface NotificationStatus {
   inbox: number;
   achievement: number;
   revision: number;
   can_revision: boolean;
+  badge_award: NotificationBadgeAward | null;
 }
 
 export interface QuestionDetailRes {
@@ -734,4 +742,54 @@ export interface ReactionItem {
   count: number;
   tooltip: string;
   is_active: boolean;
+}
+
+export interface BadgeListItem {
+  id: string;
+  name: string;
+  icon: string;
+  award_count: number;
+  earned: boolean;
+  /** 1: bronze 2: silver 3:gold */
+  level: number;
+  earned_count?: number;
+}
+
+export interface BadgeListGroupItem {
+  badges: BadgeListItem[];
+  group_name: string;
+}
+
+export interface BadgeInfo extends BadgeListItem {
+  description: string;
+  earned_count: number;
+  is_single: boolean;
+}
+
+export interface AdminBadgeListItem extends BadgeListItem {
+  group_name: string;
+  status: string;
+  description: string;
+}
+
+export interface BadgeDetailListReq {
+  page: number;
+  page_size: number;
+  badge_id: string;
+  username?: string | null;
+}
+export interface BadgeDetailListItem {
+  created_at: number;
+  author_user_info: UserInfoBase;
+  object_type: string;
+  object_id: string;
+  url_title: string;
+  question_id: string;
+  answer_id: string;
+  comment_id: string;
+}
+
+export interface BadgeDetailListRes {
+  count: number;
+  list: BadgeDetailListItem[];
 }

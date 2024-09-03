@@ -43,6 +43,7 @@ import {
   Comments,
   Answers,
   Votes,
+  Badges,
 } from './components';
 
 const Personal: FC = () => {
@@ -79,36 +80,31 @@ const Personal: FC = () => {
   return (
     <div className="pt-4 mb-5">
       <Row>
-        {userInfo?.status !== 'normal' && userInfo?.status_msg && (
-          <Alert data={userInfo?.status_msg} />
-        )}
-        <Col className="page-main flex-auto">
-          <UserInfo data={userInfo as UserInfoRes} />
-        </Col>
-        <Col
-          xxl={3}
-          lg={4}
-          sm={12}
-          className="page-right-side mt-4 mt-xl-0 d-flex justify-content-start justify-content-md-end">
-          {isSelf && (
-            <div className="mb-3">
-              <Link
-                className="btn btn-outline-secondary"
-                to="/users/settings/profile">
-                {t('edit_profile')}
-              </Link>
-            </div>
+        <Col>
+          {userInfo?.status !== 'normal' && userInfo?.status_msg && (
+            <Alert data={userInfo?.status_msg} />
           )}
-        </Col>
-      </Row>
-      <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
-      <Row>
-        <Col className="page-main flex-auto">
+          <div className="d-md-flex d-block flex-wrap justify-content-between">
+            <UserInfo data={userInfo as UserInfoRes} />
+            {isSelf && (
+              <div className="mb-3">
+                <Link
+                  className="btn btn-outline-secondary"
+                  to="/users/settings/profile">
+                  {t('edit_profile')}
+                </Link>
+              </div>
+            )}
+          </div>
+          <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
+
           <Overview
             visible={tabName === 'overview'}
             introduction={userInfo?.bio_html || ''}
             data={topData}
+            username={username}
           />
+
           <ListHead
             count={tabName === 'reputation' ? Number(userInfo?.rank) : count}
             sort={order}
@@ -124,6 +120,11 @@ const Personal: FC = () => {
           <Reputation data={list} visible={tabName === 'reputation'} />
           <Comments data={list} visible={tabName === 'comments'} />
           <Votes data={list} visible={tabName === 'votes'} />
+          <Badges
+            data={list}
+            visible={tabName === 'badges'}
+            username={username}
+          />
           {!list?.length && !isLoading && <Empty />}
 
           {count > 0 && (
@@ -135,20 +136,20 @@ const Personal: FC = () => {
               />
             </div>
           )}
-        </Col>
-        <Col className="page-right-side mt-4 mt-xl-0">
-          <h5 className="mb-3">{t('stats')}</h5>
-          {userInfo?.created_at && (
+
+          {tabName === 'overview' && (
             <>
-              <div className="text-secondary">
-                <FormatTime time={userInfo.created_at} preFix={t('joined')} />
-              </div>
-              <div className="text-secondary">
-                <FormatTime
-                  time={userInfo.last_login_date}
-                  preFix={t('last_login')}
-                />
-              </div>
+              <h5 className="mb-3">{t('stats')}</h5>
+              {userInfo?.created_at && (
+                <div className="text-secondary">
+                  <FormatTime time={userInfo.created_at} preFix={t('joined')} />
+                  {t('comma')}{' '}
+                  <FormatTime
+                    time={userInfo.last_login_date}
+                    preFix={t('last_login')}
+                  />
+                </div>
+              )}
             </>
           )}
         </Col>
