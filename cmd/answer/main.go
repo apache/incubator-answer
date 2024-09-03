@@ -17,12 +17,19 @@
  * under the License.
  */
 
+//go:generate go run github.com/swaggo/swag/cmd/swag init -g ./cmd/answer/main.go -d ../../ -o ../../docs
+
 package main
 
 import (
 	answercmd "github.com/apache/incubator-answer/cmd"
 )
 
+// main godoc
+// @title 	"apache answer"
+// @description = "apache answer api"
+// @version = "v0.0.1"
+// @BasePath = "/"
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
