@@ -57,7 +57,6 @@ func (BadgeEarnedCount) TableName() string {
 
 type BadgeAwardRecent struct {
 	Created        time.Time `xorm:"created"`
-	UserID         string    `xorm:"user_id"`
 	BadgeID        string    `xorm:"badge_id"`
 	AwardKey       string    `xorm:"award_key"`
 	EarnedCount    int64     `xorm:"earned_count"`
