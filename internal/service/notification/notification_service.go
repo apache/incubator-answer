@@ -23,12 +23,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/internal/service/badge"
-	"github.com/apache/incubator-answer/internal/service/report_common"
-	"github.com/apache/incubator-answer/internal/service/review"
-	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
-	"github.com/apache/incubator-answer/pkg/converter"
-
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -36,8 +30,13 @@ import (
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/badge"
 	notficationcommon "github.com/apache/incubator-answer/internal/service/notification_common"
+	"github.com/apache/incubator-answer/internal/service/report_common"
+	"github.com/apache/incubator-answer/internal/service/review"
 	"github.com/apache/incubator-answer/internal/service/revision_common"
+	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/log"
@@ -202,6 +201,20 @@ func (ns *NotificationService) ClearIDUnRead(ctx context.Context, userID string,
 	err = ns.notificationCommon.RemoveBadgeAwardAlertCache(ctx, userID, id)
 	if err != nil {
 		log.Errorf("remove badge award alert cache failed: %v", err)
+	}
+
+	amount, err := ns.notificationRepo.CountNotificationByUser(ctx, &entity.Notification{
+		UserID: userID,
+		Type:   notificationInfo.Type,
+		IsRead: schema.NotificationNotRead,
+		Status: schema.NotificationStatusNormal,
+	})
+	if err != nil {
+		log.Errorf("count notification failed: %v", err)
+		return nil
+	}
+	if amount == 0 {
+		_ = ns.notificationCommon.DeleteRedDot(ctx, userID, notificationInfo.Type)
 	}
 	return nil
 }

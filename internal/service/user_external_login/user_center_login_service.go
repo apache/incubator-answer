@@ -129,7 +129,9 @@ func (us *UserCenterLoginService) ExternalLogin(
 		return nil, err
 	}
 
-	us.activeUser(ctx, oldUserInfo)
+	if err := us.activeUser(ctx, oldUserInfo); err != nil {
+		return nil, err
+	}
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
 		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
@@ -181,10 +183,12 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 	return userInfo, nil
 }
 
-func (us *UserCenterLoginService) activeUser(ctx context.Context, oldUserInfo *entity.User) {
+func (us *UserCenterLoginService) activeUser(ctx context.Context, oldUserInfo *entity.User) error {
 	if err := us.userActivity.UserActive(ctx, oldUserInfo.ID); err != nil {
 		log.Error(err)
+		return err
 	}
+	return nil
 }
 
 func (us *UserCenterLoginService) UserCenterUserSettings(ctx context.Context, userID string) (

@@ -129,3 +129,11 @@ func (nr *notificationRepo) GetNotificationPage(ctx context.Context, searchCond 
 	}
 	return
 }
+
+func (nr *notificationRepo) CountNotificationByUser(ctx context.Context, cond *entity.Notification) (int64, error) {
+	count, err := nr.data.DB.Context(ctx).Count(cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, err
+}
