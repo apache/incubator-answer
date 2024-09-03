@@ -22,6 +22,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 export interface Props {
+  id?: string;
   /** header title */
   title?: string;
   children?: React.ReactNode;
@@ -43,6 +44,7 @@ export interface Props {
   className?: string;
 }
 const Index: FC<Props> = ({
+  id = '',
   title = 'title',
   visible = false,
   centered = true,
@@ -63,6 +65,7 @@ const Index: FC<Props> = ({
   const { t } = useTranslation();
   return (
     <Modal
+      id={id}
       className={className}
       scrollable={scrollable}
       show={visible}
