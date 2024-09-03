@@ -127,7 +127,12 @@ const Badges: FC = () => {
                 )}
                 <div>
                   <Link to={`/badges/${badge.id}`}>{badge.name}</Link>
-                  <div className="text-body small">{badge.description}</div>
+                  <div
+                    className="text-body small"
+                    dangerouslySetInnerHTML={{
+                      __html: badge.description,
+                    }}
+                  />
                 </div>
               </td>
 
