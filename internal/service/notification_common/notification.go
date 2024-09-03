@@ -54,6 +54,7 @@ type NotificationRepo interface {
 	GetByUserIdObjectIdTypeId(ctx context.Context, userID, objectID string, notificationType int) (*entity.Notification, bool, error)
 	UpdateNotificationContent(ctx context.Context, notification *entity.Notification) (err error)
 	GetById(ctx context.Context, id string) (*entity.Notification, bool, error)
+	CountNotificationByUser(ctx context.Context, cond *entity.Notification) (int64, error)
 }
 
 type NotificationCommon struct {
@@ -220,6 +221,20 @@ func (ns *NotificationCommon) addRedDot(ctx context.Context, userID string, noti
 		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeAchievement, userID)
 	}
 	err := ns.data.Cache.SetInt64(ctx, key, 1, constant.RedDotCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
+}
+
+func (ns *NotificationCommon) DeleteRedDot(ctx context.Context, userID string, notificationType int) error {
+	var key string
+	if notificationType == schema.NotificationTypeInbox {
+		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeInbox, userID)
+	} else {
+		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeAchievement, userID)
+	}
+	err := ns.data.Cache.Del(ctx, key)
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
