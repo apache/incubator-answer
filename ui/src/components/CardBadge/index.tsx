@@ -79,7 +79,7 @@ const Index: FC<IProps> = ({
 
         <h6 className="mb-0 mt-3 text-center">{data.name}</h6>
         {showAwardedCount && (
-          <div className="small text-secondary">
+          <div className="small text-secondary mt-2">
             {t('×_awarded', { number: formatCount(data.award_count) })}
           </div>
         )}
