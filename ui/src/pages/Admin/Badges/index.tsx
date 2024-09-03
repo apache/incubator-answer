@@ -19,7 +19,7 @@
 
 import { FC } from 'react';
 import { Form, Table, Stack } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -126,13 +126,20 @@ const Badges: FC = () => {
                   />
                 )}
                 <div>
-                  <div className="text-primary">{badge.name}</div>
-                  <div className="text-body small">{badge.description}</div>
+                  <Link to={`/badges/${badge.id}`}>{badge.name}</Link>
+                  <div
+                    className="text-body small"
+                    dangerouslySetInnerHTML={{
+                      __html: badge.description,
+                    }}
+                  />
                 </div>
               </td>
 
               <td>{badge.group_name}</td>
-              <td className="text-primary">{badge.award_count}</td>
+              <td>
+                <Link to={`/badges/${badge.id}`}>{badge.award_count}</Link>
+              </td>
               <td>
                 <span className={classNames('badge', bgMap[badge.status])}>
                   {t(badge.status)}

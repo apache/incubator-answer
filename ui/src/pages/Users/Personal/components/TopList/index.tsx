@@ -38,6 +38,7 @@ const Index: FC<Props> = ({ data, type }) => {
             className={`${index === data.length - 1 ? '' : 'mb-2'}`}
             key={type === 'answer' ? item.answer_id : item.question_id}>
             <Link
+              className="text-truncate-1"
               to={
                 type === 'answer'
                   ? pathFactory.answerLanding({

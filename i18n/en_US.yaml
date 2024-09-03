@@ -539,7 +539,7 @@ backend:
         name:
           other: Autobiographer
         desc:
-          other: Filled out [profile] information.
+          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
       certified:
         name:
           other: Certified
@@ -1748,8 +1748,8 @@ ui:
       confirm: View badges
     title: Badges
     awarded: Awarded
-    earned_x: Earned x{{ number }}
-    x_awarded: "{{ number }} awarded"
+    earned_×: Earned ×{{ number }}
+    ×_awarded: "{{ number }} awarded"
     can_earn_multiple: You can earn this multiple times.
     earned: Earned
 

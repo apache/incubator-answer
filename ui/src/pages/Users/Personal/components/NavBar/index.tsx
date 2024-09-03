@@ -60,7 +60,6 @@ const list = [
     name: 'votes',
   },
   {
-    role: 'self', // Only visible to author
     path: '/badges',
     name: 'badges',
   },

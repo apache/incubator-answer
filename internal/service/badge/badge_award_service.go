@@ -273,13 +273,6 @@ func (bs *BadgeAwardService) GetUserRecentBadgeAwardList(ctx *gin.Context, req *
 	return
 }
 
-// validate user
-
-type userReq struct {
-	UserID   string
-	Username string
-}
-
 func (bs *BadgeAwardService) validateUserByUsername(ctx context.Context, userName string) (userID string, err error) {
 	var (
 		userInfo *schema.UserBasicInfo

@@ -370,9 +370,9 @@ definitions:
       award_count:
         description: badge award count
         type: integer
-      earned:
+      earned_count:
         description: badge earned count
-        type: boolean
+        type: integer
       icon:
         description: badge icon
         type: string
@@ -2909,8 +2909,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: = "answer api"
-  title: '"answer"'
+  description: = "apache answer api"
+  title: '"apache answer"'
   version: = "v0.0.1"
 paths:
   /:

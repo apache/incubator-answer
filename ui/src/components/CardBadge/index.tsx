@@ -49,15 +49,17 @@ const Index: FC<IProps> = ({
       className="card text-center badge-card"
       to={`/badges/${data.id}${urlSearchParams ? `?${urlSearchParams}` : ''}`}>
       <Card.Body>
-        {data.earned && badgePillType === 'earned' && (
+        {Number(data?.earned_count) > 0 && badgePillType === 'earned' && (
           <Badge bg="success" className="label">
-            {t('earned')}
+            {`${t('earned')}${
+              Number(data?.earned_count) > 1 ? ` ×${data.earned_count}` : ''
+            }`}
           </Badge>
         )}
 
-        {badgePillType === 'count' && Number(data?.earned_count) > 0 && (
-          <Badge pill bg="success" className="label">
-            x{data.earned_count}
+        {badgePillType === 'count' && Number(data?.earned_count) > 1 && (
+          <Badge pill bg="secondary" className="label">
+            ×{data.earned_count}
           </Badge>
         )}
         {data.icon.startsWith('http') ? (
@@ -78,7 +80,7 @@ const Index: FC<IProps> = ({
         <h6 className="mb-0 mt-3 text-center">{data.name}</h6>
         {showAwardedCount && (
           <div className="small text-secondary">
-            {t('x_awarded', { number: formatCount(data.award_count) })}
+            {t('×_awarded', { number: formatCount(data.award_count) })}
           </div>
         )}
       </Card.Body>
