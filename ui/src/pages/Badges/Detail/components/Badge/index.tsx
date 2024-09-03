@@ -77,10 +77,13 @@ const Index: FC<IProps> = ({ data }) => {
                 </span>
               )}
 
-              {data.earned_count > 0 && (
+              {data.earned_count > 1 && (
                 <Badge bg="success">
                   {t('earned_×', { number: data.earned_count })}
                 </Badge>
+              )}
+              {data.earned_count === 1 && (
+                <Badge bg="success">{t('earned')}</Badge>
               )}
             </div>
           )}
