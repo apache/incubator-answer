@@ -139,7 +139,7 @@ func (r *badgeAwardRepo) ListPagedByBadgeIdAndUserId(ctx context.Context, badgeI
 func (r *badgeAwardRepo) ListNewestEarned(ctx context.Context, userID string, limit int) (badgeAwards []*entity.BadgeAwardRecent, err error) {
 	badgeAwards = make([]*entity.BadgeAwardRecent, 0)
 	err = r.data.DB.Context(ctx).
-		Select("user_id, badge_id, max(created_at) created,count(*) earned_count").
+		Select("any_value(user_id), badge_id, max(created_at) created,count(*) earned_count").
 		Where("user_id = ? AND is_badge_deleted = ? ", userID, entity.IsBadgeNotDeleted).
 		GroupBy("badge_id").
 		OrderBy("created desc").
