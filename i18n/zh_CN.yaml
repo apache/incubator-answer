@@ -538,7 +538,7 @@ backend:
         name:
           other: 自传作者
         desc:
-          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
+          other: 填写了 <a href="{{ .ProfileURL }}" target="_blank">个人资料</a> 信息。
       certified:
         name:
           other: 已认证
@@ -2122,6 +2122,7 @@ ui:
     badges:
       action: 操作
       active: 活跃的
+      activate: 启用
       all: 全部
       awards: 奖项
       deactivate: 取消激活
