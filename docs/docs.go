@@ -7239,9 +7239,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Accept-Language",
-                        "name": "Accept-Language",
-                        "in": "header",
+                        "description": "installation language",
+                        "name": "lang",
+                        "in": "query",
                         "required": true
                     }
                 ],

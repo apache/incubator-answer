@@ -63,7 +63,7 @@ export const loadLanguageOptions = async (forAdmin = false) => {
 
 const pullLanguageConf = (res) => {
   if (window.location.pathname === '/install') {
-    return getInstallLanguageConfig().then((langConf) => {
+    return getInstallLanguageConfig(res.lng).then((langConf) => {
       if (langConf && langConf.ui) {
         res.resources = langConf.ui;
         Storage.set(LANG_RESOURCE_STORAGE_KEY, res);
@@ -162,9 +162,7 @@ export const setupAppTheme = () => {
 };
 
 export const setupInstallLanguage = async (lang) => {
-  if (!i18next.getDataByLanguage(lang)?.translation) {
-    await addI18nResource(lang);
-  }
+  await addI18nResource(lang);
   localeDayjs(lang);
   i18next.changeLanguage(lang);
 };
