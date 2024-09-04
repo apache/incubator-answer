@@ -39,6 +39,6 @@ export const getInstallLangOptions = () => {
   return request.get('/installation/language/options');
 };
 
-export const getInstallLanguageConfig = () => {
-  return request.get('/installation/language/config');
+export const getInstallLanguageConfig = (lang: string) => {
+  return request.get(`/installation/language/config?lang=${lang}`);
 };

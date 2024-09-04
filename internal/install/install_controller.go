@@ -38,6 +38,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -56,7 +57,7 @@ func LangOptions(ctx *gin.Context) {
 // @Summary get installation language config mapping
 // @Description get installation language config mapping
 // @Tags Lang
-// @Param Accept-Language header string true "Accept-Language"
+// @Param lang query string true "installation language"
 // @Produce json
 // @Success 200 {object} handler.RespBody{}
 // @Router /installation/language/config [get]
@@ -66,7 +67,8 @@ func GetLangMapping(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	trData, _ := t.Dump(handler.GetLang(ctx))
+	lang := ctx.Query("lang")
+	trData, _ := t.Dump(i18n.Language(lang))
 	var resp map[string]any
 	_ = json.Unmarshal(trData, &resp)
 	handler.HandleResponse(ctx, nil, resp)

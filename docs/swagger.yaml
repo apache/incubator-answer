@@ -7243,9 +7243,9 @@ paths:
     get:
       description: get installation language config mapping
       parameters:
-      - description: Accept-Language
-        in: header
-        name: Accept-Language
+      - description: installation language
+        in: query
+        name: lang
         required: true
         type: string
       produces:
