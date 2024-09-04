@@ -2122,6 +2122,7 @@ ui:
     badges:
       action: Action
       active: Active
+      activate: Activate
       all: All
       awards: Awards
       deactivate: Deactivate
