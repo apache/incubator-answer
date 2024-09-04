@@ -220,9 +220,43 @@ func (ns *NotificationCommon) addRedDot(ctx context.Context, userID string, noti
 	} else {
 		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeAchievement, userID)
 	}
-	err := ns.data.Cache.SetInt64(ctx, key, 1, constant.RedDotCacheTime)
+	_, exist, err := ns.data.Cache.GetInt64(ctx, key)
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	if exist {
+		if _, err := ns.data.Cache.Increase(ctx, key, 1); err != nil {
+			return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		}
+		return nil
+	}
+	err = ns.data.Cache.SetInt64(ctx, key, 1, constant.RedDotCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
+}
+
+func (ns *NotificationCommon) DecreaseRedDot(ctx context.Context, userID string, notificationType int) error {
+	var key string
+	if notificationType == schema.NotificationTypeInbox {
+		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeInbox, userID)
+	} else {
+		key = fmt.Sprintf(constant.RedDotCacheKey, constant.NotificationTypeAchievement, userID)
+	}
+	_, exist, err := ns.data.Cache.GetInt64(ctx, key)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	if !exist {
+		return nil
+	}
+	res, err := ns.data.Cache.Decrease(ctx, key, 1)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	if res <= 0 {
+		return ns.DeleteRedDot(ctx, userID, notificationType)
 	}
 	return nil
 }
