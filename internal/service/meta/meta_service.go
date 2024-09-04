@@ -104,7 +104,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 		if !exist {
 			return nil, myErrors.BadRequest(reason.AnswerNotFound)
 		}
-		event = schema.NewEvent(constant.EventAnswerReact, req.UserID).
+		event = schema.NewEvent(constant.EventAnswerReact, req.UserID).TID(answerInfo.ID).
 			AID(answerInfo.ID, answerInfo.UserID)
 	} else if objectType == constant.QuestionObjectType {
 		questionInfo, exist, err := ms.questionRepo.GetQuestion(ctx, req.ObjectID)
@@ -114,7 +114,7 @@ func (ms *MetaService) AddOrUpdateReaction(ctx context.Context, req *schema.Upda
 		if !exist {
 			return nil, myErrors.BadRequest(reason.QuestionNotFound)
 		}
-		event = schema.NewEvent(constant.EventQuestionReact, req.UserID).
+		event = schema.NewEvent(constant.EventQuestionReact, req.UserID).TID(questionInfo.ID).
 			QID(questionInfo.ID, questionInfo.UserID)
 	} else {
 		return nil, myErrors.BadRequest(reason.ObjectNotFound)

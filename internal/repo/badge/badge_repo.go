@@ -140,3 +140,12 @@ func (r *badgeRepo) UpdateStatus(ctx context.Context, id string, status int8) (e
 
 	return
 }
+
+// UpdateAwardCount updates the award count of a badge
+func (r *badgeRepo) UpdateAwardCount(ctx context.Context, badgeID string, awardCount int) (err error) {
+	_, err = r.data.DB.Context(ctx).ID(badgeID).Cols("award_count").Update(&entity.Badge{AwardCount: awardCount})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}

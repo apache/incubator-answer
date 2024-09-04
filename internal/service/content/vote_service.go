@@ -305,13 +305,13 @@ func (vs *VoteService) sendEvent(ctx context.Context,
 	var event *schema.EventMsg
 	switch objectInfo.ObjectType {
 	case constant.QuestionObjectType:
-		event = schema.NewEvent(constant.EventQuestionVote, req.UserID).
+		event = schema.NewEvent(constant.EventQuestionVote, req.UserID).TID(objectInfo.QuestionID).
 			QID(objectInfo.QuestionID, objectInfo.ObjectCreatorUserID)
 	case constant.AnswerObjectType:
-		event = schema.NewEvent(constant.EventAnswerVote, req.UserID).
+		event = schema.NewEvent(constant.EventAnswerVote, req.UserID).TID(objectInfo.AnswerID).
 			AID(objectInfo.AnswerID, objectInfo.ObjectCreatorUserID)
 	case constant.CommentObjectType:
-		event = schema.NewEvent(constant.EventCommentVote, req.UserID).
+		event = schema.NewEvent(constant.EventCommentVote, req.UserID).TID(objectInfo.CommentID).
 			CID(objectInfo.CommentID, objectInfo.ObjectCreatorUserID)
 	default:
 		return

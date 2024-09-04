@@ -63,9 +63,15 @@ func (r *badgeAwardRepo) AwardBadgeForUser(ctx context.Context, badgeAward *enti
 			return nil, fmt.Errorf("badge not exist")
 		}
 
-		old := &entity.BadgeAward{}
-		exist, err = session.Where("user_id = ? AND badge_id = ? AND award_key = ? AND is_badge_deleted = 0",
-			badgeAward.UserID, badgeAward.BadgeID, badgeAward.AwardKey).Get(old)
+		old := &entity.BadgeAward{
+			UserID:         badgeAward.UserID,
+			BadgeID:        badgeAward.BadgeID,
+			IsBadgeDeleted: entity.IsBadgeNotDeleted,
+		}
+		if badgeInfo.Single != entity.BadgeSingleAward {
+			old.AwardKey = badgeAward.AwardKey
+		}
+		exist, err = session.Get(old)
 		if err != nil {
 			return nil, err
 		}
@@ -104,6 +110,14 @@ func (r *badgeAwardRepo) CountByUserIdAndBadgeId(ctx context.Context, userID str
 	awardCount, err := r.data.DB.Context(ctx).Where("user_id = ? AND badge_id = ?", userID, badgeID).Count(&entity.BadgeAward{})
 	if err != nil {
 		return 0
+	}
+	return
+}
+
+func (r *badgeAwardRepo) CountByBadgeID(ctx context.Context, badgeID string) (awardCount int64, err error) {
+	awardCount, err = r.data.DB.Context(ctx).Count(&entity.BadgeAward{BadgeID: badgeID})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }

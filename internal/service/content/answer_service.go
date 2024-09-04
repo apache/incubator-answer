@@ -179,7 +179,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		OriginalObjectID: answerInfo.ID,
 		ActivityTypeKey:  constant.ActAnswerDeleted,
 	})
-	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerDelete, req.UserID).
+	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerDelete, req.UserID).TID(answerInfo.ID).
 		AID(answerInfo.ID, answerInfo.UserID))
 	return
 }
@@ -301,7 +301,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionAnswered,
 	})
-	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerCreate, req.UserID).
+	as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerCreate, req.UserID).TID(insertData.ID).
 		AID(insertData.ID, insertData.UserID))
 	return insertData.ID, nil
 }
@@ -391,7 +391,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 			ActivityTypeKey:  constant.ActAnswerEdited,
 			RevisionID:       revisionID,
 		})
-		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerUpdate, req.UserID).
+		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventAnswerUpdate, req.UserID).TID(insertData.ID).
 			AID(insertData.ID, insertData.UserID))
 	}
 
@@ -447,7 +447,7 @@ func (as *AnswerService) AcceptAnswer(ctx context.Context, req *schema.AcceptAns
 	}
 
 	if acceptedAnswerInfo != nil {
-		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionAccept, req.UserID).
+		as.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionAccept, req.UserID).TID(acceptedAnswerInfo.ID).
 			QID(questionInfo.ID, questionInfo.UserID).AID(acceptedAnswerInfo.ID, acceptedAnswerInfo.UserID))
 	}
 

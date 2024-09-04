@@ -304,7 +304,8 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		userInfo, err := tc.userService.GetOtherUserInfoByUsername(
 			ctx, &schema.GetOtherUserInfoByUsernameReq{Username: shareUsername})
 		if err == nil {
-			tc.eventQueueService.Send(ctx, schema.NewEvent(constant.EventUserShare, userInfo.ID))
+			tc.eventQueueService.Send(ctx, schema.NewEvent(constant.EventUserShare, userInfo.ID).
+				QID(id, detail.UserID).AID(answerid, ""))
 		}
 	}
 	encodeTitle := htmltext.UrlTitle(detail.Title)

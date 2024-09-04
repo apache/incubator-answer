@@ -397,7 +397,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		qs.externalNotificationQueueService.Send(ctx,
 			schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, question.UserID, tags))
 	}
-	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionCreate, req.UserID).
+	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionCreate, req.UserID).TID(question.ID).
 		QID(question.ID, question.UserID))
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
@@ -560,7 +560,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
 	})
-	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionDelete, req.UserID).
+	qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionDelete, req.UserID).TID(questionInfo.ID).
 		QID(questionInfo.ID, questionInfo.UserID))
 	return nil
 }
@@ -953,7 +953,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 			RevisionID:       revisionID,
 			OriginalObjectID: question.ID,
 		})
-		qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionUpdate, req.UserID).
+		qs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventQuestionUpdate, req.UserID).TID(question.ID).
 			QID(question.ID, question.UserID))
 	}
 
