@@ -265,7 +265,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	eventRuleRepo := badge.NewEventRuleRepo(dataData)
 	badgeAwardService := badge2.NewBadgeAwardService(badgeAwardRepo, badgeRepo, userCommon, objService, notificationQueueService)
 	badgeEventService := badge2.NewBadgeEventService(dataData, eventQueueService, badgeRepo, eventRuleRepo, badgeAwardService)
-	badgeService := badge2.NewBadgeService(badgeRepo, badgeGroupRepo, badgeAwardRepo, badgeEventService)
+	badgeService := badge2.NewBadgeService(badgeRepo, badgeGroupRepo, badgeAwardRepo, badgeEventService, siteInfoCommonService)
 	badgeController := controller.NewBadgeController(badgeService, badgeAwardService)
 	controller_adminBadgeController := controller_admin.NewBadgeController(badgeService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController, userPluginController, reviewController, metaController, badgeController, controller_adminBadgeController)

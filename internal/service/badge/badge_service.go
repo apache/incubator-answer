@@ -26,6 +26,7 @@ import (
 	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
@@ -45,10 +46,11 @@ type BadgeRepo interface {
 }
 
 type BadgeService struct {
-	badgeRepo         BadgeRepo
-	badgeGroupRepo    BadgeGroupRepo
-	badgeAwardRepo    BadgeAwardRepo
-	badgeEventService *BadgeEventService
+	badgeRepo             BadgeRepo
+	badgeGroupRepo        BadgeGroupRepo
+	badgeAwardRepo        BadgeAwardRepo
+	badgeEventService     *BadgeEventService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 func NewBadgeService(
@@ -56,12 +58,14 @@ func NewBadgeService(
 	badgeGroupRepo BadgeGroupRepo,
 	badgeAwardRepo BadgeAwardRepo,
 	badgeEventService *BadgeEventService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *BadgeService {
 	return &BadgeService{
-		badgeRepo:         badgeRepo,
-		badgeGroupRepo:    badgeGroupRepo,
-		badgeAwardRepo:    badgeAwardRepo,
-		badgeEventService: badgeEventService,
+		badgeRepo:             badgeRepo,
+		badgeGroupRepo:        badgeGroupRepo,
+		badgeAwardRepo:        badgeAwardRepo,
+		badgeEventService:     badgeEventService,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -198,11 +202,18 @@ func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPa
 
 	resp = make([]*schema.GetBadgeListPagedResp, len(badges))
 
+	general, siteErr := b.siteInfoCommonService.GetSiteGeneral(ctx)
+	var baseURL = ""
+	if siteErr != nil {
+		baseURL = ""
+	}
+	baseURL = general.SiteUrl
+
 	for i, badge := range badges {
 		resp[i] = &schema.GetBadgeListPagedResp{
 			ID:          uid.EnShortID(badge.ID),
 			Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
-			Description: translator.Tr(handler.GetLangByCtx(ctx), badge.Description),
+			Description: translator.TrWithData(handler.GetLangByCtx(ctx), badge.Description, &schema.BadgeTplData{ProfileURL: baseURL + "/users/settings/profile"}),
 			Icon:        badge.Icon,
 			AwardCount:  badge.AwardCount,
 			Level:       badge.Level,
@@ -251,10 +262,17 @@ func (b *BadgeService) GetBadgeInfo(ctx *gin.Context, id string, userID string) 
 		earnedTotal = b.badgeAwardRepo.CountByUserIdAndBadgeId(ctx, userID, badge.ID)
 	}
 
+	general, siteErr := b.siteInfoCommonService.GetSiteGeneral(ctx)
+	var baseURL = ""
+	if siteErr != nil {
+		baseURL = ""
+	}
+	baseURL = general.SiteUrl
+
 	info = &schema.GetBadgeInfoResp{
 		ID:          uid.EnShortID(badge.ID),
 		Name:        translator.Tr(handler.GetLangByCtx(ctx), badge.Name),
-		Description: translator.Tr(handler.GetLangByCtx(ctx), badge.Description),
+		Description: translator.TrWithData(handler.GetLangByCtx(ctx), badge.Description, &schema.BadgeTplData{ProfileURL: baseURL + "/users/settings/profile"}),
 		Icon:        badge.Icon,
 		AwardCount:  badge.AwardCount,
 		EarnedCount: earnedTotal,
