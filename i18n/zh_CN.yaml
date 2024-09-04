@@ -538,7 +538,7 @@ backend:
         name:
           other: 自传作者
         desc:
-          other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
+          other: 填写了 <a href="{{ .ProfileURL }}" target="_blank">个人资料</a> 信息。
       certified:
         name:
           other: 已认证
