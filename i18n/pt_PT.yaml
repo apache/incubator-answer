@@ -23,7 +23,7 @@ backend:
     unknown:
       other: Erro desconhecido.
     request_format_error:
-      other: Formato de solicitação não é válido.
+      other: Formato de solicitação inválido.
     unauthorized_error:
       other: Não autorizado.
     database_error:
@@ -31,14 +31,14 @@ backend:
     forbidden_error:
       other: Proibido.
     duplicate_request_error:
-      other: Duplicate submission.
+      other: Solicitação duplicada.
   action:
     report:
       other: Bandeira
     edit:
       other: Editar
     delete:
-      other: Deletar
+      other: Excluir
     close:
       other: Fechar
     reopen:
@@ -56,7 +56,7 @@ backend:
     invite_someone_to_answer:
       other: Editar
     undelete:
-      other: Undelete
+      other: Desfazer
   role:
     name:
       user:
@@ -69,9 +69,9 @@ backend:
       user:
         other: Padrão sem acesso especial.
       admin:
-        other: Possui acesso total ao site.
+        other: Possui acesso total.
       moderator:
-        other: Possui acesso a todas as postagens exceto às configurações de usuários.
+        other: Acesso a todas as postagens, exceto configurações administrativas.
   privilege:
     level_1:
       description:
@@ -84,7 +84,7 @@ backend:
         other: Nível 3 (Alta reputação necessária para a comunidade adulta)
     level_custom:
       description:
-        other: Custom Level
+        other: Nível customizado
     rank_question_add_label:
       other: Perguntar
     rank_answer_add_label:
@@ -144,7 +144,9 @@ backend:
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: URL inválida.
+      status_invalid:
+        other: Invalid status.
     password:
       space_invalid:
         other: A senha não pode conter espaços.
@@ -152,7 +154,7 @@ backend:
       cannot_update_their_password:
         other: Você não pode modificar sua senha.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Você não pode alterar o seu perfil.
       cannot_modify_self_status:
         other: Você não pode modificar seu status
       email_or_password_wrong:
@@ -311,6 +313,9 @@ backend:
     site_info:
       config_not_found:
         other: Configuração do site não encontrada.
+    badge:
+      object_not_found:
+        other: Badge object not found
   reason:
     spam:
       name:
@@ -459,6 +464,8 @@ backend:
         other: votos positivos do comentário
       invited_you_to_answer:
         other: lhe convidou para responder
+      earned_badge:
+        other: You've earned the "{{.BadgeName}}" badge
   email_tpl:
     change_email:
       title:
@@ -525,6 +532,263 @@ backend:
   reaction:
     tooltip:
       other: "{{ .Names }} and {{ .Count }} more..."
+  badge:
+    default_badges:
+      autobiographer:
+        name:
+          other: Autobiographer
+        desc:
+          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
+      certified:
+        name:
+          other: Certified
+        desc:
+          other: Completed our new user tutorial.
+      editor:
+        name:
+          other: Editor
+        desc:
+          other: First post edit.
+      first_flag:
+        name:
+          other: First Flag
+        desc:
+          other: First flagged a post.
+      first_upvote:
+        name:
+          other: First Upvote
+        desc:
+          other: First up voted a post.
+      first_link:
+        name:
+          other: First Link
+        desc:
+          other: First dirst added a link to another post.
+      first_reaction:
+        name:
+          other: First Reaction
+        desc:
+          other: First reacted to the post.
+      first_share:
+        name:
+          other: First Share
+        desc:
+          other: First shared a post.
+      scholar:
+        name:
+          other: Scholar
+        desc:
+          other: Asked a question and accepted an answer.
+      commentator:
+        name:
+          other: Commentator
+        desc:
+          other: Leave 5 comments.
+      new_user_of_the_month:
+        name:
+          other: New User of the Month
+        desc:
+          other: Outstanding contributions in their first month.
+      read_guidelines:
+        name:
+          other: Read Guidelines
+        desc:
+          other: Read the [community guidelines].
+      reader:
+        name:
+          other: Reader
+        desc:
+          other: Read every answers in a topic with more than 10 answers.
+      welcome:
+        name:
+          other: Welcome
+        desc:
+          other: Received a up vote.
+      nice_share:
+        name:
+          other: Nice Share
+        desc:
+          other: Shared a post with 25 unique visitors.
+      good_share:
+        name:
+          other: Good Share
+        desc:
+          other: Shared a post with 300 unique visitors.
+      great_share:
+        name:
+          other: Great Share
+        desc:
+          other: Shared a post with 1000 unique visitors.
+      out_of_love:
+        name:
+          other: Out of Love
+        desc:
+          other: Used 50 up votes in a day.
+      higher_love:
+        name:
+          other: Higher Love
+        desc:
+          other: Used 50 up votes in a day 5 times.
+      crazy_in_love:
+        name:
+          other: Crazy in Love
+        desc:
+          other: Used 50 up votes in a day 20 times.
+      promoter:
+        name:
+          other: Promoter
+        desc:
+          other: Invited a user.
+      campaigner:
+        name:
+          other: Campaigner
+        desc:
+          other: Invited 3 basic users.
+      champion:
+        name:
+          other: Champion
+        desc:
+          other: Invited 5 members.
+      thank_you:
+        name:
+          other: Thank You
+        desc:
+          other: Has 20 up voted posts and gave 10 up votes.
+      gives_back:
+        name:
+          other: Gives Back
+        desc:
+          other: Has 100 up voted posts and gave 100 up votes.
+      empathetic:
+        name:
+          other: Empathetic
+        desc:
+          other: Has 500 up voted posts and gave 1000 up votes.
+      enthusiast:
+        name:
+          other: Enthusiast
+        desc:
+          other: Visited 10 consecutive days.
+      aficionado:
+        name:
+          other: Aficionado
+        desc:
+          other: Visited 100 consecutive days.
+      devotee:
+        name:
+          other: Devotee
+        desc:
+          other: Visited 365 consecutive days.
+      anniversary:
+        name:
+          other: Anniversary
+        desc:
+          other: Active member for a year, posted at least once.
+      appreciated:
+        name:
+          other: Appreciated
+        desc:
+          other: Received 1 up vote on 20 posts.
+      respected:
+        name:
+          other: Respected
+        desc:
+          other: Received 2 up votes on 100 posts.
+      admired:
+        name:
+          other: Admired
+        desc:
+          other: Received 5 up votes on 300 posts.
+      solved:
+        name:
+          other: Solved
+        desc:
+          other: Have an answer be accepted.
+      guidance_counsellor:
+        name:
+          other: Guidance Counsellor
+        desc:
+          other: Have 10 answers be accepted.
+      know_it_all:
+        name:
+          other: Know-it-All
+        desc:
+          other: Have 50 answers be accepted.
+      solution_institution:
+        name:
+          other: Solution Institution
+        desc:
+          other: Have 150 answers be accepted.
+      nice_answer:
+        name:
+          other: Nice Answer
+        desc:
+          other: Answer score of 10 or more.
+      good_answer:
+        name:
+          other: Good Answer
+        desc:
+          other: Answer score of 25 or more.
+      great_answer:
+        name:
+          other: Great Answer
+        desc:
+          other: Answer score of 50 or more.
+      nice_question:
+        name:
+          other: Nice Question
+        desc:
+          other: Question score of 10 or more.
+      good_question:
+        name:
+          other: Good Question
+        desc:
+          other: Question score of 25 or more.
+      great_question:
+        name:
+          other: Great Question
+        desc:
+          other: Question score of 50 or more.
+      popular_question:
+        name:
+          other: Popular Question
+        desc:
+          other: Question with 500 views.
+      notable_question:
+        name:
+          other: Notable Question
+        desc:
+          other: Question with 1,000 views.
+      famous_question:
+        name:
+          other: Famous Question
+        desc:
+          other: Question with 5,000 views.
+      popular_link:
+        name:
+          other: Popular Link
+        desc:
+          other: Posted an external link with 50 clicks.
+      hot_link:
+        name:
+          other: Hot Link
+        desc:
+          other: Posted an external link with 300 clicks.
+      famous_link:
+        name:
+          other: Famous Link
+        desc:
+          other: Posted an external link with 100 clicks.
+    default_badge_groups:
+      getting_started:
+        name:
+          other: Getting Started
+      community:
+        name:
+          other: Community
+      posting:
+        name:
+          other: Posting
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -579,6 +843,9 @@ ui:
       posts: Postagens
       invites: Convites
       votes: Votos
+    answer: Answer
+    question: Question
+    badge_award: Badge
   suspended:
     title: A sua conta foi suspensa
     until_time: "Sua conta está suspensa até {{ time }}."
@@ -874,6 +1141,7 @@ ui:
       question: Perguntas
       tag: Marcadores
       user: Usuários
+      badges: Badges
       profile: Perfil
       setting: Configurações
       logout: Sair
@@ -1257,6 +1525,7 @@ ui:
     newest: Mais recente
     active: Ativo
     hot: Hot
+    recommend: Recommend
     score: Pontuação
     unanswered: Não Respondido
     modified: modificado
@@ -1275,12 +1544,14 @@ ui:
     reputation: Reputação
     comments: Comentários
     votes: Votos
+    badges: Badges
     newest: Mais recente
     score: Pontuação
     edit_profile: Editar Perfil
     visited_x_days: "Visitado {{ count }} dias"
     viewed: Visualizado
     joined: Ingressou
+    comma: ","
     last_login: Visto
     about_me: Sobre mim
     about_me_empty: "// Olá, Mundo !"
@@ -1298,6 +1569,7 @@ ui:
     x_votes: votos recebidos
     x_answers: respostas
     x_questions: perguntas
+    recent_badges: Recent Badges
   install:
     title: Installation
     next: Proximo
@@ -1407,6 +1679,7 @@ ui:
     questions: Perguntas
     answers: Respostas
     users: Usuários
+    badges: Badges
     flags: Marcadores
     settings: Configurações
     general: Geral
@@ -1430,6 +1703,18 @@ ui:
     login: Entrar
     qrcode_login_tip: Por favor, utilize {{ agentName }} para escanear o QR code para entrar.
     login_failed_email_tip: Falha ao entrar, por favor, permita que este aplicativo acesse a informação do seu e-mail antes de tentar novamente.
+  badges:
+    modal:
+      title: Congratulations
+      content: You've earned a new badge.
+      close: Close
+      confirm: View badges
+    title: Badges
+    awarded: Awarded
+    earned_×: Earned ×{{ number }}
+    ×_awarded: "{{ number }} awarded"
+    can_earn_multiple: You can earn this multiple times.
+    earned: Earned
   admin:
     admin_header:
       title: Administrador
@@ -1834,6 +2119,20 @@ ui:
       msg:
         should_be_number: the input should be number
         number_larger_1: number should be equal or larger than 1
+    badges:
+      action: Action
+      active: Active
+      all: All
+      awards: Awards
+      deactivate: Deactivate
+      filter:
+        placeholder: Filter by name, badge:id
+      group: Group
+      inactive: Inactive
+      name: Name
+      show_logs: Show logs
+      status: Status
+      title: Badges
   form:
     optional: (opcional)
     empty: não pode ser vazio
