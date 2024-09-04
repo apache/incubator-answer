@@ -538,7 +538,7 @@ backend:
         name:
           other: Autobiographer
         desc:
-          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
+          other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
       certified:
         name:
           other: Certified
