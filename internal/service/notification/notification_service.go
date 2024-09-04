@@ -163,9 +163,7 @@ func (ns *NotificationService) countAllReviewAmount(ctx context.Context, req *sc
 }
 
 func (ns *NotificationService) ClearRedDot(ctx context.Context, req *schema.NotificationClearRequest) (*schema.RedDot, error) {
-	key := fmt.Sprintf(constant.RedDotCacheKey, req.NotificationType, req.UserID)
-	_ = ns.data.Cache.Del(ctx, key)
-
+	_ = ns.notificationCommon.DeleteRedDot(ctx, req.UserID, schema.NotificationType[req.NotificationType])
 	resp := &schema.GetRedDot{}
 	_ = copier.Copy(resp, req)
 	return ns.GetRedDot(ctx, resp)
@@ -203,19 +201,7 @@ func (ns *NotificationService) ClearIDUnRead(ctx context.Context, userID string,
 		log.Errorf("remove badge award alert cache failed: %v", err)
 	}
 
-	amount, err := ns.notificationRepo.CountNotificationByUser(ctx, &entity.Notification{
-		UserID: userID,
-		Type:   notificationInfo.Type,
-		IsRead: schema.NotificationNotRead,
-		Status: schema.NotificationStatusNormal,
-	})
-	if err != nil {
-		log.Errorf("count notification failed: %v", err)
-		return nil
-	}
-	if amount == 0 {
-		_ = ns.notificationCommon.DeleteRedDot(ctx, userID, notificationInfo.Type)
-	}
+	_ = ns.notificationCommon.DecreaseRedDot(ctx, userID, notificationInfo.Type)
 	return nil
 }
 
