@@ -38,7 +38,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -62,7 +61,15 @@ func LangOptions(ctx *gin.Context) {
 // @Success 200 {object} handler.RespBody{}
 // @Router /installation/language/config [get]
 func GetLangMapping(ctx *gin.Context) {
-	// TODO
+	t, err := translator.NewTranslator(&translator.I18n{BundleDir: cli.I18nPath})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	trData, _ := t.Dump(handler.GetLang(ctx))
+	var resp map[string]any
+	_ = json.Unmarshal(trData, &resp)
+	handler.HandleResponse(ctx, nil, resp)
 }
 
 // CheckConfigFileAndRedirectToInstallPage if config file not exist try to redirect to install page
