@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "= \"answer api\"",
-        "title": "\"answer\"",
+        "description": "= \"apache answer api\"",
+        "title": "\"apache answer\"",
         "contact": {},
         "version": "= \"v0.0.1\""
     },
@@ -4159,6 +4159,67 @@
                 }
             }
         },
+        "/answer/api/v1/question/recommend/page": {
+            "get": {
+                "description": "get recommend questions by page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "get recommend questions by page",
+                "parameters": [
+                    {
+                        "description": "QuestionPageReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.QuestionPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/pager.PageModel"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/schema.QuestionPageResp"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/recover": {
             "post": {
                 "security": [
@@ -6560,14 +6621,14 @@
         },
         "/custom.css": {
             "get": {
-                "description": "get site robots information",
+                "description": "get site custom CSS",
                 "produces": [
-                    "application/json"
+                    "text/css"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "get site robots information",
+                "summary": "get site custom CSS",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -8847,7 +8908,8 @@
                         "active",
                         "hot",
                         "score",
-                        "unanswered"
+                        "unanswered",
+                        "recommend"
                     ]
                 },
                 "page": {
