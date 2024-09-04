@@ -2122,6 +2122,7 @@ ui:
     badges:
       action: 操作
       active: 活跃的
+      activate: Activate
       all: 全部
       awards: 奖项
       deactivate: 取消激活
