@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import type { LangsType, FormValue, FormDataType } from '@/common/interface';
 import Progress from '../Progress';
 import { getInstallLangOptions } from '@/services';
+import { setupInstallLanguage } from '@/utils/localize';
 
 interface Props {
   data: FormValue;
@@ -32,7 +33,7 @@ interface Props {
   visible: boolean;
 }
 const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
-  const { t, i18n } = useTranslation('translation', { keyPrefix: 'install' });
+  const { t } = useTranslation('translation', { keyPrefix: 'install' });
 
   const [langs, setLangs] = useState<LangsType[]>();
 
@@ -65,7 +66,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           value={data.value}
           isInvalid={data.isInvalid}
           onChange={(e) => {
-            i18n.changeLanguage(e.target.value);
+            setupInstallLanguage(e.target.value);
             changeCallback({
               lang: {
                 value: e.target.value,

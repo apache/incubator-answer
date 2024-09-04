@@ -20,6 +20,7 @@
 package install
 
 import (
+	"encoding/json"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -37,6 +38,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -49,6 +51,18 @@ import (
 // @Router /installation/language/options [get]
 func LangOptions(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, translator.LanguageOptions)
+}
+
+// GetLangMapping get installation language config mapping
+// @Summary get installation language config mapping
+// @Description get installation language config mapping
+// @Tags Lang
+// @Param Accept-Language header string true "Accept-Language"
+// @Produce json
+// @Success 200 {object} handler.RespBody{}
+// @Router /installation/language/config [get]
+func GetLangMapping(ctx *gin.Context) {
+	// TODO
 }
 
 // CheckConfigFileAndRedirectToInstallPage if config file not exist try to redirect to install page

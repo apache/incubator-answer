@@ -35,6 +35,7 @@ import {
 } from '@/common/constants';
 import {
   getAdminLanguageOptions,
+  getInstallLanguageConfig,
   getLanguageConfig,
   getLanguageOptions,
 } from '@/services';
@@ -61,6 +62,15 @@ export const loadLanguageOptions = async (forAdmin = false) => {
 };
 
 const pullLanguageConf = (res) => {
+  if (window.location.pathname === '/install') {
+    return getInstallLanguageConfig().then((langConf) => {
+      if (langConf && langConf.ui) {
+        res.resources = langConf.ui;
+        Storage.set(LANG_RESOURCE_STORAGE_KEY, res);
+      }
+    });
+  }
+
   return getLanguageConfig().then((langConf) => {
     if (langConf && langConf.ui) {
       res.resources = langConf.ui;
@@ -68,6 +78,7 @@ const pullLanguageConf = (res) => {
     }
   });
 };
+
 const addI18nResource = async (langName) => {
   const res = { lng: langName, resources: undefined };
   const storageResource = Storage.get(LANG_RESOURCE_STORAGE_KEY);
@@ -148,4 +159,10 @@ export const setupAppTimeZone = () => {
 export const setupAppTheme = () => {
   const theme = getCurrentTheme();
   changeTheme(theme);
+};
+
+export const setupInstallLanguage = async (lang) => {
+  await addI18nResource(lang);
+  localeDayjs(lang);
+  i18next.changeLanguage(lang);
 };

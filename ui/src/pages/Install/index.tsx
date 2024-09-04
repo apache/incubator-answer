@@ -37,6 +37,7 @@ import {
 } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 import { BASE_ORIGIN } from '@/router/alias';
+import { setupInstallLanguage } from '@/utils/localize';
 
 import {
   FirstStep,
@@ -47,7 +48,7 @@ import {
 } from './components';
 
 const Index: FC = () => {
-  const { t, i18n } = useTranslation('translation', { keyPrefix: 'install' });
+  const { t } = useTranslation('translation', { keyPrefix: 'install' });
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
@@ -293,7 +294,7 @@ const Index: FC = () => {
 
   useEffect(() => {
     configYmlCheck();
-    i18n.changeLanguage(Storage.get(CURRENT_LANG_STORAGE_KEY));
+    setupInstallLanguage(Storage.get(CURRENT_LANG_STORAGE_KEY));
   }, []);
 
   if (loading) {
