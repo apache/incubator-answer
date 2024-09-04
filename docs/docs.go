@@ -7226,6 +7226,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/installation/language/config": {
+            "get": {
+                "description": "get installation language config mapping",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lang"
+                ],
+                "summary": "get installation language config mapping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Accept-Language",
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/installation/language/options": {
             "get": {
                 "description": "get installation language options",

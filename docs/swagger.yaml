@@ -7239,6 +7239,25 @@ paths:
       summary: init environment
       tags:
       - installation
+  /installation/language/config:
+    get:
+      description: get installation language config mapping
+      parameters:
+      - description: Accept-Language
+        in: header
+        name: Accept-Language
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: get installation language config mapping
+      tags:
+      - Lang
   /installation/language/options:
     get:
       description: get installation language options
