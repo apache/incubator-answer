@@ -1555,6 +1555,7 @@ definitions:
         - hot
         - score
         - unanswered
+        - recommend
         type: string
       page:
         minimum: 1
@@ -5641,6 +5642,40 @@ paths:
                     type: object
               type: object
       summary: get questions by page
+      tags:
+      - Question
+  /answer/api/v1/question/recommend/page:
+    get:
+      consumes:
+      - application/json
+      description: get recommend questions by page
+      parameters:
+      - description: QuestionPageReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionPageReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.QuestionPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get recommend questions by page
       tags:
       - Question
   /answer/api/v1/question/recover:

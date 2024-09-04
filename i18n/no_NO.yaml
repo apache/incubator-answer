@@ -859,6 +859,7 @@ ui:
     newest: Newest
     active: Active
     hot: Hot
+    recommend: Recommend
     score: Score
     unanswered: Unanswered
     modified: modified
