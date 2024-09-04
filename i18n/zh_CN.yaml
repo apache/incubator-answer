@@ -1017,9 +1017,9 @@ ui:
     delete:
       title: 删除标签
       tip_with_posts: >-
-        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>我们不允许 <strong>删除带有帖子的标签</strong>。</p> <p>请先从帖子中移除此标签。</p>
       tip_with_synonyms: >-
-        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>我们不允许 <strong>删除带有同义词的标签</strong>。</p> <p>请先从此标签中删除同义词。</p>
       tip: 确定要删除吗？
       close: 关闭
   edit_tag:
@@ -1997,7 +1997,7 @@ ui:
       restrict_answer:
         title: 回答编辑
         label: 每个用户对于每个问题只能有一个回答
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        text: "用户可以使用编辑按钮优化已有的回答"
       recommend_tags:
         label: 推荐标签
         text: "推荐标签将默认显示在下拉列表中。"
