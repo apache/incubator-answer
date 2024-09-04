@@ -72,8 +72,8 @@ func NewEventRuleRepo(data *data.Data) badge.EventRuleRepo {
 func (br *eventRuleRepo) HandleEventWithRule(ctx context.Context, msg *schema.EventMsg) (
 	awards []*entity.BadgeAward) {
 	handlers := br.EventRuleMapping[msg.EventType]
-	for _, h := range handlers {
-		t, err := h(ctx, msg)
+	for _, handler := range handlers {
+		t, err := handler(ctx, msg)
 		if err != nil {
 			log.Errorf("error handling badge event %+v: %v", msg, err)
 		} else {
@@ -97,7 +97,7 @@ func (br *eventRuleRepo) FirstUpdateUserProfile(ctx context.Context,
 			continue
 		}
 		if len(bean.Bio) > 0 {
-			awards = append(awards, br.createBadgeAward(event.UserID, "", b))
+			awards = append(awards, br.createBadgeAward(event.UserID, entity.BadgeEmptyAwardKey, b))
 		}
 	}
 	return awards, nil
@@ -245,9 +245,6 @@ func (br *eventRuleRepo) getBadgesByHandler(ctx context.Context, handler string)
 }
 
 func (br *eventRuleRepo) createBadgeAward(userID, awardKey string, badge *entity.Badge) (awards *entity.BadgeAward) {
-	if badge.Single == entity.BadgeSingleAward {
-		awardKey = entity.BadgeOnceAwardKey
-	}
 	return &entity.BadgeAward{
 		UserID:   userID,
 		BadgeID:  badge.ID,

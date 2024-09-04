@@ -25,7 +25,7 @@ const (
 	IsBadgeNotDeleted = 0
 	IsBadgeDeleted    = 1
 
-	BadgeOnceAwardKey = "0"
+	BadgeEmptyAwardKey = "0"
 )
 
 // BadgeAward badge_award

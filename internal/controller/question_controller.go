@@ -340,6 +340,35 @@ func (qc *QuestionController) QuestionPage(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
 }
 
+// QuestionRecommendPage get recommend questions by page
+// @Summary get recommend questions by page
+// @Description get recommend questions by page
+// @Tags Question
+// @Accept  json
+// @Produce  json
+// @Param data body schema.QuestionPageReq  true "QuestionPageReq"
+// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.QuestionPageResp}}
+// @Router /answer/api/v1/question/recommend/page [get]
+func (qc *QuestionController) QuestionRecommendPage(ctx *gin.Context) {
+	req := &schema.QuestionPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	if req.LoginUserID == "" {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+
+	questions, total, err := qc.questionService.GetRecommendQuestionPage(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
+}
+
 // AddQuestion add question
 // @Summary add question
 // @Description add question

@@ -31,6 +31,7 @@ import (
 	"github.com/apache/incubator-answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 	"strings"
 )
 
@@ -43,6 +44,7 @@ type BadgeRepo interface {
 	ListInactivated(ctx context.Context, page int, pageSize int) (badges []*entity.Badge, total int64, err error)
 
 	UpdateStatus(ctx context.Context, id string, status int8) (err error)
+	UpdateAwardCount(ctx context.Context, badgeID string, awardCount int) (err error)
 }
 
 type BadgeService struct {
@@ -286,32 +288,42 @@ func (b *BadgeService) GetBadgeInfo(ctx *gin.Context, id string, userID string) 
 
 // UpdateStatus update badge status
 func (b *BadgeService) UpdateStatus(ctx *gin.Context, req *schema.UpdateBadgeStatusReq) (err error) {
-	var (
-		badge  *entity.Badge
-		exists bool
-	)
 	req.ID = uid.DeShortID(req.ID)
 
-	badge, exists, err = b.badgeRepo.GetByID(ctx, req.ID)
+	badge, exists, err := b.badgeRepo.GetByID(ctx, req.ID)
 	if err != nil {
-		return
+		return err
 	}
 	if !exists {
-		err = errors.BadRequest(reason.BadgeObjectNotFound)
-		return
+		return errors.BadRequest(reason.BadgeObjectNotFound)
 	}
 
-	status, ok := schema.BadgeStatusEMap[req.Status]
 	// check duplicate action
-	if badge.Status == status {
-		return
-	}
-
+	status, ok := schema.BadgeStatusEMap[req.Status]
 	if !ok {
 		err = errors.BadRequest(reason.StatusInvalid)
 		return
 	}
+	if badge.Status == status {
+		return
+	}
 
 	err = b.badgeRepo.UpdateStatus(ctx, req.ID, status)
-	return
+	if err != nil {
+		return err
+	}
+
+	if status == entity.BadgeStatusActive {
+		count, err := b.badgeAwardRepo.CountByBadgeID(ctx, badge.ID)
+		if err != nil {
+			log.Errorf("count badge award failed: %v", err)
+			return nil
+		}
+		err = b.badgeRepo.UpdateAwardCount(ctx, badge.ID, int(count))
+		if err != nil {
+			log.Errorf("update badge award count failed: %v", err)
+			return nil
+		}
+	}
+	return nil
 }

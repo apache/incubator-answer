@@ -192,11 +192,11 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	switch objInfo.ObjectType {
 	case constant.QuestionObjectType:
 		activityMsg.ActivityTypeKey = constant.ActQuestionCommented
-		event = schema.NewEvent(constant.EventCommentCreate, req.UserID).
+		event = schema.NewEvent(constant.EventCommentCreate, req.UserID).TID(comment.ID).
 			CID(comment.ID, comment.UserID).QID(objInfo.QuestionID, objInfo.ObjectCreatorUserID)
 	case constant.AnswerObjectType:
 		activityMsg.ActivityTypeKey = constant.ActAnswerCommented
-		event = schema.NewEvent(constant.EventCommentCreate, req.UserID).
+		event = schema.NewEvent(constant.EventCommentCreate, req.UserID).TID(comment.ID).
 			CID(comment.ID, comment.UserID).AID(objInfo.AnswerID, objInfo.ObjectCreatorUserID)
 	}
 	cs.activityQueueService.Send(ctx, activityMsg)
@@ -255,7 +255,8 @@ func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveC
 	if err != nil {
 		return err
 	}
-	cs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventCommentDelete, req.UserID).CID(req.CommentID, req.UserID))
+	cs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventCommentDelete, req.UserID).
+		TID(req.CommentID).CID(req.CommentID, req.UserID))
 	return nil
 }
 
@@ -288,7 +289,7 @@ func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateC
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
 	}
-	cs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventCommentUpdate, req.UserID).
+	cs.eventQueueService.Send(ctx, schema.NewEvent(constant.EventCommentUpdate, req.UserID).TID(old.ID).
 		CID(old.ID, old.UserID))
 	return resp, nil
 }

@@ -42,6 +42,7 @@ type BadgeAwardRepo interface {
 	AwardBadgeForUser(ctx context.Context, badgeAward *entity.BadgeAward) (err error)
 
 	CountByUserIdAndBadgeId(ctx context.Context, userID string, badgeID string) (awardCount int64)
+	CountByBadgeID(ctx context.Context, badgeID string) (awardCount int64, err error)
 
 	SumUserEarnedGroupByBadgeID(ctx context.Context, userID string) (earnedCounts []*entity.BadgeEarnedCount, err error)
 

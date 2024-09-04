@@ -233,13 +233,13 @@ func (rs *ReportService) sendEvent(ctx context.Context,
 	var event *schema.EventMsg
 	switch objectInfo.ObjectType {
 	case constant.QuestionObjectType:
-		event = schema.NewEvent(constant.EventQuestionFlag, report.UserID).
+		event = schema.NewEvent(constant.EventQuestionFlag, report.UserID).TID(objectInfo.QuestionID).
 			QID(objectInfo.QuestionID, objectInfo.ObjectCreatorUserID)
 	case constant.AnswerObjectType:
-		event = schema.NewEvent(constant.EventAnswerFlag, report.UserID).
+		event = schema.NewEvent(constant.EventAnswerFlag, report.UserID).TID(objectInfo.AnswerID).
 			AID(objectInfo.AnswerID, objectInfo.ObjectCreatorUserID)
 	case constant.CommentObjectType:
-		event = schema.NewEvent(constant.EventCommentFlag, report.UserID).
+		event = schema.NewEvent(constant.EventCommentFlag, report.UserID).TID(objectInfo.CommentID).
 			CID(objectInfo.CommentID, objectInfo.ObjectCreatorUserID)
 	default:
 		return

@@ -23,9 +23,10 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components';
 
 interface Props {
+  status: string;
   onSelect: (eventKey: string | null) => void;
 }
-const BadgeOperation = ({ onSelect }: Props) => {
+const BadgeOperation = ({ onSelect, status }: Props) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.badges' });
 
   return (
@@ -35,8 +36,12 @@ const BadgeOperation = ({ onSelect }: Props) => {
           <Icon name="three-dots-vertical" title={t('action')} />
         </Dropdown.Toggle>
         <Dropdown.Menu align="end">
-          <Dropdown.Item eventKey="active">{t('active')}</Dropdown.Item>
-          <Dropdown.Item eventKey="inactive">{t('deactivate')}</Dropdown.Item>
+          {status === 'inactive' && (
+            <Dropdown.Item eventKey="active">{t('active')}</Dropdown.Item>
+          )}
+          {status === 'active' && (
+            <Dropdown.Item eventKey="inactive">{t('deactivate')}</Dropdown.Item>
+          )}
         </Dropdown.Menu>
       </Dropdown>
     </td>

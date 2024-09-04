@@ -146,6 +146,7 @@ const Badges: FC = () => {
                 </span>
               </td>
               <Action
+                status={badge.status}
                 onSelect={(status) => handleBadgeStatus(badge.id, status)}
               />
             </tr>

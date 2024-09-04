@@ -34,7 +34,7 @@ backend:
       other: Trùng lặp yêu cầu.
   action:
     report:
-      other: Gắn Cờ
+      other: Gắn nhãn
     edit:
       other: Chỉnh sửa
     delete:
@@ -64,7 +64,7 @@ backend:
       admin:
         other: Quản trị viên
       moderator:
-        other: Điều hành viên
+        other: Người điều hành
     description:
       user:
         other: Mặc định không có quyền truy cập đặc biệt.
@@ -94,7 +94,7 @@ backend:
     rank_report_add_label:
       other: Gắn Cờ
     rank_comment_vote_up_label:
-      other: Upvote cho một bình luận
+      other: Bình chọn lên cho bình luận
     rank_link_url_limit_label:
       other: Đăng nhiều hơn 2 liên kết cùng một lúc
     rank_question_vote_up_label:
@@ -138,13 +138,15 @@ backend:
   pass:
     other: Mật khẩu
   original_text:
-    other: post này
+    other: Bài viết này
   email_or_password_wrong_error:
     other: Email và mật khẩu không trùng khớp.
   error:
     common:
       invalid_url:
         other: URL không tồn tại.
+      status_invalid:
+        other: Invalid status.
     password:
       space_invalid:
         other: Mật khẩu không thể tồn tại khoảng trắng.
@@ -187,7 +189,7 @@ backend:
         other: Không tìm thấy file ngôn ngữ.
     object:
       captcha_verification_failed:
-        other: Sai Captcha.
+        other: Xác minh Captcha thất bại.
       disallow_follow:
         other: Bạn không được phép theo dõi.
       disallow_vote:
@@ -311,6 +313,9 @@ backend:
     site_info:
       config_not_found:
         other: Không tìm thấy cấu hình trang.
+    badge:
+      object_not_found:
+        other: Badge object not found
   reason:
     spam:
       name:
@@ -415,12 +420,12 @@ backend:
     deleted_title:
       other: Câu hỏi đã xóa
     questions_title:
-      other: Questions
+      other: Các câu hỏi
   tag:
     tags_title:
-      other: Tags
+      other: Thẻ
     no_description:
-      other: The tag has no description.
+      other: Thẻ không có mô tả.
   notification:
     action:
       update_question:
@@ -459,6 +464,8 @@ backend:
         other: bình luận đã bình chọn lên
       invited_you_to_answer:
         other: đã mời bạn trả lời
+      earned_badge:
+        other: You've earned the "{{.BadgeName}}" badge
   email_tpl:
     change_email:
       title:
@@ -510,7 +517,7 @@ backend:
     downvoted:
       other: đã bình chọn xuống
     accept:
-      other:
+      other: chấp nhận
     accepted:
       other: đã chấp nhận
     edit:
@@ -525,6 +532,263 @@ backend:
   reaction:
     tooltip:
       other: "{{ .Names }} và {{ .Count }} thêm..."
+  badge:
+    default_badges:
+      autobiographer:
+        name:
+          other: Autobiographer
+        desc:
+          other: Filled out <a href="/users/settings/profile" target="_blank">profile</a> information.
+      certified:
+        name:
+          other: Certified
+        desc:
+          other: Completed our new user tutorial.
+      editor:
+        name:
+          other: Editor
+        desc:
+          other: First post edit.
+      first_flag:
+        name:
+          other: First Flag
+        desc:
+          other: First flagged a post.
+      first_upvote:
+        name:
+          other: First Upvote
+        desc:
+          other: First up voted a post.
+      first_link:
+        name:
+          other: First Link
+        desc:
+          other: First dirst added a link to another post.
+      first_reaction:
+        name:
+          other: First Reaction
+        desc:
+          other: First reacted to the post.
+      first_share:
+        name:
+          other: First Share
+        desc:
+          other: First shared a post.
+      scholar:
+        name:
+          other: Scholar
+        desc:
+          other: Asked a question and accepted an answer.
+      commentator:
+        name:
+          other: Commentator
+        desc:
+          other: Leave 5 comments.
+      new_user_of_the_month:
+        name:
+          other: New User of the Month
+        desc:
+          other: Outstanding contributions in their first month.
+      read_guidelines:
+        name:
+          other: Read Guidelines
+        desc:
+          other: Read the [community guidelines].
+      reader:
+        name:
+          other: Reader
+        desc:
+          other: Read every answers in a topic with more than 10 answers.
+      welcome:
+        name:
+          other: Welcome
+        desc:
+          other: Received a up vote.
+      nice_share:
+        name:
+          other: Nice Share
+        desc:
+          other: Shared a post with 25 unique visitors.
+      good_share:
+        name:
+          other: Good Share
+        desc:
+          other: Shared a post with 300 unique visitors.
+      great_share:
+        name:
+          other: Great Share
+        desc:
+          other: Shared a post with 1000 unique visitors.
+      out_of_love:
+        name:
+          other: Out of Love
+        desc:
+          other: Used 50 up votes in a day.
+      higher_love:
+        name:
+          other: Higher Love
+        desc:
+          other: Used 50 up votes in a day 5 times.
+      crazy_in_love:
+        name:
+          other: Crazy in Love
+        desc:
+          other: Used 50 up votes in a day 20 times.
+      promoter:
+        name:
+          other: Promoter
+        desc:
+          other: Invited a user.
+      campaigner:
+        name:
+          other: Campaigner
+        desc:
+          other: Invited 3 basic users.
+      champion:
+        name:
+          other: Champion
+        desc:
+          other: Invited 5 members.
+      thank_you:
+        name:
+          other: Thank You
+        desc:
+          other: Has 20 up voted posts and gave 10 up votes.
+      gives_back:
+        name:
+          other: Gives Back
+        desc:
+          other: Has 100 up voted posts and gave 100 up votes.
+      empathetic:
+        name:
+          other: Empathetic
+        desc:
+          other: Has 500 up voted posts and gave 1000 up votes.
+      enthusiast:
+        name:
+          other: Enthusiast
+        desc:
+          other: Visited 10 consecutive days.
+      aficionado:
+        name:
+          other: Aficionado
+        desc:
+          other: Visited 100 consecutive days.
+      devotee:
+        name:
+          other: Devotee
+        desc:
+          other: Visited 365 consecutive days.
+      anniversary:
+        name:
+          other: Anniversary
+        desc:
+          other: Active member for a year, posted at least once.
+      appreciated:
+        name:
+          other: Appreciated
+        desc:
+          other: Received 1 up vote on 20 posts.
+      respected:
+        name:
+          other: Respected
+        desc:
+          other: Received 2 up votes on 100 posts.
+      admired:
+        name:
+          other: Admired
+        desc:
+          other: Received 5 up votes on 300 posts.
+      solved:
+        name:
+          other: Solved
+        desc:
+          other: Have an answer be accepted.
+      guidance_counsellor:
+        name:
+          other: Guidance Counsellor
+        desc:
+          other: Have 10 answers be accepted.
+      know_it_all:
+        name:
+          other: Know-it-All
+        desc:
+          other: Have 50 answers be accepted.
+      solution_institution:
+        name:
+          other: Solution Institution
+        desc:
+          other: Have 150 answers be accepted.
+      nice_answer:
+        name:
+          other: Nice Answer
+        desc:
+          other: Answer score of 10 or more.
+      good_answer:
+        name:
+          other: Good Answer
+        desc:
+          other: Answer score of 25 or more.
+      great_answer:
+        name:
+          other: Great Answer
+        desc:
+          other: Answer score of 50 or more.
+      nice_question:
+        name:
+          other: Nice Question
+        desc:
+          other: Question score of 10 or more.
+      good_question:
+        name:
+          other: Good Question
+        desc:
+          other: Question score of 25 or more.
+      great_question:
+        name:
+          other: Great Question
+        desc:
+          other: Question score of 50 or more.
+      popular_question:
+        name:
+          other: Popular Question
+        desc:
+          other: Question with 500 views.
+      notable_question:
+        name:
+          other: Notable Question
+        desc:
+          other: Question with 1,000 views.
+      famous_question:
+        name:
+          other: Famous Question
+        desc:
+          other: Question with 5,000 views.
+      popular_link:
+        name:
+          other: Popular Link
+        desc:
+          other: Posted an external link with 50 clicks.
+      hot_link:
+        name:
+          other: Hot Link
+        desc:
+          other: Posted an external link with 300 clicks.
+      famous_link:
+        name:
+          other: Famous Link
+        desc:
+          other: Posted an external link with 100 clicks.
+    default_badge_groups:
+      getting_started:
+        name:
+          other: Getting Started
+      community:
+        name:
+          other: Community
+      posting:
+        name:
+          other: Posting
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -579,6 +843,9 @@ ui:
       posts: Bài đăng
       invites: Lời mời
       votes: Bình chọn
+    answer: Answer
+    question: Question
+    badge_award: Badge
   suspended:
     title: Tài khoản của bạn đã bị đình chỉ
     until_time: "Tài khoản của bạn đã bị đình chỉ cho đến {{ time }}."
@@ -718,12 +985,12 @@ ui:
             empty: Tên hiển thị không thể trống.
             range: Tên hiển thị tối đa 35 ký tự.
         slug_name:
-          label: URL slug
-          desc: URL slug tối đa 35 ký tự.
+          label: Đường dẫn URL
+          desc: Đường dẫn tối đa 35 ký tự.
           msg:
-            empty: URL slug không thể trống.
-            range: URL slug tối đa 35 ký tự.
-            character: URL slug chứa bộ ký tự không được phép.
+            empty: Đường dẫn URL không thể trống.
+            range: Đường dẫn URL tối đa 35 ký tự.
+            character: Đường dẫn URL chứa bộ ký tự không được phép.
         desc:
           label: Mô tả
         revision:
@@ -732,7 +999,7 @@ ui:
           label: Tóm tắt chỉnh sửa
           placeholder: >-
             Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, cải thiện định dạng)
-    btn_cancel:
+    btn_cancel: Hủy
     btn_submit: Gửi
     btn_post: Đăng thẻ mới
   tag_info:
@@ -750,9 +1017,9 @@ ui:
     delete:
       title: Xóa thẻ này
       tip_with_posts: >-
-        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>Chúng tôi không cho phép <strong>xóa thẻ có bài đăng</strong>.</p> <p>Vui lòng xóa thẻ này khỏi các bài đăng trước.</p>
       tip_with_synonyms: >-
-        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>Chúng tôi không cho phép <strong>xóa thẻ có từ đồng nghĩa</strong>.</p> <p>Vui lòng xóa các từ đồng nghĩa khỏi thẻ này trước.</p>
       tip: Bạn có chắc chắn muốn xóa không?
       close: Đóng
   edit_tag:
@@ -766,9 +1033,9 @@ ui:
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: bây giờ
-    x_seconds_ago: "{{count}}s trước"
-    x_minutes_ago: "{{count}}m trước"
-    x_hours_ago: "{{count}}h trước"
+    x_seconds_ago: "{{count}}giây trước"
+    x_minutes_ago: "{{count}}phút trước"
+    x_hours_ago: "{{count}}giờ trước"
     hour: giờ
     day: ngày
     hours: giờ
@@ -779,8 +1046,8 @@ ui:
     frown: khắc nghiệt
     btn_label: thêm hoặc loại bỏ lại
     undo_emoji: trở lại {{ emoji }} lặp lại
-    react_emoji: react with {{ emoji }}
-    unreact_emoji: react with {{ emoji }}
+    react_emoji: biểu cảm với {{ emoji }}
+    unreact_emoji: hủy biểu cảm {{ emoji }}
   comment:
     btn_add_comment: Thêm bình luận
     reply_to: Trả lời cho
@@ -838,7 +1105,7 @@ ui:
           label: Sửa đổi
         title:
           label: Tiêu đề
-          placeholder: Hãy cụ thể và tưởng tượng bạn đang hỏi một người khác
+          placeholder: Hãy cụ thể và tưởng tượng rằng bạn đang hỏi một người khác
           msg:
             empty: Tiêu đề không thể trống.
             range: Tiêu đề tối đa 150 ký tự
@@ -874,6 +1141,7 @@ ui:
       question: Câu hỏi
       tag: Thẻ
       user: Người dùng
+      badges: Badges
       profile: Hồ sơ
       setting: Cài đặt
       logout: Đăng xuất
@@ -918,7 +1186,7 @@ ui:
       msg:
         empty: Tên không thể trống.
         range: Độ dài của tên phải từ 4 đến 30 ký tự.
-        character: 'Chỉ sử dụng bộ ký tự "a-z", "0-9", " - . _"'
+        character: 'Chỉ sử dụng bộ ký tự "a-z", "0-9", , "A-Z", " - . _"'
     email:
       label: Email
       msg:
@@ -993,7 +1261,7 @@ ui:
         msg_range: Tên hiển thị tối đa 30 ký tự.
       username:
         label: Tên người dùng
-        caption: Mọi người có thể nhắc đến bạn là "@username".
+        caption: Mọi người có thể nhắc đến bạn với "@username".
         msg: Tên người dùng không thể trống.
         msg_range: Tên người dùng tối đa 30 ký tự.
         character: 'Chỉ sử dụng bộ ký tự "a-z", "0-9", " - . _"'
@@ -1019,7 +1287,7 @@ ui:
       turn_on: Bật
       inbox:
         label: Thông báo hộp thư đến
-        description: Các câu trả lời cho câu hỏi của bạn, bình luận, lời mời, và nhiều hơn nữa.
+        description: Các câu trả lời cho câu hỏi của bạn, bình luận, lời mời và nhiều hơn nữa.
       all_new_question:
         label: Tất cả câu hỏi mới
         description: Nhận thông báo về tất cả các câu hỏi mới. Tối đa 50 câu hỏi mỗi tuần.
@@ -1074,8 +1342,8 @@ ui:
     title: Các câu hỏi liên quan
     answers: câu trả lời
   invite_to_answer:
-    title: People Asked
-    desc: Select people who you think might know the answer.
+    title: Mời mọi người
+    desc: Mời những người bạn nghĩ có thể trả lời.
     invite: Mời trả lời
     add: Thêm người
     search: Tìm kiếm người
@@ -1233,8 +1501,8 @@ ui:
   account_result:
     success: Tài khoản mới của bạn đã được xác nhận; bạn sẽ được chuyển hướng đến trang chủ.
     link: Tiếp tục đến trang chủ
-    oops: Oops!
-    invalid: The link you used no longer works.
+    oops: Rất tiếc!
+    invalid: Liên kết bạn đã dùng không còn hoạt động nữa.
     confirm_new_email: Email của bạn đã được cập nhật.
     confirm_new_email_invalid: >-
       Xin lỗi, liên kết xác nhận này không còn hợp lệ. Có thể email của bạn đã được thay đổi?
@@ -1256,7 +1524,8 @@ ui:
     answers: Câu trả lời
     newest: Mới nhất
     active: Hoạt động
-    hot: Hot
+    hot: Được nhiều quan tâm
+    recommend: Recommend
     score: Điểm
     unanswered: Chưa được trả lời
     modified: đã chỉnh sửa
@@ -1275,12 +1544,14 @@ ui:
     reputation: Danh tiếng
     comments: Bình luận
     votes: Bình chọn
+    badges: Badges
     newest: Mới nhất
     score: Điểm
     edit_profile: Chỉnh sửa hồ sơ
     visited_x_days: "Đã truy cập {{ count }} ngày"
     viewed: Đã xem
     joined: Tham gia
+    comma: ","
     last_login: Đã xem
     about_me: Về tôi
     about_me_empty: "// Xin chào, Thế giới !"
@@ -1298,6 +1569,7 @@ ui:
     x_votes: phiếu bầu nhận được
     x_answers: câu trả lời
     x_questions: câu hỏi
+    recent_badges: Recent Badges
   install:
     title: Cài đặt
     next: Tiếp theo
@@ -1321,7 +1593,7 @@ ui:
       msg: Máy chủ cơ sở dữ liệu không thể trống.
     db_name:
       label: Tên cơ sở dữ liệu
-      placeholder: answer
+      placeholder: câu trả lời
       msg: Tên cơ sở dữ liệu không thể trống.
     db_file:
       label: Tệp tin Database
@@ -1407,6 +1679,7 @@ ui:
     questions: Câu hỏi
     answers: Câu trả lời
     users: Người dùng
+    badges: Badges
     flags: Cờ
     settings: Cài đặt
     general: Chung
@@ -1430,6 +1703,18 @@ ui:
     login: Đăng nhập
     qrcode_login_tip: Vui lòng sử dụng {{ agentName }} để quét mã QR và đăng nhập.
     login_failed_email_tip: Đăng nhập thất bại, vui lòng cho phép ứng dụng này truy cập thông tin email của bạn trước khi thử lại.
+  badges:
+    modal:
+      title: Congratulations
+      content: You've earned a new badge.
+      close: Close
+      confirm: View badges
+    title: Badges
+    awarded: Awarded
+    earned_×: Earned ×{{ number }}
+    ×_awarded: "{{ number }} awarded"
+    can_earn_multiple: You can earn this multiple times.
+    earned: Earned
   admin:
     admin_header:
       title: Quản trị
@@ -1509,8 +1794,8 @@ ui:
       form:
         fields:
           display_name:
-            label: Display name
-            msg_range: Display name up to 30 characters.
+            label: Tên hiển thị
+            msg_range: Tên hiển thị tối đa 30 ký tự.
           username:
             label: Tên người dùng
             msg_range: Tên người dùng tối đa 30 ký tự.
@@ -1577,7 +1862,7 @@ ui:
         title: Xóa người dùng này
         content: Bạn có chắc chắn muốn xóa người dùng này không? Điều này là vĩnh viễn!
         remove: Xóa nội dung của họ
-        label: Xóa tất cả các câu hỏi, câu trả lời, bình luận, etc.
+        label: Xóa tất cả các câu hỏi, câu trả lời, bình luận, vv.
         text: Không chọn điều này nếu bạn chỉ muốn xóa tài khoản của người dùng.
       suspend_user:
         title: Đình chỉ người dùng này
@@ -1710,21 +1995,21 @@ ui:
     write:
       page_title: Viết
       restrict_answer:
-        title: Answer write
+        title: Câu trả lời chỉnh sửa
         label: Each user can only write one answer for each question
-        text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
+        text: "Tắt để cho phép người dùng viết nhiều câu trả lời cho cùng một câu hỏi, điều này có thể khiến các câu trả lời bị mất trọng tâm."
       recommend_tags:
         label: Thẻ được đề xuất
-        text: "Recommend tags will show in the dropdown list by default."
+        text: "Các thẻ gợi ý sẽ hiển thị trong danh sách thả xuống theo mặc định."
         msg:
-          contain_reserved: "recommended tags cannot contain reserved tags"
+          contain_reserved: "các thẻ được đề xuất không được chứa thẻ dự bị"
       required_tag:
-        title: Set required tags
-        label: Set “Recommend tags” as required tags
+        title: Đặt thẻ cần thiết
+        label: Đặt thẻ được đề xuất là bắt buộc
         text: "Mỗi câu hỏi mới phải có ít nhất một thẻ được đề xuất."
       reserved_tags:
         label: Thẻ dành riêng
-        text: "Reserved tags can only be used by moderator."
+        text: "Thẻ dành riêng chỉ có thể được thêm vào một bài đăng bởi điều hành viên."
     seo:
       page_title: SEO
       permalink:
@@ -1834,6 +2119,20 @@ ui:
       msg:
         should_be_number: dữ liệu đầu vào phải là số
         number_larger_1: số phải bằng hoặc lớn hơn 1
+    badges:
+      action: Action
+      active: Active
+      all: All
+      awards: Awards
+      deactivate: Deactivate
+      filter:
+        placeholder: Filter by name, badge:id
+      group: Group
+      inactive: Inactive
+      name: Name
+      show_logs: Show logs
+      status: Status
+      title: Badges
   form:
     optional: (tùy chọn)
     empty: không thể trống

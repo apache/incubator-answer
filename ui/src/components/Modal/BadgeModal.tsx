@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +26,7 @@ import classNames from 'classnames';
 import type * as Type from '@/common/interface';
 import { loggedUserInfoStore } from '@/stores';
 import { readNotification, useQueryNotificationStatus } from '@/services';
+import AnimateGift from '@/utils/animateGift';
 import Icon from '../Icon';
 
 import Modal from './Modal';
@@ -34,6 +35,10 @@ interface BadgeModalProps {
   badge?: Type.NotificationBadgeAward | null;
   visible: boolean;
 }
+
+let bg1: AnimateGift;
+let bg2: AnimateGift;
+let timeout: NodeJS.Timeout;
 const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'badges.modal' });
   const { user } = loggedUserInfoStore();
@@ -47,6 +52,9 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
       ...data,
       badge_award: null,
     });
+    clearTimeout(timeout);
+    bg1?.destroy();
+    bg2?.destroy();
   };
   const handleCancel = async () => {
     await handle();
@@ -58,8 +66,38 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
     navigate(url);
   };
 
+  useEffect(() => {
+    const DURATION = 8000;
+    const LENGTH = 200;
+    const bgNode = document.documentElement || document.body;
+
+    if (visible) {
+      const paranetNode = document.getElementById('badgeModal')?.parentNode;
+
+      bg1 = new AnimateGift({
+        elm: paranetNode,
+        width: bgNode.clientWidth,
+        height: bgNode.clientHeight,
+        length: LENGTH,
+        duration: DURATION,
+        isLoop: true,
+      });
+
+      timeout = setTimeout(() => {
+        bg2 = new AnimateGift({
+          elm: paranetNode,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          length: LENGTH,
+          duration: DURATION,
+        });
+      }, DURATION / 2);
+    }
+  }, [visible]);
+
   return (
     <Modal
+      id="badgeModal"
       title={t('title')}
       visible={visible}
       onCancel={handleCancel}

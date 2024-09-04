@@ -19,12 +19,17 @@
 
 package schema
 
-import "github.com/apache/incubator-answer/internal/base/constant"
+import (
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/pkg/uid"
+)
 
 // EventMsg event message
 type EventMsg struct {
 	EventType constant.EventType
 	UserID    string
+
+	TriggerObjectID string
 
 	QuestionID     string
 	QuestionUserID string
@@ -49,14 +54,18 @@ func NewEvent(e constant.EventType, userID string) *EventMsg {
 
 // QID get question id
 func (e *EventMsg) QID(questionID, userID string) *EventMsg {
-	e.QuestionID = questionID
+	if len(questionID) > 0 {
+		e.QuestionID = uid.DeShortID(questionID)
+	}
 	e.QuestionUserID = userID
 	return e
 }
 
 // AID get answer id
 func (e *EventMsg) AID(answerID, userID string) *EventMsg {
-	e.AnswerID = answerID
+	if len(answerID) > 0 {
+		e.AnswerID = uid.DeShortID(answerID)
+	}
 	e.AnswerUserID = userID
 	return e
 }
@@ -65,6 +74,12 @@ func (e *EventMsg) AID(answerID, userID string) *EventMsg {
 func (e *EventMsg) CID(comment, userID string) *EventMsg {
 	e.CommentID = comment
 	e.CommentUserID = userID
+	return e
+}
+
+// TID get trigger object id
+func (e *EventMsg) TID(triggerObjectID string) *EventMsg {
+	e.TriggerObjectID = triggerObjectID
 	return e
 }
 
@@ -84,6 +99,9 @@ func (e *EventMsg) GetExtra(key string) string {
 
 // GetObjectID get object id
 func (e *EventMsg) GetObjectID() string {
+	if len(e.TriggerObjectID) > 0 {
+		return e.TriggerObjectID
+	}
 	if len(e.CommentID) > 0 {
 		return e.CommentID
 	}

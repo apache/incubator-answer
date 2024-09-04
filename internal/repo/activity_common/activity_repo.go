@@ -107,6 +107,19 @@ func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 	return
 }
 
+func (ar *ActivityRepo) GetUserActivitysByActivityType(ctx context.Context, userID string, activityType int) (
+	activityList []*entity.Activity, err error) {
+	activityList = make([]*entity.Activity, 0)
+	err = ar.data.DB.Context(ctx).Where("user_id = ?", userID).
+		And("activity_type = ?", activityType).
+		And("cancelled = 0").
+		Find(&activityList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error) {
 	sum := &entity.ActivityRankSum{}
 	_, err := ar.data.DB.Context(ctx).Table(entity.Activity{}.TableName()).

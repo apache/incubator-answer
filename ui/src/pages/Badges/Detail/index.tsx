@@ -23,7 +23,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 // import classnames from 'classnames';
 
-import { FormatTime, Pagination, Empty } from '@/components';
+import { FormatTime, Pagination } from '@/components';
 import { usePageTags, useSkeletonControl } from '@/hooks';
 // import { formatCount } from '@/utils';
 import { useGetBadgeInfo, useBadgeDetailList } from '@/services';
@@ -102,7 +102,6 @@ const Index = () => {
           })
         )}
       </Row>
-      {Number(badges?.count) <= 0 && !isDetailLoading && <Empty />}
       <div className="d-flex justify-content-center">
         <Pagination
           currentPage={page}

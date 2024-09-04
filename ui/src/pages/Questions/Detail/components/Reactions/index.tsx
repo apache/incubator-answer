@@ -110,7 +110,7 @@ const Index: FC<Props> = ({
 
   return (
     <div
-      className={classNames('d-block d-md-flex flex-wrap', {
+      className={classNames('d-flex flex-wrap', {
         'mb-3': !showAddCommentBtn,
       })}>
       {showAddCommentBtn && (
