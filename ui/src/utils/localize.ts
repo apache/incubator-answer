@@ -162,7 +162,9 @@ export const setupAppTheme = () => {
 };
 
 export const setupInstallLanguage = async (lang) => {
-  await addI18nResource(lang);
+  if (!i18next.getDataByLanguage(lang)?.translation) {
+    await addI18nResource(lang);
+  }
   localeDayjs(lang);
   i18next.changeLanguage(lang);
 };
