@@ -208,8 +208,9 @@ func (b *BadgeService) ListPaged(ctx context.Context, req *schema.GetBadgeListPa
 	var baseURL = ""
 	if siteErr != nil {
 		baseURL = ""
+	} else {
+		baseURL = general.SiteUrl
 	}
-	baseURL = general.SiteUrl
 
 	for i, badge := range badges {
 		resp[i] = &schema.GetBadgeListPagedResp{
@@ -268,8 +269,9 @@ func (b *BadgeService) GetBadgeInfo(ctx *gin.Context, id string, userID string) 
 	var baseURL = ""
 	if siteErr != nil {
 		baseURL = ""
+	} else {
+		baseURL = general.SiteUrl
 	}
-	baseURL = general.SiteUrl
 
 	info = &schema.GetBadgeInfoResp{
 		ID:          uid.EnShortID(badge.ID),
