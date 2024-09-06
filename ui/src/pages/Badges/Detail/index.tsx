@@ -64,7 +64,6 @@ const Index = () => {
     <div className="pt-4 mb-5">
       <h3 className="mb-4">{t('title')}</h3>
       {isHeaderLoading ? <HeaderLoader /> : <BadgeDetail data={badgeInfo} />}
-      <Loader />
       <Row>
         {isSkeletonShow ? (
           <Loader />
