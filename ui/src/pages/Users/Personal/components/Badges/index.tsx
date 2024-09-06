@@ -18,6 +18,7 @@
  */
 
 import { FC } from 'react';
+import { Row, Col } from 'react-bootstrap';
 
 import * as Type from '@/common/interface';
 import { CardBadge } from '@/components';
@@ -33,17 +34,19 @@ const Index: FC<IProps> = ({ data, visible, username }) => {
     return null;
   }
   return (
-    <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+    <Row>
       {data.map((item) => {
         return (
-          <CardBadge
-            data={item}
-            urlSearchParams={`username=${username}`}
-            badgePillType="count"
-          />
+          <Col sm={6} md={4} lg={3} key={item.id} className="mb-4">
+            <CardBadge
+              data={item}
+              urlSearchParams={`username=${username}`}
+              badgePillType="count"
+            />
+          </Col>
         );
       })}
-    </div>
+    </Row>
   );
 };
 
