@@ -25,6 +25,8 @@ import type { LangsType, FormValue, FormDataType } from '@/common/interface';
 import Progress from '../Progress';
 import { getInstallLangOptions } from '@/services';
 import { setupInstallLanguage } from '@/utils/localize';
+import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
+import { Storage } from '@/utils';
 
 interface Props {
   data: FormValue;
@@ -39,10 +41,15 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
 
   const getLangs = async () => {
     const res: LangsType[] = await getInstallLangOptions();
+    const currentLang = Storage.get(CURRENT_LANG_STORAGE_KEY);
+    const selectedLang = currentLang || res[0].value;
+
     setLangs(res);
+    setupInstallLanguage(selectedLang);
+
     changeCallback({
       lang: {
-        value: res[0].value,
+        value: selectedLang,
         isInvalid: false,
         errorMsg: '',
       },
