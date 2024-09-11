@@ -37,6 +37,7 @@ import {
 } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 import { BASE_ORIGIN } from '@/router/alias';
+import { setupInstallLanguage } from '@/utils/localize';
 
 import {
   FirstStep,
@@ -293,6 +294,7 @@ const Index: FC = () => {
 
   useEffect(() => {
     configYmlCheck();
+    setupInstallLanguage(Storage.get(CURRENT_LANG_STORAGE_KEY));
   }, []);
 
   if (loading) {

@@ -26,10 +26,9 @@ import (
 )
 
 // main godoc
-// @title 	"apache answer"
-// @description = "apache answer api"
-// @version = "v0.0.1"
-// @BasePath = "/"
+// @title Apache Answer
+// @description Apache Answer API
+// @BasePath /
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization

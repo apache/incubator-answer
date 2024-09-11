@@ -38,3 +38,7 @@ export const installBaseInfo = (params) => {
 export const getInstallLangOptions = () => {
   return request.get('/installation/language/options');
 };
+
+export const getInstallLanguageConfig = (lang: string) => {
+  return request.get(`/installation/language/config?lang=${lang}`);
+};

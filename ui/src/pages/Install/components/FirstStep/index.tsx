@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import type { LangsType, FormValue, FormDataType } from '@/common/interface';
 import Progress from '../Progress';
 import { getInstallLangOptions } from '@/services';
+import { setupInstallLanguage } from '@/utils/localize';
 
 interface Props {
   data: FormValue;
@@ -65,6 +66,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           value={data.value}
           isInvalid={data.isInvalid}
           onChange={(e) => {
+            setupInstallLanguage(e.target.value);
             changeCallback({
               lang: {
                 value: e.target.value,
