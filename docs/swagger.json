@@ -1,12 +1,11 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "= \"apache answer api\"",
-        "title": "\"apache answer\"",
-        "contact": {},
-        "version": "= \"v0.0.1\""
+        "description": "Apache Answer API",
+        "title": "Apache Answer",
+        "contact": {}
     },
-    "basePath": "= \"/\"",
+    "basePath": "/",
     "paths": {
         "/": {
             "get": {

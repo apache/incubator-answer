@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-basePath: = "/"
+basePath: /
 definitions:
   constant.NotificationChannelKey:
     enum:
@@ -2910,9 +2910,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: = "apache answer api"
-  title: '"apache answer"'
-  version: = "v0.0.1"
+  description: Apache Answer API
+  title: Apache Answer
 paths:
   /:
     get:
