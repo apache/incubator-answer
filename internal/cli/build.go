@@ -264,9 +264,16 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 		if !dir.CheckFileExist(packageJsonPath) {
 			continue
 		}
+
+		pnpmInstallCmd := b.newExecCmd("pnpm", "install")
+		pnpmInstallCmd.Dir = sourcePluginDir
+		if err = pnpmInstallCmd.Run(); err != nil {
+			return fmt.Errorf("failed to install plugin dependencies: %w", err)
+		}
+
 		localPluginDir := filepath.Join(localUIPluginDir, entry.Name())
 		fmt.Printf("try to copy dir from %s to %s\n", sourcePluginDir, localPluginDir)
-		if err = copyDirEntries(os.DirFS(sourcePluginDir), ".", localPluginDir); err != nil {
+		if err = copyDirEntries(os.DirFS(sourcePluginDir), ".", localPluginDir, "node_modules"); err != nil {
 			return fmt.Errorf("failed to copy ui files: %w", err)
 		}
 	}
