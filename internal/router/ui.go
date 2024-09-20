@@ -120,10 +120,8 @@ func (a *UIRouter) Register(r *gin.Engine, baseURLPath string) {
 			} else {
 				c.Header("content-type", "image/vnd.microsoft.icon")
 				filePath = UIRootFilePath + urlPath
-
 			}
 		case "/manifest.json":
-			// filePath = UIRootFilePath + urlPath
 			a.siteInfoController.GetManifestJson(c)
 			return
 		case "/install":
@@ -154,6 +152,12 @@ func (a *UIRouter) Register(r *gin.Engine, baseURLPath string) {
 			c.String(http.StatusOK, strings.ReplaceAll(string(file), "/static", cdnPrefix+"/static"))
 			return
 		}
+
+		if filePath == UIIndexFilePath {
+			c.String(http.StatusNotFound, string(file))
+			return
+		}
+
 		c.String(http.StatusOK, string(file))
 	})
 }
