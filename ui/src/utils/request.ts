@@ -18,7 +18,12 @@
  */
 
 import axios, { AxiosResponse } from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+import type {
+  AxiosInstance,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+  AxiosError,
+} from 'axios';
 
 import { Modal } from '@/components';
 import { loggedUserInfoStore, toastStore, errorCodeStore } from '@/stores';
@@ -51,13 +56,11 @@ class Request {
   constructor(config: AxiosRequestConfig) {
     this.instance = axios.create(config);
     this.instance.interceptors.request.use(
-      (requestConfig: AxiosRequestConfig) => {
+      (requestConfig: InternalAxiosRequestConfig) => {
         const token = Storage.get(LOGGED_TOKEN_STORAGE_KEY) || '';
         const lang = getCurrentLang();
-        requestConfig.headers = {
-          Authorization: token,
-          'Accept-Language': lang,
-        };
+        requestConfig.headers.set('Authorization', token);
+        requestConfig.headers.set('Accept-Language', lang);
         return requestConfig;
       },
       (err: AxiosError) => {
