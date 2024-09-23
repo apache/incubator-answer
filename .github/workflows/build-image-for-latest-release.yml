@@ -24,6 +24,10 @@ on:
       - v2.*
       - v1.*
       - v0.*
+    tags-ignore:
+      - v2.*-RC*
+      - v1.*-RC*
+      - v0.*-RC*
   # pull_request:
   #   branches: [ "main" ]
 
@@ -41,8 +45,7 @@ jobs:
       with:
         images: apache/answer
         tags: |
-          type=ref,enable=true,priority=600,prefix=,suffix=,event=branch
-          type=semver,pattern={{version}}
+          type=raw,value=latest
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
