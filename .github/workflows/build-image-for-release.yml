@@ -19,7 +19,6 @@ name: Build Docker Image For Release
 
 on:
   push:
-    branches: [ "main"]
     tags:
       - v2.*
       - v1.*
