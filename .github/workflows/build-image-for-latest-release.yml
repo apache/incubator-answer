@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Build Docker Image For Release
+name: Build Latest Docker Image For Release
 
 on:
   push:
@@ -23,6 +23,7 @@ on:
       - v2.*
       - v1.*
       - v0.*
+      - "!v*-RC*"
   # pull_request:
   #   branches: [ "main" ]
 
@@ -40,8 +41,7 @@ jobs:
       with:
         images: apache/answer
         tags: |
-          type=ref,enable=true,priority=600,prefix=,suffix=,event=branch
-          type=semver,pattern={{version}}
+          type=raw,value=latest
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
