@@ -24,6 +24,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
+	"github.com/apache/incubator-answer/pkg/token"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -46,7 +47,6 @@ import (
 	"github.com/apache/incubator-answer/internal/service/user_external_login"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/plugin"
-	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/crypto/bcrypt"
@@ -225,7 +225,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 		Email:  req.Email,
 		UserID: userInfo.ID,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
@@ -452,7 +452,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		Email:  registerUserInfo.Email,
 		UserID: userInfo.ID,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
@@ -502,7 +502,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		Email:  userInfo.EMail,
 		UserID: userInfo.ID,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
@@ -617,7 +617,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		Email:  req.Email,
 		UserID: req.UserID,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	var title, body string
 	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.getSiteUrl(ctx), code)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {

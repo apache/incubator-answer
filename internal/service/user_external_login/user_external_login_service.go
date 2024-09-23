@@ -40,7 +40,6 @@ import (
 	"github.com/apache/incubator-answer/pkg/random"
 	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/apache/incubator-answer/plugin"
-	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -322,7 +321,7 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 		UserID:     userInfo.ID,
 		BindingKey: req.BindingKey,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", siteGeneral.SiteUrl, code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {

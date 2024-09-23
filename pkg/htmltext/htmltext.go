@@ -35,21 +35,6 @@ import (
 	"github.com/apache/incubator-answer/pkg/converter"
 )
 
-// min() and max() can be removed starting from Go1.21
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 // ClearText clear HTML, get the clear text
 func ClearText(html string) (text string) {
 	if len(html) == 0 {

@@ -23,6 +23,6 @@ import "github.com/google/uuid"
 
 // GenerateToken generate token
 func GenerateToken() string {
-	uid, _ := uuid.NewUUID()
+	uid, _ := uuid.NewV7()
 	return uid.String()
 }
