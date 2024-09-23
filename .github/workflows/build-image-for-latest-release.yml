@@ -24,10 +24,7 @@ on:
       - v2.*
       - v1.*
       - v0.*
-    tags-ignore:
-      - v2.*-RC*
-      - v1.*-RC*
-      - v0.*-RC*
+      - "!v*-RC*"
   # pull_request:
   #   branches: [ "main" ]
 
