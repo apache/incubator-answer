@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Build Docker Image For Release
+name: Build Latest Docker Image For Release
 
 on:
   push:
