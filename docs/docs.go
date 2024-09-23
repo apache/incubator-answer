@@ -11559,12 +11559,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "= \"v0.0.1\"",
+	Version:          "",
 	Host:             "",
-	BasePath:         "= \"/\"",
+	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "\"apache answer\"",
-	Description:      "= \"apache answer api\"",
+	Title:            "Apache Answer",
+	Description:      "Apache Answer API",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

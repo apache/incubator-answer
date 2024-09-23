@@ -150,7 +150,8 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	siteInfo.Canonical = siteInfo.General.SiteUrl
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+		siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = ""
@@ -183,7 +184,8 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+		siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
@@ -466,7 +468,8 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	siteInfo.Keywords = tagInfo.DisplayName
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+		siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("'%s' %s - %s", tagInfo.DisplayName, translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)

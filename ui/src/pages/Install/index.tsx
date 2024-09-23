@@ -280,6 +280,7 @@ const Index: FC = () => {
           db_connection_success: res.db_connection_success,
         });
         if (res && res.config_file_exist) {
+          setupInstallLanguage(Storage.get(CURRENT_LANG_STORAGE_KEY));
           if (res.db_connection_success) {
             setStep(6);
           } else {
@@ -294,7 +295,6 @@ const Index: FC = () => {
 
   useEffect(() => {
     configYmlCheck();
-    setupInstallLanguage(Storage.get(CURRENT_LANG_STORAGE_KEY));
   }, []);
 
   if (loading) {

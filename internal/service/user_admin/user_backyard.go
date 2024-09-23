@@ -30,7 +30,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/comment_common"
 	"github.com/apache/incubator-answer/internal/service/export"
 	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
-	"github.com/google/uuid"
+	"github.com/apache/incubator-answer/pkg/token"
 	"net/mail"
 	"strings"
 	"time"
@@ -531,7 +531,7 @@ func (us *UserAdminService) GetUserActivation(ctx context.Context, req *schema.G
 		Email:  userInfo.EMail,
 		UserID: userInfo.ID,
 	}
-	code := uuid.NewString()
+	code := token.GenerateToken()
 	us.emailService.SaveCode(ctx, userInfo.ID, code, data.ToJSONString())
 	resp = &schema.GetUserActivationResp{
 		ActivationURL: fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code),
@@ -558,8 +558,7 @@ func (us *UserAdminService) SendUserActivation(ctx context.Context, req *schema.
 		Email:  userInfo.EMail,
 		UserID: userInfo.ID,
 	}
-	code := uuid.NewString()
-
+	code := token.GenerateToken()
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {

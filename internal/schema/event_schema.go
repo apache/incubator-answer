@@ -79,7 +79,9 @@ func (e *EventMsg) CID(comment, userID string) *EventMsg {
 
 // TID get trigger object id
 func (e *EventMsg) TID(triggerObjectID string) *EventMsg {
-	e.TriggerObjectID = triggerObjectID
+	if len(triggerObjectID) > 0 {
+		e.TriggerObjectID = uid.DeShortID(triggerObjectID)
+	}
 	return e
 }
 
