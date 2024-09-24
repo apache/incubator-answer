@@ -72,19 +72,21 @@ const Index: FC<Props> = ({ visible, introduction, data, username }) => {
       </Row>
 
       {Number(recentBadges?.count) > 0 && (
-        <div className="mb-5">
+        <div className="mb-4">
           <h5 className="mb-3">{t('recent_badges')}</h5>
-          <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+          <Row>
             {recentBadges?.list?.map((item) => {
               return (
-                <CardBadge
-                  data={item}
-                  urlSearchParams={`username=${username}`}
-                  badgePillType="count"
-                />
+                <Col sm={6} md={4} lg={3} key={item.id} className="mb-4">
+                  <CardBadge
+                    data={item}
+                    urlSearchParams={`username=${username}`}
+                    badgePillType="count"
+                  />
+                </Col>
               );
             })}
-          </div>
+          </Row>
         </div>
       )}
     </div>

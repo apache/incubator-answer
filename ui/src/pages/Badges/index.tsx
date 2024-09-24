@@ -18,6 +18,7 @@
  */
 
 import { useTranslation } from 'react-i18next';
+import { Row, Col } from 'react-bootstrap';
 
 import { CardBadge } from '@/components';
 import { usePageTags } from '@/hooks';
@@ -37,15 +38,17 @@ const Index = () => {
       <h3 className="mb-4">{t('title')}</h3>
       {badgesList?.map((item) => {
         return (
-          <div key={item.group_name} className="mb-5">
+          <div key={item.group_name} className="mb-4">
             <h5 className="mb-4">{item.group_name}</h5>
-            <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+            <Row>
               {item.badges?.map((badge) => {
                 return (
-                  <CardBadge data={badge} key={badge.id} showAwardedCount />
+                  <Col sm={6} md={4} lg={3} key={badge.id} className="mb-4">
+                    <CardBadge data={badge} showAwardedCount />
+                  </Col>
                 );
               })}
-            </div>
+            </Row>
           </div>
         );
       })}

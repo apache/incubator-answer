@@ -102,7 +102,7 @@ const Badges: FC = () => {
           </tr>
         </thead>
         <tbody className="align-middle">
-          {data?.list.map((badge) => (
+          {data?.list?.map((badge) => (
             <tr key={badge.id}>
               <td className="d-flex align-items-center">
                 {badge.icon?.startsWith('http') ? (

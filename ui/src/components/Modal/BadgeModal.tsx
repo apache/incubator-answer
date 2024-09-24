@@ -72,7 +72,10 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
     const bgNode = document.documentElement || document.body;
 
     if (visible) {
-      const paranetNode = document.getElementById('badgeModal')?.parentNode;
+      const badgeModalNode = document.getElementById('badgeModal');
+      const paranetNode = badgeModalNode?.parentNode;
+
+      badgeModalNode?.setAttribute('style', 'z-index: 1');
 
       bg1 = new AnimateGift({
         elm: paranetNode,

@@ -20,7 +20,7 @@
     "@codemirror/language-data": "^6.5.0",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.26.1",
-    "axios": "^0.28.1",
+    "axios": "^1.7.7",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.10.5",
     "classnames": "^2.3.1",

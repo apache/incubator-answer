@@ -68,7 +68,7 @@ const Index = () => {
         {isSkeletonShow ? (
           <Loader />
         ) : (
-          badges?.list?.map((item) => {
+          badges?.list?.map((item, index) => {
             const linkUrl =
               item.object_type === 'question'
                 ? `/questions/${item.question_id}`
@@ -84,7 +84,7 @@ const Index = () => {
                 sm={12}
                 md={6}
                 lg={3}
-                key={item.author_user_info.id}
+                key={item.object_id || `${item.author_user_info.id}${index}`}
                 className="mb-4">
                 <FormatTime
                   time={item.created_at}

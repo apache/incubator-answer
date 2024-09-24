@@ -50,7 +50,9 @@ const Index: FC<IProps> = ({
       to={`/badges/${data.id}${urlSearchParams ? `?${urlSearchParams}` : ''}`}>
       <Card.Body>
         {Number(data?.earned_count) > 0 && badgePillType === 'earned' && (
-          <Badge bg="success" className="label">
+          <Badge
+            bg="success"
+            style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
             {`${t('earned')}${
               Number(data?.earned_count) > 1 ? ` ×${data.earned_count}` : ''
             }`}
@@ -58,7 +60,10 @@ const Index: FC<IProps> = ({
         )}
 
         {badgePillType === 'count' && Number(data?.earned_count) > 1 && (
-          <Badge pill bg="secondary" className="label">
+          <Badge
+            pill
+            bg="secondary"
+            style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
             ×{data.earned_count}
           </Badge>
         )}

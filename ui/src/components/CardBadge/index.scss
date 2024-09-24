@@ -18,19 +18,9 @@
  */
 
 .badge-card {
-  width: 194px;
-  margin: 12px;
-
   .label {
     position: absolute;
     top: 1rem;
     right: 1rem;
-  }
-}
-
-
-@media screen and (max-width: 768px) {
-  .badge-card {
-    width: 163.5px;
   }
 }
