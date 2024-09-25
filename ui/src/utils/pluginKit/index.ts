@@ -25,6 +25,7 @@ import type * as Type from '@/common/interface';
 import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { getPluginsStatus } from '@/services';
 import Storage from '@/utils/storage';
+import request from '@/utils/request';
 
 import { initI18nResource } from './utils';
 import { Plugin, PluginInfo, PluginType } from './interface';
@@ -227,7 +228,7 @@ const useRenderHtmlPlugin = (
     })
     .forEach((plugin) => {
       plugin.hooks?.useRender?.forEach((hook) => {
-        hook(element);
+        hook(element, request);
       });
     });
 };
@@ -247,7 +248,7 @@ const useRenderPlugin = (
     })
     .forEach((plugin) => {
       plugin.hooks?.useRender?.forEach((hook) => {
-        hook(element);
+        hook(element, request);
       });
     });
 };
