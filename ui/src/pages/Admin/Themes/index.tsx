@@ -27,6 +27,7 @@ import { useToast } from '@/hooks';
 import { handleFormError, scrollToElementTop } from '@/utils';
 import { themeSettingStore } from '@/stores';
 import { setupAppTheme } from '@/utils/localize';
+import { DEFAULT_THEME_COLOR } from '@/common/constants';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -67,7 +68,7 @@ const Index: FC = () => {
         type: 'string',
         title: t('primary_color.label'),
         description: t('primary_color.text'),
-        default: '#0033FF',
+        default: DEFAULT_THEME_COLOR,
       },
     },
   };
@@ -103,7 +104,7 @@ const Index: FC = () => {
 
   const resetPrimaryScheme = () => {
     const formMeta = { ...formData };
-    formMeta.primary_color.value = '#0033FF';
+    formMeta.primary_color.value = DEFAULT_THEME_COLOR;
     setFormData({ ...formMeta });
   };
 

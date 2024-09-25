@@ -24,6 +24,7 @@ import Color from 'color';
 
 import { shiftColor, tintColor, shadeColor } from '@/utils';
 import { themeSettingStore } from '@/stores';
+import { DEFAULT_THEME_COLOR } from '@/common/constants';
 
 const Index: FC = () => {
   const { theme, theme_config } = themeSettingStore((_) => _);
@@ -34,7 +35,9 @@ const Index: FC = () => {
   const setThemeColor = () => {
     const themeMetaNode = document.querySelector('meta[name="theme-color"]');
     if (themeMetaNode) {
-      const themeColor = primaryColor ? primaryColor.hex() : '#0033ff';
+      const themeColor = primaryColor
+        ? primaryColor.hex()
+        : DEFAULT_THEME_COLOR;
       themeMetaNode.setAttribute('content', themeColor);
     }
   };
