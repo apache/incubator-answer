@@ -40,7 +40,10 @@ export const useGetAllBadges = () => {
 export const useGetBadgeInfo = (id: string) => {
   const { data, error, mutate } = useSWR<Type.BadgeInfo, Error>(
     `/answer/api/v1/badge?id=${id}`,
-    request.instance.get,
+    (url) =>
+      request.get(url, {
+        allow404: true,
+      }),
   );
   return {
     data,
@@ -51,12 +54,17 @@ export const useGetBadgeInfo = (id: string) => {
 };
 
 export const useBadgeDetailList = (params: Type.BadgeDetailListReq) => {
+  if (!params.badge_id) return { data: null, isLoading: false, error: null };
   const { data, error, mutate } = useSWR<Type.BadgeDetailListRes, Error>(
     `/answer/api/v1/badge/awards/page?${qs.stringify(params, {
       skipNulls: true,
     })}`,
-    request.instance.get,
+    (url) =>
+      request.get(url, {
+        allow404: true,
+      }),
   );
+
   return {
     data,
     isLoading: !data && !error,
