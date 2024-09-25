@@ -96,7 +96,7 @@ export const usePersonalListByTabName = (params: ListReq, tabName: string) => {
 
   const queryParams = qs.stringify(params, { skipNulls: true });
   const { data, error, mutate } = useSWR<ListRes, Error>(
-    tabName !== 'review' ? `${apiUrl}?${queryParams}` : null,
+    tabName !== 'overview' ? `${apiUrl}?${queryParams}` : null,
     request.instance.get,
   );
 
