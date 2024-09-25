@@ -20,6 +20,7 @@
 import { NamedExoticComponent, FC, RefObject } from 'react';
 
 import type * as Type from '@/common/interface';
+import Request from '@/utils/request';
 
 export enum PluginType {
   Connector = 'connector',
@@ -44,7 +45,10 @@ export interface Plugin {
   i18nConfig?;
   hooks?: {
     useRender?: Array<
-      (element: HTMLElement | RefObject<HTMLElement> | null) => void
+      (
+        element: HTMLElement | RefObject<HTMLElement> | null,
+        request?: typeof Request,
+      ) => void
     >;
     useCaptcha?: (props: { captchaKey: Type.CaptchaKey; commonProps: any }) => {
       getCaptcha: () => Record<string, any>;
