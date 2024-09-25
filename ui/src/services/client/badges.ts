@@ -54,11 +54,13 @@ export const useGetBadgeInfo = (id: string) => {
 };
 
 export const useBadgeDetailList = (params: Type.BadgeDetailListReq) => {
-  if (!params.badge_id) return { data: null, isLoading: false, error: null };
+  const path = params.badge_id
+    ? `/answer/api/v1/badge/awards/page?${qs.stringify(params, {
+        skipNulls: true,
+      })}`
+    : null;
   const { data, error, mutate } = useSWR<Type.BadgeDetailListRes, Error>(
-    `/answer/api/v1/badge/awards/page?${qs.stringify(params, {
-      skipNulls: true,
-    })}`,
+    path,
     (url) =>
       request.get(url, {
         allow404: true,

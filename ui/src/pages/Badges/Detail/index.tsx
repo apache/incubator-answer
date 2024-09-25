@@ -44,7 +44,7 @@ const Index = () => {
   const { data: badgeInfo, isLoading: isHeaderLoading } =
     useGetBadgeInfo(badge_id);
   const { data: badges, isLoading: isDetailLoading } = useBadgeDetailList({
-    badge_id,
+    badge_id: badgeInfo?.id || '',
     page,
     page_size: pageSize,
     username: urlSearchParams.get('username') || null,
