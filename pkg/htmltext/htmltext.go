@@ -27,12 +27,11 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/Chain-Zhang/pinyin"
 	"github.com/Machiel/slugify"
-	strip "github.com/grokify/html-strip-tags-go"
-
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/converter"
+	strip "github.com/grokify/html-strip-tags-go"
+	"github.com/mozillazg/go-pinyin"
 )
 
 // ClearText clear HTML, get the clear text
@@ -97,11 +96,7 @@ func convertChinese(content string) string {
 	if !has {
 		return content
 	}
-	str, err := pinyin.New(content).Split("-").Mode(pinyin.WithoutTone).Convert()
-	if err != nil {
-		return content
-	}
-	return str
+	return strings.Join(pinyin.LazyConvert(content, nil), "-")
 }
 
 func cutLongTitle(title string) string {

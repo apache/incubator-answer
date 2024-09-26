@@ -20,7 +20,6 @@ module github.com/apache/incubator-answer
 go 1.22.0
 
 require (
-	github.com/Chain-Zhang/pinyin v0.1.3
 	github.com/Machiel/slugify v1.0.1
 	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267
@@ -41,6 +40,7 @@ require (
 	github.com/jinzhu/now v1.1.5
 	github.com/lib/pq v1.10.9
 	github.com/microcosm-cc/bluemonday v1.0.27
+	github.com/mozillazg/go-pinyin v0.20.0
 	github.com/ory/dockertest/v3 v3.11.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/scottleedavis/go-exif-remove v0.0.0-20230314195146-7e059d593405
