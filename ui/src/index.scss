@@ -87,33 +87,26 @@ img[src=""] {
 .badge-tag {
   display: inline-block;
   font-size: 14px;
-  background: rgba($blue-100, 0.5);
+  background: $gray-200;
   padding: 0 7px 1px;
-  color: $blue-700;
+  color: $gray-700;
+  font-weight: 400;
   border: 1px solid transparent;
   &:hover {
-    color: $blue-700;
-    background: $blue-100;
-  }
-}
-
-.badge-tag-required {
-  background: $gray-200;
-  color: $gray-700;
-  border: 1px solid $gray-400;
-  &:hover {
-    color: $gray-700;
     background: $gray-300;
   }
 }
 
+.badge-tag-required {
+  font-weight: 700;
+}
+
 .badge-tag-reserved {
-  background: rgba($orange-100, 0.5);
+  background: $orange-100;
   color: $orange-700;
-  border: 1px solid $orange-100;
+  border: 1px solid transparent;
   &:hover {
-    color: $orange-700;
-    background: rgba($orange-100, 1);
+    background: $orange-200;
   }
 }
 

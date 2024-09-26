@@ -143,31 +143,7 @@ const Index: FC = () => {
               .link-primary:hover, .link-primary:focus {
                 color: ${shadeColor(primaryColor, 0.8).hex()}!important;
               }
-              .badge-tag:not(.badge-tag-reserved, .badge-tag-required) {
-                background-color: rgba(${tintColor(primaryColor, 0.2)
-                  .rgb()
-                  .array()
-                  .join(',')}, .5);
-                color: ${shadeColor(primaryColor, 0.6).hex()}
-              }
-              .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
-                 background-color: ${tintColor(primaryColor, 0.2).hex()};
-              }
 
-              [data-bs-theme="dark"] .badge-tag:not(.badge-tag-reserved):not(.badge-tag-required) {
-                background-color: rgba(${shadeColor(primaryColor, 0.2)
-                  .rgb()
-                  .array()
-                  .join(',')}, .5) !important;
-                color: ${tintColor(primaryColor, 0.4).hex()} !important;
-              }
-              [data-bs-theme="dark"] .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
-                background-color: rgba(${tintColor(
-                  primaryColor,
-                  0.4,
-                ).hex()}, 0.8) !important;
-                color: ${tintColor(primaryColor, 0.6).hex()} !important;
-              }
             `}
         </style>
       )}
