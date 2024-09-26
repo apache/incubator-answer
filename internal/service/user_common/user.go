@@ -26,7 +26,6 @@ import (
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/pkg/converter"
 
-	"github.com/Chain-Zhang/pinyin"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
@@ -35,6 +34,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/random"
+	"github.com/mozillazg/go-pinyin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -181,12 +181,7 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (username string, err error) {
 	// Chinese processing
 	if has := checker.IsChinese(displayName); has {
-		str, err := pinyin.New(displayName).Split("").Mode(pinyin.WithoutTone).Convert()
-		if err != nil {
-			return "", errors.BadRequest(reason.UsernameInvalid)
-		} else {
-			displayName = str
-		}
+		displayName = strings.Join(pinyin.LazyConvert(displayName, nil), "")
 	}
 
 	username = strings.ReplaceAll(displayName, " ", "-")
