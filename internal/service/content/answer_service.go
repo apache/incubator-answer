@@ -22,8 +22,10 @@ package content
 import (
 	"context"
 	"encoding/json"
-	"github.com/apache/incubator-answer/internal/service/event_queue"
+	"strings"
 	"time"
+
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -42,6 +44,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/token"
@@ -166,6 +169,17 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if err != nil {
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
+	err = as.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: answerInfo.QuestionID,
+		FromAnswerID:   answerInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: answerInfo.QuestionID,
+		ToAnswerID:   answerInfo.ID,
+	})
+	if err != nil {
+		log.Error("RemoveQuestionLink error", err.Error())
+	}
+
 	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
 	// facing the problem of recovery.
 	//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
@@ -197,6 +211,15 @@ func (as *AnswerService) RecoverAnswer(ctx context.Context, req *schema.RecoverA
 		return nil
 	}
 	if err = as.answerRepo.RecoverAnswer(ctx, req.AnswerID); err != nil {
+		return err
+	}
+	if err = as.questionRepo.RecoverQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: answerInfo.QuestionID,
+		FromAnswerID:   answerInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: answerInfo.QuestionID,
+		ToAnswerID:   answerInfo.ID,
+	}); err != nil {
 		return err
 	}
 
@@ -250,6 +273,15 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData, req.IP, req.UserAgent)
 	if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, insertData.Status); err != nil {
 		return "", err
+	}
+	if insertData.Status == entity.AnswerStatusAvailable {
+		insertData.ParsedText, err = as.updateAnswerLink(ctx, insertData)
+		if err != nil {
+			return "", err
+		}
+		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"parsed_text"}); err != nil {
+			return "", err
+		}
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
@@ -366,6 +398,10 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
+		insertData.ParsedText, err = as.updateAnswerLink(ctx, insertData)
+		if err != nil {
+			return "", err
+		}
 		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"}); err != nil {
 			return "", err
 		}
@@ -709,4 +745,80 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 	}
 	externalNotificationMsg.NewAnswerTemplateRawData = rawData
 	as.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
+}
+
+func (as *AnswerService) updateAnswerLink(ctx context.Context, answer *entity.Answer) (string, error) {
+	err := as.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: uid.DeShortID(answer.QuestionID),
+		FromAnswerID:   uid.DeShortID(answer.ID),
+	})
+	retParsedText := answer.ParsedText
+	if err != nil {
+		return retParsedText, err
+	}
+	links := checker.GetQuestionLink(answer.OriginalText)
+	// validate links
+	questionLinks := make([]*entity.QuestionLink, 0)
+	answerCache := make(map[string]string)
+	questionCache := make(map[string]string)
+	answerIDList := make([]string, 0)
+	questionIDList := make([]string, 0)
+	for _, link := range links {
+		if link.AnswerID != "" {
+			answerIDList = append(answerIDList, link.AnswerID)
+		}
+		if link.QuestionID != "" {
+			questionIDList = append(questionIDList, link.QuestionID)
+		}
+	}
+	answerInfoList, err := as.answerRepo.GetByIDs(ctx, answerIDList...)
+	if err != nil {
+		return answer.ParsedText, err
+	}
+	for _, answer := range answerInfoList {
+		answerCache[answer.ID] = answer.QuestionID
+	}
+	questionInfoList, err := as.questionRepo.FindByID(ctx, questionIDList)
+	if err != nil {
+		return answer.ParsedText, err
+	}
+	for _, question := range questionInfoList {
+		questionCache[question.ID] = question.ParsedText
+	}
+
+	for _, link := range links {
+		if link.QuestionID != "" {
+			if _, ok := questionCache[link.QuestionID]; !ok {
+				continue
+			}
+		}
+		if link.AnswerID != "" {
+			if _, ok := answerCache[link.AnswerID]; !ok {
+				continue
+			}
+			if link.QuestionID == "" {
+				link.QuestionID = answerCache[link.AnswerID]
+			}
+		}
+
+		questionLinks = append(questionLinks, &entity.QuestionLink{
+			FromQuestionID: uid.DeShortID(answer.QuestionID),
+			FromAnswerID:   uid.DeShortID(answer.ID),
+			ToQuestionID:   uid.DeShortID(link.QuestionID),
+			ToAnswerID:     uid.DeShortID(link.AnswerID),
+		})
+
+		if link.QuestionID != "" {
+			retParsedText = strings.Replace(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>", -1)
+		}
+		if link.AnswerID != "" {
+			questionID := answerCache[link.AnswerID]
+			retParsedText = strings.Replace(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>", -1)
+		}
+	}
+	if err = as.questionRepo.LinkQuestion(ctx, questionLinks...); err != nil {
+		return retParsedText, err
+	}
+
+	return retParsedText, nil
 }
