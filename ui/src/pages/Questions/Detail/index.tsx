@@ -47,6 +47,7 @@ import {
   Alert,
   ContentLoader,
   InviteToAnswer,
+  LinkedQuestions,
 } from './components';
 
 import './index.scss';
@@ -230,6 +231,7 @@ const Index = () => {
   });
 
   const showInviteToAnswer = question?.id;
+  const showLinkedQuestions = question?.id && question.id !== '';
   let canInvitePeople = false;
   if (showInviteToAnswer && Array.isArray(question.extends_actions)) {
     const inviteAct = question.extends_actions.find((op) => {
@@ -305,6 +307,7 @@ const Index = () => {
             readOnly={!canInvitePeople}
           />
         ) : null}
+        {showLinkedQuestions ? <LinkedQuestions id={question.id} /> : null}
         <RelatedQuestions id={question?.id || ''} />
       </Col>
     </Row>

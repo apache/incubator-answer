@@ -270,6 +270,24 @@ func (ar *answerRepo) GetByID(ctx context.Context, answerID string) (*entity.Ans
 	return &resp, has, nil
 }
 
+func (ar *answerRepo) GetByIDs(ctx context.Context, answerIDs ...string) ([]*entity.Answer, error) {
+	for idx, answerID := range answerIDs {
+		answerIDs[idx] = uid.DeShortID(answerID)
+	}
+	var resp = make([]*entity.Answer, 0)
+	err := ar.data.DB.Context(ctx).In("id", answerIDs).Find(&resp)
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range resp {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
+	}
+	return resp, nil
+}
+
 func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID string) (int64, error) {
 	questionID = uid.DeShortID(questionID)
 	var resp = new(entity.Answer)

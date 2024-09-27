@@ -22,9 +22,10 @@ package content
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"strings"
 	"time"
+
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/handler"
@@ -347,6 +348,16 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err := qs.questionRepo.UpdateQuestionStatus(ctx, question.ID, question.Status); err != nil {
 		return nil, err
 	}
+	if question.Status == entity.QuestionStatusAvailable {
+		question.ParsedText, err = qs.updateQuestionLink(ctx, question)
+		if err != nil {
+			return nil, err
+		}
+		err = qs.questionRepo.UpdateQuestion(ctx, question, []string{"parsed_text"})
+		if err != nil {
+			return nil, err
+		}
+	}
 	objectTagData := schema.TagChange{}
 	objectTagData.ObjectID = question.ID
 	objectTagData.Tags = req.Tags
@@ -425,6 +436,14 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 	switch req.Operation {
 	case schema.QuestionOperationHide:
 		questionInfo.Show = entity.QuestionHide
+		err = qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+			FromQuestionID: questionInfo.ID,
+		}, &entity.QuestionLink{
+			ToQuestionID: questionInfo.ID,
+		})
+		if err != nil {
+			return
+		}
 		err = qs.tagCommon.HideTagRelListByObjectID(ctx, req.ID)
 		if err != nil {
 			return err
@@ -435,6 +454,14 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 		}
 	case schema.QuestionOperationShow:
 		questionInfo.Show = entity.QuestionShow
+		err = qs.questionRepo.RecoverQuestionLink(ctx, &entity.QuestionLink{
+			FromQuestionID: questionInfo.ID,
+		}, &entity.QuestionLink{
+			ToQuestionID: questionInfo.ID,
+		})
+		if err != nil {
+			return
+		}
 		err = qs.tagCommon.ShowTagRelListByObjectID(ctx, req.ID)
 		if err != nil {
 			return err
@@ -553,6 +580,14 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	// if err != nil {
 	// 	 log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	// }
+	err = qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: questionInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: questionInfo.ID,
+	})
+	if err != nil {
+		return
+	}
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           questionInfo.UserID,
 		TriggerUserID:    converter.StringToInt64(req.UserID),
@@ -676,6 +711,14 @@ func (qs *QuestionService) RecoverQuestion(ctx context.Context, req *schema.Ques
 		if err = qs.tagCommon.RefreshTagQuestionCount(ctx, tagIDs); err != nil {
 			log.Errorf("update tag's question count failed, %v", err)
 		}
+	}
+	err = qs.questionRepo.RecoverQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: questionInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: questionInfo.ID,
+	})
+	if err != nil {
+		return
 	}
 
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
@@ -921,6 +964,10 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
+		question.ParsedText, err = qs.updateQuestionLink(ctx, question)
+		if err != nil {
+			return questionInfo, err
+		}
 		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
 		if saveerr != nil {
 			return questionInfo, saveerr
@@ -930,7 +977,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		objectTagData.Tags = req.Tags
 		objectTagData.UserID = req.UserID
 		tagerr := qs.ChangeTag(ctx, &objectTagData)
-		if err != nil {
+		if tagerr != nil {
 			return questionInfo, tagerr
 		}
 	}
@@ -1572,4 +1619,98 @@ func (qs *QuestionService) SitemapCron(ctx context.Context) {
 	}
 	ctx = context.WithValue(ctx, constant.ShortIDFlag, siteSeo.IsShortLink())
 	qs.questioncommon.SitemapCron(ctx)
+}
+
+func (qs *QuestionService) updateQuestionLink(ctx context.Context, questionInfo *entity.Question) (string, error) {
+	err := qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: questionInfo.ID,
+		FromAnswerID:   "0",
+	})
+	if err != nil {
+		return questionInfo.ParsedText, err
+	}
+	retParsedText := questionInfo.ParsedText
+	links := checker.GetQuestionLink(questionInfo.OriginalText)
+	// validate links
+	questionLinks := make([]*entity.QuestionLink, 0)
+	answerCache := make(map[string]string)
+	questionCache := make(map[string]string)
+	answerIDList := make([]string, 0)
+	questionIDList := make([]string, 0)
+	for _, link := range links {
+		if link.AnswerID != "" {
+			answerIDList = append(answerIDList, link.AnswerID)
+		}
+		if link.QuestionID != "" {
+			questionIDList = append(questionIDList, link.QuestionID)
+		}
+	}
+	answerInfoList, err := qs.answerRepo.GetByIDs(ctx, answerIDList...)
+	if err != nil {
+		return questionInfo.ParsedText, err
+	}
+	for _, answer := range answerInfoList {
+		answerCache[answer.ID] = answer.QuestionID
+	}
+	questionInfoList, err := qs.questionRepo.FindByID(ctx, questionIDList)
+	if err != nil {
+		return questionInfo.ParsedText, err
+	}
+	for _, question := range questionInfoList {
+		questionCache[question.ID] = question.ParsedText
+	}
+
+	for _, link := range links {
+		if link.QuestionID != "" {
+			if _, ok := questionCache[link.QuestionID]; !ok {
+				continue
+			}
+		}
+		if link.AnswerID != "" {
+			if _, ok := answerCache[link.AnswerID]; !ok {
+				continue
+			}
+			if link.QuestionID == "" {
+				link.QuestionID = answerCache[link.AnswerID]
+			}
+		}
+
+		questionLinks = append(questionLinks, &entity.QuestionLink{
+			FromQuestionID: uid.DeShortID(questionInfo.ID),
+			FromAnswerID:   "0",
+			ToQuestionID:   uid.DeShortID(link.QuestionID),
+			ToAnswerID:     uid.DeShortID(link.AnswerID),
+		})
+
+		if link.QuestionID != "" {
+			retParsedText = strings.Replace(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>", -1)
+		}
+		if link.AnswerID != "" {
+			questionID := answerCache[link.AnswerID]
+			retParsedText = strings.Replace(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>", -1)
+		}
+	}
+	if err = qs.questionRepo.LinkQuestion(ctx, questionLinks...); err != nil {
+		return retParsedText, err
+	}
+
+	return retParsedText, nil
+}
+
+func (qs *QuestionService) GetQuestionLink(ctx context.Context, req *schema.GetQuestionLinkReq) (
+	questions []*schema.QuestionPageResp, total int64, err error) {
+	if req.OrderCond == schema.QuestionOrderCondHot {
+		req.InDays = schema.HotInDays
+	}
+
+	questionList, total, err := qs.questionRepo.GetQuestionLink(ctx, req.Page, req.PageSize, req.QuestionID, req.OrderCond, req.InDays)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	questions, err = qs.questioncommon.FormatQuestionsPage(ctx, questionList, req.LoginUserID, req.OrderCond)
+	if err != nil {
+		return nil, 0, err
+	}
+	return questions, total, nil
 }

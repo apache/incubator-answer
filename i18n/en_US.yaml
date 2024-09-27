@@ -796,7 +796,8 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li>
+      <li><p class="mb-2">to make links</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
       class="mb-2">put returns between paragraphs</p></li><li><p
       class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
@@ -1366,6 +1367,9 @@ ui:
   related_question:
     title: Related Questions
     answers: answers
+  linked_question:
+    title: Linked Questions
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Invite People
     desc: Invite people you think can answer.

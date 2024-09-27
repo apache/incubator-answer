@@ -119,3 +119,20 @@ export const unDeleteQuestion = (qid) => {
     question_id: qid,
   });
 };
+
+export const useQuestionLink = (params: {
+  question_id: string;
+  page: number;
+  page_size: number;
+}) => {
+  const apiUrl = `/answer/api/v1/question/link?${qs.stringify(params)}`;
+  const { data, error } = useSWR<Type.ListResult, Error>(
+    [apiUrl, params],
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
