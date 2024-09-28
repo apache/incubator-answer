@@ -30,6 +30,7 @@ type PluginAPIRouter struct {
 	captchaController    *controller.CaptchaController
 	embedController      *controller.EmbedController
 	renderController     *controller.RenderController
+	importerController   *controller.ImporterController
 }
 
 func NewPluginAPIRouter(
@@ -38,6 +39,7 @@ func NewPluginAPIRouter(
 	captchaController *controller.CaptchaController,
 	embedController *controller.EmbedController,
 	renderController *controller.RenderController,
+	importerController *controller.ImporterController,
 ) *PluginAPIRouter {
 	return &PluginAPIRouter{
 		connectorController:  connectorController,
@@ -68,6 +70,9 @@ func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	r.GET("/captcha/config", pr.captchaController.GetCaptchaConfig)
 	r.GET("/embed/config", pr.embedController.GetEmbedConfig)
 	r.GET("/render/config", pr.renderController.GetRenderConfig)
+
+	// importer plugin
+	r.POST("/importer/answer", pr.importerController.ImportCommand)
 }
 
 func (pr *PluginAPIRouter) RegisterAuthUserConnectorRouter(r *gin.RouterGroup) {
