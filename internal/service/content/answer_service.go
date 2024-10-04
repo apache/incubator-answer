@@ -801,20 +801,24 @@ func (as *AnswerService) updateAnswerLink(ctx context.Context, answer *entity.An
 			}
 		}
 
-		questionLinks = append(questionLinks, &entity.QuestionLink{
+		addLink := &entity.QuestionLink{
 			FromQuestionID: uid.DeShortID(answer.QuestionID),
 			FromAnswerID:   uid.DeShortID(answer.ID),
 			ToQuestionID:   uid.DeShortID(link.QuestionID),
 			ToAnswerID:     uid.DeShortID(link.AnswerID),
-		})
-
+		}
 		if link.QuestionID != "" {
 			retParsedText = strings.Replace(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>", -1)
 		}
 		if link.AnswerID != "" {
 			questionID := answerCache[link.AnswerID]
+			addLink.ToQuestionID = questionID
 			retParsedText = strings.Replace(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>", -1)
 		}
+		if addLink.FromQuestionID == addLink.ToQuestionID {
+			continue
+		}
+		questionLinks = append(questionLinks, addLink)
 	}
 	if err = as.questionRepo.LinkQuestion(ctx, questionLinks...); err != nil {
 		return retParsedText, err
