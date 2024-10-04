@@ -17,13 +17,13 @@
  * under the License.
  */
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { useQuestionLink } from '@/services';
+import { questionLink, questionDetail } from '@/services';
 import * as Type from '@/common/interface';
 import {
   QuestionList,
@@ -50,13 +50,21 @@ const LinkedQuestions: FC = () => {
     QUESTION_ORDER_KEYS[0]) as Type.QuestionOrderBy;
   const pageSize = 10;
   const { siteInfo } = siteInfoStore();
-  const { data: listData, isLoading: listLoading } = useQuestionLink({
+  const { data: listData, isLoading: listLoading } = questionLink({
     question_id: qid || '',
     page: curPage,
     page_size: pageSize,
   });
   const { login: loginSetting } = loginSettingStore();
-
+  const [questionTitle, setQuestionTitle] = useState('');
+  questionDetail(qid || '')
+    .then((res) => {
+      setQuestionTitle(res.title);
+    })
+    .catch((err) => {
+      console.error('get question detail failed:', err);
+      setQuestionTitle(`#${qid}`);
+    });
   usePageTags({
     title: t('title'),
   });
@@ -64,6 +72,11 @@ const LinkedQuestions: FC = () => {
   return (
     <Row className="pt-4 mb-5">
       <Col className="page-main flex-auto">
+        <h3>Linked Questions</h3>
+        <p>
+          Questions linked to/from&nbsp;
+          <a href={`/questions/${qid}`}>{questionTitle}</a>
+        </p>
         <QuestionList
           source="linked"
           data={listData}
