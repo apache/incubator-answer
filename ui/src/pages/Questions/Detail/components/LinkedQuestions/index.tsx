@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@/components';
-import { useQuestionLink } from '@/services';
+import { questionLink } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ id }) => {
     keyPrefix: 'related_question',
   });
 
-  const { data, isLoading } = useQuestionLink({
+  const { data, isLoading } = questionLink({
     question_id: id,
     page: 1,
     page_size: 5,
