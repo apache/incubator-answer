@@ -32,7 +32,7 @@ type Embed interface {
 }
 
 var (
-	// CallReviewer is a function that calls all registered parsers
+	// CallEmbed is a function that calls all registered parsers
 	CallEmbed,
 	registerEmbed = MakePlugin[Embed](false)
 )

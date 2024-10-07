@@ -124,7 +124,7 @@ type SearchSyncer interface {
 }
 
 var (
-	// CallUserCenter is a function that calls all registered parsers
+	// CallSearch is a function that calls all registered parsers
 	CallSearch,
 	registerSearch = MakePlugin[Search](false)
 )
