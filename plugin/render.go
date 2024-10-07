@@ -33,7 +33,7 @@ type Render interface {
 }
 
 var (
-	// CallReviewer is a function that calls all registered parsers
+	// CallRender is a function that calls all registered parsers
 	CallRender,
 	registerRender = MakePlugin[Render](false)
 )
