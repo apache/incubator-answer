@@ -49,12 +49,12 @@ class Plugins {
 
   constructor() {
     this.registerBuiltin();
-    this.registerPlugins();
-
-    getPluginsStatus().then((plugins) => {
-      this.registeredPlugins = plugins;
-      this.activatePlugins(plugins);
-    });
+    this.registerPlugins()
+      .then(getPluginsStatus)
+      .then((plugins) => {
+        this.registeredPlugins = plugins;
+        this.activatePlugins(plugins);
+      });
   }
 
   validate(plugin: Plugin) {
@@ -75,6 +75,15 @@ class Plugins {
     return true;
   }
 
+  async loadPlugins() {
+    return Promise.all(
+      Object.keys(allPlugins).map(async (key) => {
+        const plugin = await allPlugins[key]();
+        return plugin;
+      }),
+    );
+  }
+
   registerBuiltin() {
     Object.keys(builtin).forEach((key) => {
       const plugin = builtin[key];
@@ -86,9 +95,13 @@ class Plugins {
   }
 
   registerPlugins() {
-    Object.keys(allPlugins).forEach((key) => {
-      const plugin = allPlugins[key];
-      this.register(plugin);
+    return new Promise((resolve) => {
+      this.loadPlugins().then((plugins) => {
+        plugins.forEach((plugin) => {
+          this.register(plugin);
+        });
+        resolve(true);
+      });
     });
   }
 
