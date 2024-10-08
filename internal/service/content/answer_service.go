@@ -808,12 +808,12 @@ func (as *AnswerService) updateAnswerLink(ctx context.Context, answer *entity.An
 			ToAnswerID:     uid.DeShortID(link.AnswerID),
 		}
 		if link.QuestionID != "" {
-			retParsedText = strings.Replace(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>", -1)
+			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>")
 		}
 		if link.AnswerID != "" {
 			questionID := answerCache[link.AnswerID]
 			addLink.ToQuestionID = questionID
-			retParsedText = strings.Replace(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>", -1)
+			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>")
 		}
 		if addLink.FromQuestionID == addLink.ToQuestionID {
 			continue

@@ -1683,12 +1683,12 @@ func (qs *QuestionService) updateQuestionLink(ctx context.Context, questionInfo 
 		}
 
 		if link.QuestionID != "" {
-			retParsedText = strings.Replace(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>", -1)
+			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>")
 		}
 		if link.AnswerID != "" {
 			questionID := answerCache[link.AnswerID]
 			addLink.ToQuestionID = questionID
-			retParsedText = strings.Replace(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>", -1)
+			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>")
 		}
 		if addLink.FromQuestionID == addLink.ToQuestionID {
 			continue
