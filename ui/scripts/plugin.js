@@ -63,7 +63,8 @@ function addPluginToIndexTs(packageName) {
   const indexTsContent = fs.readFileSync(indexTsPath, 'utf-8');
   const lines = indexTsContent.split('\n');
   const ComponentName = pascalize(packageName);
-  const importLine = `export { default as ${ComponentName} } from '${packageName}';`;
+
+  const importLine = `export const load${ComponentName} = () => import('${packageName}').then(module => module.default);`;
   if (!lines.includes(importLine)) {
     lines.push(importLine);
   }
