@@ -178,6 +178,8 @@ export default class Confetti {
   }
 
   destroy() {
-    this.parent.removeChild(this.canvas);
+    if (this.parent.contains(this.canvas)) {
+      this.parent.removeChild(this.canvas);
+    }
   }
 }
