@@ -19,6 +19,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const yaml = require('js-yaml');
 
 const pluginPath = path.join(__dirname, '../src/plugins');
 const pluginFolders = fs.readdirSync(pluginPath);
@@ -64,10 +65,15 @@ function addPluginToIndexTs(packageName) {
   const lines = indexTsContent.split('\n');
   const ComponentName = pascalize(packageName);
 
-  const importLine = `export const load${ComponentName} = () => import('${packageName}').then(module => module.default);`;
-  if (!lines.includes(importLine)) {
+  const importLine = `const load${ComponentName} = () => import('${packageName}').then(module => module.default);`;
+  const info = yaml.load(fs.readFileSync(path.join(pluginPath, packageName, 'info.yaml'), 'utf8'));
+  const exportLine = `export const ${info.slug_name} = load${ComponentName}`;
+
+  if (!lines.includes(exportLine)) {
     lines.push(importLine);
+    lines.push(exportLine);
   }
+
   fs.writeFileSync(indexTsPath, lines.join('\n'));
 }
 
@@ -75,7 +81,7 @@ const pluginLength = pluginFolders.filter((folder) => {
   const pluginFolder = path.join(pluginPath, folder);
   const stat = fs.statSync(pluginFolder);
   return stat.isDirectory() && folder !== 'builtin';
-}).length
+}).length;
 
 if (pluginLength > 0) {
   resetIndexTs();
