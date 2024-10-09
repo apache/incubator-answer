@@ -66,19 +66,15 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
     navigate(url);
   };
 
-  useEffect(() => {
+  const initAnimation = () => {
     const DURATION = 8000;
     const LENGTH = 200;
     const bgNode = document.documentElement || document.body;
+    const parentNode = document.getElementById('badgeModal')?.parentNode;
 
-    if (visible) {
-      const badgeModalNode = document.getElementById('badgeModal');
-      const paranetNode = badgeModalNode?.parentNode;
-
-      badgeModalNode?.setAttribute('style', 'z-index: 1');
-
+    if (parentNode) {
       bg1 = new AnimateGift({
-        elm: paranetNode,
+        elm: parentNode,
         width: bgNode.clientWidth,
         height: bgNode.clientHeight,
         length: LENGTH,
@@ -88,7 +84,7 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
 
       timeout = setTimeout(() => {
         bg2 = new AnimateGift({
-          elm: paranetNode,
+          elm: parentNode,
           width: window.innerWidth,
           height: window.innerHeight,
           length: LENGTH,
@@ -96,6 +92,35 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
         });
       }, DURATION / 2);
     }
+  };
+
+  const destroyAnimation = () => {
+    console.log('destroyAnimation');
+    clearTimeout(timeout);
+    bg1?.destroy();
+    bg2?.destroy();
+  };
+
+  useEffect(() => {
+    if (visible) {
+      initAnimation();
+    } else {
+      destroyAnimation();
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        initAnimation();
+      } else {
+        destroyAnimation();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      destroyAnimation();
+    };
   }, [visible]);
 
   return (
