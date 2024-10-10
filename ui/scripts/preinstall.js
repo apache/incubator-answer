@@ -19,7 +19,7 @@
 
 // There is a bug when using npm to install: the execution of preinstall is after install, so when this prompt is displayed, the dependent packages have already been installed.
 
-require('./plugin');
+require('./loadPlugins');
 
 if (!/pnpm/.test(process.env.npm_execpath)) {
   console.warn(
