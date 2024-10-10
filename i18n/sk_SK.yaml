@@ -1185,7 +1185,7 @@ ui:
       label: Prihlasovacie meno
       msg:
         empty: Prihlasovacie meno nemôže byť prázdne.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-mail
@@ -1816,7 +1816,7 @@ ui:
             msg: "Please enter the user's email, one per line."
           display_name:
             label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            msg: Display name must be 2-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.

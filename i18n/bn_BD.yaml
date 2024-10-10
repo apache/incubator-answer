@@ -612,7 +612,7 @@ ui:
       label: Name
       msg:
         empty: Name cannot be empty.
-        range: Name must between 4 to 30 characters in length.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email
@@ -1123,7 +1123,7 @@ ui:
           fields:
             display_name:
               label: Display Name
-              msg: display_name must be at 4 - 30 characters in length.
+              msg: display_name must be at 2 - 30 characters in length.
             email:
               label: Email
               msg: Email is not valid.

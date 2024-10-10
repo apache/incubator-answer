@@ -1185,7 +1185,7 @@ ui:
       label: Name
       msg:
         empty: Der Name darf nicht leer sein.
-        range: Die Länge des Namens sollte zwischen 4 und 30 Zeichen liegen.
+        range: Die Länge des Namens sollte zwischen 2 und 30 Zeichen liegen.
         character: 'Muss den Zeichensatz "a-z", "A-Z", "0-9", " - . _" verwenden'
     email:
       label: E-Mail
@@ -1816,7 +1816,7 @@ ui:
             msg: "Bitte gib die E-Mail des Nutzers ein, eine pro Zeile."
           display_name:
             label: Anzeigename
-            msg: Der Anzeigename muss zwischen 4 und 30 Zeichen lang sein.
+            msg: Der Anzeigename muss zwischen 2 und 30 Zeichen lang sein.
           email:
             label: E-Mail
             msg: Die E-Mail ist nicht gültig.
