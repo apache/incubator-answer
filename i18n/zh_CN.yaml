@@ -1559,6 +1559,7 @@ ui:
     top_questions: 高分问题
     stats: 状态
     list_empty: 没有找到相关的内容。<br />试试看其他选项卡？
+    content_empty: 没有找到相关的内容。
     accepted: 已采纳
     answered: 回答于
     asked: 提问于
