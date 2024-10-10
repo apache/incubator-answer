@@ -157,4 +157,28 @@ func TestGetQuestionLink(t *testing.T) {
 		links := checker.GetQuestionLink("https://example.com/questions/10110000000000060")
 		assert.Empty(t, links)
 	})
+
+	// step 15: SEO options
+	t.Run("SEO options", func(t *testing.T) {
+		content := `
+		URL1: http://localhost:3000/questions/D1I2
+		URL2: http://localhost:3000/questions/D1I2/hello
+		URL3: http://localhost:3000/questions/10010000000000068
+		URL4: http://localhost:3000/questions/10010000000000068/hello
+		ERROR URL: http://localhost:3000/questions/AAAA/BBBB
+		`
+		links := checker.GetQuestionLink(content)
+		assert.Equal(t, []checker.QuestionLink{
+			{
+				LinkType:   checker.QuestionLinkTypeURL,
+				QuestionID: "D1I2",
+				AnswerID:   "",
+			},
+			{
+				LinkType:   checker.QuestionLinkTypeURL,
+				QuestionID: "10010000000000068",
+				AnswerID:   "",
+			},
+		}, links)
+	})
 }
