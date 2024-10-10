@@ -8,7 +8,7 @@
     "build": "node ./scripts/env.js && react-app-rewired build",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --config ./.prettierrc.json",
-    "pre-install": "pnpm install && node ./scripts/preinstall.js",
+    "pre-install": "node ./scripts/importPlugins.js && pnpm install && node ./scripts/preinstall.js ",
     "prepare": "pnpm build:packages",
     "pre-commit": "lint-staged",
     "build:packages": "pnpm -r --filter=./src/plugins/* run build",

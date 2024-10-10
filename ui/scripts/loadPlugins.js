@@ -28,35 +28,9 @@ function pascalize(str) {
   return str.split(/[_-]/).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('');
 }
 
-function resetPackageJson() {
-  const packageJsonPath = path.join(__dirname, '..', 'package.json');
-  const packageJsonContent = require(packageJsonPath);
-  const dependencies = packageJsonContent.dependencies;
-  for (const key in dependencies) {
-    if (dependencies[key].startsWith('workspace')) {
-      delete dependencies[key];
-    }
-  }
-  fs.writeFileSync(
-    packageJsonPath,
-    JSON.stringify(packageJsonContent, null, 2),
-  );
-}
-
 function resetIndexTs() {
   const indexTsPath = path.join(pluginPath, 'index.ts');
   fs.writeFileSync(indexTsPath, '');
-}
-
-function addPluginToPackageJson(packageName) {
-  const packageJsonPath = path.join(__dirname, '..', 'package.json');
-  const packageJsonContent = require(packageJsonPath);
-  packageJsonContent.dependencies[packageName] = 'workspace:*';
-
-  fs.writeFileSync(
-    packageJsonPath,
-    JSON.stringify(packageJsonContent, null, 2),
-  );
 }
 
 function addPluginToIndexTs(packageName, pluginFolder) {
@@ -87,8 +61,6 @@ if (pluginLength > 0) {
   resetIndexTs();
 }
 
-resetPackageJson();
-
 pluginFolders.forEach((folder) => {
   const pluginFolder = path.join(pluginPath, folder);
   const stat = fs.statSync(pluginFolder);
@@ -100,7 +72,7 @@ pluginFolders.forEach((folder) => {
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
 
-    addPluginToPackageJson(packageName);
     addPluginToIndexTs(packageName, pluginFolder);
   }
 });
+
