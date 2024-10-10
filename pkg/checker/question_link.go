@@ -22,6 +22,7 @@ package checker
 import (
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/pkg/obj"
+	"github.com/apache/incubator-answer/pkg/uid"
 )
 
 const (
@@ -60,7 +61,7 @@ func GetQuestionLink(content string) []QuestionLink {
 }
 
 func processURL(content string, left, right *int, uniqueIDs map[string]struct{}, questionLinks *[]QuestionLink) {
-	for *right < len(content) && isDigit(content[*right]) {
+	for *right < len(content) && (isDigit(content[*right]) || isLetter(content[*right])) {
 		*right++
 	}
 	questionID := content[*left+len("/questions/") : *right]
@@ -69,7 +70,7 @@ func processURL(content string, left, right *int, uniqueIDs map[string]struct{},
 	if *right < len(content) && content[*right] == '/' {
 		*left = *right + 1
 		*right = *left
-		for *right < len(content) && isDigit(content[*right]) {
+		for *right < len(content) && (isDigit(content[*right]) || isLetter(content[*right])) {
 			*right++
 		}
 		answerID = content[*left:*right]
@@ -79,7 +80,7 @@ func processURL(content string, left, right *int, uniqueIDs map[string]struct{},
 }
 
 func processID(content string, left, right *int, uniqueIDs map[string]struct{}, questionLinks *[]QuestionLink) {
-	for *right < len(content) && isDigit(content[*right]) {
+	for *right < len(content) && (isDigit(content[*right]) || isLetter(content[*right])) {
 		*right++
 	}
 	id := content[*left:*right]
@@ -90,14 +91,19 @@ func isDigit(c byte) bool {
 	return c >= '0' && c <= '9'
 }
 
-func addUniqueID(questionID, answerID string, linkType int, uniqueIDs map[string]struct{}, questionLinks *[]QuestionLink) {
-	if questionID == "" && answerID == "" {
-		return
-	}
+func isLetter(c byte) bool {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+}
 
+func addUniqueID(questionID, answerID string, linkType int, uniqueIDs map[string]struct{}, questionLinks *[]QuestionLink) {
 	isAdd := false
 	if answerID != "" {
-		if objectType, err := obj.GetObjectTypeStrByObjectID(answerID); err == nil && objectType == constant.AnswerObjectType {
+		objectType, err := obj.GetObjectTypeStrByObjectID(uid.DeShortID(answerID))
+		if err != nil {
+			answerID = ""
+		}
+
+		if objectType == constant.AnswerObjectType {
 			if _, ok := uniqueIDs[answerID]; !ok {
 				uniqueIDs[answerID] = struct{}{}
 				isAdd = true
@@ -105,7 +111,7 @@ func addUniqueID(questionID, answerID string, linkType int, uniqueIDs map[string
 		}
 	}
 
-	if objectType, err := obj.GetObjectTypeStrByObjectID(questionID); err == nil {
+	if objectType, err := obj.GetObjectTypeStrByObjectID(uid.DeShortID(questionID)); err == nil {
 		if _, ok := uniqueIDs[questionID]; !ok {
 			uniqueIDs[questionID] = struct{}{}
 			isAdd = true
