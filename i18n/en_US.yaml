@@ -1585,6 +1585,7 @@ ui:
     top_questions: Top Questions
     stats: Stats
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    content_empty: No posts found.
     accepted: Accepted
     answered: answered
     asked: asked
