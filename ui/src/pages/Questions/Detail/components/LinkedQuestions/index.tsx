@@ -37,36 +37,14 @@ const Index: FC<Props> = ({ id }) => {
     keyPrefix: 'related_question',
   });
 
-  const { data, isLoading } = questionLink({
+  const { data } = questionLink({
     question_id: id,
     page: 1,
     page_size: 5,
   });
 
-  if (isLoading) {
-    return null;
-  }
-
   if (!data || !data.list) {
-    return (
-      <Card className="mb-4">
-        <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
-          {t('title')}
-          <Link to={`/questions/linked/${id}`} className="btn btn-link p-0">
-            {t('more', { keyPrefix: 'btns' })}
-          </Link>
-        </Card.Header>
-        <ListGroup variant="flush">
-          <div
-            className="text-muted"
-            style={{
-              padding: 'var(--bs-card-spacer-y) var(--bs-card-spacer-x)',
-            }}>
-            {t('no_linked_question')}
-          </div>
-        </ListGroup>
-      </Card>
-    );
+    return null;
   }
 
   return (
@@ -78,8 +56,8 @@ const Index: FC<Props> = ({ id }) => {
         </Link>
       </Card.Header>
       <ListGroup variant="flush">
-        {data.list.map((item) => {
-          return (
+        {data.list.length > 0 ? (
+          data.list.map((item) => (
             <ListGroup.Item
               action
               key={item.id}
@@ -107,9 +85,8 @@ const Index: FC<Props> = ({ id }) => {
                 </div>
               )}
             </ListGroup.Item>
-          );
-        })}
-        {data.list.length === 0 ? (
+          ))
+        ) : (
           <div
             className="text-muted"
             style={{
@@ -117,7 +94,7 @@ const Index: FC<Props> = ({ id }) => {
             }}>
             {t('no_linked_question')}
           </div>
-        ) : null}
+        )}
       </ListGroup>
     </Card>
   );
