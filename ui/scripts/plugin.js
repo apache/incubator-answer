@@ -59,14 +59,14 @@ function addPluginToPackageJson(packageName) {
   );
 }
 
-function addPluginToIndexTs(packageName) {
+function addPluginToIndexTs(packageName, pluginFolder) {
   const indexTsPath = path.join(pluginPath, 'index.ts');
   const indexTsContent = fs.readFileSync(indexTsPath, 'utf-8');
   const lines = indexTsContent.split('\n');
   const ComponentName = pascalize(packageName);
 
   const importLine = `const load${ComponentName} = () => import('${packageName}').then(module => module.default);`;
-  const info = yaml.load(fs.readFileSync(path.join(pluginPath, packageName, 'info.yaml'), 'utf8'));
+  const info = yaml.load(fs.readFileSync(path.join(pluginFolder, 'info.yaml'), 'utf8'));
   const exportLine = `export const ${info.slug_name} = load${ComponentName}`;
 
   if (!lines.includes(exportLine)) {
@@ -101,6 +101,6 @@ pluginFolders.forEach((folder) => {
     const packageName = packageJson.name;
 
     addPluginToPackageJson(packageName);
-    addPluginToIndexTs(packageName);
+    addPluginToIndexTs(packageName, pluginFolder);
   }
 });
