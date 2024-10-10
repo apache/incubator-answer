@@ -22,7 +22,9 @@ package questioncommon
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -686,4 +688,110 @@ func (qs *QuestionCommon) ShowFormatWithTag(ctx context.Context, data *entity.Qu
 	}
 	info.Tags = Tags
 	return info
+}
+
+func (qs *QuestionCommon) UpdateQuestionLink(ctx context.Context, questionID, answerID, parsedText, originalText string) (string, error) {
+	err := qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: uid.DeShortID(questionID),
+		FromAnswerID:   uid.DeShortID(answerID),
+	})
+	if err != nil {
+		return parsedText, err
+	}
+
+	links := checker.GetQuestionLink(originalText)
+	if len(links) == 0 {
+		return parsedText, nil
+	}
+
+	// get answer ids and question ids
+	answerIDs := make([]string, 0, len(links))
+	questionIDs := make([]string, 0, len(links))
+	for _, link := range links {
+		if link.AnswerID != "" {
+			answerIDs = append(answerIDs, link.AnswerID)
+		}
+		if link.QuestionID != "" {
+			questionIDs = append(questionIDs, link.QuestionID)
+		}
+	}
+
+	// get answer info and build cache
+	answerInfoList, err := qs.answerRepo.GetByIDs(ctx, answerIDs...)
+	if err != nil {
+		return parsedText, err
+	}
+	answerCache := make(map[string]string, len(answerInfoList))
+	for _, ans := range answerInfoList {
+		answerID := uid.DeShortID(ans.ID)
+		questionID := ans.QuestionID
+		answerCache[answerID] = questionID
+	}
+
+	// get question info and build cache
+	questionInfoList, err := qs.questionRepo.FindByID(ctx, questionIDs)
+	if err != nil {
+		return parsedText, err
+	}
+	questionCache := make(map[string]struct{}, len(questionInfoList))
+	for _, q := range questionInfoList {
+		questionID := uid.DeShortID(q.ID)
+		questionCache[questionID] = struct{}{}
+	}
+
+	// process links and generate new QuestionLink
+	validLinks := make([]*entity.QuestionLink, 0, len(links))
+	for _, link := range links {
+		linkQuestionID := uid.DeShortID(link.QuestionID)
+		linkAnswerID := uid.DeShortID(link.AnswerID)
+		// validate question id
+		if _, exists := questionCache[linkQuestionID]; linkQuestionID != "0" && !exists {
+			continue
+		}
+
+		// validate answer id
+		if linkAnswerID != "0" {
+			linkedQuestionID, exists := answerCache[linkAnswerID]
+			if !exists {
+				continue
+			}
+			// if question id is empty, get it from answer cache
+			if link.QuestionID == "" {
+				link.QuestionID = linkedQuestionID
+			}
+		}
+
+		// build new link
+		newLink := &entity.QuestionLink{
+			FromQuestionID: uid.DeShortID(questionID),
+			FromAnswerID:   uid.DeShortID(answerID),
+			ToQuestionID:   uid.DeShortID(link.QuestionID),
+			ToAnswerID:     uid.DeShortID(link.AnswerID),
+		}
+		// replace link in parsed text
+		if link.QuestionID != "" {
+			htmlLink := fmt.Sprintf("<a href=\"/questions/%s\">#%s</a>", link.QuestionID, link.QuestionID)
+			parsedText = strings.ReplaceAll(parsedText, "#"+link.QuestionID, htmlLink)
+		}
+		if link.AnswerID != "" {
+			linkedQuestionID := answerCache[linkAnswerID]
+			htmlLink := fmt.Sprintf("<a href=\"/questions/%s/%s\">#%s</a>", linkedQuestionID, link.AnswerID, link.AnswerID)
+			parsedText = strings.ReplaceAll(parsedText, "#"+link.AnswerID, htmlLink)
+			newLink.ToQuestionID = uid.DeShortID(linkedQuestionID)
+		}
+		// avoid link to self
+		if newLink.FromQuestionID != newLink.ToQuestionID {
+			validLinks = append(validLinks, newLink)
+		}
+	}
+
+	// add new links to repo
+	if len(validLinks) > 0 {
+		err = qs.questionRepo.LinkQuestion(ctx, validLinks...)
+		if err != nil {
+			return parsedText, err
+		}
+	}
+
+	return parsedText, nil
 }
