@@ -22,7 +22,6 @@ package content
 import (
 	"context"
 	"encoding/json"
-	"strings"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/service/event_queue"
@@ -44,7 +43,6 @@ import (
 	"github.com/apache/incubator-answer/internal/service/revision_common"
 	"github.com/apache/incubator-answer/internal/service/role"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
-	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/apache/incubator-answer/pkg/htmltext"
 	"github.com/apache/incubator-answer/pkg/token"
@@ -275,7 +273,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		return "", err
 	}
 	if insertData.Status == entity.AnswerStatusAvailable {
-		insertData.ParsedText, err = as.updateAnswerLink(ctx, insertData)
+		insertData.ParsedText, err = as.questionCommon.UpdateQuestionLink(ctx, insertData.QuestionID, insertData.ID, insertData.ParsedText, insertData.OriginalText)
 		if err != nil {
 			return "", err
 		}
@@ -398,7 +396,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
-		insertData.ParsedText, err = as.updateAnswerLink(ctx, insertData)
+		insertData.ParsedText, err = as.questionCommon.UpdateQuestionLink(ctx, insertData.QuestionID, insertData.ID, insertData.ParsedText, insertData.OriginalText)
 		if err != nil {
 			return "", err
 		}
@@ -745,84 +743,4 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 	}
 	externalNotificationMsg.NewAnswerTemplateRawData = rawData
 	as.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
-}
-
-func (as *AnswerService) updateAnswerLink(ctx context.Context, answer *entity.Answer) (string, error) {
-	err := as.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
-		FromQuestionID: uid.DeShortID(answer.QuestionID),
-		FromAnswerID:   uid.DeShortID(answer.ID),
-	})
-	retParsedText := answer.ParsedText
-	if err != nil {
-		return retParsedText, err
-	}
-	links := checker.GetQuestionLink(answer.OriginalText)
-	// validate links
-	questionLinks := make([]*entity.QuestionLink, 0)
-	answerCache := make(map[string]string)
-	questionCache := make(map[string]string)
-	answerIDList := make([]string, 0)
-	questionIDList := make([]string, 0)
-	for _, link := range links {
-		if link.AnswerID != "" {
-			answerIDList = append(answerIDList, link.AnswerID)
-		}
-		if link.QuestionID != "" {
-			questionIDList = append(questionIDList, link.QuestionID)
-		}
-	}
-	answerInfoList, err := as.answerRepo.GetByIDs(ctx, answerIDList...)
-	if err != nil {
-		return answer.ParsedText, err
-	}
-	for _, answer := range answerInfoList {
-		answerCache[answer.ID] = answer.QuestionID
-	}
-	questionInfoList, err := as.questionRepo.FindByID(ctx, questionIDList)
-	if err != nil {
-		return answer.ParsedText, err
-	}
-	for _, question := range questionInfoList {
-		questionCache[question.ID] = question.ParsedText
-	}
-
-	for _, link := range links {
-		if link.QuestionID != "" {
-			if _, ok := questionCache[link.QuestionID]; !ok {
-				continue
-			}
-		}
-		if link.AnswerID != "" {
-			if _, ok := answerCache[link.AnswerID]; !ok {
-				continue
-			}
-			if link.QuestionID == "" {
-				link.QuestionID = answerCache[link.AnswerID]
-			}
-		}
-
-		addLink := &entity.QuestionLink{
-			FromQuestionID: uid.DeShortID(answer.QuestionID),
-			FromAnswerID:   uid.DeShortID(answer.ID),
-			ToQuestionID:   uid.DeShortID(link.QuestionID),
-			ToAnswerID:     uid.DeShortID(link.AnswerID),
-		}
-		if link.QuestionID != "" {
-			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>")
-		}
-		if link.AnswerID != "" {
-			questionID := answerCache[link.AnswerID]
-			addLink.ToQuestionID = questionID
-			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>")
-		}
-		if addLink.FromQuestionID == addLink.ToQuestionID {
-			continue
-		}
-		questionLinks = append(questionLinks, addLink)
-	}
-	if err = as.questionRepo.LinkQuestion(ctx, questionLinks...); err != nil {
-		return retParsedText, err
-	}
-
-	return retParsedText, nil
 }

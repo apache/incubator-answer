@@ -349,7 +349,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return nil, err
 	}
 	if question.Status == entity.QuestionStatusAvailable {
-		question.ParsedText, err = qs.updateQuestionLink(ctx, question)
+		question.ParsedText, err = qs.questioncommon.UpdateQuestionLink(ctx, question.ID, "", question.ParsedText, question.OriginalText)
 		if err != nil {
 			return nil, err
 		}
@@ -964,7 +964,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
-		question.ParsedText, err = qs.updateQuestionLink(ctx, question)
+		question.ParsedText, err = qs.questioncommon.UpdateQuestionLink(ctx, question.ID, "", question.ParsedText, question.OriginalText)
 		if err != nil {
 			return questionInfo, err
 		}
@@ -1619,87 +1619,6 @@ func (qs *QuestionService) SitemapCron(ctx context.Context) {
 	}
 	ctx = context.WithValue(ctx, constant.ShortIDFlag, siteSeo.IsShortLink())
 	qs.questioncommon.SitemapCron(ctx)
-}
-
-func (qs *QuestionService) updateQuestionLink(ctx context.Context, questionInfo *entity.Question) (string, error) {
-	err := qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
-		FromQuestionID: questionInfo.ID,
-		FromAnswerID:   "0",
-	})
-	if err != nil {
-		return questionInfo.ParsedText, err
-	}
-	retParsedText := questionInfo.ParsedText
-	links := checker.GetQuestionLink(questionInfo.OriginalText)
-	// validate links
-	questionLinks := make([]*entity.QuestionLink, 0)
-	answerCache := make(map[string]string)
-	questionCache := make(map[string]string)
-	answerIDList := make([]string, 0)
-	questionIDList := make([]string, 0)
-	for _, link := range links {
-		if link.AnswerID != "" {
-			answerIDList = append(answerIDList, link.AnswerID)
-		}
-		if link.QuestionID != "" {
-			questionIDList = append(questionIDList, link.QuestionID)
-		}
-	}
-	answerInfoList, err := qs.answerRepo.GetByIDs(ctx, answerIDList...)
-	if err != nil {
-		return questionInfo.ParsedText, err
-	}
-	for _, answer := range answerInfoList {
-		answerCache[answer.ID] = answer.QuestionID
-	}
-	questionInfoList, err := qs.questionRepo.FindByID(ctx, questionIDList)
-	if err != nil {
-		return questionInfo.ParsedText, err
-	}
-	for _, question := range questionInfoList {
-		questionCache[question.ID] = question.ParsedText
-	}
-
-	for _, link := range links {
-		if link.QuestionID != "" {
-			if _, ok := questionCache[link.QuestionID]; !ok {
-				continue
-			}
-		}
-		if link.AnswerID != "" {
-			if _, ok := answerCache[link.AnswerID]; !ok {
-				continue
-			}
-			if link.QuestionID == "" {
-				link.QuestionID = answerCache[link.AnswerID]
-			}
-		}
-
-		addLink := &entity.QuestionLink{
-			FromQuestionID: uid.DeShortID(questionInfo.ID),
-			FromAnswerID:   "0",
-			ToQuestionID:   uid.DeShortID(link.QuestionID),
-			ToAnswerID:     uid.DeShortID(link.AnswerID),
-		}
-
-		if link.QuestionID != "" {
-			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.QuestionID, "<a href=\"/questions/"+link.QuestionID+"\">#"+link.QuestionID+"</a>")
-		}
-		if link.AnswerID != "" {
-			questionID := answerCache[link.AnswerID]
-			addLink.ToQuestionID = questionID
-			retParsedText = strings.ReplaceAll(retParsedText, "#"+link.AnswerID, "<a href=\"/questions/"+questionID+"/"+link.AnswerID+"\">#"+link.AnswerID+"</a>")
-		}
-		if addLink.FromQuestionID == addLink.ToQuestionID {
-			continue
-		}
-		questionLinks = append(questionLinks, addLink)
-	}
-	if err = qs.questionRepo.LinkQuestion(ctx, questionLinks...); err != nil {
-		return retParsedText, err
-	}
-
-	return retParsedText, nil
 }
 
 func (qs *QuestionService) GetQuestionLink(ctx context.Context, req *schema.GetQuestionLinkReq) (
