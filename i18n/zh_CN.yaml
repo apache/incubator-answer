@@ -1185,7 +1185,7 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名字应该在 4 到 30 个字符之间
+        range: 名字应该在 2 到 30 个字符之间
         character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
@@ -1816,7 +1816,7 @@ ui:
             msg: "请输入用户的邮箱，每行一个。"
           display_name:
             label: 显示名称
-            msg: 显示名称长度必须为 4-30 个字符
+            msg: 显示名称长度必须为 2-30 个字符
           email:
             label: 邮箱
             msg: 邮箱无效。

@@ -1185,7 +1185,7 @@ ui:
       label: Nume
       msg:
         empty: Câmpul Nume trebuie completat.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-mail
@@ -1816,7 +1816,7 @@ ui:
             msg: "Te rugăm să introduci e-mailul utilizatorului, câte unul pe linie."
           display_name:
             label: Nume afișat
-            msg: Numele afișat trebuie să aibă între 4 și 30 de caractere.
+            msg: Numele afișat trebuie să aibă între 2 și 30 de caractere.
           email:
             label: E-mail
             msg: E-mail nu este validă.

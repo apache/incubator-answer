@@ -1185,7 +1185,7 @@ ui:
       label: Tên
       msg:
         empty: Tên không thể trống.
-        range: Độ dài của tên phải từ 4 đến 30 ký tự.
+        range: Độ dài của tên phải từ 2 đến 30 ký tự.
         character: 'Chỉ sử dụng bộ ký tự "a-z", "0-9", , "A-Z", " - . _"'
     email:
       label: Email
@@ -1816,7 +1816,7 @@ ui:
             msg: "Vui lòng nhập email của người dùng, một dòng mỗi người."
           display_name:
             label: Tên hiển thị
-            msg: Tên hiển thị phải có từ 4 đến 30 ký tự.
+            msg: Tên hiển thị phải có từ 2 đến 30 ký tự.
           email:
             label: Email
             msg: Email không hợp lệ.

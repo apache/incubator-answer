@@ -1185,7 +1185,7 @@ ui:
       label: نام
       msg:
         empty: نام نمی‌تواند خالی باشد.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: ایمیل
@@ -1816,7 +1816,7 @@ ui:
             msg: "لطفا ایمیل کاربر را در هر خط یکی وارد کنید."
           display_name:
             label: نمایش نام
-            msg: نام نمایشی باید 4 تا 30 کاراکتر باشد.
+            msg: نام نمایشی باید 2 تا 30 کاراکتر باشد.
           email:
             label: ایمیل
             msg: ایمیل معتبر نمی‌باشد
