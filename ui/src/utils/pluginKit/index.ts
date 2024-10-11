@@ -48,12 +48,21 @@ class Plugins {
   registeredPlugins: Type.ActivatedPlugin[] = [];
 
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.registerBuiltin();
 
     getPluginsStatus().then((plugins) => {
       this.registeredPlugins = plugins.filter((p) => p.enabled);
       this.registerPlugins();
     });
+  }
+
+  refresh() {
+    this.plugins = [];
+    this.init();
   }
 
   validate(plugin: Plugin) {
@@ -121,13 +130,6 @@ class Plugins {
         plugin.activated = activatedPlugin?.enabled;
       }
     });
-  }
-
-  changePluginActiveStatus(slug_name: string, active: boolean) {
-    const plugin = this.getPlugin(slug_name);
-    if (plugin) {
-      plugin.activated = active;
-    }
   }
 
   getPlugin(slug_name: string) {
