@@ -74,15 +74,6 @@ class Plugins {
     return true;
   }
 
-  async loadPlugins() {
-    return Promise.all(
-      Object.keys(allPlugins).map(async (key) => {
-        const plugin = await allPlugins[key]();
-        return plugin;
-      }),
-    );
-  }
-
   registerBuiltin() {
     Object.keys(builtin).forEach((key) => {
       const plugin = builtin[key];
