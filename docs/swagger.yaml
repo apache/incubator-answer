@@ -2844,6 +2844,7 @@ definitions:
         type: string
       name:
         maxLength: 30
+        minLength: 2
         type: string
       pass:
         maxLength: 32

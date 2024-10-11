@@ -11456,7 +11456,8 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string",
-                    "maxLength": 30
+                    "maxLength": 30,
+                    "minLength": 2
                 },
                 "pass": {
                     "type": "string",
