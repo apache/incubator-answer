@@ -1362,6 +1362,7 @@ ui:
     answers: answers
   linked_question:
     title: Linked Questions
+    description: Questions linked to 
     no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Invite People

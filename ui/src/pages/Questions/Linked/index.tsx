@@ -72,9 +72,9 @@ const LinkedQuestions: FC = () => {
   return (
     <Row className="pt-4 mb-5">
       <Col className="page-main flex-auto">
-        <h3 className="mb-3">Linked Questions</h3>
+        <h3 className="mb-3">{t('title')}</h3>
         <div className="mb-5">
-          Questions linked to/from&nbsp;
+          {t('description')}&nbsp;
           <a href={`/questions/${qid}`}>{questionTitle}</a>
         </div>
         <QuestionList
