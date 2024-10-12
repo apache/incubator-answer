@@ -94,11 +94,13 @@ class Plugins {
   }
 
   registerPlugins() {
-    const plugins = this.registeredPlugins.map((p) => {
-      const func = allPlugins[p.slug_name];
+    const plugins = this.registeredPlugins
+      .map((p) => {
+        const func = allPlugins[p.slug_name];
 
-      return func;
-    });
+        return func;
+      })
+      .filter((p) => p);
     return new Promise((resolve) => {
       plugins.forEach(async (p) => {
         const plugin = await p();
