@@ -62,3 +62,12 @@ func ValPageAndPageSize(page, pageSize int) (int, int) {
 	}
 	return page, pageSize
 }
+
+// ValPageOutOfRange validate page out of range
+func ValPageOutOfRange(total int64, page, pageSize int) bool {
+	if total <= 0 {
+		return false
+	}
+	totalPages := (total + int64(pageSize) - 1) / int64(pageSize)
+	return page < 1 || page > int(totalPages)
+}
