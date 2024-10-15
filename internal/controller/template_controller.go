@@ -22,6 +22,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/service/content"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/apache/incubator-answer/plugin"
@@ -58,6 +59,7 @@ type TemplateController struct {
 	siteInfoService          siteinfo_common.SiteInfoCommonService
 	eventQueueService        event_queue.EventQueueService
 	userService              *content.UserService
+	questionService          *content.QuestionService
 }
 
 // NewTemplateController new controller
@@ -66,6 +68,7 @@ func NewTemplateController(
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	eventQueueService event_queue.EventQueueService,
 	userService *content.UserService,
+	questionService *content.QuestionService,
 ) *TemplateController {
 	script, css := GetStyle()
 	return &TemplateController{
@@ -75,6 +78,7 @@ func NewTemplateController(
 		siteInfoService:          siteInfoService,
 		eventQueueService:        eventQueueService,
 		userService:              userService,
+		questionService:          questionService,
 	}
 }
 func GetStyle() (script []string, css string) {
@@ -146,6 +150,14 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		return
 	}
 
+	hotQuestionReq := &schema.QuestionPageReq{
+		Page:      1,
+		PageSize:  6,
+		OrderCond: "hot",
+		InDays:    7,
+	}
+	hotQuestion, _, _ := tc.templateRenderController.Index(ctx, hotQuestionReq)
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = siteInfo.General.SiteUrl
 
@@ -156,10 +168,11 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	}
 	siteInfo.Title = ""
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data":     data,
-		"useTitle": UrlUseTitle,
-		"page":     templaterender.Paginator(page, req.PageSize, count),
-		"path":     "questions",
+		"data":        data,
+		"useTitle":    UrlUseTitle,
+		"page":        templaterender.Paginator(page, req.PageSize, count),
+		"path":        "questions",
+		"hotQuestion": hotQuestion,
 	})
 }
 
@@ -177,6 +190,15 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
+
+	hotQuestionReq := &schema.QuestionPageReq{
+		Page:      1,
+		PageSize:  6,
+		OrderCond: "hot",
+		InDays:    7,
+	}
+	hotQuestion, _, _ := tc.templateRenderController.Index(ctx, hotQuestionReq)
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
 	if page > 1 {
@@ -190,13 +212,14 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 	siteInfo.Title = fmt.Sprintf("%s - %s", translator.Tr(handler.GetLang(ctx), constant.QuestionsTitleTrKey), siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data":     data,
-		"useTitle": UrlUseTitle,
-		"page":     templaterender.Paginator(page, req.PageSize, count),
+		"data":        data,
+		"useTitle":    UrlUseTitle,
+		"page":        templaterender.Paginator(page, req.PageSize, count),
+		"hotQuestion": hotQuestion,
 	})
 }
 
-func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
+func (tc *TemplateController) QuestionInfoRedirect(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
 	questionID := ctx.Param("id")
 	title := ctx.Param("title")
 	answerID := uid.DeShortID(title)
@@ -316,7 +339,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	siteInfo := tc.SiteInfo(ctx)
-	jump, jumpurl := tc.QuestionInfoeRdirect(ctx, siteInfo, correctTitle)
+	jump, jumpurl := tc.QuestionInfoRedirect(ctx, siteInfo, correctTitle)
 	if jump {
 		ctx.Redirect(http.StatusFound, jumpurl)
 		return
@@ -337,7 +360,6 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	// comments
-
 	objectIDs := []string{uid.DeShortID(id)}
 	for _, answer := range answers {
 		answerID := uid.DeShortID(answer.ID)
@@ -348,6 +370,17 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
+
+	UrlUseTitle := false
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+		siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID {
+		UrlUseTitle = true
+	}
+
+	//related question
+	userID := middleware.GetLoginUserIDFromContext(ctx)
+	relatedQuestion, _, _ := tc.questionService.SimilarQuestion(ctx, id, userID)
+
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID || siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDByShortID {
 		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
@@ -389,7 +422,6 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 			item.Author.URL = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, answer.UserInfo.Username)
 			answerList = append(answerList, item)
 		}
-
 	}
 	jsonLD.MainEntity.SuggestedAnswer = answerList
 	jsonLDStr, err := json.Marshal(jsonLD)
@@ -405,12 +437,14 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	siteInfo.Keywords = strings.Replace(strings.Trim(fmt.Sprint(tags), "[]"), " ", ",", -1)
 	siteInfo.Title = fmt.Sprintf("%s - %s", detail.Title, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question-detail.html", siteInfo, gin.H{
-		"id":       id,
-		"answerid": answerid,
-		"detail":   detail,
-		"answers":  answers,
-		"comments": comments,
-		"noindex":  detail.Show == entity.QuestionHide,
+		"id":              id,
+		"answerid":        answerid,
+		"detail":          detail,
+		"answers":         answers,
+		"comments":        comments,
+		"noindex":         detail.Show == entity.QuestionHide,
+		"useTitle":        UrlUseTitle,
+		"relatedQuestion": relatedQuestion,
 	})
 }
 
