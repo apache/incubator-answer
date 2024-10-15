@@ -24,7 +24,11 @@
     <div class="mb-5 mb-md-0 col-xxl-7 col-lg-8 col-sm-12">
       <div>
         <h1 class="h3 mb-3 text-wrap text-break">
+          {{if $.useTitle }}
+          <a class="link-dark" href="{{$.baseURL}}/questions/{{.detail.ID}}/{{urlTitle .detail.Title}}">{{.detail.Title}}</a>
+          {{else}}
           <a class="link-dark" href="{{$.baseURL}}/questions/{{.detail.ID}}">{{.detail.Title}}</a>
+          {{end}}
         </h1>
         <div
           class="d-flex flex-wrap align-items-center small mb-3 text-secondary">
@@ -116,7 +120,7 @@
         <h5 class="mb-0">{{.detail.AnswerCount}} Answers</h5>
       </div>
       {{range .answers}}
-      <div id="10020000000000930" class="answer-item py-4">
+      <div class="answer-item py-4">
         <article class="fmt">
           {{formatLinkNofollow .HTML}}
         </article>
@@ -192,8 +196,8 @@
       </div>
       {{end}}
     </div>
-    <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
-
+    <div class="page-right-side mt-4 mt-xl-0 col">
+      {{template "related-question" .}}
     </div>
   </div>
 </div>
