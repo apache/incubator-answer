@@ -111,6 +111,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/user_common"
 	user_external_login2 "github.com/apache/incubator-answer/internal/service/user_external_login"
 	user_notification_config2 "github.com/apache/incubator-answer/internal/service/user_notification_config"
+	"github.com/apache/incubator-answer/internal/service/importer"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
@@ -253,7 +254,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	roleController := controller_admin.NewRoleController(roleService)
 	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
 	pluginUserConfigRepo := plugin_config.NewPluginUserConfigRepo(dataData)
-	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, pluginUserConfigRepo, configService, dataData)
+	importerService := importer.NewImporterService(questionService, rankService, userCommon)
+	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, pluginUserConfigRepo, configService, dataData, importerService)
 	pluginController := controller_admin.NewPluginController(pluginCommonService)
 	permissionController := controller.NewPermissionController(rankService)
 	userPluginController := controller.NewUserPluginController(pluginCommonService)

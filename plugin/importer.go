@@ -19,7 +19,9 @@
 
 package plugin
 
-import "github.com/gin-gonic/gin"
+import (
+	"context"
+)
 
 type QuestionImporterInfo struct {
 	Title     string   `json:"title"`
@@ -30,7 +32,11 @@ type QuestionImporterInfo struct {
 
 type Importer interface {
 	Base
-	GetQuestion(ctx *gin.Context) (questionInfo *QuestionImporterInfo, err error)
+	RegisterImporterFunc(ctx context.Context, importer ImporterFunc)
+}
+
+type ImporterFunc interface {
+	AddQuestion(ctx context.Context, questionInfo QuestionImporterInfo)
 }
 
 var (
