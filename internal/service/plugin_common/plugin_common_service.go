@@ -105,7 +105,6 @@ func (ps *PluginCommonService) UpdatePluginConfig(ctx context.Context, req *sche
 		return nil
 	})
 	_ = plugin.CallImporter(func(importer plugin.Importer) error {
-		fmt.Println("更新时注册Importer")
 		importer.RegisterImporterFunc(ctx, ps.importerService.NewImporterFunc())
 		return nil
 	})

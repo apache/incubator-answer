@@ -21,7 +21,6 @@ package importer
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -61,27 +60,19 @@ type ImporterFunc struct {
 	importerService *ImporterService
 }
 
-func (ipfunc *ImporterFunc) AddQuestion(ctx context.Context, questionInfo plugin.QuestionImporterInfo) {
-	println("Hello, World123!")
-	ipfunc.importerService.AddQuestion123(ctx, questionInfo)
+func (ipfunc *ImporterFunc) AddQuestion(ctx context.Context, questionInfo plugin.QuestionImporterInfo) (err error) {
+	ipfunc.importerService.ImportQuestion(ctx, questionInfo)
+	return nil
 }
 
 func (ip *ImporterService) NewImporterFunc() plugin.ImporterFunc {
 	return &ImporterFunc{importerService: ip}
 }
 
-func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plugin.QuestionImporterInfo) {
-	fmt.Println("Call from func (ip *ImporterService) AddQuestion123(*****)")
-	// body, err := io.ReadAll(ctx.Request.Body)
-	// ctx.Request.Body = io.NopCloser(bytes.NewBuffer(body))
-	fmt.Println("ImportPush")
-
-	// if err != nil {
-	// 	log.Errorf("error: %v", err)
-	// 	return
-	// }
+func (ip *ImporterService) ImportQuestion(ctx context.Context, questionInfo plugin.QuestionImporterInfo) (err error) {
 	req := &schema.QuestionAdd{}
 	errFields := make([]*validator.FormErrorField, 0)
+	// To limit rate, remove the following code from comment: Part 1/2
 	// reject, rejectKey := ipc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req)
 	// if reject {
 	// 	return
@@ -89,13 +80,14 @@ func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plug
 	user_info, exist, err := ip.userCommon.GetByEmail(ctx, questionInfo.UserEmail)
 	if err != nil {
 		log.Errorf("error: %v", err)
-		return
+		return err
 	}
 	if !exist {
 		log.Errorf("error: User Email not found")
-		return
+		return err
 	}
 
+	// To limit rate, remove the following code from comment: Part 2/2
 	// defer func() {
 	// 	// If status is not 200 means that the bad request has been returned, so the record should be cleared
 	// 	if ctx.Writer.Status() != http.StatusOK {
@@ -125,7 +117,7 @@ func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plug
 	})
 	if err != nil {
 		log.Errorf("error: %v", err)
-		return
+		return err
 	}
 	req.CanAdd = canList[0]
 	req.CanEdit = canList[1]
@@ -136,18 +128,18 @@ func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plug
 	req.CanAddTag = canList[6]
 	if !req.CanAdd {
 		log.Errorf("error: %v", err)
-		return
+		return err
 	}
 	hasNewTag, err := ip.questionService.HasNewTag(ctx.(*gin.Context), req.Tags)
 	if err != nil {
 		log.Errorf("error: %v", err)
-		return
+		return err
 	}
 	if !req.CanAddTag && hasNewTag {
 		lang := handler.GetLang(ctx.(*gin.Context))
 		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: requireRanks[6]})
 		log.Errorf("error: %v", msg)
-		return
+		return errors.BadRequest(msg)
 	}
 
 	errList, err := ip.questionService.CheckAddQuestion(ctx, req)
@@ -158,9 +150,7 @@ func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plug
 		}
 	}
 	if len(errFields) > 0 {
-		handler.HandleResponse(ctx.(*gin.Context), errors.BadRequest(reason.RequestFormatError), errFields)
-		log.Errorf("error: RequestFormat Error")
-		return
+		return errors.BadRequest(reason.RequestFormatError)
 	}
 	ginCtx := ctx.(*gin.Context)
 	req.UserAgent = ginCtx.GetHeader("User-Agent")
@@ -172,10 +162,10 @@ func (ip *ImporterService) AddQuestion123(ctx context.Context, questionInfo plug
 			errFields = append(errFields, errlist...)
 		}
 	}
-
 	if len(errFields) > 0 {
 		log.Errorf("error: RequestFormatError")
-		return
+		return errors.BadRequest(reason.RequestFormatError)
 	}
 	log.Info("Add Question Successfully")
+	return nil
 }
