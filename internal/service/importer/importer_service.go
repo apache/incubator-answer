@@ -21,6 +21,7 @@ package importer
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -83,7 +84,7 @@ func (ip *ImporterService) ImportQuestion(ctx context.Context, questionInfo plug
 		return err
 	}
 	if !exist {
-		log.Errorf("error: User Email not found")
+		return fmt.Errorf("User not found")
 	}
 
 	// To limit rate, remove the following code from comment: Part 2/2
