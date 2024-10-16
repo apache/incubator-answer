@@ -22,6 +22,8 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { isEmpty } from 'lodash';
+
 import { Icon } from '@/components';
 import { questionLink } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
@@ -43,7 +45,7 @@ const Index: FC<Props> = ({ id }) => {
     page_size: 5,
   });
 
-  if (!data || !data.list) {
+  if (!data || isEmpty(data?.list)) {
     return null;
   }
 
