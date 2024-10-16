@@ -611,3 +611,170 @@ func (qr *questionRepo) RemoveAllUserQuestion(ctx context.Context, userID string
 	}
 	return nil
 }
+
+// LinkQuestion batch insert question link
+func (qr *questionRepo) LinkQuestion(ctx context.Context, link ...*entity.QuestionLink) (err error) {
+	// Batch retrieve all links
+	var links []*entity.QuestionLink
+	for _, l := range link {
+		l.FromQuestionID = uid.DeShortID(l.FromQuestionID)
+		l.ToQuestionID = uid.DeShortID(l.ToQuestionID)
+		l.FromAnswerID = uid.DeShortID(l.FromAnswerID)
+		l.ToAnswerID = uid.DeShortID(l.ToAnswerID)
+		links = append(links, l)
+	}
+	// Retrieve existing records from the database
+	var existLinks []*entity.QuestionLink
+	session := qr.data.DB.Context(ctx)
+	for _, link := range links {
+		session = session.Or(builder.Eq{
+			"from_question_id": link.FromQuestionID,
+			"to_question_id":   link.ToQuestionID,
+			"from_answer_id":   link.FromAnswerID,
+			"to_answer_id":     link.ToAnswerID,
+		})
+	}
+	err = session.Find(&existLinks)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	// Optimize separation of records that need to be updated or inserted using a map
+	existMap := make(map[string]*entity.QuestionLink)
+	for _, el := range existLinks {
+		key := fmt.Sprintf("%s:%s:%s:%s", el.FromQuestionID, el.ToQuestionID, el.FromAnswerID, el.ToAnswerID)
+		existMap[key] = el
+	}
+
+	var updateLinks []*entity.QuestionLink
+	var insertLinks []*entity.QuestionLink
+	for _, link := range links {
+		key := fmt.Sprintf("%s:%s:%s:%s", link.FromQuestionID, link.ToQuestionID, link.FromAnswerID, link.ToAnswerID)
+		if el, exist := existMap[key]; exist {
+			if el.Status == entity.QuestionLinkStatusDeleted {
+				el.Status = entity.QuestionLinkStatusAvailable
+				el.UpdatedAt = time.Now()
+				updateLinks = append(updateLinks, el)
+			}
+		} else {
+			link.Status = entity.QuestionLinkStatusAvailable
+			link.CreatedAt = time.Now()
+			link.UpdatedAt = time.Now()
+			insertLinks = append(insertLinks, link)
+		}
+	}
+
+	// Batch update
+	if len(updateLinks) > 0 {
+		for _, link := range updateLinks {
+			_, err = qr.data.DB.Context(ctx).ID(link.ID).Cols("status").Update(&entity.QuestionLink{Status: entity.QuestionLinkStatusAvailable})
+			if err != nil {
+				return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+			}
+		}
+	}
+
+	// Batch insert
+	if len(insertLinks) > 0 {
+		_, err = qr.data.DB.Context(ctx).Insert(insertLinks)
+		if err != nil {
+			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+	}
+
+	return
+}
+
+// RecoverQuestionLink batch recover question link
+func (qr *questionRepo) RecoverQuestionLink(ctx context.Context, links ...*entity.QuestionLink) (err error) {
+	return qr.UpdateQuestionLinkStatus(ctx, entity.QuestionLinkStatusAvailable, links...)
+}
+
+// RemoveQuestionLink batch remove question link
+func (qr *questionRepo) RemoveQuestionLink(ctx context.Context, links ...*entity.QuestionLink) (err error) {
+	return qr.UpdateQuestionLinkStatus(ctx, entity.QuestionLinkStatusDeleted, links...)
+}
+
+// UpdateQuestionLinkStatus update question link status
+func (qr *questionRepo) UpdateQuestionLinkStatus(ctx context.Context, status int, links ...*entity.QuestionLink) (err error) {
+	if len(links) == 0 {
+		return nil
+	}
+
+	session := qr.data.DB.Context(ctx).Cols("status")
+	for _, link := range links {
+		eq := builder.Eq{}
+		if link.FromQuestionID != "" {
+			eq["from_question_id"] = uid.DeShortID(link.FromQuestionID)
+		}
+		if link.FromAnswerID != "" {
+			eq["from_answer_id"] = uid.DeShortID(link.FromAnswerID)
+		}
+		if link.ToQuestionID != "" {
+			eq["to_question_id"] = uid.DeShortID(link.ToQuestionID)
+		}
+		if link.ToAnswerID != "" {
+			eq["to_answer_id"] = uid.DeShortID(link.ToAnswerID)
+		}
+		session = session.Or(eq)
+	}
+	_, err = session.Update(&entity.QuestionLink{Status: status})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// GetQuestionLink get linked question to questionID
+func (qr *questionRepo) GetQuestionLink(ctx context.Context, page, pageSize int, questionID string, orderCond string, inDays int) (questionList []*entity.Question, total int64, err error) {
+	questionList = make([]*entity.Question, 0)
+	questionID = uid.DeShortID(questionID)
+	questionStatus := []int{entity.QuestionStatusAvailable, entity.QuestionStatusPending}
+	if questionID == "0" {
+		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(
+			fmt.Errorf("questionID is empty"),
+		).WithStack()
+	}
+
+	session := qr.data.DB.Context(ctx).
+		Table("question_link").
+		Join("INNER", "question", "question_link.from_question_id = question.id").
+		Where("question_link.to_question_id = ? AND question.show = ?", questionID, entity.QuestionShow).
+		Distinct("question.id").
+		Where("question_link.status = ?", entity.QuestionLinkStatusAvailable).
+		Select("question.*").
+		In("question.status", questionStatus)
+
+	switch orderCond {
+	case "newest":
+		session.OrderBy("question.pin desc,question.created_at DESC")
+	case "active":
+		if inDays == 0 {
+			session.And("question.created_at > ?", time.Now().AddDate(0, 0, -180))
+		}
+		session.And("question.post_update_time > ?", time.Now().AddDate(0, 0, -90))
+		session.OrderBy("question.pin desc,question.post_update_time DESC, question.updated_at DESC")
+	case "hot":
+		session.OrderBy("question.pin desc,question.hot_score DESC")
+	case "score":
+		session.OrderBy("question.pin desc,question.vote_count DESC, question.view_count DESC")
+	case "unanswered":
+		session.Where("question.answer_count = 0")
+		session.OrderBy("question.pin desc,question.created_at DESC")
+	}
+
+	if page > 0 && pageSize > 0 {
+		session.Limit(pageSize, (page-1)*pageSize)
+	}
+
+	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
+	}
+	return
+}

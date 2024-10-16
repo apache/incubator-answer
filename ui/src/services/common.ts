@@ -199,6 +199,23 @@ export const questionDetail = (id: string) => {
   );
 };
 
+export const questionLink = (params: {
+  question_id: string;
+  page: number;
+  page_size: number;
+}) => {
+  const apiUrl = `/answer/api/v1/question/link?${qs.stringify(params)}`;
+  const { data, error } = useSWR<Type.ListResult, Error>(
+    [apiUrl, params],
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
+
 export const getAnswers = (params: Type.AnswersReq) => {
   const apiUrl = `/answer/api/v1/answer/page?${qs.stringify(params)}`;
   return request.get<Type.ListResult<Type.AnswerItem>>(apiUrl);

@@ -794,7 +794,7 @@ ui:
   how_to_format:
     title: 如何排版
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">添加链接</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加 <code>&gt;</code> 表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用 <code>```</code> 创建代码块</p><pre class="mb-0"><code>```<br/>这是代码块<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">引用问题或答案: <code>#10010000000000001</code></p></li><li><p class="mb-2">添加链接</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加 <code>&gt;</code> 表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用 <code>```</code> 创建代码块</p><pre class="mb-0"><code>```<br/>这是代码块<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -1185,7 +1185,7 @@ ui:
       label: 名字
       msg:
         empty: 名字不能为空
-        range: 名字应该在 4 到 30 个字符之间
+        range: 名字应该在 2 到 30 个字符之间
         character: '只能由 "a-z"、"A-Z"、"0-9"、" - . _" 组成'
     email:
       label: 邮箱
@@ -1341,6 +1341,9 @@ ui:
   related_question:
     title: 相关问题
     answers: 个回答
+  linked_question:
+    title: 关联问题
+    no_linked_question: 没有关联的问题。
   invite_to_answer:
     title: 受邀人
     desc: 邀请你认为可能知道答案的人。
@@ -1559,6 +1562,7 @@ ui:
     top_questions: 高分问题
     stats: 状态
     list_empty: 没有找到相关的内容。<br />试试看其他选项卡？
+    content_empty: 没有找到相关的内容。
     accepted: 已采纳
     answered: 回答于
     asked: 提问于
@@ -1816,7 +1820,7 @@ ui:
             msg: "请输入用户的邮箱，每行一个。"
           display_name:
             label: 显示名称
-            msg: 显示名称长度必须为 4-30 个字符
+            msg: 显示名称长度必须为 2-30 个字符
           email:
             label: 邮箱
             msg: 邮箱无效。

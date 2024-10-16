@@ -1185,7 +1185,7 @@ ui:
       label: Navn
       msg:
         empty: Navn må ikke være tomt.
-        range: Navnet skal være mellem 4 og 30 tegn.
+        range: Navnet skal være mellem 2 og 30 tegn.
         character: 'Skal bruge tegnsættet "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: E-mail
@@ -1816,7 +1816,7 @@ ui:
             msg: "Indtast venligst brugerens e-mail, en pr. linje."
           display_name:
             label: Visnings-navn
-            msg: Vis navn skal være på 4-30 tegn.
+            msg: Vis navn skal være på 2-30 tegn.
           email:
             label: E-mail
             msg: E-mail er ugyldig.

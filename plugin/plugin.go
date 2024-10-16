@@ -110,6 +110,10 @@ func Register(p Base) {
 	if _, ok := p.(CDN); ok {
 		registerCDN(p.(CDN))
 	}
+
+	if _, ok := p.(Importer); ok {
+		registerImporter(p.(Importer))
+	}
 }
 
 type Stack[T Base] struct {

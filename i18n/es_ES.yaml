@@ -1185,7 +1185,7 @@ ui:
       label: Nombre
       msg:
         empty: El nombre no puede estar vacío.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Correo electrónico
@@ -1816,7 +1816,7 @@ ui:
             msg: "Por favor, introduzca el correo electrónico del usuario, uno por línea."
           display_name:
             label: Nombre público
-            msg: El nombre público debe tener entre 4 y 30 caracteres de longitud.
+            msg: El nombre público debe tener entre 2 y 30 caracteres de longitud.
           email:
             label: Correo
             msg: El correo no es válido.

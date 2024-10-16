@@ -974,3 +974,25 @@ func (qc *QuestionController) AdminUpdateQuestionStatus(ctx *gin.Context) {
 	err := qc.questionService.AdminSetQuestionStatus(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
+
+// GetQuestionLink get question link
+// @Summary get question link
+// @Description get question link
+// @Tags Question
+// @Param data query schema.GetQuestionLinkReq  true "GetQuestionLinkReq"
+// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.QuestionPageResp}}
+// @Router /answer/api/v1/question/link [get]
+func (qc *QuestionController) GetQuestionLink(ctx *gin.Context) {
+	req := &schema.GetQuestionLinkReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.QuestionID = uid.DeShortID(req.QuestionID)
+	questions, total, err := qc.questionService.GetQuestionLink(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
+}

@@ -48,13 +48,21 @@ class Plugins {
   registeredPlugins: Type.ActivatedPlugin[] = [];
 
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.registerBuiltin();
-    this.registerPlugins();
 
     getPluginsStatus().then((plugins) => {
-      this.registeredPlugins = plugins;
-      this.activatePlugins(plugins);
+      this.registeredPlugins = plugins.filter((p) => p.enabled);
+      this.registerPlugins();
     });
+  }
+
+  refresh() {
+    this.plugins = [];
+    this.init();
   }
 
   validate(plugin: Plugin) {
@@ -86,9 +94,19 @@ class Plugins {
   }
 
   registerPlugins() {
-    Object.keys(allPlugins).forEach((key) => {
-      const plugin = allPlugins[key];
-      this.register(plugin);
+    const plugins = this.registeredPlugins
+      .map((p) => {
+        const func = allPlugins[p.slug_name];
+
+        return func;
+      })
+      .filter((p) => p);
+    return new Promise((resolve) => {
+      plugins.forEach(async (p) => {
+        const plugin = await p();
+        this.register(plugin);
+      });
+      resolve(true);
     });
   }
 
@@ -100,6 +118,7 @@ class Plugins {
     if (plugin.i18nConfig) {
       initI18nResource(plugin.i18nConfig);
     }
+    plugin.activated = true;
     this.plugins.push(plugin);
   }
 
@@ -113,13 +132,6 @@ class Plugins {
         plugin.activated = activatedPlugin?.enabled;
       }
     });
-  }
-
-  changePluginActiveStatus(slug_name: string, active: boolean) {
-    const plugin = this.getPlugin(slug_name);
-    if (plugin) {
-      plugin.activated = active;
-    }
   }
 
   getPlugin(slug_name: string) {

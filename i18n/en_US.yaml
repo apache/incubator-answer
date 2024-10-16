@@ -327,9 +327,7 @@ backend:
       name:
         other: rude or abusive
       desc:
-        other:
-          A reasonable person would find this content inappropriate for respectful
-          discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: a duplicate
@@ -341,10 +339,7 @@ backend:
       name:
         other: not an answer
       desc:
-        other:
-          This was posted as an answer, but it does not attempt to answer the
-          question. It should possibly be an edit, a comment, another question,
-          or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: no longer needed
@@ -403,9 +398,7 @@ backend:
         name:
           other: needs details or clarity
         desc:
-          other:
-            This question currently includes multiple questions in one. It should
-            focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: something else
@@ -796,7 +789,8 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li>
+      <li><p class="mb-2">to make links</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
       class="mb-2">put returns between paragraphs</p></li><li><p
       class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
@@ -1205,7 +1199,7 @@ ui:
       label: Name
       msg:
         empty: Name cannot be empty.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email
@@ -1366,6 +1360,10 @@ ui:
   related_question:
     title: Related Questions
     answers: answers
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to 
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Invite People
     desc: Invite people you think can answer.
@@ -1592,6 +1590,7 @@ ui:
     top_questions: Top Questions
     stats: Stats
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    content_empty: No posts found.
     accepted: Accepted
     answered: answered
     asked: asked
@@ -1855,7 +1854,7 @@ ui:
             msg: "Please enter the user's email, one per line."
           display_name:
             label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            msg: Display name must be 2-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.

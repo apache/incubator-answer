@@ -22,8 +22,9 @@ package content
 import (
 	"context"
 	"encoding/json"
-	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"time"
+
+	"github.com/apache/incubator-answer/internal/service/event_queue"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -166,6 +167,17 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if err != nil {
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
+	err = as.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: answerInfo.QuestionID,
+		FromAnswerID:   answerInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: answerInfo.QuestionID,
+		ToAnswerID:   answerInfo.ID,
+	})
+	if err != nil {
+		log.Error("RemoveQuestionLink error", err.Error())
+	}
+
 	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
 	// facing the problem of recovery.
 	//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
@@ -197,6 +209,15 @@ func (as *AnswerService) RecoverAnswer(ctx context.Context, req *schema.RecoverA
 		return nil
 	}
 	if err = as.answerRepo.RecoverAnswer(ctx, req.AnswerID); err != nil {
+		return err
+	}
+	if err = as.questionRepo.RecoverQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: answerInfo.QuestionID,
+		FromAnswerID:   answerInfo.ID,
+	}, &entity.QuestionLink{
+		ToQuestionID: answerInfo.QuestionID,
+		ToAnswerID:   answerInfo.ID,
+	}); err != nil {
 		return err
 	}
 
@@ -250,6 +271,15 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.Status = as.reviewService.AddAnswerReview(ctx, insertData, req.IP, req.UserAgent)
 	if err := as.answerRepo.UpdateAnswerStatus(ctx, insertData.ID, insertData.Status); err != nil {
 		return "", err
+	}
+	if insertData.Status == entity.AnswerStatusAvailable {
+		insertData.ParsedText, err = as.questionCommon.UpdateQuestionLink(ctx, insertData.QuestionID, insertData.ID, insertData.ParsedText, insertData.OriginalText)
+		if err != nil {
+			return "", err
+		}
+		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"parsed_text"}); err != nil {
+			return "", err
+		}
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
@@ -366,6 +396,10 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
+		insertData.ParsedText, err = as.questionCommon.UpdateQuestionLink(ctx, insertData.QuestionID, insertData.ID, insertData.ParsedText, insertData.OriginalText)
+		if err != nil {
+			return "", err
+		}
 		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"}); err != nil {
 			return "", err
 		}

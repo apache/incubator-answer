@@ -46,7 +46,7 @@ export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'recommend',
 ];
 interface Props {
-  source: 'questions' | 'tag';
+  source: 'questions' | 'tag' | 'linked';
   order?: Type.QuestionOrderBy;
   data;
   orderList?: Type.QuestionOrderBy[];

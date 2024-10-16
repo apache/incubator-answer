@@ -52,6 +52,7 @@ var (
 		&entity.Meta{},
 		&entity.Notification{},
 		&entity.Question{},
+		&entity.QuestionLink{},
 		&entity.Report{},
 		&entity.Revision{},
 		&entity.SiteInfo{},

@@ -66,7 +66,7 @@ const Users: FC = () => {
       plugin_slug_name: plugin.slug_name,
     }).then(() => {
       updatePlugins();
-      PluginKit.changePluginActiveStatus(plugin.slug_name, !plugin.enabled);
+      PluginKit.refresh();
       if (plugin.have_config) {
         emitPluginChange('refreshConfigurablePlugins');
       }

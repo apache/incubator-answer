@@ -1185,7 +1185,7 @@ ui:
       label: Imię
       msg:
         empty: Imię nie może być puste.
-        range: Długość nazwy powinna wynosić od 4 do 30 znaków.
+        range: Długość nazwy powinna wynosić od 2 do 30 znaków.
         character: 'Możesz użyć dozwolone znaki "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Adres e-mail
@@ -1816,7 +1816,7 @@ ui:
             msg: "Podaj adresy e-mail użytkowników, jeden w każdej linii."
           display_name:
             label: Nazwa wyświetlana
-            msg: Wyświetlana nazwa musi mieć od 4 do 30 znaków.
+            msg: Wyświetlana nazwa musi mieć od 2 do 30 znaków.
           email:
             label: E-mail
             msg: Email nie jest prawidłowy.

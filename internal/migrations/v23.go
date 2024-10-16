@@ -17,14 +17,15 @@
  * under the License.
  */
 
-package checker
+package migrations
 
-import "regexp"
+import (
+	"context"
 
-var (
-	usernameReg = regexp.MustCompile(`^[a-z0-9._-]{2,30}$`)
+	"github.com/apache/incubator-answer/internal/entity"
+	"xorm.io/xorm"
 )
 
-func IsInvalidUsername(username string) bool {
-	return !usernameReg.MatchString(username)
+func addQuestionLink(ctx context.Context, x *xorm.Engine) (err error) {
+	return x.Context(ctx).Sync(new(entity.QuestionLink))
 }

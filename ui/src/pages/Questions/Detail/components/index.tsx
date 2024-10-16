@@ -25,6 +25,7 @@ import WriteAnswer from './WriteAnswer';
 import Alert from './Alert';
 import ContentLoader from './ContentLoader';
 import InviteToAnswer from './InviteToAnswer';
+import LinkedQuestions from './LinkedQuestions';
 
 export {
   Question,
@@ -35,4 +36,5 @@ export {
   Alert,
   ContentLoader,
   InviteToAnswer,
+  LinkedQuestions,
 };

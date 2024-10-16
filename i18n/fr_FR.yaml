@@ -1185,7 +1185,7 @@ ui:
       label: Nom
       msg:
         empty: Le nom ne peut pas être vide.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email
@@ -1610,7 +1610,7 @@ ui:
     site_name:
       label: Nom du site
       msg: Le nom ne peut pas être vide.
-      msg_max_length: Le nom affiché doit avoir une longueur de 4 à 30 caractères.
+      msg_max_length: Le nom affiché doit avoir une longueur de 2 à 30 caractères.
     site_url:
       label: URL du site
       text: L'adresse de ce site.
@@ -1816,7 +1816,7 @@ ui:
             msg: "Veuillez entrer l'email de l'utilisateur, un par ligne."
           display_name:
             label: Nom affiché
-            msg: Le nom affiché doit avoir une longueur de 4 à 30 caractères.
+            msg: Le nom affiché doit avoir une longueur de 2 à 30 caractères.
           email:
             label: Email
             msg: L'email n'est pas valide.

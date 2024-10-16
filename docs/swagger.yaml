@@ -2844,6 +2844,7 @@ definitions:
         type: string
       name:
         maxLength: 30
+        minLength: 2
         type: string
       pass:
         maxLength: 32
@@ -5583,6 +5584,57 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update question invite user
+      tags:
+      - Question
+  /answer/api/v1/question/link:
+    get:
+      description: get question link
+      parameters:
+      - in: query
+        minimum: 1
+        name: in_days
+        type: integer
+      - enum:
+        - newest
+        - active
+        - hot
+        - score
+        - unanswered
+        - recommend
+        in: query
+        name: order
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        type: integer
+      - in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - in: query
+        name: question_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.QuestionPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get question link
       tags:
       - Question
   /answer/api/v1/question/operation:

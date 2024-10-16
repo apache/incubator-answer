@@ -1185,7 +1185,7 @@ ui:
       label: Имя пользователя
       msg:
         empty: Имя пользователя не должно быть пустым.
-        range: Length of name should between 4 to 30 characters.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Email адрес
@@ -1816,7 +1816,7 @@ ui:
             msg: "Пожалуйста, введите адрес электронной почты пользователя, по одному на строку."
           display_name:
             label: Отображаемое имя
-            msg: Отображаемое имя должно содержать не менее 4-30 символов.
+            msg: Отображаемое имя должно содержать не менее 2-30 символов.
           email:
             label: Email
             msg: Некорректный email.
