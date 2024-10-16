@@ -37,6 +37,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/follow"
+	"github.com/apache/incubator-answer/internal/service/importer"
 	"github.com/apache/incubator-answer/internal/service/meta"
 	"github.com/apache/incubator-answer/internal/service/meta_common"
 	"github.com/apache/incubator-answer/internal/service/notice_queue"
@@ -124,4 +125,5 @@ var ProviderSetService = wire.NewSet(
 	badge.NewBadgeEventService,
 	badge.NewBadgeAwardService,
 	badge.NewBadgeGroupService,
+	importer.NewImporterService,
 )
