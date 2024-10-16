@@ -36,7 +36,7 @@ type Importer interface {
 }
 
 type ImporterFunc interface {
-	AddQuestion(ctx context.Context, questionInfo QuestionImporterInfo)
+	AddQuestion(ctx context.Context, questionInfo QuestionImporterInfo) (err error)
 }
 
 var (

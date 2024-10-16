@@ -79,6 +79,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/collection_common"
 	comment2 "github.com/apache/incubator-answer/internal/service/comment"
 	"github.com/apache/incubator-answer/internal/service/comment_common"
+	"github.com/apache/incubator-answer/internal/service/importer"
 	config2 "github.com/apache/incubator-answer/internal/service/config"
 	"github.com/apache/incubator-answer/internal/service/content"
 	"github.com/apache/incubator-answer/internal/service/dashboard"
@@ -111,7 +112,6 @@ import (
 	"github.com/apache/incubator-answer/internal/service/user_common"
 	user_external_login2 "github.com/apache/incubator-answer/internal/service/user_external_login"
 	user_notification_config2 "github.com/apache/incubator-answer/internal/service/user_notification_config"
-	"github.com/apache/incubator-answer/internal/service/importer"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
