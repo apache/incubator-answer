@@ -77,14 +77,13 @@ func (ip *ImporterService) ImportQuestion(ctx context.Context, questionInfo plug
 	// if reject {
 	// 	return
 	// }
-	user_info, exist, err := ip.userCommon.GetByEmail(ctx, questionInfo.UserEmail)
+	userInfo, exist, err := ip.userCommon.GetByEmail(ctx, questionInfo.UserEmail)
 	if err != nil {
 		log.Errorf("error: %v", err)
 		return err
 	}
 	if !exist {
 		log.Errorf("error: User Email not found")
-		return err
 	}
 
 	// To limit rate, remove the following code from comment: Part 2/2
@@ -94,7 +93,7 @@ func (ip *ImporterService) ImportQuestion(ctx context.Context, questionInfo plug
 	// 		ipc.rateLimitMiddleware.DuplicateRequestClear(ctx, rejectKey)
 	// 	}
 	// }()
-	req.UserID = user_info.ID
+	req.UserID = userInfo.ID
 	req.Title = questionInfo.Title
 	req.Content = questionInfo.Content
 	req.HTML = "<p>" + questionInfo.Content + "</p>"
@@ -162,6 +161,7 @@ func (ip *ImporterService) ImportQuestion(ctx context.Context, questionInfo plug
 			errFields = append(errFields, errlist...)
 		}
 	}
+
 	if len(errFields) > 0 {
 		log.Errorf("error: RequestFormatError")
 		return errors.BadRequest(reason.RequestFormatError)

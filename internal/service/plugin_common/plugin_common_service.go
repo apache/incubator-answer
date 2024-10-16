@@ -22,7 +22,6 @@ package plugin_common
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/repo/search_sync"
@@ -135,7 +134,6 @@ func (ps *PluginCommonService) GetUserPluginConfig(ctx context.Context, req *sch
 }
 
 func (ps *PluginCommonService) initPluginData() {
-	fmt.Println("init plugin data")
 	// init plugin status
 	pluginStatus, err := ps.configService.GetStringValue(context.TODO(), constant.PluginStatus)
 	if err != nil {
