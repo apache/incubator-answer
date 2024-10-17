@@ -455,8 +455,11 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	if req.PageSize == 0 {
+		req.PageSize = constant.DefaultPageSize
+	}
 	data, err := tc.templateRenderController.TagList(ctx, req)
-	if err != nil {
+	if err != nil || pager.ValPageOutOfRange(data.Count, req.Page, req.PageSize) {
 		tc.Page404(ctx)
 		return
 	}
