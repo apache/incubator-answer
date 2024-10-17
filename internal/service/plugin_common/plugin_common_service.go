@@ -34,6 +34,7 @@ import (
 	"github.com/apache/incubator-answer/internal/entity"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/config"
+	"github.com/apache/incubator-answer/internal/service/importer"
 	"github.com/apache/incubator-answer/plugin"
 )
 
@@ -56,6 +57,7 @@ type PluginCommonService struct {
 	pluginConfigRepo     PluginConfigRepo
 	pluginUserConfigRepo PluginUserConfigRepo
 	data                 *data.Data
+	importerService      *importer.ImporterService
 }
 
 // NewPluginCommonService new report service
@@ -64,6 +66,7 @@ func NewPluginCommonService(
 	pluginUserConfigRepo PluginUserConfigRepo,
 	configService *config.ConfigService,
 	data *data.Data,
+	importerService *importer.ImporterService,
 ) *PluginCommonService {
 
 	p := &PluginCommonService{
@@ -71,6 +74,7 @@ func NewPluginCommonService(
 		pluginConfigRepo:     pluginConfigRepo,
 		pluginUserConfigRepo: pluginUserConfigRepo,
 		data:                 data,
+		importerService:      importerService,
 	}
 	p.initPluginData()
 	return p
@@ -97,6 +101,10 @@ func (ps *PluginCommonService) UpdatePluginConfig(ctx context.Context, req *sche
 		if search.Info().SlugName == req.PluginSlugName {
 			search.RegisterSyncer(ctx, search_sync.NewPluginSyncer(ps.data))
 		}
+		return nil
+	})
+	_ = plugin.CallImporter(func(importer plugin.Importer) error {
+		importer.RegisterImporterFunc(ctx, ps.importerService.NewImporterFunc())
 		return nil
 	})
 	return nil
