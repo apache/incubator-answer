@@ -337,6 +337,10 @@ func (qc *QuestionController) QuestionPage(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
+	if pager.ValPageOutOfRange(total, req.Page, req.PageSize) {
+		handler.HandleResponse(ctx, errors.NotFound(reason.RequestFormatError), nil)
+		return
+	}
 	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
 }
 

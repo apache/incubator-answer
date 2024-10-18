@@ -35,11 +35,11 @@ export const queryQuestionByTitle = (title: string) => {
 };
 
 export const useQueryTags = (params) => {
-  const { data, error, mutate } = useSWR<Type.ListResult>(
-    `/answer/api/v1/tags/page?${qs.stringify(params, {
-      skipNulls: true,
-    })}`,
-    request.instance.get,
+  const apiUrl = `/answer/api/v1/tags/page?${qs.stringify(params, {
+    skipNulls: true,
+  })}`;
+  const { data, error, mutate } = useSWR<Type.ListResult>(apiUrl, (url) =>
+    request.get(url, { allow404: true }),
   );
   return {
     data,

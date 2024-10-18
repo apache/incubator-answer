@@ -174,6 +174,9 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if err != nil {
 		return err
 	}
+	if cf.Key == constant.ReasonADuplicate {
+		qs.questioncommon.AddQuestionLinkForCloseReason(ctx, questionInfo, req.CloseMsg)
+	}
 
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
@@ -199,6 +202,7 @@ func (qs *QuestionService) ReopenQuestion(ctx context.Context, req *schema.Reope
 	if err != nil {
 		return err
 	}
+	qs.questioncommon.RemoveQuestionLinkForReopen(ctx, questionInfo)
 	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
