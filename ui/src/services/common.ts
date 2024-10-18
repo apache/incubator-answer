@@ -199,10 +199,11 @@ export const questionDetail = (id: string) => {
   );
 };
 
-export const questionLink = (params: {
+export const useQuestionLink = (params: {
   question_id: string;
   page: number;
   page_size: number;
+  order?: string;
 }) => {
   const apiUrl = `/answer/api/v1/question/link?${qs.stringify(params)}`;
   const { data, error } = useSWR<Type.ListResult, Error>(

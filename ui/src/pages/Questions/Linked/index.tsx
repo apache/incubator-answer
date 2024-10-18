@@ -17,13 +17,13 @@
  * under the License.
  */
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { questionLink, questionDetail } from '@/services';
+import { useQuestionLink, questionDetail } from '@/services';
 import * as Type from '@/common/interface';
 import {
   QuestionList,
@@ -50,21 +50,25 @@ const LinkedQuestions: FC = () => {
     QUESTION_ORDER_KEYS[0]) as Type.QuestionOrderBy;
   const pageSize = 10;
   const { siteInfo } = siteInfoStore();
-  const { data: listData, isLoading: listLoading } = questionLink({
+  const { data: listData, isLoading: listLoading } = useQuestionLink({
     question_id: qid || '',
     page: curPage,
     page_size: pageSize,
+    order: curOrder,
   });
   const { login: loginSetting } = loginSettingStore();
   const [questionTitle, setQuestionTitle] = useState('');
-  questionDetail(qid || '')
-    .then((res) => {
-      setQuestionTitle(res.title);
-    })
-    .catch((err) => {
-      console.error('get question detail failed:', err);
-      setQuestionTitle(`#${qid}`);
-    });
+
+  useEffect(() => {
+    questionDetail(qid || '')
+      .then((res) => {
+        setQuestionTitle(res.title);
+      })
+      .catch((err) => {
+        console.error('get question detail failed:', err);
+        setQuestionTitle(`#${qid}`);
+      });
+  }, []);
   usePageTags({
     title: t('title'),
   });
@@ -81,11 +85,7 @@ const LinkedQuestions: FC = () => {
           source="linked"
           data={listData}
           order={curOrder}
-          orderList={
-            loggedUser.username
-              ? QUESTION_ORDER_KEYS
-              : QUESTION_ORDER_KEYS.filter((key) => key !== 'recommend')
-          }
+          orderList={QUESTION_ORDER_KEYS.slice(0, 5)}
           isLoading={listLoading}
         />
       </Col>

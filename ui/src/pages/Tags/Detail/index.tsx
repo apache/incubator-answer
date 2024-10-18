@@ -176,7 +176,7 @@ const Index: FC = () => {
           source="tag"
           data={listData}
           order={curOrder}
-          orderList={QUESTION_ORDER_KEYS.slice(0, 4)}
+          orderList={QUESTION_ORDER_KEYS.slice(0, 5)}
           isLoading={listLoading}
         />
       </Col>

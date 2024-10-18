@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
 
 import { Icon } from '@/components';
-import { questionLink } from '@/services';
+import { useQuestionLink } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
@@ -39,7 +39,7 @@ const Index: FC<Props> = ({ id }) => {
     keyPrefix: 'related_question',
   });
 
-  const { data } = questionLink({
+  const { data } = useQuestionLink({
     question_id: id,
     page: 1,
     page_size: 5,
