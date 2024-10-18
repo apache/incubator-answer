@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/service/content"
 	"github.com/apache/incubator-answer/internal/service/event_queue"
 	"github.com/apache/incubator-answer/plugin"
@@ -145,7 +146,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	var page = req.Page
 
 	data, count, err := tc.templateRenderController.Index(ctx, req)
-	if err != nil {
+	if err != nil || (len(data) == 0 && pager.ValPageOutOfRange(count, page, req.PageSize)) {
 		tc.Page404(ctx)
 		return
 	}
@@ -186,7 +187,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 	var page = req.Page
 	data, count, err := tc.templateRenderController.Index(ctx, req)
-	if err != nil {
+	if err != nil || (len(data) == 0 && pager.ValPageOutOfRange(count, page, req.PageSize)) {
 		tc.Page404(ctx)
 		return
 	}
@@ -454,8 +455,11 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	if req.PageSize == 0 {
+		req.PageSize = constant.DefaultPageSize
+	}
 	data, err := tc.templateRenderController.TagList(ctx, req)
-	if err != nil {
+	if err != nil || pager.ValPageOutOfRange(data.Count, req.Page, req.PageSize) {
 		tc.Page404(ctx)
 		return
 	}

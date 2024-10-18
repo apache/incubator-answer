@@ -432,7 +432,6 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 		}
 		item.GetExcerpt()
 		resp = append(resp, item)
-
 	}
 	return pager.NewPageModel(total, resp), nil
 }

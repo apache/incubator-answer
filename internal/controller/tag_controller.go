@@ -22,6 +22,7 @@ package controller
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/base/pager"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/permission"
@@ -269,6 +270,10 @@ func (tc *TagController) GetTagWithPage(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := tc.tagService.GetTagWithPage(ctx, req)
+	if pager.ValPageOutOfRange(resp.Count, req.Page, req.PageSize) {
+		handler.HandleResponse(ctx, errors.NotFound(reason.RequestFormatError), nil)
+		return
+	}
 	handler.HandleResponse(ctx, err, resp)
 }
 
