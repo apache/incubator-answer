@@ -71,6 +71,9 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
     const LENGTH = 200;
     const bgNode = document.documentElement || document.body;
     const parentNode = document.getElementById('badgeModal')?.parentNode;
+    const badgeModalNode = document.getElementById('badgeModal');
+
+    badgeModalNode?.setAttribute('style', 'z-index: 1');
 
     if (parentNode) {
       bg1 = new AnimateGift({
