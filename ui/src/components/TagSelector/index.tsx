@@ -18,10 +18,11 @@
  */
 
 /* eslint-disable no-nested-ternary */
-import { FC, useState, useEffect, useRef } from 'react';
+import { FC, useState, useEffect, useRef, useCallback } from 'react';
 import { Dropdown, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import debounce from 'lodash/debounce';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
@@ -69,7 +70,7 @@ const TagSelector: FC<IProps> = ({
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [repeatIndex, setRepeatIndex] = useState(-1);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [tags, setTags] = useState<Type.Tag[] | null>(null);
+  const [tags, setTags] = useState<Type.Tag[] | null>([]);
   const [requiredTags, setRequiredTags] = useState<Type.Tag[] | null>(null);
   const { t } = useTranslation('translation', { keyPrefix: 'tag_selector' });
   const { data: userPermission } = useUserPermission('tag.add');
@@ -146,20 +147,23 @@ const TagSelector: FC<IProps> = ({
     handleMenuShow(false);
   };
 
-  const fetchTags = (str) => {
-    if (!showRequiredTag && !str) {
-      setTags([]);
-      return;
-    }
-    queryTags(str).then((res) => {
-      const tagArray: Type.Tag[] = filterTags(res || []);
-      if (str === '') {
-        setRequiredTags(res);
+  const fetchTags = useCallback(
+    debounce((str) => {
+      if (!showRequiredTag && !str) {
+        setTags([]);
+        return;
       }
-      handleMenuShow(tagArray.length > 0);
-      setTags(tagArray);
-    });
-  };
+      queryTags(str).then((res) => {
+        const tagArray: Type.Tag[] = filterTags(res || []);
+        if (str === '') {
+          setRequiredTags(res);
+        }
+        handleMenuShow(tagArray.length > 0);
+        setTags(tagArray);
+      });
+    }, 400),
+    [],
+  );
 
   const resetSearch = () => {
     setCurrentIndex(0);
