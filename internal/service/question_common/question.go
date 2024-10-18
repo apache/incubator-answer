@@ -23,6 +23,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"math"
 	"strings"
 	"time"
@@ -98,6 +99,7 @@ type QuestionCommon struct {
 	configService        *config.ConfigService
 	activityQueueService activity_queue.ActivityQueueService
 	revisionRepo         revision.RevisionRepo
+	siteInfoService      siteinfo_common.SiteInfoCommonService
 	data                 *data.Data
 }
 
@@ -113,6 +115,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	configService *config.ConfigService,
 	activityQueueService activity_queue.ActivityQueueService,
 	revisionRepo revision.RevisionRepo,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 	data *data.Data,
 ) *QuestionCommon {
 	return &QuestionCommon{
@@ -128,6 +131,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		configService:        configService,
 		activityQueueService: activityQueueService,
 		revisionRepo:         revisionRepo,
+		siteInfoService:      siteInfoService,
 		data:                 data,
 	}
 }
@@ -794,4 +798,76 @@ func (qs *QuestionCommon) UpdateQuestionLink(ctx context.Context, questionID, an
 	}
 
 	return parsedText, nil
+}
+
+// AddQuestionLinkForCloseReason When the reason about close question is a question link, add the link to the question
+func (qs *QuestionCommon) AddQuestionLinkForCloseReason(ctx context.Context,
+	questionInfo *entity.Question, closeMsg string) {
+	questionID := qs.tryToGetQuestionIDFromMsg(ctx, closeMsg)
+	if len(questionID) == 0 {
+		return
+	}
+
+	linkedQuestion, exist, err := qs.questionRepo.GetQuestion(ctx, questionID)
+	if err != nil {
+		log.Errorf("get question error %s", err)
+		return
+	}
+	if !exist {
+		return
+	}
+	err = qs.questionRepo.LinkQuestion(ctx, &entity.QuestionLink{
+		FromQuestionID: questionInfo.ID,
+		ToQuestionID:   linkedQuestion.ID,
+		Status:         entity.QuestionLinkStatusAvailable,
+	})
+	if err != nil {
+		log.Errorf("link question error %s", err)
+	}
+}
+
+func (qs *QuestionCommon) RemoveQuestionLinkForReopen(ctx context.Context, questionInfo *entity.Question) {
+	questionInfo.ID = uid.DeShortID(questionInfo.ID)
+	metaInfo, err := qs.metaCommonService.GetMetaByObjectIdAndKey(ctx, questionInfo.ID, entity.QuestionCloseReasonKey)
+	if err != nil {
+		return
+	}
+
+	closeMsgMeta := &schema.CloseQuestionMeta{}
+	_ = json.Unmarshal([]byte(metaInfo.Value), closeMsgMeta)
+
+	linkedQuestionID := qs.tryToGetQuestionIDFromMsg(ctx, closeMsgMeta.CloseMsg)
+	if len(linkedQuestionID) == 0 {
+		return
+	}
+	err = qs.questionRepo.RemoveQuestionLink(ctx, &entity.QuestionLink{
+		FromQuestionID: questionInfo.ID,
+		ToQuestionID:   linkedQuestionID,
+	})
+	if err != nil {
+		log.Errorf("remove question link error %s", err)
+	}
+}
+
+func (qs *QuestionCommon) tryToGetQuestionIDFromMsg(ctx context.Context, closeMsg string) (questionID string) {
+	siteGeneral, err := qs.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general error %s", err)
+		return
+	}
+	if !strings.HasPrefix(closeMsg, siteGeneral.SiteUrl) {
+		return
+	}
+	// get question id from url
+	// the url may like: https://xxx.com/questions/D1401/xxx
+	// the D1401 is question id
+	questionID = strings.TrimPrefix(closeMsg, siteGeneral.SiteUrl)
+	questionID = strings.TrimPrefix(questionID, "/questions/")
+	t := strings.Split(questionID, "/")
+	if len(t) < 1 {
+		return ""
+	}
+	questionID = t[0]
+	questionID = uid.DeShortID(questionID)
+	return questionID
 }

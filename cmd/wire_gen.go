@@ -177,7 +177,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)
 	metaRepo := meta.NewMetaRepo(dataData)
 	metaCommonService := metacommon.NewMetaCommonService(metaRepo)
-	questionCommon := questioncommon.NewQuestionCommon(questionRepo, answerRepo, voteRepo, followRepo, tagCommonService, userCommon, collectionCommon, answerCommon, metaCommonService, configService, activityQueueService, revisionRepo, dataData)
+	questionCommon := questioncommon.NewQuestionCommon(questionRepo, answerRepo, voteRepo, followRepo, tagCommonService, userCommon, collectionCommon, answerCommon, metaCommonService, configService, activityQueueService, revisionRepo, siteInfoCommonService, dataData)
 	eventQueueService := event_queue.NewEventQueueService()
 	userService := content.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService, userNotificationConfigRepo, userNotificationConfigService, questionCommon, eventQueueService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
