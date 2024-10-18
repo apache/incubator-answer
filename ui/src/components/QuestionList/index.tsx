@@ -118,9 +118,15 @@ const QuestionList: FC<Props> = ({
                     />
                     •
                     <FormatTime
-                      time={li.operated_at}
+                      time={
+                        curOrder === 'active' ? li.operated_at : li.created_at
+                      }
                       className="text-secondary ms-1 flex-shrink-0"
-                      preFix={t(li.operation_type)}
+                      preFix={
+                        curOrder === 'active'
+                          ? t(li.operation_type)
+                          : t('asked')
+                      }
                     />
                   </div>
                   <Counts
