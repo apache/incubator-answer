@@ -49,35 +49,32 @@ const Index: FC<Props> = ({ visible, introduction, data, username }) => {
           dangerouslySetInnerHTML={{ __html: introduction }}
         />
       ) : (
-        <div className="mb-5">{t('about_me_empty')}</div>
+        <div className="text-center py-5 mb-5">{t('about_me_empty')}</div>
       )}
 
-      <Row
-        className={
-          data?.answer?.length > 0 || data?.question?.length > 0 ? 'mb-4' : ''
-        }>
-        <Col sm={12} md={6}>
-          <h5 className="mb-3">{t('top_answers')}</h5>
-          {data?.answer?.length > 0 ? (
-            <TopList data={data?.answer} type="answer" />
-          ) : (
-            <div className="mb-5">{t('content_empty')}</div>
+      <Row className="mb-4">
+        <Col sm={12} md={6} className="mb-4">
+          {data?.answer?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_answers')}</h5>
+              <TopList data={data?.answer} type="answer" />
+            </>
           )}
         </Col>
         <Col sm={12} md={6}>
-          <h5 className="mb-3">{t('top_questions')}</h5>
-          {data?.question?.length > 0 ? (
-            <TopList data={data?.question} type="question" />
-          ) : (
-            <div className="mb-5">{t('content_empty')}</div>
+          {data?.question?.length > 0 && (
+            <>
+              <h5 className="mb-3">{t('top_questions')}</h5>
+              <TopList data={data?.question} type="question" />
+            </>
           )}
         </Col>
       </Row>
 
-      <div className="mb-5">
-        <h5 className="mb-3">{t('recent_badges')}</h5>
-        {Number(recentBadges?.count) > 0 ? (
-          <div className="d-flex flex-wrap" style={{ margin: '-12px' }}>
+      {Number(recentBadges?.count) > 0 && (
+        <div className="mb-4">
+          <h5 className="mb-3">{t('recent_badges')}</h5>
+          <Row>
             {recentBadges?.list?.map((item) => {
               return (
                 <Col sm={6} md={4} lg={3} key={item.id} className="mb-4">
@@ -89,11 +86,9 @@ const Index: FC<Props> = ({ visible, introduction, data, username }) => {
                 </Col>
               );
             })}
-          </div>
-        ) : (
-          <div className="mb-5">{t('content_empty')}</div>
-        )}
-      </div>
+          </Row>
+        </div>
+      )}
     </div>
   );
 };
