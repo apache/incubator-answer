@@ -70,8 +70,8 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
     const DURATION = 8000;
     const LENGTH = 200;
     const bgNode = document.documentElement || document.body;
-    const parentNode = document.getElementById('badgeModal')?.parentNode;
     const badgeModalNode = document.getElementById('badgeModal');
+    const parentNode = badgeModalNode?.parentNode;
 
     badgeModalNode?.setAttribute('style', 'z-index: 1');
 
