@@ -729,7 +729,7 @@ func (qr *questionRepo) UpdateQuestionLinkStatus(ctx context.Context, status int
 func (qr *questionRepo) GetQuestionLink(ctx context.Context, page, pageSize int, questionID string, orderCond string, inDays int) (questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 	questionID = uid.DeShortID(questionID)
-	questionStatus := []int{entity.QuestionStatusAvailable, entity.QuestionStatusPending}
+	questionStatus := []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed, entity.QuestionStatusPending}
 	if questionID == "0" {
 		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(
 			fmt.Errorf("questionID is empty"),

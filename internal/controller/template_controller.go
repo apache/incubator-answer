@@ -139,7 +139,6 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
-		tc.Page404(ctx)
 		return
 	}
 
@@ -182,7 +181,6 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
-		tc.Page404(ctx)
 		return
 	}
 	var page = req.Page
