@@ -58,45 +58,35 @@ const Index: FC<Props> = ({ id }) => {
         </Link>
       </Card.Header>
       <ListGroup variant="flush">
-        {data.list.length > 0 ? (
-          data.list.map((item) => (
-            <ListGroup.Item
-              action
-              key={item.id}
-              as={Link}
-              to={pathFactory.questionLanding(item.id, item.url_title)}>
-              <div className="link-dark">{item.title}</div>
-              {item.answer_count > 0 && (
-                <div
-                  className={`mt-1 small me-2 ${
+        {data.list?.map((item) => (
+          <ListGroup.Item
+            action
+            key={item.id}
+            as={Link}
+            to={pathFactory.questionLanding(item.id, item.url_title)}>
+            <div className="link-dark">{item.title}</div>
+            {item.answer_count > 0 && (
+              <div
+                className={`mt-1 small me-2 ${
+                  item.accepted_answer_id > 0
+                    ? 'link-success'
+                    : 'link-secondary'
+                }`}>
+                <Icon
+                  name={
                     item.accepted_answer_id > 0
-                      ? 'link-success'
-                      : 'link-secondary'
-                  }`}>
-                  <Icon
-                    name={
-                      item.accepted_answer_id > 0
-                        ? 'check-circle-fill'
-                        : 'chat-square-text-fill'
-                    }
-                    className="me-1"
-                  />
-                  <span>
-                    {item.answer_count} {t2('answers')}
-                  </span>
-                </div>
-              )}
-            </ListGroup.Item>
-          ))
-        ) : (
-          <div
-            className="text-muted"
-            style={{
-              padding: 'var(--bs-card-spacer-y) var(--bs-card-spacer-x)',
-            }}>
-            {t('no_linked_question')}
-          </div>
-        )}
+                      ? 'check-circle-fill'
+                      : 'chat-square-text-fill'
+                  }
+                  className="me-1"
+                />
+                <span>
+                  {item.answer_count} {t2('answers')}
+                </span>
+              </div>
+            )}
+          </ListGroup.Item>
+        ))}
       </ListGroup>
     </Card>
   );

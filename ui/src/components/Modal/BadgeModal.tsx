@@ -98,7 +98,6 @@ const BadgeModal: FC<BadgeModalProps> = ({ badge, visible }) => {
   };
 
   const destroyAnimation = () => {
-    console.log('destroyAnimation');
     clearTimeout(timeout);
     bg1?.destroy();
     bg2?.destroy();
