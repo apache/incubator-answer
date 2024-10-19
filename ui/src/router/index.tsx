@@ -27,8 +27,6 @@ import baseRoutes, { RouteNode } from './routes';
 import RouteGuard from './RouteGuard';
 import RouteErrorBoundary from './RouteErrorBoundary';
 
-const routes: RouteNode[] = [];
-
 const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
   routeNodes.forEach((rn) => {
     if (rn.page === 'pages/Layout') {
@@ -76,8 +74,14 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
     }
   });
 };
-const mergedRoutes = mergeRoutePlugins(baseRoutes);
 
-routeWrapper(mergedRoutes, routes);
+function resolveRoutes(): RouteObject[] {
+  const routes: RouteNode[] = [];
+  const mergedRoutes = mergeRoutePlugins(baseRoutes);
 
-export default routes as RouteObject[];
+  routeWrapper(mergedRoutes, routes);
+
+  return routes as RouteObject[];
+}
+
+export default resolveRoutes;

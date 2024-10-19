@@ -42,13 +42,44 @@ import { Plugin, PluginInfo, PluginType } from './interface';
  * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
  */
 
+type EventName = string;
+type EventHandler = () => void;
+
 class Plugins {
   plugins: Plugin[] = [];
 
   registeredPlugins: Type.ActivatedPlugin[] = [];
 
+  events: Record<EventName, EventHandler[]> = {};
+
   constructor() {
     this.init();
+  }
+
+  on(name: EventName, handler: EventHandler) {
+    if (!this.events[name]) {
+      this.events[name] = [];
+    }
+
+    this.events[name].push(handler);
+  }
+
+  off(name: EventName, handler?: EventHandler) {
+    const handlers = this.events[name];
+
+    if (!handlers || handlers.length === 0) {
+      return;
+    }
+
+    if (handler) {
+      this.events[name] = handlers.filter((func) => func !== handler);
+    } else {
+      delete this.events[name];
+    }
+  }
+
+  trigger(name: EventName) {
+    (this.events[name] || []).forEach((handler) => handler());
   }
 
   init() {
@@ -101,12 +132,10 @@ class Plugins {
         return func;
       })
       .filter((p) => p);
-    return new Promise((resolve) => {
-      plugins.forEach(async (p) => {
-        const plugin = await p();
-        this.register(plugin);
-      });
-      resolve(true);
+    return Promise.all(plugins.map((p) => p())).then((resolvedPlugins) => {
+      resolvedPlugins.forEach((plugin) => this.register(plugin));
+      this.trigger('registered');
+      return true;
     });
   }
 
@@ -149,6 +178,9 @@ class Plugins {
 }
 
 const plugins = new Plugins();
+
+const subscribe = plugins.on.bind(plugins);
+const unsubscribe = plugins.off.bind(plugins);
 
 const getRoutePlugins = () => {
   return plugins
@@ -287,5 +319,7 @@ export {
   useCaptchaPlugin,
   useRenderPlugin,
   PluginType,
+  subscribe,
+  unsubscribe,
 };
 export default plugins;
