@@ -28,8 +28,9 @@ import './i18n/init';
 
 import { subscribe, unsubscribe } from '@/utils/pluginKit';
 import resolveRoutes from '@/router';
+import InitialLoadingPlaceholder from '@/components/InitialLoadingPlaceholder';
 
-function App() {
+function useResolvedRoutes() {
   const [routes, setRoutes] = useState<RouteObject[]>([]);
 
   useEffect(() => {
@@ -44,8 +45,14 @@ function App() {
     };
   }, []);
 
+  return routes;
+}
+
+function App() {
+  const routes = useResolvedRoutes();
+
   if (routes.length === 0) {
-    return <div>initializing</div>;
+    return <InitialLoadingPlaceholder />;
   }
 
   const router = createBrowserRouter(routes, {
