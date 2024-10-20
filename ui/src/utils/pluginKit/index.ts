@@ -29,6 +29,7 @@ import request from '@/utils/request';
 
 import { initI18nResource } from './utils';
 import { Plugin, PluginInfo, PluginType } from './interface';
+import SimpleEventEmitter from './emitter';
 
 /**
  * This information is to be defined for all components.
@@ -42,44 +43,14 @@ import { Plugin, PluginInfo, PluginType } from './interface';
  * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
  */
 
-type EventName = string;
-type EventHandler = () => void;
-
-class Plugins {
+class Plugins extends SimpleEventEmitter {
   plugins: Plugin[] = [];
 
   registeredPlugins: Type.ActivatedPlugin[] = [];
 
-  events: Record<EventName, EventHandler[]> = {};
-
   constructor() {
+    super();
     this.init();
-  }
-
-  on(name: EventName, handler: EventHandler) {
-    if (!this.events[name]) {
-      this.events[name] = [];
-    }
-
-    this.events[name].push(handler);
-  }
-
-  off(name: EventName, handler?: EventHandler) {
-    const handlers = this.events[name];
-
-    if (!handlers || handlers.length === 0) {
-      return;
-    }
-
-    if (handler) {
-      this.events[name] = handlers.filter((func) => func !== handler);
-    } else {
-      delete this.events[name];
-    }
-  }
-
-  trigger(name: EventName) {
-    (this.events[name] || []).forEach((handler) => handler());
   }
 
   init() {
@@ -134,7 +105,7 @@ class Plugins {
       .filter((p) => p);
     return Promise.all(plugins.map((p) => p())).then((resolvedPlugins) => {
       resolvedPlugins.forEach((plugin) => this.register(plugin));
-      this.trigger('registered');
+      this.emit('registered');
       return true;
     });
   }
