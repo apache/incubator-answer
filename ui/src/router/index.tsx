@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
@@ -75,13 +75,21 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
   });
 };
 
-function resolveRoutes(): RouteObject[] {
-  const routes: RouteNode[] = [];
-  const mergedRoutes = mergeRoutePlugins(baseRoutes);
+function useMergeRoutes() {
+  const [routesState, setRoutes] = useState<RouteObject[]>([]);
 
-  routeWrapper(mergedRoutes, routes);
+  const init = async () => {
+    const routes = [];
+    const mergedRoutes = await mergeRoutePlugins(baseRoutes).catch(() => []);
+    routeWrapper(mergedRoutes, routes);
+    setRoutes(routes);
+  };
 
-  return routes as RouteObject[];
+  useEffect(() => {
+    init();
+  }, []);
+
+  return routesState;
 }
 
-export default resolveRoutes;
+export { useMergeRoutes };
