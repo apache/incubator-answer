@@ -153,10 +153,15 @@ func (a *UIRouter) Register(r *gin.Engine, baseURLPath string) {
 			return
 		}
 
-		if filePath == UIIndexFilePath {
-			c.String(http.StatusNotFound, string(file))
-			return
-		}
+		// This part is to solve the problem of returning 404 when the access path does not exist.
+		// However, there is no way to check whether the current route exists in the frontend.
+		// We can only hand over the route to the frontend for processing.
+		// And the plugin, frontend routes can now be dynamically registered,
+		// so there's no good way to get all frontend routes
+		//if filePath == UIIndexFilePath {
+		//	c.String(http.StatusNotFound, string(file))
+		//	return
+		//}
 
 		c.String(http.StatusOK, string(file))
 	})
