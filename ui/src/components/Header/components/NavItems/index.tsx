@@ -26,6 +26,7 @@ import type * as Type from '@/common/interface';
 import { Avatar, Icon } from '@/components';
 import { floppyNavigation } from '@/utils';
 import { userCenterStore } from '@/stores';
+import { REACT_BASE_PATH } from '@/router/alias';
 
 interface Props {
   redDot: Type.NotificationStatus | undefined;
@@ -95,31 +96,27 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <NavLink
-            to={`/users/${userInfo.username}`}
-            className={() => 'dropdown-item'}
+          <Dropdown.Item
+            href={`${REACT_BASE_PATH}/users/${userInfo.username}`}
             onClick={handleLinkClick}>
             {t('header.nav.profile')}
-          </NavLink>
-          <NavLink
-            to={`/users/${userInfo.username}/bookmarks`}
-            className={() => 'dropdown-item'}
+          </Dropdown.Item>
+          <Dropdown.Item
+            href={`${REACT_BASE_PATH}/users/${userInfo.username}/bookmarks`}
             onClick={handleLinkClick}>
             {t('header.nav.bookmark')}
-          </NavLink>
-          <NavLink
-            to="/users/settings/profile"
-            className={() => 'dropdown-item'}
+          </Dropdown.Item>
+          <Dropdown.Item
+            href={`${REACT_BASE_PATH}/users/settings/profile`}
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
-          </NavLink>
+          </Dropdown.Item>
           <Dropdown.Divider />
-          <NavLink
-            to="/users/logout"
-            className={() => 'dropdown-item'}
+          <Dropdown.Item
+            href={`${REACT_BASE_PATH}/users/logout`}
             onClick={(e) => logOut(e)}>
             {t('header.nav.logout')}
-          </NavLink>
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       {/* Dropdown for user center agent info */}
