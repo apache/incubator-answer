@@ -29,7 +29,6 @@ import request from '@/utils/request';
 
 import { initI18nResource } from './utils';
 import { Plugin, PluginInfo, PluginType } from './interface';
-import SimpleEventEmitter from './emitter';
 
 /**
  * This information is to be defined for all components.
@@ -43,23 +42,23 @@ import SimpleEventEmitter from './emitter';
  * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
  */
 
-class Plugins extends SimpleEventEmitter {
+class Plugins {
   plugins: Plugin[] = [];
 
   registeredPlugins: Type.ActivatedPlugin[] = [];
 
+  initialization: Promise<void>;
+
   constructor() {
-    super();
-    this.init();
+    this.initialization = this.init();
   }
 
-  init() {
+  async init() {
     this.registerBuiltin();
 
-    getPluginsStatus().then((plugins) => {
-      this.registeredPlugins = plugins.filter((p) => p.enabled);
-      this.registerPlugins();
-    });
+    const plugins = await getPluginsStatus().catch(() => []);
+    this.registeredPlugins = plugins.filter((p) => p.enabled);
+    await this.registerPlugins();
   }
 
   refresh() {
@@ -105,7 +104,6 @@ class Plugins extends SimpleEventEmitter {
       .filter((p) => p);
     return Promise.all(plugins.map((p) => p())).then((resolvedPlugins) => {
       resolvedPlugins.forEach((plugin) => this.register(plugin));
-      this.emit('registered');
       return true;
     });
   }
@@ -120,18 +118,6 @@ class Plugins extends SimpleEventEmitter {
     }
     plugin.activated = true;
     this.plugins.push(plugin);
-  }
-
-  activatePlugins(activatedPlugins: Type.ActivatedPlugin[]) {
-    this.plugins.forEach((plugin: any) => {
-      const { slug_name } = plugin.info;
-      const activatedPlugin: any = activatedPlugins?.find(
-        (p) => p.slug_name === slug_name,
-      );
-      if (activatedPlugin) {
-        plugin.activated = activatedPlugin?.enabled;
-      }
-    });
   }
 
   getPlugin(slug_name: string) {
@@ -150,10 +136,8 @@ class Plugins extends SimpleEventEmitter {
 
 const plugins = new Plugins();
 
-const subscribe = plugins.on.bind(plugins);
-const unsubscribe = plugins.off.bind(plugins);
-
-const getRoutePlugins = () => {
+const getRoutePlugins = async () => {
+  await plugins.initialization;
   return plugins
     .getPlugins()
     .filter((plugin) => plugin.info.type === PluginType.Route);
@@ -183,8 +167,8 @@ const validateRoutePlugin = async (slugName) => {
   return Boolean(registeredPlugin?.enabled);
 };
 
-const mergeRoutePlugins = (routes) => {
-  const routePlugins = getRoutePlugins();
+const mergeRoutePlugins = async (routes) => {
+  const routePlugins = await getRoutePlugins();
   if (routePlugins.length === 0) {
     return routes;
   }
@@ -290,7 +274,5 @@ export {
   useCaptchaPlugin,
   useRenderPlugin,
   PluginType,
-  subscribe,
-  unsubscribe,
 };
 export default plugins;

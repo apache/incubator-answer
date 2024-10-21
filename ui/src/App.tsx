@@ -17,44 +17,19 @@
  * under the License.
  */
 
-import {
-  type RouteObject,
-  RouterProvider,
-  createBrowserRouter,
-} from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import './i18n/init';
 
-import { subscribe, unsubscribe } from '@/utils/pluginKit';
-import resolveRoutes from '@/router';
+import '@/utils/pluginKit';
+import { useMergeRoutes } from '@/router';
 import InitialLoadingPlaceholder from '@/components/InitialLoadingPlaceholder';
 
-function useResolvedRoutes() {
-  const [routes, setRoutes] = useState<RouteObject[]>([]);
-
-  useEffect(() => {
-    const callback = () => {
-      setRoutes(resolveRoutes());
-    };
-
-    subscribe('registered', callback);
-
-    return () => {
-      unsubscribe('registered', callback);
-    };
-  }, []);
-
-  return routes;
-}
-
 function App() {
-  const routes = useResolvedRoutes();
-
+  const routes = useMergeRoutes();
   if (routes.length === 0) {
     return <InitialLoadingPlaceholder />;
   }
-
   const router = createBrowserRouter(routes, {
     basename: process.env.REACT_APP_BASE_URL,
   });
