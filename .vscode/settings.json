@@ -5,5 +5,6 @@
   "explorer.autoReveal": "focusNoScroll",
   "cSpell.words": [
     "grecaptcha"
-  ]
+  ],
+  "makefile.configureOnOpen": false
 }

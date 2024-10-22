@@ -315,7 +315,7 @@ const Ask = () => {
       .then(async (res) => {
         await editCaptcha?.close();
         navigate(pathFactory.questionLanding(qid, res?.url_title), {
-          state: { isReview: res?.wait_for_review },
+          state: { isReview: false },
         });
       })
       .catch((err) => {
