@@ -326,9 +326,7 @@ backend:
       name:
         other: Грубость или оскорбления
       desc:
-        other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: дубликат
@@ -340,10 +338,7 @@ backend:
       name:
         other: это не ответ
       desc:
-        other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: Не актуально
@@ -402,9 +397,7 @@ backend:
         name:
           other: нуждается в деталях или ясности
         desc:
-          other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: прочее
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: 'Форматирование:'
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">создание ссылок: </p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">пробел между абзацами</p></li><li><p class="mb-2"><em>_italic_</em> или **<strong>bold</strong>**</p></li><li><p class="mb-2">отступ для кода - 4 пробела</p></li><li><p class="mb-2">тег  <code>&gt;</code> для цитаты в начале строки</p></li><li><p class="mb-2">обратные кавычки для строки кода <code>`like _this_`</code></p></li><li><p class="mb-2">тройные обратные кавычки для блоков кода <code>`</code></p><pre class="mb-0"><code>```<br/>тут код<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Назад
     next: Следующий
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Похожие вопросы
     answers: ответы
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Позвать на помощь
     desc: Выберите людей, которые, по вашему мнению, могут знать ответ.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Топ вопросов
     stats: Статистика
     list_empty: Сообщений не найдено.<br />Возможно, вы хотели бы выбрать другую вкладку?
+    content_empty: No posts found.
     accepted: Принято
     answered: отвеченные
     asked: спросил

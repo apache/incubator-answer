@@ -138,7 +138,7 @@ backend:
   pass:
     other: Password
   original_text:
-    other: This post
+    other: Questo post
   email_or_password_wrong_error:
     other: Email o password errati.
   error:
@@ -146,7 +146,7 @@ backend:
       invalid_url:
         other: URL non valido.
       status_invalid:
-        other: Invalid status.
+        other: Status non valido.
     password:
       space_invalid:
         other: La password non può contenere spazi.
@@ -154,7 +154,7 @@ backend:
       cannot_update_their_password:
         other: Non è possibile modificare la password.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Non è possibile modificare il profilo.
       cannot_modify_self_status:
         other: Non è possibile modificare il tuo status.
       email_or_password_wrong:
@@ -207,10 +207,10 @@ backend:
       new_password_same_as_previous_setting:
         other: La nuova password è identica alla precedente
       already_deleted:
-        other: This post has been deleted.
+        other: Questo post è stato eliminato.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Meta oggetto non trovato
     question:
       already_deleted:
         other: Questo post è stato eliminato.
@@ -315,7 +315,7 @@ backend:
         other: Configurazione del sito non trovata.
     badge:
       object_not_found:
-        other: Badge object not found
+        other: Oggetto badge non trovato
   reason:
     spam:
       name:
@@ -326,9 +326,7 @@ backend:
       name:
         other: scortese o offensivo
       desc:
-        other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: duplicato
@@ -340,10 +338,7 @@ backend:
       name:
         other: Non è una risposta
       desc:
-        other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: Non più necessario
@@ -402,9 +397,7 @@ backend:
         name:
           other: richiede maggiori dettagli o chiarezza
         desc:
-          other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: altro
@@ -420,12 +413,12 @@ backend:
     deleted_title:
       other: "\nDomanda cancellata"
     questions_title:
-      other: Questions
+      other: Domande
   tag:
     tags_title:
       other: Tags
     no_description:
-      other: The tag has no description.
+      other: Il tag non ha descrizioni.
   notification:
     action:
       update_question:
@@ -465,7 +458,7 @@ backend:
       invited_you_to_answer:
         other: sei invitato a rispondere
       earned_badge:
-        other: You've earned the "{{.BadgeName}}" badge
+        other: Hai ottenuto il badge "{{.BadgeName}}"
   email_tpl:
     change_email:
       title:
@@ -531,89 +524,89 @@ backend:
       other: Modifiche suggerite
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
+      other: "{{ .Names }} e {{ .Count }} più..."
   badge:
     default_badges:
       autobiographer:
         name:
-          other: Autobiographer
+          other: Autobiografo
         desc:
-          other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
+          other: Informazioni sul profilo <a href="{{ .ProfileURL }}" target="_blank"></a> completate.
       certified:
         name:
-          other: Certified
+          other: Certificato
         desc:
-          other: Completed our new user tutorial.
+          other: "\nCompletato il nostro nuovo tutorial per l'utente."
       editor:
         name:
           other: Editor
         desc:
-          other: First post edit.
+          other: Prima modifica al post.
       first_flag:
         name:
-          other: First Flag
+          other: Primo Contrassegno
         desc:
-          other: First flagged a post.
+          other: Primo contrassegno di un post.
       first_upvote:
         name:
-          other: First Upvote
+          other: Primo Mi Piace
         desc:
-          other: First up voted a post.
+          other: Primo Mi Piace a un post
       first_link:
         name:
-          other: First Link
+          other: Primo Link
         desc:
-          other: First dirst added a link to another post.
+          other: Aggiunto un link a un altro post per la prima volta
       first_reaction:
         name:
-          other: First Reaction
+          other: Prima Reazione
         desc:
-          other: First reacted to the post.
+          other: Prima reazione al post.
       first_share:
         name:
-          other: First Share
+          other: Prima Condivisione
         desc:
-          other: First shared a post.
+          other: Prima condivisione a un post.
       scholar:
         name:
-          other: Scholar
+          other: Studioso
         desc:
-          other: Asked a question and accepted an answer.
+          other: Ha posto una domanda e ha accettato una risposta
       commentator:
         name:
-          other: Commentator
+          other: Commentatore
         desc:
-          other: Leave 5 comments.
+          other: Lascia 5 commenti.
       new_user_of_the_month:
         name:
-          other: New User of the Month
+          other: Nuovo Utente del Mese
         desc:
-          other: Outstanding contributions in their first month.
+          other: Contributi straordinari nel primo mese.
       read_guidelines:
         name:
-          other: Read Guidelines
+          other: Leggi le Linee Guida
         desc:
-          other: Read the [community guidelines].
+          other: Leggi le [linee guida della community].
       reader:
         name:
-          other: Reader
+          other: Lettore
         desc:
-          other: Read every answers in a topic with more than 10 answers.
+          other: Leggi ogni risposta in un argomento con più di 10 risposte.
       welcome:
         name:
-          other: Welcome
+          other: Benvenuto
         desc:
-          other: Received a up vote.
+          other: Ricevuto un voto positivo.
       nice_share:
         name:
-          other: Nice Share
+          other: Condivisione positiva.
         desc:
-          other: Shared a post with 25 unique visitors.
+          other: Ha condiviso un post con 25 visitatori unici.
       good_share:
         name:
-          other: Good Share
+          other: Condivisione positiva.
         desc:
-          other: Shared a post with 300 unique visitors.
+          other: Condiviso un post con 300 visitatori unici.
       great_share:
         name:
           other: Great Share
@@ -741,60 +734,60 @@ backend:
           other: Question score of 10 or more.
       good_question:
         name:
-          other: Good Question
+          other: Buona domanda
         desc:
-          other: Question score of 25 or more.
+          other: Punteggio della domanda di 25 o più
       great_question:
         name:
-          other: Great Question
+          other: Ottima domanda
         desc:
-          other: Question score of 50 or more.
+          other: Punteggio domande pari o superiore a 50.
       popular_question:
         name:
-          other: Popular Question
+          other: Domanda popolare
         desc:
-          other: Question with 500 views.
+          other: "Domanda con 500 visualizzazioni\n"
       notable_question:
         name:
-          other: Notable Question
+          other: Domanda notevole
         desc:
-          other: Question with 1,000 views.
+          other: Domanda con 1.000 visualizzazioni.
       famous_question:
         name:
-          other: Famous Question
+          other: Domanda celebre
         desc:
-          other: Question with 5,000 views.
+          other: "Domanda con 5.000 visualizzazioni.\n."
       popular_link:
         name:
-          other: Popular Link
+          other: Link Popolare
         desc:
-          other: Posted an external link with 50 clicks.
+          other: Pubblicato un link esterno con 50 clic.
       hot_link:
         name:
-          other: Hot Link
+          other: Link popolare
         desc:
-          other: Posted an external link with 300 clicks.
+          other: Pubblicato un link esterno con 300 clic.
       famous_link:
         name:
-          other: Famous Link
+          other: Link celebre
         desc:
-          other: Posted an external link with 100 clicks.
+          other: Pubblicato un link esterno con 100 clic.
     default_badge_groups:
       getting_started:
         name:
-          other: Getting Started
+          other: Primi passi
       community:
         name:
           other: Community
       posting:
         name:
-          other: Posting
+          other: Pubblicazione in corso
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Come formattare
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url. om)</code></pre></li><li><p class="mb-2">mette i rendimenti tra i paragrafi</p></li><li><p class="mb-2"><em>_italic_</em> o **<strong>grassetto</strong>**</p></li><li><p class="mb-2">trattino di codice per 4 spazi</p></li><li><p class="mb-2">preventivo inserendo <code>&gt;</code> all'inizio della riga</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">crea recinzioni di codice con backticks <code>`</code></p><pre class="mb-0">````<code><br/>codice qui<br/>`````</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prec
     next: Successivo
@@ -843,9 +836,9 @@ ui:
       posts: Messaggi
       invites: Inviti
       votes: Voti
-    answer: Answer
-    question: Question
-    badge_award: Badge
+    answer: Risposta
+    question: Domanda
+    badge_award: Distintivo
   suspended:
     title: Il tuo account è stato sospeso
     until_time: "Il tuo account è stato sospeso fino a {{ time }}."
@@ -1017,9 +1010,9 @@ ui:
     delete:
       title: Elimina questo tag
       tip_with_posts: >-
-        <p>We do not allow <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>Non è consentita <strong>l'eliminazione di tag con post</strong>.</p> <p>Rimuovi prima questo tag dai post.</p>
       tip_with_synonyms: >-
-        <p>We do not allow <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>Non è consentita <strong>l'eliminazione di tag con sinonimi</strong>.</p> <p>Per favore, rimuovi prima i sinonimi da questo tag.</p>
       tip: Sei sicuro di voler cancellare?
       close: Chiudi
   edit_tag:
@@ -1041,13 +1034,13 @@ ui:
     hours: ore
     days: giorni
   reaction:
-    heart: heart
-    smile: smile
-    frown: frown
-    btn_label: add or remove reactions
-    undo_emoji: undo {{ emoji }} reaction
-    react_emoji: react with {{ emoji }}
-    unreact_emoji: unreact with {{ emoji }}
+    heart: cuore
+    smile: sorriso
+    frown: disapprovare
+    btn_label: aggiungere o rimuovere le reazioni
+    undo_emoji: annulla reazione {{ emoji }}
+    react_emoji: reagire con {{ emoji }}
+    unreact_emoji: non reagire con {{ emoji }}
   comment:
     btn_add_comment: Aggiungi un commento
     reply_to: Rispondi a
@@ -1186,7 +1179,7 @@ ui:
       msg:
         empty: Il nome non può essere vuoto.
         range: Name must be between 2 to 30 characters in length.
-        character: 'Must use the character set "a-z", "A-Z", "0-9", " - . _"'
+        character: 'È necessario utilizzare il set di caratteri "a-z", "0-9", " - . _"'
     email:
       label: E-mail
       msg:
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Domande correlate
     answers: risposte
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Persone Interpellate
     desc: Seleziona le persone che pensi potrebbero conoscere la risposta.
@@ -1502,7 +1499,7 @@ ui:
     success: Il tuo nuovo account è confermato; sarai reindirizzato alla home page.
     link: Continua alla Homepage
     oops: Oops!
-    invalid: The link you used no longer works.
+    invalid: Il link che hai usato non è più attivo.
     confirm_new_email: La tua email è stata aggiornata.
     confirm_new_email_invalid: >-
       Siamo spiacenti, questo link di conferma non è più valido. Forse la tua email è già stata modificata?
@@ -1524,8 +1521,8 @@ ui:
     answers: Risposte
     newest: Più recenti
     active: Attivo
-    hot: Hot
-    recommend: Recommend
+    hot: Caldo
+    recommend: Raccomandato
     score: Punteggio
     unanswered: Senza risposta
     modified: Modificato
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Domande principali
     stats: Statistiche
     list_empty: Nessun post trovato.<br />Forse desideri selezionare una scheda diversa?
+    content_empty: No posts found.
     accepted: Accettato
     answered: risposto
     asked: chiesto
