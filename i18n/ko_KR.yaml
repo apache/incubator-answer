@@ -326,9 +326,7 @@ backend:
       name:
         other: 폭언 또는 무례한 언행입니다.
       desc:
-        other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: 중복
@@ -340,10 +338,7 @@ backend:
       name:
         other: 답변이 아닙니다
       desc:
-        other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: 더 이상 필요하지 않습니다.
@@ -402,9 +397,7 @@ backend:
         name:
           other: 세부사항 또는 명확성이 필요합니다.
         desc:
-          other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: 다른 이유
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: 포맷 방법
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">링크 만들기</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">단락 사이에 줄 바꿈 넣기</p></li><li><p class="mb-2"><em>_이탤릭체_</em> 또는 **<strong>볼드체</strong>**</p></li><li><p class="mb-2">코드는 4칸 들여쓰기</p></li><li><p class="mb-2"> 인용은 <code>&gt;</code>로 시작하기</p></li><li><p class="mb-2">백틱으로 이스케이프 <code>`이렇게_사용`</code></p></li><li><p class="mb-2">백틱으로 코드 펜스 만들기 <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: 이전
     next: 다음
@@ -1185,7 +1178,7 @@ ui:
       label: 이름
       msg:
         empty: 이름을 입력하세요.
-        range: 이름은 최대 30자까지 입력 가능합니다.
+        range: Name must be between 2 to 30 characters in length.
         character: '문자 집합 "a-z", "0-9", " - . _"를 사용해야 합니다'
     email:
       label: 이메일
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: 관련 질문
     answers: 답변
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: 질문자 초대
     desc: 답변을 알고 있을 것으로 생각되는 사람을 선택하세요.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: 최고 질문
     stats: 통계
     list_empty: 게시물을 찾을 수 없습니다.<br />다른 탭을 선택하실 수 있습니다.
+    content_empty: No posts found.
     accepted: 채택됨
     answered: 답변됨
     asked: 질문됨

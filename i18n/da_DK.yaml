@@ -326,9 +326,7 @@ backend:
       name:
         other: uhøflig eller misbrug
       desc:
-        other:
-          - En fornuftig person ville finde dette indhold upassende eller ikke respektfuldt
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: en duplikering
@@ -340,10 +338,7 @@ backend:
       name:
         other: ikke et svar
       desc:
-        other:
-          - Dette blev sendt som svar, men det forsøger ikke at besvare
-          - spørgsmål. Det bør muligvis være en redigering, en kommentar, et andet spørgsmål
-          - eller slettet helt.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: ikke længere nødvendigt
@@ -402,9 +397,7 @@ backend:
         name:
           other: kræver detaljer eller klarhed
         desc:
-          other:
-            - Dette spørgsmål indeholder i øjeblikket flere spørgsmål i et. Det bør
-            - fokusere på kun ét problem.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: noget andet
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: Sådan formaterer du
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">for at lave links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Titel](https://url.com)</code></pre></li><li><p class="mb-2">indsæt linieskift mellem paragraffer</p></li><li><p class="mb-2"><em>_kursiv_</em> or **<strong>fed</strong>**</p></li><li><p class="mb-2">indskyd kode med 4 mellemrum</p></li><li><p class="mb-2">citér ved at placere <code>&gt;</code> på starten af linie</p></li><li><p class="mb-2">backtick escapes <code>`som _dette_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Forrige
     next: Næste
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Relaterede spørgsmål
     answers: svar
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Inviter personer
     desc: Invitér personer, som du tror, kan svare.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Populære Spørgsmål
     stats: Statistik
     list_empty: Ingen indlæg fundet.<br />Måske vil du vælge en anden fane?
+    content_empty: No posts found.
     accepted: Accepteret
     answered: besvaret
     asked: spurgt

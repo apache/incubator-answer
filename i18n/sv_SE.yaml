@@ -146,7 +146,7 @@ backend:
       invalid_url:
         other: Ogiltig URL.
       status_invalid:
-        other: Invalid status.
+        other: Ogiltig status.
     password:
       space_invalid:
         other: Password cannot contain spaces.
@@ -326,9 +326,7 @@ backend:
       name:
         other: rude or abusive
       desc:
-        other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: a duplicate
@@ -340,10 +338,7 @@ backend:
       name:
         other: not an answer
       desc:
-        other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: no longer needed
@@ -402,9 +397,7 @@ backend:
         name:
           other: needs details or clarity
         desc:
-          other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: something else
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
     next: Nästa
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Related Questions
     answers: answers
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: People Asked
     desc: Bjud in personer som du tror kan svara.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Top Questions
     stats: Stats
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    content_empty: No posts found.
     accepted: Accepted
     answered: answered
     asked: asked
@@ -1705,9 +1703,9 @@ ui:
     login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
   badges:
     modal:
-      title: Congratulations
+      title: Grattis
       content: You've earned a new badge.
-      close: Close
+      close: Stäng
       confirm: View badges
     title: Badges
     awarded: Awarded
@@ -1794,7 +1792,7 @@ ui:
       form:
         fields:
           display_name:
-            label: Display name
+            label: Visningsnamn
             msg_range: Display name up to 30 characters.
           username:
             label: Username
@@ -2121,17 +2119,18 @@ ui:
         number_larger_1: number should be equal or larger than 1
     badges:
       action: Action
-      active: Active
+      active: Aktiv
+      activate: Aktivera
       activate: Activate
-      all: All
+      all: Alla
       awards: Awards
-      deactivate: Deactivate
+      deactivate: Inaktivera
       filter:
         placeholder: Filter by name, badge:id
-      group: Group
-      inactive: Inactive
-      name: Name
-      show_logs: Show logs
+      group: Grupp
+      inactive: Inaktiv
+      name: Namn
+      show_logs: Visa loggar
       status: Status
       title: Badges
   form:

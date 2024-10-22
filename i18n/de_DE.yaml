@@ -146,7 +146,7 @@ backend:
       invalid_url:
         other: Ungültige URL.
       status_invalid:
-        other: Invalid status.
+        other: Ungültiger Status.
     password:
       space_invalid:
         other: Passwort darf keine Leerzeichen enthalten.
@@ -326,9 +326,7 @@ backend:
       name:
         other: unhöflich oder beleidigend
       desc:
-        other:
-          - Eine vernünftige Person würde diesen Inhalt als unangemessen für einen respektvollen
-          - Umgang empfinden
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: ein Duplikat
@@ -340,10 +338,7 @@ backend:
       name:
         other: keine Antwort
       desc:
-        other:
-          - Dies wurde als Antwort gepostet, aber es wird nicht versucht, die
-          - Frage zu beantworten. Es sollte vielleicht eine Bearbeitung, ein Kommentar oder eine andere Frage sein,
-          - oder ganz gelöscht.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: nicht mehr benötigt
@@ -402,9 +397,7 @@ backend:
         name:
           other: benötigt Details oder Klarheit
         desc:
-          other:
-            - Diese Frage enthält derzeit mehrere Fragen in einer. Sie sollte
-            - auf ein einziges Problem konzentrieren.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
           other: etwas anderes
@@ -465,7 +458,7 @@ backend:
       invited_you_to_answer:
         other: hat dich eingeladen, zu antworten
       earned_badge:
-        other: You've earned the "{{.BadgeName}}" badge
+        other: Du hast das "{{.BadgeName}}" Abzeichen verdient
   email_tpl:
     change_email:
       title:
@@ -536,12 +529,12 @@ backend:
     default_badges:
       autobiographer:
         name:
-          other: Autobiographer
+          other: Autobiograph
         desc:
           other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
       certified:
         name:
-          other: Certified
+          other: Zertifiziert
         desc:
           other: Completed our new user tutorial.
       editor:
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: Wie man formatiert
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">um Links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Titel](https://url.com)</code></pre></li><li><p class="mb-2">Zwischen den Absätzen Zeilenumbrüche einfügen</p></li><li><p class="mb-2"><em>_italic_</em> oder **<strong>fett</strong>**</p></li><li><p class="mb-2">Code um 4 Leerzeichen einrücken</p></li><li><p class="mb-2">Zitat durch Setzen von <code>&gt; </code> am Anfang der Zeile</p></li><li><p class="mb-2">Backtick-Escapes <code>`wie _this_`</code></p></li><li><p class="mb-2">Codeumrandungen mit Backticks <code>`</code></p><pre class="mb-0"><code>`<br/>Code hier<br/>``</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Zurück
     next: Weiter
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Verwandte Fragen
     answers: antworten
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Frage jemanden
     desc: Lade Leute ein, von denen du glaubst, dass sie die Antwort wissen könnten.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Top-Fragen
     stats: Statistiken
     list_empty: Keine Beiträge gefunden.<br />Vielleicht möchtest du einen anderen Reiter auswählen?
+    content_empty: No posts found.
     accepted: Akzeptiert
     answered: antwortete
     asked: gefragt
@@ -2205,7 +2203,7 @@ ui:
     users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
     staffs: Unsere Community Teammitglieder
     reputation: Ansehen
-    votes: stimmen
+    votes: Stimmen
   prompt:
     leave_page: Bist du sicher, dass du die Seite verlassen willst?
     changes_not_save: Deine Änderungen werden möglicherweise nicht gespeichert.
