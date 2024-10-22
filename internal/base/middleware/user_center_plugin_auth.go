@@ -20,9 +20,9 @@
 package middleware
 
 import (
-	"github.com/apache/incubator-answer/internal/base/handler"
-	"github.com/apache/incubator-answer/internal/base/reason"
-	"github.com/apache/incubator-answer/plugin"
+	"github.com/answer-tester/incubator-answer/internal/base/handler"
+	"github.com/answer-tester/incubator-answer/internal/base/reason"
+	"github.com/answer-tester/incubator-answer/plugin"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )

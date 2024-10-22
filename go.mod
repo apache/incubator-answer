@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-module github.com/apache/incubator-answer
+module github.com/answer-tester/incubator-answer
 
 go 1.22.0
 

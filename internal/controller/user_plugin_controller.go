@@ -21,15 +21,15 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/apache/incubator-answer/internal/base/middleware"
-	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/answer-tester/incubator-answer/internal/base/middleware"
+	"github.com/answer-tester/incubator-answer/internal/base/reason"
 	"github.com/segmentfault/pacman/errors"
 	"net/http"
 
-	"github.com/apache/incubator-answer/internal/base/handler"
-	"github.com/apache/incubator-answer/internal/schema"
-	"github.com/apache/incubator-answer/internal/service/plugin_common"
-	"github.com/apache/incubator-answer/plugin"
+	"github.com/answer-tester/incubator-answer/internal/base/handler"
+	"github.com/answer-tester/incubator-answer/internal/schema"
+	"github.com/answer-tester/incubator-answer/internal/service/plugin_common"
+	"github.com/answer-tester/incubator-answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 

@@ -21,11 +21,11 @@ package schema
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/internal/base/constant"
-	"github.com/apache/incubator-answer/internal/base/handler"
-	"github.com/apache/incubator-answer/internal/base/reason"
-	"github.com/apache/incubator-answer/internal/base/translator"
-	"github.com/apache/incubator-answer/internal/base/validator"
+	"github.com/answer-tester/incubator-answer/internal/base/constant"
+	"github.com/answer-tester/incubator-answer/internal/base/handler"
+	"github.com/answer-tester/incubator-answer/internal/base/reason"
+	"github.com/answer-tester/incubator-answer/internal/base/translator"
+	"github.com/answer-tester/incubator-answer/internal/base/validator"
 	"github.com/segmentfault/pacman/errors"
 	"strings"
 )

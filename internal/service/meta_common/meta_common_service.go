@@ -22,8 +22,8 @@ package metacommon
 import (
 	"context"
 
-	"github.com/apache/incubator-answer/internal/base/reason"
-	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/answer-tester/incubator-answer/internal/base/reason"
+	"github.com/answer-tester/incubator-answer/internal/entity"
 	myErrors "github.com/segmentfault/pacman/errors"
 )
 

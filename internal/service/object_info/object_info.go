@@ -21,15 +21,15 @@ package object_info
 
 import (
 	"context"
-	"github.com/apache/incubator-answer/internal/base/constant"
-	"github.com/apache/incubator-answer/internal/base/reason"
-	"github.com/apache/incubator-answer/internal/schema"
-	answercommon "github.com/apache/incubator-answer/internal/service/answer_common"
-	"github.com/apache/incubator-answer/internal/service/comment_common"
-	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
-	tagcommon "github.com/apache/incubator-answer/internal/service/tag_common"
-	"github.com/apache/incubator-answer/pkg/checker"
-	"github.com/apache/incubator-answer/pkg/obj"
+	"github.com/answer-tester/incubator-answer/internal/base/constant"
+	"github.com/answer-tester/incubator-answer/internal/base/reason"
+	"github.com/answer-tester/incubator-answer/internal/schema"
+	answercommon "github.com/answer-tester/incubator-answer/internal/service/answer_common"
+	"github.com/answer-tester/incubator-answer/internal/service/comment_common"
+	questioncommon "github.com/answer-tester/incubator-answer/internal/service/question_common"
+	tagcommon "github.com/answer-tester/incubator-answer/internal/service/tag_common"
+	"github.com/answer-tester/incubator-answer/pkg/checker"
+	"github.com/answer-tester/incubator-answer/pkg/obj"
 	"github.com/segmentfault/pacman/errors"
 )
 
