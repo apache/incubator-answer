@@ -1,16 +1,13 @@
-import { Spinner } from 'react-bootstrap';
+// Same as spin in `public/index.html`
+
+import './index.scss';
 
 function InitialLoadingPlaceholder() {
   return (
-    <div
-      style={{
-        flexGrow: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Spinner />
-      <span style={{ marginLeft: 8 }}>Initializing</span>
+    <div className="InitialLoadingPlaceholder">
+      <div className="InitialLoadingPlaceholder-spinnerContainer">
+        <div className="InitialLoadingPlaceholder-spinner" />
+      </div>
     </div>
   );
 }
