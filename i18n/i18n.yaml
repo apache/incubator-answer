@@ -22,43 +22,43 @@ language_options:
     progress: 100
   - label: "Español"
     value: "es_ES"
-    progress: 64
+    progress: 83
   - label: "Português(BR)"
     value: "pt_BR"
-    progress: 12
+    progress: 96
   - label: "Português"
     value: "pt_PT"
-    progress: 12
+    progress: 96
   - label: "Deutsch"
     value: "de_DE"
-    progress: 69
+    progress: 83
   - label: "Français"
     value: "fr_FR"
-    progress: 70
+    progress: 78
   - label: "日本語"
     value: "ja_JP"
-    progress: 12
+    progress: 11
   - label: "Italiano"
     value: "it_IT"
-    progress: 9
+    progress: 89
   - label: "Русский"
     value: "ru_RU"
-    progress: 20
+    progress: 80
   - label: "简体中文"
     value: "zh_CN"
     progress: 100
   - label: "繁體中文"
     value: "zh_TW"
-    progress: 64
+    progress: 47
   - label: "한국어"
     value: "ko_KR"
-    progress: 0
+    progress: 84
   - label: "Tiếng Việt"
     value: "vi_VN"
-    progress: 0
+    progress: 96
   - label: "Slovak"
     value: "sk_SK"
-    progress: 62
+    progress: 45
   - label: "فارسی"
     value: "fa_IR"
-    progress: 85
+    progress: 69
