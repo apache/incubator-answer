@@ -1,0 +1,35 @@
+// Same as spin in `public/index.html`
+
+@keyframes _initial-loading-spin {
+  to { transform: rotate(360deg) }
+}
+
+.InitialLoadingPlaceholder {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  z-index: 9999;
+
+  &-spinnerContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &-spinner {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: -.125em;
+    border: .25rem solid currentColor;
+    border-right-color: transparent;
+    color: rgba(108, 117, 125, .75);
+    border-radius: 50%;
+    animation: 0.75s linear infinite _initial-loading-spin;
+  }
+}

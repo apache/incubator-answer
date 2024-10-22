@@ -22,9 +22,14 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './i18n/init';
 
 import '@/utils/pluginKit';
-import routes from '@/router';
+import { useMergeRoutes } from '@/router';
+import InitialLoadingPlaceholder from '@/components/InitialLoadingPlaceholder';
 
 function App() {
+  const routes = useMergeRoutes();
+  if (routes.length === 0) {
+    return <InitialLoadingPlaceholder />;
+  }
   const router = createBrowserRouter(routes, {
     basename: process.env.REACT_APP_BASE_URL,
   });
