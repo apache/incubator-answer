@@ -183,7 +183,7 @@ backend:
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
-        other: Email is not allowed from that email domain. Please use another one.
+        other: Bu alan adındaki e-posta adreslerine izin verilmiyor. Lütfen başka bir e-posta deneyin.
     lang:
       not_found:
         other: Dil dosyası bulunamadı.
@@ -326,9 +326,7 @@ backend:
       name:
         other: rude or abusive
       desc:
-        other:
-          - A reasonable person would find this content inappropriate for respectful
-          - discourse.
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     a_duplicate:
       name:
         other: a duplicate
@@ -340,10 +338,7 @@ backend:
       name:
         other: not an answer
       desc:
-        other:
-          - This was posted as an answer, but it does not attempt to answer the
-          - question. It should possibly be an edit, a comment, another question,
-          - or deleted altogether.
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
     no_longer_needed:
       name:
         other: no longer needed
@@ -400,23 +395,21 @@ backend:
           other: This question doesn't meet a community guideline.
       multiple:
         name:
-          other: needs details or clarity
+          other: açıklanmaya veya detaya ihtiyacı var
         desc:
-          other:
-            - This question currently includes multiple questions in one. It should
-            - focus on one problem only.
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
-          other: something else
+          other: başka bir şey
         desc:
           other: This post requires another reason not listed above.
     operation_type:
       asked:
-        other: asked
+        other: soruldu
       answered:
-        other: answered
+        other: cevaplandı
       modified:
-        other: modified
+        other: düzenlendi
     deleted_title:
       other: Deleted question
     questions_title:
@@ -641,7 +634,7 @@ backend:
           other: Invited a user.
       campaigner:
         name:
-          other: Campaigner
+          other: Kampanyacı
         desc:
           other: Invited 3 basic users.
       champion:
@@ -651,7 +644,7 @@ backend:
           other: Invited 5 members.
       thank_you:
         name:
-          other: Thank You
+          other:
         desc:
           other: Has 20 up voted posts and gave 10 up votes.
       gives_back:
@@ -794,7 +787,7 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Önceki
     next: Sonraki
@@ -1341,6 +1334,10 @@ ui:
   related_question:
     title: Related Questions
     answers: answers
+  linked_question:
+    title: Linked Questions
+    description: Questions linked to
+    no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: People Asked
     desc: Select people who you think might know the answer.
@@ -1559,6 +1556,7 @@ ui:
     top_questions: Top Questions
     stats: Stats
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    content_empty: No posts found.
     accepted: Accepted
     answered: answered
     asked: asked
