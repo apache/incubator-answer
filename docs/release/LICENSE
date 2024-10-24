@@ -231,7 +231,7 @@ The following components are provided under the MIT License. See project link fo
    (MIT License) bootstrap (https://github.com/twbs/bootstrap) [link](./licenses/LICENSE-twbs-bootstrap.txt)
    (MIT License) icons (https://github.com/twbs/icons) [link](./licenses/LICENSE-twbs-icons.txt)
    (MIT License) classnames (https://github.com/JedWatson/classnames) [link](./LICENSE-JedWatson-classnames.txt)
-   (MIT License) codemirror5 (https://github.com/codemirror/codemirror5) [link](./licenses/LICENSE-codemirror-codemirror5.txt)
+   (MIT License) codemirror (https://github.com/codemirror/basic-setup) [link](./licenses/LICENSE-codemirror.txt)
    (MIT License) color (https://github.com/Qix-/color) [link](./licenses/LICENSE-Qix--color.txt)
    (MIT License) copy-to-clipboard (https://github.com/sudodoki/copy-to-clipboard) [link](./licenses/LICENSE-sudodoki-copy-to-clipboard.txt)
    (MIT License) dayjs (https://github.com/iamkun/dayjs) [link](./licenses/LICENSE-iamkun-dayjs.txt)
@@ -272,7 +272,8 @@ The following components are provided under the MIT License. See project link fo
    (MIT License) tidwall-gjson (https://github.com/tidwall/gjson) [link](./licenses/LICENSE-tidwall-gjson.txt)
    (MIT License) yuin-goldmark (https://github.com/yuin/goldmark) [link](./licenses/LICENSE-yuin-goldmark.txt)
    (MIT License) go-gomail-gomail (https://gopkg.in/gomail.v2) [link](./licenses/LICENSE-go-gomail-gomail.txt)
-   (MIT License) front-matter (https://github.com/jxson/front-matter) [link](./licenses/LICENSE-front-matter.txt)
+   (MIT License) front-matter (https://github.com/jxson/front-matter) [link](./licenses/LICENSE-jxson-front-matter.txt)
+   (MIT License) js-sha256 (https://github.com/emn178/js-sha256) [link](./licenses/LICENSE-emn178-js-sha256.txt)
 
 ========================================================================
 BSD licenses
@@ -287,7 +288,6 @@ The following components are provided under a BSD license. See project link for 
    (BSD 3-Clause) microcosm-cc-bluemonday (https://github.com/microcosm-cc/bluemonday) [link](./licenses/LICENSE-microcosm-cc-bluemonday.txt)
    (BSD 3-Clause) cznic-sqlite (https://modernc.org/sqlite) [link](./licenses/LICENSE-cznic-sqlite.txt)
    (BSD 3-Clause) jsdiff (https://github.com/kpdecker/jsdiff) [link](./licenses/LICENSE-kpdecker-jsdiff.txt)
-   (BSD 3-Clause) node-md5 (https://github.com/pvorb/node-md5) [link](./licenses/LICENSE-pvorb-node-md5.txt)
    (BSD 3-Clause) qs (https://github.com/ljharb/qs) [link](./licenses/LICENSE-ljharb-qs.txt)
 
 ========================================================================
