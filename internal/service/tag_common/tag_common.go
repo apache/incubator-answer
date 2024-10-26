@@ -290,24 +290,18 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 
 func (ts *TagCommonService) HasNewTag(ctx context.Context, tags []*schema.TagItem) (bool, error) {
 	tagNames := make([]string, 0)
-	tagMap := make(map[string]bool)
+	tagMap := make(map[string]struct{})
 	for _, item := range tags {
 		item.SlugName = strings.ReplaceAll(item.SlugName, " ", "-")
 		tagNames = append(tagNames, item.SlugName)
-		tagMap[item.SlugName] = false
+		tagMap[item.SlugName] = struct{}{}
 	}
 	list, err := ts.GetTagListByNames(ctx, tagNames)
 	if err != nil {
 		return true, err
 	}
 	for _, item := range list {
-		_, ok := tagMap[item.SlugName]
-		if ok {
-			tagMap[item.SlugName] = true
-		}
-	}
-	for _, has := range tagMap {
-		if !has {
+		if _, ok := tagMap[item.SlugName]; !ok {
 			return true, nil
 		}
 	}
