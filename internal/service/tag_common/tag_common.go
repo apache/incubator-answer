@@ -71,11 +71,12 @@ type TagRelRepo interface {
 	ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	HideTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
-	EnableTagRelByIDs(ctx context.Context, ids []int64) (err error)
+	EnableTagRelByIDs(ctx context.Context, ids []int64, hide bool) (err error)
 	GetObjectTagRelWithoutStatus(ctx context.Context, objectId, tagID string) (tagRel *entity.TagRel, exist bool, err error)
 	GetObjectTagRelList(ctx context.Context, objectId string) (tagListList []*entity.TagRel, err error)
 	BatchGetObjectTagRelList(ctx context.Context, objectIds []string) (tagListList []*entity.TagRel, err error)
 	CountTagRelByTagID(ctx context.Context, tagID string) (count int64, err error)
+	GetTagRelDefaultStatusByObjectID(ctx context.Context, objectID string) (status int, err error)
 }
 
 // TagCommonService user service
@@ -762,10 +763,9 @@ func (ts *TagCommonService) ShowTagRelListByObjectID(ctx context.Context, object
 
 // CreateOrUpdateTagRelList if tag relation is exists update status, if not create it
 func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, objectId string, tagIDs []string) (err error) {
-	addTagIDMapping := make(map[string]bool)
-	needRefreshTagIDs := make([]string, 0)
+	addTagIDMapping := make(map[string]struct{})
 	for _, t := range tagIDs {
-		addTagIDMapping[t] = true
+		addTagIDMapping[t] = struct{}{}
 	}
 
 	// get all old relation
@@ -774,8 +774,10 @@ func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, object
 		return err
 	}
 	var deleteTagRel []int64
+	needRefreshTagIDs := make([]string, 0, len(oldTagRelList)+len(tagIDs))
+	needRefreshTagIDs = append(needRefreshTagIDs, tagIDs...)
 	for _, rel := range oldTagRelList {
-		if !addTagIDMapping[rel.TagID] {
+		if _, ok := addTagIDMapping[rel.TagID]; !ok {
 			deleteTagRel = append(deleteTagRel, rel.ID)
 			needRefreshTagIDs = append(needRefreshTagIDs, rel.TagID)
 		}
@@ -783,8 +785,11 @@ func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, object
 
 	addTagRelList := make([]*entity.TagRel, 0)
 	enableTagRelList := make([]int64, 0)
+	defaultTagRelStatus, err := ts.tagRelRepo.GetTagRelDefaultStatusByObjectID(ctx, objectId)
+	if err != nil {
+		return err
+	}
 	for _, tagID := range tagIDs {
-		needRefreshTagIDs = append(needRefreshTagIDs, tagID)
 		rel, exist, err := ts.tagRelRepo.GetObjectTagRelWithoutStatus(ctx, objectId, tagID)
 		if err != nil {
 			return err
@@ -792,11 +797,11 @@ func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, object
 		// if not exist add tag relation
 		if !exist {
 			addTagRelList = append(addTagRelList, &entity.TagRel{
-				TagID: tagID, ObjectID: objectId, Status: entity.TagStatusAvailable,
+				TagID: tagID, ObjectID: objectId, Status: defaultTagRelStatus,
 			})
 		}
 		// if exist and has been removed, that should be enabled
-		if exist && rel.Status != entity.TagStatusAvailable {
+		if exist && rel.Status != entity.TagRelStatusAvailable && rel.Status != entity.TagRelStatusHide {
 			enableTagRelList = append(enableTagRelList, rel.ID)
 		}
 	}
@@ -812,7 +817,7 @@ func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, object
 		}
 	}
 	if len(enableTagRelList) > 0 {
-		if err = ts.tagRelRepo.EnableTagRelByIDs(ctx, enableTagRelList); err != nil {
+		if err = ts.tagRelRepo.EnableTagRelByIDs(ctx, enableTagRelList, defaultTagRelStatus == entity.TagRelStatusHide); err != nil {
 			return err
 		}
 	}
