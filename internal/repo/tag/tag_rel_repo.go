@@ -21,6 +21,7 @@ package tag
 
 import (
 	"context"
+
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -85,7 +86,7 @@ func (tr *tagRelRepo) RecoverTagRelListByObjectID(ctx context.Context, objectID 
 
 func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
-	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).And("status = ?", entity.TagRelStatusAvailable).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -94,7 +95,7 @@ func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID str
 
 func (tr *tagRelRepo) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
-	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).And("status = ?", entity.TagRelStatusHide).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
