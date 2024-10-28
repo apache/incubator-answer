@@ -449,12 +449,12 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 
 // TagList tags list
 func (tc *TemplateController) TagList(ctx *gin.Context) {
-	req := &schema.GetTagWithPageReq{}
+	req := &schema.GetTagWithPageReq{
+		PageSize: constant.DefaultPageSize,
+		Page:     1,
+	}
 	if handler.BindAndCheck(ctx, req) {
 		return
-	}
-	if req.PageSize == 0 {
-		req.PageSize = constant.DefaultPageSize
 	}
 	data, err := tc.templateRenderController.TagList(ctx, req)
 	if err != nil || pager.ValPageOutOfRange(data.Count, req.Page, req.PageSize) {
