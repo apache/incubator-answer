@@ -189,9 +189,13 @@
           </div>
         </div>
       </nav>
-      <div class="position-relative page-wrap">
-        {{template "sidenav" . }}
-        {{end}}
+      <div class="position-relative page-wrap d-flex flex-column flex-fill">
+        <div class="d-flex flex-column flex-fill container">
+          <div class="flex-fill row">
+            {{template "sidenav" . }}
+            {{end}}
+          </div>
+        </div>
       </div>
 
     </div>

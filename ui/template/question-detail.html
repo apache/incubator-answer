@@ -19,9 +19,9 @@
 
 -->
 {{template "header" . }}
-<div class="pt-4 mt-2 mb-5 questionDetailPage container">
-  <div class="justify-content-center row">
-    <div class="mb-5 mb-md-0 col-xxl-7 col-lg-8 col-sm-12">
+<div class="col-xl-10 col-lg-9 col-md-12">
+  <div class="questionDetailPage pt-4 mb-5 row">
+    <div class="page-main flex-auto col">
       <div>
         <h1 class="h3 mb-3 text-wrap text-break">
           {{if $.useTitle }}
@@ -46,14 +46,16 @@
         <div class="m-n1">
           {{range .detail.Tags}}
           <a href="{{$.baseURL}}/tags/{{.SlugName}}"
-             class="badge-tag rounded-1 {{if .Reserved}}badge-tag-reserved{{end}} {{if .Recommend}}badge-tag-required{{end}} m-1">
+              class="badge-tag rounded-1 {{if .Reserved}}badge-tag-reserved{{end}} {{if .Recommend}}badge-tag-required{{end}} m-1">
             <span class="">{{.SlugName}}</span>
           </a>
           {{end}}
         </div>
-        <article class="fmt text-break text-wrap mt-4">
-          {{formatLinkNofollow .detail.HTML}}
-        </article>
+        <div class="img-viewer">
+          <article class="fmt text-break text-wrap mt-4">
+            {{formatLinkNofollow .detail.HTML}}
+          </article>
+        </div>
         <div class="mt-4">
           <div role="group" class="btn-group">
             <button type="button" class="btn btn-outline-secondary">
@@ -70,11 +72,11 @@
             <i class="br bi-bookmark-fill"></i><span style="padding-left: 10px">{{.detail.CollectionCount}}</span>
           </button>
         </div>
-        <div class="mt-4 mb-3 row">
-          <div class="mb-3 mb-md-0 col-lg-5">
+        <div class="d-block d-md-flex flex-wrap mt-4 mb-3">
+          <div class="mb-3 mb-md-0 me-4 flex-grow-1">
 
           </div>
-          <div class="mb-3 mb-md-0 col-lg-3">
+          <div class="mb-3 me-4 mb-md-0" style="min-width: 196px;">
             <a href="{{$.baseURL}}/posts/{{.detail.ID}}/timeline">
               <time class="link-secondary small"
                     datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
@@ -83,7 +85,7 @@
               </time>
             </a>
           </div>
-          <div class="col-lg-3">
+          <div style="min-width: 196px;">
             <div class="d-flex">
               <a href="{{$.baseURL}}/users/{{.detail.UserInfo.Username}}"><img
                 src="{{.detail.UserInfo.Avatar}}"
@@ -98,7 +100,7 @@
                 class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
-                     href="{{$.baseURL}}/users/{{.detail.UserInfo.Username}}">{{.detail.UserInfo.DisplayName}}</a><span
+                      href="{{$.baseURL}}/users/{{.detail.UserInfo.Username}}">{{.detail.UserInfo.DisplayName}}</a><span
                   class="fw-bold" title="Reputation">{{.detail.UserInfo.Rank}}</span>
                 </div>
                 <a href="{{$.baseURL}}/posts/{{.detail.ID}}/timeline">
@@ -116,7 +118,7 @@
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-between mt-5 mb-3"
-           id="answerHeader">
+            id="answerHeader">
         <h5 class="mb-0">{{.detail.AnswerCount}} Answers</h5>
       </div>
       {{range .answers}}
@@ -176,7 +178,7 @@
                 class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
-                     href="{{$.baseURL}}/users/{{.UserInfo.Username}}">{{.UserInfo.DisplayName}}</a><span
+                      href="{{$.baseURL}}/users/{{.UserInfo.Username}}">{{.UserInfo.DisplayName}}</a><span
                   class="fw-bold" title="Reputation">{{.UserInfo.Rank}}</span>
                 </div>
                 <a href="{{$.baseURL}}/posts/{{$.detail.ID}}/{{.ID}}/timeline">
@@ -200,15 +202,5 @@
       {{template "related-question" .}}
     </div>
   </div>
-</div>
-<div style="
-            position: fixed;
-            top: 90px;
-            left: 0px;
-            right: 0px;
-            margin: auto;
-            z-index: 5;
-          ">
-  <div class="d-flex justify-content-center"></div>
 </div>
 {{template "footer" .}}
