@@ -56,7 +56,8 @@ class Plugins {
   async init() {
     this.registerBuiltin();
 
-    const plugins = await getPluginsStatus().catch(() => []);
+    // Note: The /install stage does not allow access to the getPluginsStatus api, so an initial value needs to be given
+    const plugins = (await getPluginsStatus().catch(() => [])) || [];
     this.registeredPlugins = plugins.filter((p) => p.enabled);
     await this.registerPlugins();
   }
@@ -169,6 +170,7 @@ const validateRoutePlugin = async (slugName) => {
 
 const mergeRoutePlugins = async (routes) => {
   const routePlugins = await getRoutePlugins();
+  console.log('routePlugins', routePlugins);
   if (routePlugins.length === 0) {
     return routes;
   }
