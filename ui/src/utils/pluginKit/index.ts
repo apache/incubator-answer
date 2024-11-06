@@ -170,7 +170,6 @@ const validateRoutePlugin = async (slugName) => {
 
 const mergeRoutePlugins = async (routes) => {
   const routePlugins = await getRoutePlugins();
-  console.log('routePlugins', routePlugins);
   if (routePlugins.length === 0) {
     return routes;
   }
