@@ -1103,6 +1103,7 @@ ui:
     search_placeholder: Filter by tag name
     no_desc: The tag has no description.
     more: More
+    wiki: Wiki
   ask:
     title: Add Question
     edit_title: Edit Question
@@ -1362,7 +1363,7 @@ ui:
     answers: answers
   linked_question:
     title: Linked Questions
-    description: Questions linked to 
+    description: Questions linked to
     no_linked_question: No questions linked from this question.
   invite_to_answer:
     title: Invite People
