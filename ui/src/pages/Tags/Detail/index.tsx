@@ -38,7 +38,7 @@ import {
 } from '@/services';
 import QuestionList, { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove, guard } from '@/utils';
+import { guard } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
 const Index: FC = () => {
@@ -143,12 +143,10 @@ const Index: FC = () => {
               </Link>
             </h3>
 
-            <p className="text-break">
-              {escapeRemove(tagInfo.excerpt) || t('no_desc')}
-              <Link to={pathFactory.tagInfo(curTagName)} className="ms-1">
-                [{t('more')}]
-              </Link>
-            </p>
+            <div
+              className="text-break"
+              dangerouslySetInnerHTML={{ __html: tagInfo.excerpt }}
+            />
 
             <div className="box-ft">
               {tagInfo.is_follower ? (
@@ -157,17 +155,29 @@ const Index: FC = () => {
                     {t('button_following')}
                   </Button>
                   <Link
+                    to={pathFactory.tagInfo(curTagName)}
+                    className="btn btn-outline-secondary ms-2">
+                    {t('wiki')}
+                  </Link>
+                  <Link
                     className="btn btn-outline-secondary ms-2"
                     to="/users/settings/notify">
                     <Icon name="bell-fill" />
                   </Link>
                 </div>
               ) : (
-                <Button
-                  variant="outline-primary"
-                  onClick={() => toggleFollow()}>
-                  {t('button_follow')}
-                </Button>
+                <div>
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => toggleFollow()}>
+                    {t('button_follow')}
+                  </Button>
+                  <Link
+                    to={pathFactory.tagInfo(curTagName)}
+                    className="btn btn-outline-secondary ms-2">
+                    {t('wiki')}
+                  </Link>
+                </div>
               )}
             </div>
           </div>
