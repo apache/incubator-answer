@@ -49,6 +49,7 @@ type ReviewRepo interface {
 	AddReview(ctx context.Context, review *entity.Review) (err error)
 	UpdateReviewStatus(ctx context.Context, reviewID int, reviewerUserID string, status int) (err error)
 	GetReview(ctx context.Context, reviewID int) (review *entity.Review, exist bool, err error)
+	GetReviewByObject(ctx context.Context, objectID string) (review *entity.Review, exist bool, err error)
 	GetReviewCount(ctx context.Context, status int) (count int64, err error)
 	GetReviewPage(ctx context.Context, page, pageSize int, cond *entity.Review) (reviewList []*entity.Review, total int64, err error)
 }
