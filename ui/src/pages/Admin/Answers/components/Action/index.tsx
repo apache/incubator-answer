@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 
 import { Icon, Modal } from '@/components';
 import { changeAnswerStatus } from '@/services';
+import { toastStore } from '@/stores';
 
 const AnswerActions = ({ itemData, curFilter, refreshList }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
@@ -37,6 +38,10 @@ const AnswerActions = ({ itemData, curFilter, refreshList }) => {
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
           changeAnswerStatus(itemData.id, 'deleted').then(() => {
+            toastStore.getState().show({
+              msg: t('answer_deleted', { keyPrefix: 'messages' }),
+              variant: 'success',
+            });
             refreshList();
           });
         },
@@ -52,6 +57,10 @@ const AnswerActions = ({ itemData, curFilter, refreshList }) => {
         confirmText: t('undelete', { keyPrefix: 'btns' }),
         onConfirm: () => {
           changeAnswerStatus(itemData.id, 'available').then(() => {
+            toastStore.getState().show({
+              msg: t('answer_cancel_deleted', { keyPrefix: 'messages' }),
+              variant: 'success',
+            });
             refreshList();
           });
         },
