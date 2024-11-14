@@ -49,7 +49,7 @@ var (
 	// Time is the build time of the project
 	Time = ""
 	// GoVersion is the go version of the project
-	GoVersion = "1.19"
+	GoVersion = "1.22"
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path
