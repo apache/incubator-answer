@@ -35,7 +35,7 @@ import (
 )
 
 const (
-	maxImageSize = 8192 * 8192
+	maxImageSize = 16384 * 16384
 )
 
 // IsSupportedImageFile currently answers support image type is
