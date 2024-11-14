@@ -60,6 +60,7 @@ func Markdown2HTML(source string) string {
 	filter.RequireNoFollowOnFullyQualifiedLinks(false)
 	filter.AllowElements("kbd")
 	filter.AllowAttrs("title").Matching(regexp.MustCompile(`^[\p{L}\p{N}\s\-_',\[\]!\./\\\(\)]*$|^@embed?$`)).Globally()
+	filter.AllowAttrs("start").OnElements("ol")
 	html = filter.Sanitize(html)
 	return html
 }
