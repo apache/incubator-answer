@@ -524,6 +524,10 @@ export interface SearchRes extends ListResult<SearchResItem> {
 export interface AdminDashboard {
   info: {
     question_count: number;
+    resolved_count: number;
+    resolved_rate: string;
+    unanswered_count: number;
+    unanswered_rate: string;
     answer_count: number;
     comment_count: number;
     vote_count: number;

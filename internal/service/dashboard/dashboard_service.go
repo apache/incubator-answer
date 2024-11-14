@@ -103,7 +103,6 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo := ds.getFromCache(ctx)
 	if dashboardInfo == nil {
 		dashboardInfo = &schema.DashboardInfo{}
-		dashboardInfo.QuestionCount = ds.questionCount(ctx)
 		dashboardInfo.AnswerCount = ds.answerCount(ctx)
 		dashboardInfo.CommentCount = ds.commentCount(ctx)
 		dashboardInfo.UserCount = ds.userCount(ctx)
@@ -119,6 +118,18 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		}
 		dashboardInfo.DatabaseVersion = ds.getDatabaseInfo()
 		dashboardInfo.DatabaseSize = ds.GetDatabaseSize()
+	}
+
+	dashboardInfo.QuestionCount = ds.questionCount(ctx)
+	dashboardInfo.UnansweredCount = ds.unansweredQuestionCount(ctx)
+	dashboardInfo.ResolvedCount = ds.resolvedQuestionCount(ctx)
+
+	if dashboardInfo.QuestionCount == 0 {
+		dashboardInfo.ResolvedRate = "0.00"
+		dashboardInfo.UnansweredRate = "0.00"
+	} else {
+		dashboardInfo.ResolvedRate = fmt.Sprintf("%.2f", float64(dashboardInfo.ResolvedCount)/float64(dashboardInfo.QuestionCount)*100)
+		dashboardInfo.UnansweredRate = fmt.Sprintf("%.2f", float64(dashboardInfo.UnansweredCount)/float64(dashboardInfo.QuestionCount)*100)
 	}
 
 	dashboardInfo.ReportCount = ds.reportCount(ctx)
@@ -168,6 +179,22 @@ func (ds *dashboardService) questionCount(ctx context.Context) int64 {
 		log.Errorf("get question count failed: %s", err)
 	}
 	return questionCount
+}
+
+func (ds *dashboardService) unansweredQuestionCount(ctx context.Context) int64 {
+	unansweredQuestionCount, err := ds.questionRepo.GetUnansweredQuestionCount(ctx)
+	if err != nil {
+		log.Errorf("get unanswered question count failed: %s", err)
+	}
+	return unansweredQuestionCount
+}
+
+func (ds *dashboardService) resolvedQuestionCount(ctx context.Context) int64 {
+	resolvedQuestionCount, err := ds.questionRepo.GetResolvedQuestionCount(ctx)
+	if err != nil {
+		log.Errorf("get resolved question count failed: %s", err)
+	}
+	return resolvedQuestionCount
 }
 
 func (ds *dashboardService) answerCount(ctx context.Context) int64 {
