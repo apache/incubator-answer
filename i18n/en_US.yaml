@@ -1762,6 +1762,8 @@ ui:
       welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Questions:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "Answers:"
       comments: "Comments:"
       votes: "Votes:"
