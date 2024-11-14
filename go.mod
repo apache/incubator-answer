@@ -32,7 +32,6 @@ require (
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/goccy/go-json v0.10.3
-	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/grokify/html-strip-tags-go v0.1.0
@@ -57,6 +56,7 @@ require (
 	github.com/swaggo/swag v1.16.3
 	github.com/tidwall/gjson v1.17.3
 	github.com/yuin/goldmark v1.7.4
+	go.uber.org/mock v0.5.0
 	golang.org/x/crypto v0.27.0
 	golang.org/x/image v0.20.0
 	golang.org/x/net v0.29.0
