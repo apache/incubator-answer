@@ -284,6 +284,29 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 	return count, nil
 }
 
+func (qr *questionRepo) GetUnansweredQuestionCount(ctx context.Context) (count int64, err error) {
+	session := qr.data.DB.Context(ctx)
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted}).
+		And(builder.Eq{"answer_count": 0})
+	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
+	if err != nil {
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
+func (qr *questionRepo) GetResolvedQuestionCount(ctx context.Context) (count int64, err error) {
+	session := qr.data.DB.Context(ctx)
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted}).
+		And(builder.Neq{"answer_count": 0}).
+		And(builder.Neq{"accepted_answer_id": 0})
+	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
+	if err != nil {
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
 func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
 	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted})
