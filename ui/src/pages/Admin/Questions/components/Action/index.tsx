@@ -28,11 +28,19 @@ import {
   reopenQuestion,
 } from '@/services';
 import { useReportModal, useToast } from '@/hooks';
+import { toastStore } from '@/stores';
 
 const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
-  const closeModal = useReportModal(refreshList);
   const toast = useToast();
+  const closeCallback = () => {
+    toastStore.getState().show({
+      msg: t('post_closed', { keyPrefix: 'messages' }),
+      variant: 'success',
+    });
+    refreshList();
+  };
+  const closeModal = useReportModal(closeCallback);
 
   const handleAction = (type) => {
     if (type === 'delete') {
@@ -47,6 +55,10 @@ const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
           changeQuestionStatus(itemData.id, 'deleted').then(() => {
+            toastStore.getState().show({
+              msg: t('post_deleted', { keyPrefix: 'messages' }),
+              variant: 'success',
+            });
             refreshList();
           });
         },
@@ -62,6 +74,10 @@ const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
         confirmText: t('undelete', { keyPrefix: 'btns' }),
         onConfirm: () => {
           changeQuestionStatus(itemData.id, 'available').then(() => {
+            toastStore.getState().show({
+              msg: t('post_cancel_deleted', { keyPrefix: 'messages' }),
+              variant: 'success',
+            });
             refreshList();
           });
         },
@@ -86,7 +102,7 @@ const AnswerActions = ({ itemData, refreshList, curFilter, show, pin }) => {
           reopenQuestion({
             question_id: itemData.id,
           }).then(() => {
-            toast.onShow({
+            toastStore.getState().show({
               msg: t('post_reopen', { keyPrefix: 'messages' }),
               variant: 'success',
             });
