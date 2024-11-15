@@ -74,6 +74,8 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetUnansweredQuestionCount(ctx context.Context) (count int64, err error)
+	GetResolvedQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error)
 	SitemapQuestions(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 	RemoveAllUserQuestion(ctx context.Context, userID string) (err error)
