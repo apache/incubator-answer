@@ -411,7 +411,7 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 		session.Where("question.answer_count = 0")
 		session.OrderBy("question.pin desc,question.created_at DESC")
 	case "frequent":
-		session.OrderBy("question.pin DESC, question.linked_count DESC")
+		session.OrderBy("question.pin DESC, question.linked_count DESC, question.updated_at DESC")
 	}
 
 	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
@@ -823,7 +823,7 @@ func (qr *questionRepo) GetQuestionLink(ctx context.Context, page, pageSize int,
 		session.Where("question.answer_count = 0")
 		session.OrderBy("question.pin desc,question.created_at DESC")
 	case "frequent":
-		session.OrderBy("question.pin DESC, question.linked_count DESC")
+		session.OrderBy("question.pin DESC, question.linked_count DESC, question.updated_at DESC")
 	}
 
 	if page > 0 && pageSize > 0 {
