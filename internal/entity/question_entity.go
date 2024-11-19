@@ -73,6 +73,7 @@ type Question struct {
 	LastAnswerID     string    `xorm:"not null default 0 BIGINT(20) last_answer_id"`
 	PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
 	RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
+	LinkedCount      int       `xorm:"not null default 0 INT(11) linked_count"`
 }
 
 // TableName question table name
