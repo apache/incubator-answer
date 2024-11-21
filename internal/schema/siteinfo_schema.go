@@ -79,8 +79,8 @@ type SiteWriteReq struct {
 	MaxImageSize                   int             `validate:"omitempty,gt=0" json:"max_image_size"`
 	MaxAttachmentSize              int             `validate:"omitempty,gt=0" json:"max_attachment_size"`
 	MaxImageMegapixel              int             `validate:"omitempty,gt=0" json:"max_image_megapixel"`
-	AuthorizedImageExtensions      []string        `validate:"omitempty,dive,gt=0,lte=128" json:"authorized_image_extensions"`
-	AuthorizedAttachmentExtensions []string        `validate:"omitempty,dive,gt=0,lte=128" json:"authorized_attachment_extensions"`
+	AuthorizedImageExtensions      []string        `validate:"omitempty" json:"authorized_image_extensions"`
+	AuthorizedAttachmentExtensions []string        `validate:"omitempty" json:"authorized_attachment_extensions"`
 	UserID                         string          `json:"-"`
 }
 
