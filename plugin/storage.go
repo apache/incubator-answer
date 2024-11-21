@@ -22,9 +22,10 @@ package plugin
 type UploadSource string
 
 const (
-	UserAvatar    UploadSource = "user_avatar"
-	UserPost      UploadSource = "user_post"
-	AdminBranding UploadSource = "admin_branding"
+	UserAvatar         UploadSource = "user_avatar"
+	UserPost           UploadSource = "user_post"
+	UserPostAttachment UploadSource = "user_post_attachment"
+	AdminBranding      UploadSource = "admin_branding"
 )
 
 var (
