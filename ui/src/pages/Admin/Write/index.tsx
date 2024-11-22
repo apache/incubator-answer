@@ -52,6 +52,31 @@ const initFormData = {
     errorMsg: '',
     isInvalid: false,
   },
+  max_image_size: {
+    value: 4,
+    errorMsg: '',
+    isInvalid: false,
+  },
+  max_attachment_size: {
+    value: 8,
+    errorMsg: '',
+    isInvalid: false,
+  },
+  max_image_megapixel: {
+    value: 40,
+    errorMsg: '',
+    isInvalid: false,
+  },
+  authorized_image_extensions: {
+    value: 'jpg, jpeg, png, gif, webp',
+    errorMsg: '',
+    isInvalid: false,
+  },
+  authorized_attachment_extensions: {
+    value: '',
+    errorMsg: '',
+    isInvalid: false,
+  },
 };
 
 const Index: FC = () => {
@@ -111,6 +136,18 @@ const Index: FC = () => {
       reserved_tags: formData.reserved_tags.value,
       required_tag: formData.required_tag.value,
       restrict_answer: formData.restrict_answer.value,
+      max_image_size: Number(formData.max_image_size.value),
+      max_attachment_size: Number(formData.max_attachment_size.value),
+      max_image_megapixel: Number(formData.max_image_megapixel.value),
+      authorized_image_extensions: formData.authorized_image_extensions.value
+        .split(',')
+        ?.map((item) => item.trim().toLowerCase()),
+      authorized_attachment_extensions:
+        formData.authorized_attachment_extensions.value.length > 0
+          ? formData.authorized_attachment_extensions.value
+              .split(',')
+              ?.map((item) => item.trim().toLowerCase())
+          : [],
     };
     postRequireAndReservedTag(reqParams)
       .then(() => {
@@ -120,7 +157,7 @@ const Index: FC = () => {
         });
         writeSettingStore
           .getState()
-          .update({ restrict_answer: reqParams.restrict_answer });
+          .update({ restrict_answer: reqParams.restrict_answer, ...reqParams });
       })
       .catch((err) => {
         if (err.isError) {
@@ -142,6 +179,13 @@ const Index: FC = () => {
       if (Array.isArray(res.reserved_tags)) {
         formData.reserved_tags.value = res.reserved_tags;
       }
+      formData.max_image_size.value = res.max_image_size;
+      formData.max_attachment_size.value = res.max_attachment_size;
+      formData.max_image_megapixel.value = res.max_image_megapixel;
+      formData.authorized_image_extensions.value =
+        res.authorized_image_extensions?.join(', ').toLowerCase();
+      formData.authorized_attachment_extensions.value =
+        res.authorized_attachment_extensions?.join(', ').toLowerCase();
       setFormData({ ...formData });
     });
   };
@@ -240,6 +284,111 @@ const Index: FC = () => {
           <Form.Text>{t('restrict_answer.text')}</Form.Text>
           <Form.Control.Feedback type="invalid">
             {formData.restrict_answer.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="image_size">
+          <Form.Label>{t('image_size.label')}</Form.Label>
+          <Form.Control
+            type="number"
+            value={formData.max_image_size.value}
+            onChange={(evt) => {
+              handleValueChange({
+                max_image_size: {
+                  value: evt.target.value,
+                  errorMsg: '',
+                  isInvalid: false,
+                },
+              });
+            }}
+          />
+          <Form.Text>{t('image_size.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.max_image_size.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="attachment_size">
+          <Form.Label>{t('attachment_size.label')}</Form.Label>
+          <Form.Control
+            type="number"
+            value={formData.max_attachment_size.value}
+            onChange={(evt) => {
+              handleValueChange({
+                max_attachment_size: {
+                  value: evt.target.value,
+                  errorMsg: '',
+                  isInvalid: false,
+                },
+              });
+            }}
+          />
+          <Form.Text>{t('attachment_size.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.max_attachment_size.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="image_megapixels">
+          <Form.Label>{t('image_megapixels.label')}</Form.Label>
+          <Form.Control
+            type="number"
+            value={formData.max_image_megapixel.value}
+            onChange={(evt) => {
+              handleValueChange({
+                max_image_megapixel: {
+                  value: evt.target.value,
+                  errorMsg: '',
+                  isInvalid: false,
+                },
+              });
+            }}
+          />
+          <Form.Text>{t('image_megapixels.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.max_image_megapixel.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="image_extensions">
+          <Form.Label>{t('image_extensions.label')}</Form.Label>
+          <Form.Control
+            type="text"
+            value={formData.authorized_image_extensions.value}
+            onChange={(evt) => {
+              handleValueChange({
+                authorized_image_extensions: {
+                  value: evt.target.value.toLowerCase(),
+                  errorMsg: '',
+                  isInvalid: false,
+                },
+              });
+            }}
+          />
+          <Form.Text>{t('image_extensions.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.authorized_image_extensions.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="attachment_extensions">
+          <Form.Label>{t('attachment_extensions.label')}</Form.Label>
+          <Form.Control
+            type="text"
+            value={formData.authorized_attachment_extensions.value}
+            onChange={(evt) => {
+              handleValueChange({
+                authorized_attachment_extensions: {
+                  value: evt.target.value.toLowerCase(),
+                  errorMsg: '',
+                  isInvalid: false,
+                },
+              });
+            }}
+          />
+          <Form.Text>{t('attachment_extensions.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.authorized_attachment_extensions.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
 

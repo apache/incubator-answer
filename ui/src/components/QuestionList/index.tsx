@@ -40,10 +40,10 @@ import { useSkeletonControl } from '@/hooks';
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'newest',
   'active',
-  'hot',
-  'score',
   'unanswered',
   'recommend',
+  'frequent',
+  'score',
 ];
 interface Props {
   source: 'questions' | 'tag' | 'linked';
@@ -83,6 +83,7 @@ const QuestionList: FC<Props> = ({
           currentSort={curOrder}
           pathname={source === 'questions' ? '/questions' : ''}
           i18nKeyPrefix="question"
+          maxBtnCount={source === 'tag' ? 3 : 4}
         />
       </div>
       <ListGroup className="rounded-0">

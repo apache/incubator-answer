@@ -173,7 +173,7 @@ export interface UserInfoRes extends UserInfoBase {
   [prop: string]: any;
 }
 
-export type UploadType = 'post' | 'avatar' | 'branding';
+export type UploadType = 'post' | 'avatar' | 'branding' | 'post_attachment';
 export interface UploadReq {
   file: FormData;
 }
@@ -301,7 +301,8 @@ export type QuestionOrderBy =
   | 'active'
   | 'hot'
   | 'score'
-  | 'unanswered';
+  | 'unanswered'
+  | 'frequent';
 
 export interface QueryQuestionsReq extends Paging {
   order: QuestionOrderBy;
@@ -439,6 +440,11 @@ export interface AdminSettingsWrite {
   recommend_tags?: Tag[];
   required_tag?: boolean;
   reserved_tags?: Tag[];
+  max_image_size?: number;
+  max_attachment_size?: number;
+  max_image_megapixel?: number;
+  authorized_image_extensions?: string[];
+  authorized_attachment_extensions?: string[];
 }
 
 export interface AdminSettingsSeo {
