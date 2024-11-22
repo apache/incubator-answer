@@ -140,13 +140,13 @@ const Index: FC = () => {
       max_attachment_size: Number(formData.max_attachment_size.value),
       max_image_megapixel: Number(formData.max_image_megapixel.value),
       authorized_image_extensions:
-        formData.authorized_image_extensions.value.length > 0
+        formData.authorized_image_extensions.value?.length > 0
           ? formData.authorized_image_extensions.value
               .split(',')
               ?.map((item) => item.trim().toLowerCase())
           : [],
       authorized_attachment_extensions:
-        formData.authorized_attachment_extensions.value.length > 0
+        formData.authorized_attachment_extensions.value?.length > 0
           ? formData.authorized_attachment_extensions.value
               .split(',')
               ?.map((item) => item.trim().toLowerCase())

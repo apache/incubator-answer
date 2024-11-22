@@ -113,7 +113,7 @@ const Image = ({ editorInstance }) => {
       });
   };
 
-  if (!authorized_attachment_extensions.length) {
+  if (!authorized_attachment_extensions?.length) {
     return null;
   }
 
