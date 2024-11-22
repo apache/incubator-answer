@@ -166,9 +166,14 @@ const Image = ({ editorInstance }) => {
 
     editor.replaceSelection(loadingText);
     editor.setReadOnly(true);
-    const urls = await upload(fileList).catch((ex) => {
-      console.error('upload file error: ', ex);
-    });
+    const urls = await upload(fileList)
+      .catch(() => {
+        editor.replaceRange('', startPos, endPos);
+      })
+      .finally(() => {
+        editor.setReadOnly(false);
+        editor.focus();
+      });
 
     const text: string[] = [];
     if (Array.isArray(urls)) {
@@ -183,8 +188,6 @@ const Image = ({ editorInstance }) => {
     } else {
       editor.replaceRange('', startPos, endPos);
     }
-    editor.setReadOnly(false);
-    editor.focus();
   };
 
   const paste = async (event) => {
@@ -199,14 +202,21 @@ const Image = ({ editorInstance }) => {
 
       editor.replaceSelection(loadingText);
       editor.setReadOnly(true);
-      const urls = await upload(clipboard.files);
-      const text = urls.map(({ name, url, type }) => {
-        return `${type === 'post' ? '!' : ''}[${name}](${url})`;
-      });
+      upload(clipboard.files)
+        .then((urls) => {
+          const text = urls.map(({ name, url, type }) => {
+            return `${type === 'post' ? '!' : ''}[${name}](${url})`;
+          });
 
-      editor.replaceRange(text.join('\n'), startPos, endPos);
-      editor.setReadOnly(false);
-      editor.focus();
+          editor.replaceRange(text.join('\n'), startPos, endPos);
+        })
+        .catch(() => {
+          editor.replaceRange('', startPos, endPos);
+        })
+        .finally(() => {
+          editor.setReadOnly(false);
+          editor.focus();
+        });
 
       return;
     }
