@@ -45,6 +45,7 @@ import {
   Outdent,
   Table,
   UL,
+  File,
 } from './ToolBars';
 import { htmlRender, useEditor } from './utils';
 import Viewer from './Viewer';
@@ -130,6 +131,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
               <LinkItem />
               <BlockQuote />
               <Image editorInstance={editor} />
+              <File editorInstance={editor} />
               <Table />
               <div className="toolbar-divider" />
               <OL />
