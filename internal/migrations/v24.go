@@ -21,12 +21,50 @@ package migrations
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
 
 	"xorm.io/xorm"
 )
 
 func addQuestionLinkedCount(ctx context.Context, x *xorm.Engine) error {
+	writeSiteInfo := &entity.SiteInfo{
+		Type: constant.SiteTypeWrite,
+	}
+	exist, err := x.Context(ctx).Get(writeSiteInfo)
+	if err != nil {
+		return fmt.Errorf("get config failed: %w", err)
+	}
+	if exist {
+		type OldSiteWriteReq struct {
+			RestrictAnswer                 bool                   `json:"restrict_answer"`
+			RequiredTag                    bool                   `json:"required_tag"`
+			RecommendTags                  []*schema.SiteWriteTag `json:"recommend_tags"`
+			ReservedTags                   []*schema.SiteWriteTag `json:"reserved_tags"`
+			MaxImageSize                   int                    `json:"max_image_size"`
+			MaxAttachmentSize              int                    `json:"max_attachment_size"`
+			MaxImageMegapixel              int                    `json:"max_image_megapixel"`
+			AuthorizedImageExtensions      []string               `json:"authorized_image_extensions"`
+			AuthorizedAttachmentExtensions []string               `json:"authorized_attachment_extensions"`
+		}
+		content := &OldSiteWriteReq{}
+		_ = json.Unmarshal([]byte(writeSiteInfo.Content), content)
+		content.MaxImageSize = 4
+		content.MaxAttachmentSize = 8
+		content.MaxImageMegapixel = 40
+		content.AuthorizedImageExtensions = []string{"jpg", "jpeg", "png", "gif", "webp"}
+		content.AuthorizedAttachmentExtensions = []string{}
+		data, _ := json.Marshal(content)
+		writeSiteInfo.Content = string(data)
+		_, err = x.Context(ctx).ID(writeSiteInfo.ID).Cols("content").Update(writeSiteInfo)
+		if err != nil {
+			return fmt.Errorf("update site info failed: %w", err)
+		}
+	}
+
 	type Question struct {
 		LinkedCount int `xorm:"not null default 0 INT(11) linked_count"`
 	}

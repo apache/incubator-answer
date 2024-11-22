@@ -72,11 +72,37 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RestrictAnswer bool            `validate:"omitempty" json:"restrict_answer"`
-	RequiredTag    bool            `validate:"omitempty" json:"required_tag"`
-	RecommendTags  []*SiteWriteTag `validate:"omitempty,dive" json:"recommend_tags"`
-	ReservedTags   []*SiteWriteTag `validate:"omitempty,dive" json:"reserved_tags"`
-	UserID         string          `json:"-"`
+	RestrictAnswer                 bool            `validate:"omitempty" json:"restrict_answer"`
+	RequiredTag                    bool            `validate:"omitempty" json:"required_tag"`
+	RecommendTags                  []*SiteWriteTag `validate:"omitempty,dive" json:"recommend_tags"`
+	ReservedTags                   []*SiteWriteTag `validate:"omitempty,dive" json:"reserved_tags"`
+	MaxImageSize                   int             `validate:"omitempty,gt=0" json:"max_image_size"`
+	MaxAttachmentSize              int             `validate:"omitempty,gt=0" json:"max_attachment_size"`
+	MaxImageMegapixel              int             `validate:"omitempty,gt=0" json:"max_image_megapixel"`
+	AuthorizedImageExtensions      []string        `validate:"omitempty" json:"authorized_image_extensions"`
+	AuthorizedAttachmentExtensions []string        `validate:"omitempty" json:"authorized_attachment_extensions"`
+	UserID                         string          `json:"-"`
+}
+
+func (s *SiteWriteResp) GetMaxImageSize() int64 {
+	if s.MaxImageSize <= 0 {
+		return constant.DefaultMaxImageSize
+	}
+	return int64(s.MaxImageSize) * 1024 * 1024
+}
+
+func (s *SiteWriteResp) GetMaxAttachmentSize() int64 {
+	if s.MaxAttachmentSize <= 0 {
+		return constant.DefaultMaxAttachmentSize
+	}
+	return int64(s.MaxAttachmentSize) * 1024 * 1024
+}
+
+func (s *SiteWriteResp) GetMaxImageMegapixel() int {
+	if s.MaxImageMegapixel <= 0 {
+		return constant.DefaultMaxImageMegapixel
+	}
+	return s.MaxImageMegapixel * 1000 * 1000
 }
 
 // SiteWriteTag site write response tag

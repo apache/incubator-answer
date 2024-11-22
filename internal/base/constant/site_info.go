@@ -48,3 +48,9 @@ const (
 const (
 	EmailConfigKey = "email.config"
 )
+
+const (
+	DefaultMaxImageMegapixel = 40 * 1000 * 1000
+	DefaultMaxImageSize      = 4 * 1024 * 1024
+	DefaultMaxAttachmentSize = 8 * 1024 * 1024
+)
