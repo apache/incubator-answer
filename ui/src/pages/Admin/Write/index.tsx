@@ -139,9 +139,12 @@ const Index: FC = () => {
       max_image_size: Number(formData.max_image_size.value),
       max_attachment_size: Number(formData.max_attachment_size.value),
       max_image_megapixel: Number(formData.max_image_megapixel.value),
-      authorized_image_extensions: formData.authorized_image_extensions.value
-        .split(',')
-        ?.map((item) => item.trim().toLowerCase()),
+      authorized_image_extensions:
+        formData.authorized_image_extensions.value.length > 0
+          ? formData.authorized_image_extensions.value
+              .split(',')
+              ?.map((item) => item.trim().toLowerCase())
+          : [],
       authorized_attachment_extensions:
         formData.authorized_attachment_extensions.value.length > 0
           ? formData.authorized_attachment_extensions.value
@@ -287,11 +290,12 @@ const Index: FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="image_size">
+        <Form.Group className="mb-3" controlId="max_image_size">
           <Form.Label>{t('image_size.label')}</Form.Label>
           <Form.Control
             type="number"
             value={formData.max_image_size.value}
+            isInvalid={formData.max_image_size.isInvalid}
             onChange={(evt) => {
               handleValueChange({
                 max_image_size: {
@@ -308,11 +312,12 @@ const Index: FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="attachment_size">
+        <Form.Group className="mb-3" controlId="max_attachment_size">
           <Form.Label>{t('attachment_size.label')}</Form.Label>
           <Form.Control
             type="number"
             value={formData.max_attachment_size.value}
+            isInvalid={formData.max_attachment_size.isInvalid}
             onChange={(evt) => {
               handleValueChange({
                 max_attachment_size: {
@@ -329,10 +334,11 @@ const Index: FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="image_megapixels">
+        <Form.Group className="mb-3" controlId="max_image_megapixel">
           <Form.Label>{t('image_megapixels.label')}</Form.Label>
           <Form.Control
             type="number"
+            isInvalid={formData.max_image_megapixel.isInvalid}
             value={formData.max_image_megapixel.value}
             onChange={(evt) => {
               handleValueChange({
@@ -350,11 +356,12 @@ const Index: FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="image_extensions">
+        <Form.Group className="mb-3" controlId="authorized_image_extensions">
           <Form.Label>{t('image_extensions.label')}</Form.Label>
           <Form.Control
             type="text"
             value={formData.authorized_image_extensions.value}
+            isInvalid={formData.authorized_image_extensions.isInvalid}
             onChange={(evt) => {
               handleValueChange({
                 authorized_image_extensions: {
@@ -371,11 +378,14 @@ const Index: FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="attachment_extensions">
+        <Form.Group
+          className="mb-3"
+          controlId="authorized_attachment_extensions">
           <Form.Label>{t('attachment_extensions.label')}</Form.Label>
           <Form.Control
             type="text"
             value={formData.authorized_attachment_extensions.value}
+            isInvalid={formData.authorized_attachment_extensions.isInvalid}
             onChange={(evt) => {
               handleValueChange({
                 authorized_attachment_extensions: {

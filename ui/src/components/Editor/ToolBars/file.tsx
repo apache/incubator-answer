@@ -104,6 +104,9 @@ const Image = ({ editorInstance }) => {
         editor.replaceRange('', startPos, endPos);
         editor.replaceSelection(text);
       })
+      .catch(() => {
+        editor.replaceRange('', startPos, endPos);
+      })
       .finally(() => {
         editor.setReadOnly(false);
         editor.focus();
