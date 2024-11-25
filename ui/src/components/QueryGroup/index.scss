@@ -1,0 +1,16 @@
+.md-show {
+  display: flex !important;
+}
+.md-hide {
+  display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+  .md-show {
+    display: none !important;
+  }
+  .md-hide {
+    display: block;
+  }
+}
