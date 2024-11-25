@@ -143,11 +143,7 @@ const Index: FC<Props> = ({
               as="a"
               key={key}
               active={currentSort === name}
-              className={classNames(
-                'text-capitalize',
-                'd-block d-sm-none',
-                className,
-              )}
+              className={classNames('text-capitalize', className)}
               href={
                 pathname
                   ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
