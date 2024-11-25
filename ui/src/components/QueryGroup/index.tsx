@@ -27,6 +27,8 @@ import classNames from 'classnames';
 import { REACT_BASE_PATH } from '@/router/alias';
 import { floppyNavigation } from '@/utils';
 
+import './index.scss';
+
 interface Props {
   data;
   i18nKeyPrefix: string;
@@ -80,9 +82,7 @@ const Index: FC<Props> = ({
 
   return (
     <>
-      <ButtonGroup
-        size="sm"
-        className={classNames('d-none d-sm-block', wrapClassName)}>
+      <ButtonGroup size="sm" className={classNames('md-show', wrapClassName)}>
         {normalBtnData.map((btn) => {
           const key = typeof btn === 'string' ? btn : btn.sort;
           const name = typeof btn === 'string' ? btn : btn.name;
@@ -132,8 +132,8 @@ const Index: FC<Props> = ({
       </ButtonGroup>
       <DropdownButton
         size="sm"
-        variant="secondary"
-        className="d-block d-sm-none"
+        variant="outline-secondary"
+        className="md-hide"
         title={t(currentSort)}>
         {data.map((btn) => {
           const key = typeof btn === 'string' ? btn : btn.sort;
