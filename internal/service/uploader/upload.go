@@ -105,8 +105,12 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 		return url, nil
 	}
 
-	// max size
-	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 5*1024*1024)
+	siteWrite, err := us.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, siteWrite.GetMaxImageSize())
 	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
@@ -317,8 +321,20 @@ func (us *uploaderService) uploadAttachmentFile(ctx *gin.Context, file *multipar
 
 func (us *uploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.UploadSource) (
 	url string, err error) {
+	siteWrite, err := us.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		return "", err
+	}
+	cond := plugin.UploadFileCondition{
+		Source:                         source,
+		MaxImageSize:                   siteWrite.MaxImageSize,
+		MaxAttachmentSize:              siteWrite.MaxAttachmentSize,
+		MaxImageMegapixel:              siteWrite.MaxImageMegapixel,
+		AuthorizedImageExtensions:      siteWrite.AuthorizedImageExtensions,
+		AuthorizedAttachmentExtensions: siteWrite.AuthorizedAttachmentExtensions,
+	}
 	_ = plugin.CallStorage(func(fn plugin.Storage) error {
-		resp := fn.UploadFile(ctx, source)
+		resp := fn.UploadFile(ctx, cond)
 		if resp.OriginalError != nil {
 			log.Errorf("upload file by plugin failed, err: %v", resp.OriginalError)
 			err = errors.BadRequest("").WithMsg(resp.DisplayErrorMsg.Translate(ctx)).WithError(err)

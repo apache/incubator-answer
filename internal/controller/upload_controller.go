@@ -21,6 +21,7 @@ package controller
 
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/uploader"
@@ -75,6 +76,10 @@ func (uc *UploadController) UploadFile(ctx *gin.Context) {
 	case fileFromPost:
 		url, err = uc.uploaderService.UploadPostFile(ctx)
 	case fileFromBranding:
+		if !middleware.GetIsAdminFromContext(ctx) {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
+			return
+		}
 		url, err = uc.uploaderService.UploadBrandingFile(ctx)
 	case fileFromPostAttachment:
 		url, err = uc.uploaderService.UploadPostAttachment(ctx)
