@@ -712,7 +712,7 @@ export interface PutFlagReviewParams {
 }
 
 /**
- * @description response for reaction
+ * @description response
  */
 export interface ReactionItems {
   reaction_summary: ReactionItem[];
