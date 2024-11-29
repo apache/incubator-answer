@@ -190,7 +190,6 @@ export const setNotice = (params: Type.SetNoticeReq) => {
 };
 
 export const saveQuestion = (params: Type.QuestionParams) => {
-  // Ensure tags and content are optional
   params.tags = params.tags || []; 
   params.content = params.content || ''; 
   return request.post('/answer/api/v1/question', params);
