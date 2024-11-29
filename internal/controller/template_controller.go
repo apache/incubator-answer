@@ -546,12 +546,20 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		return
 	}
 
+	questionList, answerList, err := tc.questionService.SearchUserTopList(ctx, req.Username, "")
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
 	siteInfo.Title = fmt.Sprintf("%s - %s", username, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
-		"userinfo": userinfo,
-		"bio":      template.HTML(userinfo.BioHTML),
+		"userinfo":     userinfo,
+		"bio":          template.HTML(userinfo.BioHTML),
+		"topQuestions": questionList,
+		"topAnswers":   answerList,
 	})
 
 }
