@@ -205,12 +205,12 @@ const Ask = () => {
       saveDraft.save({
         params: {
           title: title.value,
-          tags: tags.value,
+          tags: tags.value.length > 0 ? tags.value : [], // Allow empty tags in drafts
           content: content.value,
           answer_content: answer_content.value,
         },
         callback: () => setHasDraft(true),
-      });
+      });      
       setBlockState(true);
     } else {
       removeDraft();
@@ -382,10 +382,15 @@ const Ask = () => {
     event.preventDefault();
     event.stopPropagation();
 
+    setFormData({
+      ...formData,
+      content: { value: formData.content.value, errorMsg: '', isInvalid: false }, 
+    });
+
     const params: Type.QuestionParams = {
       title: formData.title.value,
-      content: formData.content.value,
-      tags: formData.tags.value,
+      content: formData.content.value || '', 
+      tags: formData.tags.value || [],
     };
 
     if (isEdit) {
@@ -497,8 +502,8 @@ const Ask = () => {
               <TagSelector
                 value={formData.tags.value}
                 onChange={handleTagsChange}
-                showRequiredTag
                 maxTagLength={5}
+                showRequiredTag={false} 
                 isInvalid={formData.tags.isInvalid}
                 errMsg={formData.tags.errorMsg}
               />

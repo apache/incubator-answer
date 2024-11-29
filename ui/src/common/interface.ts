@@ -82,7 +82,7 @@ export interface QuestionParams extends ImgCodeReq {
   title: string;
   url_title?: string;
   content: string;
-  tags: Tag[];
+  tags?: Tag[];
 }
 
 export interface QuestionWithAnswer extends QuestionParams {
