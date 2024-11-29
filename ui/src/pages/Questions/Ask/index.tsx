@@ -205,7 +205,7 @@ const Ask = () => {
       saveDraft.save({
         params: {
           title: title.value,
-          tags: tags.value.length > 0 ? tags.value : [], // Allow empty tags in drafts
+          tags: tags.value.length > 0 ? tags.value : [], 
           content: content.value,
           answer_content: answer_content.value,
         },
