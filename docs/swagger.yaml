@@ -270,7 +270,7 @@ definitions:
     properties:
       display_name:
         maxLength: 30
-        minLength: 4
+        minLength: 2
         type: string
       email:
         maxLength: 500
