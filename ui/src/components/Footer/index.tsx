@@ -33,6 +33,13 @@ const Index = () => {
     <footer className="bg-light">
       <Container className="py-3">
         <p className="text-center mb-0 small text-secondary">
+          <a className="m-2" href="/privacy" target="_blank">
+            Privacy Policy
+          </a>
+          <a href="/tos" target="_blank">
+            Terms of Service
+          </a>
+          <br />
           <Trans i18nKey="footer.build_on" values={{ cc }}>
             Powered by
             {/* eslint-disable-next-line react/jsx-no-target-blank */}
