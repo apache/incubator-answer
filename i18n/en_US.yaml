@@ -789,7 +789,7 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li>
       <li><p class="mb-2">to make links</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
       class="mb-2">put returns between paragraphs</p></li><li><p
