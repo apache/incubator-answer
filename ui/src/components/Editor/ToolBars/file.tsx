@@ -122,7 +122,9 @@ const Image = ({ editorInstance }) => {
       <input
         type="file"
         className="d-none"
-        accept={authorized_attachment_extensions.join(',.').toLocaleLowerCase()}
+        accept={`.${authorized_attachment_extensions
+          .join(',.')
+          .toLocaleLowerCase()}`}
         ref={fileInputRef}
         onChange={onUpload}
       />
