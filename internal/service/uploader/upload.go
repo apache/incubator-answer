@@ -25,6 +25,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -237,7 +238,7 @@ func (us *uploaderService) UploadPostAttachment(ctx *gin.Context) (
 	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(postSubPath, newFilename)
-	return us.uploadAttachmentFile(ctx, fileHeader, avatarFilePath)
+	return us.uploadAttachmentFile(ctx, fileHeader, fileHeader.Filename, avatarFilePath)
 }
 
 func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
@@ -304,8 +305,8 @@ func (us *uploaderService) uploadImageFile(ctx *gin.Context, file *multipart.Fil
 	return url, nil
 }
 
-func (us *uploaderService) uploadAttachmentFile(ctx *gin.Context, file *multipart.FileHeader, fileSubPath string) (
-	url string, err error) {
+func (us *uploaderService) uploadAttachmentFile(ctx *gin.Context, file *multipart.FileHeader, originalFilename, fileSubPath string) (
+	downloadUrl string, err error) {
 	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		return "", err
@@ -315,8 +316,16 @@ func (us *uploaderService) uploadAttachmentFile(ctx *gin.Context, file *multipar
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	url = fmt.Sprintf("%s/uploads/%s", siteGeneral.SiteUrl, fileSubPath)
-	return url, nil
+	// The original filename is 123.png
+	// The local saved path is /UploadPath/hash.png
+	// The download link wil be /download/hash/123.png.
+	// When downloading, the download link will be redirect to the local saved path. And the download filename will be 123.png.
+	ext := filepath.Ext(fileSubPath)
+	// Need url encode the original filename. Because the filename may contain special characters that conflict with the markdown syntax.
+	originalFilename = url.QueryEscape(originalFilename)
+	downloadPath := strings.TrimSuffix(fileSubPath, ext) + "/" + originalFilename
+	downloadUrl = fmt.Sprintf("%s/download/%s", siteGeneral.SiteUrl, downloadPath)
+	return downloadUrl, nil
 }
 
 func (us *uploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.UploadSource) (
