@@ -31,6 +31,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/service/service_config"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
@@ -45,19 +46,13 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-const (
-	avatarSubPath      = "avatar"
-	avatarThumbSubPath = "avatar_thumb"
-	postSubPath        = "post"
-	brandingSubPath    = "branding"
-)
-
 var (
 	subPathList = []string{
-		avatarSubPath,
-		avatarThumbSubPath,
-		postSubPath,
-		brandingSubPath,
+		constant.AvatarSubPath,
+		constant.AvatarThumbSubPath,
+		constant.PostSubPath,
+		constant.BrandingSubPath,
+		constant.FilesPostSubPath,
 	}
 	supportedThumbFileExtMapping = map[string]imaging.Format{
 		".jpg":  imaging.JPEG,
@@ -123,7 +118,7 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 	}
 
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
-	avatarFilePath := path.Join(avatarSubPath, newFilename)
+	avatarFilePath := path.Join(constant.AvatarSubPath, newFilename)
 	return us.uploadImageFile(ctx, fileHeader, avatarFilePath)
 }
 
@@ -131,19 +126,19 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 	fileSuffix := path.Ext(fileName)
 	if _, ok := supportedThumbFileExtMapping[fileSuffix]; !ok {
 		// if file type is not supported, return original file
-		return path.Join(us.serviceConfig.UploadPath, avatarSubPath, fileName), nil
+		return path.Join(us.serviceConfig.UploadPath, constant.AvatarSubPath, fileName), nil
 	}
 	if size > 1024 {
 		size = 1024
 	}
 
 	thumbFileName := fmt.Sprintf("%d_%d@%s", size, size, fileName)
-	thumbFilePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, avatarThumbSubPath, thumbFileName)
+	thumbFilePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, constant.AvatarThumbSubPath, thumbFileName)
 	avatarFile, err := os.ReadFile(thumbFilePath)
 	if err == nil {
 		return thumbFilePath, nil
 	}
-	filePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, avatarSubPath, fileName)
+	filePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, constant.AvatarSubPath, fileName)
 	avatarFile, err = os.ReadFile(filePath)
 	if err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
@@ -160,11 +155,11 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	if err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath)); err != nil {
+	if err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, constant.AvatarThumbSubPath)); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
+	avatarFilePath := path.Join(constant.AvatarThumbSubPath, thumbFileName)
 	saveFilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
 	out, err := os.Create(saveFilePath)
 	if err != nil {
@@ -206,7 +201,7 @@ func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
 
 	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
-	avatarFilePath := path.Join(postSubPath, newFilename)
+	avatarFilePath := path.Join(constant.PostSubPath, newFilename)
 	return us.uploadImageFile(ctx, fileHeader, avatarFilePath)
 }
 
@@ -237,7 +232,7 @@ func (us *uploaderService) UploadPostAttachment(ctx *gin.Context) (
 
 	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
-	avatarFilePath := path.Join(postSubPath, newFilename)
+	avatarFilePath := path.Join(constant.FilesPostSubPath, newFilename)
 	return us.uploadAttachmentFile(ctx, fileHeader, fileHeader.Filename, avatarFilePath)
 }
 
@@ -268,7 +263,7 @@ func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
 	}
 
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
-	avatarFilePath := path.Join(brandingSubPath, newFilename)
+	avatarFilePath := path.Join(constant.BrandingSubPath, newFilename)
 	return us.uploadImageFile(ctx, fileHeader, avatarFilePath)
 }
 
@@ -316,15 +311,14 @@ func (us *uploaderService) uploadAttachmentFile(ctx *gin.Context, file *multipar
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	// The original filename is 123.png
-	// The local saved path is /UploadPath/hash.png
-	// The download link wil be /download/hash/123.png.
-	// When downloading, the download link will be redirect to the local saved path. And the download filename will be 123.png.
-	ext := filepath.Ext(fileSubPath)
 	// Need url encode the original filename. Because the filename may contain special characters that conflict with the markdown syntax.
 	originalFilename = url.QueryEscape(originalFilename)
-	downloadPath := strings.TrimSuffix(fileSubPath, ext) + "/" + originalFilename
-	downloadUrl = fmt.Sprintf("%s/download/%s", siteGeneral.SiteUrl, downloadPath)
+
+	// The original filename is 123.pdf
+	// The local saved path is /UploadPath/hash.pdf
+	// When downloading, the download link will be redirect to the local saved path. And the download filename will be 123.png.
+	downloadPath := strings.TrimSuffix(fileSubPath, filepath.Ext(fileSubPath)) + "/" + originalFilename
+	downloadUrl = fmt.Sprintf("%s/uploads/%s", siteGeneral.SiteUrl, downloadPath)
 	return downloadUrl, nil
 }
 
