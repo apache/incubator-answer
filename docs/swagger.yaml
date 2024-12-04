@@ -1556,6 +1556,7 @@ definitions:
         - score
         - unanswered
         - recommend
+        - frequent
         type: string
       page:
         minimum: 1
@@ -2221,6 +2222,20 @@ definitions:
     type: object
   schema.SiteWriteReq:
     properties:
+      authorized_attachment_extensions:
+        items:
+          type: string
+        type: array
+      authorized_image_extensions:
+        items:
+          type: string
+        type: array
+      max_attachment_size:
+        type: integer
+      max_image_megapixel:
+        type: integer
+      max_image_size:
+        type: integer
       recommend_tags:
         items:
           $ref: '#/definitions/schema.SiteWriteTag'
@@ -2236,6 +2251,20 @@ definitions:
     type: object
   schema.SiteWriteResp:
     properties:
+      authorized_attachment_extensions:
+        items:
+          type: string
+        type: array
+      authorized_image_extensions:
+        items:
+          type: string
+        type: array
+      max_attachment_size:
+        type: integer
+      max_image_megapixel:
+        type: integer
+      max_image_size:
+        type: integer
       recommend_tags:
         items:
           $ref: '#/definitions/schema.SiteWriteTag'
@@ -4767,6 +4796,7 @@ paths:
       - description: identify the source of the file upload
         enum:
         - post
+        - post_attachment
         - avatar
         - branding
         in: formData
@@ -5601,6 +5631,7 @@ paths:
         - score
         - unanswered
         - recommend
+        - frequent
         in: query
         name: order
         type: string
