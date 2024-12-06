@@ -51,6 +51,7 @@ type UserExternalLoginRepo interface {
 	GetByUserID(ctx context.Context, provider, userID string) (userInfo *entity.UserExternalLogin, exist bool, err error)
 	GetUserExternalLoginList(ctx context.Context, userID string) (resp []*entity.UserExternalLogin, err error)
 	DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error)
+	DeleteUserExternalLoginByUserID(ctx context.Context, userID string) (err error)
 	SetCacheUserExternalLoginInfo(ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error)
 	GetCacheUserExternalLoginInfo(ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error)
 }

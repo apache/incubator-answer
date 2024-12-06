@@ -104,6 +104,16 @@ func (ur *userExternalLoginRepo) DeleteUserExternalLogin(ctx context.Context, us
 	return
 }
 
+// DeleteUserExternalLoginByUserID delete external user login info by user ID
+func (ur *userExternalLoginRepo) DeleteUserExternalLoginByUserID(ctx context.Context, userID string) (err error) {
+	cond := &entity.UserExternalLogin{}
+	_, err = ur.data.DB.Context(ctx).Where("user_id = ?", userID).Delete(cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // SetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
 	ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error) {
