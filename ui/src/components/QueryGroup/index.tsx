@@ -27,6 +27,8 @@ import classNames from 'classnames';
 import { REACT_BASE_PATH } from '@/router/alias';
 import { floppyNavigation } from '@/utils';
 
+import './index.scss';
+
 interface Props {
   data;
   i18nKeyPrefix: string;
@@ -35,8 +37,8 @@ interface Props {
   className?: string;
   pathname?: string;
   wrapClassName?: string;
+  maxBtnCount?: number;
 }
-const MAX_BUTTON_COUNT = 3;
 const Index: FC<Props> = ({
   data = [],
   currentSort = '',
@@ -45,6 +47,7 @@ const Index: FC<Props> = ({
   className = '',
   pathname = '',
   wrapClassName = '',
+  maxBtnCount = 3,
 }) => {
   const [searchParams, setUrlSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -71,79 +74,88 @@ const Index: FC<Props> = ({
       }
     }
   };
-
-  const filteredData = data.filter((_, index) => index > MAX_BUTTON_COUNT - 2);
-  const currentBtn = filteredData.find((btn) => {
+  const moreBtnData = data.length > 4 ? data.slice(maxBtnCount) : [];
+  const normalBtnData = data.length > 4 ? data.slice(0, maxBtnCount) : data;
+  const currentBtn = moreBtnData.find((btn) => {
     return (typeof btn === 'string' ? btn : btn.name) === currentSort;
   });
+
   return (
-    <ButtonGroup size="sm" className={wrapClassName}>
-      {data.map((btn, index) => {
-        const key = typeof btn === 'string' ? btn : btn.sort;
-        const name = typeof btn === 'string' ? btn : btn.name;
-        return (
-          <Button
-            key={key}
-            variant="outline-secondary"
-            active={currentSort === name}
-            className={classNames(
-              'text-capitalize fit-content',
-              data.length > MAX_BUTTON_COUNT &&
-                index > MAX_BUTTON_COUNT - 2 &&
-                'd-none d-md-block',
-              className,
-            )}
-            style={
-              data.length > MAX_BUTTON_COUNT && index === data.length - 1
-                ? {
-                    borderTopRightRadius: '0.25rem',
-                    borderBottomRightRadius: '0.25rem',
+    <>
+      <ButtonGroup size="sm" className={classNames('md-show', wrapClassName)}>
+        {normalBtnData.map((btn) => {
+          const key = typeof btn === 'string' ? btn : btn.sort;
+          const name = typeof btn === 'string' ? btn : btn.name;
+          return (
+            <Button
+              key={key}
+              variant="outline-secondary"
+              active={currentSort === name}
+              className={classNames('text-capitalize fit-content', className)}
+              href={
+                pathname
+                  ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
+                  : handleParams(key)
+              }
+              onClick={(evt) => handleClick(evt, key)}>
+              {t(name)}
+            </Button>
+          );
+        })}
+        {moreBtnData.length > 0 && (
+          <DropdownButton
+            size="sm"
+            variant={currentBtn ? 'secondary' : 'outline-secondary'}
+            as={ButtonGroup}
+            title={currentBtn ? t(currentSort) : t('more')}>
+            {moreBtnData.map((btn) => {
+              const key = typeof btn === 'string' ? btn : btn.sort;
+              const name = typeof btn === 'string' ? btn : btn.name;
+              return (
+                <Dropdown.Item
+                  as="a"
+                  key={key}
+                  active={currentSort === name}
+                  className={classNames('text-capitalize', className)}
+                  href={
+                    pathname
+                      ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
+                      : handleParams(key)
                   }
-                : {}
-            }
-            href={
-              pathname
-                ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
-                : handleParams(key)
-            }
-            onClick={(evt) => handleClick(evt, key)}>
-            {t(name)}
-          </Button>
-        );
-      })}
-      {data.length > MAX_BUTTON_COUNT && (
-        <DropdownButton
-          size="sm"
-          variant={currentBtn ? 'secondary' : 'outline-secondary'}
-          className="d-block d-md-none"
-          as={ButtonGroup}
-          title={currentBtn ? t(currentSort) : t('more')}>
-          {filteredData.map((btn) => {
-            const key = typeof btn === 'string' ? btn : btn.sort;
-            const name = typeof btn === 'string' ? btn : btn.name;
-            return (
-              <Dropdown.Item
-                as="a"
-                key={key}
-                active={currentSort === name}
-                className={classNames(
-                  'text-capitalize',
-                  'd-block d-md-none',
-                  className,
-                )}
-                href={
-                  pathname
-                    ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
-                    : handleParams(key)
-                }
-                onClick={(evt) => handleClick(evt, key)}>
-                {t(name)}
-              </Dropdown.Item>
-            );
-          })}
-        </DropdownButton>
-      )}
-    </ButtonGroup>
+                  onClick={(evt) => handleClick(evt, key)}>
+                  {t(name)}
+                </Dropdown.Item>
+              );
+            })}
+          </DropdownButton>
+        )}
+      </ButtonGroup>
+      <DropdownButton
+        size="sm"
+        variant="outline-secondary"
+        className="md-hide"
+        title={t(currentSort)}>
+        {data.map((btn) => {
+          const key = typeof btn === 'string' ? btn : btn.sort;
+          const name = typeof btn === 'string' ? btn : btn.name;
+          return (
+            <Dropdown.Item
+              as="a"
+              key={key}
+              active={currentSort === name}
+              className={classNames('text-capitalize', className)}
+              href={
+                pathname
+                  ? `${REACT_BASE_PATH}${pathname}${handleParams(key)}`
+                  : handleParams(key)
+              }
+              onClick={(evt) => handleClick(evt, key)}>
+              {t(name)}
+            </Dropdown.Item>
+          );
+        })}
+      </DropdownButton>
+    </>
   );
 };
 

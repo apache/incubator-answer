@@ -27,6 +27,7 @@ import classNames from 'classnames';
 import { Empty, Icon, Pagination, QueryGroup } from '@/components';
 import * as Type from '@/common/interface';
 import { useQueryBadges, updateBadgeStatus } from '@/services/admin/badges';
+import { useToast } from '@/hooks';
 
 import Action from './components/Action';
 
@@ -46,6 +47,7 @@ const Badges: FC = () => {
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curFilter = urlSearchParams.get('filter') || BadgeFilterKeys[0];
   const curQuery = urlSearchParams.get('query') || '';
+  const Toast = useToast();
 
   const { data, isLoading, mutate } = useQueryBadges({
     page: curPage,
@@ -62,6 +64,13 @@ const Badges: FC = () => {
 
   const handleBadgeStatus = (badgeId, status) => {
     updateBadgeStatus({ id: badgeId, status }).then(() => {
+      Toast.onShow({
+        msg:
+          status === 'inactive'
+            ? t('badge_inactivated', { keyPrefix: 'messages' })
+            : t('badge_activated', { keyPrefix: 'messages' }),
+        variant: 'success',
+      });
       mutate();
     });
   };

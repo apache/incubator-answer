@@ -33,6 +33,7 @@ import {
 } from '@/components';
 import * as Type from '@/common/interface';
 import { useUserModal } from '@/hooks';
+import { toastStore, loggedUserInfoStore, userCenterStore } from '@/stores';
 import {
   useQueryUsers,
   addUsers,
@@ -40,7 +41,6 @@ import {
   AdminUcAgent,
   changeUserStatus,
 } from '@/services';
-import { loggedUserInfoStore, userCenterStore } from '@/stores';
 import { formatCount } from '@/utils';
 
 import DeleteUserModal from './components/DeleteUserModal';
@@ -139,6 +139,10 @@ const Users: FC = () => {
       status: 'deleted',
       remove_all_content: val,
     }).then(() => {
+      toastStore.getState().show({
+        msg: t('user_deleted', { keyPrefix: 'messages' }),
+        variant: 'success',
+      });
       changeDeleteUserModalState({
         show: false,
         userId: '',

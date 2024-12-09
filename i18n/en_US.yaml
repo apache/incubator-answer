@@ -789,7 +789,7 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li>
       <li><p class="mb-2">to make links</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
       class="mb-2">put returns between paragraphs</p></li><li><p
@@ -915,7 +915,7 @@ ui:
             msg:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: Description
       tab_url: Image URL
@@ -957,6 +957,10 @@ ui:
       text: Table
       heading: Heading
       cell: Cell
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: I am closing this post as...
     btn_cancel: Cancel
@@ -1557,6 +1561,7 @@ ui:
     newest: Newest
     active: Active
     hot: Hot
+    frequent: Frequent
     recommend: Recommend
     score: Score
     unanswered: Unanswered
@@ -2051,6 +2056,21 @@ ui:
       reserved_tags:
         label: Reserved tags
         text: "Reserved tags can only be used by moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: SEO
       permalink:
@@ -2252,6 +2272,7 @@ ui:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
     post_deleted: This post has been deleted.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: This post has been pinned.
     post_unpin: This post has been unpinned.
     post_hide_list: This post has been hidden from list.
@@ -2260,3 +2281,15 @@ ui:
     post_list: This post has been listed.
     post_unlist: This post has been unlisted.
     post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+

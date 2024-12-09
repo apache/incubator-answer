@@ -19,116 +19,116 @@
 backend:
   base:
     success:
-      other: Success.
+      other: Úspěch.
     unknown:
-      other: Unknown error.
+      other: Neznámá chyba.
     request_format_error:
-      other: Request format is not valid.
+      other: Formát požadavku není platný.
     unauthorized_error:
-      other: Unauthorized.
+      other: Neautorizováno.
     database_error:
-      other: Data server error.
+      other: Chyba datového serveru.
     forbidden_error:
-      other: Forbidden.
+      other: Zakázáno.
     duplicate_request_error:
-      other: Duplicate submission.
+      other: Duplicitní odeslání.
   action:
     report:
-      other: Flag
+      other: Nahlásit
     edit:
-      other: Edit
+      other: Upravit
     delete:
-      other: Delete
+      other: Smazat
     close:
-      other: Close
+      other: Zavřít
     reopen:
-      other: Reopen
+      other: Znovu otevřít
     forbidden_error:
-      other: Forbidden.
+      other: Zakázáno.
     pin:
-      other: Pin
+      other: Připnout
     hide:
-      other: Unlist
+      other: Skrýt
     unpin:
-      other: Unpin
+      other: Odepnout
     show:
-      other: List
+      other: Zobrazit
     invite_someone_to_answer:
-      other: Edit
+      other: Upravit
     undelete:
-      other: Undelete
+      other: Obnovit
   role:
     name:
       user:
-        other: User
+        other: Uživatel
       admin:
-        other: Admin
+        other: Administrátor
       moderator:
-        other: Moderator
+        other: Moderátor
     description:
       user:
-        other: Default with no special access.
+        other: Výchozí bez zvláštního přístupu.
       admin:
-        other: Have the full power to access the site.
+        other: Má plnou kontrolu nad stránkou.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Má přístup ke všem příspěvkům kromě admin nastavení.
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Úroveň 1 (méně reputace je vyžadováno pro soukromý tým, skupinu)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Úroveň 2 (nízká reputace je vyžadována pro startovací komunitu)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Úroveň 3 (vysoká reputace je vyžadována pro vyspělou komunitu)
     level_custom:
       description:
-        other: Custom Level
+        other: Vlastní úroveň
     rank_question_add_label:
-      other: Ask question
+      other: Položit dotaz
     rank_answer_add_label:
-      other: Write answer
+      other: Napsat odpověď
     rank_comment_add_label:
-      other: Write comment
+      other: Napsat komentář
     rank_report_add_label:
-      other: Flag
+      other: Nahlásit
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: Hlasovat pro komentář
     rank_link_url_limit_label:
-      other: Post more than 2 links at a time
+      other: Zveřejnit více než 2 odkazy najednou
     rank_question_vote_up_label:
-      other: Upvote question
+      other: Hlasovat pro dotaz
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: Hlasovat pro odpověď
     rank_question_vote_down_label:
-      other: Downvote question
+      other: Hlasovat proti otázce
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: Hlasovat proti odpovědi
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Pozvěte někoho, aby odpověděl
     rank_tag_add_label:
-      other: Create new tag
+      other: Vytvořit nový štítek
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Upravit popis štítku (vyžaduje kontrolu)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Upravit dotaz někoho jiného (vyžaduje kontrolu)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Upravit odpověď někoho jiného (vyžaduje kontrolu)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Upravit dotaz někoho jiného (bez kontroly)
     rank_answer_edit_without_review_label:
-      other: Edit other's answer without review
+      other: Upravit odpověď někoho jiného (bez kontroly)
     rank_question_audit_label:
-      other: Review question edits
+      other: Zkontrolovat úpravy dotazu
     rank_answer_audit_label:
-      other: Review answer edits
+      other: Zkontrolovat úpravy odpovědí
     rank_tag_audit_label:
-      other: Review tag edits
+      other: Zkontrolovat úpravy štítků
     rank_tag_edit_without_review_label:
-      other: Edit tag description without review
+      other: Upravit popis štítku (bez kontroly)
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Správa synonym štítků
   email:
     other: Email
   e_mail:
@@ -136,17 +136,17 @@ backend:
   password:
     other: Heslo
   pass:
-    other: Password
+    other: Heslo
   original_text:
-    other: This post
+    other: Tento příspěvek
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: Email a heslo nesouhlasí.
   error:
     common:
       invalid_url:
-        other: Invalid URL.
+        other: Neplatná URL.
       status_invalid:
-        other: Invalid status.
+        other: Neplatný stav.
     password:
       space_invalid:
         other: Heslo nesmí obsahovat mezery.
@@ -154,7 +154,7 @@ backend:
       cannot_update_their_password:
         other: Nemůžete změnit své heslo.
       cannot_edit_their_profile:
-        other: You cannot modify your profile.
+        other: Nemůžete upravovat svůj profil.
       cannot_modify_self_status:
         other: Nemůžete změnit svůj stav.
       email_or_password_wrong:
@@ -167,7 +167,7 @@ backend:
       cannot_update:
         other: Nemáte právo aktualizovat.
       question_closed_cannot_add:
-        other: Otázky jsou uzavřené a není možno je přidávat.
+        other: Dotazy jsou uzavřené a není možno je přidávat.
     comment:
       edit_without_permission:
         other: Nejsou povoleny úpravy komentáře.
@@ -186,375 +186,375 @@ backend:
         other: Email z této domény není povolen. Použijte jinou doménu.
     lang:
       not_found:
-        other: Language file not found.
+        other: Jazykový soubor nenalezen.
     object:
       captcha_verification_failed:
         other: Nesprávně vyplněná Captcha.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Nemáte oprávnění sledovat.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Nemáte oprávnění hlasovat.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Nemůžete hlasovat pro svůj vlastní příspěvek.
       not_found:
-        other: Object not found.
+        other: Objekt nenalezen.
       verification_failed:
-        other: Verification failed.
+        other: Ověření se nezdařilo.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: Email a heslo nesouhlasí.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Ověření starého hesla selhalo
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: Nové heslo je stejné jako předchozí.
       already_deleted:
-        other: This post has been deleted.
+        other: Tento příspěvek byl odstraněn.
     meta:
       object_not_found:
-        other: Meta object not found
+        other: Meta objekt nenalezen
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Tento příspěvek byl odstraněn.
       under_review:
-        other: Your post is awaiting review. It will be visible after it has been approved.
+        other: Váš příspěvek čeká na kontrolu. Bude viditelný po jeho schválení.
       not_found:
-        other: Question not found.
+        other: Dotaz nenalezen.
       cannot_deleted:
-        other: No permission to delete.
+        other: Nemáte oprávnění k mazání.
       cannot_close:
-        other: No permission to close.
+        other: Nemáte oprávnění k uzavření.
       cannot_update:
-        other: No permission to update.
+        other: Nemáte oprávnění pro aktualizaci.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: Hodnost reputace nesplňuje podmínku.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+        other: Děkujeme za zpětnou vazbu. Potřebujete alespoň úroveň {{.Rank}}, abyste mohli hlasovat.
       no_enough_rank_to_operate:
-        other: You need at least {{.Rank}} reputation to do this.
+        other: Potřebujete alespoň úroveň {{.Rank}} k provedení této akce.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Report selhal.
       not_found:
-        other: Report not found.
+        other: Report nebyl nalezen.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Štítek již existuje.
       not_found:
-        other: Tag not found.
+        other: Štítek nebyl nalezen.
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: Doporučený štítek nebyl nalezen.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Zadejte prosím alespoň jeden povinný štítek.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Nemělo by obsahovat synonyma štítků.
       cannot_update:
-        other: No permission to update.
+        other: Nemáte oprávnění pro aktualizaci.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: Nemůžete odstranit štítek, který se používá.
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Aktuální štítek nelze jako synonymum stejného štítku.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
+        other: Jméno odesílatele nemůže být emailová adresa.
     theme:
       not_found:
-        other: Theme not found.
+        other: Motiv nebyl nalezen.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: V současné době nelze upravit, čeká na kontrolu.
       no_permission:
-        other: No permission to revise.
+        other: Nemáte oprávnění k revizi.
     user:
       external_login_missing_user_id:
-        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
+        other: Platforma třetí strany neposkytuje unikátní UserID, takže se nemůžete přihlásit, kontaktujte prosím správce webových stránek.
       external_login_unbinding_forbidden:
-        other: Please set a login password for your account before you remove this login.
+        other: Před odebráním tohoto typu přihlášení nastavte přihlašovací heslo pro svůj účet.
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: Email a heslo nesouhlasí.
       not_found:
-        other: User not found.
+        other: Uživatel nebyl nalezen.
       suspended:
-        other: User has been suspended.
+        other: Uživatelský účet byl pozastaven.
       username_invalid:
-        other: Username is invalid.
+        other: Uživatelské jméno je neplatné.
       username_duplicate:
-        other: Username is already in use.
+        other: Uživatelské jméno je již použito.
       set_avatar:
-        other: Avatar set failed.
+        other: Nastavení avataru se nezdařilo.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Nemůžete upravovat svoji roli.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: Registrace nejsou povolené.
       not_allowed_login_via_password:
-        other: Currently the site is not allowed to login via password.
+        other: Přihlášení přes heslo není povolené.
       access_denied:
-        other: Access denied
+        other: Přístup zamítnut
       page_access_denied:
-        other: You do not have access to this page.
+        other: Nemáte přístup k této stránce.
       add_bulk_users_format_error:
-        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+        other: "Chyba formátu pole {{.Field}} poblíž '{{.Content}}' na řádku {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "Počet uživatelů, které přidáte najednou, by měl být v rozsahu 1-{{.MaxAmount}}."
     config:
       read_config_failed:
-        other: Read config failed
+        other: Načtení konfigurace selhalo
     database:
       connection_failed:
-        other: Database connection failed
+        other: Spojení s databází selhalo
       create_table_failed:
-        other: Create table failed
+        other: Vytvoření tabulky selhalo
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Soubor config.yaml nelze vytvořit.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Nepodporovaný formát souboru.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Konfigurace webu nebyla nalezena.
     badge:
       object_not_found:
-        other: Badge object not found
+        other: Objekt odznaku nebyl nalezen
   reason:
     spam:
       name:
         other: spam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: Tento příspěvek je reklama nebo vandalismus. Není užitečný ani relevantní pro aktuální téma.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: hrubý nebo zneužívající
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: "Rozumný člověk by tento obsah považoval za nevhodný pro slušnou konverzaci."
     a_duplicate:
       name:
-        other: a duplicate
+        other: duplicita
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Tento dotaz byl položen dříve a již má odpověď.
       placeholder:
-        other: Enter the existing question link
+        other: Zadejte existující odkaz na dotaz
     not_a_answer:
       name:
-        other: not an answer
+        other: není odpověď
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
+        other: "Toto bylo zveřejněno jako odpověď, ale nesnaží se odpovědět na dotaz. Měla by to být úprava, komentář, nebo úplně jiný dotaz."
     no_longer_needed:
       name:
-        other: no longer needed
+        other: již není potřeba
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Tento komentář je zastaralý, konverzační nebo není relevantní pro tento příspěvek.
     something:
       name:
-        other: something else
+        other: jiný důvod
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Tento příspěvek vyžaduje pozornost moderátorů z jiného důvodu, který není uveden výše.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: Dejte nám vědět konkrétně, v čem je problém
     community_specific:
       name:
-        other: a community-specific reason
+        other: důvod specifický pro komunitu
       desc:
-        other: This question doesn't meet a community guideline.
+        other: Tento dotaz nesplňuje pravidla komunity.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: vyžaduje detaily nebo upřesnění
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: Tento dotaz v současné době obsahuje více otázek. Měl by se zaměřit pouze na jeden problém.
     looks_ok:
       name:
-        other: looks OK
+        other: vypadá v pořádku
       desc:
-        other: This post is good as-is and not low quality.
+        other: Tento příspěvek je dobrý tak jak je, nemá nízkou kvalitu.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: potřebuje úpravu, kterou jsem udělal(a)
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: Zlepšete a opravte problémy s tímto příspěvkem.
     needs_close:
       name:
-        other: needs close
+        other: potřebuje zavřít
       desc:
-        other: A closed question can't answer, but still can edit, vote and comment.
+        other: Na uzavřený dotaz není možné odpovídat, ale stále může být upraven a je možné pro něj hlasovat a komentovat jej.
     needs_delete:
       name:
-        other: needs delete
+        other: potřebuje smazat
       desc:
-        other: This post will be deleted.
+        other: Tento příspěvek bude odstraněn.
   question:
     close:
       duplicate:
         name:
           other: spam
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Tento dotaz byl položena dříve a již má odpověď.
       guideline:
         name:
-          other: a community-specific reason
+          other: důvod specifický pro komunitu
         desc:
-          other: This question doesn't meet a community guideline.
+          other: Tento dotaz nesplňuje pravidla komunity.
       multiple:
         name:
-          other: needs details or clarity
+          other: vyžaduje detaily nebo upřesnění
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: Tento dotaz v současné době obsahuje více otázek. Měla by se zaměřit pouze na jeden problém.
       other:
         name:
-          other: something else
+          other: jiný důvod
         desc:
-          other: This post requires another reason not listed above.
+          other: Tento příspěvek vyžaduje pozornost moderátorů z jiného důvodu, který není uveden výše.
     operation_type:
       asked:
-        other: asked
+        other: dotázáno
       answered:
-        other: answered
+        other: zodpovězeno
       modified:
-        other: modified
+        other: upraveno
     deleted_title:
-      other: Deleted question
+      other: Smazat dotaz
     questions_title:
-      other: Questions
+      other: Dotazy
   tag:
     tags_title:
-      other: Tags
+      other: Štítky
     no_description:
-      other: The tag has no description.
+      other: Štítek nemá žádný popis.
   notification:
     action:
       update_question:
-        other: updated question
+        other: upravený dotaz
       answer_the_question:
-        other: answered question
+        other: položil(a) dotaz
       update_answer:
-        other: updated answer
+        other: upravil(a) odpověď
       accept_answer:
-        other: accepted answer
+        other: přijal(a) odpověď
       comment_question:
-        other: commented question
+        other: okomentoval(a) dotaz
       comment_answer:
-        other: commented answer
+        other: okomentoval(a) odpověď
       reply_to_you:
-        other: replied to you
+        other: vám odpověděl(a)
       mention_you:
-        other: mentioned you
+        other: vás zmínil(a)
       your_question_is_closed:
-        other: Your question has been closed
+        other: Váš dotaz byl uzavřen
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: Váš dotaz byl odstraněn
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: Vaše odpověď byla smazána
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: Váš komentář byl odstraněn
       up_voted_question:
-        other: upvoted question
+        other: hlasoval(a) pro dotaz
       down_voted_question:
-        other: downvoted question
+        other: hlasoval(a) proti dotazu
       up_voted_answer:
-        other: upvoted answer
+        other: hlasoval(a) pro odpověď
       down_voted_answer:
-        other: downvoted answer
+        other: hlasoval(a) proti odpovědi
       up_voted_comment:
-        other: upvoted comment
+        other: hlasoval(a) pro komentář
       invited_you_to_answer:
-        other: invited you to answer
+        other: vás pozval, abyste odpověděl(a)
       earned_badge:
-        other: You've earned the "{{.BadgeName}}" badge
+        other: Získali jste odznak "{{.BadgeName}}"
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Potvrďte svůj nový email"
       body:
-        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     new_answer:
       title:
-        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+        other: "[{{.SiteName}}] {{.DisplayName}} odpověděl(a) na váš dotaz"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
-        other: "[{{.SiteName }}] Password reset"
+        other: "[{{.SiteName }}] Obnova hesla"
       body:
-        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     register:
       title:
-        other: "[{{.SiteName}}] Confirm your new account"
+        other: "[{{.SiteName}}] Potvrďte svůj nový účet"
       body:
-        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     test:
       title:
-        other: "[{{.SiteName}}] Test Email"
+        other: "[{{.SiteName}}] Zkušební email"
       body:
-        other: "This is a test email."
+        other: "This is a test email.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
   action_activity_type:
     upvote:
-      other: upvote
+      other: hlasovat pro
     upvoted:
-      other: upvoted
+      other: hlasováno pro
     downvote:
-      other: downvote
+      other: hlasovat proti
     downvoted:
-      other: downvoted
+      other: hlasováno proti
     accept:
-      other: accept
+      other: přijmout
     accepted:
-      other: accepted
+      other: přijato
     edit:
-      other: edit
+      other: upravit
   review:
     queued_post:
-      other: Queued post
+      other: Příspěvek ve frontě
     flagged_post:
-      other: Flagged post
+      other: Nahlášený příspěvek
     suggested_post_edit:
-      other: Suggested edits
+      other: Navrhované úpravy
   reaction:
     tooltip:
-      other: "{{ .Names }} and {{ .Count }} more..."
+      other: "{{ .Names }} a {{ .Count }} dalších..."
   badge:
     default_badges:
       autobiographer:
         name:
-          other: Autobiographer
+          other: Životopisec
         desc:
-          other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
+          other: <a href="{{ .ProfileURL }}" target="_blank">Profil</a> vyplněn.
       certified:
         name:
-          other: Certified
+          other: Certifikovaný
         desc:
-          other: Completed our new user tutorial.
+          other: Tutoriál pro nové uživatele dokončen.
       editor:
         name:
           other: Editor
         desc:
-          other: First post edit.
+          other: První úprava příspěvku.
       first_flag:
         name:
-          other: First Flag
+          other: První nahlášení
         desc:
-          other: First flagged a post.
+          other: První nahlášení příspěvku.
       first_upvote:
         name:
-          other: First Upvote
+          other: První hlas pro
         desc:
-          other: First up voted a post.
+          other: První hlas pro příspěvek.
       first_link:
         name:
-          other: First Link
+          other: První odkaz
         desc:
           other: First dirst added a link to another post.
       first_reaction:
@@ -564,9 +564,9 @@ backend:
           other: First reacted to the post.
       first_share:
         name:
-          other: First Share
+          other: První sdílení
         desc:
-          other: First shared a post.
+          other: První sdílení příspěvku.
       scholar:
         name:
           other: Scholar
@@ -576,67 +576,67 @@ backend:
         name:
           other: Commentator
         desc:
-          other: Leave 5 comments.
+          other: Napište 5 komentářů.
       new_user_of_the_month:
         name:
-          other: New User of the Month
+          other: Nový uživatel měsíce
         desc:
-          other: Outstanding contributions in their first month.
+          other: Výjimečný přínos ve svém prvním měsíci na stránce.
       read_guidelines:
         name:
-          other: Read Guidelines
+          other: Přečíst pravidla
         desc:
-          other: Read the [community guidelines].
+          other: Přečtěte si [pravidla komunity].
       reader:
         name:
-          other: Reader
+          other: Čtenář
         desc:
-          other: Read every answers in a topic with more than 10 answers.
+          other: Přečtěte si všechny odpovědi v tématu s více než 10 odpověďmi.
       welcome:
         name:
-          other: Welcome
+          other: Vítejte
         desc:
-          other: Received a up vote.
+          other: Obdržel(a) hlas.
       nice_share:
         name:
-          other: Nice Share
+          other: Povedené sdílení
         desc:
-          other: Shared a post with 25 unique visitors.
+          other: Sdílel(a) příspěvek s 25 unikátními návštěvníky.
       good_share:
         name:
-          other: Good Share
+          other: Dobré sdílení
         desc:
-          other: Shared a post with 300 unique visitors.
+          other: Sdílel(a) příspěvek s 300 unikátními návštěvníky.
       great_share:
         name:
-          other: Great Share
+          other: Skvělé sdílení
         desc:
-          other: Shared a post with 1000 unique visitors.
+          other: Sdílel(a) příspěvek s 1000 unikátními návštěvníky.
       out_of_love:
         name:
-          other: Out of Love
+          other: Optimista
         desc:
-          other: Used 50 up votes in a day.
+          other: Využito 50 hlasů pro za den.
       higher_love:
         name:
-          other: Higher Love
+          other: Vytrvalý optimista
         desc:
-          other: Used 50 up votes in a day 5 times.
+          other: 5 krát využito 50 hlasů pro za den.
       crazy_in_love:
         name:
-          other: Crazy in Love
+          other: Bláznivý optimista
         desc:
-          other: Used 50 up votes in a day 20 times.
+          other: 20 krát využito 50 hlasů pro za den.
       promoter:
         name:
-          other: Promoter
+          other: Promotér
         desc:
-          other: Invited a user.
+          other: Pozval(a) uživatele.
       campaigner:
         name:
           other: Campaigner
         desc:
-          other: Invited 3 basic users.
+          other: Pozval(a) 3 uživatele.
       champion:
         name:
           other: Champion
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: How to Format
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
     next: Next
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4 MB.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: Description
       tab_url: Image URL
@@ -946,6 +946,10 @@ ui:
       text: Table
       heading: Heading
       cell: Cell
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: I am closing this post as...
     btn_cancel: Cancel
@@ -1086,6 +1090,7 @@ ui:
     search_placeholder: Filter by tag name
     no_desc: The tag has no description.
     more: More
+    wiki: Wiki
   ask:
     title: Add Question
     edit_title: Edit Question
@@ -1339,8 +1344,8 @@ ui:
     description: Questions linked to
     no_linked_question: No questions linked from this question.
   invite_to_answer:
-    title: People Asked
-    desc: Select people who you think might know the answer.
+    title: Pozvěte další uživatele
+    desc: Pozvěte lidi, o kterých si myslíte, že mohou odpovědět.
     invite: Invite to answer
     add: Add people
     search: Search people
@@ -1522,6 +1527,7 @@ ui:
     newest: Newest
     active: Active
     hot: Hot
+    frequent: Frequent
     recommend: Recommend
     score: Score
     unanswered: Unanswered
@@ -1721,6 +1727,8 @@ ui:
       welcome: Welcome to Admin!
       site_statistics: Site statistics
       questions: "Questions:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "Answers:"
       comments: "Comments:"
       votes: "Votes:"
@@ -1994,7 +2002,7 @@ ui:
       page_title: Write
       restrict_answer:
         title: Answer write
-        label: Each user can only write one answer for each question
+        label: Každý uživatel může napsat pouze jednu odpověď na stejný dotaz
         text: "Turn off to allow users to write multiple answers to the same question, which may cause answers to be unfocused."
       recommend_tags:
         label: Recommend tags
@@ -2008,6 +2016,21 @@ ui:
       reserved_tags:
         label: Reserved tags
         text: "Reserved tags can only be used by moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: SEO
       permalink:
@@ -2211,6 +2234,7 @@ ui:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
     post_deleted: This post has been deleted.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: This post has been pinned.
     post_unpin: This post has been unpinned.
     post_hide_list: This post has been hidden from list.
@@ -2219,3 +2243,15 @@ ui:
     post_list: This post has been listed.
     post_unlist: This post has been unlisted.
     post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+

@@ -23,7 +23,7 @@ To learn more about the project, visit [answer.apache.org](https://answer.apache
 ### Running with docker
 
 ```bash
-docker run -d -p 9080:80 -v answer-data:/data --name answer apache/answer:1.4.1
+docker run -d -p 9080:80 -v answer-data:/data --name answer apache/answer:1.4.2
 ```
 
 For more information, see [Installation](https://answer.apache.org/docs/installation).
@@ -40,20 +40,20 @@ You can also check out the [plugins here](https://answer.apache.org/plugins).
 
 ### Prerequisites
 
-- Golang >= 1.18
+- Golang >= 1.22
 - Node.js >= 16.17
 - pnpm >= 8
-- mockgen >= 1.6.0
-- wire >= 0.5.0
+- [mockgen](https://github.com/uber-go/mock?tab=readme-ov-file#installation) >= 1.6.0
+- [wire](https://github.com/google/wire/) >= 0.5.0
 
 ### Build
 
 ```bash
-# install wire and mockgen for building
+# Install wire and mockgen for building. You can run `make check` to check if they are installed.
 $ make generate
-# install frontend dependencies and build
+# Install frontend dependencies and build
 $ make ui
-# install backend dependencies and build
+# Install backend dependencies and build
 $ make build
 ```
 

@@ -29,11 +29,6 @@ const Heading = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const headerList = [
     {
-      text: `<h1 class="mb-0 h3">${t('heading.options.h1')}</h1>`,
-      level: 1,
-      label: t('heading.options.h1'),
-    },
-    {
       text: `<h2 class="mb-0 h4">${t('heading.options.h2')}</h2>`,
       level: 2,
       label: t('heading.options.h2'),
@@ -60,7 +55,7 @@ const Heading = () => {
     },
   ];
   const item = {
-    label: 'type',
+    label: 'type-h2',
     keyMap: ['Ctrl-h'],
     tip: `${t('heading.text')} (Ctrl+h)`,
   };

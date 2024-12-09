@@ -72,6 +72,16 @@ func (cr *reviewRepo) GetReview(ctx context.Context, reviewID int) (
 	return
 }
 
+// GetReviewByObject get review by object
+func (cr *reviewRepo) GetReviewByObject(ctx context.Context, objectID string) (review *entity.Review, exist bool, err error) {
+	review = &entity.Review{}
+	exist, err = cr.data.DB.Context(ctx).Desc("id").Where("object_id = ?", objectID).Get(review)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetReviewCount get review count
 func (cr *reviewRepo) GetReviewCount(ctx context.Context, status int) (count int64, err error) {
 	count, err = cr.data.DB.Context(ctx).Count(&entity.Review{Status: status})

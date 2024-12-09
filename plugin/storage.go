@@ -22,9 +22,10 @@ package plugin
 type UploadSource string
 
 const (
-	UserAvatar    UploadSource = "user_avatar"
-	UserPost      UploadSource = "user_post"
-	AdminBranding UploadSource = "admin_branding"
+	UserAvatar         UploadSource = "user_avatar"
+	UserPost           UploadSource = "user_post"
+	UserPostAttachment UploadSource = "user_post_attachment"
+	AdminBranding      UploadSource = "admin_branding"
 )
 
 var (
@@ -51,6 +52,21 @@ var (
 	}
 )
 
+type UploadFileCondition struct {
+	// Source is the source of the file
+	Source UploadSource
+	// MaxImageSize is the maximum size of the image in MB
+	MaxImageSize int
+	// MaxAttachmentSize is the maximum size of the attachment in MB
+	MaxAttachmentSize int
+	// MaxImageMegapixel is the maximum megapixel of the image
+	MaxImageMegapixel int
+	// AuthorizedImageExtensions is the list of authorized image extensions
+	AuthorizedImageExtensions []string
+	// AuthorizedAttachmentExtensions is the list of authorized attachment extensions
+	AuthorizedAttachmentExtensions []string
+}
+
 type UploadFileResponse struct {
 	// FullURL is the URL that can be used to access the file
 	FullURL string
@@ -65,7 +81,7 @@ type Storage interface {
 
 	// UploadFile uploads a file to storage.
 	// The file is in the Form of the ctx and the key is "file"
-	UploadFile(ctx *GinContext, source UploadSource) UploadFileResponse
+	UploadFile(ctx *GinContext, condition UploadFileCondition) UploadFileResponse
 }
 
 var (

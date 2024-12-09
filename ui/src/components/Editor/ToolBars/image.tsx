@@ -25,11 +25,18 @@ import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
 import { IEditorContext, Editor } from '../types';
 import { uploadImage } from '@/services';
+import { writeSettingStore } from '@/stores';
 
 let context: IEditorContext;
 const Image = ({ editorInstance }) => {
   const [editor, setEditor] = useState<Editor>(editorInstance);
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
+  const {
+    max_image_size = 4,
+    max_attachment_size = 8,
+    authorized_image_extensions = [],
+    authorized_attachment_extensions = [],
+  } = writeSettingStore((state) => state.write);
 
   const loadingText = `![${t('image.uploading')}...]()`;
 
@@ -52,41 +59,85 @@ const Image = ({ editorInstance }) => {
     isInvalid: false,
     errorMsg: '',
   });
+
   const verifyImageSize = (files: FileList) => {
     if (files.length === 0) {
       return false;
     }
-    const filteredFiles = Array.from(files).filter(
-      (file) => file.type.indexOf('image') === -1,
-    );
 
-    if (filteredFiles.length > 0) {
+    /**
+     * When allowing attachments to be uploaded, verification logic for attachment information has been added. In order to avoid abnormal judgment caused by the order of drag and drop upload, the drag and drop upload verification of attachments and the drag and drop upload of images are put together.
+     *
+     */
+    const canUploadAttachment = authorized_attachment_extensions.length > 0;
+    const allowedAllType = [
+      ...authorized_image_extensions,
+      ...authorized_attachment_extensions,
+    ];
+    const unSupportFiles = Array.from(files).filter((file) => {
+      const fileName = file.name.toLowerCase();
+      return canUploadAttachment
+        ? !allowedAllType.find((v) => fileName.endsWith(v))
+        : file.type.indexOf('image') === -1;
+    });
+
+    if (unSupportFiles.length > 0) {
       AnswerModal.confirm({
-        content: t('image.form_image.fields.file.msg.only_image'),
+        content: canUploadAttachment
+          ? t('file.not_supported', { file_type: allowedAllType.join(', ') })
+          : t('image.form_image.fields.file.msg.only_image'),
+        showCancel: false,
       });
       return false;
     }
-    const filteredImages = Array.from(files).filter(
-      (file) => file.size / 1024 / 1024 > 4,
-    );
 
-    if (filteredImages.length > 0) {
+    const otherFiles = Array.from(files).filter((file) => {
+      return file.type.indexOf('image') === -1;
+    });
+
+    if (canUploadAttachment && otherFiles.length > 0) {
+      const attachmentOverSizeFiles = otherFiles.filter(
+        (file) => file.size / 1024 / 1024 > max_attachment_size,
+      );
+      if (attachmentOverSizeFiles.length > 0) {
+        AnswerModal.confirm({
+          content: t('file.max_size', { size: max_attachment_size }),
+          showCancel: false,
+        });
+        return false;
+      }
+    }
+
+    const imageFiles = Array.from(files).filter(
+      (file) => file.type.indexOf('image') > -1,
+    );
+    const oversizedImages = imageFiles.filter(
+      (file) => file.size / 1024 / 1024 > max_image_size,
+    );
+    if (oversizedImages.length > 0) {
       AnswerModal.confirm({
-        content: t('image.form_image.fields.file.msg.max_size'),
+        content: t('image.form_image.fields.file.msg.max_size', {
+          size: max_image_size,
+        }),
+        showCancel: false,
       });
       return false;
     }
+
     return true;
   };
+
   const upload = (
     files: FileList,
-  ): Promise<{ url: string; name: string }[]> => {
+  ): Promise<{ url: string; name: string; type: string }[]> => {
     const promises = Array.from(files).map(async (file) => {
-      const url = await uploadImage({ file, type: 'post' });
+      const type = file.type.indexOf('image') > -1 ? 'post' : 'post_attachment';
+      const url = await uploadImage({ file, type });
 
       return {
         name: file.name,
         url,
+        type,
       };
     });
 
@@ -103,7 +154,6 @@ const Image = ({ editorInstance }) => {
   }
   const drop = async (e) => {
     const fileList = e.dataTransfer.files;
-
     const bool = verifyImageSize(fileList);
 
     if (!bool) {
@@ -116,15 +166,20 @@ const Image = ({ editorInstance }) => {
 
     editor.replaceSelection(loadingText);
     editor.setReadOnly(true);
-    const urls = await upload(fileList).catch((ex) => {
-      console.error('upload file error: ', ex);
-    });
+    const urls = await upload(fileList)
+      .catch(() => {
+        editor.replaceRange('', startPos, endPos);
+      })
+      .finally(() => {
+        editor.setReadOnly(false);
+        editor.focus();
+      });
 
     const text: string[] = [];
     if (Array.isArray(urls)) {
-      urls.forEach(({ name, url }) => {
+      urls.forEach(({ name, url, type }) => {
         if (name && url) {
-          text.push(`![${name}](${url})`);
+          text.push(`${type === 'post' ? '!' : ''}[${name}](${url})`);
         }
       });
     }
@@ -133,8 +188,6 @@ const Image = ({ editorInstance }) => {
     } else {
       editor.replaceRange('', startPos, endPos);
     }
-    editor.setReadOnly(false);
-    editor.focus();
   };
 
   const paste = async (event) => {
@@ -149,14 +202,21 @@ const Image = ({ editorInstance }) => {
 
       editor.replaceSelection(loadingText);
       editor.setReadOnly(true);
-      const urls = await upload(clipboard.files);
-      const text = urls.map(({ name, url }) => {
-        return `![${name}](${url})`;
-      });
+      upload(clipboard.files)
+        .then((urls) => {
+          const text = urls.map(({ name, url, type }) => {
+            return `${type === 'post' ? '!' : ''}[${name}](${url})`;
+          });
 
-      editor.replaceRange(text.join('\n'), startPos, endPos);
-      editor.setReadOnly(false);
-      editor.focus();
+          editor.replaceRange(text.join('\n'), startPos, endPos);
+        })
+        .catch(() => {
+          editor.replaceRange('', startPos, endPos);
+        })
+        .finally(() => {
+          editor.setReadOnly(false);
+          editor.focus();
+        });
 
       return;
     }
@@ -252,6 +312,7 @@ const Image = ({ editorInstance }) => {
 
     uploadImage({ file: e.target.files[0], type: 'post' }).then((url) => {
       setLink({ ...link, value: url });
+      setImageName({ ...imageName, value: files[0].name });
     });
   };
 
@@ -283,6 +344,7 @@ const Image = ({ editorInstance }) => {
                     type="file"
                     onChange={onUpload}
                     isInvalid={currentTab === 'localImage' && link.isInvalid}
+                    accept="image/*"
                   />
 
                   <Form.Control.Feedback type="invalid">
