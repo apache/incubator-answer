@@ -464,42 +464,42 @@ backend:
       title:
         other: "[{{.SiteName}}] 确认你的新邮箱地址"
       body:
-        other: "请点击以下链接确认你在 {{.SiteName}} 上的新邮箱地址：<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n如果你没有请求此更改，请忽略此邮件。\n"
+        other: "请点击以下链接确认你在 {{.SiteName}} 上的新邮箱地址：<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n如果你没有请求此更改，请忽略此邮件。\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到<br><br>"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 回答了你的问题"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 邀请您回答问题"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>我想你可能知道答案。</blockquote><br>\n<a href='{{.InviteUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>我想你可能知道答案。</blockquote><br>\n<a href='{{.InviteUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 评论了你的帖子"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}：<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] 新问题: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到 <br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] 重置密码"
       body:
-        other: "有人要求在 [{{.SiteName}}] 上重置你的密码。<br><br>\n\n如果这不是你的操作，请安心忽略此电子邮件。<br><br>\n\n请点击以下链接设置一个新密码：<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "有人要求在 [{{.SiteName}}] 上重置你的密码。<br><br>\n\n如果这不是你的操作，请安心忽略此电子邮件。<br><br>\n\n请点击以下链接设置一个新密码：<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n\n如果你没有请求此更改，请忽略此邮件。\n"
     register:
       title:
         other: "[{{.SiteName}}] 确认你的新账户"
       body:
-        other: "欢迎加入 {{.SiteName}}！<br><br>\n\n请点击以下链接确认并激活你的新账户：<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n如果上面的链接不能点击，请将其复制并粘贴到你的浏览器地址栏中。\n"
+        other: "欢迎加入 {{.SiteName}}！<br><br>\n\n请点击以下链接确认并激活你的新账户：<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n如果上面的链接不能点击，请将其复制并粘贴到你的浏览器地址栏中。\n<br><br>\n\n--<br>\n这是系统自动发送的电子邮件，请勿回复，因为您的回复将不会被看到"
     test:
       title:
         other: "[{{.SiteName}}] 测试邮件"
       body:
-        other: "这是一封测试邮件。"
+        other: "这是测试电子邮件。\n<br><br>\n\n-<br>\n注意：这是一个自动的系统电子邮件， 请不要回复此消息，因为您的回复将不会被看到。"
   action_activity_type:
     upvote:
       other: 点赞
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: 如何排版
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">引用问题或答案: <code>#10010000000000001</code></p></li><li><p class="mb-2">添加链接</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加 <code>&gt;</code> 表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用 <code>```</code> 创建代码块</p><pre class="mb-0"><code>```<br/>这是代码块<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">引用问题或答案: <code>#post_id</code></p></li><li><p class="mb-2">添加链接</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用  个空格缩进代码</p></li><li><p class="mb-2">在行首添加 <code>&gt;</code> 表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用 <code>```</code> 创建代码块</p><pre class="mb-0"><code>```<br/>这是代码块<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: 请选择图片文件。
               only_image: 只能上传图片文件。
-              max_size: 文件大小不能超过 4 MB。
+              max_size: 文件大小不能超过 {{size}} MB。
           desc:
             label: 描述
       tab_url: 图片地址
@@ -946,6 +946,10 @@ ui:
       text: 表格
       heading: 表头
       cell: 单元格
+    file:
+      text: 附件
+      not_supported: "不支持的文件类型。请尝试上传其他类型的文件如： {{file_type}}。"
+      max_size: "上传文件超过 {{size}} MB。"
   close_modal:
     title: 关闭原因是...
     btn_cancel: 取消
@@ -1523,6 +1527,7 @@ ui:
     newest: 最新
     active: 活跃
     hot: 热门
+    frequent: 频繁的
     recommend: 推荐
     score: 评分
     unanswered: 未回答
@@ -1557,7 +1562,7 @@ ui:
     top_questions: 高分问题
     stats: 状态
     list_empty: 没有找到相关的内容。<br />试试看其他选项卡？
-    content_empty: 没有找到相关的内容。
+    content_empty: 未找到帖子。
     accepted: 已采纳
     answered: 回答于
     asked: 提问于
@@ -1723,7 +1728,7 @@ ui:
       site_statistics: 站点统计
       questions: "问题:"
       resolved: "已解决:"
-      unanswered: "未回复:"
+      unanswered: "未回答:"
       answers: "回答:"
       comments: "评论:"
       votes: "投票:"
@@ -2011,6 +2016,21 @@ ui:
       reserved_tags:
         label: 保留标签
         text: "只有版主才能使用保留的标签。"
+      image_size:
+        label: 最大图像大小 (MB)
+        text: "最大图像上传大小."
+      attachment_size:
+        label: 最大附件大小 (MB)
+        text: "最大附件文件上传大小。"
+      image_megapixels:
+        label: 最大图像兆像素
+        text: "允许图像的最大兆位数。"
+      image_extensions:
+        label: 允许的图像后缀
+        text: "允许图像显示的文件扩展名的列表，用英文逗号分隔。"
+      attachment_extensions:
+        label: 允许的附件后缀
+        text: "允许上传的文件扩展名列表与英文逗号分开。警告：允许上传可能会导致安全问题。"
     seo:
       page_title: 搜索引擎优化
       permalink:
@@ -2214,6 +2234,7 @@ ui:
     discard_confirm: 您确定要丢弃您的草稿吗？
   messages:
     post_deleted: 该帖子已被删除。
+    post_cancel_deleted: 此帖子已被删除
     post_pin: 该帖子已被置顶。
     post_unpin: 该帖子已被取消置顶。
     post_hide_list: 此帖子已经从列表中隐藏。
@@ -2222,3 +2243,15 @@ ui:
     post_list: 这个帖子已经被显示
     post_unlist: 这个帖子已经被隐藏
     post_pending: 您的帖子正在等待审核。它将在它获得批准后可见。
+    post_closed: 此帖已关闭。
+    answer_deleted: 该回答已被删除.
+    answer_cancel_deleted: 此答案已取消删除。
+    change_user_role: 此用户的角色已被更改。
+    user_inactive: 此用户已经处于未激活状态。
+    user_normal: 此用户已经是正常的。
+    user_suspended: 此用户已被封禁。
+    user_deleted: 此用户已被删除
+    badge_activated: 此徽章已被激活。
+    badge_inactivated: 此徽章已被禁用。
+
+

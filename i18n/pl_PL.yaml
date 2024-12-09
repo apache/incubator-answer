@@ -315,7 +315,7 @@ backend:
         other: Nie znaleziono konfiguracji strony.
     badge:
       object_not_found:
-        other: Badge object not found
+        other: Nie znaleziono obiektu odznaki
   reason:
     spam:
       name:
@@ -326,7 +326,7 @@ backend:
       name:
         other: niegrzeczny lub obraźliwy
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: "Rozsądna osoba uznałaby tę treść za nieodpowiednią do dyskusji opartej na szacunku."
     a_duplicate:
       name:
         other: duplikat
@@ -338,7 +338,7 @@ backend:
       name:
         other: nie jest odpowiedzią
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question,or deleted altogether."
+        other: "Ta wiadomość została zamieszczona jako odpowiedź, ale nie próbuje odpowiedzieć na pytanie. Powinna być prawdopodobnie edycją, komentarzem, kolejnym pytaniem lub całkowicie usunięta."
     no_longer_needed:
       name:
         other: nie jest już potrzebne
@@ -397,7 +397,7 @@ backend:
         name:
           other: wymaga szczegółów lub wyjaśnienia
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: To pytanie obecnie zawiera wiele pytań w jednym. Powinno się skupić tylko na jednym problemie.
       other:
         name:
           other: coś innego
@@ -458,48 +458,48 @@ backend:
       invited_you_to_answer:
         other: zaproszono Cię do odpowiedzi
       earned_badge:
-        other: You've earned the "{{.BadgeName}}" badge
+        other: Zdobyłeś odznakę "{{.BadgeName}}"
   email_tpl:
     change_email:
       title:
         other: "[{{.SiteName}}] Potwierdź swój nowy adres e-mail"
       body:
-        other: "Potwierdź swój nowy adres e-mail dla {{.SiteName}} klikając na poniższy link:<br><br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nJeśli to nie Ty wysyłałeś to żądanie zignoruj ten e-mail.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} odpowiedział(-a) na pytanie"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Zobacz to na {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Zrezygnuj z subskrypcji</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} zaprosił(a) Cię do odpowiedzi"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Myślę, że na to pytani możesz znać odpowiedź.</blockquote><br>\n<a href='{{.InviteUrl}}'>Zobacz to na {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Zrezygnuj z subskrypcji</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} skomentował/-a Twój wpis"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Zobacz to na {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Zrezygnuj z subskrypcji</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] Nowe pytanie: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Zrezygnuj z subskrypcji</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Reset hasła"
       body:
-        other: "Ktoś poprosił o zresetowanie hasła [{{.SiteName}}].<br><br>\n\nJeśli to nie Ty, możesz bezpiecznie zignorować ten e-mail.<br><br>\n\nKliknij na poniższy link, aby utworzyć nowe hasło:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     register:
       title:
         other: "[{{.SiteName}}] Potwierdź swoje nowe konto"
       body:
-        other: "Witaj w {{.SiteName}}<br><br>\n\nKliknij na poniższy link, aby potwierdzić i aktywować nowe konto:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nJeśli w powyższy link nie można kliknąć, spróbuj skopiować i wkleić go do paska adresu przeglądarki internetowej.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     test:
       title:
         other: "[{{.SiteName}}] Wiadomość testowa"
       body:
-        other: "To jest wiadomość testowa."
+        other: "This is a test email.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
   action_activity_type:
     upvote:
       other: oceń pozytywnie
@@ -531,7 +531,7 @@ backend:
         name:
           other: Autobiografista
         desc:
-          other: Filled out <a href="{{ .ProfileURL }}" target="_blank">profile</a> information.
+          other: Wypełniono informacje <a href="{{ .ProfileURL }}" target="_blank">profil</a>.
       certified:
         name:
           other: Certyfikowany
@@ -541,12 +541,12 @@ backend:
         name:
           other: Edytor
         desc:
-          other: First post edit.
+          other: Pierwsza edycja posta.
       first_flag:
         name:
           other: Pierwsza flaga
         desc:
-          other: First flagged a post.
+          other: Po raz pierwszy oznaczono post.
       first_upvote:
         name:
           other: Pierwszy pozytywny głos
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: Jak formatować
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Poprzedni
     next: Następny
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: Plik nie może być pusty.
               only_image: Dozwolone są tylko pliki obrazków.
-              max_size: Rozmiar pliku nie może przekroczyć 4 MB.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: Opis
       tab_url: Adres URL obrazka
@@ -946,6 +946,10 @@ ui:
       text: Tabela
       heading: Nagłówek
       cell: Komórka
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: Zamykam ten post jako...
     btn_cancel: Anuluj
@@ -1086,6 +1090,7 @@ ui:
     search_placeholder: Filtruj według nazwy tagu
     no_desc: Tag nie posiada opisu.
     more: Więcej
+    wiki: Wiki
   ask:
     title: Dodaj pytanie
     edit_title: Edytuj pytanie
@@ -1178,7 +1183,7 @@ ui:
       label: Imię
       msg:
         empty: Imię nie może być puste.
-        range: Długość nazwy powinna wynosić od 2 do 30 znaków.
+        range: Name must be between 2 to 30 characters in length.
         character: 'Możesz użyć dozwolone znaki "a-z", "A-Z", "0-9", " - . _"'
     email:
       label: Adres e-mail
@@ -1522,6 +1527,7 @@ ui:
     newest: Najnowsze
     active: Aktywne
     hot: Gorące
+    frequent: Frequent
     recommend: Polecane
     score: Ocena
     unanswered: Bez odpowiedzi
@@ -1721,6 +1727,8 @@ ui:
       welcome: Witaj Administratorze!
       site_statistics: Statystyki witryny
       questions: "Pytania:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "Odpowiedzi:"
       comments: "Komentarze:"
       votes: "Głosy:"
@@ -2008,6 +2016,21 @@ ui:
       reserved_tags:
         label: Zarezerwowane tagi
         text: "Reserved tags can only be used by moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: SEO
       permalink:
@@ -2211,6 +2234,7 @@ ui:
     discard_confirm: Czy na pewno chcesz odrzucić swoją wersję roboczą?
   messages:
     post_deleted: Ten post został usunięty.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: Ten post został przypięty.
     post_unpin: Ten post został odpięty.
     post_hide_list: Ten post został ukryty na liście.
@@ -2219,3 +2243,15 @@ ui:
     post_list: Ten wpis został umieszczony na liście.
     post_unlist: Ten wpis został usunięty z listy.
     post_pending: Twój wpis oczekuje na recenzje. Będzie widoczny po jej akceptacji.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+

@@ -464,42 +464,42 @@ backend:
       title:
         other: "[{{.SiteName}}] Bestätige deine neue E-Mail-Adresse"
       body:
-        other: "Bestätige deine neue E-Mail-Adresse für {{.SiteName}}, indem du auf den folgenden Link klickst:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nWenn du diese Änderung nicht beantragt hast, ignoriere bitte diese E-Mail."
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} hat deine Frage beantwortet"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Auf {{.SiteName}} ansehen</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbestellen</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} hat dich eingeladen zu antworten"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Ich glaube, du kennst die Antwort.</blockquote><br>\n<a href='{{.InviteUrl}}'>Auf {{.SiteName}} ansehen</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbestellen</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} hat deinen Beitrag kommentiert"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Auf {{.SiteName}} ansehen</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbestellen</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] Neue Frage: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Abbestellen</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Passwort zurücksetzen"
       body:
-        other: "Jemand hat dich gebeten, dein Passwort auf {{.SiteName}} zurückzusetzen.<br><br>\n\nWenn du es nicht warst, kannst du diese E-Mail getrost ignorieren.<br><br>\n\nKlicke auf den folgenden Link, um ein neues Passwort zu wählen:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     register:
       title:
         other: "[{{.SiteName}}] Bestätige dein neues Konto"
       body:
-        other: "Willkommen bei {{.SiteName}}!<br><br>\n\nKlicke auf den folgenden Link, um dein neues Konto zu bestätigen und zu aktivieren:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nWenn du den obigen Link nicht anklicken kannst, kopiere ihn und füge ihn in die Adresszeile deines Webbrowsers ein."
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     test:
       title:
         other: "[{{.SiteName}}] Test-E-Mail"
       body:
-        other: "Dies ist eine Test-Email."
+        other: "This is a test email.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
   action_activity_type:
     upvote:
       other: positiv bewerten
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: Wie man formatiert
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Zurück
     next: Weiter
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: Datei darf nicht leer sein.
               only_image: Nur Bilddateien sind erlaubt.
-              max_size: Die Dateigröße darf 4 MB nicht überschreiten.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: Beschreibung
       tab_url: Bild URL
@@ -946,6 +946,10 @@ ui:
       text: Tabelle
       heading: Überschrift
       cell: Zelle
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: Ich schließe diesen Beitrag als...
     btn_cancel: Abbrechen
@@ -1086,6 +1090,7 @@ ui:
     search_placeholder: Nach Tagnamen filtern
     no_desc: Der Tag hat keine Beschreibung.
     more: Mehr
+    wiki: Wiki
   ask:
     title: Frage stellen
     edit_title: Frage bearbeiten
@@ -1522,6 +1527,7 @@ ui:
     newest: Neueste
     active: Aktiv
     hot: Hot
+    frequent: Frequent
     recommend: Recommend
     score: Punktzahl
     unanswered: Unbeantwortet
@@ -1721,6 +1727,8 @@ ui:
       welcome: Willkommen im Admin Bereich!
       site_statistics: Website-Statistiken
       questions: "Fragen:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "Antworten:"
       comments: "Kommentare:"
       votes: "Stimmen:"
@@ -2008,6 +2016,21 @@ ui:
       reserved_tags:
         label: Reservierte Tags
         text: "Reserved tags can only be used by moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: SEO
       permalink:
@@ -2211,6 +2234,7 @@ ui:
     discard_confirm: Bist du sicher, dass du deinen Entwurf verwerfen willst?
   messages:
     post_deleted: Dieser Beitrag wurde gelöscht.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: Dieser Beitrag wurde angepinnt.
     post_unpin: Dieser Beitrag wurde losgelöst.
     post_hide_list: Dieser Beitrag wurde aus der Liste verborgen.
@@ -2219,3 +2243,15 @@ ui:
     post_list: This post has been listed.
     post_unlist: This post has been unlisted.
     post_pending: Your post is awaiting review. This is a preview, it will be visible after it has been approved.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+

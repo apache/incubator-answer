@@ -464,42 +464,42 @@ backend:
       title:
         other: "[{{.SiteName}}] Bekræft din nye e-mailadresse"
       body:
-        other: "Bekræft din nye e-mailadresse for {{.SiteName}} ved at klikke på følgende link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nHvis du ikke anmodede om denne ændring, ignorér venligst denne e-mail.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} besvarede dit spørgsmål"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>Se den på {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Afmeld</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} inviterede dig til at svare"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>Jeg tror du måske kender svaret.</blockquote><br>\n<a href='{{.InviteUrl}}'>Se den på {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Afmeld</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} kommenterede dit indlæg"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>Se den på {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Afmeld</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] Nyt spørgsmål: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Afmeld</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Nulstilling af adgangskode"
       body:
-        other: "Nogen bad om at nulstille din adgangskode på {{.SiteName}}.<br><br>\n\nHvis det ikke var dig, kan du trygt ignorere denne e-mail.<br><br>\n\nKlik på følgende link for at vælge en ny adgangskode:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     register:
       title:
         other: "[{{.SiteName}}] Bekræft din nye konto"
       body:
-        other: "Velkommen til {{.SiteName}}!<br><br>\n\nKlik på følgende link for at bekræfte og aktivere din nye konto:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nHvis ovenstående link ikke kan klikkes på, prøv at kopiere og indsætte det i adresselinjen i din webbrowser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     test:
       title:
         other: "[{{.SiteName}}] Test E-Mail"
       body:
-        other: "Dette er en test e-mail."
+        other: "This is a test email.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
   action_activity_type:
     upvote:
       other: stem op
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: Sådan formaterer du
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Forrige
     next: Næste
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: Filen skal udfyldes.
               only_image: Kun billedfiler er tilladt.
-              max_size: Filstørrelse må ikke overstige 4 MB.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: Beskriveslse
       tab_url: Billede-URL
@@ -946,6 +946,10 @@ ui:
       text: Tabel
       heading: Overskrift
       cell: Celle
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: Jeg lukker dette indlæg fordi...
     btn_cancel: Annuller
@@ -1086,6 +1090,7 @@ ui:
     search_placeholder: Filtrer efter tag-navn
     no_desc: Tag har ingen beskrivelse.
     more: Mere
+    wiki: Wiki
   ask:
     title: Tilføj spørgsmål
     edit_title: Rediger spørgsmål
@@ -1522,6 +1527,7 @@ ui:
     newest: Nyeste
     active: Aktiv
     hot: Populært
+    frequent: Frequent
     recommend: Recommend
     score: Bedømmelse
     unanswered: Ubesvaret
@@ -1721,6 +1727,8 @@ ui:
       welcome: Velkommen til Administration!
       site_statistics: Statistik for webstedet
       questions: "Spørgsmål:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "Svar:"
       comments: "Kommentarer:"
       votes: "Stemmer:"
@@ -2008,6 +2016,21 @@ ui:
       reserved_tags:
         label: Reserverede tags
         text: "Reserverede tags kan kun bruges af moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: SEO
       permalink:
@@ -2211,6 +2234,7 @@ ui:
     discard_confirm: Er du sikker på, at du vil kassere dit udkast?
   messages:
     post_deleted: Dette indlæg er blevet slettet.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: Dette indlæg er blevet fastgjort.
     post_unpin: Dette indlæg er blevet frigjort.
     post_hide_list: Dette indlæg er blevet skjult fra listen.
@@ -2219,3 +2243,15 @@ ui:
     post_list: Dette indlæg er blevet listet.
     post_unlist: Dette indlæg er blevet aflistet.
     post_pending: Dit indlæg afventer gennemgang. Dette er en forhåndsvisning, det vil være synligt, når det er blevet godkendt.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+
