@@ -7831,7 +7831,7 @@ const docTemplate = `{
                 "display_name": {
                     "type": "string",
                     "maxLength": 30,
-                    "minLength": 4
+                    "minLength": 2
                 },
                 "email": {
                     "type": "string",
