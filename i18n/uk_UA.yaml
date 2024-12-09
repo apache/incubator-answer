@@ -1563,7 +1563,6 @@ ui:
     stats: Статистика
     list_empty: Не знайдено жодного допису.<br />Можливо, ви хочете вибрати іншу вкладку?
     content_empty: Постів не знайдено.
-    content_empty: No posts found.
     accepted: Прийнято
     answered: дано відповідь
     asked: запитано
@@ -2145,7 +2144,6 @@ ui:
       action: Дія
       active: Активні
       activate: Активувати
-      activate: Activate
       all: Усі
       awards: Нагороди
       deactivate: Деактивувати

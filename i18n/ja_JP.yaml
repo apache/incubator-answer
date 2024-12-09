@@ -1565,7 +1565,6 @@ ui:
     stats: 統計情報
     list_empty: 投稿が見つかりませんでした。<br />他のタブを選択しますか？
     content_empty: 投稿が見つかりませんでした。
-    content_empty: No posts found.
     accepted: 承認済み
     answered: 回答済み
     asked: 質問済み
@@ -2147,7 +2146,6 @@ ui:
       action: 操作
       active: アクティブ
       activate: アクティベート
-      activate: Activate
       all: すべて
       awards: 賞
       deactivate: 非アクティブ化
