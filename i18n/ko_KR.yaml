@@ -464,42 +464,42 @@ backend:
       title:
         other: "[{{.SiteName}}] 새 이메일 주소 확인"
       body:
-        other: "{{.SiteName}}에서 새 이메일 주소를 확인하세요. 다음 링크를 클릭하여 확인하세요:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n이 변경을 요청하지 않았다면 이 이메일을 무시해 주세요.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 님이 답변을 작성했습니다"
       body:
-        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 답변을 작성했습니다:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 님이 답변을 요청했습니다"
       body:
-        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 답변을 요청했습니다:<br>\n<blockquote>아마 당신이 답을 알고 있을 것입니다.</blockquote><br>\n<a href='{{.InviteUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 님이 당신의 게시물에 댓글을 남겼습니다"
       body:
-        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}} 님이 당신의 게시물에 댓글을 남겼습니다:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>자세히 보기 ({{.SiteName}})</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_question:
       title:
         other: "[{{.SiteName}}] 새 질문: {{.QuestionTitle}}"
       body:
-        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>구독 취소</a></small>"
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen.<br><br>\n\n<a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] 비밀번호 재설정"
       body:
-        other: "{{.SiteName}}에서 비밀번호 재설정 요청이 있었습니다.<br><br>\n\n만약 이 요청이 여러분이 하지 않았다면, 이 이메일을 무시하셔도 됩니다.<br><br>\n\n새 비밀번호를 설정하려면 다음 링크를 클릭하세요:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     register:
       title:
         other: "[{{.SiteName}}] 새 계정 확인"
       body:
-        other: "{{.SiteName}}에 오신 것을 환영합니다!<br><br>\n\n다음 링크를 클릭하여 계정을 확인하고 활성화하세요:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n위 링크가 클릭이 되지 않을 경우, 웹 브라우저 주소창에 복사하여 붙여넣어 보세요.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
     test:
       title:
         other: "[{{.SiteName}}] 테스트 이메일"
       body:
-        other: "이것은 테스트용 이메일입니다."
+        other: "This is a test email.\n<br><br>\n\n--<br>\nNote: This is an automatic system email, please do not reply to this message as your response will not be seen."
   action_activity_type:
     upvote:
       other: 추천
@@ -787,7 +787,7 @@ ui:
   how_to_format:
     title: 포맷 방법
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">link question or answer: <code>#10010000000000001</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">mention a post: <code>#post_id</code></p></li> <li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: 이전
     next: 다음
@@ -904,7 +904,7 @@ ui:
             msg:
               empty: 파일을 선택하세요.
               only_image: 이미지 파일만 허용됩니다.
-              max_size: 파일 크기는 4MB를 초과할 수 없습니다.
+              max_size: File size cannot exceed {{size}} MB.
           desc:
             label: 설명
       tab_url: 이미지 URL
@@ -946,6 +946,10 @@ ui:
       text: 표
       heading: 제목
       cell: 셀
+    file:
+      text: Attach files
+      not_supported: "Don’t support that file type. Try again with {{file_type}}."
+      max_size: "Attach files size cannot exceed {{size}} MB."
   close_modal:
     title: 이 게시물을 다음과 같은 이유로 닫습니다...
     btn_cancel: 취소
@@ -1086,6 +1090,7 @@ ui:
     search_placeholder: 태그 이름으로 필터링
     no_desc: 이 태그에는 설명이 없습니다.
     more: 더 보기
+    wiki: Wiki
   ask:
     title: 질문 하기
     edit_title: 질문 수정
@@ -1522,6 +1527,7 @@ ui:
     newest: 최신순
     active: 활성순
     hot: Hot
+    frequent: Frequent
     recommend: Recommend
     score: 평점순
     unanswered: 답변이 없는 질문
@@ -1721,6 +1727,8 @@ ui:
       welcome: 관리자에 오신 것을 환영합니다!
       site_statistics: 사이트 통계
       questions: "질문:"
+      resolved: "Resolved:"
+      unanswered: "Unanswered:"
       answers: "답변:"
       comments: "댓글:"
       votes: "투표:"
@@ -2008,6 +2016,21 @@ ui:
       reserved_tags:
         label: 예약된 태그
         text: "Reserved tags can only be used by moderator."
+      image_size:
+        label: Max image size (MB)
+        text: "The maximum image upload size."
+      attachment_size:
+        label: Max attachment size (MB)
+        text: "The maximum attachment files upload size."
+      image_megapixels:
+        label: Max image megapixels
+        text: "Maximum number of megapixels allowed for an image."
+      image_extensions:
+        label: Authorized image extensions
+        text: "A list of file extensions allowed for image display, separate with commas."
+      attachment_extensions:
+        label: Authorized attachment extensions
+        text: "A list of file extensions allowed for upload, separate with commas. WARNING: Allowing uploads may cause security issues."
     seo:
       page_title: 검색 엔진 최적화
       permalink:
@@ -2211,6 +2234,7 @@ ui:
     discard_confirm: 초안을 삭제하시겠습니까?
   messages:
     post_deleted: 이 게시물은 삭제되었습니다.
+    post_cancel_deleted: This post has been undeleted.
     post_pin: 이 게시물이 고정되었습니다.
     post_unpin: 이 게시물의 고정이 해제되었습니다.
     post_hide_list: 이 게시물이 목록에서 숨겨졌습니다.
@@ -2219,3 +2243,15 @@ ui:
     post_list: 이 게시물이 목록에 등록되었습니다.
     post_unlist: 이 게시물이 목록에서 등록 해제되었습니다.
     post_pending: 회원님의 게시물이 검토를 기다리고 있습니다. 미리보기입니다. 승인 후에 공개됩니다.
+    post_closed: This post has been closed.
+    answer_deleted: This answer has been deleted.
+    answer_cancel_deleted: This answer has been undeleted.
+    change_user_role: This user's role has been changed.
+    user_inactive: This user is already inactive.
+    user_normal: This user is already normal.
+    user_suspended: This user has been suspended.
+    user_deleted: This user has been deleted.
+    badge_activated: This badge has been activated.
+    badge_inactivated: This badge has been inactivated.
+
+
