@@ -3145,6 +3145,7 @@ const docTemplate = `{
                     {
                         "enum": [
                             "post",
+                            "post_attachment",
                             "avatar",
                             "branding"
                         ],
@@ -4483,7 +4484,8 @@ const docTemplate = `{
                             "hot",
                             "score",
                             "unanswered",
-                            "recommend"
+                            "recommend",
+                            "frequent"
                         ],
                         "type": "string",
                         "name": "order",
@@ -7829,7 +7831,7 @@ const docTemplate = `{
                 "display_name": {
                     "type": "string",
                     "maxLength": 30,
-                    "minLength": 4
+                    "minLength": 2
                 },
                 "email": {
                     "type": "string",
@@ -9666,7 +9668,8 @@ const docTemplate = `{
                         "hot",
                         "score",
                         "unanswered",
-                        "recommend"
+                        "recommend",
+                        "frequent"
                     ]
                 },
                 "page": {
@@ -10641,6 +10644,27 @@ const docTemplate = `{
         "schema.SiteWriteReq": {
             "type": "object",
             "properties": {
+                "authorized_attachment_extensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "authorized_image_extensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "max_attachment_size": {
+                    "type": "integer"
+                },
+                "max_image_megapixel": {
+                    "type": "integer"
+                },
+                "max_image_size": {
+                    "type": "integer"
+                },
                 "recommend_tags": {
                     "type": "array",
                     "items": {
@@ -10664,6 +10688,27 @@ const docTemplate = `{
         "schema.SiteWriteResp": {
             "type": "object",
             "properties": {
+                "authorized_attachment_extensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "authorized_image_extensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "max_attachment_size": {
+                    "type": "integer"
+                },
+                "max_image_megapixel": {
+                    "type": "integer"
+                },
+                "max_image_size": {
+                    "type": "integer"
+                },
                 "recommend_tags": {
                     "type": "array",
                     "items": {

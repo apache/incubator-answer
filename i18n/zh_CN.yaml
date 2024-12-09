@@ -1086,6 +1086,7 @@ ui:
     search_placeholder: 通过标签名称过滤
     no_desc: 此标签无描述。
     more: 更多
+    wiki: 维基
   ask:
     title: 新增问题
     edit_title: 编辑问题
@@ -1721,6 +1722,8 @@ ui:
       welcome: 欢迎来到管理后台！
       site_statistics: 站点统计
       questions: "问题:"
+      resolved: "已解决:"
+      unanswered: "未回复:"
       answers: "回答:"
       comments: "评论:"
       votes: "投票:"

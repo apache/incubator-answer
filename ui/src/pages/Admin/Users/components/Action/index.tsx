@@ -33,6 +33,7 @@ import {
   changeUserStatus,
   updateUserProfile,
 } from '@/services';
+import { toastStore } from '@/stores';
 
 interface Props {
   showActionPassword?: boolean;
@@ -57,7 +58,13 @@ const UserOperation = ({
   const Toast = useToast();
 
   const changeUserRoleModal = useChangeUserRoleModal({
-    callback: refreshUsers,
+    callback: () => {
+      Toast.onShow({
+        msg: t('change_user_role', { keyPrefix: 'messages' }),
+        variant: 'success',
+      });
+      refreshUsers?.();
+    },
   });
   const changePasswordModal = useChangePasswordModal({
     onConfirm: (rd) => {
@@ -107,6 +114,10 @@ const UserOperation = ({
       user_id: userData.user_id,
       status: statusType,
     }).then(() => {
+      toastStore.getState().show({
+        msg: t(`user_${statusType}`, { keyPrefix: 'messages' }),
+        variant: 'success',
+      });
       refreshUsers?.();
       // onClose();
     });

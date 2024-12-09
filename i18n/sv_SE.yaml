@@ -2121,7 +2121,6 @@ ui:
       action: Action
       active: Aktiv
       activate: Aktivera
-      activate: Activate
       all: Alla
       awards: Awards
       deactivate: Inaktivera

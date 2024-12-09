@@ -30,6 +30,10 @@ const (
 
 type DashboardInfo struct {
 	QuestionCount         int64                `json:"question_count"`
+	ResolvedCount         int64                `json:"resolved_count"`
+	ResolvedRate          string               `json:"resolved_rate"`
+	UnansweredCount       int64                `json:"unanswered_count"`
+	UnansweredRate        string               `json:"unanswered_rate"`
 	AnswerCount           int64                `json:"answer_count"`
 	CommentCount          int64                `json:"comment_count"`
 	VoteCount             int64                `json:"vote_count"`

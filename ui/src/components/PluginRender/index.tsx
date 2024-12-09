@@ -20,6 +20,7 @@
 import React, { FC, ReactNode } from 'react';
 
 import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
+import { writeSettingStore } from '@/stores';
 /**
  * Note：Please set at least either of the `slug_name` and `type` attributes, otherwise no plugins will be rendered.
  *
@@ -47,6 +48,9 @@ const Index: FC<Props> = ({
 }) => {
   const pluginSlice: Plugin[] = [];
   const plugins = PluginKit.getPlugins().filter((plugin) => plugin.activated);
+  const { authorized_attachment_extensions = [] } = writeSettingStore(
+    (state) => state.write,
+  );
 
   plugins.forEach((plugin) => {
     if (type && slug_name) {
@@ -76,8 +80,10 @@ const Index: FC<Props> = ({
   }
 
   if (type === 'editor') {
+    const showAttachFile = authorized_attachment_extensions?.length > 0;
+    const pendIndex = showAttachFile ? 16 : 15;
     const nodes = React.Children.map(children, (child, index) => {
-      if (index === 15) {
+      if (index === pendIndex) {
         return (
           <>
             {child}

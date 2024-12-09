@@ -284,6 +284,29 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 	return count, nil
 }
 
+func (qr *questionRepo) GetUnansweredQuestionCount(ctx context.Context) (count int64, err error) {
+	session := qr.data.DB.Context(ctx)
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted}).
+		And(builder.Eq{"answer_count": 0})
+	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
+	if err != nil {
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
+func (qr *questionRepo) GetResolvedQuestionCount(ctx context.Context) (count int64, err error) {
+	session := qr.data.DB.Context(ctx)
+	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted}).
+		And(builder.Neq{"answer_count": 0}).
+		And(builder.Neq{"accepted_answer_id": 0})
+	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
+	if err != nil {
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
 func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
 	session.Where(builder.Lt{"status": entity.QuestionStatusDeleted})
@@ -387,6 +410,8 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	case "unanswered":
 		session.Where("question.answer_count = 0")
 		session.OrderBy("question.pin desc,question.created_at DESC")
+	case "frequent":
+		session.OrderBy("question.pin DESC, question.linked_count DESC, question.updated_at DESC")
 	}
 
 	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
@@ -685,6 +710,42 @@ func (qr *questionRepo) LinkQuestion(ctx context.Context, link ...*entity.Questi
 	return
 }
 
+// UpdateQuestionLinkCount update question link count
+func (qr *questionRepo) UpdateQuestionLinkCount(ctx context.Context, questionID string) (err error) {
+	// count the number of links
+	count, err := qr.data.DB.Context(ctx).
+		Where("to_question_id = ?", questionID).
+		Where("status = ?", entity.QuestionLinkStatusAvailable).
+		Count(&entity.QuestionLink{})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	// update the number of links
+	_, err = qr.data.DB.Context(ctx).ID(questionID).
+		Cols("linked_count").Update(&entity.Question{LinkedCount: int(count)})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// GetLinkedQuestionIDs get linked question ids
+func (qr *questionRepo) GetLinkedQuestionIDs(ctx context.Context, questionID string, status int) (
+	questionIDs []string, err error) {
+	questionIDs = make([]string, 0)
+	err = qr.data.DB.Context(ctx).
+		Select("to_question_id").
+		Table(new(entity.QuestionLink).TableName()).
+		Where("from_question_id = ?", questionID).
+		Where("status = ?", status).
+		Find(&questionIDs)
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return questionIDs, nil
+}
+
 // RecoverQuestionLink batch recover question link
 func (qr *questionRepo) RecoverQuestionLink(ctx context.Context, links ...*entity.QuestionLink) (err error) {
 	return qr.UpdateQuestionLinkStatus(ctx, entity.QuestionLinkStatusAvailable, links...)
@@ -761,6 +822,8 @@ func (qr *questionRepo) GetQuestionLink(ctx context.Context, page, pageSize int,
 	case "unanswered":
 		session.Where("question.answer_count = 0")
 		session.OrderBy("question.pin desc,question.created_at DESC")
+	case "frequent":
+		session.OrderBy("question.pin DESC, question.linked_count DESC, question.updated_at DESC")
 	}
 
 	if page > 0 && pageSize > 0 {

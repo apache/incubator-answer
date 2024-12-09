@@ -21,6 +21,7 @@ package controller
 
 import (
 	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/middleware"
 	"github.com/apache/incubator-answer/internal/base/reason"
 	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/apache/incubator-answer/internal/service/uploader"
@@ -32,6 +33,8 @@ import (
 const (
 	// file is uploaded by markdown(or something else) editor
 	fileFromPost = "post"
+	// file is used to upload the post attachment
+	fileFromPostAttachment = "post_attachment"
 	// file is used to change the user's avatar
 	fileFromAvatar = "avatar"
 	// file is logo/icon images
@@ -56,7 +59,7 @@ func NewUploadController(uploaderService uploader.UploaderService) *UploadContro
 // @Tags Upload
 // @Accept multipart/form-data
 // @Security ApiKeyAuth
-// @Param source formData string true "identify the source of the file upload" Enums(post, avatar, branding)
+// @Param source formData string true "identify the source of the file upload" Enums(post, post_attachment, avatar, branding)
 // @Param file formData file true "file"
 // @Success 200 {object} handler.RespBody{data=string}
 // @Router /answer/api/v1/file [post]
@@ -73,7 +76,13 @@ func (uc *UploadController) UploadFile(ctx *gin.Context) {
 	case fileFromPost:
 		url, err = uc.uploaderService.UploadPostFile(ctx)
 	case fileFromBranding:
+		if !middleware.GetIsAdminFromContext(ctx) {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
+			return
+		}
 		url, err = uc.uploaderService.UploadBrandingFile(ctx)
+	case fileFromPostAttachment:
+		url, err = uc.uploaderService.UploadPostAttachment(ctx)
 	default:
 		handler.HandleResponse(ctx, errors.BadRequest(reason.UploadFileSourceUnsupported), nil)
 		return

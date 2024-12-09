@@ -60,7 +60,7 @@ const Index: FC<Props> = ({
   const [searchParams] = useSearchParams();
   const answerRef = useRef<HTMLDivElement>(null);
 
-  useRenderHtmlPlugin(answerRef);
+  useRenderHtmlPlugin(answerRef.current?.querySelector('.fmt') as HTMLElement);
 
   const acceptAnswer = () => {
     acceptanceAnswer({

@@ -93,6 +93,7 @@ const ToolItem: FC<IProps> = (props) => {
       disabled={disable}
       tabIndex={-1}
       onClick={(e) => {
+        console.log('onClick', e);
         e.preventDefault();
         onClick?.({
           editor,

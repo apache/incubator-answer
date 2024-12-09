@@ -20,8 +20,11 @@
 package router
 
 import (
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"github.com/apache/incubator-answer/internal/service/service_config"
 	"github.com/gin-gonic/gin"
+	"path/filepath"
+	"strings"
 )
 
 // StaticRouter static api router
@@ -38,5 +41,19 @@ func NewStaticRouter(serviceConfig *service_config.ServiceConfig) *StaticRouter 
 
 // RegisterStaticRouter register static api router
 func (a *StaticRouter) RegisterStaticRouter(r *gin.RouterGroup) {
-	r.Static("/uploads", a.serviceConfig.UploadPath)
+	r.Static("/uploads/"+constant.AvatarSubPath, filepath.Join(a.serviceConfig.UploadPath, constant.AvatarSubPath))
+	r.Static("/uploads/"+constant.AvatarThumbSubPath, filepath.Join(a.serviceConfig.UploadPath, constant.AvatarThumbSubPath))
+	r.Static("/uploads/"+constant.PostSubPath, filepath.Join(a.serviceConfig.UploadPath, constant.PostSubPath))
+	r.Static("/uploads/"+constant.BrandingSubPath, filepath.Join(a.serviceConfig.UploadPath, constant.BrandingSubPath))
+	r.GET("/uploads/"+constant.FilesPostSubPath+"/*filepath", func(c *gin.Context) {
+		// The filepath such as hash/123.pdf
+		filePath := c.Param("filepath")
+		// The original filename is 123.pdf
+		originalFilename := filepath.Base(filePath)
+		// The real filename is hash.pdf
+		realFilename := strings.TrimSuffix(filePath, "/"+originalFilename) + filepath.Ext(originalFilename)
+		// The file local path is /uploads/files/post/hash.pdf
+		fileLocalPath := filepath.Join(a.serviceConfig.UploadPath, constant.FilesPostSubPath, realFilename)
+		c.FileAttachment(fileLocalPath, originalFilename)
+	})
 }

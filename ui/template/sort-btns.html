@@ -1,0 +1,39 @@
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+{{define "sort-btns"}}
+<div role="group" class="btn-group btn-group-sm">
+  <a role="button" tabindex="0" href="?order=newest" class="text-capitalize fit-content btn active btn-outline-secondary">
+    {{translator ($.language) "ui.question.newest" }}
+  </a>
+  <a role="button" tabindex="0" href="?order=active" class="text-capitalize fit-content btn btn-outline-secondary">
+    {{translator ($.language) "ui.question.active" }}
+  </a>
+  <a role="button" tabindex="0" href="?order=hot" class="text-capitalize fit-content d-none d-md-block btn btn-outline-secondary">
+    {{translator ($.language) "ui.question.hot" }}
+  </a>
+  <a role="button" tabindex="0" href="?order=score" class="text-capitalize fit-content d-none d-md-block btn btn-outline-secondary">
+    {{translator ($.language) "ui.question.score" }}
+  </a>
+  <a role="button" tabindex="0" href="?order=unanswered" class="text-capitalize fit-content d-none d-md-block btn btn-outline-secondary" style="border-top-right-radius: 0.25rem; border-bottom-right-radius: 0.25rem;">
+  {{translator ($.language) "ui.question.unanswered" }}
+  </a>
+</div>
+{{end}}

@@ -74,11 +74,15 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetUnansweredQuestionCount(ctx context.Context) (count int64, err error)
+	GetResolvedQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string, show int) (count int64, err error)
 	SitemapQuestions(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 	RemoveAllUserQuestion(ctx context.Context, userID string) (err error)
 	UpdateSearch(ctx context.Context, questionID string) (err error)
 	LinkQuestion(ctx context.Context, link ...*entity.QuestionLink) (err error)
+	GetLinkedQuestionIDs(ctx context.Context, questionID string, status int) (questionIDs []string, err error)
+	UpdateQuestionLinkCount(ctx context.Context, questionID string) (err error)
 	RemoveQuestionLink(ctx context.Context, link ...*entity.QuestionLink) (err error)
 	RecoverQuestionLink(ctx context.Context, link ...*entity.QuestionLink) (err error)
 	UpdateQuestionLinkStatus(ctx context.Context, status int, links ...*entity.QuestionLink) (err error)
@@ -702,6 +706,17 @@ func (qs *QuestionCommon) UpdateQuestionLink(ctx context.Context, questionID, an
 	if err != nil {
 		return parsedText, err
 	}
+	// Update the number of question links that have been removed
+	linkedQuestionIDs, err := qs.questionRepo.GetLinkedQuestionIDs(ctx, questionID, entity.QuestionLinkStatusDeleted)
+	if err != nil {
+		log.Errorf("get linked question ids error %v", err)
+	} else {
+		for _, id := range linkedQuestionIDs {
+			if err := qs.questionRepo.UpdateQuestionLinkCount(ctx, id); err != nil {
+				log.Errorf("update question link count error %v", err)
+			}
+		}
+	}
 
 	links := checker.GetQuestionLink(originalText)
 	if len(links) == 0 {
@@ -794,6 +809,16 @@ func (qs *QuestionCommon) UpdateQuestionLink(ctx context.Context, questionID, an
 		err = qs.questionRepo.LinkQuestion(ctx, validLinks...)
 		if err != nil {
 			return parsedText, err
+		}
+	}
+
+	// update question linked count
+	for _, link := range validLinks {
+		if len(link.ToQuestionID) == 0 {
+			continue
+		}
+		if err := qs.questionRepo.UpdateQuestionLinkCount(ctx, link.ToQuestionID); err != nil {
+			log.Errorf("update question link count error %v", err)
 		}
 	}
 

@@ -449,12 +449,12 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 
 // TagList tags list
 func (tc *TemplateController) TagList(ctx *gin.Context) {
-	req := &schema.GetTagWithPageReq{}
+	req := &schema.GetTagWithPageReq{
+		PageSize: constant.DefaultPageSize,
+		Page:     1,
+	}
 	if handler.BindAndCheck(ctx, req) {
 		return
-	}
-	if req.PageSize == 0 {
-		req.PageSize = constant.DefaultPageSize
 	}
 	data, err := tc.templateRenderController.TagList(ctx, req)
 	if err != nil || pager.ValPageOutOfRange(data.Count, req.Page, req.PageSize) {
@@ -546,12 +546,20 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		return
 	}
 
+	questionList, answerList, err := tc.questionService.SearchUserTopList(ctx, req.Username, "")
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
 	siteInfo.Title = fmt.Sprintf("%s - %s", username, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
-		"userinfo": userinfo,
-		"bio":      template.HTML(userinfo.BioHTML),
+		"userinfo":     userinfo,
+		"bio":          template.HTML(userinfo.BioHTML),
+		"topQuestions": questionList,
+		"topAnswers":   answerList,
 	})
 
 }

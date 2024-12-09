@@ -91,6 +91,7 @@ type QuestionService struct {
 	reviewService                    *review.ReviewService
 	configService                    *config.ConfigService
 	eventQueueService                event_queue.EventQueueService
+	reviewRepo                       review.ReviewRepo
 }
 
 func NewQuestionService(
@@ -116,6 +117,7 @@ func NewQuestionService(
 	reviewService *review.ReviewService,
 	configService *config.ConfigService,
 	eventQueueService event_queue.EventQueueService,
+	reviewRepo review.ReviewRepo,
 ) *QuestionService {
 	return &QuestionService{
 		activityRepo:                     activityRepo,
@@ -140,6 +142,7 @@ func NewQuestionService(
 		reviewService:                    reviewService,
 		configService:                    configService,
 		eventQueueService:                eventQueueService,
+		reviewRepo:                       reviewRepo,
 	}
 }
 
@@ -556,6 +559,15 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
 		if err != nil {
 			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
+	}
+
+	// If this question has been reviewed, then delete the review.
+	reviewInfo, exist, err := qs.reviewRepo.GetReviewByObject(ctx, questionInfo.ID)
+	if exist && err == nil {
+		err = qs.reviewRepo.UpdateReviewStatus(ctx, reviewInfo.ID, req.UserID, entity.ReviewStatusRejected)
+		if err != nil {
+			return errors.InternalServer(reason.DatabaseError)
 		}
 	}
 

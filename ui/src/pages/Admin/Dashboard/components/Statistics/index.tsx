@@ -40,6 +40,28 @@ const Statistics: FC<IProps> = ({ data }) => {
             <strong>{data.question_count}</strong>
           </Col>
           <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('resolved')}</span>
+            <strong>{data.resolved_count}</strong>
+            {data.resolved_count > 0 ? (
+              <span className="text-secondary m-1">
+                ({data.resolved_rate}%)
+              </span>
+            ) : (
+              ''
+            )}
+          </Col>
+          <Col xs={6} className="mb-1">
+            <span className="text-secondary me-1">{t('unanswered')}</span>
+            <strong>{data.unanswered_count}</strong>
+            {data.unanswered_count > 0 ? (
+              <span className="text-secondary m-1">
+                ({data.unanswered_rate}%)
+              </span>
+            ) : (
+              ''
+            )}
+          </Col>
+          <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('answers')}</span>
             <strong>{data.answer_count}</strong>
           </Col>

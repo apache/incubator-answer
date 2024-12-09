@@ -356,7 +356,7 @@ const (
 type QuestionPageReq struct {
 	Page      int    `validate:"omitempty,min=1" form:"page"`
 	PageSize  int    `validate:"omitempty,min=1" form:"page_size"`
-	OrderCond string `validate:"omitempty,oneof=newest active hot score unanswered recommend" form:"order"`
+	OrderCond string `validate:"omitempty,oneof=newest active hot score unanswered recommend frequent" form:"order"`
 	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
 	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
 	InDays    int    `validate:"omitempty,min=1" form:"in_days"`
@@ -504,7 +504,7 @@ type GetQuestionLinkReq struct {
 	Page       int    `validate:"omitempty,min=1" form:"page"`
 	PageSize   int    `validate:"omitempty,min=1,max=100" form:"page_size"`
 	QuestionID string `validate:"required" form:"question_id"`
-	OrderCond  string `validate:"omitempty,oneof=newest active hot score unanswered recommend" form:"order"`
+	OrderCond  string `validate:"omitempty,oneof=newest active hot score unanswered recommend frequent" form:"order"`
 	InDays     int    `validate:"omitempty,min=1" form:"in_days"`
 
 	LoginUserID string `json:"-"`

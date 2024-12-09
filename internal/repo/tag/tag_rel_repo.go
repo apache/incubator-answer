@@ -21,6 +21,7 @@ package tag
 
 import (
 	"context"
+
 	"github.com/apache/incubator-answer/internal/base/data"
 	"github.com/apache/incubator-answer/internal/base/handler"
 	"github.com/apache/incubator-answer/internal/base/reason"
@@ -85,7 +86,7 @@ func (tr *tagRelRepo) RecoverTagRelListByObjectID(ctx context.Context, objectID 
 
 func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
-	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).And("status = ?", entity.TagRelStatusAvailable).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -94,7 +95,7 @@ func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID str
 
 func (tr *tagRelRepo) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
-	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).And("status = ?", entity.TagRelStatusHide).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -129,8 +130,12 @@ func (tr *tagRelRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectID
 }
 
 // EnableTagRelByIDs update tag status to available
-func (tr *tagRelRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err error) {
-	_, err = tr.data.DB.Context(ctx).In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
+func (tr *tagRelRepo) EnableTagRelByIDs(ctx context.Context, ids []int64, hide bool) (err error) {
+	status := entity.TagRelStatusAvailable
+	if hide {
+		status = entity.TagRelStatusHide
+	}
+	_, err = tr.data.DB.Context(ctx).In("id", ids).Update(&entity.TagRel{Status: status})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -184,4 +189,17 @@ func (tr *tagRelRepo) CountTagRelByTagID(ctx context.Context, tagID string) (cou
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+// GetTagRelDefaultStatusByObjectID get tag rel default status
+func (tr *tagRelRepo) GetTagRelDefaultStatusByObjectID(ctx context.Context, objectID string) (status int, err error) {
+	question := entity.Question{}
+	exist, err := tr.data.DB.Context(ctx).ID(objectID).Cols("show", "status").Get(&question)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if exist && (question.Show == entity.QuestionHide || question.Status == entity.QuestionStatusDeleted) {
+		return entity.TagRelStatusHide, nil
+	}
+	return entity.TagRelStatusAvailable, nil
 }
