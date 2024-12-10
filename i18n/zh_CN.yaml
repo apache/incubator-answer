@@ -168,6 +168,8 @@ backend:
         other: 没有更新权限。
       question_closed_cannot_add:
         other: 问题已关闭，无法添加。
+      content_cannot_empty:
+        other: 回答内容不能为空。
     comment:
       edit_without_permission:
         other: 不允许编辑评论。
@@ -175,6 +177,8 @@ backend:
         other: 评论未找到。
       cannot_edit_after_deadline:
         other: 评论时间太久，无法修改。
+      content_cannot_empty:
+        other: 评论内容不能为空。
     email:
       duplicate:
         other: 邮箱已存在。
@@ -224,6 +228,8 @@ backend:
         other: 没有关闭权限。
       cannot_update:
         other: 没有更新权限。
+      content_cannot_empty:
+        other: 内容不能为空。
     rank:
       fail_to_meet_the_condition:
         other: 声望值未达到要求。
