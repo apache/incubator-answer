@@ -121,15 +121,23 @@ func (r *DangerousHTMLRenderer) renderRawHTML(w util.BufWriter, source []byte, n
 func (r *DangerousHTMLRenderer) renderHTMLBlock(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	n := node.(*ast.HTMLBlock)
 	if entering {
-		l := n.Lines().Len()
-		for i := 0; i < l; i++ {
-			line := n.Lines().At(i)
-			r.Writer.SecureWrite(w, r.Filter.SanitizeBytes(line.Value(source)))
+		if r.Unsafe {
+			l := n.Lines().Len()
+			for i := 0; i < l; i++ {
+				line := n.Lines().At(i)
+				r.Writer.SecureWrite(w, r.Filter.SanitizeBytes(line.Value(source)))
+			}
+		} else {
+			_, _ = w.WriteString("<!-- raw HTML omitted -->")
 		}
 	} else {
 		if n.HasClosure() {
-			closure := n.ClosureLine
-			r.Writer.SecureWrite(w, closure.Value(source))
+			if r.Unsafe {
+				closure := n.ClosureLine
+				r.Writer.SecureWrite(w, closure.Value(source))
+			} else {
+				_, _ = w.WriteString("<!-- raw HTML omitted -->")
+			}
 		}
 	}
 	return ast.WalkContinue, nil
