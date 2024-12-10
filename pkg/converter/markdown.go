@@ -65,7 +65,7 @@ func Markdown2HTML(source string) string {
 	return html
 }
 
-// Markdown2BasicHTML convert markdown to html ,Only basic syntax can be used
+// Markdown2BasicHTML convert markdown to html, Only basic syntax can be used
 func Markdown2BasicHTML(source string) string {
 	content := Markdown2HTML(source)
 	filter := bluemonday.NewPolicy()
@@ -124,7 +124,7 @@ func (r *DangerousHTMLRenderer) renderHTMLBlock(w util.BufWriter, source []byte,
 		l := n.Lines().Len()
 		for i := 0; i < l; i++ {
 			line := n.Lines().At(i)
-			r.Writer.SecureWrite(w, r.Filter.SanitizeBytes(line.Value(source)))
+			r.Writer.SecureWrite(w, line.Value(source))
 		}
 	} else {
 		if n.HasClosure() {
