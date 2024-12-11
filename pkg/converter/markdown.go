@@ -22,6 +22,7 @@ package converter
 import (
 	"bytes"
 	"regexp"
+	"strings"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/microcosm-cc/bluemonday"
@@ -61,7 +62,7 @@ func Markdown2HTML(source string) string {
 	filter.AllowElements("kbd")
 	filter.AllowAttrs("title").Matching(regexp.MustCompile(`^[\p{L}\p{N}\s\-_',\[\]!\./\\\(\)]*$|^@embed?$`)).Globally()
 	filter.AllowAttrs("start").OnElements("ol")
-	html = filter.Sanitize(html)
+	html = strings.TrimSpace(filter.Sanitize(html))
 	return html
 }
 
