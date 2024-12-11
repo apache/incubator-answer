@@ -64,7 +64,7 @@ const Index: FC<Props> = ({ id }) => {
             key={item.id}
             as={Link}
             to={pathFactory.questionLanding(item.id, item.url_title)}>
-            <div className="link-dark">{item.title}</div>
+            <div className="link-dark text-truncate-3">{item.title}</div>
             {item.answer_count > 0 && (
               <div
                 className={`mt-1 small me-2 ${
