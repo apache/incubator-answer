@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import classname from 'classnames';
 
 import { Icon } from '@/components';
+import { formatCount } from '@/utils/common';
 
 interface Props {
   data: {
@@ -82,10 +83,20 @@ const Index: FC<Props> = ({
         </div>
       )}
       {showViews && (
-        <span className="summary-stat ms-3 flex-shrink-0">
-          <Icon name="eye-fill" />
+        <span
+          className={classname(
+            'summary-stat ms-3 flex-shrink-0',
+            data.views >= 100 * 1000
+              ? 'view-level3'
+              : data.views >= 1000
+                ? 'view-level2'
+                : data.views >= 100
+                  ? 'view-level1'
+                  : '',
+          )}>
+          <Icon name="bar-chart-fill" />
           <em className="fst-normal ms-1">
-            {data.views} {t('views')}
+            {formatCount(data.views)} {t('views')}
           </em>
         </span>
       )}
