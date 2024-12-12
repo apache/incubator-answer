@@ -52,11 +52,10 @@ const Index: FC<Props> = ({
   return (
     <div className={classname('d-flex align-items-center', className)}>
       {showVotes && (
-        <div className="d-flex align-items-center flex-shrink-0">
+        <div className="d-flex align-items-center flex-shrink-0 text-body">
           <Icon name="hand-thumbs-up-fill me-1" />
-          <span>
-            {data.votes} {t('votes')}
-          </span>
+          <span className="fw-medium">{data.votes}</span>
+          <span className="ms-1">{t('votes')}</span>
         </div>
       )}
 
@@ -70,16 +69,15 @@ const Index: FC<Props> = ({
       {showAnswers && (
         <div
           className={`d-flex flex-shrink-0 align-items-center ms-3 ${
-            isAccepted ? 'text-success' : ''
+            isAccepted ? 'text-bg-success rounded-2 px-2 py-1 lh-1' : ''
           }`}>
           {isAccepted ? (
             <Icon name="check-circle-fill me-1" />
           ) : (
             <Icon name="chat-square-text-fill me-1" />
           )}
-          <span>
-            {data.answers} {t('answers')}
-          </span>
+          <span className="fw-medium">{data.answers}</span>
+          <span className="ms-1">{t('answers')}</span>
         </div>
       )}
       {showViews && (
@@ -95,9 +93,8 @@ const Index: FC<Props> = ({
                   : '',
           )}>
           <Icon name="bar-chart-fill" />
-          <em className="fst-normal ms-1">
-            {formatCount(data.views)} {t('views')}
-          </em>
+          <span className="fw-medium ms-1">{formatCount(data.views)}</span>
+          <span className="ms-1">{t('views')}</span>
         </span>
       )}
     </div>

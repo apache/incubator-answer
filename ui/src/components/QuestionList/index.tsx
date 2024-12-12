@@ -94,7 +94,24 @@ const QuestionList: FC<Props> = ({
             return (
               <ListGroup.Item
                 key={li.id}
-                className="bg-transparent py-3 px-0 border-start-0 border-end-0">
+                className="bg-transparent py-3 px-2 border-start-0 border-end-0">
+                <div className="d-flex flex-wrap text-secondary small mb-12">
+                  <BaseUserCard
+                    data={li.operator}
+                    className="me-1"
+                    avatarClass="me-2"
+                  />
+                  •
+                  <FormatTime
+                    time={
+                      curOrder === 'active' ? li.operated_at : li.created_at
+                    }
+                    className="text-secondary ms-1 flex-shrink-0"
+                    preFix={
+                      curOrder === 'active' ? t(li.operation_type) : t('asked')
+                    }
+                  />
+                </div>
                 <h5 className="text-wrap text-break">
                   {li.pin === 2 && (
                     <Icon
@@ -110,26 +127,24 @@ const QuestionList: FC<Props> = ({
                     {li.status === 2 ? ` [${t('closed')}]` : ''}
                   </NavLink>
                 </h5>
-                <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
-                  <div className="d-flex flex-wrap me-0 me-md-3">
-                    <BaseUserCard
-                      data={li.operator}
-                      showAvatar={false}
-                      className="me-1"
-                    />
-                    •
-                    <FormatTime
-                      time={
-                        curOrder === 'active' ? li.operated_at : li.created_at
-                      }
-                      className="text-secondary ms-1 flex-shrink-0"
-                      preFix={
-                        curOrder === 'active'
-                          ? t(li.operation_type)
-                          : t('asked')
-                      }
-                    />
-                  </div>
+                <p className="mb-2 small text-body text-truncate-2">
+                  {li.description}
+                </p>
+
+                <div className="question-tags mb-2">
+                  {Array.isArray(li.tags)
+                    ? li.tags.map((tag, index) => {
+                        return (
+                          <Tag
+                            key={tag.slug_name}
+                            className={`${li.tags.length - 1 === index ? '' : 'me-1'}`}
+                            data={tag}
+                          />
+                        );
+                      })
+                    : null}
+                </div>
+                <div className="small text-secondary">
                   <Counts
                     data={{
                       votes: li.vote_count,
@@ -139,15 +154,6 @@ const QuestionList: FC<Props> = ({
                     isAccepted={li.accepted_answer_id >= 1}
                     className="mt-2 mt-md-0"
                   />
-                </div>
-                <div className="question-tags m-n1">
-                  {Array.isArray(li.tags)
-                    ? li.tags.map((tag) => {
-                        return (
-                          <Tag key={tag.slug_name} className="m-1" data={tag} />
-                        );
-                      })
-                    : null}
                 </div>
               </ListGroup.Item>
             );
