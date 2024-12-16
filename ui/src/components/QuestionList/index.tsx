@@ -32,7 +32,7 @@ import {
   QueryGroup,
   QuestionListLoader,
   Counts,
-  Icon,
+  PinList,
 } from '@/components';
 import * as Type from '@/common/interface';
 import { useSkeletonControl } from '@/hooks';
@@ -69,6 +69,13 @@ const QuestionList: FC<Props> = ({
   const pageSize = 20;
   const count = data?.count || 0;
   const orderKeys = orderList || QUESTION_ORDER_KEYS;
+  const pinData =
+    source === 'questions'
+      ? data?.list?.filter((v) => v.pin === 2).slice(0, 3)
+      : [];
+  const renderData = data?.list?.filter(
+    (v) => pinData.findIndex((p) => p.id === v.id) === -1,
+  );
 
   return (
     <div>
@@ -90,74 +97,72 @@ const QuestionList: FC<Props> = ({
         {isSkeletonShow ? (
           <QuestionListLoader />
         ) : (
-          data?.list?.map((li) => {
-            return (
-              <ListGroup.Item
-                key={li.id}
-                className="bg-transparent py-3 px-2 border-start-0 border-end-0">
-                <div className="d-flex flex-wrap text-secondary small mb-12">
-                  <BaseUserCard
-                    data={li.operator}
-                    className="me-1"
-                    avatarClass="me-2"
-                  />
-                  •
-                  <FormatTime
-                    time={
-                      curOrder === 'active' ? li.operated_at : li.created_at
-                    }
-                    className="text-secondary ms-1 flex-shrink-0"
-                    preFix={
-                      curOrder === 'active' ? t(li.operation_type) : t('asked')
-                    }
-                  />
-                </div>
-                <h5 className="text-wrap text-break">
-                  {li.pin === 2 && (
-                    <Icon
-                      name="pin-fill"
+          <>
+            <PinList data={pinData} />
+            {renderData?.map((li) => {
+              return (
+                <ListGroup.Item
+                  key={li.id}
+                  className="bg-transparent py-3 px-2 border-start-0 border-end-0">
+                  <div className="d-flex flex-wrap text-secondary small mb-12">
+                    <BaseUserCard
+                      data={li.operator}
                       className="me-1"
-                      title={t('pinned', { keyPrefix: 'btns' })}
+                      avatarClass="me-2"
                     />
-                  )}
-                  <NavLink
-                    to={pathFactory.questionLanding(li.id, li.url_title)}
-                    className="link-dark">
-                    {li.title}
-                    {li.status === 2 ? ` [${t('closed')}]` : ''}
-                  </NavLink>
-                </h5>
-                <p className="mb-2 small text-body text-truncate-2">
-                  {li.description}
-                </p>
+                    •
+                    <FormatTime
+                      time={
+                        curOrder === 'active' ? li.operated_at : li.created_at
+                      }
+                      className="text-secondary ms-1 flex-shrink-0"
+                      preFix={
+                        curOrder === 'active'
+                          ? t(li.operation_type)
+                          : t('asked')
+                      }
+                    />
+                  </div>
+                  <h5 className="text-wrap text-break">
+                    <NavLink
+                      to={pathFactory.questionLanding(li.id, li.url_title)}
+                      className="link-dark">
+                      {li.title}
+                      {li.status === 2 ? ` [${t('closed')}]` : ''}
+                    </NavLink>
+                  </h5>
+                  <p className="mb-2 small text-body text-truncate-2">
+                    {li.description}
+                  </p>
 
-                <div className="question-tags mb-2">
-                  {Array.isArray(li.tags)
-                    ? li.tags.map((tag, index) => {
-                        return (
-                          <Tag
-                            key={tag.slug_name}
-                            className={`${li.tags.length - 1 === index ? '' : 'me-1'}`}
-                            data={tag}
-                          />
-                        );
-                      })
-                    : null}
-                </div>
-                <div className="small text-secondary">
-                  <Counts
-                    data={{
-                      votes: li.vote_count,
-                      answers: li.answer_count,
-                      views: li.view_count,
-                    }}
-                    isAccepted={li.accepted_answer_id >= 1}
-                    className="mt-2 mt-md-0"
-                  />
-                </div>
-              </ListGroup.Item>
-            );
-          })
+                  <div className="question-tags mb-2">
+                    {Array.isArray(li.tags)
+                      ? li.tags.map((tag, index) => {
+                          return (
+                            <Tag
+                              key={tag.slug_name}
+                              className={`${li.tags.length - 1 === index ? '' : 'me-1'}`}
+                              data={tag}
+                            />
+                          );
+                        })
+                      : null}
+                  </div>
+                  <div className="small text-secondary">
+                    <Counts
+                      data={{
+                        votes: li.vote_count,
+                        answers: li.answer_count,
+                        views: li.view_count,
+                      }}
+                      isAccepted={li.accepted_answer_id >= 1}
+                      className="mt-2 mt-md-0"
+                    />
+                  </div>
+                </ListGroup.Item>
+              );
+            })}
+          </>
         )}
       </ListGroup>
       {count <= 0 && !isLoading && <Empty />}
