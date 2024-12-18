@@ -1504,6 +1504,7 @@ ui:
     normal: Normal
     closed: Closed
     deleted: Deleted
+    deleted_permanently: Deleted permanently
     pending: Pending
     more: More
   search:
@@ -1539,6 +1540,9 @@ ui:
   cannot_vote_for_self: You can't vote for your own post.
   modal_confirm:
     title: Error...
+  delete_permanently:
+    title: Delete permanently
+    content: Are you sure you want to delete permanently?
   account_result:
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
@@ -2297,5 +2301,6 @@ ui:
     user_deleted: This user has been deleted.
     badge_activated: This badge has been activated.
     badge_inactivated: This badge has been inactivated.
-
-
+    users_deleted: These users have been deleted.
+    posts_deleted: These questions have been deleted.
+    answers_deleted: These answers have been deleted.
