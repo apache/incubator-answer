@@ -457,7 +457,6 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 				item.Operator.Status = userInfo.Status
 			}
 		}
-
 	}
 	return formattedQuestions, nil
 }
