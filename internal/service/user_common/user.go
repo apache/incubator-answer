@@ -155,6 +155,15 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, userIDs []stri
 		info.Avatar = avatarMapping[user.ID].GetURL()
 		userMap[user.ID] = info
 	}
+	for _, id := range userIDs {
+		if _, ok := userMap[id]; !ok {
+			userMap[id] = &schema.UserBasicInfo{
+				ID:          id,
+				DisplayName: "user" + converter.DeleteUserDisplay(id),
+				Status:      constant.UserDeleted,
+			}
+		}
+	}
 	return userMap, nil
 }
 
