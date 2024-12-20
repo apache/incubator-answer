@@ -52,7 +52,7 @@ const Index: FC<Props> = ({ count = 10 }) => {
           />
 
           <div
-            className="placeholder w-50 align-top mb-2"
+            className="placeholder w-50 align-top mb-12"
             style={{ height: '24px' }}
           />
 

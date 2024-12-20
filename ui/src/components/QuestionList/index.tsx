@@ -135,7 +135,7 @@ const QuestionList: FC<Props> = ({
                     {li.description}
                   </p>
 
-                  <div className="question-tags mb-2">
+                  <div className="question-tags mb-12">
                     {Array.isArray(li.tags)
                       ? li.tags.map((tag, index) => {
                           return (
