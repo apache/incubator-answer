@@ -120,10 +120,10 @@ const QuestionList: FC<Props> = ({
                 {t('view', { keyPrefix: 'btns' })}
               </Dropdown.Header>
               <Dropdown.Item eventKey="card" active={viewType === 'card'}>
-                {t('view', { keyPrefix: 'card' })}
+                {t('card', { keyPrefix: 'btns' })}
               </Dropdown.Item>
               <Dropdown.Item eventKey="compact" active={viewType === 'compact'}>
-                {t('view', { keyPrefix: 'compact' })}
+                {t('compact', { keyPrefix: 'btns' })}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
