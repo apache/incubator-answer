@@ -17,8 +17,8 @@
  * under the License.
  */
 
-import { FC } from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { FC, useEffect, useState } from 'react';
+import { ListGroup, Dropdown } from 'react-bootstrap';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -33,9 +33,12 @@ import {
   QuestionListLoader,
   Counts,
   PinList,
+  Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
 import { useSkeletonControl } from '@/hooks';
+import Storage from '@/utils/storage';
+import { LIST_VIEW_STORAGE_KEY } from '@/common/constants';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'newest',
@@ -77,6 +80,19 @@ const QuestionList: FC<Props> = ({
     (v) => pinData.findIndex((p) => p.id === v.id) === -1,
   );
 
+  const [viewType, setViewType] = useState('card');
+
+  // 切换列表预览模式
+  const handleViewMode = (key) => {
+    Storage.set(LIST_VIEW_STORAGE_KEY, key);
+    setViewType(key);
+  };
+
+  useEffect(() => {
+    const type = Storage.get(LIST_VIEW_STORAGE_KEY) || 'card';
+    setViewType(type);
+  }, []);
+
   return (
     <div>
       <div className="mb-3 d-flex flex-wrap justify-content-between">
@@ -85,13 +101,33 @@ const QuestionList: FC<Props> = ({
             ? t('all_questions')
             : t('x_questions', { count })}
         </h5>
-        <QueryGroup
-          data={orderKeys}
-          currentSort={curOrder}
-          pathname={source === 'questions' ? '/questions' : ''}
-          i18nKeyPrefix="question"
-          maxBtnCount={source === 'tag' ? 3 : 4}
-        />
+        <div className="d-flex flex-wrap">
+          <QueryGroup
+            data={orderKeys}
+            currentSort={curOrder}
+            pathname={source === 'questions' ? '/questions' : ''}
+            i18nKeyPrefix="question"
+            maxBtnCount={source === 'tag' ? 3 : 4}
+            wrapClassName="me-2"
+          />
+          <Dropdown align="end" onSelect={handleViewMode}>
+            <Dropdown.Toggle variant="outline-secondary" size="sm">
+              <Icon name="list" />
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Header>
+                {t('view', { keyPrefix: 'btns' })}
+              </Dropdown.Header>
+              <Dropdown.Item eventKey="card" active={viewType === 'card'}>
+                {t('view', { keyPrefix: 'card' })}
+              </Dropdown.Item>
+              <Dropdown.Item eventKey="compact" active={viewType === 'compact'}>
+                {t('view', { keyPrefix: 'compact' })}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </div>
       <ListGroup className="rounded-0">
         {isSkeletonShow ? (
@@ -131,9 +167,11 @@ const QuestionList: FC<Props> = ({
                       {li.status === 2 ? ` [${t('closed')}]` : ''}
                     </NavLink>
                   </h5>
-                  <p className="mb-2 small text-body text-truncate-2">
-                    {li.description}
-                  </p>
+                  {viewType === 'card' && (
+                    <p className="mb-2 small text-body text-truncate-2">
+                      {li.description}
+                    </p>
+                  )}
 
                   <div className="question-tags mb-12">
                     {Array.isArray(li.tags)

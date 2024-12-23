@@ -1500,6 +1500,9 @@ ui:
     deleted: Deleted
     pending: Pending
     more: More
+    view: View
+    card: Card
+    compact: Compact
   search:
     title: Search Results
     keywords: Keywords

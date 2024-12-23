@@ -1467,6 +1467,9 @@ ui:
     deleted: 已删除
     pending: 等待处理
     more: 更多
+    view: 视图
+    card: 卡片模式
+    compact: 简洁模式
   search:
     title: 搜索结果
     keywords: 关键词
