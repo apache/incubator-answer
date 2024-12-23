@@ -81,6 +81,7 @@ const Index: FC = () => {
               </div>
               {can_revision && (
                 <NavLink to="/review" className="nav-link">
+                  <Icon name="shield-fill-check" className="me-2" />
                   <span>{t('header.nav.review')}</span>
                   <span className="float-end">
                     {revision > 99 ? '99+' : revision > 0 ? revision : ''}
@@ -90,7 +91,8 @@ const Index: FC = () => {
 
               {userInfo?.role_id === 2 ? (
                 <NavLink to="/admin" className="nav-link">
-                  {t('header.nav.admin')}
+                  <Icon name="gear-fill" className="me-2" />
+                  <span>{t('header.nav.admin')}</span>
                 </NavLink>
               ) : null}
             </>

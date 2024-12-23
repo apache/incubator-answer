@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import create from 'zustand';
+import { create } from 'zustand';
 
 import { AdminSettingsTheme } from '@/common/interface';
 import { DEFAULT_THEME_COLOR } from '@/common/constants';

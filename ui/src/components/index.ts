@@ -61,6 +61,7 @@ import SideNav from './SideNav';
 import PluginRender from './PluginRender';
 import HighlightText from './HighlightText';
 import CardBadge from './CardBadge';
+import PinList from './PinList';
 
 export {
   Avatar,
@@ -109,5 +110,6 @@ export {
   PluginRender,
   HighlightText,
   CardBadge,
+  PinList,
 };
 export type { EditorRef, JSONSchema, UISchema };

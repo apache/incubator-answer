@@ -37,7 +37,7 @@
   --an-editor-toolbar-hover: #f8f9fa;
   --ans-editor-toolbar-focus: #dae0e5;
   --an-editor-placeholder-color: #6c757d;
-  --an-side-nav-link-hover-color: black;
+  --an-side-nav-link-hover-color: rgba(0, 0, 0, .85);
   --an-invite-answer-item-active: #e9ecef;
   --an-alert-exist-color: #055160;
 }
@@ -123,6 +123,18 @@
     &:hover {
       background: $orange-700;
     }
+  }
+
+  .view-level1 {
+    color: $orange-300;
+  }
+
+  .view-level2 {
+    color: $orange-200;
+  }
+
+  .view-level3 {
+    color: $orange-100;
   }
 
 }

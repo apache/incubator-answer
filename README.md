@@ -41,8 +41,8 @@ You can also check out the [plugins here](https://answer.apache.org/plugins).
 ### Prerequisites
 
 - Golang >= 1.22
-- Node.js >= 16.17
-- pnpm >= 8
+- Node.js >= 20
+- pnpm >= 9
 - [mockgen](https://github.com/uber-go/mock?tab=readme-ov-file#installation) >= 1.6.0
 - [wire](https://github.com/google/wire/) >= 0.5.0
 
