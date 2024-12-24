@@ -1232,6 +1232,9 @@ ui:
     modal_content: 该电子邮件地址已经注册。你确定要连接到已有账户吗？
     modal_cancel: 更改邮箱
     modal_confirm: 连接到已有账户
+  delete_permanently:
+    title: 永久删除
+    content: 你确定要永久删除吗？
   password_reset:
     page_title: 密码重置
     btn_name: 重置我的密码
@@ -1471,6 +1474,7 @@ ui:
     normal: 正常
     closed: 已关闭
     deleted: 已删除
+    deleted_permanently: 永久删除
     pending: 等待处理
     more: 更多
   search:
@@ -2259,5 +2263,6 @@ ui:
     user_deleted: 此用户已被删除
     badge_activated: 此徽章已被激活。
     badge_inactivated: 此徽章已被禁用。
-
-
+    users_deleted: 这些用户已被删除。
+    posts_deleted: 这些帖子已被删除。
+    answers_deleted: 这些回答已被删除。
