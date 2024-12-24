@@ -384,6 +384,7 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 			LastAnswerID:     questionInfo.LastAnswerID,
 			Pin:              questionInfo.Pin,
 			Show:             questionInfo.Show,
+			Operator:         &schema.QuestionPageRespOperator{ID: questionInfo.UserID},
 		}
 
 		questionIDs = append(questionIDs, questionInfo.ID)
