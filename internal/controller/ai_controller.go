@@ -22,6 +22,7 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"maps"
 	"net/http"
@@ -224,23 +225,27 @@ func (c *AIController) TranslateContent(ctx *gin.Context) {
 	aiConfig, err := c.siteInfoService.GetSiteAI(ctx)
 	if err != nil {
 		log.Errorf("failed to get AI config for translation: %v", err)
-		handler.HandleResponse(ctx, errors.InternalServer(reason.UnknownError), nil)
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI configuration could not be loaded. Ask an administrator to verify the AI settings."), nil)
 		return
 	}
 	if !aiConfig.Enabled {
 		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI service is not enabled"), nil)
 		return
 	}
+	if !aiConfig.IsTranslationEnabled() {
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI translation is disabled"), nil)
+		return
+	}
 	provider := aiConfig.GetProvider()
-	if provider.APIHost == "" || provider.Model == "" {
-		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI service is not configured"), nil)
+	if provider.APIHost == "" || provider.APIKey == "" || provider.Model == "" {
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI provider is not configured. Ask an administrator to check the API host, API key, and model."), nil)
 		return
 	}
 
 	siteInterface, err := c.siteInfoService.GetSiteInterface(ctx)
-	if err != nil {
+	if err != nil || siteInterface.Language == "" {
 		log.Errorf("failed to get site language for translation: %v", err)
-		handler.HandleResponse(ctx, errors.InternalServer(reason.UnknownError), nil)
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("The site language is not configured. Ask an administrator to check the interface settings."), nil)
 		return
 	}
 
@@ -255,9 +260,14 @@ func (c *AIController) TranslateContent(ctx *gin.Context) {
 		},
 		Temperature: 0,
 	})
-	if err != nil || len(completion.Choices) == 0 {
+	if err != nil {
 		log.Errorf("AI translation request failed: %v", err)
-		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI translation failed"), nil)
+		handler.HandleResponse(ctx, translationProviderError(err), nil)
+		return
+	}
+	if len(completion.Choices) == 0 {
+		log.Error("AI translation provider returned no choices")
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI provider returned an empty response. Check the configured model."), nil)
 		return
 	}
 
@@ -265,12 +275,27 @@ func (c *AIController) TranslateContent(ctx *gin.Context) {
 	if err != nil || (req.Title != "" && strings.TrimSpace(translated.Title) == "") ||
 		(req.Content != "" && strings.TrimSpace(translated.Content) == "") {
 		log.Errorf("AI translation returned invalid content: %v", err)
-		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI translation returned invalid content"), nil)
+		handler.HandleResponse(ctx, errors.ServiceUnavailable("AI provider returned an invalid translation. Check that the configured model supports chat completions."), nil)
 		return
 	}
 	translated.TargetLanguage = siteInterface.Language
 	// The caller must explicitly accept this draft before it replaces editor text.
 	handler.HandleResponse(ctx, nil, translated)
+}
+
+func translationProviderError(err error) *errors.Error {
+	apiError := &openai.APIError{}
+	if stderrors.As(err, &apiError) {
+		switch apiError.HTTPStatusCode {
+		case http.StatusUnauthorized, http.StatusForbidden:
+			return errors.ServiceUnavailable("AI provider authentication failed. Check the configured API key.")
+		case http.StatusNotFound:
+			return errors.ServiceUnavailable("AI provider endpoint or model was not found. Check the API host and model.")
+		case http.StatusTooManyRequests:
+			return errors.ServiceUnavailable("AI provider rate limit exceeded. Try again later.")
+		}
+	}
+	return errors.ServiceUnavailable("Could not connect to the configured AI provider. Check the API host and provider status.")
 }
 
 func buildTranslationPrompt(targetLanguage string) string {

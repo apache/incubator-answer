@@ -37,13 +37,14 @@ interface Props {
 
 const AITranslateButton = ({ title, content, className, onApply }: Props) => {
   const { t } = useTranslation('translation', { keyPrefix: 'ai_translate' });
-  const aiEnabled = aiControlStore((state) => state.ai_enabled);
+  const { ai_enabled: aiEnabled, ai_translation_enabled: translationEnabled } =
+    aiControlStore((state) => state);
   const targetLanguage = interfaceStore((state) => state.interface.language);
   const [loading, setLoading] = useState(false);
   const [translation, setTranslation] =
     useState<TranslateContentResponse | null>(null);
 
-  if (!aiEnabled) {
+  if (!aiEnabled || !translationEnabled) {
     return null;
   }
 

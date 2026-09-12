@@ -2315,6 +2315,10 @@ ui:
         label: AI 已启用
         check: 启用AI功能
         text: AI 模型必须正确配置才能使用。
+      translation_enabled:
+        label: AI 翻译
+        check: 为问题和回答启用 AI 翻译
+        text: 启用后，作者可以在发布前将草稿翻译为站点配置的语言。
       provider:
         label: 提供商
       api_host:

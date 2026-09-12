@@ -2357,6 +2357,10 @@ ui:
         label: AI enabled
         check: Enable AI features
         text: The AI model must be configured correctly before it can be used.
+      translation_enabled:
+        label: AI translation
+        check: Enable AI translation for questions and answers
+        text: When enabled, authors can translate drafts into the site's configured language before posting.
       provider:
         label: Provider
       api_host:
